@@ -20,8 +20,8 @@ export default function AboutUsPage() {
       <div className="w-full relative z-10 pb-10">
         <AboutHero data={pageData} />
         
-        {/* Dynamic Sections from Dashboard */}
-        <PageSections sections={pageData?.sections} />
+        {/* Dynamic Sections from Dashboard, exclude stats as it's in the hero */}
+        <PageSections sections={pageData?.sections?.filter(s => s.type !== 'stats')} />
       </div>
     </main>
   );

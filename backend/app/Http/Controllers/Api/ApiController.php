@@ -76,6 +76,7 @@ class ApiController extends Controller
                 'image' => $project->image ? asset('storage/' . $project->image) : null,
                 'client' => $project->client,
                 'url' => $project->url,
+                'tags' => $project->tags ?? [],
             ];
         });
         return response()->json($projects);
@@ -159,8 +160,11 @@ class ApiController extends Controller
                 Action::make('view')
                     ->label('View')
                     ->link()
-                    ->url(fn () => \App\Filament\Resources\ContactMessageResource::getUrl('index', ['activeTab' => $validated['type']]))
-                    ->markAsRead(),
+                    ->url(fn () => \App\Filament\Resources\ContactMessageResource::getUrl('view', ['record' => $message]))
+                    ->markAsRead()
+                    ->extraAttributes([
+                        'x-on:click' => '$dispatch(\'close-database-notifications\')',
+                    ]),
             ])
             ->sendToDatabase($admins);
 

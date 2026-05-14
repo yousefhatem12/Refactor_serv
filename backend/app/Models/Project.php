@@ -16,10 +16,12 @@ class Project extends Model
         'image',
         'client',
         'url',
+        'tags',
     ];
 
     protected $casts = [
         'name' => 'json',
         'description' => 'json',
+        'tags' => 'json',
     ];
 }

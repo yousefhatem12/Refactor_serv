@@ -48,13 +48,12 @@ public static function getNavigationGroup(): ?string
                             ->label('Name (Arabic)')->required(),
                         Select::make('category')
                             ->options([
-                                'websites' => 'Websites',
-                                'mobile' => 'Mobile Apps',
-                                'motion' => 'Motions Graphics',
-                                'digital' => 'Digital Identity',
-                                'social1' => 'Social Media',
+                                'Online Stores' => 'Online Stores',
+                                'Mobile Apps' => 'Mobile Apps',
+                                'Dashboards' => 'Dashboards',
+                                'Branding' => 'Branding',
                             ])
-                            ->default('websites')
+                            ->default('Online Stores')
                             ->required(),
                         Textarea::make('description.en')
                             ->label('Description (English)')->nullable(),
@@ -68,6 +67,10 @@ public static function getNavigationGroup(): ?string
                             ->nullable(),
                         TextInput::make('url')
                             ->url()
+                            ->nullable(),
+                        \Filament\Forms\Components\TagsInput::make('tags')
+                            ->label('Technologies/Tags')
+                            ->placeholder('Add a tag...')
                             ->nullable(),
                     ])
             ]);
