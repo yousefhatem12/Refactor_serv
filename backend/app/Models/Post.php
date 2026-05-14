@@ -17,6 +17,7 @@ class Post extends Model
         'image',
         'category',
         'is_published',
+        'is_trending',
         'author_id',
         'seo_title',
         'seo_description',
@@ -24,6 +25,7 @@ class Post extends Model
 
     protected $casts = [
         'is_published' => 'boolean',
+        'is_trending' => 'boolean',
         'title' => 'json',
         'content' => 'json',
         'seo_title' => 'json',

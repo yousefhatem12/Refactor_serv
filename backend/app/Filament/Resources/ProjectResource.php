@@ -42,6 +42,13 @@ public static function getNavigationGroup(): ?string
             ->components([
                 Section::make('Project Details')
                     ->schema([
+                        Select::make('type')
+                            ->options([
+                                'portfolio' => 'Portfolio',
+                                'product' => 'Product',
+                            ])
+                            ->default('portfolio')
+                            ->required(),
                         TextInput::make('name.en')
                             ->label('Name (English)')->required(),
                         TextInput::make('name.ar')
@@ -81,6 +88,13 @@ public static function getNavigationGroup(): ?string
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\TextColumn::make('type')
+                    ->badge()
+                    ->colors([
+                        'primary' => 'portfolio',
+                        'success' => 'product',
+                    ])
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('name.en')
                     ->label('Name')
                     ->searchable()

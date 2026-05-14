@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('projects', function (Blueprint $table) {
-            $table->json('tags')->nullable()->after('url');
+        Schema::table('posts', function (Blueprint $table) {
+            $table->boolean('is_trending')->default(false)->after('is_published');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('projects', function (Blueprint $table) {
-            $table->dropColumn('tags');
+        Schema::table('posts', function (Blueprint $table) {
+            $table->dropColumn('is_trending');
         });
     }
 };

@@ -176,7 +176,7 @@ const OnlineWebsite = () => {
     const fetchProjects = async () => {
       try {
         setIsLoading(true);
-        const data = await fetchAPI(`/portfolio?lang=${language}`);
+        const data = await fetchAPI(`/portfolio?lang=${language}&type=product`);
         if (data && data.length > 0) {
           setProducts(data);
         }
