@@ -5,7 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLanguage } from "../../../context/LanguageContext";
 import { fetchAPI } from "@/lib/api";
 import PricingModal from "../../Shared/PricingModal";
-import VideoModal from "../../Shared/VideoModal";
+import ContactModal from "../../Shared/ContactModal";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,7 +17,7 @@ const CTA = () => {
   const planet1Ref = useRef(null);
   const text1Ref = useRef(null);
   const [isPricingModalOpen, setIsPricingModalOpen] = useState(false);
-  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   const [settings, setSettings] = useState({});
   useEffect(() => {
@@ -136,7 +136,7 @@ const CTA = () => {
               {t("getAQuote")}
             </button>
             <button 
-              onClick={() => setIsVideoModalOpen(true)}
+              onClick={() => setIsContactModalOpen(true)}
               className="border border-white/20 hover:border-white/40 bg-white/5 backdrop-blur-sm text-white px-6 md:px-8 py-2 md:py-3 rounded-lg font-bold text-sm md:text-base transition-all transform hover:scale-105"
             >
               {t("callUs")}
@@ -178,7 +178,7 @@ const CTA = () => {
               {t("getAQuote")}
             </button>
             <button 
-              onClick={() => setIsVideoModalOpen(true)}
+              onClick={() => setIsContactModalOpen(true)}
               className="w-full bg-white/5 border border-white/10 hover:bg-white/10 text-white py-3 sm:py-3.5 rounded-xl font-bold text-xs sm:text-sm active:scale-95 transition-all uppercase tracking-wider"
             >
               {t("callUs")}
@@ -191,10 +191,10 @@ const CTA = () => {
         isOpen={isPricingModalOpen} 
         onClose={() => setIsPricingModalOpen(false)} 
       />
-      <VideoModal 
-        isOpen={isVideoModalOpen} 
-        onClose={() => setIsVideoModalOpen(false)} 
-        videoUrl={settings.company_video_url} 
+      <ContactModal 
+        isOpen={isContactModalOpen} 
+        onClose={() => setIsContactModalOpen(false)} 
+        settings={settings} 
       />
     </section>
   );

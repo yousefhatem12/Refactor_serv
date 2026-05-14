@@ -4,12 +4,14 @@ import { useLanguage } from "../../context/LanguageContext";
 import { useSettings } from "../../context/SettingsContext";
 import VideoModal from "../Shared/VideoModal";
 import PricingModal from "../Shared/PricingModal";
+import ContactModal from "../Shared/ContactModal";
 
 const AboutCTA = ({ data }) => {
   const { t } = useLanguage();
   const settings = useSettings();
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [isPricingModalOpen, setIsPricingModalOpen] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   return (
     <section className="py-24 px-6 md:px-16 lg:px-24 w-full relative z-20">
@@ -34,7 +36,7 @@ const AboutCTA = ({ data }) => {
             {data?.button_text || t("getAQuote")}
           </button>
           <button 
-            onClick={() => setIsVideoModalOpen(true)}
+            onClick={() => setIsContactModalOpen(true)}
             className="border border-white/30 text-white px-10 py-4 rounded-md font-bold text-lg hover:bg-white/10 backdrop-blur-sm transition-colors"
           >
             {t("callUs")}
@@ -51,6 +53,11 @@ const AboutCTA = ({ data }) => {
       <PricingModal
         isOpen={isPricingModalOpen}
         onClose={() => setIsPricingModalOpen(false)}
+      />
+      <ContactModal
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
+        settings={settings}
       />
     </section>
   );
