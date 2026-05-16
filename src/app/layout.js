@@ -37,6 +37,9 @@ export default async function RootLayout({ children }) {
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
+        {settings?.custom_header_code && (
+          <div dangerouslySetInnerHTML={{ __html: settings.custom_header_code }} style={{ display: 'none' }} />
+        )}
         <LanguageProvider>
           <AuthProvider>
             <SettingsProvider initialSettings={settings || {}}>
@@ -47,6 +50,9 @@ export default async function RootLayout({ children }) {
             </SettingsProvider>
           </AuthProvider>
         </LanguageProvider>
+        {settings?.custom_footer_code && (
+          <div dangerouslySetInnerHTML={{ __html: settings.custom_footer_code }} style={{ display: 'none' }} />
+        )}
       </body>
     </html>
   );
