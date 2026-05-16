@@ -18,6 +18,7 @@ Route::get('/services', [ApiController::class, 'getServices']);
 Route::get('/portfolio', [ApiController::class, 'getProjects']);
 Route::get('/blog', [ApiController::class, 'getPosts']);
 Route::get('/blog/{slug}', [ApiController::class, 'getPost']);
+Route::get('/trending-posts', [ApiController::class, 'getTrendingPosts']);
 Route::get('/faqs', [ApiController::class, 'getFaqs']);
 Route::get('/settings', [ApiController::class, 'getSettings']);
 Route::get('/testimonials', [ApiController::class, 'getTestimonials']);

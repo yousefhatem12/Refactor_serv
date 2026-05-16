@@ -10,16 +10,19 @@ class Project extends Model
     use HasFactory;
 
     protected $fillable = [
+        'type',
         'name',
         'category',
         'description',
         'image',
         'client',
         'url',
+        'tags',
     ];
 
     protected $casts = [
         'name' => 'json',
         'description' => 'json',
+        'tags' => 'json',
     ];
 }

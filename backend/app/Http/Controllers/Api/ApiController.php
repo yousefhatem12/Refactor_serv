@@ -64,10 +64,15 @@ class ApiController extends Controller
         return response()->json($mapped);
     }
 
-    public function getProjects()
+    public function getProjects(\Illuminate\Http\Request $request)
     {
         $lang = $this->getLang();
-        $projects = Project::all()->map(function ($project) use ($lang) {
+        $type = $request->query('type');
+        $query = Project::query();
+        if ($type) {
+            $query->where('type', $type);
+        }
+        $projects = $query->latest()->get()->map(function ($project) use ($lang) {
             return [
                 'id' => $project->id,
                 'name' => $this->trans($project->name, $lang),
@@ -76,6 +81,7 @@ class ApiController extends Controller
                 'image' => $project->image ? asset('storage/' . $project->image) : null,
                 'client' => $project->client,
                 'url' => $project->url,
+                'tags' => $project->tags ?? [],
             ];
         });
         return response()->json($projects);
@@ -96,6 +102,26 @@ class ApiController extends Controller
                 'published_at' => $post->created_at->format('M d, Y'),
             ];
         });
+        return response()->json($posts);
+    }
+
+    public function getTrendingPosts()
+    {
+        $lang = $this->getLang();
+        $posts = Post::with('author')
+            ->where('is_published', true)
+            ->where('is_trending', true)
+            ->latest()
+            ->take(5)
+            ->get()
+            ->map(function ($post) use ($lang) {
+                return [
+                    'id' => $post->id,
+                    'title' => $this->trans($post->title, $lang),
+                    'slug' => $post->slug,
+                    'author' => $post->author?->name ?? 'Admin',
+                ];
+            });
         return response()->json($posts);
     }
 
@@ -159,8 +185,11 @@ class ApiController extends Controller
                 Action::make('view')
                     ->label('View')
                     ->link()
-                    ->url(fn () => \App\Filament\Resources\ContactMessageResource::getUrl('index', ['activeTab' => $validated['type']]))
-                    ->markAsRead(),
+                    ->url(fn () => \App\Filament\Resources\ContactMessageResource::getUrl('view', ['record' => $message]))
+                    ->markAsRead()
+                    ->extraAttributes([
+                        'x-on:click' => '$dispatch(\'close-database-notifications\')',
+                    ]),
             ])
             ->sendToDatabase($admins);
 

@@ -17,5 +17,10 @@ class ContactMessage extends Model
         'status',
         'user_id',
         'type',
+        'read_at',
+    ];
+
+    protected $casts = [
+        'read_at' => 'datetime',
     ];
 }
