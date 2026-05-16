@@ -7,9 +7,20 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
+import { fetchAPI } from "@/lib/api";
 import { useLanguage } from "../../../context/LanguageContext";
 
-// --- Mock Data ---
+// --- Gradients for dynamic data ---
+const gradients = [
+  "from-blue-600/40 to-purple-900/40",
+  "from-orange-600/40 to-red-900/40",
+  "from-cyan-600/40 to-blue-900/40",
+  "from-pink-600/40 to-purple-900/40",
+  "from-emerald-600/40 to-teal-900/40",
+  "from-indigo-600/40 to-blue-900/40",
+];
+
+// --- Mock Data (as fallback) ---
 const categoryKeys = [
   "catAll",
   "catOnlineStores",
@@ -25,63 +36,6 @@ const categoryMap = {
   "catDashboards": "Dashboards",
   "catBranding": "Branding",
 };
-
-const products = [
-  {
-    id: 1,
-    title: "Nova E-Commerce",
-    category: "Online Stores",
-    description: "High-performance futuristic store for tech gadgets.",
-    logo: "/Oline-website/logos/Group 2159.png",
-    tags: ["Next.js", "Stripe", "3D"],
-    gradient: "from-blue-600/40 to-purple-900/40",
-  },
-  {
-    id: 2,
-    title: "Orbit Analytics",
-    category: "Dashboards",
-    description: "Real-time data visualization with cinematic UI.",
-    logo: "/Oline-website/logos/Group 2160.png",
-    tags: ["React", "D3.js", "WebSockets"],
-    gradient: "from-orange-600/40 to-red-900/40",
-  },
-  {
-    id: 3,
-    title: "Quantum Pay",
-    category: "Mobile Apps",
-    description: "Secure crypto wallet with biometric auth.",
-    logo: "/Oline-website/logos/Group 2161.png",
-    tags: ["React Native", "Web3", "Security"],
-    gradient: "from-cyan-600/40 to-blue-900/40",
-  },
-  {
-    id: 4,
-    title: "Nebula Branding",
-    category: "Branding",
-    description: "Identity design for a space tourism agency.",
-    logo: "/Oline-website/logos/Group 2162.png",
-    tags: ["Identity", "Motion", "3D"],
-    gradient: "from-pink-600/40 to-purple-900/40",
-  },
-  {
-    id: 5,
-    title: "Galactic Store",
-    category: "Online Stores",
-    description: "Premium fashion apparel online shopping experience.",
-    logo: "/Oline-website/logos/Group 2163.png",
-    tags: ["Shopify", "Tailwind", "Framer"],
-    gradient: "from-emerald-600/40 to-teal-900/40",
-  },
-  {
-    id: 6,
-    title: "Astro Tracker",
-    category: "Dashboards",
-    description: "Mission control interface for satellite tracking.",
-    logo: "/Oline-website/logos/Group 2164.png",
-    tags: ["Vue", "WebGL", "Three.js"],
-    gradient: "from-indigo-600/40 to-blue-900/40",
-  },
-];
 
 // --- 3D Card Component ---
 const ProductCard = ({ product, index }) => {
@@ -112,6 +66,8 @@ const ProductCard = ({ product, index }) => {
     y.set(0);
   };
 
+  const cardGradient = product.gradient || gradients[index % gradients.length];
+
   return (
     <motion.div
       layout
@@ -130,7 +86,7 @@ const ProductCard = ({ product, index }) => {
           rotateY,
           transformStyle: "preserve-3d",
         }}
-        className={`relative w-full h-[350px] md:h-[380px] rounded-3xl bg-gradient-to-br ${product.gradient} p-[1px] group cursor-pointer`}
+        className={`relative w-full h-[350px] md:h-[380px] rounded-3xl bg-gradient-to-br ${cardGradient} p-[1px] group cursor-pointer`}
       >
         {/* Glow border on hover */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl blur-md" />
@@ -146,14 +102,14 @@ const ProductCard = ({ product, index }) => {
           <div style={{ transform: "translateZ(50px)" }}>
             <div className="h-16 sm:h-20 md:h-24 mb-4 lg:mb-6 flex items-center">
               <img
-                src={product.logo}
-                alt={product.title}
+                src={product.image || product.logo}
+                alt={product.name || product.title}
                 className="h-full w-auto max-w-[85%] object-contain object-left filter drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]"
               />
             </div>
 
             <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 tracking-wide">
-              {product.title}
+              {product.name || product.title}
             </h3>
             <p className="text-gray-400 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-4 font-medium line-clamp-2">
               {product.description}
@@ -162,7 +118,7 @@ const ProductCard = ({ product, index }) => {
 
           <div style={{ transform: "translateZ(40px)" }} className="mt-auto">
             <div className="flex flex-wrap gap-1.5 mb-4 md:mb-5">
-              {product.tags.map((tag) => (
+              {(product.tags || []).map((tag) => (
                 <span
                   key={tag}
                   className="text-[8px] sm:text-[9px] md:text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded-full bg-white/5 text-white/70 border border-white/10"
@@ -174,22 +130,29 @@ const ProductCard = ({ product, index }) => {
 
             {/* CTA Button */}
             <div className="overflow-hidden rounded-xl">
-              <motion.button className="w-full py-2.5 md:py-3 bg-gradient-to-r from-[#FF8A00] to-[#D98B50] text-white font-bold text-[10px] sm:text-xs md:text-sm tracking-widest uppercase flex items-center justify-center gap-2 transform translate-y-[120%] group-hover:translate-y-0 transition-transform duration-500 ease-out hover:brightness-110 shadow-[0_0_20px_rgba(255,138,0,0.3)]">
-                {t("viewProject")}
-                <svg
-                  className="w-3.5 h-3.5 md:w-4 md:h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M14 5l7 7m0 0l-7 7m7-7H3"
-                  />
-                </svg>
-              </motion.button>
+              <a 
+                href={product.url || "#"} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block"
+              >
+                <motion.button className="w-full py-2.5 md:py-3 bg-gradient-to-r from-[#FF8A00] to-[#D98B50] text-white font-bold text-[10px] sm:text-xs md:text-sm tracking-widest uppercase flex items-center justify-center gap-2 transform translate-y-[120%] group-hover:translate-y-0 transition-transform duration-500 ease-out hover:brightness-110 shadow-[0_0_20px_rgba(255,138,0,0.3)]">
+                  {t("viewProject")}
+                  <svg
+                    className="w-3.5 h-3.5 md:w-4 md:h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M14 5l7 7m0 0l-7 7m7-7H3"
+                    />
+                  </svg>
+                </motion.button>
+              </a>
             </div>
           </div>
         </div>
@@ -199,15 +162,33 @@ const ProductCard = ({ product, index }) => {
 };
 
 const OnlineWebsite = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [activeTab, setActiveTab] = useState("catAll");
   const sectionRef = useRef(null);
   const sliderRef = useRef(null);
   const [mounted, setMounted] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    
+    const fetchProjects = async () => {
+      try {
+        setIsLoading(true);
+        const data = await fetchAPI(`/portfolio?lang=${language}&type=product`);
+        if (data && data.length > 0) {
+          setProducts(data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch projects:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, [language]);
 
   const scrollLeft = () => {
     if (sliderRef.current) {

@@ -16,7 +16,10 @@ class ViewContactMessage extends EditRecord
         $this->record = $this->resolveRecord($record);
 
         if ($this->record->status === 'unread') {
-            $this->record->update(['status' => 'read']);
+            $this->record->update([
+                'status' => 'read',
+                'read_at' => now(),
+            ]);
         }
 
         parent::mount($record);

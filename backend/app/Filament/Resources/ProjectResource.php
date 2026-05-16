@@ -42,19 +42,25 @@ public static function getNavigationGroup(): ?string
             ->components([
                 Section::make('Project Details')
                     ->schema([
+                        Select::make('type')
+                            ->options([
+                                'portfolio' => 'Portfolio',
+                                'product' => 'Product',
+                            ])
+                            ->default('portfolio')
+                            ->required(),
                         TextInput::make('name.en')
                             ->label('Name (English)')->required(),
                         TextInput::make('name.ar')
                             ->label('Name (Arabic)')->required(),
                         Select::make('category')
                             ->options([
-                                'websites' => 'Websites',
-                                'mobile' => 'Mobile Apps',
-                                'motion' => 'Motions Graphics',
-                                'digital' => 'Digital Identity',
-                                'social1' => 'Social Media',
+                                'Online Stores' => 'Online Stores',
+                                'Mobile Apps' => 'Mobile Apps',
+                                'Dashboards' => 'Dashboards',
+                                'Branding' => 'Branding',
                             ])
-                            ->default('websites')
+                            ->default('Online Stores')
                             ->required(),
                         Textarea::make('description.en')
                             ->label('Description (English)')->nullable(),
@@ -69,6 +75,10 @@ public static function getNavigationGroup(): ?string
                         TextInput::make('url')
                             ->url()
                             ->nullable(),
+                        \Filament\Forms\Components\TagsInput::make('tags')
+                            ->label('Technologies/Tags')
+                            ->placeholder('Add a tag...')
+                            ->nullable(),
                     ])
             ]);
     }
@@ -78,6 +88,13 @@ public static function getNavigationGroup(): ?string
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\TextColumn::make('type')
+                    ->badge()
+                    ->colors([
+                        'primary' => 'portfolio',
+                        'success' => 'product',
+                    ])
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('name.en')
                     ->label('Name')
                     ->searchable()

@@ -89,6 +89,9 @@ class ContactMessageResource extends Resource
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('read_at')
+                    ->dateTime()
+                    ->sortable(),
             ])
             ->filters([
                 //

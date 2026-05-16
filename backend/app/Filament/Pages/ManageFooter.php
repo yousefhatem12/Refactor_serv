@@ -35,6 +35,7 @@ class ManageFooter extends Page implements HasForms
             'site_phone',
             'site_email',
             'site_address',
+            'custom_footer_code',
         ];
 
         $settings = Setting::whereIn('key', $keys)->get()->pluck('value', 'key')->toArray();
@@ -62,6 +63,15 @@ class ManageFooter extends Page implements HasForms
                         TextInput::make('site_email')->email()->required(),
                         TextInput::make('site_address')->required(),
                     ])->columns(3),
+
+                Section::make('Custom Code')
+                    ->description('Inject custom HTML/JS code before the closing </body> tag')
+                    ->schema([
+                        \Filament\Forms\Components\Textarea::make('custom_footer_code')
+                            ->label('Footer Code (e.g. Chat widgets, external scripts)')
+                            ->rows(5)
+                            ->columnSpanFull(),
+                    ]),
             ])
             ->statePath('data');
     }

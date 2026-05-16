@@ -12,21 +12,30 @@ const OurBlog = () => {
     featured: null,
     gridPosts: [],
   });
+  const [trendingItems, setTrendingItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchBlog = async () => {
       try {
         setIsLoading(true);
-        const data = await fetchAPI('/blog');
-        if (data && data.length > 0) {
+        const [postsData, trendingData] = await Promise.all([
+          fetchAPI('/blog'),
+          fetchAPI('/trending-posts')
+        ]);
+
+        if (postsData && postsData.length > 0) {
           setBlogPosts({
-            featured: data[0],
-            gridPosts: data.slice(1, 5),
+            featured: postsData[0],
+            gridPosts: postsData.slice(1, 5),
           });
         }
+
+        if (trendingData) {
+          setTrendingItems(trendingData);
+        }
       } catch (error) {
-        console.error("Failed to fetch blog:", error);
+        console.error("Failed to fetch blog data:", error);
       } finally {
         setIsLoading(false);
       }
@@ -34,31 +43,6 @@ const OurBlog = () => {
 
     fetchBlog();
   }, []);
-
-  const trendingItems = [
-    {
-      id: 1,
-      title: "The Best Homemade Masks for Face (keep the Pimples Away)",
-      author: "Jane Cooper",
-    },
-    {
-      id: 2,
-      title:
-        "17 Pictures of Medium Length Hair in Layers That Will Inspire Your New Haircut",
-      author: "Wade Warren",
-    },
-    {
-      id: 3,
-      title:
-        "13 Amazing Poems from Shel Silverstein with Valuable Life Lessons",
-      author: "Esther Howard",
-    },
-    {
-      id: 4,
-      title: "9 Half-up/half-down Hairstyles for Long and Medium Hair",
-      author: "Cameron Williamson",
-    },
-  ];
 
   return (
     <section className="py-10 md:py-20 bg-transparent text-white relative z-0">
@@ -228,16 +212,18 @@ const OurBlog = () => {
                     key={item.id}
                     className="pb-[20px] border-b border-white/5 last:border-b-0"
                   >
-                    <h4 className="text-[1rem] font-semibold leading-[1.4] mb-2 text-[#e0e0e0] cursor-pointer transition-colors duration-300 hover:text-[#ff8a00]">
-                      {item.title}
-                    </h4>
+                    <a href={`/blog/${item.slug}`}>
+                      <h4 className="text-[1rem] font-semibold leading-[1.4] mb-2 text-[#e0e0e0] cursor-pointer transition-colors duration-300 hover:text-[#ff8a00]">
+                        {item.title}
+                      </h4>
+                    </a>
                     <p className="text-[0.85rem] text-[#666]">{item.author}</p>
                   </div>
                 ))}
               </div>
 
               <a
-                href="#"
+                href="/blog"
                 className="mt-[30px] flex items-center gap-[10px] text-[#e0e0e0] text-[0.9rem] font-semibold underline underline-offset-4 group/viewall"
               >
                 {t("viewAllArticles")}{" "}

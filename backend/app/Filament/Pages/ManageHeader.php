@@ -30,6 +30,7 @@ class ManageHeader extends Page implements HasForms
         $keys = [
             'site_logo',
             'site_title',
+            'custom_header_code',
         ];
 
         $settings = Setting::whereIn('key', $keys)->get()->pluck('value', 'key')->toArray();
@@ -53,6 +54,14 @@ class ManageHeader extends Page implements HasForms
                             ->directory('settings')
                             ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'settings')),
                     ])->columns(2),
+                Section::make('Custom Code')
+                    ->description('Inject custom HTML/JS code into the <head> of the website')
+                    ->schema([
+                        \Filament\Forms\Components\Textarea::make('custom_header_code')
+                            ->label('Header Code (e.g. Meta tags, Google Analytics)')
+                            ->rows(5)
+                            ->columnSpanFull(),
+                    ]),
             ])
             ->statePath('data');
     }

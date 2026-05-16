@@ -4,6 +4,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLanguage } from "../../../context/LanguageContext";
 import { fetchAPI } from "@/lib/api";
+import PricingModal from "../../Shared/PricingModal";
+import ContactModal from "../../Shared/ContactModal";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,6 +16,8 @@ const CTA = () => {
   const slide2Ref = useRef(null);
   const planet1Ref = useRef(null);
   const text1Ref = useRef(null);
+  const [isPricingModalOpen, setIsPricingModalOpen] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   const [settings, setSettings] = useState({});
   useEffect(() => {
@@ -125,10 +129,16 @@ const CTA = () => {
             {settings.cta_long_desc || t("ctaLongDesc")}
           </p>
           <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
-            <button className="bg-[#FF8A00] hover:bg-[#e67e00] text-white px-6 md:px-8 py-2 md:py-3 rounded-lg font-bold text-sm md:text-base transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,138,0,0.3)]">
+            <button 
+              onClick={() => setIsPricingModalOpen(true)}
+              className="bg-[#FF8A00] hover:bg-[#e67e00] text-white px-6 md:px-8 py-2 md:py-3 rounded-lg font-bold text-sm md:text-base transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,138,0,0.3)]"
+            >
               {t("getAQuote")}
             </button>
-            <button className="border border-white/20 hover:border-white/40 bg-white/5 backdrop-blur-sm text-white px-6 md:px-8 py-2 md:py-3 rounded-lg font-bold text-sm md:text-base transition-all transform hover:scale-105">
+            <button 
+              onClick={() => setIsContactModalOpen(true)}
+              className="border border-white/20 hover:border-white/40 bg-white/5 backdrop-blur-sm text-white px-6 md:px-8 py-2 md:py-3 rounded-lg font-bold text-sm md:text-base transition-all transform hover:scale-105"
+            >
               {t("callUs")}
             </button>
           </div>
@@ -161,15 +171,31 @@ const CTA = () => {
           </p>
           
           <div className="flex flex-col w-full gap-3 sm:gap-4">
-            <button className="w-full bg-gradient-to-r from-[#FF8A00] to-[#E1804E] hover:from-[#e67e00] hover:to-[#c96d3f] text-white py-3 sm:py-3.5 rounded-xl font-bold text-xs sm:text-sm shadow-[0_0_20px_rgba(255,138,0,0.4)] active:scale-95 transition-all uppercase tracking-wider">
+            <button 
+              onClick={() => setIsPricingModalOpen(true)}
+              className="w-full bg-gradient-to-r from-[#FF8A00] to-[#E1804E] hover:from-[#e67e00] hover:to-[#c96d3f] text-white py-3 sm:py-3.5 rounded-xl font-bold text-xs sm:text-sm shadow-[0_0_20px_rgba(255,138,0,0.4)] active:scale-95 transition-all uppercase tracking-wider"
+            >
               {t("getAQuote")}
             </button>
-            <button className="w-full bg-white/5 border border-white/10 hover:bg-white/10 text-white py-3 sm:py-3.5 rounded-xl font-bold text-xs sm:text-sm active:scale-95 transition-all uppercase tracking-wider">
+            <button 
+              onClick={() => setIsContactModalOpen(true)}
+              className="w-full bg-white/5 border border-white/10 hover:bg-white/10 text-white py-3 sm:py-3.5 rounded-xl font-bold text-xs sm:text-sm active:scale-95 transition-all uppercase tracking-wider"
+            >
               {t("callUs")}
             </button>
           </div>
         </div>
       </div>
+      
+      <PricingModal 
+        isOpen={isPricingModalOpen} 
+        onClose={() => setIsPricingModalOpen(false)} 
+      />
+      <ContactModal 
+        isOpen={isContactModalOpen} 
+        onClose={() => setIsContactModalOpen(false)} 
+        settings={settings} 
+      />
     </section>
   );
 };

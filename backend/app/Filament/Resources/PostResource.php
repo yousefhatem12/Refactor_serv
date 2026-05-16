@@ -79,6 +79,9 @@ class PostResource extends Resource
                             ->searchable(),
                         Toggle::make('is_published')
                             ->default(false),
+                        Toggle::make('is_trending')
+                            ->label('Trending')
+                            ->default(false),
                         Select::make('author_id')
                             ->relationship('author', 'name')
                             ->default(auth()->id())
@@ -122,6 +125,10 @@ class PostResource extends Resource
                     ->badge()
                     ->sortable(),
                 Tables\Columns\IconColumn::make('is_published')
+                    ->boolean()
+                    ->sortable(),
+                Tables\Columns\IconColumn::make('is_trending')
+                    ->label('Trending')
                     ->boolean()
                     ->sortable(),
                 Tables\Columns\IconColumn::make('seo_description')
