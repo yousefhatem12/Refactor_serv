@@ -29,7 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
+            ->login(\App\Filament\Pages\Auth\LoginWithOtp::class)
             ->colors([
                 'primary' => \Filament\Support\Colors\Color::hex('#FF8A00'),
                 'danger' => \Filament\Support\Colors\Color::Rose,
