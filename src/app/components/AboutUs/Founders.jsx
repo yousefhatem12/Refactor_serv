@@ -92,7 +92,7 @@ const Founders = ({ data }) => {
   };
 
   return (
-    <section className="py-32 px-6 md:px-16 lg:px-24 w-full relative overflow-hidden bg-[#050b18]">
+    <section className="py-32 px-6 md:px-16 lg:px-24 w-full relative overflow-hidden">
       {/* Abstract Background Decor */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-600/10 blur-[120px] rounded-full -translate-y-1/2 pointer-events-none"></div>
       <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-indigo-600/10 blur-[120px] rounded-full translate-y-1/2 pointer-events-none"></div>
@@ -106,13 +106,13 @@ const Founders = ({ data }) => {
           transition={{ duration: 0.8 }}
           className="text-center mb-24"
         >
-          <span className="text-blue-400 font-semibold tracking-[0.3em] uppercase text-xs md:text-sm mb-4 block">
+          <span className="text-blue-500 font-black tracking-[0.4em] uppercase text-[10px] md:text-xs mb-6 block opacity-80">
             {t("ourLeadership") || "Our Leadership"}
           </span>
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-8 tracking-tight leading-tight">
+          <h2 className="text-4xl md:text-6xl font-black text-white mb-10 tracking-tighter leading-none text-cinematic">
             {data?.title || settings.founders_title || t("aboutFoundersTag")}
           </h2>
-          <p className="text-gray-400 text-sm md:text-lg max-w-2xl mx-auto leading-relaxed whitespace-pre-line font-light">
+          <p className="text-gray-400 text-base md:text-xl max-w-3xl mx-auto leading-relaxed whitespace-pre-line font-light text-balance">
             {data?.description ||
               settings.founders_desc ||
               t("aboutFoundersDesc")}
@@ -160,11 +160,11 @@ const Founders = ({ data }) => {
 
                 {/* Content Overlay (Mobile-friendly reveal) */}
                 <div className="absolute bottom-0 left-0 w-full p-8 translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                  <h3 className="text-white font-bold text-xl md:text-2xl tracking-wide mb-2">
+                  <h3 className="text-white font-black text-xl md:text-3xl tracking-tight mb-2">
                     {founder.name}
                   </h3>
-                  <div className="h-[2px] w-0 bg-blue-500 group-hover:w-12 transition-all duration-500 ease-out mb-3"></div>
-                  <p className="text-blue-300/90 text-sm font-medium tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100">
+                  <div className="h-[2px] w-0 bg-blue-500 group-hover:w-16 transition-all duration-700 ease-out mb-4"></div>
+                  <p className="text-blue-400 text-xs font-black tracking-[0.2em] uppercase opacity-0 group-hover:opacity-100 transition-all duration-700 delay-100">
                     {founder.role}
                   </p>
                 </div>

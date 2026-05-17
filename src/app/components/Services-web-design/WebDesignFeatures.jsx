@@ -3,7 +3,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "../../context/LanguageContext";
 
-const WebDesignFeatures = () => {
+const WebDesignFeatures = ({ title, description }) => {
   const { t } = useLanguage();
   const features = [
     {
@@ -200,7 +200,7 @@ const WebDesignFeatures = () => {
             viewport={{ once: true }}
             className="text-white text-3xl md:text-5xl font-bold mb-6 leading-tight"
           >
-            {t("wdFeaturesTitle")}
+            {title || t("wdFeaturesTitle")}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -209,7 +209,7 @@ const WebDesignFeatures = () => {
             transition={{ delay: 0.2 }}
             className="text-gray-400 text-lg md:text-xl leading-relaxed"
           >
-            {t("wdFeaturesDesc")}
+            {description || t("wdFeaturesDesc")}
           </motion.p>
         </div>
 
