@@ -39,6 +39,7 @@ const Navbar = () => {
                 { name: t("webDesign"), href: "/services-web-design" },
                 { name: t("socialMedia"), href: "/services-social-media" },
                 { name: t("webHosting"), href: "/services-web-hosting" },
+                { name: t("consultationHeroTitle"), href: "/project-consultation" },
               ],
             },
             { name: t("portfolio"), href: "/portfolio" },
@@ -60,6 +61,7 @@ const Navbar = () => {
               { name: t("webDesign"), href: "/services-web-design" },
               { name: t("socialMedia"), href: "/services-social-media" },
               { name: t("webHosting"), href: "/services-web-hosting" },
+              { name: t("consultationHeroTitle"), href: "/project-consultation" },
             ],
           },
           { name: t("portfolio"), href: "/portfolio" },
@@ -156,9 +158,9 @@ const Navbar = () => {
               <div key={link.name} className="relative group">
                 <Link
                   href={link.href}
-                  className={`flex items-center gap-1 text-sm font-medium tracking-wider transition-all duration-300 ${isActive
-                      ? "text-[#D98B50]"
-                      : "text-white/70 hover:text-white"
+                  className={`flex items-center gap-1 text-xs md:text-sm font-semibold tracking-[0.1em] uppercase transition-all duration-300 ${isActive
+                      ? "text-[#FF8A00]"
+                      : "text-white/60 hover:text-white"
                     }`}
                 >
                   {link.name}
@@ -178,7 +180,7 @@ const Navbar = () => {
                     </svg>
                   )}
                   <span
-                    className={`absolute -bottom-1 left-0 h-[2px] bg-[#D98B50] rounded-full transition-all duration-300 ${isActive ? "w-full" : "w-0 group-hover:w-full"
+                    className={`absolute -bottom-1 left-0 h-[1px] bg-[#FF8A00] rounded-full transition-all duration-300 ${isActive ? "w-full" : "w-0 group-hover:w-full"
                       }`}
                   />
                 </Link>
@@ -191,9 +193,9 @@ const Navbar = () => {
                         <Link
                           key={subLink.name}
                           href={subLink.href}
-                          className={`block px-4 py-3 text-sm rounded-md transition-all duration-200 ${pathname === subLink.href
-                              ? "text-[#D98B50] bg-white/10 font-semibold"
-                              : "text-white/70 hover:text-white hover:bg-white/5 hover:translate-x-1"
+                          className={`block px-4 py-3 text-xs md:text-sm font-medium tracking-wide rounded-lg transition-all duration-200 ${pathname === subLink.href
+                              ? "text-[#FF8A00] bg-white/5 font-bold"
+                              : "text-white/50 hover:text-white hover:bg-white/5 hover:translate-x-1"
                             }`}
                         >
                           {subLink.name}
