@@ -9,7 +9,9 @@ const WebDesignFeatures = ({ title, description }) => {
     {
       id: 1,
       title: t("wdFeature1Title") || "Professional Design",
-      desc: t("wdFeature1Desc") || "A web design that by a simple modern and professional design with the latest web dev platforms that addresses you and your identity.",
+      desc:
+        t("wdFeature1Desc") ||
+        "A web design that by a simple modern and professional design with the latest web dev platforms that addresses you and your identity.",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -32,7 +34,9 @@ const WebDesignFeatures = ({ title, description }) => {
     {
       id: 2,
       title: t("wdFeature2Title") || "Modern Colors",
-      desc: t("wdFeature2Desc") || "A web design that by a simple modern and professional design with the latest web dev platforms that addresses you and your identity.",
+      desc:
+        t("wdFeature2Desc") ||
+        "A web design that by a simple modern and professional design with the latest web dev platforms that addresses you and your identity.",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -57,7 +61,9 @@ const WebDesignFeatures = ({ title, description }) => {
     {
       id: 3,
       title: t("wdFeature3Title") || "Free Design",
-      desc: t("wdFeature3Desc") || "A web design that by a simple modern and professional design with the latest web dev platforms that addresses you and your identity.",
+      desc:
+        t("wdFeature3Desc") ||
+        "A web design that by a simple modern and professional design with the latest web dev platforms that addresses you and your identity.",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -81,7 +87,9 @@ const WebDesignFeatures = ({ title, description }) => {
     {
       id: 4,
       title: t("wdFeature4Title") || "Responsive Design",
-      desc: t("wdFeature4Desc") || "A web design that by a simple modern and professional design with the latest web dev platforms that addresses you and your identity.",
+      desc:
+        t("wdFeature4Desc") ||
+        "A web design that by a simple modern and professional design with the latest web dev platforms that addresses you and your identity.",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -103,7 +111,9 @@ const WebDesignFeatures = ({ title, description }) => {
     {
       id: 5,
       title: t("wdFeature5Title") || "Multi-lingual",
-      desc: t("wdFeature5Desc") || "A web design that by a simple modern and professional design with the latest web dev platforms that addresses you and your identity.",
+      desc:
+        t("wdFeature5Desc") ||
+        "A web design that by a simple modern and professional design with the latest web dev platforms that addresses you and your identity.",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -126,7 +136,9 @@ const WebDesignFeatures = ({ title, description }) => {
     {
       id: 6,
       title: t("wdFeature6Title") || "UI Components",
-      desc: t("wdFeature6Desc") || "A web design that by a simple modern and professional design with the latest web dev platforms that addresses you and your identity.",
+      desc:
+        t("wdFeature6Desc") ||
+        "A web design that by a simple modern and professional design with the latest web dev platforms that addresses you and your identity.",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -149,7 +161,9 @@ const WebDesignFeatures = ({ title, description }) => {
     {
       id: 7,
       title: t("wdFeature7Title") || "Unity Complete Markets",
-      desc: t("wdFeature7Desc") || "A web design that by a simple modern and professional design with the latest web dev platforms that addresses you and your identity.",
+      desc:
+        t("wdFeature7Desc") ||
+        "A web design that by a simple modern and professional design with the latest web dev platforms that addresses you and your identity.",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -170,7 +184,9 @@ const WebDesignFeatures = ({ title, description }) => {
     {
       id: 8,
       title: t("wdFeature8Title") || "Unique Features",
-      desc: t("wdFeature8Desc") || "A web design that by a simple modern and professional design with the latest web dev platforms that addresses you and your identity.",
+      desc:
+        t("wdFeature8Desc") ||
+        "A web design that by a simple modern and professional design with the latest web dev platforms that addresses you and your identity.",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
