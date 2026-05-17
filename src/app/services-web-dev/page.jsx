@@ -12,9 +12,11 @@ export default function WebDevPage() {
   const [pageData, setPageData] = useState(null);
 
   useEffect(() => {
-    fetchAPI(`/pages/services-web-dev?lang=${language}`).then(data => {
-      if (data) setPageData(data);
-    }).catch(console.error);
+    fetchAPI(`/pages/services-web-dev?lang=${language}`)
+      .then((data) => {
+        if (data) setPageData(data);
+      })
+      .catch(console.error);
   }, [language]);
 
   return (

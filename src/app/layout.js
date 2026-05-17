@@ -28,10 +28,12 @@ const alexandria = Alexandria({
 import { fetchAPI } from "@/lib/api";
 
 export async function generateMetadata() {
-  const settings = await fetchAPI('/settings');
+  const settings = await fetchAPI("/settings");
   return {
     title: settings?.site_title || "Serv5 | Advanced Agentic Coding",
-    description: settings?.site_description || "Leading company in web development and AI solutions.",
+    description:
+      settings?.site_description ||
+      "Leading company in web development and AI solutions.",
   };
 }
 
@@ -40,7 +42,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { SettingsProvider } from "./context/SettingsContext";
 
 export default async function RootLayout({ children }) {
-  const settings = await fetchAPI('/settings');
+  const settings = await fetchAPI("/settings");
   return (
     <html
       lang="en"
@@ -49,7 +51,10 @@ export default async function RootLayout({ children }) {
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         {settings?.custom_header_code && (
-          <div dangerouslySetInnerHTML={{ __html: settings.custom_header_code }} style={{ display: 'none' }} />
+          <div
+            dangerouslySetInnerHTML={{ __html: settings.custom_header_code }}
+            style={{ display: "none" }}
+          />
         )}
         <LanguageProvider>
           <AuthProvider>
@@ -62,7 +67,10 @@ export default async function RootLayout({ children }) {
           </AuthProvider>
         </LanguageProvider>
         {settings?.custom_footer_code && (
-          <div dangerouslySetInnerHTML={{ __html: settings.custom_footer_code }} style={{ display: 'none' }} />
+          <div
+            dangerouslySetInnerHTML={{ __html: settings.custom_footer_code }}
+            style={{ display: "none" }}
+          />
         )}
       </body>
     </html>

@@ -15,8 +15,10 @@ const WebDevHero = ({ data, serviceId = "web-development" }) => {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [isPricingModalOpen, setIsPricingModalOpen] = useState(false);
 
-  const heroImage = data?.hero_image ? getMediaUrl(data.hero_image) : "/services-web-dev/hero.png";
-  
+  const heroImage = data?.hero_image
+    ? getMediaUrl(data.hero_image)
+    : "/services-web-dev/hero.png";
+
   return (
     <section className="relative w-full min-h-[80vh] flex items-center justify-between px-6 lg:px-20 pt-20">
       {/* Background Image behind everything */}
@@ -51,14 +53,14 @@ const WebDevHero = ({ data, serviceId = "web-development" }) => {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="flex flex-wrap items-center gap-6"
         >
-          <button 
+          <button
             onClick={() => setIsPricingModalOpen(true)}
             className="px-8 py-3 rounded-full bg-white text-[#040A37] font-semibold text-lg hover:bg-gray-200 transition-colors cursor-pointer border-none"
           >
             {settings?.hero_cta_text || t("getStarted")}
           </button>
 
-          <button 
+          <button
             onClick={() => setIsVideoModalOpen(true)}
             className="flex items-center gap-3 text-white hover:text-gray-300 transition-colors group bg-transparent border-none cursor-pointer"
           >

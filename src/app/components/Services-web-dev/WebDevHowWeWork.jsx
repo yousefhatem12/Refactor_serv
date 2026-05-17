@@ -203,13 +203,11 @@ const WebDevHowWeWork = () => {
                   {/* Point */}
                   <div
                     className={`absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-[#D98B50] shadow-[0_0_15px_rgba(217,139,80,0.8)] z-20 ${
-                      step.align === "right"
-                        ? "left-[-10px]"
-                        : "right-[-10px]"
+                      step.align === "right" ? "left-[-10px]" : "right-[-10px]"
                     }`}
                   ></div>
 
-                  <div 
+                  <div
                     className="bg-[#03071E]/80 backdrop-blur-md rounded-2xl p-8 border border-white/5 w-full max-w-sm hover:border-white/10 transition-colors"
                     dir={isRtl ? "rtl" : "ltr"}
                   >
@@ -264,7 +262,7 @@ const WebDevHowWeWork = () => {
                   className={`absolute left-[20px] top-6 w-4 h-4 rounded-full bg-[#D98B50] shadow-[0_0_15px_rgba(217,139,80,0.8)] z-20`}
                 ></div>
 
-                <div 
+                <div
                   className="bg-[#03071E]/80 backdrop-blur-md rounded-2xl p-6 border border-white/5 hover:border-white/10 transition-colors"
                   dir={isRtl ? "rtl" : "ltr"}
                 >
