@@ -17,7 +17,7 @@ import { RiTwitterXFill } from "react-icons/ri";
 // for the icons to match the design perfectly and avoid dependency issues.
 
 const Footer = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const [settings, setSettings] = useState({});
   const [footerData, setFooterData] = useState({
@@ -31,10 +31,10 @@ const Footer = () => {
       if (data) setSettings(data);
     }).catch(console.error);
 
-    fetchAPI('/footer-data').then(data => {
+    fetchAPI(`/footer-data?lang=${language}`).then(data => {
       if (data) setFooterData(data);
     }).catch(console.error);
-  }, []);
+  }, [language]);
 
   const getSocialIconData = (platform) => {
     const map = {

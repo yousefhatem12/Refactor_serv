@@ -6,7 +6,6 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { FaMapMarkerAlt, FaUsers, FaTrophy } from "react-icons/fa";
 import { useLanguage } from "../../context/LanguageContext";
-import { getMediaUrl } from "@/lib/api";
 
 const OurJourney = ({ data }) => {
   const { t } = useLanguage();
@@ -41,7 +40,7 @@ const OurJourney = ({ data }) => {
     const style = timelineStyles[idx % timelineStyles.length];
     return {
       year: item.year,
-      planet: item.planet ? getMediaUrl(item.planet) : `/about-us/planet${(idx % 7) + 1}.png`,
+      planet: `/about-us/planet${((idx % 7) + 1) === 1 ? '1' : `-${(idx % 7) + 1}`}.png`,
       yOffset: style.yOffset,
       size: style.size,
       mix: style.mix,
