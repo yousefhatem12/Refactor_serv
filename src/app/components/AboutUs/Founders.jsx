@@ -99,7 +99,7 @@ const Founders = ({ data }) => {
 
       <div className="max-w-7xl mx-auto flex flex-col items-center relative z-20">
         {/* Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -121,7 +121,7 @@ const Founders = ({ data }) => {
         </motion.div>
 
         {/* Founders Grid */}
-        <motion.div 
+        <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -129,14 +129,13 @@ const Founders = ({ data }) => {
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-14 w-full max-w-6xl"
         >
           {displayTeam.map((founder, index) => (
-            <motion.div 
-              key={index} 
+            <motion.div
+              key={index}
               variants={itemVariants}
               className="group relative flex flex-col"
             >
               {/* Main Card Container */}
               <div className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-[#0d2a57]/20 border border-white/10 backdrop-blur-sm transition-all duration-500 group-hover:border-blue-500/50 group-hover:shadow-[0_0_40px_-10px_rgba(59,130,246,0.3)]">
-                
                 {/* Image */}
                 <Image
                   src={
@@ -182,4 +181,3 @@ const Founders = ({ data }) => {
 };
 
 export default Founders;
-

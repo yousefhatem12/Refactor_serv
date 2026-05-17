@@ -2,7 +2,15 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../../context/LanguageContext";
-import { FaMobileAlt, FaLaptopCode, FaCogs, FaLightbulb, FaCheckCircle, FaChevronRight, FaChevronLeft } from "react-icons/fa";
+import {
+  FaMobileAlt,
+  FaLaptopCode,
+  FaCogs,
+  FaLightbulb,
+  FaCheckCircle,
+  FaChevronRight,
+  FaChevronLeft,
+} from "react-icons/fa";
 
 const ConsultationForm = () => {
   const { t, language } = useLanguage();
@@ -47,7 +55,11 @@ const ConsultationForm = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {[
               { id: "mobile", label: t("typeMobile"), icon: <FaMobileAlt /> },
-              { id: "website", label: t("typeWebsite"), icon: <FaLaptopCode /> },
+              {
+                id: "website",
+                label: t("typeWebsite"),
+                icon: <FaLaptopCode />,
+              },
               { id: "erp", label: t("typeERP"), icon: <FaCogs /> },
               { id: "other", label: t("typeOther"), icon: <FaLightbulb /> },
             ].map((item) => (
@@ -238,9 +250,7 @@ const ConsultationForm = () => {
               {language === "ar" ? <FaChevronLeft /> : <FaChevronRight />}
             </button>
           ) : (
-            <button
-              className="px-10 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:scale-105 text-white font-bold transition-all shadow-xl shadow-purple-600/20"
-            >
+            <button className="px-10 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:scale-105 text-white font-bold transition-all shadow-xl shadow-purple-600/20">
               {t("submitConsultation")}
             </button>
           )}
@@ -268,14 +278,23 @@ const SelectionCard = ({ selected, onClick, icon, label }) => {
         </div>
       )}
       {icon && <div className="text-3xl text-blue-400">{icon}</div>}
-      <span className={`text-lg font-medium ${selected ? "text-white" : "text-gray-400"}`}>
+      <span
+        className={`text-lg font-medium ${selected ? "text-white" : "text-gray-400"}`}
+      >
         {label}
       </span>
     </motion.div>
   );
 };
 
-const InputField = ({ label, name, value, onChange, placeholder, type = "text" }) => {
+const InputField = ({
+  label,
+  name,
+  value,
+  onChange,
+  placeholder,
+  type = "text",
+}) => {
   return (
     <div className="flex flex-col gap-2">
       <label className="text-gray-400 text-sm font-medium px-2">{label}</label>
