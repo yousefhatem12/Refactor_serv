@@ -28,6 +28,13 @@ class ApiController extends Controller
 
     private function trans($field, $lang)
     {
+        if (is_string($field)) {
+            $decoded = json_decode($field, true);
+            if (is_array($decoded)) {
+                $field = $decoded;
+            }
+        }
+
         if (!is_array($field)) {
             return $field;
         }
@@ -266,6 +273,7 @@ class ApiController extends Controller
 
     public function getFooterData()
     {
+        $lang = $this->getLang();
         $texts = [
             'heading' => Setting::where('key', 'footer_heading')->value('value') ?? 'Have a Good Web Design<br/>With Serv5.',
             'description' => Setting::where('key', 'footer_description')->value('value') ?? 'Serv5 specializes in modern web solutions...',
@@ -273,11 +281,11 @@ class ApiController extends Controller
             'copyright' => Setting::where('key', 'footer_copyright')->value('value') ?? '2026 © Serv5. All Rights Reserved.'
         ];
 
-        $links = \App\Models\FooterLink::orderBy('sort_order')->get()->groupBy('column_name')->map(function ($group) {
-            return $group->map(function ($link) {
+        $links = \App\Models\FooterLink::orderBy('sort_order')->get()->groupBy('column_name')->map(function ($group) use ($lang) {
+            return $group->map(function ($link) use ($lang) {
                 return [
                     'id' => $link->id,
-                    'label' => $link->label,
+                    'label' => $this->trans($link->label, $lang),
                     'url' => $link->url,
                 ];
             });
