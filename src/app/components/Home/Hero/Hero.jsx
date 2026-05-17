@@ -99,16 +99,16 @@ export default function Hero({ isPhaseTwo, data }) {
             >
               <motion.h1
                 variants={itemVariants}
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-3 sm:mb-4 md:mb-6 leading-tight drop-shadow-2xl [text-shadow:_0_4px_15px_rgba(0,0,0,1)]"
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black mb-6 leading-[0.9] tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/40 text-cinematic drop-shadow-2xl"
               >
-                {isLoadingSettings ? <span className="opacity-0">Loading...</span> : title}
+                {isLoadingSettings ? <span className="opacity-0 text-white">Loading...</span> : title}
               </motion.h1>
 
               <motion.p
                 variants={itemVariants}
-                className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-200 mb-6 sm:mb-8 md:mb-10 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg leading-relaxed drop-shadow-xl [text-shadow:_0_2px_10px_rgba(0,0,0,1)]"
+                className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-400 mb-10 max-w-xl leading-relaxed font-light text-balance opacity-90"
               >
-                {isLoadingSettings ? <span className="opacity-0">Loading...</span> : subtitle}
+                {isLoadingSettings ? <span className="opacity-0 text-white">Loading...</span> : subtitle}
               </motion.p>
 
               <motion.div
@@ -117,7 +117,7 @@ export default function Hero({ isPhaseTwo, data }) {
               >
                 <button
                   onClick={() => setIsPricingModalOpen(true)}
-                  className="bg-[#D98B50] hover:bg-[#c47a45] text-white text-sm sm:text-base px-6 py-3 sm:px-8 sm:py-4 rounded-full font-bold flex items-center gap-2 sm:gap-3 transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(217,139,80,0.4)] active:scale-95 cursor-pointer"
+                  className="bg-gradient-to-r from-[#FF8A00] to-[#FF5C00] hover:from-[#FF5C00] hover:to-[#FF8A00] text-white text-sm sm:text-base px-8 py-4 rounded-2xl font-black uppercase tracking-widest flex items-center gap-3 transition-all transform hover:scale-105 shadow-[0_20px_40px_-10px_rgba(255,138,0,0.5)] active:scale-95 cursor-pointer border-none"
                 >
                   <span className="bg-white/20 p-1 sm:p-1.5 rounded-full">
                     <svg

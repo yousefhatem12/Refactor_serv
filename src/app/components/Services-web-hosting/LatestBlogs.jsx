@@ -8,22 +8,22 @@ const LatestBlogs = () => {
   const blogs = [
     {
       id: 1,
-      title: "Future of Work",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      title: t("blog1Title"),
+      desc: t("blog1Desc"),
       img: "/services-page/card-1.png",
       link: "#",
     },
     {
       id: 2,
-      title: "Future of Data",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      title: t("blog2Title"),
+      desc: t("blog2Desc"),
       img: "/services-page/card-2.png",
       link: "#",
     },
     {
       id: 3,
-      title: "Future of learning",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      title: t("blog3Title"),
+      desc: t("blog3Desc"),
       img: "/services-page/card-3.png",
       link: "#",
     },

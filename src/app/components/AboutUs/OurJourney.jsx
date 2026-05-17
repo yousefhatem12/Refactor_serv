@@ -8,7 +8,7 @@ import { useLanguage } from "../../context/LanguageContext";
 import { getMediaUrl } from "@/lib/api";
 
 const OurJourney = ({ data }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const containerRef = useRef(null);
   const timelineRef = useRef(null);
   const cardsRef = useRef([]);
@@ -121,10 +121,10 @@ const OurJourney = ({ data }) => {
   return (
     <section ref={containerRef} className="pt-16 md:pt-24 pb-32 md:pb-64 w-full relative min-h-screen bg-transparent overflow-hidden">
       <div className="max-w-7xl mx-auto flex flex-col items-center px-6 md:px-16 lg:px-24 z-30 relative text-center mb-8">
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#FF8A00] mb-6 tracking-wide uppercase">
+        <h2 className="text-4xl md:text-5xl lg:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-[#FF8A00] to-[#FF5C00] mb-8 tracking-tighter uppercase text-cinematic animate-fade-in">
           {data?.title || t("aboutJourneyTag")}
         </h2>
-        <p className="text-gray-300 text-sm md:text-base font-normal max-w-4xl mx-auto leading-relaxed whitespace-pre-line">
+        <p className="text-gray-400 text-base md:text-lg lg:text-xl font-light max-w-4xl mx-auto leading-relaxed whitespace-pre-line text-balance opacity-80">
           {data?.description || t("aboutJourneyDesc")}
         </p>
       </div>
@@ -137,17 +137,17 @@ const OurJourney = ({ data }) => {
         <div className="absolute right-0 left-0 top-[-15%] w-[1500px] h-[1500px] z-5 opacity-40">
           <Image src="/about-us/orbit.png" alt="Orbit" fill className="object-contain object-center" />
         </div>
-        <div className="relative z-40 w-full flex justify-between items-center px-12 md:px-32 lg:px-48 xl:px-64 max-w-[1200px] mx-auto">
+        <div dir="ltr" className="relative z-40 w-full flex justify-between items-center px-12 md:px-32 lg:px-48 xl:px-64 max-w-[1200px] mx-auto">
           {timeline.map((item, index) => (
-            <div key={index} className={`flex flex-col items-center relative ${item.yOffset} transition-transform duration-700`}>
-              <div className="text-gray-200 font-bold text-sm md:text-lg mb-4 md:mb-6 tracking-widest bg-black/60 px-4 py-1.5 rounded-full backdrop-blur-md border border-white/5">
+            <div key={index} className={`flex flex-col items-center relative ${item.yOffset} transition-all duration-700 hover:scale-105`}>
+              <div className="text-white font-black text-lg md:text-2xl mb-4 md:mb-6 tracking-tighter bg-white/5 px-6 py-2 rounded-2xl backdrop-blur-2xl border border-white/10 shadow-[0_0_20px_rgba(255,255,255,0.05)]">
                 {item.year}
               </div>
               <div className={`relative ${item.size} ${item.mix ? "mix-blend-lighten" : ""} drop-shadow-[0_0_40px_rgba(255,255,255,0.2)]`}>
                 <Image src={item.planet} alt={`Planet ${item.year}`} fill className="object-contain" />
               </div>
               <div ref={(el) => (cardsRef.current[index] = el)} className="absolute top-[110%] left-1/2 -translate-x-1/2 w-[140px] lg:w-[160px] z-50" style={{ opacity: 0 }}>
-                <div className="relative bg-[#0A0A0C]/95 backdrop-blur-3xl border border-white/10 p-3 rounded-2xl shadow-[0_40px_80px_rgba(0,0,0,0.9)] border-t-white/20 text-left">
+                <div dir={language === "ar" ? "rtl" : "ltr"} className="relative bg-[#0A0A0C]/95 backdrop-blur-3xl border border-white/10 p-3 rounded-2xl shadow-[0_40px_80px_rgba(0,0,0,0.9)] border-t-white/20 text-start">
                    <div className="absolute -top-[8px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-b-[10px] border-b-[#0A0A0C]"></div>
                    <div className="flex flex-col gap-1">
                       <span className="text-white text-xs font-bold">{item.card.location}</span>
@@ -169,7 +169,7 @@ const OurJourney = ({ data }) => {
       </div>
 
       {/* Mobile Timeline (Vertical) */}
-      <div className="flex md:hidden flex-col items-center relative z-10 px-6 mt-12">
+      <div dir="ltr" className="flex md:hidden flex-col items-center relative z-10 px-6 mt-12">
         {/* Vertical Line */}
         <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-[#FF8A00] via-[#FF8A00]/20 to-transparent"></div>
         
@@ -190,7 +190,7 @@ const OurJourney = ({ data }) => {
             </div>
 
             {/* Info Card */}
-            <div className={`w-[160px] bg-[#0A0A0C]/80 backdrop-blur-xl border border-white/10 p-4 rounded-2xl shadow-2xl ${index % 2 === 0 ? "mr-4" : "ml-4"}`}>
+            <div dir={language === "ar" ? "rtl" : "ltr"} className={`w-[160px] bg-[#0A0A0C]/80 backdrop-blur-xl border border-white/10 p-4 rounded-2xl shadow-2xl ${index % 2 === 0 ? "mr-4" : "ml-4"}`}>
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-[#FF8A00]"></div>
