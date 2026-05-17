@@ -42,11 +42,13 @@ export default function Hero({ isPhaseTwo, data }) {
   // Settings are always populated instantly from layout.js
   const isLoadingSettings = !settings || Object.keys(settings).length === 0;
 
-  const heroTitle1 = settings?.hero_title_1 || '';
-  const heroTitle2 = settings?.hero_title_2 || '';
-  const defaultTitle = t("innovativeSolutions") + " " + t("tailoredToYourNeeds");
+  const heroTitle1 = settings?.hero_title_1 || "";
+  const heroTitle2 = settings?.hero_title_2 || "";
+  const defaultTitle =
+    t("innovativeSolutions") + " " + t("tailoredToYourNeeds");
 
-  const title = (heroTitle1 || heroTitle2 ? `${heroTitle1} ${heroTitle2}`.trim() : null) ||
+  const title =
+    (heroTitle1 || heroTitle2 ? `${heroTitle1} ${heroTitle2}`.trim() : null) ||
     data?.title ||
     defaultTitle;
 
@@ -70,8 +72,18 @@ export default function Hero({ isPhaseTwo, data }) {
         {isPhaseTwo && (
           <motion.div
             key={`planet-${language}`}
-            initial={{ x: isRtl ? "-100%" : "100%", y: "-20%", opacity: 0, scale: 0.8 }}
-            animate={{ x: isRtl ? "-20%" : "20%", y: "-30%", opacity: 1, scale: 1 }}
+            initial={{
+              x: isRtl ? "-100%" : "100%",
+              y: "-20%",
+              opacity: 0,
+              scale: 0.8,
+            }}
+            animate={{
+              x: isRtl ? "-20%" : "20%",
+              y: "-30%",
+              opacity: 1,
+              scale: 1,
+            }}
             transition={{ duration: 1.0, ease: "easeOut" }}
             style={{ y: planetY, opacity: planetOpacity }}
             className={`absolute top-0 ${isRtl ? "left-0 md:-left-20 lg:-left-32" : "right-0 md:-right-20 lg:-right-32"} z-0 pointer-events-none hidden md:block`}
@@ -101,14 +113,22 @@ export default function Hero({ isPhaseTwo, data }) {
                 variants={itemVariants}
                 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black mb-6 leading-[0.9] tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/40 text-cinematic drop-shadow-2xl"
               >
-                {isLoadingSettings ? <span className="opacity-0 text-white">Loading...</span> : title}
+                {isLoadingSettings ? (
+                  <span className="opacity-0 text-white">Loading...</span>
+                ) : (
+                  title
+                )}
               </motion.h1>
 
               <motion.p
                 variants={itemVariants}
                 className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-400 mb-10 max-w-xl leading-relaxed font-light text-balance opacity-90"
               >
-                {isLoadingSettings ? <span className="opacity-0 text-white">Loading...</span> : subtitle}
+                {isLoadingSettings ? (
+                  <span className="opacity-0 text-white">Loading...</span>
+                ) : (
+                  subtitle
+                )}
               </motion.p>
 
               <motion.div
@@ -135,7 +155,11 @@ export default function Hero({ isPhaseTwo, data }) {
                       <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
                     </svg>
                   </span>
-                  {isLoadingSettings ? <span className="opacity-0">Loading...</span> : (settings?.hero_cta_text || t("getAQuote"))}
+                  {isLoadingSettings ? (
+                    <span className="opacity-0">Loading...</span>
+                  ) : (
+                    settings?.hero_cta_text || t("getAQuote")
+                  )}
                 </button>
 
                 <div className="flex items-center gap-4 group">
@@ -153,18 +177,21 @@ export default function Hero({ isPhaseTwo, data }) {
                       <polygon points="5 3 19 12 5 21 5 3" />
                     </svg>
                   </button>
-                  <span 
+                  <span
                     onClick={() => setIsVideoModalOpen(true)}
                     className="text-white font-bold text-sm sm:text-base cursor-pointer hover:text-[#D98B50] transition-colors"
                   >
-                    {isLoadingSettings ? <span className="opacity-0">Loading...</span> : (settings?.hero_video_button_text || t("knowMore"))}
+                    {isLoadingSettings ? (
+                      <span className="opacity-0">Loading...</span>
+                    ) : (
+                      settings?.hero_video_button_text || t("knowMore")
+                    )}
                   </span>
                 </div>
               </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
-
       </div>
       <VideoModal
         isOpen={isVideoModalOpen}

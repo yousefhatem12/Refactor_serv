@@ -8,14 +8,70 @@ import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const locations = [
-  { id: "egypt", name: "Egypt", city: "Mansoura", details: "Suez canal above Dr.Rami pharmacy", x: 59, y: 42 },
-  { id: "saudi", name: "Saudi Arabia", city: "Riyadh", details: "Headquarters", x: 63, y: 50 },
-  { id: "uae", name: "UAE", city: "Dubai", details: "Innovation Hub", x: 66, y: 51 },
-  { id: "india", name: "India", city: "Mumbai", details: "Tech Center", x: 76, y: 58 },
-  { id: "australia", name: "Australia", city: "Sydney", details: "Growth Center", x: 89, y: 81 },
-  { id: "usa", name: "USA", city: "New York", details: "Business Office", x: 18, y: 38 },
-  { id: "brazil", name: "Brazil", city: "São Paulo", details: "Regional Center", x: 31, y: 74 },
-  { id: "south-africa", name: "South Africa", city: "Cape Town", details: "Operations Hub", x: 55, y: 82 },
+  {
+    id: "egypt",
+    name: "Egypt",
+    city: "Mansoura",
+    details: "Suez canal above Dr.Rami pharmacy",
+    x: 59,
+    y: 42,
+  },
+  {
+    id: "saudi",
+    name: "Saudi Arabia",
+    city: "Riyadh",
+    details: "Headquarters",
+    x: 63,
+    y: 50,
+  },
+  {
+    id: "uae",
+    name: "UAE",
+    city: "Dubai",
+    details: "Innovation Hub",
+    x: 66,
+    y: 51,
+  },
+  {
+    id: "india",
+    name: "India",
+    city: "Mumbai",
+    details: "Tech Center",
+    x: 76,
+    y: 58,
+  },
+  {
+    id: "australia",
+    name: "Australia",
+    city: "Sydney",
+    details: "Growth Center",
+    x: 89,
+    y: 81,
+  },
+  {
+    id: "usa",
+    name: "USA",
+    city: "New York",
+    details: "Business Office",
+    x: 18,
+    y: 38,
+  },
+  {
+    id: "brazil",
+    name: "Brazil",
+    city: "São Paulo",
+    details: "Regional Center",
+    x: 31,
+    y: 74,
+  },
+  {
+    id: "south-africa",
+    name: "South Africa",
+    city: "Cape Town",
+    details: "Operations Hub",
+    x: 55,
+    y: 82,
+  },
 ];
 
 const GlobalReach = ({ minimal = false }) => {
@@ -48,14 +104,18 @@ const GlobalReach = ({ minimal = false }) => {
           duration: 0.5,
           ease: "back.out(1.7)",
         })
-          .to(tooltip, {
-            opacity: 1,
-            y: 0,
-            duration: 0.4,
-            ease: "power2.out",
-          }, "-=0.2")
+          .to(
+            tooltip,
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.4,
+              ease: "power2.out",
+            },
+            "-=0.2",
+          )
           // Pause and show
-          .to({}, { duration: 2 }) 
+          .to({}, { duration: 2 })
           // Hide
           .to(tooltip, {
             opacity: 0,
@@ -63,12 +123,16 @@ const GlobalReach = ({ minimal = false }) => {
             duration: 0.4,
             ease: "power2.in",
           })
-          .to(dotContainer, {
-            opacity: 0,
-            scale: 0,
-            duration: 0.5,
-            ease: "power2.in",
-          }, "-=0.2");
+          .to(
+            dotContainer,
+            {
+              opacity: 0,
+              scale: 0,
+              duration: 0.5,
+              ease: "power2.in",
+            },
+            "-=0.2",
+          );
       });
     }, sectionRef);
 
@@ -76,8 +140,21 @@ const GlobalReach = ({ minimal = false }) => {
   }, []);
 
   return (
-    <section ref={sectionRef} className={minimal ? "w-full relative" : "py-20 px-6 md:px-16 lg:px-24 w-full relative overflow-hidden"}>
-      <div className={minimal ? "w-full flex flex-col items-center" : "max-w-7xl mx-auto flex flex-col items-center"}>
+    <section
+      ref={sectionRef}
+      className={
+        minimal
+          ? "w-full relative"
+          : "py-20 px-6 md:px-16 lg:px-24 w-full relative overflow-hidden"
+      }
+    >
+      <div
+        className={
+          minimal
+            ? "w-full flex flex-col items-center"
+            : "max-w-7xl mx-auto flex flex-col items-center"
+        }
+      >
         {/* Header Content */}
         {!minimal && (
           <div className="text-center max-w-3xl mb-16">
@@ -91,7 +168,14 @@ const GlobalReach = ({ minimal = false }) => {
         )}
 
         {/* Map Container */}
-        <div dir="ltr" className={minimal ? "relative w-full aspect-[4/3] md:aspect-[2/1]" : "relative w-full max-w-6xl aspect-[4/3] md:aspect-[2/1] mt-8"}>
+        <div
+          dir="ltr"
+          className={
+            minimal
+              ? "relative w-full aspect-[4/3] md:aspect-[2/1]"
+              : "relative w-full max-w-6xl aspect-[4/3] md:aspect-[2/1] mt-8"
+          }
+        >
           <div className="absolute inset-0 bg-blue-500/5 blur-[120px] rounded-full -z-10"></div>
           <Image
             src="/about-us/Contents.png"
@@ -116,12 +200,19 @@ const GlobalReach = ({ minimal = false }) => {
 
               {/* Tooltip / Label */}
               <div className="tooltip-container absolute bottom-full left-1/2 -translate-x-1/2 mb-2 md:mb-4 opacity-0 translate-y-4 pointer-events-none whitespace-nowrap">
-                <div dir={language === "ar" ? "rtl" : "ltr"} className="bg-white text-[#0A0F1A] px-3 py-2 md:px-5 md:py-3 rounded-xl md:rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.3)] relative border border-gray-100">
+                <div
+                  dir={language === "ar" ? "rtl" : "ltr"}
+                  className="bg-white text-[#0A0F1A] px-3 py-2 md:px-5 md:py-3 rounded-xl md:rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.3)] relative border border-gray-100"
+                >
                   <div className="flex items-center gap-2 md:gap-4">
                     <div className="w-2 h-2 md:w-3 md:h-3 bg-[#FF8A00] rounded-full shadow-inner"></div>
                     <div>
-                      <p className="text-[10px] md:text-sm font-extrabold leading-tight tracking-tight">{loc.city}, {loc.name}</p>
-                      <p className="text-[8px] md:text-[11px] text-gray-500 mt-0.5 md:mt-1 font-medium">{loc.details}</p>
+                      <p className="text-[10px] md:text-sm font-extrabold leading-tight tracking-tight">
+                        {loc.city}, {loc.name}
+                      </p>
+                      <p className="text-[8px] md:text-[11px] text-gray-500 mt-0.5 md:mt-1 font-medium">
+                        {loc.details}
+                      </p>
                     </div>
                   </div>
                   {/* Decorative Arrow */}
@@ -135,7 +226,8 @@ const GlobalReach = ({ minimal = false }) => {
 
       <style jsx>{`
         @keyframes ping {
-          75%, 100% {
+          75%,
+          100% {
             transform: scale(3.5);
             opacity: 0;
           }
@@ -149,5 +241,3 @@ const GlobalReach = ({ minimal = false }) => {
 };
 
 export default GlobalReach;
-
-

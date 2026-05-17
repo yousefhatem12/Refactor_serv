@@ -39,7 +39,12 @@ const Navbar = () => {
                 { name: t("webDesign"), href: "/services-web-design" },
                 { name: t("socialMedia"), href: "/services-social-media" },
                 { name: t("webHosting"), href: "/services-web-hosting" },
-                { name: t("consultationHeroTitle"), href: "/project-consultation" },
+                { name: t("catOnlineStores"), href: "/services-ecommerce" },
+                { name: t("catMobileApps"), href: "/services-mobile-apps" },
+                {
+                  name: t("consultationHeroTitle"),
+                  href: "/project-consultation",
+                },
               ],
             },
             { name: t("portfolio"), href: "/portfolio" },
@@ -61,7 +66,12 @@ const Navbar = () => {
               { name: t("webDesign"), href: "/services-web-design" },
               { name: t("socialMedia"), href: "/services-social-media" },
               { name: t("webHosting"), href: "/services-web-hosting" },
-              { name: t("consultationHeroTitle"), href: "/project-consultation" },
+              { name: t("catOnlineStores"), href: "/services-ecommerce" },
+              { name: t("catMobileApps"), href: "/services-mobile-apps" },
+              {
+                name: t("consultationHeroTitle"),
+                href: "/project-consultation",
+              },
             ],
           },
           { name: t("portfolio"), href: "/portfolio" },
@@ -85,8 +95,8 @@ const Navbar = () => {
       let currentHash = "";
       // Only look for hashes on the current page
       const pageHashLinks = navLinks
-        .filter(link => link.href.startsWith(pathname + '#'))
-        .map(link => link.href.split('#')[1]);
+        .filter((link) => link.href.startsWith(pathname + "#"))
+        .map((link) => link.href.split("#")[1]);
 
       for (const sectionId of pageHashLinks) {
         const element = document.getElementById(sectionId);
@@ -107,20 +117,21 @@ const Navbar = () => {
 
       setActiveHash(currentHash);
     };
-    
+
     window.addEventListener("scroll", handleScroll);
     // Initial check
     handleScroll();
-    
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, [pathname, navLinks]);
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-[1000] transition-all duration-500 ease-in-out ${isScrolled
+      className={`fixed top-0 left-0 w-full z-[1000] transition-all duration-500 ease-in-out ${
+        isScrolled
           ? "py-4 bg-[#05050f]/5 backdrop-blur-md shadow-lg "
           : "py-6 bg-transparent"
-        }`}
+      }`}
     >
       <div className="max-w-[1400px] mx-auto px-6 md:px-10 flex items-center justify-between">
         {/* Logo */}
@@ -137,13 +148,16 @@ const Navbar = () => {
         {/* Desktop Links */}
         <div className="hidden lg:flex items-center gap-8">
           {navLinks.map((link) => {
-            const isHashLink = link.href.includes('#');
-            const targetPath = link.href.split('#')[0];
-            const targetHash = '#' + (link.href.split('#')[1] || '');
+            const isHashLink = link.href.includes("#");
+            const targetPath = link.href.split("#")[0];
+            const targetHash = "#" + (link.href.split("#")[1] || "");
 
             let isActive = false;
 
-            if (link.dropdown && link.dropdown.some((sub) => pathname === sub.href)) {
+            if (
+              link.dropdown &&
+              link.dropdown.some((sub) => pathname === sub.href)
+            ) {
               isActive = true;
             } else if (isHashLink) {
               isActive = pathname === targetPath && activeHash === targetHash;
@@ -151,17 +165,18 @@ const Navbar = () => {
               // It's a normal link. Only active if pathname matches AND we aren't currently in a known hash section.
               // Alternatively, if it's the exact pathname and activeHash is empty.
               const hasActiveHash = activeHash !== "";
-              isActive = (pathname === link.href && !hasActiveHash);
+              isActive = pathname === link.href && !hasActiveHash;
             }
 
             return (
               <div key={link.name} className="relative group">
                 <Link
                   href={link.href}
-                  className={`flex items-center gap-1 text-xs md:text-sm font-semibold tracking-[0.1em] uppercase transition-all duration-300 ${isActive
+                  className={`flex items-center gap-1 text-xs md:text-sm font-semibold tracking-[0.1em] uppercase transition-all duration-300 ${
+                    isActive
                       ? "text-[#FF8A00]"
                       : "text-white/60 hover:text-white"
-                    }`}
+                  }`}
                 >
                   {link.name}
                   {link.dropdown && (
@@ -180,8 +195,9 @@ const Navbar = () => {
                     </svg>
                   )}
                   <span
-                    className={`absolute -bottom-1 left-0 h-[1px] bg-[#FF8A00] rounded-full transition-all duration-300 ${isActive ? "w-full" : "w-0 group-hover:w-full"
-                      }`}
+                    className={`absolute -bottom-1 left-0 h-[1px] bg-[#FF8A00] rounded-full transition-all duration-300 ${
+                      isActive ? "w-full" : "w-0 group-hover:w-full"
+                    }`}
                   />
                 </Link>
 
@@ -193,10 +209,11 @@ const Navbar = () => {
                         <Link
                           key={subLink.name}
                           href={subLink.href}
-                          className={`block px-4 py-3 text-xs md:text-sm font-medium tracking-wide rounded-lg transition-all duration-200 ${pathname === subLink.href
+                          className={`block px-4 py-3 text-xs md:text-sm font-medium tracking-wide rounded-lg transition-all duration-200 ${
+                            pathname === subLink.href
                               ? "text-[#FF8A00] bg-white/5 font-bold"
                               : "text-white/50 hover:text-white hover:bg-white/5 hover:translate-x-1"
-                            }`}
+                          }`}
                         >
                           {subLink.name}
                         </Link>
@@ -295,18 +312,22 @@ const Navbar = () => {
               </div>
               <div className="flex flex-col gap-6">
                 {navLinks.map((link) => {
-                  const isHashLink = link.href.includes('#');
-                  const targetPath = link.href.split('#')[0];
-                  const targetHash = '#' + (link.href.split('#')[1] || '');
+                  const isHashLink = link.href.includes("#");
+                  const targetPath = link.href.split("#")[0];
+                  const targetHash = "#" + (link.href.split("#")[1] || "");
 
                   let isActive = false;
-                  if (link.dropdown && link.dropdown.some((sub) => pathname === sub.href)) {
+                  if (
+                    link.dropdown &&
+                    link.dropdown.some((sub) => pathname === sub.href)
+                  ) {
                     isActive = true;
                   } else if (isHashLink) {
-                    isActive = pathname === targetPath && activeHash === targetHash;
+                    isActive =
+                      pathname === targetPath && activeHash === targetHash;
                   } else {
                     const hasActiveHash = activeHash !== "";
-                    isActive = (pathname === link.href && !hasActiveHash);
+                    isActive = pathname === link.href && !hasActiveHash;
                   }
 
                   return (
@@ -323,10 +344,11 @@ const Navbar = () => {
                       >
                         <Link
                           href={link.dropdown ? "#" : link.href}
-                          className={`text-xl font-semibold tracking-wide transition-colors ${isActive
+                          className={`text-xl font-semibold tracking-wide transition-colors ${
+                            isActive
                               ? "text-[#D98B50]"
                               : "text-white/80 hover:text-white"
-                            }`}
+                          }`}
                           onClick={(e) => {
                             if (link.dropdown) e.preventDefault();
                           }}
@@ -366,10 +388,11 @@ const Navbar = () => {
                                 <Link
                                   key={subLink.name}
                                   href={subLink.href}
-                                  className={`text-lg py-1 transition-colors ${pathname === subLink.href
+                                  className={`text-lg py-1 transition-colors ${
+                                    pathname === subLink.href
                                       ? "text-[#D98B50] font-medium"
                                       : "text-white/60 hover:text-white"
-                                    }`}
+                                  }`}
                                   onClick={() => setIsMobileMenuOpen(false)}
                                 >
                                   {subLink.name}
