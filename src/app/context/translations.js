@@ -306,6 +306,11 @@ export const translations = {
     // Services - Web Dev
     webDevHeroTitle: "WEB DEVELOPMENT",
     webDevHeroDesc: "If your dream is to own a website with distinctive design that remains in your place with servers, for we will ... an integrated team is available that work to provide the best web design service with the latest technology. If your dream is to own a website with distinctive design that remains in your place with servers, for we will ... an integrated team is available that work to provide the best ...",
+    webDevStep1Title: "Strategy & Analysis",
+    webDevStep2Title: "Prototyping & UX",
+    webDevStep3Title: "Development & Coding",
+    webDevStep4Title: "Testing & QA",
+    webDevStep5Title: "Launch & Support",
     designAndDevStrategy: "Design and Development Strategy",
     uxAnalysis: "UX Analysis",
     devStrategy: "Development Strategy",
@@ -323,6 +328,7 @@ export const translations = {
     deployment: "Deployment",
     maintenance: "Maintenance",
     clientSupport: "Client Support",
+    webDevFeaturesTitle: "What distinguish us at web development service?",
 
     // Services - Web Hosting (Hero)
     webHostingHeroTitle: "WEB HOSTING",
@@ -370,6 +376,51 @@ export const translations = {
     latestBlogsTitle: "LATEST BLOGS",
     latestBlogsDesc: "Any project needs to be evaluated from all aspects before starting to implement it, taking into consideration the cost.",
     readMore: "Read More",
+    blog1Title: "Future of Work",
+    blog1Desc: "How technology is reshaping the modern workplace and remote collaboration.",
+    blog2Title: "Future of Data",
+    blog2Desc: "Protecting and leveraging your digital assets in a data-driven world.",
+    blog3Title: "Future of Learning",
+    blog3Desc: "The evolution of education through digital platforms and AI.",
+
+    // Project Consultation
+    consultationHeroTitle: "PROJECT CONSULTATION",
+    consultationHeroDesc: "Launch your project with a professional vision. Fill out the details below and get a free consultation from our experts.",
+    consultationStep1Title: "What is your project type?",
+    consultationStep2Title: "Do you have project documentation?",
+    consultationStep3Title: "What is your estimated budget?",
+    consultationStep4Title: "What is the expected timeline?",
+    consultationStep5Title: "Who is the decision maker?",
+    consultationStep6Title: "Any similar projects or references?",
+    consultationStep7Title: "Contact Information",
+    
+    typeMobile: "Mobile App",
+    typeWebsite: "Website / Web App",
+    typeERP: "ERP / CRM System",
+    typeOther: "Other / Creative Idea",
+    
+    docYes: "Yes, I have complete specs",
+    docNo: "No, I need a consultation",
+    
+    budgetUnder5k: "Under 5,000 SAR",
+    budget12to35: "12,000 - 35,000 SAR",
+    budget35to80: "35,000 - 80,000 SAR",
+    budgetOver80: "Over 80,000 SAR",
+    
+    time1Week: "1 Week (Urgent)",
+    time1Month: "1 Month",
+    time3Months: "3 Months",
+    timeNone: "No specific timeline",
+    
+    decisionMe: "Just me",
+    decisionTeam: "Me and a partner/team",
+    decisionCompany: "Company / Institution",
+    
+    refPlaceholder: "Paste links or describe similar projects...",
+    
+    nextStep: "Next Step",
+    prevStep: "Previous Step",
+    submitConsultation: "Submit Request",
   },
   ar: {
     home: "الرئيسية",
@@ -683,6 +734,11 @@ export const translations = {
     // Services - Web Dev
     webDevHeroTitle: "تطوير المواقع",
     webDevHeroDesc: "إذا كان حلمك هو امتلاك موقع الويب الخاص بك بتصميم جذاب يناسب أهدافك ويتحدث عنك... فأنت في أيد أمينة، حان الوقت للحصول على حلول تصميم أكثر واقعية لحلول التسويق لتروي قصة علامتك التجارية بفعالية، يمكننا مساعدتك في تحويل حلمك إلى حقيقة... فريقنا المتكامل متاح ومستعد لتقديم الأفضل...",
+    webDevStep1Title: "الاستراتيجية والتحليل",
+    webDevStep2Title: "النماذج وتجربة المستخدم",
+    webDevStep3Title: "التطوير والبرمجة",
+    webDevStep4Title: "الاختبار وضمان الجودة",
+    webDevStep5Title: "الإطلاق والدعم",
     designAndDevStrategy: "استراتيجية التصميم والتطوير",
     uxAnalysis: "تحليل تجربة المستخدم",
     devStrategy: "استراتيجية التطوير",
@@ -700,6 +756,7 @@ export const translations = {
     deployment: "النشر",
     maintenance: "الصيانة",
     clientSupport: "دعم العملاء",
+    webDevFeaturesTitle: "ما الذي يميزنا في خدمات تطوير المواقع؟",
 
     // Services - Web Hosting (Hero)
     webHostingHeroTitle: "استضافة المواقع",
@@ -747,5 +804,50 @@ export const translations = {
     latestBlogsTitle: "أحدث المقالات",
     latestBlogsDesc: "يحتاج أي مشروع إلى التقييم من جميع الجوانب قبل البدء في تنفيذه، مع الأخذ في الاعتبار التكلفة.",
     readMore: "اقرأ المزيد",
+    blog1Title: "مستقبل العمل",
+    blog1Desc: "كيف تعيد التكنولوجيا تشكيل مكان العمل الحديث والتعاون عن بعد.",
+    blog2Title: "مستقبل البيانات",
+    blog2Desc: "حماية أصولك الرقمية والاستفادة منها في عالم قائم على البيانات.",
+    blog3Title: "مستقبل التعلم",
+    blog3Desc: "تطور التعليم من خلال المنصات الرقمية والذكاء الاصطناعي.",
+
+    // Project Consultation
+    consultationHeroTitle: "استشارة المشروع",
+    consultationHeroDesc: "ابدأ مشروعك برؤية احترافية. قم بتعبئة التفاصيل أدناه واحصل على استشارة مجانية من خبرائنا.",
+    consultationStep1Title: "ما هو نوع مشروعك؟",
+    consultationStep2Title: "هل لديك وثائق أو مواصفات للمشروع؟",
+    consultationStep3Title: "ما هي الميزانية التقديرية للمشروع؟",
+    consultationStep4Title: "ما هو الجدول الزمني المتوقع؟",
+    consultationStep5Title: "من هو صاحب القرار في المشروع؟",
+    consultationStep6Title: "هل هناك مشاريع مشابهة أو مراجع؟",
+    consultationStep7Title: "معلومات التواصل",
+
+    typeMobile: "تطبيق جوال",
+    typeWebsite: "موقع إلكتروني / تطبيق ويب",
+    typeERP: "نظام ERP / CRM",
+    typeOther: "أخرى / فكرة مبتكرة",
+
+    docYes: "نعم، لدي مواصفات كاملة",
+    docNo: "لا، أحتاج إلى استشارة فنية",
+
+    budgetUnder5k: "أقل من 5,000 ريال",
+    budget12to35: "12,000 - 35,000 ريال",
+    budget35to80: "35,000 - 80,000 ريال",
+    budgetOver80: "أكثر من 80,000 ريال",
+
+    time1Week: "أسبوع واحد (عاجل)",
+    time1Month: "شهر واحد",
+    time3Months: "3 أشهر",
+    timeNone: "لا يوجد وقت محدد",
+
+    decisionMe: "أنا فقط",
+    decisionTeam: "أنا وشريك / فريق عمل",
+    decisionCompany: "شركة / مؤسسة",
+
+    refPlaceholder: "أضف روابط أو صف مشاريع مشابهة...",
+
+    nextStep: "الخطوة التالية",
+    prevStep: "الخطوة السابقة",
+    submitConsultation: "إرسال الطلب",
   }
 };

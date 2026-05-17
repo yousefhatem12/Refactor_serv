@@ -5,6 +5,7 @@ import { useLanguage } from "../../../context/LanguageContext";
 
 import { useAuth } from "../../../context/AuthContext";
 import { fetchAPI } from "@/lib/api";
+import GlobalReach from "../../AboutUs/GlobalReach";
 
 const ContactUs = () => {
   const { t, language } = useLanguage();
@@ -393,11 +394,9 @@ const ContactUs = () => {
             transition={{ duration: 1, delay: 2.4, times: [0, 0.2, 0.8, 1] }}
           />
 
-          {/* Contents.png */}
-          <motion.img 
-            src="/about-us/Contents.png" 
-            alt="Contents" 
-            className="w-[90%] h-auto object-contain drop-shadow-[0_0_50px_rgba(255,138,0,0.3)] relative z-20 pointer-events-none"
+          {/* Global Reach Interactive Map */}
+          <motion.div 
+            className="w-full relative z-20"
             initial={{ opacity: 0, scale: 0.2, filter: "brightness(2) blur(10px)" }}
             whileInView={{ opacity: 1, scale: 1, filter: "brightness(1) blur(0px)" }}
             viewport={{ once: true, amount: 0.3 }}
@@ -407,7 +406,9 @@ const ContactUs = () => {
               type: "spring",
               stiffness: 80 
             }}
-          />
+          >
+            <GlobalReach minimal={true} />
+          </motion.div>
         </div>
       </div>
     </section>
