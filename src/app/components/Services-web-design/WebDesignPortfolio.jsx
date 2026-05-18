@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../../context/LanguageContext";
 
-const WebDesignPortfolio = () => {
+const WebDesignPortfolio = ({ isMobileApp }) => {
   const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState("companies");
 
@@ -50,7 +50,7 @@ const WebDesignPortfolio = () => {
               viewport={{ once: true }}
               className="text-white text-3xl md:text-5xl font-bold mb-6 leading-tight"
             >
-              {t("wdPortfolioTitle")}
+              {isMobileApp ? "Some of our Mobile app development work at Serve5" : t("wdPortfolioTitle")}
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -59,7 +59,7 @@ const WebDesignPortfolio = () => {
               transition={{ delay: 0.2 }}
               className="text-gray-400 text-lg mb-10 leading-relaxed"
             >
-              {t("wdPortfolioDesc")}
+              {isMobileApp ? "The latest of Serv5 works, as you brows our portfolio. Select the market in which you want to see works to find everything you look for." : t("wdPortfolioDesc")}
             </motion.p>
 
             <div className="flex flex-col gap-2">
@@ -84,34 +84,59 @@ const WebDesignPortfolio = () => {
           </div>
 
           {/* Right Column - Images Grid */}
-          <div className="lg:w-2/3">
+          <div className="lg:w-2/3 flex justify-center items-center">
             <AnimatePresence mode="wait">
-              <motion.div
-                key={activeTab}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.4 }}
-                className="grid grid-cols-1 md:grid-cols-2 gap-6"
-              >
-                {portfolioItems[activeTab]?.map((item, index) => (
-                  <div
-                    key={item.id}
-                    className="relative group rounded-xl overflow-hidden aspect-[4/3] bg-white/5"
-                  >
+              {isMobileApp ? (
+                <motion.div
+                  key={activeTab}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.4 }}
+                  className="relative w-full max-w-[320px] mx-auto"
+                >
+                  <img
+                    src="/template/iphone13.png"
+                    alt="iPhone Frame"
+                    className="relative z-10 w-full h-auto drop-shadow-2xl"
+                  />
+                  {/* Image inside frame */}
+                  <div className="absolute top-[3%] left-[5%] right-[5%] bottom-[3%] z-0 rounded-[2.5rem] overflow-hidden">
                     <img
-                      src={item.img}
-                      alt="Portfolio Item"
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      src={portfolioItems[activeTab]?.[0]?.img || portfolioItems["companies"][0].img}
+                      alt="App Screen"
+                      className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      <span className="text-white font-semibold tracking-wider uppercase text-sm border border-white px-4 py-2 rounded-full backdrop-blur-sm">
-                        {t("viewProject")}
-                      </span>
-                    </div>
                   </div>
-                ))}
-              </motion.div>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key={activeTab}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.4 }}
+                  className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full"
+                >
+                  {portfolioItems[activeTab]?.map((item, index) => (
+                    <div
+                      key={item.id}
+                      className="relative group rounded-xl overflow-hidden aspect-[4/3] bg-white/5"
+                    >
+                      <img
+                        src={item.img}
+                        alt="Portfolio Item"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <span className="text-white font-semibold tracking-wider uppercase text-sm border border-white px-4 py-2 rounded-full backdrop-blur-sm">
+                          {t("viewProject")}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </motion.div>
+              )}
             </AnimatePresence>
           </div>
         </div>

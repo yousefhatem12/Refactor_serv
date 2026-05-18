@@ -1,8 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { useLanguage } from "../../context/LanguageContext";
 import { fetchAPI } from "@/lib/api";
 import { motion } from "framer-motion";
+import PlanetAstronaut from "../Home/Shared/PlanetAstronaut";
 import {
   FaFacebook,
   FaInstagram,
@@ -18,6 +20,8 @@ import { RiTwitterXFill } from "react-icons/ri";
 
 const Footer = () => {
   const { t, language } = useLanguage();
+  const pathname = usePathname();
+  const isHomePage = pathname === "/" || pathname === "/Home";
 
   const [settings, setSettings] = useState({});
   const [footerData, setFooterData] = useState({
@@ -49,10 +53,17 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-transparent text-white pt-20 pb-10 relative overflow-hidden">
+    <footer className="bg-transparent text-white pt-10 pb-6 relative overflow-hidden">
       {/* Background Glows */}
       <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-blue-600/10 blur-[150px] -z-10 rounded-full"></div>
       <div className="absolute top-0 left-0 w-1/3 h-1/3 bg-orange-500/5 blur-[120px] -z-10 rounded-full"></div>
+
+      {/* Decorative Element */}
+      <img 
+        src="/Element.png" 
+        alt="Element" 
+        className="absolute top-0 -right-[150px] mix-blend-luminosity opacity-50 w-48 md:w-[500px]  object-contain pointer-events-none z-0 " 
+      />
 
       <div className=" mx-auto px-6 lg:px-20 relative z-10">
         {/* Top Section: Heading & Astronaut */}
@@ -62,7 +73,7 @@ const Footer = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-4xl md:text-7xl font-bold mb-6 md:mb-10 leading-[1.1] tracking-tight"
+              className="text-4xl md:text-7xl font-bold mb-4 md:mb-6 leading-[1.1] tracking-tight"
             >
               <span dangerouslySetInnerHTML={{ __html: (footerData.texts?.heading || t("haveAGoodWebDesign")).replace('\n', '<br className="hidden md:block" />') }} />
             </motion.h2>
@@ -71,7 +82,7 @@ const Footer = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-gray-400 text-lg md:text-xl mb-10 max-w-xl font-light"
+              className="text-gray-400 text-lg md:text-xl mb-6 max-w-xl font-light"
             >
               {footerData.texts?.description || t("footerDesc")}
             </motion.p>
@@ -93,12 +104,17 @@ const Footer = () => {
 
           {/* Space reserved for global planet transition */}
           <div className="absolute top-[-10%] right-[-10%] w-full md:w-1/2 flex justify-center md:justify-end pr-10 pointer-events-none invisible lg:visible">
-            <div className="w-72 md:w-[500px] lg:w-[600px] aspect-square"></div>
+            <div 
+              className={`w-72 md:w-[500px] lg:w-[600px] aspect-square ${!isHomePage ? "opacity-[0.35]" : ""}`}
+              style={!isHomePage ? { filter: "contrast(60%) brightness(60%)", transform: "rotate(10deg) translatey(8rem) translatex(15rem) " } : {}}
+            >
+              {!isHomePage && <PlanetAstronaut />}
+            </div>
           </div>
         </div>
 
         {/* Middle Section: Links Grid */}
-        <div className="relative grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10 mb-20 pt-10">
+        <div className="relative grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10 mb-10 pt-6">
           {/* Useful Links */}
           <div>
             <h4 className="text-xl font-bold mb-5 text-white">{t("usefulLinks")}</h4>
@@ -238,7 +254,7 @@ const Footer = () => {
         </div>
 
         {/* Bottom Section: Socials & Copyright */}
-        <div className="pt-10 border-t-[3px] border-blue-500 flex flex-col md:flex-row items-center justify-between gap-8">
+        <div className="pt-6 border-t-[3px] border-blue-500 flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="flex items-center gap-6">
             <span className="text-gray-300 font-bold text-lg">{t("followUs")}</span>
             <div className="flex flex-wrap justify-center gap-4">
