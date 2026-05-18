@@ -7,12 +7,12 @@ import { useSettings } from "../../context/SettingsContext";
 import VideoModal from "../Shared/VideoModal";
 import PricingModal from "../Shared/PricingModal";
 
-const SocialMediaHero = ({ 
+const SocialMediaHero = ({
   title,
   desc,
   bgImage = "/services-web-dev/hero.png",
   planetImage = "/Services/Blue Planet.png",
-  serviceId = "social-media" 
+  serviceId = "social-media",
 }) => {
   const { t } = useLanguage();
   const settings = useSettings();
@@ -20,7 +20,7 @@ const SocialMediaHero = ({
   const [isPricingModalOpen, setIsPricingModalOpen] = useState(false);
 
   return (
-    <section className="relative w-full min-h-[80vh] flex items-center justify-between px-6 lg:px-20 pt-20">
+    <section className="relative w-full min-h-[80vh] flex items-center  justify-between px-6 lg:px-20 pt-20">
       {/* Background Image behind everything */}
       <div
         className="absolute inset-[-100px] h-screen z-0 bg-no-repeat bg-cover bg-center mix-blend-screen"
@@ -53,14 +53,14 @@ const SocialMediaHero = ({
           transition={{ duration: 0.6, delay: 0.4 }}
           className="flex flex-wrap items-center gap-6"
         >
-          <button 
+          <button
             onClick={() => setIsPricingModalOpen(true)}
             className="px-8 py-3 rounded-full bg-white text-[#040A37] font-semibold text-lg hover:bg-gray-200 transition-colors border-none cursor-pointer"
           >
             {settings?.hero_cta_text || t("startProject")}
           </button>
 
-          <button 
+          <button
             onClick={() => setIsVideoModalOpen(true)}
             className="flex items-center gap-3 text-white hover:text-gray-300 transition-colors group bg-transparent border-none cursor-pointer"
           >
@@ -89,7 +89,7 @@ const SocialMediaHero = ({
             <img
               src={planetImage}
               alt="Planet"
-              className="w-full h-auto object-contain drop-shadow-[0_0_50px_rgba(56,189,248,0.3)] scale-110 translate-x-[10%]"
+              className="w-full h-auto object-contain drop-shadow-[0_0_50px_rgba(56,189,248,0.3)] scale-75 translate-x-[10%]"
             />
           </motion.div>
         </motion.div>
