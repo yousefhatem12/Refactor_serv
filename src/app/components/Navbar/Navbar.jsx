@@ -36,10 +36,10 @@ const Navbar = () => {
               name: t("services"),
               href: "#",
               dropdown: [
-                { name: t("webDevelopment"), href: "/services-web-dev" },
-                { name: t("webDesign"), href: "/services-web-design" },
+                { name: t("webDevelopment"), href: "/services-web-development" },
+                { name: t("webDesign"), href: "/services-ui-ux-design" },
                 { name: t("socialMedia"), href: "/services-social-media" },
-                { name: t("webHosting"), href: "/services-web-hosting" },
+                { name: t("webHosting"), href: "/services-cloud-hosting" },
                 { name: t("catOnlineStores"), href: "/services-ecommerce" },
                 { name: t("catMobileApps"), href: "/services-mobile-apps" },
                 {
@@ -63,10 +63,10 @@ const Navbar = () => {
             name: t("services"),
             href: "#",
             dropdown: [
-              { name: t("webDevelopment"), href: "/services-web-dev" },
-              { name: t("webDesign"), href: "/services-web-design" },
+              { name: t("webDevelopment"), href: "/services-web-development" },
+              { name: t("webDesign"), href: "/services-ui-ux-design" },
               { name: t("socialMedia"), href: "/services-social-media" },
-              { name: t("webHosting"), href: "/services-web-hosting" },
+              { name: t("webHosting"), href: "/services-cloud-hosting" },
               { name: t("catOnlineStores"), href: "/services-ecommerce" },
               { name: t("catMobileApps"), href: "/services-mobile-apps" },
               {

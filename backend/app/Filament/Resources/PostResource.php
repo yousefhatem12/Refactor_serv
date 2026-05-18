@@ -20,9 +20,10 @@ use Illuminate\Support\Str;
 class PostResource extends Resource
 {
     protected static ?string $model = Post::class;
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-pencil-square';
-    protected static string|\UnitEnum|null $navigationGroup = 'Blog';
-    protected static ?int $navigationSort = 1;
+    protected static string|\UnitEnum|null $navigationGroup = null;
+    protected static ?int $navigationSort = 14;
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-newspaper';
+    public static function getNavigationLabel(): string { return __('Blog'); }
 
 
 

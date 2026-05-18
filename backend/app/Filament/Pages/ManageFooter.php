@@ -17,10 +17,10 @@ class ManageFooter extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-link';
-    protected static string|\UnitEnum|null $navigationGroup = 'Footer';
-    protected static ?string $navigationLabel = 'Footer & Contact Settings';
-    protected static ?int $navigationSort = 1;
+    protected static string|\UnitEnum|null $navigationGroup = null;
+    protected static ?int $navigationSort = 6;
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-bars-3-bottom-right';
+    public static function getNavigationLabel(): string { return __('Footer'); }
     protected string $view = 'filament.pages.manage-footer';
 
     public ?array $data = [];

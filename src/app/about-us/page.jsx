@@ -33,11 +33,8 @@ export default function AboutUsPage() {
         <Solutions />
         <GlobalReach />
         <WhyChooseUs />
-        <OurJourney />
-        <Founders />
-        <AboutCTA />
         {/* Dynamic Sections from Dashboard */}
-        <PageSections sections={pageData?.sections} />
+        <PageSections sections={pageData?.sections?.filter(s => s.type !== 'stats')} />
       </div>
     </main>
   );

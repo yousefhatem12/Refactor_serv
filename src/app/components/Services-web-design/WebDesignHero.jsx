@@ -7,7 +7,7 @@ import { useSettings } from "../../context/SettingsContext";
 import VideoModal from "../Shared/VideoModal";
 import PricingModal from "../Shared/PricingModal";
 
-const WebDesignHero = ({ serviceId = "ui-ux-design" }) => {
+const WebDesignHero = ({ data, serviceId = "ui-ux-design" }) => {
   const { t } = useLanguage();
   const settings = useSettings();
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
@@ -29,7 +29,7 @@ const WebDesignHero = ({ serviceId = "ui-ux-design" }) => {
           transition={{ duration: 0.6 }}
           className="text-white text-5xl md:text-7xl font-bold mb-6 tracking-tight uppercase"
         >
-          {t("webDesignHeroTitle")}
+          {data?.hero_title || data?.title || t("webDesignHeroTitle")}
         </motion.h1>
 
         <motion.p
@@ -38,7 +38,7 @@ const WebDesignHero = ({ serviceId = "ui-ux-design" }) => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-gray-300 text-lg md:text-xl leading-relaxed mb-10"
         >
-          {t("webDesignHeroDesc")}
+          {data?.hero_subtitle || data?.subtitle || data?.description || t("webDesignHeroDesc")}
         </motion.p>
 
         <motion.div

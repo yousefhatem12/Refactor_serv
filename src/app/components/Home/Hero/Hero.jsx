@@ -48,11 +48,11 @@ export default function Hero({ isPhaseTwo, data }) {
     t("innovativeSolutions") + " " + t("tailoredToYourNeeds");
 
   const title =
+    (data?.title || data?.subtitle ? `${data?.title || ""} ${data?.subtitle || ""}`.trim() : null) ||
     (heroTitle1 || heroTitle2 ? `${heroTitle1} ${heroTitle2}`.trim() : null) ||
-    data?.title ||
     defaultTitle;
 
-  const subtitle = settings?.hero_desc || data?.subtitle || t("heroDesc");
+  const subtitle = data?.content || settings?.hero_desc || t("heroDesc");
 
   // Phase 1 (Hero) disappearance on scroll
   // Changed from horizontal scroll (x) to vertical fade/parallax (y)
@@ -89,7 +89,7 @@ export default function Hero({ isPhaseTwo, data }) {
             className={`absolute top-0 ${isRtl ? "left-0 md:-left-20 lg:-left-32" : "right-0 md:-right-20 lg:-right-32"} z-0 pointer-events-none hidden md:block`}
           >
             <img
-              src={settings?.hero_planet || "/Hero/orange-planet.png"}
+              src={data?.hero_image || settings?.hero_planet || "/Hero/orange-planet.png"}
               alt="Orange Planet"
               className="w-[400px] md:w-[600px] lg:w-[750px] opacity-80"
             />
