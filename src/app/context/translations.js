@@ -11,6 +11,7 @@ export const translations = {
     blog: "Blog",
     faq: "FAQ",
     contactUs: "Contact us",
+    ourProducts: "Our Products",
 
     // Footer
     haveAGoodWebDesign: "Have a Good Web \n Design Today",
@@ -560,6 +561,7 @@ export const translations = {
     blog: "المدونة",
     faq: "الأسئلة الشائعة",
     contactUs: "اتصل بنا",
+    ourProducts: "منتجاتنا",
 
     // Footer
     haveAGoodWebDesign: "احصل على تصميم ويب \n رائع اليوم",
