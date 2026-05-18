@@ -50,6 +50,7 @@ const Navbar = () => {
             },
             { name: t("portfolio"), href: "/portfolio" },
             { name: t("blog"), href: "/blog" },
+            { name: t("ourProducts"), href: "/our-products" },
             { name: t("faq"), href: "/faq" },
             { name: t("contactUs"), href: "/contact-us" },
           ]);
@@ -77,6 +78,7 @@ const Navbar = () => {
           },
           { name: t("portfolio"), href: "/portfolio" },
           { name: t("blog"), href: "/blog" },
+          { name: t("ourProducts"), href: "/our-products" },
           { name: t("faq"), href: "/faq" },
           { name: t("contactUs"), href: "/contact-us" },
         ]);

@@ -17,8 +17,8 @@ const ServicesFeatures = ({ title, featuresData }) => {
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="32"
-          height="32"
+          width="48"
+          height="48"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -41,8 +41,8 @@ const ServicesFeatures = ({ title, featuresData }) => {
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="32"
-          height="32"
+          width="48"
+          height="48"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -69,8 +69,8 @@ const ServicesFeatures = ({ title, featuresData }) => {
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="32"
-          height="32"
+          width="48"
+          height="48"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -94,8 +94,8 @@ const ServicesFeatures = ({ title, featuresData }) => {
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="32"
-          height="32"
+          width="48"
+          height="48"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -117,8 +117,8 @@ const ServicesFeatures = ({ title, featuresData }) => {
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="32"
-          height="32"
+          width="48"
+          height="48"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -139,8 +139,8 @@ const ServicesFeatures = ({ title, featuresData }) => {
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="32"
-          height="32"
+          width="48"
+          height="48"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -183,7 +183,7 @@ const ServicesFeatures = ({ title, featuresData }) => {
               transition={{ delay: index * 0.1, duration: 0.6 }}
               className="flex items-start gap-6 group cursor-pointer"
             >
-              <div className="flex-shrink-0 w-16 h-16 rounded-xl border border-white/10 flex items-center justify-center bg-white/5 backdrop-blur-sm group-hover:bg-[#D98B50]/10 group-hover:border-[#D98B50]/50 transition-all duration-300">
+              <div className="flex-shrink-0 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_15px_rgba(217,139,80,0.5)]">
                 {feature.icon}
               </div>
               <div>
