@@ -67,55 +67,7 @@ const WebDesignHero = ({ serviceId = "ui-ux-design" }) => {
           </button>
         </motion.div>
 
-        {/* Navigation text links */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex items-center gap-6 mt-16 text-sm font-medium tracking-wider"
-        >
-          <a
-            href="#"
-            className="text-gray-400 hover:text-white transition-colors uppercase"
-          >
-            {t("home")}
-          </a>
-          <span className="text-gray-600">-</span>
-          <a
-            href="#"
-            className="text-gray-400 hover:text-white transition-colors uppercase"
-          >
-            {t("aboutUs")}
-          </a>
-          <span className="text-gray-600">-</span>
-          <a
-            href="#"
-            className="text-[#D98B50] hover:text-white transition-colors uppercase"
-          >
-            {t("services")}
-          </a>
-          <span className="text-gray-600">-</span>
-          <a
-            href="#"
-            className="text-gray-400 hover:text-white transition-colors uppercase"
-          >
-            {t("portfolio")}
-          </a>
-          <span className="text-gray-600">-</span>
-          <a
-            href="#"
-            className="text-gray-400 hover:text-white transition-colors uppercase"
-          >
-            {t("blog")}
-          </a>
-          <span className="text-gray-600">-</span>
-          <a
-            href="#"
-            className="text-gray-400 hover:text-white transition-colors uppercase"
-          >
-            {t("contactUs")}
-          </a>
-        </motion.div>
+
       </div>
 
       {/* Right Image (Planet) */}
@@ -132,7 +84,7 @@ const WebDesignHero = ({ serviceId = "ui-ux-design" }) => {
           <img
             src="/Services/Yellow Planet.svg"
             alt="Yellow Planet"
-            className="w-full h-auto object-contain drop-shadow-[0_0_50px_rgba(217,139,80,0.3)] scale-110 translate-x-[10%]"
+            className="w-full h-auto object-contain drop-shadow-[0_0_50px_rgba(217,139,80,0.3)] scale-75 translate-x-[10%]"
           />
         </motion.div>
       </motion.div>

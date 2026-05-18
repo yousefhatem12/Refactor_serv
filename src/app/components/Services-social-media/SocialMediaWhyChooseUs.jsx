@@ -108,7 +108,7 @@ const SocialMediaWhyChooseUs = () => {
           <img
             src="/Hero/earth.png"
             alt="Earth"
-            className="w-full max-h-[110vh] object-contain translate-x-[250px] scale-120 opacity-80"
+            className="w-full max-h-[110vh] object-contain translate-x-[250px] scale-120 opacity-50 brightness-50 contrast-125 "
           />
         </motion.div>
       </div>
