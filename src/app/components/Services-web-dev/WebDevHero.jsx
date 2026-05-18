@@ -9,13 +9,16 @@ import VideoModal from "../Shared/VideoModal";
 import PricingModal from "../Shared/PricingModal";
 
 const WebDevHero = ({ data, serviceId = "web-development" }) => {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
+  const isRtl = language === "ar";
   const settings = useSettings();
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [isPricingModalOpen, setIsPricingModalOpen] = useState(false);
 
-  const heroImage = data?.hero_image ? getMediaUrl(data.hero_image) : "/services-web-dev/hero.png";
-  
+  const heroImage = data?.hero_image
+    ? getMediaUrl(data.hero_image)
+    : "/services-web-dev/hero.png";
+
   return (
     <section className="relative w-full min-h-[80vh] flex items-center justify-between px-6 lg:px-20 pt-20">
       {/* Background Image behind everything */}
@@ -24,7 +27,7 @@ const WebDevHero = ({ data, serviceId = "web-development" }) => {
         style={{ backgroundImage: `url('${heroImage}')` }}
       />
 
-      {/* Left Content */}
+      {/* Content */}
       <div className="relative z-20 max-w-2xl w-full lg:w-1/2">
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
@@ -50,14 +53,14 @@ const WebDevHero = ({ data, serviceId = "web-development" }) => {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="flex flex-wrap items-center gap-6"
         >
-          <button 
+          <button
             onClick={() => setIsPricingModalOpen(true)}
             className="px-8 py-3 rounded-full bg-white text-[#040A37] font-semibold text-lg hover:bg-gray-200 transition-colors cursor-pointer border-none"
           >
             {settings?.hero_cta_text || t("getStarted")}
           </button>
 
-          <button 
+          <button
             onClick={() => setIsVideoModalOpen(true)}
             className="flex items-center gap-3 text-white hover:text-gray-300 transition-colors group bg-transparent border-none cursor-pointer"
           >
@@ -71,12 +74,12 @@ const WebDevHero = ({ data, serviceId = "web-development" }) => {
         </motion.div>
       </div>
 
-      {/* Right Image (Planet) */}
+      {/* Right/Left Image (Planet) */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1, ease: "easeOut" }}
-        className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 w-1/2 max-w-[800px] pointer-events-none z-10"
+        className={`hidden lg:block absolute ${isRtl ? "left-0" : "right-0"} top-1/2 -translate-y-1/2 w-1/2 max-w-[800px] pointer-events-none z-10`}
       >
         <motion.div
           animate={{ y: [0, -20, 0] }}
@@ -85,7 +88,7 @@ const WebDevHero = ({ data, serviceId = "web-development" }) => {
           <img
             src="/Services/new/green.png"
             alt="Green Planet"
-            className="w-full h-auto object-contain drop-shadow-[0_0_50px_rgba(34,197,94,0.3)] scale-110 translate-x-[10%]"
+            className={`w-full h-auto object-contain drop-shadow-[0_0_50px_rgba(34,197,94,0.3)] scale-110 ${isRtl ? "-translate-x-[10%]" : "translate-x-[10%]"}`}
           />
         </motion.div>
       </motion.div>
