@@ -27,29 +27,34 @@ const Footer = () => {
   const [footerData, setFooterData] = useState({
     texts: {},
     links: { usefulLinks: [], quickLinks: [], offers: [], company: [] },
-    socials: []
+    socials: [],
   });
 
   useEffect(() => {
-    fetchAPI('/settings').then(data => {
-      if (data) setSettings(data);
-    }).catch(console.error);
+    fetchAPI("/settings")
+      .then((data) => {
+        if (data) setSettings(data);
+      })
+      .catch(console.error);
 
-    fetchAPI(`/footer-data?lang=${language}`).then(data => {
+    fetchAPI('/footer-data').then(data => {
       if (data) setFooterData(data);
     }).catch(console.error);
-  }, [language]);
+  }, []);
 
   const getSocialIconData = (platform) => {
     const map = {
-      'facebook': { color: "bg-[#1877F2]", svg: <FaFacebook /> },
-      'twitter': { color: "bg-[#1DA1F2]", svg: <RiTwitterXFill /> },
-      'instagram': { color: "bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600", svg: <FaInstagram /> },
-      'linkedin': { color: "bg-[#0077B5]", svg: <FaLinkedin /> },
-      'youtube': { color: "bg-[#FF0000]", svg: <FaYoutube /> },
-      'tiktok': { color: "bg-black", svg: <FaTiktok /> },
+      facebook: { color: "bg-[#1877F2]", svg: <FaFacebook /> },
+      twitter: { color: "bg-[#1DA1F2]", svg: <RiTwitterXFill /> },
+      instagram: {
+        color: "bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600",
+        svg: <FaInstagram />,
+      },
+      linkedin: { color: "bg-[#0077B5]", svg: <FaLinkedin /> },
+      youtube: { color: "bg-[#FF0000]", svg: <FaYoutube /> },
+      tiktok: { color: "bg-black", svg: <FaTiktok /> },
     };
-    return map[platform] || map['facebook'];
+    return map[platform] || map["facebook"];
   };
 
   return (
@@ -59,10 +64,10 @@ const Footer = () => {
       <div className="absolute top-0 left-0 w-1/3 h-1/3 bg-orange-500/5 blur-[120px] -z-10 rounded-full"></div>
 
       {/* Decorative Element */}
-      <img 
-        src="/Element.png" 
-        alt="Element" 
-        className="absolute top-0 -right-[150px] mix-blend-luminosity opacity-50 w-48 md:w-[500px]  object-contain pointer-events-none z-0 " 
+      <img
+        src="/Element.png"
+        alt="Element"
+        className="absolute top-0 -left-[80px] mix-blend-luminosity opacity-50 w-48 md:w-[500px]  object-contain pointer-events-none z-0 "
       />
 
       <div className=" mx-auto px-6 lg:px-20 relative z-10">
@@ -75,7 +80,13 @@ const Footer = () => {
               viewport={{ once: true }}
               className="text-4xl md:text-7xl font-bold mb-4 md:mb-6 leading-[1.1] tracking-tight"
             >
-              <span dangerouslySetInnerHTML={{ __html: (footerData.texts?.heading || t("haveAGoodWebDesign")).replace('\n', '<br className="hidden md:block" />') }} />
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: (
+                    footerData.texts?.heading || t("haveAGoodWebDesign")
+                  ).replace("\n", '<br className="hidden md:block" />'),
+                }}
+              />
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -104,9 +115,17 @@ const Footer = () => {
 
           {/* Space reserved for global planet transition */}
           <div className="absolute top-[-10%] right-[-10%] w-full md:w-1/2 flex justify-center md:justify-end pr-10 pointer-events-none invisible lg:visible">
-            <div 
+            <div
               className={`w-72 md:w-[500px] lg:w-[600px] aspect-square ${!isHomePage ? "opacity-[0.35]" : ""}`}
-              style={!isHomePage ? { filter: "contrast(60%) brightness(60%)", transform: "rotate(10deg) translatey(8rem) translatex(15rem) " } : {}}
+              style={
+                !isHomePage
+                  ? {
+                      filter: "contrast(60%) brightness(60%)",
+                      transform:
+                        "rotate(10deg) translatey(-6rem) translatex(12rem) ",
+                    }
+                  : {}
+              }
             >
               {!isHomePage && <PlanetAstronaut />}
             </div>
@@ -117,7 +136,9 @@ const Footer = () => {
         <div className="relative grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10 mb-10 pt-6">
           {/* Useful Links */}
           <div>
-            <h4 className="text-xl font-bold mb-5 text-white">{t("usefulLinks")}</h4>
+            <h4 className="text-xl font-bold mb-5 text-white">
+              {t("usefulLinks")}
+            </h4>
             <ul className="space-y-2">
               {footerData.links.usefulLinks.map((link) => (
                 <li key={link.id}>
@@ -134,7 +155,9 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-xl font-bold mb-5 text-white">{t("quickLinks")}</h4>
+            <h4 className="text-xl font-bold mb-5 text-white">
+              {t("quickLinks")}
+            </h4>
             <ul className="space-y-2">
               {footerData.links.quickLinks.map((link) => (
                 <li key={link.id}>
@@ -168,7 +191,9 @@ const Footer = () => {
 
           {/* Company */}
           <div>
-            <h4 className="text-xl font-bold mb-5 text-white">{t("company")}</h4>
+            <h4 className="text-xl font-bold mb-5 text-white">
+              {t("company")}
+            </h4>
             <ul className="space-y-2">
               {footerData.links.company.map((link) => (
                 <li key={link.id}>
@@ -185,7 +210,9 @@ const Footer = () => {
 
           {/* Contact Info */}
           <div>
-            <h4 className="text-xl font-bold mb-5 text-white">{t("contactInfo")}</h4>
+            <h4 className="text-xl font-bold mb-5 text-white">
+              {t("contactInfo")}
+            </h4>
             <ul className="space-y-2">
               <li className="flex items-start gap-4 group">
                 <div className="text-orange-500 p-2 rounded-lg bg-orange-500/10 group-hover:bg-orange-500 group-hover:text-white transition-all duration-300">
@@ -256,7 +283,9 @@ const Footer = () => {
         {/* Bottom Section: Socials & Copyright */}
         <div className="pt-6 border-t-[3px] border-blue-500 flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="flex items-center gap-6">
-            <span className="text-gray-300 font-bold text-lg">{t("followUs")}</span>
+            <span className="text-gray-300 font-bold text-lg">
+              {t("followUs")}
+            </span>
             <div className="flex flex-wrap justify-center gap-4">
               {footerData.socials.map((social) => {
                 const iconData = getSocialIconData(social.platform);

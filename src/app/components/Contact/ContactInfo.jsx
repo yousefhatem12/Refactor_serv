@@ -18,41 +18,60 @@ const ContactInfo = ({ data }) => {
   const [socials, setSocials] = React.useState([]);
 
   React.useEffect(() => {
-    fetchAPI('/settings').then(data => {
-      if (data) setSettings(data);
-    }).catch(console.error);
+    fetchAPI("/settings")
+      .then((data) => {
+        if (data) setSettings(data);
+      })
+      .catch(console.error);
 
-    fetchAPI('/footer-data').then(data => {
-      if (data && data.socials) setSocials(data.socials);
-    }).catch(console.error);
+    fetchAPI("/footer-data")
+      .then((data) => {
+        if (data && data.socials) setSocials(data.socials);
+      })
+      .catch(console.error);
   }, []);
 
   // Split title if it has two parts in translation, or just use as is
-  const title = data?.title || t("contactGetInTouch1") + " " + t("contactGetInTouch2");
-  
+  const title =
+    data?.title || t("contactGetInTouch1") + " " + t("contactGetInTouch2");
+
   const getIcon = (platform) => {
     switch (platform.toLowerCase()) {
-      case 'facebook': return <FaFacebook />;
-      case 'instagram': return <FaInstagram />;
-      case 'linkedin': return <FaLinkedin />;
-      case 'youtube': return <FaYoutube />;
-      case 'tiktok': return <FaTiktok />;
-      case 'twitter':
-      case 'x': return <RiTwitterXFill />;
-      default: return null;
+      case "facebook":
+        return <FaFacebook />;
+      case "instagram":
+        return <FaInstagram />;
+      case "linkedin":
+        return <FaLinkedin />;
+      case "youtube":
+        return <FaYoutube />;
+      case "tiktok":
+        return <FaTiktok />;
+      case "twitter":
+      case "x":
+        return <RiTwitterXFill />;
+      default:
+        return null;
     }
   };
 
   const getColor = (platform) => {
     switch (platform.toLowerCase()) {
-      case 'facebook': return "bg-[#1877F2]";
-      case 'instagram': return "bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600";
-      case 'linkedin': return "bg-[#0077B5]";
-      case 'youtube': return "bg-[#FF0000]";
-      case 'tiktok': return "bg-black";
-      case 'twitter':
-      case 'x': return "bg-black";
-      default: return "bg-gray-600";
+      case "facebook":
+        return "bg-[#1877F2]";
+      case "instagram":
+        return "bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600";
+      case "linkedin":
+        return "bg-[#0077B5]";
+      case "youtube":
+        return "bg-[#FF0000]";
+      case "tiktok":
+        return "bg-black";
+      case "twitter":
+      case "x":
+        return "bg-black";
+      default:
+        return "bg-gray-600";
     }
   };
 
@@ -64,7 +83,14 @@ const ContactInfo = ({ data }) => {
         viewport={{ once: true }}
       >
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
-          {title}
+          {data?.title ? (
+            data.title
+          ) : (
+            <>
+              {t("contactGetInTouch1")}{" "}
+              <span className="text-[#FF8A00]">{t("contactGetInTouch2")}</span>
+            </>
+          )}
         </h1>
         <p className="text-gray-400 text-sm md:text-base max-w-md mb-10 leading-relaxed">
           {data?.subtitle || t("contactInfoDesc")}
