@@ -428,7 +428,7 @@ const ContactUs = () => {
         <div className="w-full h-full flex items-center justify-center relative min-h-[300px] md:min-h-[450px]">
           {/* Falling Meteor */}
           <motion.img
-            src="/CTA/meteor.png"
+            src="/CTA/meteor2.png"
             alt="Meteor"
             className="absolute z-30 w-32 md:w-48 pointer-events-none drop-shadow-[0_0_40px_rgba(255,138,0,0.8)]"
             initial={{ opacity: 0, x: -1000, y: -200, scale: 0.5, rotate: 15 }}

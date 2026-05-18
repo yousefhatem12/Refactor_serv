@@ -46,6 +46,10 @@ const Navbar = () => {
                   name: t("consultationHeroTitle"),
                   href: "/project-consultation",
                 },
+                {
+                  name: t("careers"),
+                  href: "/careers",
+                },
               ],
             },
             { name: t("portfolio"), href: "/portfolio" },
@@ -73,6 +77,10 @@ const Navbar = () => {
               {
                 name: t("consultationHeroTitle"),
                 href: "/project-consultation",
+              },
+              {
+                name: t("careers"),
+                href: "/careers",
               },
             ],
           },
