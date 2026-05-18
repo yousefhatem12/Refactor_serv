@@ -3,9 +3,9 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "../../context/LanguageContext";
 
-const WebDesignFeatures = ({ title, description }) => {
+const WebDesignFeatures = ({ title, description, featuresList }) => {
   const { t } = useLanguage();
-  const features = [
+  const defaultFeatures = [
     {
       id: 1,
       title: t("wdFeature1Title") || "Professional Design",
@@ -206,6 +206,15 @@ const WebDesignFeatures = ({ title, description }) => {
     },
   ];
 
+  const displayFeatures = featuresList && featuresList.length > 0 
+    ? featuresList.map((f, i) => ({
+        id: i,
+        title: f.title || defaultFeatures[i % defaultFeatures.length]?.title,
+        desc: f.desc || defaultFeatures[i % defaultFeatures.length]?.desc,
+        icon: defaultFeatures[i % defaultFeatures.length]?.icon
+      }))
+    : defaultFeatures;
+
   return (
     <section className="relative w-full py-24 px-6 lg:px-20 z-20">
       <div className="max-w-7xl mx-auto">
@@ -230,7 +239,7 @@ const WebDesignFeatures = ({ title, description }) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {features.map((feature, index) => (
+          {displayFeatures.map((feature, index) => (
             <motion.div
               key={feature.id}
               initial={{ opacity: 0, y: 30 }}

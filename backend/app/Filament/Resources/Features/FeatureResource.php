@@ -18,8 +18,9 @@ class FeatureResource extends Resource
 {
     protected static ?string $model = Feature::class;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-sparkles';
-    protected static string|\UnitEnum|null $navigationGroup = 'Home Page';
+    protected static string|\UnitEnum|null $navigationGroup = null;
     protected static ?int $navigationSort = 2;
+    public static function getNavigationLabel(): string { return __('Features'); }
 
 protected static ?string $recordTitleAttribute = 'title';
 

@@ -52,6 +52,7 @@ class PageForm
                                                     ->schema([
                                                         TextInput::make('label')->required(),
                                                         TextInput::make('value')->required(),
+                                                        TextInput::make('icon')->label('Icon Name (e.g., heroicon-o-clock)'),
                                                     ])->columns(2),
                                             ]),
                                         \Filament\Forms\Components\Builder\Block::make('features')
@@ -140,6 +141,7 @@ class PageForm
                                                     ->schema([
                                                         TextInput::make('label')->required(),
                                                         TextInput::make('value')->required(),
+                                                        TextInput::make('icon')->label('Icon Name (e.g., heroicon-o-clock)'),
                                                     ])->columns(2),
                                             ]),
                                         \Filament\Forms\Components\Builder\Block::make('features')

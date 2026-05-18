@@ -71,6 +71,47 @@ class ApiController extends Controller
         return response()->json($mapped);
     }
 
+    public function getService($slug)
+    {
+        $lang = $this->getLang();
+        $service = Service::where('slug', $slug)->where('is_active', true)->firstOrFail();
+        
+        $sections = $service->sections ?: [];
+        
+        $featuresList = collect($sections['features_list'] ?? [])->map(function($item) use ($lang) {
+            return [
+                'title' => $this->trans($item['title'] ?? null, $lang),
+                'desc' => $this->trans($item['desc'] ?? null, $lang),
+            ];
+        })->toArray();
+
+        $howWeWorkList = collect($sections['how_we_work_list'] ?? [])->map(function($item) use ($lang) {
+            return [
+                'title' => $this->trans($item['title'] ?? null, $lang),
+                'desc' => $this->trans($item['desc'] ?? null, $lang),
+            ];
+        })->toArray();
+
+        return response()->json([
+            'id' => $service->slug,
+            'title' => $this->trans($service->name, $lang),
+            'description' => $this->trans($service->description, $lang),
+            'icon' => $service->icon,
+            'hero_title' => $this->trans($sections['hero_title'] ?? null, $lang),
+            'hero_subtitle' => $this->trans($sections['hero_subtitle'] ?? null, $lang),
+            'features_title' => $this->trans($sections['features_title'] ?? null, $lang),
+            'features_subtitle' => $this->trans($sections['features_subtitle'] ?? null, $lang),
+            'features_list' => $featuresList,
+            'how_we_work_list' => $howWeWorkList,
+            'show_hero' => $sections['show_hero'] ?? true,
+            'show_features' => $sections['show_features'] ?? true,
+            'show_how_we_work' => $sections['show_how_we_work'] ?? true,
+            'show_portfolio' => $sections['show_portfolio'] ?? true,
+            'show_request' => $sections['show_request'] ?? true,
+            'show_blogs' => $sections['show_blogs'] ?? true,
+        ]);
+    }
+
     public function getProjects(\Illuminate\Http\Request $request)
     {
         $lang = $this->getLang();
@@ -258,19 +299,6 @@ class ApiController extends Controller
         return response()->json($features);
     }
 
-    public function getStatistics()
-    {
-        $stats = Statistic::where('is_active', true)->get()->map(function ($s) {
-            return [
-                'id' => $s->id,
-                'label' => $s->label,
-                'count' => $s->count,
-                'icon' => $s->icon,
-            ];
-        });
-        return response()->json($stats);
-    }
-
     public function getFooterData()
     {
         $lang = $this->getLang();
@@ -313,6 +341,15 @@ class ApiController extends Controller
     public function getNavLinks()
     {
         $lang = $this->getLang();
+        
+        // Fetch all active services to inject into the Services dropdown
+        $servicesDropdown = \App\Models\Service::where('is_active', true)->get()->map(function ($service) use ($lang) {
+            return [
+                'name' => $this->trans($service->name, $lang),
+                'href' => '/services-' . $service->slug,
+            ];
+        })->toArray();
+
         $links = \App\Models\NavLink::where('is_active', true)
             ->whereNull('parent_id')
             ->with(['children' => function ($query) {
@@ -320,19 +357,28 @@ class ApiController extends Controller
             }])
             ->orderBy('sort_order')
             ->get()
-            ->map(function ($link) use ($lang) {
+            ->map(function ($link) use ($lang, $servicesDropdown) {
                 $data = [
                     'name' => $this->trans($link->label, $lang),
                     'href' => $link->url,
                 ];
 
+                $dropdown = [];
                 if ($link->children->count() > 0) {
-                    $data['dropdown'] = $link->children->map(function ($child) use ($lang) {
+                    $dropdown = $link->children->map(function ($child) use ($lang) {
                         return [
                             'name' => $this->trans($child->label, $lang),
                             'href' => $child->url,
                         ];
-                    });
+                    })->toArray();
+                }
+
+                // If this is the Services link, inject the dynamic services from the database
+                $enName = strtolower($this->trans($link->label, 'en'));
+                if (str_contains($enName, 'service')) {
+                    $data['dropdown'] = $servicesDropdown;
+                } elseif (!empty($dropdown)) {
+                    $data['dropdown'] = $dropdown;
                 }
 
                 return $data;

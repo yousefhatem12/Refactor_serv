@@ -11,9 +11,7 @@ export default function MobileAppsPage() {
   const [pageData, setPageData] = useState(null);
 
   useEffect(() => {
-    // We try to fetch dynamic page data if it exists in Strapi/backend.
-    // We pass language for localization.
-    fetchAPI(`/pages/services-mobile-apps?lang=${language}`)
+    fetchAPI(`/services/app-development?lang=${language}`)
       .then((data) => {
         if (data) setPageData(data);
       })
@@ -23,9 +21,9 @@ export default function MobileAppsPage() {
   return (
     <main className="flex min-h-screen flex-col relative overflow-x-hidden">
       <div className="w-full relative z-10 pb-10 pt-20">
-        <MobileAppsHero data={pageData} />
-        <MobileAppsFeatures />
-        <LatestBlogs />
+        {pageData?.show_hero !== false && <MobileAppsHero data={pageData} />}
+        {pageData?.show_features !== false && <MobileAppsFeatures featuresList={pageData?.features_list} />}
+        {pageData?.show_blogs !== false && <LatestBlogs />}
       </div>
     </main>
   );

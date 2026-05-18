@@ -15,6 +15,7 @@ Route::post('/login', [AuthController::class, 'login']);
 
 // Public endpoints
 Route::get('/services', [ApiController::class, 'getServices']);
+Route::get('/services/{slug}', [ApiController::class, 'getService']);
 Route::get('/portfolio', [ApiController::class, 'getProjects']);
 Route::get('/blog', [ApiController::class, 'getPosts']);
 Route::get('/blog/{slug}', [ApiController::class, 'getPost']);
@@ -24,7 +25,6 @@ Route::get('/settings', [ApiController::class, 'getSettings']);
 Route::get('/testimonials', [ApiController::class, 'getTestimonials']);
 Route::get('/team', [ApiController::class, 'getTeamMembers']);
 Route::get('/features', [ApiController::class, 'getFeatures']);
-Route::get('/statistics', [ApiController::class, 'getStatistics']);
 Route::get('/footer-data', [ApiController::class, 'getFooterData']);
 Route::get('/nav-links', [ApiController::class, 'getNavLinks']);
 Route::get('/pricing-plans', [ApiController::class, 'getPricingPlans']);

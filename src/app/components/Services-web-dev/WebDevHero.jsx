@@ -38,7 +38,7 @@ const WebDevHero = ({ data, serviceId = "web-development" }) => {
           transition={{ duration: 0.6 }}
           className="text-white text-5xl md:text-7xl font-bold mb-6 tracking-tight uppercase"
         >
-          {data?.title || t("webDevHeroTitle")}
+          {data?.hero_title || data?.title || t("webDevHeroTitle")}
         </motion.h1>
 
         <motion.p
@@ -47,7 +47,7 @@ const WebDevHero = ({ data, serviceId = "web-development" }) => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-gray-300 text-lg md:text-xl leading-relaxed mb-10"
         >
-          {data?.subtitle || t("webDevHeroDesc")}
+          {data?.hero_subtitle || data?.subtitle || data?.description || t("webDevHeroDesc")}
         </motion.p>
 
         <motion.div

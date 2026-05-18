@@ -20,6 +20,7 @@ class SettingResource extends Resource
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-adjustments-vertical';
     protected static string|\UnitEnum|null $navigationGroup = 'SEO & Settings';
     protected static ?int $navigationSort = 2;
+    protected static bool $shouldRegisterNavigation = false;
 
 protected static ?string $recordTitleAttribute = 'key';
 

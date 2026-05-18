@@ -22,7 +22,9 @@ class TestimonialForm
                     ->required()
                     ->columnSpanFull(),
                 FileUpload::make('image')
-                    ->image(),
+                    ->image()
+                    ->directory('testimonials')
+                    ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'testimonials')),
                 Toggle::make('is_active')
                     ->required(),
             ]);

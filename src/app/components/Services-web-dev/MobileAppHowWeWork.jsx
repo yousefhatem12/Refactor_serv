@@ -4,7 +4,7 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { FaCheckCircle } from "react-icons/fa";
 import { useLanguage } from "../../context/LanguageContext";
 
-const MobileAppHowWeWork = () => {
+const MobileAppHowWeWork = ({ howWeWorkList }) => {
   const { language } = useLanguage();
   const isRtl = language === "ar";
   const containerRef = useRef(null);
@@ -163,7 +163,19 @@ const MobileAppHowWeWork = () => {
     },
   };
 
-  const activeTrans = translations[language] || translations.en;
+  const defaultTrans = translations[language] || translations.en;
+  
+  const activeTrans = {
+    subtitle: defaultTrans.subtitle,
+    title: defaultTrans.title,
+    steps: howWeWorkList && howWeWorkList.length > 0 
+      ? howWeWorkList.map((step, index) => ({
+          id: index + 1,
+          title: `${index + 1}. ${step.title}`,
+          items: step.desc ? step.desc.split('\n').filter(Boolean) : [],
+        }))
+      : defaultTrans.steps
+  };
 
   // Exact coordinates for placing step cards horizontally (Desktop)
   // Aligned perfectly next to/inside loops to prevent overlapping

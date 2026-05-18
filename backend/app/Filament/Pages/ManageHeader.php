@@ -17,10 +17,10 @@ class ManageHeader extends Page implements HasForms
 {
     use InteractsWithForms;
 
+    protected static string|\UnitEnum|null $navigationGroup = null;
+    protected static ?int $navigationSort = 4;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-bars-3';
-    protected static string|\UnitEnum|null $navigationGroup = 'Header';
-    protected static ?string $navigationLabel = 'Header Settings';
-    protected static ?int $navigationSort = 1;
+    public static function getNavigationLabel(): string { return __('Header'); }
     protected string $view = 'filament.pages.manage-header';
 
     public ?array $data = [];

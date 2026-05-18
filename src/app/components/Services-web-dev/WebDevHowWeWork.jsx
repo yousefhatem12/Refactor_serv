@@ -4,7 +4,7 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { FaCheckCircle } from "react-icons/fa";
 import { useLanguage } from "../../context/LanguageContext";
 
-const WebDevHowWeWork = () => {
+const WebDevHowWeWork = ({ howWeWorkList }) => {
   const { language, t } = useLanguage();
   const isRtl = language === "ar";
   const desktopContainerRef = useRef(null);
@@ -45,7 +45,7 @@ const WebDevHowWeWork = () => {
     "M 200,0 V 150 Q 200,200 250,200 H 750 Q 800,200 800,250 V 400 Q 800,450 750,450 H 250 Q 200,450 200,500 V 650 Q 200,700 250,700 H 750 Q 800,700 800,750 V 900 Q 800,950 750,950 H 250 Q 200,950 200,1000 V 1150";
   const path = originalPath;
 
-  const steps = [
+  const defaultSteps = [
     {
       id: 1,
       title: `1- ${t("webDevStep1Title")}`,
@@ -82,6 +82,15 @@ const WebDevHowWeWork = () => {
       items: [t("deployment"), t("maintenance"), t("clientSupport")],
     },
   ];
+
+  const steps = howWeWorkList && howWeWorkList.length > 0 
+    ? howWeWorkList.map((step, index) => ({
+        id: index + 1,
+        title: `${index + 1}- ${step.title}`,
+        align: index % 2 === 0 ? "right" : "left",
+        items: step.desc ? step.desc.split('\n').filter(Boolean) : [],
+      }))
+    : defaultSteps;
 
   return (
     <section className="relative w-full py-24 px-6 lg:px-20 z-20" dir="ltr">

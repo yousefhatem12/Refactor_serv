@@ -16,12 +16,14 @@ class Service extends Model
         'description',
         'icon',
         'is_active',
+        'sections',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
         'name' => 'json',
         'description' => 'json',
+        'sections' => 'json',
     ];
 
     protected static function boot()
