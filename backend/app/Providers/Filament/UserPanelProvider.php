@@ -27,7 +27,7 @@ class UserPanelProvider extends PanelProvider
             ->id('user')
             ->path('user')
             ->login()
-            ->registration()
+            ->registration(\App\Filament\Pages\Auth\RegisterWithOtp::class)
             ->colors([
                 'primary' => Color::Amber,
             ])

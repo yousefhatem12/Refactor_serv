@@ -5,11 +5,12 @@ import { useLanguage } from "../../../context/LanguageContext";
 
 import { useAuth } from "../../../context/AuthContext";
 import { fetchAPI } from "@/lib/api";
+import GlobalReach from "../../AboutUs/GlobalReach";
 
 const ContactUs = () => {
   const { t, language } = useLanguage();
   const { user, login, register } = useAuth();
-  
+
   const [authMode, setAuthMode] = React.useState("login"); // 'login' or 'register'
   const [authData, setAuthData] = React.useState({
     name: "",
@@ -17,7 +18,7 @@ const ContactUs = () => {
     password: "",
     password_confirmation: "",
   });
-  
+
   const [formData, setFormData] = React.useState({
     name: "",
     email: "",
@@ -27,13 +28,15 @@ const ContactUs = () => {
   });
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [status, setStatus] = React.useState(null);
-  
+
   const [settings, setSettings] = React.useState({});
 
   React.useEffect(() => {
-    fetchAPI('/settings').then(data => {
-      if (data) setSettings(data);
-    }).catch(console.error);
+    fetchAPI("/settings")
+      .then((data) => {
+        if (data) setSettings(data);
+      })
+      .catch(console.error);
   }, []);
 
   const handleAuthChange = (e) => {
@@ -49,13 +52,18 @@ const ContactUs = () => {
     if (authMode === "login") {
       res = await login(authData.email, authData.password);
     } else {
-      res = await register(authData.name, authData.email, authData.password, authData.password_confirmation);
+      res = await register(
+        authData.name,
+        authData.email,
+        authData.password,
+        authData.password_confirmation,
+      );
     }
-    
+
     if (res.success) {
-      setStatus({ type: 'success', message: 'Success!' });
+      setStatus({ type: "success", message: "Success!" });
     } else {
-      setStatus({ type: 'error', message: res.message });
+      setStatus({ type: "error", message: res.message });
     }
     setIsSubmitting(false);
   };
@@ -66,8 +74,8 @@ const ContactUs = () => {
     setStatus(null);
 
     try {
-      await fetchAPI('/contact', {
-        method: 'POST',
+      await fetchAPI("/contact", {
+        method: "POST",
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
@@ -76,11 +84,24 @@ const ContactUs = () => {
           type: formData.type,
         }),
       });
-      setStatus({ type: 'success', message: t("contactSuccess") || 'Message sent successfully!' });
-      setFormData({ name: "", email: "", phone: "", message: "", type: "inquiry" });
+      setStatus({
+        type: "success",
+        message: t("contactSuccess") || "Message sent successfully!",
+      });
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+        type: "inquiry",
+      });
     } catch (error) {
       console.error("Failed to submit message:", error);
-      setStatus({ type: 'error', message: t("contactError") || 'Failed to send message. Please try again.' });
+      setStatus({
+        type: "error",
+        message:
+          t("contactError") || "Failed to send message. Please try again.",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -104,7 +125,8 @@ const ContactUs = () => {
         >
           <div className="flex items-center gap-4 mb-4">
             <h2 className="text-4xl md:text-5xl font-black text-white">
-              {t("getInTouch1")} <span className="text-[#FF8A00]">{t("getInTouch2")}</span>
+              {t("getInTouch1")}{" "}
+              <span className="text-[#FF8A00]">{t("getInTouch2")}</span>
             </h2>
             {/* Saturn Planet SVG */}
             <motion.svg
@@ -135,17 +157,25 @@ const ContactUs = () => {
 
           {!user ? (
             <div className="mb-12 border border-white/10 rounded-md p-6 bg-[#0F172A]/40">
-              <h2 className="text-xl font-bold text-white mb-4 text-center">{t("mustLogin")}</h2>
+              <h2 className="text-xl font-bold text-white mb-4 text-center">
+                {t("mustLogin")}
+              </h2>
               <div className="flex justify-center gap-4 mb-6">
-                <button 
-                  onClick={() => { setAuthMode("login"); setStatus(null); }}
-                  className={`px-4 py-2 rounded-full transition-all text-sm ${authMode === 'login' ? 'bg-[#FF8A00] text-white' : 'bg-white/10 text-gray-400'}`}
+                <button
+                  onClick={() => {
+                    setAuthMode("login");
+                    setStatus(null);
+                  }}
+                  className={`px-4 py-2 rounded-full transition-all text-sm ${authMode === "login" ? "bg-[#FF8A00] text-white" : "bg-white/10 text-gray-400"}`}
                 >
                   {t("loginNow")}
                 </button>
-                <button 
-                  onClick={() => { setAuthMode("register"); setStatus(null); }}
-                  className={`px-4 py-2 rounded-full transition-all text-sm ${authMode === 'register' ? 'bg-[#FF8A00] text-white' : 'bg-white/10 text-gray-400'}`}
+                <button
+                  onClick={() => {
+                    setAuthMode("register");
+                    setStatus(null);
+                  }}
+                  className={`px-4 py-2 rounded-full transition-all text-sm ${authMode === "register" ? "bg-[#FF8A00] text-white" : "bg-white/10 text-gray-400"}`}
                 >
                   {t("registerNow")}
                 </button>
@@ -153,11 +183,13 @@ const ContactUs = () => {
 
               <form onSubmit={handleAuthSubmit} className="flex flex-col gap-4">
                 {status && (
-                  <div className={`p-3 rounded-md text-sm ${status.type === 'success' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+                  <div
+                    className={`p-3 rounded-md text-sm ${status.type === "success" ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}
+                  >
                     {status.message}
                   </div>
                 )}
-                
+
                 {authMode === "register" && (
                   <input
                     type="text"
@@ -207,19 +239,37 @@ const ContactUs = () => {
                   disabled={isSubmitting}
                   className="bg-white text-black py-3 rounded-md font-bold hover:bg-gray-200 disabled:opacity-50 transition-all text-sm mt-2"
                 >
-                  {isSubmitting ? '...' : (authMode === 'login' ? t("loginNow") : t("registerNow"))}
+                  {isSubmitting
+                    ? "..."
+                    : authMode === "login"
+                      ? t("loginNow")
+                      : t("registerNow")}
                 </button>
               </form>
             </div>
           ) : (
-            <form onSubmit={handleContactSubmit} className="flex flex-col gap-4 mb-12">
+            <form
+              onSubmit={handleContactSubmit}
+              className="flex flex-col gap-4 mb-12"
+            >
               <div className="flex justify-between items-center bg-black/20 p-3 rounded-md border border-white/5 mb-2">
-                <p className="text-gray-400 text-sm">Welcome, <span className="text-white font-bold">{user.name}</span></p>
-                <button type="button" onClick={() => window.location.reload()} className="text-xs text-[#FF8A00] hover:underline">Logout</button>
+                <p className="text-gray-400 text-sm">
+                  Welcome,{" "}
+                  <span className="text-white font-bold">{user.name}</span>
+                </p>
+                <button
+                  type="button"
+                  onClick={() => window.location.reload()}
+                  className="text-xs text-[#FF8A00] hover:underline"
+                >
+                  Logout
+                </button>
               </div>
 
               {status && (
-                <div className={`p-4 rounded-md text-sm ${status.type === 'success' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+                <div
+                  className={`p-4 rounded-md text-sm ${status.type === "success" ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}
+                >
                   {status.message}
                 </div>
               )}
@@ -258,11 +308,21 @@ const ContactUs = () => {
                 className="bg-[#0F172A]/40 border border-white/10 rounded-md p-4 text-white focus:outline-none focus:border-[#FF8A00] transition-colors appearance-none cursor-pointer"
                 required
               >
-                <option value="inquiry">{language === 'ar' ? 'استفسار عام' : 'General Inquiry'}</option>
-                <option value="pricing">{language === 'ar' ? 'أسعار ومبيعات' : 'Pricing & Sales'}</option>
-                <option value="complaint">{language === 'ar' ? 'شكاوى' : 'Complaints'}</option>
-                <option value="support">{language === 'ar' ? 'دعم فني' : 'Technical Support'}</option>
-                <option value="job">{language === 'ar' ? 'طلب توظيف' : 'Job Application'}</option>
+                <option value="inquiry">
+                  {language === "ar" ? "استفسار عام" : "General Inquiry"}
+                </option>
+                <option value="pricing">
+                  {language === "ar" ? "أسعار ومبيعات" : "Pricing & Sales"}
+                </option>
+                <option value="complaint">
+                  {language === "ar" ? "شكاوى" : "Complaints"}
+                </option>
+                <option value="support">
+                  {language === "ar" ? "دعم فني" : "Technical Support"}
+                </option>
+                <option value="job">
+                  {language === "ar" ? "طلب توظيف" : "Job Application"}
+                </option>
               </select>
               <textarea
                 name="message"
@@ -278,7 +338,7 @@ const ContactUs = () => {
                 disabled={isSubmitting}
                 className="bg-[#E1804E] hover:bg-[#c96d3f] text-white font-bold py-4 rounded-md transition-all shadow-[0_0_20px_rgba(225,128,78,0.2)] active:scale-95 tracking-widest text-sm disabled:opacity-50"
               >
-                {isSubmitting ? '...' : t("send")}
+                {isSubmitting ? "..." : t("send")}
               </button>
             </form>
           )}
@@ -304,7 +364,9 @@ const ContactUs = () => {
                 <p className="text-white text-xs font-bold uppercase mb-1">
                   {t("phone")}
                 </p>
-                <p className="text-gray-400 text-xs">{settings.site_phone || "00201288863631"}</p>
+                <p className="text-gray-400 text-xs">
+                  {settings.site_phone || "00201288863631"}
+                </p>
               </div>
             </div>
 
@@ -354,7 +416,9 @@ const ContactUs = () => {
                 <p className="text-white text-xs font-bold uppercase mb-1">
                   {t("email")}
                 </p>
-                <p className="text-gray-400 text-xs break-all">{settings.site_email || "Sales@serv5.com"}</p>
+                <p className="text-gray-400 text-xs break-all">
+                  {settings.site_email || "Sales@serv5.com"}
+                </p>
               </div>
             </div>
           </div>
@@ -362,21 +426,24 @@ const ContactUs = () => {
 
         {/* Right Side: Replaced Map with Contents.png */}
         <div className="w-full h-full flex items-center justify-center relative min-h-[300px] md:min-h-[450px]">
-          
           {/* Falling Meteor */}
           <motion.img
             src="/CTA/meteor.png"
             alt="Meteor"
             className="absolute z-30 w-32 md:w-48 pointer-events-none drop-shadow-[0_0_40px_rgba(255,138,0,0.8)]"
             initial={{ opacity: 0, x: -1000, y: -200, scale: 0.5, rotate: 15 }}
-            whileInView={{ 
-              opacity: [0, 1, 1, 0], 
-              x: [-1000, -500, 0, 0], 
+            whileInView={{
+              opacity: [0, 1, 1, 0],
+              x: [-1000, -500, 0, 0],
               y: [-200, -100, 0, 0],
               scale: [0.5, 1, 1.5, 0],
             }}
             viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 2.5, times: [0, 0.1, 0.98, 1], ease: "easeIn" }}
+            transition={{
+              duration: 2.5,
+              times: [0, 0.1, 0.98, 1],
+              ease: "easeIn",
+            }}
           />
 
           {/* Explosion */}
@@ -385,29 +452,37 @@ const ContactUs = () => {
             alt="Explosion"
             className="absolute z-40 w-64 md:w-96 pointer-events-none mix-blend-screen"
             initial={{ opacity: 0, scale: 0.2 }}
-            whileInView={{ 
-              opacity: [0, 1, 1, 0], 
-              scale: [0.2, 1.5, 2, 2.2] 
+            whileInView={{
+              opacity: [0, 1, 1, 0],
+              scale: [0.2, 1.5, 2, 2.2],
             }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 1, delay: 2.4, times: [0, 0.2, 0.8, 1] }}
           />
 
-          {/* Contents.png */}
-          <motion.img 
-            src="/about-us/Contents.png" 
-            alt="Contents" 
-            className="w-[90%] h-auto object-contain drop-shadow-[0_0_50px_rgba(255,138,0,0.3)] relative z-20 pointer-events-none"
-            initial={{ opacity: 0, scale: 0.2, filter: "brightness(2) blur(10px)" }}
-            whileInView={{ opacity: 1, scale: 1, filter: "brightness(1) blur(0px)" }}
+          {/* Global Reach Interactive Map */}
+          <motion.div
+            className="w-full relative z-20"
+            initial={{
+              opacity: 0,
+              scale: 0.2,
+              filter: "brightness(2) blur(10px)",
+            }}
+            whileInView={{
+              opacity: 1,
+              scale: 1,
+              filter: "brightness(1) blur(0px)",
+            }}
             viewport={{ once: true, amount: 0.3 }}
-            transition={{ 
-              duration: 1.2, 
+            transition={{
+              duration: 1.2,
               delay: 2.9, // Appears as explosion fades
               type: "spring",
-              stiffness: 80 
+              stiffness: 80,
             }}
-          />
+          >
+            <GlobalReach minimal={true} />
+          </motion.div>
         </div>
       </div>
     </section>
