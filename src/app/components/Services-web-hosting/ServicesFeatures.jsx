@@ -3,13 +3,17 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "../../context/LanguageContext";
 
-const ServicesFeatures = () => {
+const ServicesFeatures = ({ title, featuresData }) => {
   const { t } = useLanguage();
-  const features = [
+  const defaultFeatures = [
     {
       id: 1,
-      title: t("whFeature1Title") || "The fastest efficiency and speed of connection",
-      desc: t("whFeatureDesc") || "The main center for the server remains the space because the servers are linked to providing a response to commands as quickly as possible. The site’s components from pictures, texts, etc., require the greatest possible speed in reading data and executing commands directly without any delay. For this we are working on providing the fastest servers that guarantee you excellent speed.",
+      title:
+        t("whFeature1Title") ||
+        "The fastest efficiency and speed of connection",
+      desc:
+        t("whFeatureDesc") ||
+        "The main center for the server remains the space because the servers are linked to providing a response to commands as quickly as possible. The site’s components from pictures, texts, etc., require the greatest possible speed in reading data and executing commands directly without any delay. For this we are working on providing the fastest servers that guarantee you excellent speed.",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -31,7 +35,9 @@ const ServicesFeatures = () => {
     {
       id: 2,
       title: t("whFeature2Title") || "Protecting the server and sites 24/7",
-      desc: t("whFeatureDesc") || "The main center for the server remains the space because the servers are linked to providing a response to commands as quickly as possible. The site’s components from pictures, texts, etc., require the greatest possible speed in reading data and executing commands directly without any delay. For this we are working on providing the fastest servers that guarantee you excellent speed.",
+      desc:
+        t("whFeatureDesc") ||
+        "The main center for the server remains the space because the servers are linked to providing a response to commands as quickly as possible. The site’s components from pictures, texts, etc., require the greatest possible speed in reading data and executing commands directly without any delay. For this we are working on providing the fastest servers that guarantee you excellent speed.",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -151,6 +157,8 @@ const ServicesFeatures = () => {
     },
   ];
 
+  const displayFeatures = featuresData || defaultFeatures;
+
   return (
     <section className="relative w-full py-24 px-6 lg:px-20 z-20">
       <div className="max-w-7xl mx-auto">
@@ -160,11 +168,13 @@ const ServicesFeatures = () => {
           viewport={{ once: true }}
           className="text-white text-3xl md:text-5xl font-bold text-center mb-20 max-w-4xl mx-auto leading-tight"
         >
-          {t("whFeaturesTitle") || "Let us host your website with the most powerful features"}
+          {title ||
+            t("whFeaturesTitle") ||
+            "Let us host your website with the most powerful features"}
         </motion.h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
-          {features.map((feature, index) => (
+          {displayFeatures.map((feature, index) => (
             <motion.div
               key={feature.id}
               initial={{ opacity: 0, y: 30 }}

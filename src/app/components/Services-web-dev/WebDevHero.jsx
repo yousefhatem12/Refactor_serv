@@ -15,17 +15,20 @@ const WebDevHero = ({ data, serviceId = "web-development" }) => {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [isPricingModalOpen, setIsPricingModalOpen] = useState(false);
 
-  const heroImage = data?.hero_image
+  const heroImage = data?.bg_image || (data?.hero_image
     ? getMediaUrl(data.hero_image)
-    : "/services-web-dev/hero.png";
+    : "/services-web-dev/hero.png");
 
   return (
     <section className="relative w-full min-h-[80vh] flex items-center justify-between px-6 lg:px-20 pt-20">
       {/* Background Image behind everything */}
       <div
-        className="absolute inset-[-100px] h-screen z-0 bg-no-repeat bg-cover bg-center mix-blend-screen"
+        className={`absolute inset-[-100px] h-screen z-0 bg-no-repeat bg-cover ${data?.bgPosition || "bg-center"} mix-blend-screen`}
         style={{ backgroundImage: `url('${heroImage}')` }}
       />
+      {data?.overlay && (
+        <div className={`absolute inset-[-100px] h-screen z-10 pointer-events-none ${data.overlay}`} />
+      )}
 
       {/* Content */}
       <div className="relative z-20 max-w-2xl w-full lg:w-1/2">
@@ -75,23 +78,25 @@ const WebDevHero = ({ data, serviceId = "web-development" }) => {
       </div>
 
       {/* Right/Left Image (Planet) */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1, ease: "easeOut" }}
-        className={`hidden lg:block absolute ${isRtl ? "left-0" : "right-0"} top-1/2 -translate-y-1/2 w-1/2 max-w-[800px] pointer-events-none z-10`}
-      >
+      {!data?.hidePlanet && (
         <motion.div
-          animate={{ y: [0, -20, 0] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className={`hidden lg:block absolute ${isRtl ? "left-0" : "right-0"} top-1/2 -translate-y-1/2 w-1/2 max-w-[800px] pointer-events-none z-10`}
         >
-          <img
-            src="/Services/new/green.png"
-            alt="Green Planet"
-            className={`w-full h-auto object-contain drop-shadow-[0_0_50px_rgba(34,197,94,0.3)] scale-110 ${isRtl ? "-translate-x-[10%]" : "translate-x-[10%]"}`}
-          />
+          <motion.div
+            animate={{ y: [0, -20, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <img
+              src="/Services/new/green.png"
+              alt="Green Planet"
+              className={`w-full h-auto object-contain drop-shadow-[0_0_50px_rgba(34,197,94,0.3)] scale-110 ${isRtl ? "-translate-x-[10%]" : "translate-x-[10%]"}`}
+            />
+          </motion.div>
         </motion.div>
-      </motion.div>
+      )}
 
       <VideoModal
         isOpen={isVideoModalOpen}

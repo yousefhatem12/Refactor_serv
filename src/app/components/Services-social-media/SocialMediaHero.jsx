@@ -7,7 +7,13 @@ import { useSettings } from "../../context/SettingsContext";
 import VideoModal from "../Shared/VideoModal";
 import PricingModal from "../Shared/PricingModal";
 
-const SocialMediaHero = ({ serviceId = "social-media" }) => {
+const SocialMediaHero = ({ 
+  title,
+  desc,
+  bgImage = "/services-web-dev/hero.png",
+  planetImage = "/Services/Blue Planet.png",
+  serviceId = "social-media" 
+}) => {
   const { t } = useLanguage();
   const settings = useSettings();
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
@@ -18,7 +24,7 @@ const SocialMediaHero = ({ serviceId = "social-media" }) => {
       {/* Background Image behind everything */}
       <div
         className="absolute inset-[-100px] h-screen z-0 bg-no-repeat bg-cover bg-center mix-blend-screen"
-        style={{ backgroundImage: "url('/services-web-dev/hero.png')" }}
+        style={{ backgroundImage: `url('${bgImage}')` }}
       />
 
       {/* Left Content */}
@@ -29,7 +35,7 @@ const SocialMediaHero = ({ serviceId = "social-media" }) => {
           transition={{ duration: 0.6 }}
           className="text-white text-5xl md:text-7xl font-bold mb-6 tracking-tight"
         >
-          {t("socialMediaHeroTitle")}
+          {title || t("socialMediaHeroTitle")}
         </motion.h1>
 
         <motion.p
@@ -38,7 +44,7 @@ const SocialMediaHero = ({ serviceId = "social-media" }) => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-gray-300 text-lg md:text-xl leading-relaxed mb-10"
         >
-          {t("socialMediaHeroDesc")}
+          {desc || t("socialMediaHeroDesc")}
         </motion.p>
 
         <motion.div
@@ -69,23 +75,25 @@ const SocialMediaHero = ({ serviceId = "social-media" }) => {
       </div>
 
       {/* Right Image (Earth) */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1, ease: "easeOut" }}
-        className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 w-1/2 max-w-[800px] pointer-events-none z-10"
-      >
+      {planetImage && (
         <motion.div
-          animate={{ y: [0, -20, 0] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 w-1/2 max-w-[800px] pointer-events-none z-10"
         >
-          <img
-            src="/Services/Blue Planet.png"
-            alt="Blue Planet"
-            className="w-full h-auto object-contain drop-shadow-[0_0_50px_rgba(56,189,248,0.3)] scale-110 translate-x-[10%]"
-          />
+          <motion.div
+            animate={{ y: [0, -20, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <img
+              src={planetImage}
+              alt="Planet"
+              className="w-full h-auto object-contain drop-shadow-[0_0_50px_rgba(56,189,248,0.3)] scale-110 translate-x-[10%]"
+            />
+          </motion.div>
         </motion.div>
-      </motion.div>
+      )}
 
       <VideoModal
         isOpen={isVideoModalOpen}
