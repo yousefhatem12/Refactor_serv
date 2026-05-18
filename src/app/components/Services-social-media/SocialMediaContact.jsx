@@ -6,8 +6,14 @@ import { useLanguage } from "../../context/LanguageContext";
 const SocialMediaContact = () => {
   const { t } = useLanguage();
   return (
-    <section className="relative w-full py-20 px-6 lg:px-20 z-20">
-      <div className="max-w-4xl mx-auto text-center flex flex-col items-center">
+    <section className="relative w-full py-32 px-6 lg:px-20 z-20">
+      {/* Background image with screen blend mode to hide black pixels */}
+      <div 
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-60 mix-blend-screen pointer-events-none"
+        style={{ backgroundImage: "url('/services-social-media/section-5.png')" }}
+      ></div>
+      
+      <div className="max-w-4xl mx-auto text-center flex flex-col items-center relative z-10">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

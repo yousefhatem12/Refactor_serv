@@ -59,7 +59,7 @@ const SocialMediaHowWeWork = () => {
           </motion.h2>
         </div>
 
-        <div className="relative w-full max-w-4xl mx-auto flex flex-col gap-16 md:gap-24">
+        <div className="relative w-full max-w-4xl mx-auto flex flex-col gap-12 md:gap-16">
           {steps.map((step, index) => (
             <motion.div
               key={step.id}
@@ -68,12 +68,14 @@ const SocialMediaHowWeWork = () => {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.7 }}
               className={`flex flex-col md:flex-row items-center gap-6 md:gap-12 relative ${
-                step.align === "left" ? "md:flex-row" : "md:flex-row-reverse"
+                step.align === "left"
+                  ? "md:flex-row md:-translate-x-10 lg:-translate-x-16"
+                  : "md:flex-row-reverse md:translate-x-10 lg:translate-x-16"
               }`}
             >
               {/* Background large number */}
               <div
-                className={`absolute top-1/2 -translate-y-1/2 text-white/5 font-bold text-8xl md:text-[150px] leading-none z-0 ${step.align === "left" ? "left-[-50px] md:left-[-100px]" : "right-[-50px] md:right-[-100px]"}`}
+                className={`absolute top-1/2 -translate-y-1/2 text-white/15 font-bold text-8xl md:text-[150px] leading-none z-0 ${step.align === "left" ? "left-[-50px] md:left-[-100px]" : "right-[-50px] md:right-[-100px]"}`}
               >
                 {step.id}
               </div>
@@ -82,7 +84,7 @@ const SocialMediaHowWeWork = () => {
               <div
                 className={`w-full md:w-1/2 flex ${step.align === "left" ? "justify-end" : "justify-start"} z-10 relative`}
               >
-                <div className="w-48 h-48 md:w-64 md:h-64 relative">
+                <div className="w-48 h-48 md:w-48 md:h-48 relative">
                   <img
                     src={step.icon}
                     alt={step.title}

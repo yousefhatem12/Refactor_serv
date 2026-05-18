@@ -67,55 +67,6 @@ const ServicesHero = ({ serviceId = "cloud-hosting" }) => {
           </button>
         </motion.div>
 
-        {/* Navigation text links */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex items-center gap-6 mt-16 text-sm font-medium tracking-wider"
-        >
-          <a
-            href="#"
-            className="text-gray-400 hover:text-white transition-colors uppercase"
-          >
-            {t("home")}
-          </a>
-          <span className="text-gray-600">-</span>
-          <a
-            href="#"
-            className="text-gray-400 hover:text-white transition-colors uppercase"
-          >
-            {t("aboutUs")}
-          </a>
-          <span className="text-gray-600">-</span>
-          <a
-            href="#"
-            className="text-[#D98B50] hover:text-white transition-colors uppercase"
-          >
-            {t("services")}
-          </a>
-          <span className="text-gray-600">-</span>
-          <a
-            href="#"
-            className="text-gray-400 hover:text-white transition-colors uppercase"
-          >
-            {t("portfolio")}
-          </a>
-          <span className="text-gray-600">-</span>
-          <a
-            href="#"
-            className="text-gray-400 hover:text-white transition-colors uppercase"
-          >
-            {t("blog")}
-          </a>
-          <span className="text-gray-600">-</span>
-          <a
-            href="#"
-            className="text-gray-400 hover:text-white transition-colors uppercase"
-          >
-            {t("contactUs")}
-          </a>
-        </motion.div>
       </div>
 
       {/* Right Image (Planet) */}
