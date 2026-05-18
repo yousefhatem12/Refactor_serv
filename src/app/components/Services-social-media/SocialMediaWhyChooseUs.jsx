@@ -18,37 +18,37 @@ const SocialMediaWhyChooseUs = () => {
       id: 1,
       title: t("smReason1Title") || "Daily Reports",
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-      icon: <FiFileText className="text-2xl" />,
+      icon: <FiFileText className="text-4xl" />,
     },
     {
       id: 2,
       title: t("smReason2Title") || "Dedicated My Account",
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-      icon: <FiUserCheck className="text-2xl" />,
+      icon: <FiUserCheck className="text-4xl" />,
     },
     {
       id: 3,
       title: t("smReason3Title") || "Data protection",
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-      icon: <FiShield className="text-2xl" />,
+      icon: <FiShield className="text-4xl" />,
     },
     {
       id: 4,
       title: t("smReason4Title") || "Proven track record",
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-      icon: <FiAward className="text-2xl" />,
+      icon: <FiAward className="text-4xl" />,
     },
     {
       id: 5,
       title: t("smReason5Title") || "Data integration",
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-      icon: <FiShare2 className="text-2xl" />,
+      icon: <FiShare2 className="text-4xl" />,
     },
     {
       id: 6,
       title: t("smReason6Title") || "Result Driven Work",
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-      icon: <FiTarget className="text-2xl" />,
+      icon: <FiTarget className="text-4xl" />,
     },
   ];
 
@@ -103,12 +103,12 @@ const SocialMediaWhyChooseUs = () => {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1 }}
-          className="absolute right-0 top-1/2 -translate-y-1/2 w-1/2 max-w-[800px] pointer-events-none hidden lg:block z-10"
+          className="absolute right-0 top-1/2 -translate-y-1/2 w-[40%] max-w-[600px] pointer-events-none hidden lg:block z-10"
         >
           <img
             src="/Hero/earth.png"
             alt="Earth"
-            className="w-full h-auto object-contain translate-x-1/3 scale-125 opacity-80"
+            className="w-full max-h-[110vh] object-contain translate-x-[250px] scale-120 opacity-80"
           />
         </motion.div>
       </div>

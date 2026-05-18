@@ -12,40 +12,67 @@ const ContactMap = () => {
         initial={{ opacity: 0, x: -30 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
-        className="w-full lg:w-1/3 relative"
+        className="w-full lg:w-1/3 relative flex items-center justify-center lg:justify-start"
       >
-        <h2 className="text-5xl md:text-6xl font-bold text-white leading-tight">
-          {t("contactFindUs")} <span className="text-[#FF8A00]">{t("contactUsMap")}</span> <br />
-          {t("contactOnMap")}
-        </h2>
-        {/* Subtle decorative elements */}
-        <div className="absolute top-0 right-10 text-white/10 opacity-50">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="80"
-            height="80"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1"
-          >
-            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-          </svg>
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0 flex items-center justify-center -translate-x-10 lg:-translate-x-20 scale-[1.8] md:scale-[2] pointer-events-none opacity-50 ">
+          <img
+            src="/contact-us/Element.png"
+            alt=""
+            className="w-full h-auto object-cover mix-blend-luminosity"
+          />
         </div>
-        <div className="absolute top-1/2 -left-8 text-white/20">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
+
+        <div className="relative z-10 flex flex-col items-center lg:items-start text-center lg:text-left">
+          <div className="flex items-center gap-3">
+            <h2 className="text-5xl md:text-[70px] font-bold leading-tight flex items-center">
+              <span className="text-[#FF8A00]">{t("contactFindUs")}</span>
+              <span className="text-white ml-2 md:ml-4">
+                {t("contactUsMap")}
+              </span>
+            </h2>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="45"
+              height="45"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              className="text-white/40 mt-2"
+            >
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+            </svg>
+          </div>
+
+          <div className="flex items-center gap-2 mt-2 md:mt-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="35"
+              height="35"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="text-white/40"
+            >
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+            <h2 className="text-5xl md:text-[70px] font-bold leading-tight flex items-center">
+              {t("contactOnMap")
+                .split(" ")
+                .map((word, index) => (
+                  <span
+                    key={index}
+                    className={`${index === 1 ? "text-[#FF8A00]" : "text-white"} ${index > 0 ? "ml-2 md:ml-4" : ""}`}
+                  >
+                    {word}
+                  </span>
+                ))}
+            </h2>
+          </div>
         </div>
       </motion.div>
 
