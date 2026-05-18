@@ -9,6 +9,7 @@ import { fetchAPI } from "@/lib/api";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
 
@@ -91,6 +92,20 @@ const Navbar = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
 
+      if (document.body.scrollHeight > window.innerHeight + 100) {
+        const footer = document.querySelector("footer");
+        if (footer) {
+          const rect = footer.getBoundingClientRect();
+          if (rect.top < window.innerHeight - 50) {
+            setIsHidden(true);
+          } else {
+            setIsHidden(false);
+          }
+        }
+      } else {
+        setIsHidden(false);
+      }
+
       // ScrollSpy Logic
       let currentHash = "";
       // Only look for hashes on the current page
@@ -131,7 +146,7 @@ const Navbar = () => {
         isScrolled
           ? "py-4 bg-[#05050f]/5 backdrop-blur-md shadow-lg "
           : "py-6 bg-transparent"
-      }`}
+      } ${isHidden ? "-translate-y-full opacity-0 pointer-events-none" : "translate-y-0 opacity-100"}`}
     >
       <div className="max-w-[1400px] mx-auto px-6 md:px-10 flex items-center justify-between">
         {/* Logo */}
