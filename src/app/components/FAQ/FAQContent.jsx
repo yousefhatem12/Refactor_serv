@@ -11,6 +11,8 @@ const FAQContent = ({ data }) => {
   const { t, language } = useLanguage();
 
   const title = data?.title || (t("faqTitle1") + " " + t("faqTitle2") + " " + t("faqTitle3"));
+  const description = data?.content || "";
+  const heroImage = data?.hero_image || "/Hero/earth.png";
 
   useEffect(() => {
     const loadFaqs = async () => {
@@ -49,9 +51,14 @@ const FAQContent = ({ data }) => {
             animate={{ opacity: 1, y: 0 }}
             className="mb-10"
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-widest leading-[1.2] text-white mb-2">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-widest leading-[1.2] text-white mb-4">
               {title}
             </h1>
+            {description && (
+              <p className="text-white/80 text-lg md:text-xl leading-relaxed max-w-2xl">
+                {description}
+              </p>
+            )}
           </motion.div>
 
           <div className="flex flex-col gap-4">
@@ -155,8 +162,8 @@ const FAQContent = ({ data }) => {
           initial={{ opacity: 0, rotate: -10 }}
           animate={{ opacity: 1, rotate: 0 }}
           transition={{ duration: 1.5, ease: "easeOut" }}
-          src="/Hero/earth.png"
-          alt="Earth"
+          src={heroImage}
+          alt="FAQ Illustration"
           className="w-full h-full object-contain drop-shadow-[0_0_40px_rgba(59,130,246,0.3)]"
         />
       </div>
