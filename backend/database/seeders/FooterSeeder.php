@@ -39,7 +39,7 @@ class FooterSeeder extends Seeder
             'company' => [
                 ['en' => 'About Us', 'ar' => 'من نحن'],
                 ['en' => 'Careers', 'ar' => 'الوظائف'],
-                ['en' => 'FAQs', 'ar' => 'الأسئلة الشائعة'],
+                ['en' => 'FAQ', 'ar' => 'الأسئلة الشائعة'],
                 ['en' => 'Teams', 'ar' => 'فريق العمل'],
                 ['en' => 'Contact Us', 'ar' => 'اتصل بنا'],
             ],
