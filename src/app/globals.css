@@ -50,18 +50,7 @@ body {
 }
 
 @layer utilities {
-  .text-cinematic {
-    font-family: var(--font-heading);
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    font-weight: 800;
-  }
 
-  .text-premium {
-    font-family: var(--font-heading);
-    letter-spacing: -0.01em;
-    font-weight: 600;
-  }
 
   .text-balance {
     text-wrap: balance;

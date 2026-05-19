@@ -273,7 +273,7 @@ const Footer = () => {
                   </svg>
                 </div>
                 <span className="text-gray-400 text-base font-medium group-hover:text-white transition-colors pt-1 whitespace-pre-line">
-                  {settings.site_address || t("address")}
+                  {settings[`site_address_${language}`] || settings.site_address || t("address")}
                 </span>
               </li>
             </ul>

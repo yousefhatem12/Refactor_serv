@@ -1,0 +1,67 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use App\Models\FooterLink;
+use App\Models\Setting;
+
+class FooterSeeder extends Seeder
+{
+    public function run(): void
+    {
+        // 1. Delete all existing footer links to start fresh
+        FooterLink::truncate();
+
+        // 2. Define the exact footer structure from the design
+        $footerData = [
+            'useful_links' => [
+                ['en' => 'Landing Page', 'ar' => 'صفحة الهبوط'],
+                ['en' => 'Popup Builder', 'ar' => 'منشئ النوافذ المنبثقة'],
+                ['en' => 'Web-design', 'ar' => 'تصميم الويب'],
+                ['en' => 'Content', 'ar' => 'المحتوى'],
+                ['en' => 'Integrations', 'ar' => 'الربط والتكامل'],
+            ],
+            'quick_links' => [
+                ['en' => 'Web-designers', 'ar' => 'مصممي الويب'],
+                ['en' => 'Marketers', 'ar' => 'المسوقين'],
+                ['en' => 'Small Business', 'ar' => 'الأعمال الصغيرة'],
+                ['en' => 'Website Builder', 'ar' => 'منشئ المواقع'],
+            ],
+            'offers' => [
+                ['en' => 'Academy', 'ar' => 'الأكاديمية'],
+                ['en' => 'Blog', 'ar' => 'المدونة'],
+                ['en' => 'Themes', 'ar' => 'القوالب'],
+                ['en' => 'Hosting', 'ar' => 'الاستضافة'],
+                ['en' => 'Developers', 'ar' => 'المطورين'],
+                ['en' => 'Support', 'ar' => 'الدعم الفني'],
+            ],
+            'company' => [
+                ['en' => 'About Us', 'ar' => 'من نحن'],
+                ['en' => 'Careers', 'ar' => 'الوظائف'],
+                ['en' => 'FAQs', 'ar' => 'الأسئلة الشائعة'],
+                ['en' => 'Teams', 'ar' => 'فريق العمل'],
+                ['en' => 'Contact Us', 'ar' => 'اتصل بنا'],
+            ],
+        ];
+
+        // 3. Insert links into the database
+        foreach ($footerData as $columnName => $links) {
+            foreach ($links as $index => $label) {
+                $url = strtolower(str_replace(' ', '-', $label['en']));
+                FooterLink::create([
+                    'column_name' => $columnName,
+                    'label' => $label, 
+                    'url' => '/' . $url, 
+                    'sort_order' => $index,
+                ]);
+            }
+        }
+
+        // 4. Update Contact Info Settings
+        Setting::updateOrCreate(['key' => 'site_phone'], ['value' => '00201288863831', 'type' => 'text', 'value_source' => 'link']);
+        Setting::updateOrCreate(['key' => 'site_email'], ['value' => 'sales@serv5.com', 'type' => 'text', 'value_source' => 'link']);
+        Setting::updateOrCreate(['key' => 'site_address_en'], ['value' => 'Egypt-Mansoura-Suez Canal st. above Dr.Ramy pharmacy', 'type' => 'text', 'value_source' => 'link']);
+        Setting::updateOrCreate(['key' => 'site_address_ar'], ['value' => 'مصر - المنصورة - شارع قناة السويس - أعلى صيدلية د. رامي', 'type' => 'text', 'value_source' => 'link']);
+    }
+}
