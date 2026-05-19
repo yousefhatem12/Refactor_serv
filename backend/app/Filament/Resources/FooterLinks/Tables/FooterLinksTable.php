@@ -14,7 +14,8 @@ class FooterLinksTable
     {
         return $table
             ->columns([
-                TextColumn::make('label')
+                TextColumn::make('label.en')
+                    ->label('Label')
                     ->searchable(),
                 TextColumn::make('url')
                     ->searchable(),

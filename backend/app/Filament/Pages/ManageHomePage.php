@@ -126,7 +126,7 @@ class ManageHomePage extends Page implements HasForms
                                                     ->schema([
                                                         TextInput::make('name')->required(),
                                                         TextInput::make('role')->required(),
-                                                        \Filament\Forms\Components\FileUpload::make('image')->image()->required()
+                                                        \Filament\Forms\Components\FileUpload::make('image')->image()
                                                             ->directory('pages')
                                                             ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'pages')),
                                                     ])->columns(2),
@@ -215,7 +215,7 @@ class ManageHomePage extends Page implements HasForms
                                                     ->schema([
                                                         TextInput::make('name')->required(),
                                                         TextInput::make('role')->required(),
-                                                        \Filament\Forms\Components\FileUpload::make('image')->image()->required()
+                                                        \Filament\Forms\Components\FileUpload::make('image')->image()
                                                             ->directory('pages')
                                                             ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'pages')),
                                                     ])->columns(2),

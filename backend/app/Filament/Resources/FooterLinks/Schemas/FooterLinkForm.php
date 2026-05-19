@@ -11,7 +11,11 @@ class FooterLinkForm
     {
         return $schema
             ->components([
-                \Filament\Forms\Components\TextInput::make('label')
+                \Filament\Forms\Components\TextInput::make('label.en')
+                    ->label('Label (English)')
+                    ->required(),
+                \Filament\Forms\Components\TextInput::make('label.ar')
+                    ->label('Label (Arabic)')
                     ->required(),
                 \Filament\Forms\Components\TextInput::make('url')
                     ->required(),

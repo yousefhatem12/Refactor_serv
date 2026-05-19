@@ -111,7 +111,7 @@ export default function Hero({ isPhaseTwo, data }) {
             >
               <motion.h1
                 variants={itemVariants}
-                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black mb-6 leading-[0.9] tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/40 text-cinematic drop-shadow-2xl"
+                className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
               >
                 {isLoadingSettings ? (
                   <span className="opacity-0 text-white">Loading...</span>
