@@ -9,8 +9,6 @@ import AboutHero from "../components/AboutUs/AboutHero";
 import Experience from "../components/AboutUs/Experience";
 import Solutions from "../components/AboutUs/Solutions";
 
-
-
 // Contact Imports
 import ContactInfo from "../components/Contact/ContactInfo";
 import ContactForm from "../components/Contact/ContactForm";
@@ -28,27 +26,73 @@ import Newsletter from "../components/Blog/Newsletter";
 // FAQ Imports
 import FAQContent from "../components/FAQ/FAQContent";
 
+// Web Dev Layout Components
+import WebDevHero from "../components/Services-web-dev/WebDevHero";
+import WebDesignFeatures from "../components/Services-web-design/WebDesignFeatures";
+import WebDevHowWeWork from "../components/Services-web-dev/WebDevHowWeWork";
+import LatestBlogs from "../components/Services-web-hosting/LatestBlogs";
+
+// UI/UX Design Layout Components
+import WebDesignHero from "../components/Services-web-design/WebDesignHero";
+import WebDesignPortfolio from "../components/Services-web-design/WebDesignPortfolio";
+import WebDesignRequest from "../components/Services-web-design/WebDesignRequest";
+
+// Social Media Layout Components
+import SocialMediaHero from "../components/Services-social-media/SocialMediaHero";
+import DigitalMarketingServices from "../components/Services-social-media/DigitalMarketingServices";
+import SocialMediaWhyChooseUs from "../components/Services-social-media/SocialMediaWhyChooseUs";
+import SocialMediaHowWeWork from "../components/Services-social-media/SocialMediaHowWeWork";
+import SocialMediaContact from "../components/Services-social-media/SocialMediaContact";
+
+// Cloud Hosting Layout Components
+import ServicesHero from "../components/Services-web-hosting/ServicesHero";
+import ServicesFeatures from "../components/Services-web-hosting/ServicesFeatures";
+import HostingOffers from "../components/Services-web-hosting/HostingOffers";
+
+// Ecommerce Layout Components
+import EcommerceHero from "../components/Services-ecommerce/EcommerceHero";
+import EcommerceFeatures from "../components/Services-ecommerce/EcommerceFeatures";
+
+// Mobile Apps Layout Components
+import MobileAppsHero from "../components/Services-mobile-apps/MobileAppsHero";
+import MobileAppsFeatures from "../components/Services-mobile-apps/MobileAppsFeatures";
+import MobileAppHowWeWork from "../components/Services-web-dev/MobileAppHowWeWork";
+
 export default function DynamicPage() {
   const { slug } = useParams();
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const router = useRouter();
   const [pageData, setPageData] = useState(null);
+  const [serviceData, setServiceData] = useState(null);
+  const [isServicePage, setIsServicePage] = useState(false);
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     const loadPage = async () => {
       try {
-        const data = await fetchAPI(`/pages/${slug}?lang=${language}`);
-        if (!data || data.message === "Page not found") {
-          router.push("/404");
-          return;
-        }
-        setPageData(data);
-        
-        if (data.sections?.template === 'blog') {
-            const blogData = await fetchAPI(`/blog?lang=${language}`);
-            if (blogData) setPosts(blogData);
+        if (slug && slug.startsWith("services-")) {
+          setIsServicePage(true);
+          const serviceSlug = slug.replace("services-", "");
+          const data = await fetchAPI(`/services/${serviceSlug}?lang=${language}`);
+          if (!data || data.message === "Service not found") {
+            router.push("/404");
+            return;
+          }
+          setServiceData(data);
+        } else {
+          setIsServicePage(false);
+          const data = await fetchAPI(`/pages/${slug}?lang=${language}`);
+          if (!data || data.message === "Page not found") {
+            router.push("/404");
+            return;
+          }
+          setPageData(data);
+          
+          if (data.sections?.template === 'blog') {
+              const blogData = await fetchAPI(`/blog?lang=${language}`);
+              if (blogData) setPosts(blogData);
+          }
         }
       } catch (error) {
         console.error("Error loading page:", error);
@@ -73,13 +117,283 @@ export default function DynamicPage() {
     );
   }
 
-  if (!pageData) return null;
+  if (!isServicePage && !pageData) return null;
+  if (isServicePage && !serviceData) return null;
 
-  const template = pageData.sections?.template || "custom";
+  const template = isServicePage ? "service" : (pageData?.sections?.template || "custom");
+
+  const getServiceTemplate = (data) => {
+    if (data.template) {
+      return data.template;
+    }
+    const id = data.id || "";
+    if (id.includes("web-development")) return "web-development";
+    if (id.includes("ui-ux-design") || id.includes("web-design")) return "ui-ux-design";
+    if (id.includes("social-media") || id.includes("seo") || id.includes("marketing")) return "social-media";
+    if (id.includes("cloud-hosting") || id.includes("web-hosting") || id.includes("hosting")) return "cloud-hosting";
+    if (id.includes("ecommerce") || id.includes("online-stores") || id.includes("shop")) return "ecommerce";
+    if (id.includes("mobile-apps") || id.includes("app-development")) return "mobile-apps";
+    if (id.includes("digital-identity")) return "digital-identity";
+    return "web-development"; // default fallback
+  };
 
   return (
-    <main className="min-h-screen bg-[#020617] text-white">
-      <Navbar />
+    <main className="min-h-screen bg-[#020617] text-white flex flex-col relative overflow-x-hidden">
+
+
+      {template === "service" && (
+        <div className="w-full relative z-10 pb-10 pt-20">
+          {(() => {
+            const serviceTemplate = getServiceTemplate(serviceData);
+            switch (serviceTemplate) {
+              case "web-development":
+                return (
+                  <>
+                    {serviceData.show_hero !== false && <WebDevHero data={serviceData} serviceId={serviceData.id} />}
+                    {serviceData.show_features !== false && (
+                      <WebDesignFeatures 
+                        title={serviceData.features_title || t("webDevFeaturesTitle")} 
+                        description={serviceData.features_subtitle} 
+                        featuresList={serviceData.features_list}
+                      />
+                    )}
+                    {serviceData.show_how_we_work !== false && (
+                      <WebDevHowWeWork howWeWorkList={serviceData.how_we_work_list} />
+                    )}
+                    {serviceData.show_blogs !== false && <LatestBlogs />}
+                  </>
+                );
+              case "ui-ux-design":
+                return (
+                  <>
+                    {serviceData.show_hero !== false && <WebDesignHero data={serviceData} serviceId={serviceData.id} />}
+                    {serviceData.show_features !== false && (
+                      <WebDesignFeatures 
+                        title={serviceData.features_title} 
+                        description={serviceData.features_subtitle} 
+                        featuresList={serviceData.features_list}
+                      />
+                    )}
+                    {serviceData.show_portfolio !== false && <WebDesignPortfolio />}
+                    {serviceData.show_request !== false && <WebDesignRequest />}
+                    {serviceData.show_blogs !== false && <LatestBlogs />}
+                  </>
+                );
+              case "social-media":
+                return (
+                  <>
+                    {serviceData.show_hero !== false && (
+                      <SocialMediaHero 
+                        title={serviceData.hero_title || serviceData.title} 
+                        desc={serviceData.hero_subtitle || serviceData.description} 
+                        bgImage={serviceData.id === "seo-optimization" || serviceData.id === "network-marketing" ? "/template/template-one-hero.png" : undefined}
+                        planetImage={null}
+                        serviceId={serviceData.id}
+                      />
+                    )}
+                    {serviceData.show_digital_marketing !== false && (
+                      <DigitalMarketingServices 
+                        marketingTitle={serviceData.digital_marketing_title}
+                        marketingSubtitle={serviceData.digital_marketing_subtitle}
+                        marketingList={serviceData.digital_marketing_list}
+                      />
+                    )}
+                    {serviceData.show_why_choose_us !== false && (
+                      <SocialMediaWhyChooseUs 
+                        whyTitle={serviceData.why_choose_us_title}
+                        whySubtitle={serviceData.why_choose_us_subtitle}
+                        whyList={serviceData.why_choose_us_list}
+                      />
+                    )}
+                    {serviceData.show_how_we_work !== false && (
+                      <SocialMediaHowWeWork howWeWorkList={serviceData.how_we_work_list} />
+                    )}
+                    {serviceData.show_request !== false && <SocialMediaContact />}
+                    {serviceData.show_blogs !== false && <LatestBlogs />}
+                  </>
+                );
+              case "cloud-hosting":
+                return (
+                  <>
+                    {serviceData.show_hero !== false && (
+                      <ServicesHero 
+                        title={serviceData.hero_title || serviceData.title} 
+                        desc={serviceData.hero_subtitle || serviceData.description} 
+                        serviceId={serviceData.id}
+                      />
+                    )}
+                    {serviceData.show_features !== false && (
+                      <ServicesFeatures 
+                        featuresTitle={serviceData.features_title}
+                        featuresSubtitle={serviceData.features_subtitle}
+                        featuresList={serviceData.features_list}
+                      />
+                    )}
+                    {serviceData.show_hosting_offers !== false && (
+                      <HostingOffers offersList={serviceData.hosting_offers_list} />
+                    )}
+                    {serviceData.show_blogs !== false && <LatestBlogs />}
+                  </>
+                );
+              case "ecommerce":
+                return (
+                  <>
+                    {serviceData.show_hero !== false && <EcommerceHero data={serviceData} serviceId={serviceData.id} />}
+                    {serviceData.show_features !== false && <EcommerceFeatures />}
+                    {serviceData.show_blogs !== false && <LatestBlogs />}
+                  </>
+                );
+              case "mobile-apps":
+                return (
+                  <>
+                    {serviceData.show_hero !== false && (
+                      <SocialMediaHero
+                        title={serviceData.hero_title || serviceData.title || "Mobile Application Development"}
+                        desc={serviceData.hero_subtitle || serviceData.description}
+                        bgImage="/template/template-two-hero.png"
+                        planetImage={null}
+                        serviceId={serviceData.id}
+                      />
+                    )}
+                    {serviceData.show_features !== false && (
+                      <WebDesignFeatures
+                        title={serviceData.features_title || "What distinguish us at Mobile app development?"}
+                        description={serviceData.features_subtitle || " "}
+                        featuresList={serviceData.features_list}
+                      />
+                    )}
+                    {serviceData.show_portfolio !== false && <WebDesignPortfolio isMobileApp={true} />}
+                    {serviceData.show_how_we_work !== false && (
+                      <MobileAppHowWeWork howWeWorkList={serviceData.how_we_work_list} />
+                    )}
+                    {serviceData.show_request !== false && <WebDesignRequest />}
+                    {serviceData.show_blogs !== false && <LatestBlogs />}
+                  </>
+                );
+              case "digital-identity":
+                return (
+                  <>
+                    {serviceData.show_hero !== false && (
+                      <WebDevHero
+                        data={{
+                          title: serviceData.hero_title || serviceData.title || "Digital Identity Management",
+                          desc: serviceData.hero_subtitle || serviceData.description,
+                          bg_image: "/template/template-three-hero.png",
+                          hidePlanet: true,
+                          bgPosition: "bg-bottom",
+                          overlay: "bg-black/20",
+                        }}
+                        serviceId={serviceData.id}
+                      />
+                    )}
+                    {serviceData.show_features !== false && (
+                      <WebDesignFeatures
+                        title={serviceData.features_title || "Digital Identity Features from Serve5"}
+                        description={serviceData.features_subtitle || " "}
+                        featuresList={serviceData.features_list}
+                      />
+                    )}
+                    {serviceData.show_portfolio !== false && (
+                      <div className="py-10">
+                        <div className="max-w-7xl mx-auto px-6 lg:px-20 text-center mb-10">
+                          <h2 className="text-white text-3xl md:text-5xl font-bold leading-tight">
+                            Some of our Digital Identity Management at Serve5
+                          </h2>
+                        </div>
+                        <WebDesignPortfolio />
+                      </div>
+                    )}
+                    {serviceData.show_hosting_offers !== false && (
+                      <div className="pt-20">
+                        <div className="max-w-7xl mx-auto px-6 lg:px-20 text-center mb-[-50px] relative z-30">
+                          <h2 className="text-white text-3xl md:text-5xl font-bold leading-tight">
+                            Set up your site, pick a plan later
+                          </h2>
+                        </div>
+                        <HostingOffers offersList={serviceData.hosting_offers_list} />
+                      </div>
+                    )}
+                    {serviceData.show_how_we_work !== false && (
+                      <>
+                        <section className="py-20 px-6 lg:px-20 max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12">
+                          <div className="w-full lg:w-1/2">
+                            <h2 className="text-white text-3xl md:text-5xl font-bold mb-8 leading-tight">
+                              Make bright ideas happen.
+                            </h2>
+                            <ul className="space-y-4">
+                              {(serviceData.how_we_work_list || [
+                                { title: "Enhance your workflow" },
+                                { title: "Master management software" },
+                                { title: "Create dynamic business records" },
+                                { title: "Reorganize your application" },
+                                { title: "And much more app capabilities" }
+                              ]).map((item, idx) => (
+                                <li key={idx} className="flex items-center gap-4 text-gray-300">
+                                  <div className="w-6 h-6 rounded-full border border-[#D98B50] flex items-center justify-center shrink-0">
+                                    <div className="w-2 h-2 bg-[#D98B50] rounded-full"></div>
+                                  </div>
+                                  <span className="text-lg">{item.title}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div className="w-full lg:w-1/2 relative">
+                            <img
+                              src="/template/Mask group.png"
+                              alt="Analytics Dashboard"
+                              className="w-full h-auto object-contain drop-shadow-2xl"
+                            />
+                          </div>
+                        </section>
+                        <section className="py-20 px-6 lg:px-20 max-w-7xl mx-auto flex flex-col lg:flex-row-reverse items-center gap-12">
+                          <div className="w-full lg:w-1/2 flex flex-col items-start">
+                            <h2 className="text-white text-3xl md:text-5xl font-bold mb-6 leading-tight">
+                              Build an online presence for your business
+                            </h2>
+                            <p className="text-gray-400 mb-8 leading-relaxed text-lg">
+                              Get massive site speed with Serv5 framework, your team has all the
+                              tools they need to build and maintain an online presence.
+                            </p>
+                            <p className="text-sm text-gray-500 uppercase tracking-widest mb-4 font-semibold">
+                              Trusted by hundreds of clients
+                            </p>
+                            <div className="flex flex-col sm:flex-row items-center gap-8">
+                              <div className="flex -space-x-4">
+                                <div className="w-12 h-12 rounded-full bg-gray-600 border-2 border-[#03071E]"></div>
+                                <div className="w-12 h-12 rounded-full bg-gray-500 border-2 border-[#03071E]"></div>
+                                <div className="w-12 h-12 rounded-full bg-gray-400 border-2 border-[#03071E]"></div>
+                                <div className="w-12 h-12 rounded-full bg-[#D98B50] border-2 border-[#03071E] flex items-center justify-center text-sm font-bold text-white shadow-lg shadow-[#D98B50]/30">
+                                  +
+                                </div>
+                              </div>
+                              <button className="px-10 py-4 rounded-full bg-[#D98B50] text-white font-bold hover:bg-orange-600 transition-colors shadow-lg shadow-[#D98B50]/20">
+                                Get started
+                              </button>
+                            </div>
+                          </div>
+                          <div className="w-full lg:w-1/2 relative">
+                            <img
+                              src="/template/stephen-phillips-hostreviews-co-uk-shr_Xn8S8QU-unsplash 1.png"
+                              alt="Laptop showing website"
+                              className="w-full h-auto object-contain drop-shadow-[0_0_40px_rgba(255,255,255,0.05)]"
+                            />
+                          </div>
+                        </section>
+                      </>
+                    )}
+                    {serviceData.show_blogs !== false && <LatestBlogs />}
+                  </>
+                );
+              default:
+                return (
+                  <div className="text-center py-20">
+                    <h2 className="text-2xl font-bold">Unknown Service Template</h2>
+                  </div>
+                );
+            }
+          })()}
+        </div>
+      )}
 
       {template === "about" && (
         <>
@@ -228,8 +542,6 @@ export default function DynamicPage() {
           </div>
         </div>
       )}
-
-      <Footer />
     </main>
   );
 }
