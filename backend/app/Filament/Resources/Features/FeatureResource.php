@@ -17,8 +17,9 @@ use Filament\Tables\Table;
 class FeatureResource extends Resource
 {
     protected static ?string $model = Feature::class;
+    protected static bool $shouldRegisterNavigation = false;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-sparkles';
-    protected static string|\UnitEnum|null $navigationGroup = null;
+    public static function getNavigationGroup(): ?string { return __('Home Page'); }
     protected static ?int $navigationSort = 2;
     public static function getNavigationLabel(): string { return __('Features'); }
 

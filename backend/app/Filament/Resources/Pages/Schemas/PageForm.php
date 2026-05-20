@@ -31,8 +31,8 @@ class PageForm
                                         \Filament\Forms\Components\Builder\Block::make('text_image')
                                             ->label('Text & Image Section')
                                             ->schema([
-                                                TextInput::make('title')->required(),
                                                 TextInput::make('tagline'),
+                                                TextInput::make('title')->required(),
                                                 Textarea::make('content')->required(),
                                                 \Filament\Forms\Components\FileUpload::make('image')
                                                     ->image()
@@ -120,8 +120,8 @@ class PageForm
                                         \Filament\Forms\Components\Builder\Block::make('text_image')
                                             ->label('Text & Image Section')
                                             ->schema([
-                                                TextInput::make('title')->required(),
                                                 TextInput::make('tagline'),
+                                                TextInput::make('title')->required(),
                                                 Textarea::make('content')->required(),
                                                 \Filament\Forms\Components\FileUpload::make('image')
                                                     ->image()

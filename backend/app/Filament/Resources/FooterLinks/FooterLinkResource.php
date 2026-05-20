@@ -18,8 +18,8 @@ class FooterLinkResource extends Resource
 {
     protected static ?string $model = FooterLink::class;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-link';
-    protected static string|\UnitEnum|null $navigationGroup = null;
-    protected static ?int $navigationSort = 7;
+    public static function getNavigationGroup(): ?string { return __('Footer'); }
+    protected static ?int $navigationSort = 2;
     public static function getNavigationLabel(): string { return __('Footer Links'); }
 
 protected static ?string $recordTitleAttribute = 'label';

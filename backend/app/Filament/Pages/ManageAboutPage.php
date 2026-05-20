@@ -17,11 +17,26 @@ class ManageAboutPage extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static string|\UnitEnum|null $navigationGroup = null;
-    protected static ?int $navigationSort = 3;
+    protected static bool $shouldRegisterNavigation = false;
+    public static function getNavigationGroup(): ?string { return __('Pages'); }
+    protected static ?int $navigationSort = 1;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-information-circle';
     public static function getNavigationLabel(): string { return __('About Us'); }
     protected string $view = 'filament.pages.manage-about-page';
+
+    public function getHeading(): string|\Illuminate\Contracts\Support\Htmlable
+    {
+        return new \Illuminate\Support\HtmlString('
+            <span class="inline-flex items-center gap-3">
+                <a href="' . SitePages::getUrl() . '" class="inline-flex items-center justify-center rounded-md bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400 transition" style="width: 24px; height: 24px; min-width: 24px; min-height: 24px; display: inline-flex; align-items: center; justify-content: center;">
+                    <svg class="rtl:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 14px; height: 14px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                </a>
+                <span>' . __('About Us') . '</span>
+            </span>
+        ');
+    }
 
     public ?array $data = [];
     public ?PageModel $record = null;
@@ -65,8 +80,8 @@ class ManageAboutPage extends Page implements HasForms
                                         \Filament\Forms\Components\Builder\Block::make('text_image')
                                             ->label('Text & Image Section')
                                             ->schema([
-                                                TextInput::make('title')->required(),
                                                 TextInput::make('tagline'),
+                                                TextInput::make('title')->required(),
                                                 Textarea::make('content')->required(),
                                                 \Filament\Forms\Components\FileUpload::make('image')
                                                     ->image()
@@ -154,8 +169,8 @@ class ManageAboutPage extends Page implements HasForms
                                         \Filament\Forms\Components\Builder\Block::make('text_image')
                                             ->label('Text & Image Section')
                                             ->schema([
-                                                TextInput::make('title')->required(),
                                                 TextInput::make('tagline'),
+                                                TextInput::make('title')->required(),
                                                 Textarea::make('content')->required(),
                                                 \Filament\Forms\Components\FileUpload::make('image')
                                                     ->image()

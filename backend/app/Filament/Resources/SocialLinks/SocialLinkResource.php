@@ -18,8 +18,8 @@ class SocialLinkResource extends Resource
 {
     protected static ?string $model = SocialLink::class;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-share';
-    protected static string|\UnitEnum|null $navigationGroup = null;
-    protected static ?int $navigationSort = 8;
+    public static function getNavigationGroup(): ?string { return __('Footer'); }
+    protected static ?int $navigationSort = 3;
     public static function getNavigationLabel(): string { return __('Social Links'); }
 
 protected static ?string $recordTitleAttribute = 'platform';

@@ -16,8 +16,8 @@ class ManageMediaSettings extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static string|\UnitEnum|null $navigationGroup = null;
-    protected static ?int $navigationSort = 16;
+    public static function getNavigationGroup(): ?string { return __('System Settings'); }
+    protected static ?int $navigationSort = 70;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-photo';
     public static function getNavigationLabel(): string { return __('Images & Media'); }
     protected string $view = 'filament.pages.manage-media-settings';

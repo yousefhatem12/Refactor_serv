@@ -22,6 +22,7 @@ class PricingPlanResource extends Resource
     protected static string|\UnitEnum|null $navigationGroup = null;
     protected static ?int $navigationSort = 10;
     public static function getNavigationLabel(): string { return __('Pricing Plans'); }
+    protected static bool $shouldRegisterNavigation = false;
 
     public static function getRecordTitle(?\Illuminate\Database\Eloquent\Model $record): ?string
     {

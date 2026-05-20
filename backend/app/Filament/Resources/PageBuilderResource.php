@@ -24,8 +24,8 @@ class PageBuilderResource extends Resource
 {
     protected static ?string $model = Page::class;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-document-duplicate';
-    protected static string|\UnitEnum|null $navigationGroup = 'Pages';
-    protected static ?int $navigationSort = 4;
+    public static function getNavigationGroup(): ?string { return __('System Settings'); }
+    protected static ?int $navigationSort = 50;
     
     public static function getNavigationLabel(): string
     {
