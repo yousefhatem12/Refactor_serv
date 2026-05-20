@@ -8,8 +8,8 @@ import Footer from "../components/Footer/Footer";
 import AboutHero from "../components/AboutUs/AboutHero";
 import Experience from "../components/AboutUs/Experience";
 import Solutions from "../components/AboutUs/Solutions";
-import ServiceContent from "../components/Service/ServiceContent";
-import HeaderSpacer from "../components/Shared/HeaderSpacer";
+
+
 
 // Contact Imports
 import ContactInfo from "../components/Contact/ContactInfo";
@@ -89,19 +89,7 @@ export default function DynamicPage() {
         </>
       )}
 
-      {template === "services" && (
-        <>
-          <HeaderSpacer />
-          <ServiceContent
-             data={{
-                 name: pageData.title,
-                 description: pageData.subtitle,
-                 icon: null,
-             }}
-             sections={pageData.sections || {}}
-          />
-        </>
-      )}
+
 
       {template === "contact" && (
         <>
@@ -138,7 +126,6 @@ export default function DynamicPage() {
 
       {template === "custom" && (
         <div className="pt-24 pb-20">
-          <HeaderSpacer />
           <div className="max-w-7xl mx-auto px-6 lg:px-20">
             {pageData.sections?.blocks?.map((block, index) => {
               switch (block.type) {
@@ -200,9 +187,7 @@ export default function DynamicPage() {
                                 <div className="p-5 font-bold text-lg text-white border-b border-white/10 bg-white/5">
                                    {faq.question?.[language]}
                                 </div>
-                                <div className="p-5 text-gray-300">
-                                   {faq.answer?.[language]}
-                                </div>
+                                <div className="p-5 text-gray-300 prose prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: faq.answer?.[language] }}></div>
                              </div>
                           ))}
                        </div>

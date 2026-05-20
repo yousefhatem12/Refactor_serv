@@ -18,7 +18,7 @@ const getIcon = (iconName) => {
 
 const AboutHero = ({ data }) => {
   const { t } = useLanguage();
-  const statsSection = data?.sections?.find(s => s.type === 'stats');
+  const statsSection = data?.sections?.blocks?.find(s => s.type === 'stats');
   const statsItems = statsSection?.data?.items && statsSection.data.items.length > 0
     ? statsSection.data.items 
     : [
