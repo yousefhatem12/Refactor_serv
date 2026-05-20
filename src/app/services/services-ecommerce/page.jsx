@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import EcommerceHero from "../components/Services-ecommerce/EcommerceHero";
-import EcommerceFeatures from "../components/Services-ecommerce/EcommerceFeatures";
-import LatestBlogs from "../components/Services-web-hosting/LatestBlogs";
+import EcommerceHero from "../../components/Services-ecommerce/EcommerceHero";
+import EcommerceFeatures from "../../components/Services-ecommerce/EcommerceFeatures";
+import LatestBlogs from "../../components/Services-web-hosting/LatestBlogs";
 import { fetchAPI } from "@/lib/api";
-import { useLanguage } from "../context/LanguageContext";
+import { useLanguage } from "../../context/LanguageContext";
 
 export default function EcommercePage() {
   const { language } = useLanguage();

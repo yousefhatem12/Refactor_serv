@@ -1,15 +1,15 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { fetchAPI } from "@/lib/api";
-import { useLanguage } from "../context/LanguageContext";
+import { useLanguage } from "../../context/LanguageContext";
 import Image from "next/image";
-import SocialMediaHero from "../components/Services-social-media/SocialMediaHero";
-import ServicesFeatures from "../components/Services-web-hosting/ServicesFeatures";
-import PortfolioGallery from "../components/Portfolio/PortfolioGallery";
-import SocialMediaHowWeWork from "../components/Services-social-media/SocialMediaHowWeWork";
-import HostingOffers from "../components/Services-web-hosting/HostingOffers";
-import SocialMediaContact from "../components/Services-social-media/SocialMediaContact";
-import LatestBlogs from "../components/Services-web-hosting/LatestBlogs";
+import SocialMediaHero from "../../components/Services-social-media/SocialMediaHero";
+import ServicesFeatures from "../../components/Services-web-hosting/ServicesFeatures";
+import PortfolioGallery from "../../components/Portfolio/PortfolioGallery";
+import SocialMediaHowWeWork from "../../components/Services-social-media/SocialMediaHowWeWork";
+import HostingOffers from "../../components/Services-web-hosting/HostingOffers";
+import SocialMediaContact from "../../components/Services-social-media/SocialMediaContact";
+import LatestBlogs from "../../components/Services-web-hosting/LatestBlogs";
 
 export default function TemplateOnePage() {
   const [pageData, setPageData] = useState(null);

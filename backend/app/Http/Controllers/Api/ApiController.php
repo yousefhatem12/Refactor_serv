@@ -78,6 +78,29 @@ class ApiController extends Controller
         
         $sections = $service->sections ?: [];
         
+        // ─── NEW FORMAT: blocks array from Page Builder ───
+        $blocks = null;
+        if (!empty($sections['blocks']) && is_array($sections['blocks'])) {
+            $blocks = collect($sections['blocks'])->map(function ($block) use ($lang) {
+                $data = $block['data'] ?? [];
+                // Translate items/lists inside each block
+                if (!empty($data['items']) && is_array($data['items'])) {
+                    $data['items'] = collect($data['items'])->map(function ($item) use ($lang) {
+                        return [
+                            'title' => $item['title'] ?? null, // keep bilingual for frontend
+                            'desc' => $item['desc'] ?? null,
+                            'content' => $item['content'] ?? null,
+                        ];
+                    })->toArray();
+                }
+                return [
+                    'type' => $block['type'],
+                    'data' => $data,
+                ];
+            })->toArray();
+        }
+
+        // ─── OLD FORMAT: flat keys for backward compat ───
         $featuresList = collect($sections['features_list'] ?? [])->map(function($item) use ($lang) {
             return [
                 'title' => $this->trans($item['title'] ?? null, $lang),
@@ -92,23 +115,71 @@ class ApiController extends Controller
             ];
         })->toArray();
 
+        $hostingOffersList = collect($sections['hosting_offers_list'] ?? [])->map(function($item) use ($lang) {
+            return [
+                'title' => $this->trans($item['title'] ?? null, $lang),
+                'desc' => $this->trans($item['desc'] ?? null, $lang),
+            ];
+        })->toArray();
+
+        $digitalMarketingList = collect($sections['digital_marketing_list'] ?? [])->map(function($item) use ($lang) {
+            return [
+                'title' => $this->trans($item['title'] ?? null, $lang),
+                'desc' => $this->trans($item['desc'] ?? null, $lang),
+            ];
+        })->toArray();
+
+        $whyChooseUsList = collect($sections['why_choose_us_list'] ?? [])->map(function($item) use ($lang) {
+            return [
+                'title' => $this->trans($item['title'] ?? null, $lang),
+                'desc' => $this->trans($item['desc'] ?? null, $lang),
+            ];
+        })->toArray();
+        // Look up the template's hero_style
+        $templateSlug = $sections['template'] ?? null;
+        $heroStyle = 'social_media_hero'; // default
+        $defaultHeroImage = null;
+        if ($templateSlug) {
+            $tmpl = \App\Models\ServiceTemplate::where('slug', $templateSlug)->first();
+            if ($tmpl) {
+                $heroStyle = $tmpl->hero_style;
+                $defaultHeroImage = $tmpl->default_hero_image;
+            }
+        }
+
         return response()->json([
             'id' => $service->slug,
             'title' => $this->trans($service->name, $lang),
             'description' => $this->trans($service->description, $lang),
             'icon' => $service->icon,
+            'template' => $templateSlug,
+            'hero_style' => $heroStyle,
+            'default_hero_image' => $defaultHeroImage,
+            // NEW: blocks array for page builder
+            'blocks' => $blocks,
+            // OLD: flat keys for backward compat
             'hero_title' => $this->trans($sections['hero_title'] ?? null, $lang),
             'hero_subtitle' => $this->trans($sections['hero_subtitle'] ?? null, $lang),
             'features_title' => $this->trans($sections['features_title'] ?? null, $lang),
             'features_subtitle' => $this->trans($sections['features_subtitle'] ?? null, $lang),
             'features_list' => $featuresList,
             'how_we_work_list' => $howWeWorkList,
+            'hosting_offers_list' => $hostingOffersList,
+            'digital_marketing_title' => $this->trans($sections['digital_marketing_title'] ?? null, $lang),
+            'digital_marketing_subtitle' => $this->trans($sections['digital_marketing_subtitle'] ?? null, $lang),
+            'digital_marketing_list' => $digitalMarketingList,
+            'why_choose_us_title' => $this->trans($sections['why_choose_us_title'] ?? null, $lang),
+            'why_choose_us_subtitle' => $this->trans($sections['why_choose_us_subtitle'] ?? null, $lang),
+            'why_choose_us_list' => $whyChooseUsList,
             'show_hero' => $sections['show_hero'] ?? true,
             'show_features' => $sections['show_features'] ?? true,
             'show_how_we_work' => $sections['show_how_we_work'] ?? true,
             'show_portfolio' => $sections['show_portfolio'] ?? true,
             'show_request' => $sections['show_request'] ?? true,
             'show_blogs' => $sections['show_blogs'] ?? true,
+            'show_hosting_offers' => $sections['show_hosting_offers'] ?? true,
+            'show_digital_marketing' => $sections['show_digital_marketing'] ?? true,
+            'show_why_choose_us' => $sections['show_why_choose_us'] ?? true,
         ]);
     }
 

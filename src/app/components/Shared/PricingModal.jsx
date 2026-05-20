@@ -105,8 +105,8 @@ const PricingModal = ({ isOpen, onClose, serviceId = null }) => {
                     : "Choose the right plan for your business needs and start succeeding today."}
                 </p>
                 
-                {/* Services Tabs */}
-                {services.length > 0 && (
+                {/* Services Tabs — only shown when not locked to a specific service */}
+                {services.length > 0 && !serviceId && (
                   <div className="flex flex-wrap justify-center gap-3">
                     {services.map(service => (
                       <button
@@ -123,6 +123,16 @@ const PricingModal = ({ isOpen, onClose, serviceId = null }) => {
                     ))}
                   </div>
                 )}
+
+                {/* Show current service name as badge when locked */}
+                {serviceId && services.length > 0 && (
+                  <div className="flex justify-center">
+                    <span className="px-6 py-2.5 rounded-full text-sm font-bold bg-[#D98B50] text-white shadow-[0_0_15px_rgba(217,139,80,0.4)]">
+                      {services.find(s => s.id === serviceId)?.label || serviceId}
+                    </span>
+                  </div>
+                )}
+
               </div>
 
               {loading ? (
