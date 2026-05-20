@@ -70,7 +70,6 @@ class PageBuilderResource extends Resource
                                     ->label('Page Template')
                                     ->options([
                                         'about' => 'About Us Template',
-                                        'services' => 'Services Template',
                                         'contact' => 'Contact Us Template',
                                         'portfolio' => 'Portfolio Template',
                                         'blog' => 'Blog Template',
@@ -103,8 +102,8 @@ class PageBuilderResource extends Resource
                                             ->schema([
                                                 TextInput::make('heading.en')->label('Heading (EN)'),
                                                 TextInput::make('heading.ar')->label('Heading (AR)'),
-                                                Textarea::make('content.en')->label('Content (EN)'),
-                                                Textarea::make('content.ar')->label('Content (AR)'),
+                                                \Filament\Forms\Components\RichEditor::make('content.en')->label('Content (EN)')->columnSpanFull(),
+                                                \Filament\Forms\Components\RichEditor::make('content.ar')->label('Content (AR)')->columnSpanFull(),
                                             ]),
                                         Block::make('features_grid')
                                             ->label('Features/Services Grid')
@@ -144,8 +143,8 @@ class PageBuilderResource extends Resource
                                                     ->schema([
                                                         TextInput::make('question.en')->label('Question (EN)'),
                                                         TextInput::make('question.ar')->label('Question (AR)'),
-                                                        Textarea::make('answer.en')->label('Answer (EN)'),
-                                                        Textarea::make('answer.ar')->label('Answer (AR)'),
+                                                        \Filament\Forms\Components\RichEditor::make('answer.en')->label('Answer (EN)')->columnSpanFull(),
+                                                        \Filament\Forms\Components\RichEditor::make('answer.ar')->label('Answer (AR)')->columnSpanFull(),
                                                     ])->columns(2)
                                             ]),
                                         Block::make('split_block')
@@ -156,8 +155,8 @@ class PageBuilderResource extends Resource
                                                 FileUpload::make('image')->label('Image')->image(),
                                                 TextInput::make('title.en')->label('Title (EN)'),
                                                 TextInput::make('title.ar')->label('Title (AR)'),
-                                                Textarea::make('content.en')->label('Content (EN)'),
-                                                Textarea::make('content.ar')->label('Content (AR)'),
+                                                \Filament\Forms\Components\RichEditor::make('content.en')->label('Content (EN)')->columnSpanFull(),
+                                                \Filament\Forms\Components\RichEditor::make('content.ar')->label('Content (AR)')->columnSpanFull(),
                                             ]),
                                         Block::make('stats_block')
                                             ->label('Statistics Grid')

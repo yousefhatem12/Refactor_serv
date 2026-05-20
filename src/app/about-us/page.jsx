@@ -34,7 +34,7 @@ export default function AboutUsPage() {
         <GlobalReach />
         <WhyChooseUs />
         {/* Dynamic Sections from Dashboard */}
-        <PageSections sections={pageData?.sections?.filter(s => s.type !== 'stats')} />
+        <PageSections sections={pageData?.sections?.blocks?.filter(s => s.type !== 'stats') || []} />
       </div>
     </main>
   );
