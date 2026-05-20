@@ -17,8 +17,9 @@ use Filament\Tables\Table;
 class TeamMemberResource extends Resource
 {
     protected static ?string $model = TeamMember::class;
-    protected static string|\UnitEnum|null $navigationGroup = null;
-    protected static ?int $navigationSort = 17;
+    protected static bool $shouldRegisterNavigation = false;
+    public static function getNavigationGroup(): ?string { return __('Home Page'); }
+    protected static ?int $navigationSort = 4;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-users';
     public static function getNavigationLabel(): string { return __('Company Team'); }
 

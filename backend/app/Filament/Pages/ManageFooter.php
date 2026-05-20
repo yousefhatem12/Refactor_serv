@@ -17,8 +17,8 @@ class ManageFooter extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static string|\UnitEnum|null $navigationGroup = null;
-    protected static ?int $navigationSort = 6;
+    public static function getNavigationGroup(): ?string { return __('Footer'); }
+    protected static ?int $navigationSort = 1;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-bars-3-bottom-right';
     public static function getNavigationLabel(): string { return __('Footer'); }
     protected string $view = 'filament.pages.manage-footer';
@@ -32,9 +32,6 @@ class ManageFooter extends Page implements HasForms
             'footer_description',
             'footer_button_text',
             'footer_copyright',
-            'site_phone',
-            'site_email',
-            'site_address',
             'custom_footer_code',
         ];
 
@@ -55,14 +52,6 @@ class ManageFooter extends Page implements HasForms
                         TextInput::make('footer_button_text')->required(),
                         TextInput::make('footer_copyright')->required(),
                     ])->columns(2),
-
-                Section::make('Contact Information')
-                    ->description('Global contact details used across the site')
-                    ->schema([
-                        TextInput::make('site_phone')->required(),
-                        TextInput::make('site_email')->email()->required(),
-                        TextInput::make('site_address')->required(),
-                    ])->columns(3),
 
                 Section::make('Custom Code')
                     ->description('Inject custom HTML/JS code before the closing </body> tag')

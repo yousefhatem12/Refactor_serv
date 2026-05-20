@@ -17,8 +17,9 @@ use Illuminate\Support\Str;
 class ServiceResource extends Resource
 {
     protected static ?string $model = Service::class;
-    protected static string|\UnitEnum|null $navigationGroup = null;
-    protected static ?int $navigationSort = 9;
+    protected static bool $shouldRegisterNavigation = false;
+    public static function getNavigationGroup(): ?string { return __('Pages'); }
+    protected static ?int $navigationSort = 2;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-briefcase';
     public static function getNavigationLabel(): string { return __('Services'); }
 

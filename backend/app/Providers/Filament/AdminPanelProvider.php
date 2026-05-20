@@ -57,23 +57,17 @@ class AdminPanelProvider extends PanelProvider
                 fn (): string => Blade::render('@include("filament.hooks.notification-sound")')
             )
             ->plugins([
-                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
+                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
+                    ->navigationGroup(fn () => __('System Settings'))
+                    ->navigationSort(80),
             ])
             ->navigationGroups([
-                'Home Page',
-                'About Us',
-                'Header',
-                'Footer',
-                'Services',
-                'Portfolio',
-                'Testimonials',
-                'Pages',
-                'Blog',
-                'SEO & Settings',
-                'Media',
-                'Our Team',
-                'Filament Shield',
-                'System & Security',
+                \Filament\Navigation\NavigationGroup::make()
+                    ->label(fn () => __('Header')),
+                \Filament\Navigation\NavigationGroup::make()
+                    ->label(fn () => __('Footer')),
+                \Filament\Navigation\NavigationGroup::make()
+                    ->label(fn () => __('System Settings')),
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([

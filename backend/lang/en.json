@@ -1,5 +1,6 @@
 {
     "Home Page": "Home Page",
+    "Pages": "Pages",
     "About Us": "About Us",
     "Header": "Header",
     "Footer": "Footer",
@@ -8,7 +9,10 @@
     "Testimonials": "Testimonials",
     "Site Pages": "Site Pages",
     "Blog": "Blog",
+    "Page Builder": "Page Builder",
     "SEO Settings": "SEO Settings",
     "Images & Media": "Images & Media",
-    "Company Team": "Company Team"
+    "Company Team": "Company Team",
+    "Roles": "Roles",
+    "Users": "Users"
 }

@@ -16,8 +16,8 @@ class ManageSeoSettings extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static string|\UnitEnum|null $navigationGroup = null;
-    protected static ?int $navigationSort = 15;
+    public static function getNavigationGroup(): ?string { return __('System Settings'); }
+    protected static ?int $navigationSort = 60;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-magnifying-glass';
     public static function getNavigationLabel(): string { return __('SEO Settings'); }
     protected string $view = 'filament.pages.manage-seo-settings';

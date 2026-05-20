@@ -2,264 +2,89 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\Page as PageModel;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Schemas\Schema;
 use Filament\Pages\Page;
-use Filament\Actions\Action;
-use Filament\Notifications\Notification;
+use App\Filament\Pages\ManageHomeHero;
+use App\Filament\Pages\ManageHomeCTA;
+use App\Filament\Pages\ManageHomeFeaturesSettings;
+use App\Filament\Resources\Features\FeatureResource;
+use App\Filament\Resources\Testimonials\TestimonialResource;
+use App\Filament\Resources\TeamMembers\TeamMemberResource;
 
-class ManageHomePage extends Page implements HasForms
+class ManageHomePage extends Page
 {
-    use InteractsWithForms;
-
-    protected static string|\UnitEnum|null $navigationGroup = null;
-    protected static ?int $navigationSort = 1;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-home';
     public static function getNavigationLabel(): string { return __('Home Page'); }
-    protected string $view = 'filament.pages.manage-home-page';
+    public static function getNavigationGroup(): ?string { return null; }
+    protected static ?int $navigationSort = 10;
+    
+    protected string $view = 'filament.pages.site-pages';
 
-    public ?array $data = [];
-    public ?PageModel $record = null;
-
-    public function mount(): void
+    public function getTitle(): string
     {
-        $this->record = PageModel::firstOrCreate(
-            ['slug' => 'home'],
-            [
-                'title' => ['en' => 'Home', 'ar' => 'الرئيسية'],
-                'subtitle' => ['en' => '', 'ar' => ''],
-                'content' => ['en' => '', 'ar' => ''],
-                'sections' => ['en' => [], 'ar' => []],
-            ]
-        );
-
-        $this->form->fill($this->record->toArray());
+        return __('Home Page Sections');
     }
 
-    public function form(Schema $schema): Schema
+    public function getHeading(): string|\Illuminate\Contracts\Support\Htmlable
     {
-        return $schema
-            ->components([
-                \Filament\Schemas\Components\Tabs::make('Translations')
-                    ->tabs([
-                        \Filament\Schemas\Components\Tabs\Tab::make('English')
-                            ->schema([
-                                TextInput::make('title.en')->label('Hero Title Line 1'),
-                                TextInput::make('subtitle.en')->label('Hero Title Line 2'),
-                                Textarea::make('content.en')->label('Hero Description')->rows(3),
-                                FileUpload::make('hero_image')
-                                    ->label('Hero Planet Image')
-                                    ->image()
-                                    ->directory('pages')
-                                    ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'pages')),
-                                TextInput::make('seo_title.en')->label('SEO Title'),
-                                Textarea::make('seo_description.en')->label('SEO Description'),
-                                \Filament\Forms\Components\Builder::make('sections.en')
-                                    ->label('Page Sections')
-                                    ->blocks([
-                                        \Filament\Forms\Components\Builder\Block::make('text_image')
-                                            ->label('Text & Image Section')
-                                            ->schema([
-                                                TextInput::make('title')->required(),
-                                                TextInput::make('tagline'),
-                                                Textarea::make('content')->required(),
-                                                \Filament\Forms\Components\FileUpload::make('image')
-                                                    ->image()
-                                                    ->directory('pages')
-                                                    ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'pages')),
-                                                \Filament\Forms\Components\Select::make('layout')
-                                                    ->options([
-                                                        'text_left' => 'Text Left, Image Right',
-                                                        'text_right' => 'Text Right, Image Left',
-                                                     ])->default('text_left'),
-                                            ]),
-                                        \Filament\Forms\Components\Builder\Block::make('stats')
-                                            ->label('Stats Section')
-                                            ->schema([
-                                                TextInput::make('title'),
-                                                \Filament\Forms\Components\Repeater::make('items')
-                                                    ->schema([
-                                                        TextInput::make('label')->required(),
-                                                        TextInput::make('value')->required(),
-                                                        TextInput::make('icon')->label('Icon Name (e.g., heroicon-o-clock)'),
-                                                    ])->columns(2),
-                                            ]),
-                                        \Filament\Forms\Components\Builder\Block::make('features')
-                                            ->label('Features Section')
-                                            ->schema([
-                                                TextInput::make('title'),
-                                                \Filament\Forms\Components\Repeater::make('items')
-                                                    ->schema([
-                                                        TextInput::make('title')->required(),
-                                                        Textarea::make('description')->required(),
-                                                        TextInput::make('icon')->label('Icon Name (e.g., FaRocket)'),
-                                                    ])->columns(1),
-                                            ]),
-                                        \Filament\Forms\Components\Builder\Block::make('journey')
-                                            ->label('Journey / Timeline Section')
-                                            ->schema([
-                                                TextInput::make('title'),
-                                                Textarea::make('description'),
-                                                \Filament\Forms\Components\Repeater::make('items')
-                                                    ->schema([
-                                                        TextInput::make('year')->required(),
-                                                        \Filament\Forms\Components\FileUpload::make('planet')->label('Planet Image')->image()
-                                                            ->directory('pages')
-                                                            ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'pages')),
-                                                        TextInput::make('location')->required(),
-                                                        TextInput::make('users')->required(),
-                                                        TextInput::make('partnership'),
-                                                        Textarea::make('description')->required(),
-                                                    ])->columns(2),
-                                            ]),
-                                        \Filament\Forms\Components\Builder\Block::make('team')
-                                            ->label('Team / Founders Section')
-                                            ->schema([
-                                                TextInput::make('title'),
-                                                Textarea::make('description'),
-                                                \Filament\Forms\Components\Repeater::make('items')
-                                                    ->schema([
-                                                        TextInput::make('name')->required(),
-                                                        TextInput::make('role')->required(),
-                                                        \Filament\Forms\Components\FileUpload::make('image')->image()
-                                                            ->directory('pages')
-                                                            ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'pages')),
-                                                    ])->columns(2),
-                                            ]),
-                                        \Filament\Forms\Components\Builder\Block::make('cta')
-                                            ->label('Call To Action Section')
-                                            ->schema([
-                                                TextInput::make('title')->required(),
-                                                Textarea::make('description'),
-                                                TextInput::make('button_text'),
-                                                TextInput::make('button_url'),
-                                            ]),
-                                    ]),
-                            ]),
-                        \Filament\Schemas\Components\Tabs\Tab::make('Arabic')
-                            ->schema([
-                                TextInput::make('title.ar')->label('العنوان الرئيسي الأول'),
-                                TextInput::make('subtitle.ar')->label('العنوان الرئيسي الثاني'),
-                                Textarea::make('content.ar')->label('الوصف الرئيسي')->rows(3),
-                                TextInput::make('seo_title.ar')->label('عنوان SEO'),
-                                Textarea::make('seo_description.ar')->label('وصف SEO'),
-                                \Filament\Forms\Components\Builder::make('sections.ar')
-                                    ->label('Page Sections (Arabic)')
-                                    ->blocks([
-                                        \Filament\Forms\Components\Builder\Block::make('text_image')
-                                            ->label('Text & Image Section')
-                                            ->schema([
-                                                TextInput::make('title')->required(),
-                                                TextInput::make('tagline'),
-                                                Textarea::make('content')->required(),
-                                                \Filament\Forms\Components\FileUpload::make('image')
-                                                    ->image()
-                                                    ->directory('pages')
-                                                    ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'pages')),
-                                                \Filament\Forms\Components\Select::make('layout')
-                                                    ->options([
-                                                        'text_left' => 'Text Left, Image Right',
-                                                        'text_right' => 'Text Right, Image Left',
-                                                    ])->default('text_left'),
-                                            ]),
-                                        \Filament\Forms\Components\Builder\Block::make('stats')
-                                            ->label('Stats Section')
-                                            ->schema([
-                                                TextInput::make('title'),
-                                                \Filament\Forms\Components\Repeater::make('items')
-                                                    ->schema([
-                                                        TextInput::make('label')->required(),
-                                                        TextInput::make('value')->required(),
-                                                        TextInput::make('icon')->label('Icon Name (e.g., heroicon-o-clock)'),
-                                                    ])->columns(2),
-                                            ]),
-                                        \Filament\Forms\Components\Builder\Block::make('features')
-                                            ->label('Features Section')
-                                            ->schema([
-                                                TextInput::make('title'),
-                                                \Filament\Forms\Components\Repeater::make('items')
-                                                    ->schema([
-                                                        TextInput::make('title')->required(),
-                                                        Textarea::make('description')->required(),
-                                                        TextInput::make('icon')->label('Icon Name (Arabic)'),
-                                                    ])->columns(1),
-                                            ]),
-                                        \Filament\Forms\Components\Builder\Block::make('journey')
-                                            ->label('Journey / Timeline Section')
-                                            ->schema([
-                                                TextInput::make('title'),
-                                                Textarea::make('description'),
-                                                \Filament\Forms\Components\Repeater::make('items')
-                                                    ->schema([
-                                                        TextInput::make('year')->required(),
-                                                        \Filament\Forms\Components\FileUpload::make('planet')->label('Planet Image')->image()
-                                                            ->directory('pages')
-                                                            ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'pages')),
-                                                        TextInput::make('location')->required(),
-                                                        TextInput::make('users')->required(),
-                                                        TextInput::make('partnership'),
-                                                        Textarea::make('description')->required(),
-                                                    ])->columns(2),
-                                            ]),
-                                        \Filament\Forms\Components\Builder\Block::make('team')
-                                            ->label('Team / Founders Section')
-                                            ->schema([
-                                                TextInput::make('title'),
-                                                Textarea::make('description'),
-                                                \Filament\Forms\Components\Repeater::make('items')
-                                                    ->schema([
-                                                        TextInput::make('name')->required(),
-                                                        TextInput::make('role')->required(),
-                                                        \Filament\Forms\Components\FileUpload::make('image')->image()
-                                                            ->directory('pages')
-                                                            ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'pages')),
-                                                    ])->columns(2),
-                                            ]),
-                                        \Filament\Forms\Components\Builder\Block::make('cta')
-                                            ->label('Call To Action Section')
-                                            ->schema([
-                                                TextInput::make('title')->required(),
-                                                Textarea::make('description'),
-                                                TextInput::make('button_text'),
-                                                TextInput::make('button_url'),
-                                            ]),
-                                    ]),
-                            ]),
-                    ])->columnSpanFull(),
-            ])
-            ->statePath('data');
+        return new \Illuminate\Support\HtmlString('
+            <span class="inline-flex items-center gap-3">
+                <a href="' . url('/admin') . '" class="inline-flex items-center justify-center rounded-md bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400 transition" style="width: 24px; height: 24px; min-width: 24px; min-height: 24px; display: inline-flex; align-items: center; justify-content: center;">
+                    <svg class="rtl:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 14px; height: 14px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                </a>
+                <span>' . __('Home Page Sections') . '</span>
+            </span>
+        ');
     }
 
-    protected function getFormActions(): array
+    protected function getViewData(): array
     {
         return [
-            Action::make('save')
-                ->label(__('filament-panels::resources/pages/edit-record.form.actions.save.label'))
-                ->submit('save'),
+            'cards' => [
+                [
+                    'title' => __('Hero Section'),
+                    'description' => __('Manage the main hero section, SEO, and dynamic blocks.'),
+                    'icon' => 'heroicon-o-sparkles',
+                    'url' => ManageHomeHero::getUrl(),
+                    'color' => 'primary',
+                ],
+                [
+                    'title' => __('Features Settings'),
+                    'description' => __('Manage the titles and descriptions of the features section.'),
+                    'icon' => 'heroicon-o-adjustments-horizontal',
+                    'url' => ManageHomeFeaturesSettings::getUrl(),
+                    'color' => 'info',
+                ],
+                [
+                    'title' => __('Features List'),
+                    'description' => __('Manage the individual features.'),
+                    'icon' => 'heroicon-o-star',
+                    'url' => FeatureResource::getUrl(),
+                    'color' => 'success',
+                ],
+                [
+                    'title' => __('Testimonials'),
+                    'description' => __('Manage client testimonials.'),
+                    'icon' => 'heroicon-o-chat-bubble-left-right',
+                    'url' => TestimonialResource::getUrl(),
+                    'color' => 'warning',
+                ],
+                [
+                    'title' => __('Company Team'),
+                    'description' => __('Manage team members.'),
+                    'icon' => 'heroicon-o-users',
+                    'url' => TeamMemberResource::getUrl(),
+                    'color' => 'primary',
+                ],
+                [
+                    'title' => __('Call To Action (CTA)'),
+                    'description' => __('Manage the CTA section content at the bottom of the page.'),
+                    'icon' => 'heroicon-o-megaphone',
+                    'url' => ManageHomeCTA::getUrl(),
+                    'color' => 'danger',
+                ],
+            ]
         ];
-    }
-
-    public function save(): void
-    {
-        try {
-            $data = $this->form->getState();
-            $this->record->update($data);
-
-            Notification::make()
-                ->title('Home page content saved successfully')
-                ->success()
-                ->send();
-        } catch (\Exception $e) {
-            Notification::make()
-                ->title('Error saving home page content')
-                ->danger()
-                ->body($e->getMessage())
-                ->send();
-        }
     }
 }

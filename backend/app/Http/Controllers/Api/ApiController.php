@@ -246,8 +246,18 @@ class ApiController extends Controller
 
     public function getSettings()
     {
-        $settings = Setting::all()->mapWithKeys(function ($setting) {
+        $lang = $this->getLang();
+        $settings = Setting::all()->mapWithKeys(function ($setting) use ($lang) {
             $value = $setting->value;
+
+            // Handle multilingual JSON settings
+            if (is_string($value) && str_starts_with($value, '{')) {
+                $decoded = json_decode($value, true);
+                if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                    $value = $decoded[$lang] ?? $decoded['en'] ?? $decoded['ar'] ?? $value;
+                }
+            }
+
             if ($setting->type === 'image' && $setting->value_source === 'file' && $value) {
                 $value = asset('storage/' . $value);
             }
