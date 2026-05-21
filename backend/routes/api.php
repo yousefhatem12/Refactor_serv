@@ -33,6 +33,7 @@ Route::get('/products', [ApiController::class, 'getProducts']);
 Route::get('/products/{slug}', [ApiController::class, 'getProduct']);
 Route::get('/careers', [ApiController::class, 'getCareers']);
 Route::post('/careers/apply', [ApiController::class, 'submitCareerApplication']);
+Route::get('/bank-accounts', [ApiController::class, 'getBankAccounts']);
 
 // Protected endpoints
 Route::middleware('auth:sanctum')->group(function () {
