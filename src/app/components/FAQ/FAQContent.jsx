@@ -157,7 +157,7 @@ const FAQContent = ({ data }) => {
       </div>
 
       {/* Right Side: Earth Image */}
-      <div className="absolute right-[-15%] lg:right-[-25%] top-[5%] w-[800px] lg:w-[1100px] h-auto z-10 pointer-events-none hidden md:block">
+      <div className="absolute md:right-[-25%] lg:right-[-25%] top-[5%] md:w-[500px] lg:w-[800px] h-auto z-10 pointer-events-none hidden md:block">
         <motion.img
           initial={{ opacity: 0, rotate: -10 }}
           animate={{ opacity: 1, rotate: 0 }}

@@ -3,8 +3,8 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "../../context/LanguageContext";
 
-const ServicesFeatures = ({ title, featuresData }) => {
-  const { t } = useLanguage();
+const ServicesFeatures = ({ title, featuresData, featuresList }) => {
+  const { language, t } = useLanguage();
   const defaultFeatures = [
     {
       id: 1,
@@ -157,7 +157,17 @@ const ServicesFeatures = ({ title, featuresData }) => {
     },
   ];
 
-  const displayFeatures = featuresData || defaultFeatures;
+  const list = featuresData || featuresList;
+  const displayFeatures = (list && Array.isArray(list) && list.length > 0)
+    ? list.map((item, index) => {
+        return {
+          id: index + 1,
+          title: item.title && typeof item.title === "object" ? (item.title[language] || item.title.en || "") : (item.title || ""),
+          desc: item.desc && typeof item.desc === "object" ? (item.desc[language] || item.desc.en || "") : (item.desc || item.content && typeof item.content === "object" ? (item.content[language] || item.content.en || "") : (item.content || "")),
+          icon: defaultFeatures[index % defaultFeatures.length]?.icon,
+        };
+      })
+    : defaultFeatures;
 
   return (
     <section className="relative w-full py-24 px-6 lg:px-20 z-20">

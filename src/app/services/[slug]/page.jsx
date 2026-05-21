@@ -153,6 +153,14 @@ function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, 
 
     // ── FEATURES ──
     case "features":
+      if (serviceId === "cloud-hosting") {
+        return (
+          <ServicesFeatures
+            title={data.title?.[language] || data.title?.en || ""}
+            featuresList={data.items}
+          />
+        );
+      }
       return (
         <WebDesignFeatures
           title={data.title?.[language] || data.title?.en || ""}
@@ -232,7 +240,13 @@ function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, 
 
     // ── E-COMMERCE FEATURES ──
     case "ecommerce_features":
-      return <EcommerceFeatures />;
+      return (
+        <EcommerceFeatures
+          title={data.title?.[language] || data.title?.en || ""}
+          subtitle={data.subtitle?.[language] || data.subtitle?.en || ""}
+          featuresList={data.items}
+        />
+      );
 
     // ── SPLIT CONTENT ──
     case "split_content": {

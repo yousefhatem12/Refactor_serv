@@ -3,38 +3,56 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "../../context/LanguageContext";
 
-const SocialMediaHowWeWork = () => {
-  const { t } = useLanguage();
-  const steps = [
-    {
-      id: "01",
-      title: t("smStep1Title") || "Goal",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      icon: "/services-social-media/icon-1.png",
-      align: "left",
-    },
-    {
-      id: "02",
-      title: t("smStep2Title") || "Competitors",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      icon: "/services-social-media/icon-2.png",
-      align: "right",
-    },
-    {
-      id: "03",
-      title: t("smStep3Title") || "Strategy",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      icon: "/services-social-media/icon-3.png",
-      align: "left",
-    },
-    {
-      id: "04",
-      title: t("smStep4Title") || "Launch",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      icon: "/services-social-media/icon-4.png",
-      align: "right",
-    },
-  ];
+const SocialMediaHowWeWork = ({ howWeWorkTitle, howWeWorkSubtitle, howWeWorkList }) => {
+  const { language, t } = useLanguage();
+  const steps = (howWeWorkList && Array.isArray(howWeWorkList) && howWeWorkList.length > 0)
+    ? howWeWorkList.map((item, index) => {
+        const idNum = index + 1;
+        const idString = idNum < 10 ? `0${idNum}` : `${idNum}`;
+        const icons = [
+          "/services-social-media/icon-1.png",
+          "/services-social-media/icon-2.png",
+          "/services-social-media/icon-3.png",
+          "/services-social-media/icon-4.png",
+        ];
+        return {
+          id: idString,
+          title: item.title?.[language] || item.title || "",
+          desc: item.desc?.[language] || item.desc || item.content?.[language] || item.content || "",
+          icon: icons[index % icons.length],
+          align: index % 2 === 0 ? "left" : "right",
+        };
+      })
+    : [
+        {
+          id: "01",
+          title: t("smStep1Title") || "Goal",
+          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+          icon: "/services-social-media/icon-1.png",
+          align: "left",
+        },
+        {
+          id: "02",
+          title: t("smStep2Title") || "Competitors",
+          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+          icon: "/services-social-media/icon-2.png",
+          align: "right",
+        },
+        {
+          id: "03",
+          title: t("smStep3Title") || "Strategy",
+          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+          icon: "/services-social-media/icon-3.png",
+          align: "left",
+        },
+        {
+          id: "04",
+          title: t("smStep4Title") || "Launch",
+          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+          icon: "/services-social-media/icon-4.png",
+          align: "right",
+        },
+      ];
 
   return (
     <section className="relative w-full py-24 px-6 lg:px-20 z-20">
@@ -46,7 +64,7 @@ const SocialMediaHowWeWork = () => {
             viewport={{ once: true }}
             className="text-[#D98B50] font-semibold uppercase tracking-wider mb-2"
           >
-            {t("howWeWorkSubtitle")}
+            {howWeWorkSubtitle?.[language] || howWeWorkSubtitle || t("howWeWorkSubtitle")}
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -55,7 +73,7 @@ const SocialMediaHowWeWork = () => {
             transition={{ delay: 0.1 }}
             className="text-white text-3xl md:text-5xl font-bold leading-tight"
           >
-            {t("howWeWorkTitle")}
+            {howWeWorkTitle?.[language] || howWeWorkTitle || t("howWeWorkTitle")}
           </motion.h2>
         </div>
 
