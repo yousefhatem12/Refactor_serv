@@ -11,46 +11,63 @@ import {
 } from "react-icons/fi";
 import { useLanguage } from "../../context/LanguageContext";
 
-const DigitalMarketingServices = () => {
-  const { t } = useLanguage();
-  const services = [
-    {
-      id: 1,
-      title: t("dmService1Title") || "Social Media",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-      icon: <FiVolume2 className="text-2xl" />,
-    },
-    {
-      id: 2,
-      title: t("dmService2Title") || "SEO",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-      icon: <FiBarChart2 className="text-2xl" />,
-    },
-    {
-      id: 3,
-      title: t("dmService3Title") || "Media Buying",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-      icon: <FiCrosshair className="text-2xl" />,
-    },
-    {
-      id: 4,
-      title: t("dmService4Title") || "Motion Graphic",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-      icon: <FiVideo className="text-2xl" />,
-    },
-    {
-      id: 5,
-      title: t("dmService5Title") || "Digital Identity",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-      icon: <FiTool className="text-2xl" />,
-    },
-    {
-      id: 6,
-      title: t("dmService6Title") || "Media Production",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-      icon: <FiCamera className="text-2xl" />,
-    },
-  ];
+const DigitalMarketingServices = ({ marketingTitle, marketingSubtitle, marketingList }) => {
+  const { language, t } = useLanguage();
+  const services = (marketingList && Array.isArray(marketingList) && marketingList.length > 0)
+    ? marketingList.map((item, index) => {
+        const icons = [
+          <FiVolume2 className="text-2xl" key="1" />,
+          <FiBarChart2 className="text-2xl" key="2" />,
+          <FiCrosshair className="text-2xl" key="3" />,
+          <FiVideo className="text-2xl" key="4" />,
+          <FiTool className="text-2xl" key="5" />,
+          <FiCamera className="text-2xl" key="6" />,
+        ];
+        return {
+          id: index + 1,
+          title: item.title?.[language] || item.title || "",
+          desc: item.desc?.[language] || item.desc || item.content?.[language] || item.content || "",
+          icon: icons[index % icons.length],
+        };
+      })
+    : [
+        {
+          id: 1,
+          title: t("dmService1Title") || "Social Media",
+          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
+          icon: <FiVolume2 className="text-2xl" />,
+        },
+        {
+          id: 2,
+          title: t("dmService2Title") || "SEO",
+          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
+          icon: <FiBarChart2 className="text-2xl" />,
+        },
+        {
+          id: 3,
+          title: t("dmService3Title") || "Media Buying",
+          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
+          icon: <FiCrosshair className="text-2xl" />,
+        },
+        {
+          id: 4,
+          title: t("dmService4Title") || "Motion Graphic",
+          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
+          icon: <FiVideo className="text-2xl" />,
+        },
+        {
+          id: 5,
+          title: t("dmService5Title") || "Digital Identity",
+          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
+          icon: <FiTool className="text-2xl" />,
+        },
+        {
+          id: 6,
+          title: t("dmService6Title") || "Media Production",
+          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
+          icon: <FiCamera className="text-2xl" />,
+        },
+      ];
 
   return (
     <section className="relative w-full py-24 px-6 lg:px-20 z-20">
@@ -62,7 +79,7 @@ const DigitalMarketingServices = () => {
             viewport={{ once: true }}
             className="text-[#D98B50] font-semibold uppercase tracking-wider mb-4"
           >
-            {t("digitalMarketingSubtitle")}
+            {marketingSubtitle?.[language] || marketingSubtitle || t("digitalMarketingSubtitle")}
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -71,7 +88,7 @@ const DigitalMarketingServices = () => {
             transition={{ delay: 0.1 }}
             className="text-white text-3xl md:text-5xl font-bold leading-tight"
           >
-            {t("digitalMarketingTitle")}
+            {marketingTitle?.[language] || marketingTitle || t("digitalMarketingTitle")}
           </motion.h2>
         </div>
 

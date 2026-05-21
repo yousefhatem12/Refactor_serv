@@ -28,10 +28,10 @@ import {
   FaBalanceScale
 } from "react-icons/fa";
 
-const EcommerceFeatures = () => {
-  const { t } = useLanguage();
+const EcommerceFeatures = ({ title, subtitle, featuresList }) => {
+  const { language, t } = useLanguage();
 
-  const features = [
+  const defaultFeatures = [
     { id: 1, title: t("ecFeature1Title"), desc: t("ecFeature1Desc"), icon: <FaInfinity size={24} /> },
     { id: 2, title: t("ecFeature2Title"), desc: t("ecFeature2Desc"), icon: <FaSlidersH size={24} /> },
     { id: 3, title: t("ecFeature3Title"), desc: t("ecFeature3Desc"), icon: <FaChartLine size={24} /> },
@@ -57,6 +57,17 @@ const EcommerceFeatures = () => {
     { id: 23, title: t("ecFeature23Title"), desc: t("ecFeature23Desc"), icon: <FaBalanceScale size={24} /> },
   ];
 
+  const features = (featuresList && Array.isArray(featuresList) && featuresList.length > 0)
+    ? featuresList.map((item, index) => {
+        return {
+          id: index + 1,
+          title: item.title && typeof item.title === "object" ? (item.title[language] || item.title.en || "") : (item.title || ""),
+          desc: item.desc && typeof item.desc === "object" ? (item.desc[language] || item.desc.en || "") : (item.desc || item.content && typeof item.content === "object" ? (item.content[language] || item.content.en || "") : (item.content || "")),
+          icon: defaultFeatures[index % defaultFeatures.length]?.icon,
+        };
+      })
+    : defaultFeatures;
+
   return (
     <section className="relative w-full py-24 px-6 lg:px-20 z-20">
       <div className="max-w-7xl mx-auto">
@@ -67,7 +78,7 @@ const EcommerceFeatures = () => {
             viewport={{ once: true }}
             className="text-white text-3xl md:text-5xl font-bold mb-6 leading-tight"
           >
-            {t("ecommerceFeaturesTitle")}
+            {title || t("ecommerceFeaturesTitle")}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -76,7 +87,7 @@ const EcommerceFeatures = () => {
             transition={{ delay: 0.2 }}
             className="text-gray-400 text-lg md:text-xl leading-relaxed"
           >
-            {t("ecommerceFeaturesDesc")}
+            {subtitle || t("ecommerceFeaturesDesc")}
           </motion.p>
         </div>
 

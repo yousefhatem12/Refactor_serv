@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "../../context/LanguageContext";
 
-const HostingOffers = ({ title }) => {
-  const { t } = useLanguage();
+const HostingOffers = ({ title, offersList }) => {
+  const { language, t } = useLanguage();
   const [activeTab, setActiveTab] = useState("Web hosting");
 
   const tabs = [
@@ -14,7 +14,7 @@ const HostingOffers = ({ title }) => {
     t("tabReseller") || "Reseller",
   ];
 
-  const offers = [
+  const defaultOffers = [
     {
       id: "silver",
       name: t("silverServer") || "Silver Server",
@@ -83,6 +83,46 @@ const HostingOffers = ({ title }) => {
       ],
     },
   ];
+
+  const offers = (offersList && Array.isArray(offersList) && offersList.length > 0)
+    ? offersList.map((item, index) => {
+        const name = item.title && typeof item.title === "object" ? (item.title[language] || item.title.en || "") : (item.title || "");
+        const desc = item.desc && typeof item.desc === "object" ? (item.desc[language] || item.desc.en || "") : (item.desc || "");
+        const lines = desc ? desc.split(/\r?\n/).map(f => f.trim()).filter(Boolean) : [];
+        
+        let price = "$180";
+        let period = "/mo";
+        let subtitle = "";
+        let filteredFeatures = [];
+        
+        lines.forEach(f => {
+          if (f.startsWith("Price:") || f.includes("$") || f.toLowerCase().includes("price")) {
+            price = f.replace(/price:?/i, "").trim();
+          } else if (f.startsWith("Period:") || f.toLowerCase().includes("month") || f.toLowerCase().includes("year") || f.includes("/mo") || f.includes("/yr")) {
+            period = f.replace(/period:?/i, "").trim();
+          } else if (f.startsWith("Subtitle:") || f.toLowerCase().includes("subtitle")) {
+            subtitle = f.replace(/subtitle:?/i, "").trim();
+          } else {
+            filteredFeatures.push(f);
+          }
+        });
+        
+        if (filteredFeatures.length === 0 && desc) {
+          filteredFeatures = [desc];
+        }
+
+        return {
+          id: `offer-${index}`,
+          name: name,
+          price: price,
+          period: period,
+          subtitle: subtitle || undefined,
+          buttonText: t("bookNow") || "Book Now !",
+          isPopular: index === 2 || (offersList.length === 1),
+          features: filteredFeatures,
+        };
+      })
+    : defaultOffers;
 
   return (
     <section className="relative w-full py-24 px-4 sm:px-6 lg:px-6 z-20">

@@ -259,10 +259,19 @@ class ServiceResource extends Resource
                                                     ->label('🛒 E-commerce Features')
                                                     ->icon('heroicon-o-shopping-cart')
                                                     ->schema([
-                                                        \Filament\Forms\Components\Placeholder::make('info')
-                                                            ->content('⚡ Uses default e-commerce features component. No configuration needed.')
-                                                            ->columnSpanFull(),
-                                                    ]),
+                                                        TextInput::make('title.en')->label('Section Title (EN)'),
+                                                        TextInput::make('title.ar')->label('Section Title (AR)'),
+                                                        Textarea::make('subtitle.en')->label('Section Subtitle (EN)'),
+                                                        Textarea::make('subtitle.ar')->label('Section Subtitle (AR)'),
+                                                        Repeater::make('items')
+                                                            ->label('Feature Items')
+                                                            ->schema([
+                                                                TextInput::make('title.en')->label('Title (EN)'),
+                                                                TextInput::make('title.ar')->label('Title (AR)'),
+                                                                Textarea::make('desc.en')->label('Description (EN)'),
+                                                                Textarea::make('desc.ar')->label('Description (AR)'),
+                                                            ])->columns(2)->columnSpanFull()->collapsible(),
+                                                    ])->columns(2),
 
                                                 // ────────── SPLIT CONTENT (Image + Text) ──────────
                                                 Block::make('split_content')
