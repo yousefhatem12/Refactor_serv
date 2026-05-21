@@ -67,43 +67,157 @@ class ServiceTemplateResource extends Resource
                             ->label('Template Sections')
                             ->blocks([
                                 \Filament\Forms\Components\Builder\Block::make('hero')
-                                    ->label('🎯 Hero Section')->icon('heroicon-o-photo')->schema([]),
+                                    ->label('🎯 Hero Section')->icon('heroicon-o-photo')
+                                    ->schema([
+                                        TextInput::make('title.en')->label('Title (EN)'),
+                                        TextInput::make('title.ar')->label('Title (AR)'),
+                                        Textarea::make('subtitle.en')->label('Subtitle (EN)')->rows(3),
+                                        Textarea::make('subtitle.ar')->label('Subtitle (AR)')->rows(3),
+                                    ])->columns(2),
                                 \Filament\Forms\Components\Builder\Block::make('features')
-                                    ->label('⭐ Features Grid')->icon('heroicon-o-star')->schema([]),
+                                    ->label('⭐ Features Grid')->icon('heroicon-o-star')
+                                    ->schema([
+                                        TextInput::make('title.en')->label('Section Title (EN)'),
+                                        TextInput::make('title.ar')->label('Section Title (AR)'),
+                                        Textarea::make('subtitle.en')->label('Section Subtitle (EN)'),
+                                        Textarea::make('subtitle.ar')->label('Section Subtitle (AR)'),
+                                        \Filament\Forms\Components\Repeater::make('items')
+                                            ->label('Feature Items')
+                                            ->schema([
+                                                TextInput::make('title.en')->label('Title (EN)'),
+                                                TextInput::make('title.ar')->label('Title (AR)'),
+                                                Textarea::make('desc.en')->label('Description (EN)'),
+                                                Textarea::make('desc.ar')->label('Description (AR)'),
+                                            ])->columns(2)->columnSpanFull()->collapsible(),
+                                    ])->columns(2),
                                 \Filament\Forms\Components\Builder\Block::make('how_we_work_timeline')
-                                    ->label('🔄 How We Work (Timeline)')->icon('heroicon-o-arrow-path')->schema([]),
+                                    ->label('🔄 How We Work (Timeline)')->icon('heroicon-o-arrow-path')
+                                    ->schema([
+                                        \Filament\Forms\Components\Repeater::make('items')
+                                            ->label('Steps')
+                                            ->schema([
+                                                TextInput::make('title.en')->label('Step Title (EN)'),
+                                                TextInput::make('title.ar')->label('Step Title (AR)'),
+                                                Textarea::make('desc.en')->label('Step Description (EN)'),
+                                                Textarea::make('desc.ar')->label('Step Description (AR)'),
+                                            ])->columns(2)->collapsible(),
+                                    ]),
                                 \Filament\Forms\Components\Builder\Block::make('how_we_work_steps')
-                                    ->label('📋 How We Work (Pipeline)')->icon('heroicon-o-queue-list')->schema([]),
+                                    ->label('📋 How We Work (Pipeline)')->icon('heroicon-o-queue-list')
+                                    ->schema([
+                                        \Filament\Forms\Components\Repeater::make('items')
+                                            ->label('Steps')
+                                            ->schema([
+                                                TextInput::make('title.en')->label('Step Title (EN)'),
+                                                TextInput::make('title.ar')->label('Step Title (AR)'),
+                                                Textarea::make('desc.en')->label('Step Description (EN)'),
+                                                Textarea::make('desc.ar')->label('Step Description (AR)'),
+                                            ])->columns(2)->collapsible(),
+                                    ]),
                                 \Filament\Forms\Components\Builder\Block::make('how_we_work_mobile')
-                                    ->label('📱 How We Work (Mobile)')->icon('heroicon-o-device-phone-mobile')->schema([]),
+                                    ->label('📱 How We Work (Mobile)')->icon('heroicon-o-device-phone-mobile')
+                                    ->schema([
+                                        \Filament\Forms\Components\Repeater::make('items')
+                                            ->label('Steps')
+                                            ->schema([
+                                                TextInput::make('title.en')->label('Step Title (EN)'),
+                                                TextInput::make('title.ar')->label('Step Title (AR)'),
+                                                Textarea::make('desc.en')->label('Step Description (EN)'),
+                                                Textarea::make('desc.ar')->label('Step Description (AR)'),
+                                            ])->columns(2)->collapsible(),
+                                    ]),
                                 \Filament\Forms\Components\Builder\Block::make('digital_marketing')
-                                    ->label('📢 Digital Marketing Services')->icon('heroicon-o-presentation-chart-line')->schema([]),
+                                    ->label('📢 Digital Marketing Services')->icon('heroicon-o-presentation-chart-line')
+                                    ->schema([
+                                        TextInput::make('title.en')->label('Section Title (EN)'),
+                                        TextInput::make('title.ar')->label('Section Title (AR)'),
+                                        TextInput::make('subtitle.en')->label('Section Subtitle (EN)'),
+                                        TextInput::make('subtitle.ar')->label('Section Subtitle (AR)'),
+                                        \Filament\Forms\Components\Repeater::make('items')
+                                            ->label('Service Cards')
+                                            ->schema([
+                                                TextInput::make('title.en')->label('Card Title (EN)'),
+                                                TextInput::make('title.ar')->label('Card Title (AR)'),
+                                                Textarea::make('desc.en')->label('Card Description (EN)'),
+                                                Textarea::make('desc.ar')->label('Card Description (AR)'),
+                                            ])->columns(2)->columnSpanFull()->collapsible(),
+                                    ])->columns(2),
                                 \Filament\Forms\Components\Builder\Block::make('why_choose_us')
-                                    ->label('👍 Why Choose Us')->icon('heroicon-o-hand-thumb-up')->schema([]),
+                                    ->label('👍 Why Choose Us')->icon('heroicon-o-hand-thumb-up')
+                                    ->schema([
+                                        TextInput::make('title.en')->label('Section Title (EN)'),
+                                        TextInput::make('title.ar')->label('Section Title (AR)'),
+                                        TextInput::make('subtitle.en')->label('Section Subtitle (EN)'),
+                                        TextInput::make('subtitle.ar')->label('Section Subtitle (AR)'),
+                                        \Filament\Forms\Components\Repeater::make('items')
+                                            ->label('Reasons / Benefits')
+                                            ->schema([
+                                                TextInput::make('title.en')->label('Title (EN)'),
+                                                TextInput::make('title.ar')->label('Title (AR)'),
+                                                Textarea::make('desc.en')->label('Description (EN)'),
+                                                Textarea::make('desc.ar')->label('Description (AR)'),
+                                            ])->columns(2)->columnSpanFull()->collapsible(),
+                                    ])->columns(2),
                                 \Filament\Forms\Components\Builder\Block::make('portfolio')
                                     ->label('🎨 Portfolio Gallery')->icon('heroicon-o-photo')
                                     ->schema([
-                                        \Filament\Forms\Components\Toggle::make('is_mobile_app')->label('Mobile App Portfolio')->default(false),
-                                    ]),
+                                        TextInput::make('section_title.en')->label('Section Title (EN)'),
+                                        TextInput::make('section_title.ar')->label('Section Title (AR)'),
+                                        \Filament\Forms\Components\Toggle::make('is_mobile_app')->label('Show as Mobile App Portfolio')->default(false),
+                                    ])->columns(2),
                                 \Filament\Forms\Components\Builder\Block::make('contact_request')
                                     ->label('📧 Contact / Request Form')->icon('heroicon-o-envelope')
                                     ->schema([
                                         Select::make('style')
+                                            ->label('Form Style')
                                             ->options(['social_media' => 'Social Media Style', 'web_design' => 'Web Design Style'])
                                             ->default('social_media'),
                                     ]),
                                 \Filament\Forms\Components\Builder\Block::make('hosting_offers')
-                                    ->label('💰 Hosting / Pricing Offers')->icon('heroicon-o-server')->schema([]),
+                                    ->label('💰 Hosting / Pricing Offers')->icon('heroicon-o-server')
+                                    ->schema([
+                                        TextInput::make('title.en')->label('Section Title (EN)'),
+                                        TextInput::make('title.ar')->label('Section Title (AR)'),
+                                        \Filament\Forms\Components\Repeater::make('items')
+                                            ->label('Offer Cards')
+                                            ->schema([
+                                                TextInput::make('title.en')->label('Offer Title (EN)'),
+                                                TextInput::make('title.ar')->label('Offer Title (AR)'),
+                                                Textarea::make('desc.en')->label('Offer Description (EN)'),
+                                                Textarea::make('desc.ar')->label('Offer Description (AR)'),
+                                            ])->columns(2)->collapsible(),
+                                    ]),
                                 \Filament\Forms\Components\Builder\Block::make('blogs')
-                                    ->label('📰 Latest Blogs')->icon('heroicon-o-newspaper')->schema([]),
+                                    ->label('📰 Latest Blogs')->icon('heroicon-o-newspaper')
+                                    ->schema([
+                                        \Filament\Forms\Components\Placeholder::make('info')
+                                            ->content('⚡ This section auto-fetches the latest blog posts. No configuration needed.')
+                                            ->columnSpanFull(),
+                                    ]),
                                 \Filament\Forms\Components\Builder\Block::make('ecommerce_features')
-                                    ->label('🛒 E-commerce Features')->icon('heroicon-o-shopping-cart')->schema([]),
+                                    ->label('🛒 E-commerce Features')->icon('heroicon-o-shopping-cart')
+                                    ->schema([
+                                        \Filament\Forms\Components\Placeholder::make('info')
+                                            ->content('⚡ This section uses the default e-commerce features component. No configuration needed.')
+                                            ->columnSpanFull(),
+                                    ]),
                                 \Filament\Forms\Components\Builder\Block::make('split_content')
                                     ->label('📐 Split Content Block')->icon('heroicon-o-view-columns')
                                     ->schema([
-                                        \Filament\Forms\Components\Toggle::make('image_on_right')->label('Image on Right')->default(true),
-                                    ]),
+                                        TextInput::make('title.en')->label('Title (EN)'),
+                                        TextInput::make('title.ar')->label('Title (AR)'),
+                                        Textarea::make('content.en')->label('Content Text (EN)')->rows(4),
+                                        Textarea::make('content.ar')->label('Content Text (AR)')->rows(4),
+                                        \Filament\Forms\Components\Toggle::make('image_on_right')->label('Image on Right Side')->default(true),
+                                        \Filament\Forms\Components\Repeater::make('items')
+                                            ->label('Bullet Points (optional)')
+                                            ->schema([
+                                                TextInput::make('title.en')->label('Point (EN)'),
+                                                TextInput::make('title.ar')->label('Point (AR)'),
+                                            ])->columns(2)->collapsible()->columnSpanFull(),
+                                    ])->columns(2),
                             ])
+
                             ->collapsible()
                             ->collapsed(false)
                             ->blockNumbers(false)
