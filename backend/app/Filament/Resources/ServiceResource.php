@@ -245,20 +245,22 @@ class ServiceResource extends Resource
                                                             ])->columns(2)->collapsible(),
                                                     ]),
 
-                                                // ────────── LATEST BLOGS ──────────
                                                 Block::make('blogs')
                                                     ->label('📰 Latest Blogs')
                                                     ->icon('heroicon-o-newspaper')
                                                     ->schema([
-                                                        // No content fields needed — auto-fetches from blog
+                                                        \Filament\Forms\Components\Placeholder::make('info')
+                                                            ->content('⚡ Auto-fetches latest blog posts. No configuration needed.')
+                                                            ->columnSpanFull(),
                                                     ]),
 
-                                                // ────────── E-COMMERCE FEATURES ──────────
                                                 Block::make('ecommerce_features')
                                                     ->label('🛒 E-commerce Features')
                                                     ->icon('heroicon-o-shopping-cart')
                                                     ->schema([
-                                                        // Uses default ecommerce features component
+                                                        \Filament\Forms\Components\Placeholder::make('info')
+                                                            ->content('⚡ Uses default e-commerce features component. No configuration needed.')
+                                                            ->columnSpanFull(),
                                                     ]),
 
                                                 // ────────── SPLIT CONTENT (Image + Text) ──────────
