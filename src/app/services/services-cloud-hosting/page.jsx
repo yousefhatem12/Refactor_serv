@@ -1,11 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { fetchAPI } from "@/lib/api";
-import { useLanguage } from "../context/LanguageContext";
-import ServicesHero from "../components/Services-web-hosting/ServicesHero";
-import ServicesFeatures from "../components/Services-web-hosting/ServicesFeatures";
-import HostingOffers from "../components/Services-web-hosting/HostingOffers";
-import LatestBlogs from "../components/Services-web-hosting/LatestBlogs";
+import { useLanguage } from "../../context/LanguageContext";
+import ServicesHero from "../../components/Services-web-hosting/ServicesHero";
+import ServicesFeatures from "../../components/Services-web-hosting/ServicesFeatures";
+import HostingOffers from "../../components/Services-web-hosting/HostingOffers";
+import LatestBlogs from "../../components/Services-web-hosting/LatestBlogs";
 
 export default function ServicesPage() {
   const [pageData, setPageData] = useState(null);

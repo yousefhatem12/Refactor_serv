@@ -1,11 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import WebDevHero from "../components/Services-web-dev/WebDevHero";
-import WebDesignFeatures from "../components/Services-web-design/WebDesignFeatures";
-import WebDevHowWeWork from "../components/Services-web-dev/WebDevHowWeWork";
-import LatestBlogs from "../components/Services-web-hosting/LatestBlogs";
+import WebDevHero from "../../components/Services-web-dev/WebDevHero";
+import WebDesignFeatures from "../../components/Services-web-design/WebDesignFeatures";
+import WebDevHowWeWork from "../../components/Services-web-dev/WebDevHowWeWork";
+import LatestBlogs from "../../components/Services-web-hosting/LatestBlogs";
 import { fetchAPI } from "@/lib/api";
-import { useLanguage } from "../context/LanguageContext";
+import { useLanguage } from "../../context/LanguageContext";
 
 export default function WebDevPage() {
   const { language, t } = useLanguage();

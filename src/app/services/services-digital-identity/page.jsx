@@ -1,12 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { fetchAPI } from "@/lib/api";
-import { useLanguage } from "../context/LanguageContext";
-import WebDevHero from "../components/Services-web-dev/WebDevHero";
-import WebDesignFeatures from "../components/Services-web-design/WebDesignFeatures";
-import WebDesignPortfolio from "../components/Services-web-design/WebDesignPortfolio";
-import HostingOffers from "../components/Services-web-hosting/HostingOffers";
-import LatestBlogs from "../components/Services-web-hosting/LatestBlogs";
+import { useLanguage } from "../../context/LanguageContext";
+import WebDevHero from "../../components/Services-web-dev/WebDevHero";
+import WebDesignFeatures from "../../components/Services-web-design/WebDesignFeatures";
+import WebDesignPortfolio from "../../components/Services-web-design/WebDesignPortfolio";
+import HostingOffers from "../../components/Services-web-hosting/HostingOffers";
+import LatestBlogs from "../../components/Services-web-hosting/LatestBlogs";
 
 export default function TemplateThreePage() {
   const [pageData, setPageData] = useState(null);

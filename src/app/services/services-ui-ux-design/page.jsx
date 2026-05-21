@@ -1,13 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { fetchAPI } from "@/lib/api";
-import { useLanguage } from "../context/LanguageContext";
+import { useLanguage } from "../../context/LanguageContext";
 
-import WebDesignHero from "../components/Services-web-design/WebDesignHero";
-import WebDesignFeatures from "../components/Services-web-design/WebDesignFeatures";
-import WebDesignPortfolio from "../components/Services-web-design/WebDesignPortfolio";
-import WebDesignRequest from "../components/Services-web-design/WebDesignRequest";
-import LatestBlogs from "../components/Services-web-hosting/LatestBlogs";
+import WebDesignHero from "../../components/Services-web-design/WebDesignHero";
+import WebDesignFeatures from "../../components/Services-web-design/WebDesignFeatures";
+import WebDesignPortfolio from "../../components/Services-web-design/WebDesignPortfolio";
+import WebDesignRequest from "../../components/Services-web-design/WebDesignRequest";
+import LatestBlogs from "../../components/Services-web-hosting/LatestBlogs";
 
 
 
