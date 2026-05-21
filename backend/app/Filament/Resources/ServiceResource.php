@@ -9,6 +9,11 @@ use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Builder;
+use Filament\Forms\Components\Builder\Block;
+use Filament\Forms\Components\FileUpload;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -55,152 +60,240 @@ class ServiceResource extends Resource
                                 Toggle::make('is_active')->default(true),
                             ])->columns(2),
 
-                        \Filament\Schemas\Components\Tabs\Tab::make('Page Content')
-                            ->icon('heroicon-o-document-text')
+                        \Filament\Schemas\Components\Tabs\Tab::make('Page Builder')
+                            ->icon('heroicon-o-squares-2x2')
                             ->schema([
                                 \Filament\Schemas\Components\Group::make()
                                     ->statePath('sections')
                                     ->schema([
-                                        \Filament\Schemas\Components\Tabs::make('Content Tabs')
-                                            ->tabs([
-                                                \Filament\Schemas\Components\Tabs\Tab::make('Hero Section')
+                                        Select::make('template')
+                                            ->label('Template Style')
+                                            ->options(fn () => \App\Models\ServiceTemplate::pluck('name', 'slug')->toArray())
+                                            ->required()
+                                            ->live()
+                                            ->afterStateUpdated(function ($state, $set, $get) {
+                                                // Auto-fill blocks from template preset when template changes
+                                                if ($state) {
+                                                    $tmpl = \App\Models\ServiceTemplate::where('slug', $state)->first();
+                                                    if ($tmpl && $tmpl->blocks_preset) {
+                                                        $set('blocks', $tmpl->blocks_preset);
+                                                    }
+                                                }
+                                            })
+                                            ->helperText('Changing template will reset sections to the template defaults.')
+                                            ->columnSpanFull(),
+
+                                        Builder::make('blocks')
+                                            ->label('Page Sections — Drag to reorder')
+                                            ->blocks([
+                                                // ────────── HERO ──────────
+                                                Block::make('hero')
+                                                    ->label('🎯 Hero Section')
                                                     ->icon('heroicon-o-photo')
-                                    ->schema([
-                                        Toggle::make('show_hero')->label('Show Hero Section')->default(true),
-                                        \Filament\Schemas\Components\Tabs::make('Hero Translations')
-                                            ->tabs([
-                                                \Filament\Schemas\Components\Tabs\Tab::make('English')
                                                     ->schema([
-                                                        TextInput::make('hero_title.en')->label('Hero Title'),
-                                                        Textarea::make('hero_subtitle.en')->label('Hero Subtitle'),
-                                                    ]),
-                                                \Filament\Schemas\Components\Tabs\Tab::make('Arabic')
+                                                        TextInput::make('title.en')->label('Title (EN)'),
+                                                        TextInput::make('title.ar')->label('Title (AR)'),
+                                                        Textarea::make('subtitle.en')->label('Subtitle (EN)')->rows(3),
+                                                        Textarea::make('subtitle.ar')->label('Subtitle (AR)')->rows(3),
+                                                        FileUpload::make('hero_image')
+                                                            ->label('Hero Background Image')
+                                                            ->image()
+                                                            ->directory('services/heroes')
+                                                            ->helperText('Leave empty to use template default')
+                                                            ->columnSpanFull(),
+                                                    ])->columns(2),
+
+                                                // ────────── FEATURES GRID ──────────
+                                                Block::make('features')
+                                                    ->label('⭐ Features Grid')
+                                                    ->icon('heroicon-o-star')
                                                     ->schema([
-                                                        TextInput::make('hero_title.ar')->label('Hero Title'),
-                                                        Textarea::make('hero_subtitle.ar')->label('Hero Subtitle'),
+                                                        TextInput::make('title.en')->label('Section Title (EN)'),
+                                                        TextInput::make('title.ar')->label('Section Title (AR)'),
+                                                        Textarea::make('subtitle.en')->label('Section Subtitle (EN)'),
+                                                        Textarea::make('subtitle.ar')->label('Section Subtitle (AR)'),
+                                                        Repeater::make('items')
+                                                            ->label('Feature Items')
+                                                            ->schema([
+                                                                TextInput::make('title.en')->label('Title (EN)'),
+                                                                TextInput::make('title.ar')->label('Title (AR)'),
+                                                                Textarea::make('desc.en')->label('Description (EN)'),
+                                                                Textarea::make('desc.ar')->label('Description (AR)'),
+                                                            ])->columns(2)->columnSpanFull()->collapsible(),
+                                                    ])->columns(2),
+
+                                                // ────────── HOW WE WORK (Timeline) ──────────
+                                                Block::make('how_we_work_timeline')
+                                                    ->label('🔄 How We Work (Timeline)')
+                                                    ->icon('heroicon-o-arrow-path')
+                                                    ->schema([
+                                                        Repeater::make('items')
+                                                            ->label('Steps')
+                                                            ->schema([
+                                                                TextInput::make('title.en')->label('Step Title (EN)'),
+                                                                TextInput::make('title.ar')->label('Step Title (AR)'),
+                                                                Textarea::make('desc.en')->label('Step Description (EN)'),
+                                                                Textarea::make('desc.ar')->label('Step Description (AR)'),
+                                                            ])->columns(2)->collapsible(),
                                                     ]),
+
+                                                // ────────── HOW WE WORK (Pipeline Steps) ──────────
+                                                Block::make('how_we_work_steps')
+                                                    ->label('📋 How We Work (Pipeline)')
+                                                    ->icon('heroicon-o-queue-list')
+                                                    ->schema([
+                                                        Repeater::make('items')
+                                                            ->label('Steps')
+                                                            ->schema([
+                                                                TextInput::make('title.en')->label('Step Title (EN)'),
+                                                                TextInput::make('title.ar')->label('Step Title (AR)'),
+                                                                Textarea::make('desc.en')->label('Step Description (EN)'),
+                                                                Textarea::make('desc.ar')->label('Step Description (AR)'),
+                                                            ])->columns(2)->collapsible(),
+                                                    ]),
+
+                                                // ────────── HOW WE WORK (Mobile) ──────────
+                                                Block::make('how_we_work_mobile')
+                                                    ->label('📱 How We Work (Mobile Style)')
+                                                    ->icon('heroicon-o-device-phone-mobile')
+                                                    ->schema([
+                                                        Repeater::make('items')
+                                                            ->label('Steps')
+                                                            ->schema([
+                                                                TextInput::make('title.en')->label('Step Title (EN)'),
+                                                                TextInput::make('title.ar')->label('Step Title (AR)'),
+                                                                Textarea::make('desc.en')->label('Step Description (EN)'),
+                                                                Textarea::make('desc.ar')->label('Step Description (AR)'),
+                                                            ])->columns(2)->collapsible(),
+                                                    ]),
+
+                                                // ────────── DIGITAL MARKETING SERVICES ──────────
+                                                Block::make('digital_marketing')
+                                                    ->label('📢 Digital Marketing Services')
+                                                    ->icon('heroicon-o-presentation-chart-line')
+                                                    ->schema([
+                                                        TextInput::make('title.en')->label('Section Title (EN)'),
+                                                        TextInput::make('title.ar')->label('Section Title (AR)'),
+                                                        TextInput::make('subtitle.en')->label('Section Subtitle (EN)'),
+                                                        TextInput::make('subtitle.ar')->label('Section Subtitle (AR)'),
+                                                        Repeater::make('items')
+                                                            ->label('Service Cards')
+                                                            ->schema([
+                                                                TextInput::make('title.en')->label('Card Title (EN)'),
+                                                                TextInput::make('title.ar')->label('Card Title (AR)'),
+                                                                Textarea::make('desc.en')->label('Card Description (EN)'),
+                                                                Textarea::make('desc.ar')->label('Card Description (AR)'),
+                                                            ])->columns(2)->columnSpanFull()->collapsible(),
+                                                    ])->columns(2),
+
+                                                // ────────── WHY CHOOSE US ──────────
+                                                Block::make('why_choose_us')
+                                                    ->label('👍 Why Choose Us')
+                                                    ->icon('heroicon-o-hand-thumb-up')
+                                                    ->schema([
+                                                        TextInput::make('title.en')->label('Section Title (EN)'),
+                                                        TextInput::make('title.ar')->label('Section Title (AR)'),
+                                                        TextInput::make('subtitle.en')->label('Section Subtitle (EN)'),
+                                                        TextInput::make('subtitle.ar')->label('Section Subtitle (AR)'),
+                                                        Repeater::make('items')
+                                                            ->label('Reasons / Benefits')
+                                                            ->schema([
+                                                                TextInput::make('title.en')->label('Title (EN)'),
+                                                                TextInput::make('title.ar')->label('Title (AR)'),
+                                                                Textarea::make('desc.en')->label('Description (EN)'),
+                                                                Textarea::make('desc.ar')->label('Description (AR)'),
+                                                            ])->columns(2)->columnSpanFull()->collapsible(),
+                                                    ])->columns(2),
+
+                                                // ────────── PORTFOLIO ──────────
+                                                Block::make('portfolio')
+                                                    ->label('🎨 Portfolio Gallery')
+                                                    ->icon('heroicon-o-photo')
+                                                    ->schema([
+                                                        TextInput::make('section_title.en')->label('Section Title (EN)'),
+                                                        TextInput::make('section_title.ar')->label('Section Title (AR)'),
+                                                        Toggle::make('is_mobile_app')->label('Show as Mobile App Portfolio')->default(false),
+                                                    ])->columns(2),
+
+                                                // ────────── CONTACT / REQUEST ──────────
+                                                Block::make('contact_request')
+                                                    ->label('📧 Contact / Request Form')
+                                                    ->icon('heroicon-o-envelope')
+                                                    ->schema([
+                                                        Select::make('style')
+                                                            ->label('Form Style')
+                                                            ->options([
+                                                                'social_media' => 'Social Media Contact Style',
+                                                                'web_design' => 'Web Design Request Style',
+                                                            ])
+                                                            ->default('social_media'),
+                                                    ]),
+
+                                                // ────────── HOSTING OFFERS ──────────
+                                                Block::make('hosting_offers')
+                                                    ->label('💰 Hosting / Pricing Offers')
+                                                    ->icon('heroicon-o-server')
+                                                    ->schema([
+                                                        TextInput::make('title.en')->label('Section Title (EN)'),
+                                                        TextInput::make('title.ar')->label('Section Title (AR)'),
+                                                        Repeater::make('items')
+                                                            ->label('Offer Cards')
+                                                            ->schema([
+                                                                TextInput::make('title.en')->label('Offer Title (EN)'),
+                                                                TextInput::make('title.ar')->label('Offer Title (AR)'),
+                                                                Textarea::make('desc.en')->label('Offer Description (EN)'),
+                                                                Textarea::make('desc.ar')->label('Offer Description (AR)'),
+                                                            ])->columns(2)->collapsible(),
+                                                    ]),
+
+                                                Block::make('blogs')
+                                                    ->label('📰 Latest Blogs')
+                                                    ->icon('heroicon-o-newspaper')
+                                                    ->schema([
+                                                        \Filament\Forms\Components\Placeholder::make('info')
+                                                            ->content('⚡ Auto-fetches latest blog posts. No configuration needed.')
+                                                            ->columnSpanFull(),
+                                                    ]),
+
+                                                Block::make('ecommerce_features')
+                                                    ->label('🛒 E-commerce Features')
+                                                    ->icon('heroicon-o-shopping-cart')
+                                                    ->schema([
+                                                        \Filament\Forms\Components\Placeholder::make('info')
+                                                            ->content('⚡ Uses default e-commerce features component. No configuration needed.')
+                                                            ->columnSpanFull(),
+                                                    ]),
+
+                                                // ────────── SPLIT CONTENT (Image + Text) ──────────
+                                                Block::make('split_content')
+                                                    ->label('📐 Split Content Block')
+                                                    ->icon('heroicon-o-view-columns')
+                                                    ->schema([
+                                                        TextInput::make('title.en')->label('Title (EN)'),
+                                                        TextInput::make('title.ar')->label('Title (AR)'),
+                                                        Textarea::make('content.en')->label('Content Text (EN)')->rows(4),
+                                                        Textarea::make('content.ar')->label('Content Text (AR)')->rows(4),
+                                                        Toggle::make('image_on_right')->label('Image on Right Side')->default(true),
+                                                        FileUpload::make('image')
+                                                            ->label('Section Image')
+                                                            ->image()
+                                                            ->directory('services/content'),
+                                                        Repeater::make('items')
+                                                            ->label('Bullet Points (optional)')
+                                                            ->schema([
+                                                                TextInput::make('title.en')->label('Point (EN)'),
+                                                                TextInput::make('title.ar')->label('Point (AR)'),
+                                                            ])->columns(2)->collapsible()->columnSpanFull(),
+                                                    ])->columns(2),
                                             ])
-                                    ]),
-
-                                \Filament\Schemas\Components\Tabs\Tab::make('Features Section')
-                                    ->icon('heroicon-o-star')
-                                    ->schema([
-                                        Toggle::make('show_features')->label('Show Features Section')->default(true),
-                                        \Filament\Schemas\Components\Tabs::make('Features Translations')
-                                            ->tabs([
-                                                \Filament\Schemas\Components\Tabs\Tab::make('English')
-                                                    ->schema([
-                                                        TextInput::make('features_title.en')->label('Features Section Title'),
-                                                        Textarea::make('features_subtitle.en')->label('Features Section Subtitle'),
-                                                    ]),
-                                                \Filament\Schemas\Components\Tabs\Tab::make('Arabic')
-                                                    ->schema([
-                                                        TextInput::make('features_title.ar')->label('Features Section Title'),
-                                                        Textarea::make('features_subtitle.ar')->label('Features Section Subtitle'),
-                                                    ]),
-                                            ]),
-                                        \Filament\Forms\Components\Repeater::make('features_list')
-                                            ->label('Features Items')
-                                            ->schema([
-                                                TextInput::make('title.en')->label('Title (EN)'),
-                                                TextInput::make('title.ar')->label('Title (AR)'),
-                                                Textarea::make('desc.en')->label('Description (EN)'),
-                                                Textarea::make('desc.ar')->label('Description (AR)'),
-                                            ])->columns(2)
-                                    ]),
-
-                                \Filament\Schemas\Components\Tabs\Tab::make('How We Work Section')
-                                    ->icon('heroicon-o-cog')
-                                    ->schema([
-                                        Toggle::make('show_how_we_work')->label('Show How We Work Section')->default(true),
-                                        \Filament\Forms\Components\Repeater::make('how_we_work_list')
-                                            ->label('Steps / Process Items')
-                                            ->schema([
-                                                TextInput::make('title.en')->label('Step Title (EN)'),
-                                                TextInput::make('title.ar')->label('Step Title (AR)'),
-                                                Textarea::make('desc.en')->label('Step Description (EN)'),
-                                                Textarea::make('desc.ar')->label('Step Description (AR)'),
-                                            ])->columns(2)
-                                    ]),
-
-                                \Filament\Schemas\Components\Tabs\Tab::make('Other Sections Visibility')
-                                    ->icon('heroicon-o-eye')
-                                    ->schema([
-                                        Toggle::make('show_portfolio')->label('Show Portfolio Section')->default(true),
-                                        Toggle::make('show_request')->label('Show Request Section')->default(true),
-                                        Toggle::make('show_blogs')->label('Show Latest Blogs Section')->default(true),
-                                        Toggle::make('show_hosting_offers')->label('Show Hosting Offers Section')->default(true),
-                                        Toggle::make('show_digital_marketing')->label('Show Digital Marketing Services')->default(true),
-                                        Toggle::make('show_why_choose_us')->label('Show Why Choose Us')->default(true),
-                                    ])->columns(3),
-
-                                \Filament\Schemas\Components\Tabs\Tab::make('Hosting Offers Section (Cards)')
-                                    ->icon('heroicon-o-server')
-                                    ->schema([
-                                        \Filament\Forms\Components\Repeater::make('hosting_offers_list')
-                                            ->label('Hosting Offers')
-                                            ->schema([
-                                                TextInput::make('title.en')->label('Offer Title (EN)'),
-                                                TextInput::make('title.ar')->label('Offer Title (AR)'),
-                                                Textarea::make('desc.en')->label('Offer Description (EN)'),
-                                                Textarea::make('desc.ar')->label('Offer Description (AR)'),
-                                            ])->columns(2)
-                                    ]),
-
-                                \Filament\Schemas\Components\Tabs\Tab::make('Digital Marketing Services (Cards)')
-                                    ->icon('heroicon-o-presentation-chart-line')
-                                    ->schema([
-                                        \Filament\Schemas\Components\Tabs::make('Translations')
-                                            ->tabs([
-                                                \Filament\Schemas\Components\Tabs\Tab::make('English')
-                                                    ->schema([
-                                                        TextInput::make('digital_marketing_title.en')->label('Section Title'),
-                                                        Textarea::make('digital_marketing_subtitle.en')->label('Section Subtitle'),
-                                                    ]),
-                                                \Filament\Schemas\Components\Tabs\Tab::make('Arabic')
-                                                    ->schema([
-                                                        TextInput::make('digital_marketing_title.ar')->label('Section Title'),
-                                                        Textarea::make('digital_marketing_subtitle.ar')->label('Section Subtitle'),
-                                                    ]),
-                                            ]),
-                                        \Filament\Forms\Components\Repeater::make('digital_marketing_list')
-                                            ->label('Services Cards')
-                                            ->schema([
-                                                TextInput::make('title.en')->label('Card Title (EN)'),
-                                                TextInput::make('title.ar')->label('Card Title (AR)'),
-                                                Textarea::make('desc.en')->label('Card Description (EN)'),
-                                                Textarea::make('desc.ar')->label('Card Description (AR)'),
-                                            ])->columns(2)
-                                    ]),
-
-                                \Filament\Schemas\Components\Tabs\Tab::make('Why Choose Us Section')
-                                    ->icon('heroicon-o-hand-thumb-up')
-                                    ->schema([
-                                        \Filament\Schemas\Components\Tabs::make('Translations')
-                                            ->tabs([
-                                                \Filament\Schemas\Components\Tabs\Tab::make('English')
-                                                    ->schema([
-                                                        TextInput::make('why_choose_us_title.en')->label('Section Title'),
-                                                        Textarea::make('why_choose_us_subtitle.en')->label('Section Subtitle'),
-                                                    ]),
-                                                \Filament\Schemas\Components\Tabs\Tab::make('Arabic')
-                                                    ->schema([
-                                                        TextInput::make('why_choose_us_title.ar')->label('Section Title'),
-                                                        Textarea::make('why_choose_us_subtitle.ar')->label('Section Subtitle'),
-                                                    ]),
-                                            ]),
-                                        \Filament\Forms\Components\Repeater::make('why_choose_us_list')
-                                            ->label('Why Choose Us Items')
-                                            ->schema([
-                                                TextInput::make('title.en')->label('Item Title (EN)'),
-                                                TextInput::make('title.ar')->label('Item Title (AR)'),
-                                                Textarea::make('desc.en')->label('Item Description (EN)'),
-                                                Textarea::make('desc.ar')->label('Item Description (AR)'),
-                                            ])->columns(2)
-                                    ]),
-                                            ])
+                                            ->collapsible()
+                                            ->collapsed(false)
+                                            ->blockNumbers(false)
+                                            ->reorderableWithButtons()
+                                            ->addActionLabel('➕ Add Section')
+                                            ->columnSpanFull(),
                                     ])
-                            ])
+                            ]),
                     ])->columnSpanFull()
             ]);
     }
@@ -215,6 +308,15 @@ class ServiceResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('sections.template')
+                    ->label('Template')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'template-one' => 'info',
+                        'template-two' => 'success',
+                        'template-three' => 'warning',
+                        default => 'gray',
+                    }),
                 Tables\Columns\IconColumn::make('is_active')
                     ->boolean()
                     ->sortable(),

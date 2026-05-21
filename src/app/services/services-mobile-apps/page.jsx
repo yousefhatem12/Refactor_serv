@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import MobileAppsHero from "../components/Services-mobile-apps/MobileAppsHero";
-import MobileAppsFeatures from "../components/Services-mobile-apps/MobileAppsFeatures";
-import LatestBlogs from "../components/Services-web-hosting/LatestBlogs";
+import MobileAppsHero from "../../components/Services-mobile-apps/MobileAppsHero";
+import MobileAppsFeatures from "../../components/Services-mobile-apps/MobileAppsFeatures";
+import LatestBlogs from "../../components/Services-web-hosting/LatestBlogs";
 import { fetchAPI } from "@/lib/api";
-import { useLanguage } from "../context/LanguageContext";
+import { useLanguage } from "../../context/LanguageContext";
 
 export default function MobileAppsPage() {
   const { language } = useLanguage();

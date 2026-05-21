@@ -7,7 +7,7 @@ import { useSettings } from "../../context/SettingsContext";
 import VideoModal from "../Shared/VideoModal";
 import PricingModal from "../Shared/PricingModal";
 
-const ServicesHero = ({ serviceId = "cloud-hosting" }) => {
+const ServicesHero = ({ serviceId = "cloud-hosting", title, desc }) => {
   const { t } = useLanguage();
   const settings = useSettings();
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
@@ -29,7 +29,7 @@ const ServicesHero = ({ serviceId = "cloud-hosting" }) => {
           transition={{ duration: 0.6 }}
           className="text-white text-5xl md:text-7xl font-bold mb-6 tracking-tight uppercase"
         >
-          {t("webHostingHeroTitle")}
+          {title || t("webHostingHeroTitle")}
         </motion.h1>
 
         <motion.p
@@ -38,7 +38,7 @@ const ServicesHero = ({ serviceId = "cloud-hosting" }) => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-gray-300 text-lg md:text-xl leading-relaxed mb-10"
         >
-          {t("webHostingHeroDesc")}
+          {desc || t("webHostingHeroDesc")}
         </motion.p>
 
         <motion.div

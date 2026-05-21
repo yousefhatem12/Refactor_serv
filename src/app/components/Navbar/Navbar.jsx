@@ -24,43 +24,59 @@ const Navbar = () => {
   useEffect(() => {
     const fetchLinks = async () => {
       try {
-        const data = await fetchAPI(`/nav-links?lang=${language}`);
-        if (data && Array.isArray(data) && data.length > 0) {
-          setNavLinks(data);
-        } else {
-          // Use fallback directly instead of throwing an error
-          setNavLinks([
-            { name: t("home"), href: "/Home" },
-            { name: t("aboutUs"), href: "/about-us" },
-            {
-              name: t("services"),
-              href: "#",
-              dropdown: [
-                { name: t("webDevelopment"), href: "/services-web-development" },
-                { name: t("webDesign"), href: "/services-ui-ux-design" },
-                { name: t("socialMedia"), href: "/services-social-media" },
-                { name: t("webHosting"), href: "/services-cloud-hosting" },
-                { name: t("catOnlineStores"), href: "/services-ecommerce" },
-                { name: t("catMobileApps"), href: "/services-mobile-apps" },
-                {
-                  name: t("consultationHeroTitle"),
-                  href: "/project-consultation",
-                },
-                {
-                  name: t("careers"),
-                  href: "/careers",
-                },
-              ],
-            },
-            { name: t("portfolio"), href: "/portfolio" },
-            { name: t("blog"), href: "/blog" },
-            { name: t("ourProducts"), href: "/our-products" },
-            { name: t("faq"), href: "/faq" },
-            { name: t("contactUs"), href: "/contact-us" },
-          ]);
+        // Fetch services dynamically from the database to auto-build the dropdown
+        const servicesData = await fetchAPI(`/services?lang=${language}`);
+        const serviceDropdown = servicesData && Array.isArray(servicesData) && servicesData.length > 0
+          ? servicesData.map((s) => ({
+              name: s.label || s.title,
+              href: `/services/services-${s.id}`,
+            }))
+          : [
+              { name: t("webDevelopment"), href: "/services/services-web-development" },
+              { name: t("webDesign"), href: "/services/services-ui-ux-design" },
+              { name: t("socialMedia"), href: "/services/services-social-media" },
+              { name: t("webHosting"), href: "/services/services-cloud-hosting" },
+            ];
+
+        const buildLinks = (dropdown) => [
+          { name: t("home"), href: "/Home" },
+          { name: t("aboutUs"), href: "/about-us" },
+          {
+            name: t("services"),
+            href: "#",
+            dropdown: [
+              ...dropdown,
+              { name: t("consultationHeroTitle"), href: "/project-consultation" },
+              { name: t("careers"), href: "/careers" },
+            ],
+          },
+          { name: t("portfolio"), href: "/portfolio" },
+          { name: t("blog"), href: "/blog" },
+          { name: t("ourProducts"), href: "/our-products" },
+          { name: t("faq"), href: "/faq" },
+          { name: t("contactUs"), href: "/contact-us" },
+        ];
+
+        // Try to get nav-links from API first (admin-defined order/links)
+        try {
+          const data = await fetchAPI(`/nav-links?lang=${language}`);
+          if (data && Array.isArray(data) && data.length > 0) {
+            // Inject dynamic services into any dropdown marked as services
+            const enriched = data.map((link) => {
+              if (link.dropdown) {
+                return { ...link, dropdown: [...serviceDropdown, { name: t("consultationHeroTitle"), href: "/project-consultation" }, { name: t("careers"), href: "/careers" }] };
+              }
+              return link;
+            });
+            setNavLinks(enriched);
+          } else {
+            setNavLinks(buildLinks(serviceDropdown));
+          }
+        } catch {
+          setNavLinks(buildLinks(serviceDropdown));
         }
       } catch (error) {
-        console.warn("Failed to fetch nav links, using fallback:", error);
+        console.warn("Failed to fetch services for nav, using hardcoded fallback:", error);
         setNavLinks([
           { name: t("home"), href: "/Home" },
           { name: t("aboutUs"), href: "/about-us" },
@@ -68,20 +84,14 @@ const Navbar = () => {
             name: t("services"),
             href: "#",
             dropdown: [
-              { name: t("webDevelopment"), href: "/services-web-development" },
-              { name: t("webDesign"), href: "/services-ui-ux-design" },
-              { name: t("socialMedia"), href: "/services-social-media" },
-              { name: t("webHosting"), href: "/services-cloud-hosting" },
-              { name: t("catOnlineStores"), href: "/services-ecommerce" },
-              { name: t("catMobileApps"), href: "/services-mobile-apps" },
-              {
-                name: t("consultationHeroTitle"),
-                href: "/project-consultation",
-              },
-              {
-                name: t("careers"),
-                href: "/careers",
-              },
+              { name: t("webDevelopment"), href: "/services/services-web-development" },
+              { name: t("webDesign"), href: "/services/services-ui-ux-design" },
+              { name: t("socialMedia"), href: "/services/services-social-media" },
+              { name: t("webHosting"), href: "/services/services-cloud-hosting" },
+              { name: t("catOnlineStores"), href: "/services/services-ecommerce" },
+              { name: t("catMobileApps"), href: "/services/services-mobile-apps" },
+              { name: t("consultationHeroTitle"), href: "/project-consultation" },
+              { name: t("careers"), href: "/careers" },
             ],
           },
           { name: t("portfolio"), href: "/portfolio" },
@@ -97,6 +107,7 @@ const Navbar = () => {
 
     fetchLinks();
   }, [t, language]);
+
 
   useEffect(() => {
     const handleScroll = () => {
