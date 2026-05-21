@@ -1,8 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../context/LanguageContext";
 import { jobs } from "../data/jobs";
+import { fetchAPI } from "../../lib/api";
 
 export default function CareersPage() {
   const { language, t } = useLanguage();
@@ -14,6 +15,8 @@ export default function CareersPage() {
   const [selectedJob, setSelectedJob] = useState(null); // Active job for modal/drawer
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [jobsList, setJobsList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -25,6 +28,24 @@ export default function CareersPage() {
   });
   const [formErrors, setFormErrors] = useState({});
 
+  useEffect(() => {
+    fetchAPI('/careers')
+      .then((data) => {
+        if (data && Array.isArray(data)) {
+          setJobsList(data);
+        } else {
+          setJobsList(jobs);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to fetch careers:", err);
+        setJobsList(jobs);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
   // Departments list for filtering
   const departments = [
     { id: "all", name: t("departmentAll") },
@@ -35,9 +56,9 @@ export default function CareersPage() {
   ];
 
   // Filtering Logic
-  const filteredJobs = jobs.filter((job) => {
-    const jobTitle = (job.title[language] || job.title.en).toLowerCase();
-    const jobDesc = (job.description[language] || job.description.en).toLowerCase();
+  const filteredJobs = jobsList.filter((job) => {
+    const jobTitle = (job.title[language] || job.title.en || '').toLowerCase();
+    const jobDesc = (job.description[language] || job.description.en || '').toLowerCase();
     const matchesSearch =
       jobTitle.includes(searchQuery.toLowerCase()) ||
       jobDesc.includes(searchQuery.toLowerCase());
@@ -79,19 +100,38 @@ export default function CareersPage() {
 
     setIsSubmitting(true);
 
-    // Mock API request delay
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setShowSuccess(true);
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        portfolio: "",
-        message: ""
+    fetchAPI('/careers/apply', {
+      method: 'POST',
+      body: JSON.stringify({
+        career_id: selectedJob.id,
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        portfolio: formData.portfolio,
+        message: formData.message,
+      }),
+    })
+      .then((res) => {
+        setIsSubmitting(false);
+        if (res) {
+          setShowSuccess(true);
+          setFormData({
+            name: "",
+            email: "",
+            phone: "",
+            portfolio: "",
+            message: ""
+          });
+          setFormErrors({});
+        } else {
+          setFormErrors({ submit: isAr ? "حدث خطأ أثناء إرسال طلبك. يرجى المحاولة مرة أخرى." : "An error occurred while submitting. Please try again." });
+        }
+      })
+      .catch((err) => {
+        console.error("Error submitting application:", err);
+        setIsSubmitting(false);
+        setFormErrors({ submit: isAr ? "حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى." : "Connection error. Please try again." });
       });
-      setFormErrors({});
-    }, 1500);
   };
 
   return (
@@ -163,7 +203,17 @@ export default function CareersPage() {
 
         {/* Jobs Grid */}
         <AnimatePresence mode="wait">
-          {filteredJobs.length > 0 ? (
+          {loading ? (
+            <motion.div
+              key="loading"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex items-center justify-center py-20"
+            >
+              <div className="w-12 h-12 border-4 border-[#FF8A00] border-t-transparent rounded-full animate-spin"></div>
+            </motion.div>
+          ) : filteredJobs.length > 0 ? (
             <motion.div
               layout
               initial={{ opacity: 0 }}
@@ -467,6 +517,8 @@ export default function CareersPage() {
                         placeholder={isAr ? "اكتب هنا أي تفاصيل أو مشاريع عملت عليها..." : "Share any key projects or reasons why you want to join us..."}
                       />
                     </div>
+
+                    {formErrors.submit && <span className="text-red-400 text-xs font-bold text-center">{formErrors.submit}</span>}
 
                     {/* Submit button */}
                     <button

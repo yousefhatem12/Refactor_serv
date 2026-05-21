@@ -29,6 +29,10 @@ Route::get('/footer-data', [ApiController::class, 'getFooterData']);
 Route::get('/nav-links', [ApiController::class, 'getNavLinks']);
 Route::get('/pricing-plans', [ApiController::class, 'getPricingPlans']);
 Route::get('/pages/{slug}', [ApiController::class, 'getPageContent']);
+Route::get('/products', [ApiController::class, 'getProducts']);
+Route::get('/products/{slug}', [ApiController::class, 'getProduct']);
+Route::get('/careers', [ApiController::class, 'getCareers']);
+Route::post('/careers/apply', [ApiController::class, 'submitCareerApplication']);
 
 // Protected endpoints
 Route::middleware('auth:sanctum')->group(function () {

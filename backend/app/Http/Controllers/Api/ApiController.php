@@ -546,4 +546,108 @@ class ApiController extends Controller
 
         return response()->json($plans);
     }
+
+    public function getProducts()
+    {
+        $lang = $this->getLang();
+        $products = \App\Models\Product::where('is_active', true)->get()->map(function ($product) use ($lang) {
+            return [
+                'id' => $product->slug,
+                'name' => $this->trans($product->name, $lang),
+                'category' => $this->trans($product->category, $lang),
+                'title' => $this->trans($product->title, $lang),
+                'description' => $this->trans($product->description, $lang),
+                'image' => $product->image ? (str_starts_with($product->image, 'http') || str_starts_with($product->image, '/') ? $product->image : asset('storage/' . $product->image)) : null,
+                'demoLink' => $product->demo_link ?? '#',
+                'orderLink' => $product->order_link ?? '#',
+            ];
+        });
+        return response()->json($products);
+    }
+
+    public function getProduct($slug)
+    {
+        $lang = $this->getLang();
+        $product = \App\Models\Product::where('slug', $slug)->where('is_active', true)->firstOrFail();
+
+        $features = [];
+        if (is_array($product->features)) {
+            $langFeatures = $product->features[$lang] ?? $product->features['en'] ?? [];
+            if (is_array($langFeatures)) {
+                foreach ($langFeatures as $f) {
+                    if (isset($f['title']) && isset($f['desc'])) {
+                        $features[] = [
+                            'title' => $f['title'],
+                            'desc' => $f['desc'],
+                        ];
+                    }
+                }
+            }
+        }
+
+        $samples = collect($product->samples ?? [])->map(function ($sample) {
+            if (str_starts_with($sample, 'http') || str_starts_with($sample, '/')) {
+                return $sample;
+            }
+            return asset('storage/' . $sample);
+        })->toArray();
+
+        return response()->json([
+            'id' => $product->slug,
+            'name' => $this->trans($product->name, $lang),
+            'category' => $this->trans($product->category, $lang),
+            'title' => $this->trans($product->title, $lang),
+            'description' => $this->trans($product->description, $lang),
+            'image' => $product->image ? (str_starts_with($product->image, 'http') || str_starts_with($product->image, '/') ? $product->image : asset('storage/' . $product->image)) : null,
+            'demoLink' => $product->demo_link ?? '#',
+            'orderLink' => $product->order_link ?? '#',
+            'features' => $features,
+            'techSpecs' => $product->tech_specs ?? [],
+            'whyChooseUs' => $this->trans($product->why_choose_us, $lang),
+            'samples' => $samples,
+        ]);
+    }
+
+    public function getCareers()
+    {
+        $careers = \App\Models\Career::where('is_active', true)->get()->map(function ($career) {
+            return [
+                'id' => $career->id,
+                'department' => $career->department,
+                'title' => $career->title,
+                'location' => $career->location,
+                'salary' => $career->salary,
+                'description' => $career->description,
+                'responsibilities' => $career->responsibilities ?? ['en' => [], 'ar' => []],
+                'requirements' => $career->requirements ?? ['en' => [], 'ar' => []],
+            ];
+        });
+        return response()->json($careers);
+    }
+
+    public function submitCareerApplication(Request $request)
+    {
+        $validated = $request->validate([
+            'career_id' => 'required|exists:careers,id',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
+            'portfolio' => 'required|string',
+            'message' => 'nullable|string',
+        ]);
+
+        $app = \App\Models\CareerApplication::create($validated);
+
+        $admins = User::role('super_admin')->get();
+        
+        Notification::make()
+            ->title('New Career Application')
+            ->body("You have received a new application from {$validated['name']} for the position: " . ($app->career?->title['en'] ?? 'Job'))
+            ->icon('heroicon-o-briefcase')
+            ->success()
+            ->sendToDatabase($admins);
+
+        return response()->json(['message' => 'Application submitted successfully', 'data' => $app], 201);
+    }
 }
+

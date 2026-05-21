@@ -12,20 +12,27 @@ class InitialContentSeeder extends Seeder
      */
     public function run(): void
     {
-        // Navigation Links
-        $home = \App\Models\NavLink::updateOrCreate(['url' => '/Home'], ['label' => ['en' => 'Home', 'ar' => 'الرئيسية'], 'sort_order' => 1]);
-        $about = \App\Models\NavLink::updateOrCreate(['url' => '/about-us'], ['label' => ['en' => 'About us', 'ar' => 'من نحن'], 'sort_order' => 2]);
-        $services = \App\Models\NavLink::updateOrCreate(['url' => '#'], ['label' => ['en' => 'Services', 'ar' => 'خدماتنا'], 'sort_order' => 3]);
-        
-        \App\Models\NavLink::updateOrCreate(['url' => '/services-web-dev'], ['label' => ['en' => 'Web Development', 'ar' => 'تطوير المواقع'], 'parent_id' => $services->id, 'sort_order' => 1]);
-        \App\Models\NavLink::updateOrCreate(['url' => '/services-web-design'], ['label' => ['en' => 'Web Design', 'ar' => 'تصميم المواقع'], 'parent_id' => $services->id, 'sort_order' => 2]);
-        \App\Models\NavLink::updateOrCreate(['url' => '/services-social-media'], ['label' => ['en' => 'Social Media', 'ar' => 'سوشيال ميديا'], 'parent_id' => $services->id, 'sort_order' => 3]);
-        \App\Models\NavLink::updateOrCreate(['url' => '/services-web-hosting'], ['label' => ['en' => 'Web Hosting', 'ar' => 'استضافة المواقع'], 'parent_id' => $services->id, 'sort_order' => 4]);
+        // Clear existing navigation links to avoid duplicates
+        \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
+        \App\Models\NavLink::truncate();
+        \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
 
-        \App\Models\NavLink::updateOrCreate(['url' => '/portfolio'], ['label' => ['en' => 'Portfolio', 'ar' => 'أعمالنا'], 'sort_order' => 4]);
-        \App\Models\NavLink::updateOrCreate(['url' => '/blog'], ['label' => ['en' => 'Blog', 'ar' => 'المدونة'], 'sort_order' => 5]);
-        \App\Models\NavLink::updateOrCreate(['url' => '/faq'], ['label' => ['en' => 'FAQ', 'ar' => 'الأسئلة الشائعة'], 'sort_order' => 6]);
-        \App\Models\NavLink::updateOrCreate(['url' => '/contact-us'], ['label' => ['en' => 'Contact Us', 'ar' => 'اتصل بنا'], 'sort_order' => 7]);
+        // Navigation Links
+        $home = \App\Models\NavLink::create(['url' => '/Home', 'label' => ['en' => 'Home', 'ar' => 'الرئيسية'], 'sort_order' => 1]);
+        $about = \App\Models\NavLink::create(['url' => '/about-us', 'label' => ['en' => 'About us', 'ar' => 'من نحن'], 'sort_order' => 2]);
+        $services = \App\Models\NavLink::create(['url' => '#', 'label' => ['en' => 'Services', 'ar' => 'خدماتنا'], 'sort_order' => 3]);
+        
+        \App\Models\NavLink::create(['url' => '/services-web-dev', 'label' => ['en' => 'Web Development', 'ar' => 'تطوير المواقع'], 'parent_id' => $services->id, 'sort_order' => 1]);
+        \App\Models\NavLink::create(['url' => '/services-web-design', 'label' => ['en' => 'Web Design', 'ar' => 'تصميم المواقع'], 'parent_id' => $services->id, 'sort_order' => 2]);
+        \App\Models\NavLink::create(['url' => '/services-social-media', 'label' => ['en' => 'Social Media', 'ar' => 'سوشيال ميديا'], 'parent_id' => $services->id, 'sort_order' => 3]);
+        \App\Models\NavLink::create(['url' => '/services-web-hosting', 'label' => ['en' => 'Web Hosting', 'ar' => 'استضافة المواقع'], 'parent_id' => $services->id, 'sort_order' => 4]);
+
+        \App\Models\NavLink::create(['url' => '/portfolio', 'label' => ['en' => 'Portfolio', 'ar' => 'أعمالنا'], 'sort_order' => 4]);
+        \App\Models\NavLink::create(['url' => '/blog', 'label' => ['en' => 'Blog', 'ar' => 'المدونة'], 'sort_order' => 5]);
+        \App\Models\NavLink::create(['url' => '/our-products', 'label' => ['en' => 'Our Products', 'ar' => 'منتجاتنا'], 'sort_order' => 6]);
+        \App\Models\NavLink::create(['url' => '/careers', 'label' => ['en' => 'Careers', 'ar' => 'الوظائف'], 'sort_order' => 7]);
+        \App\Models\NavLink::create(['url' => '/faq', 'label' => ['en' => 'FAQ', 'ar' => 'الأسئلة الشائعة'], 'sort_order' => 8]);
+        \App\Models\NavLink::create(['url' => '/contact-us', 'label' => ['en' => 'Contact Us', 'ar' => 'اتصل بنا'], 'sort_order' => 9]);
 
         // Pages
         $pages = [

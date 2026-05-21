@@ -1,11 +1,12 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useParams, notFound } from "next/navigation";
 import { products } from "../../data/products";
 import { useLanguage } from "../../context/LanguageContext";
+import { fetchAPI } from "../../../lib/api";
 
 // Local highly-focused bilingual details dictionary for the SaaS products
 const productDetails = {
@@ -199,14 +200,9 @@ const ProductDetailsPage = () => {
   const [activePreview, setActivePreview] = useState("desktop"); // 'desktop' or 'mobile'
   const [selectedImageIndex, setSelectedImageIndex] = useState(null); // Lightbox selected image index
 
-  const product = products.find((p) => p.id === productId);
-
-  if (!product) {
-    return notFound();
-  }
-
-  // Get other products for related listing
-  const otherProducts = products.filter((p) => p.id !== productId).slice(0, 6);
+  const [productData, setProductData] = useState(null);
+  const [otherProductsList, setOtherProductsList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // Samples mapping for screenshots (SaaS screens showcasing the system)
   const productSamplesMap = {
@@ -218,26 +214,81 @@ const ProductDetailsPage = () => {
     gym: ["/portfolio/image-6.png", "/portfolio/image-1.png", "/portfolio/image-2.png", "/portfolio/image-3.png"]
   };
 
-  const samples = productSamplesMap[productId] || [
-    "/portfolio/image-1.png",
-    "/portfolio/image-2.png",
-    "/portfolio/image-3.png",
-    "/portfolio/image-4.png"
-  ];
+  useEffect(() => {
+    if (!productId) return;
 
-  // Get local highly-focused product details with fallback
-  const details = productDetails[productId]?.[language] || {
-    name: isAr ? product.name || "المنتج" : product.name || "Product",
-    category: isAr ? product.category || "برمجيات SaaS" : product.category || "SaaS Solution",
-    title: isAr ? product.title || "تصميم متكامل" : product.title || "Tailored Solution",
-    description: product.description,
-    features: [
-      { title: isAr ? "دعم كامل" : "Full Support", desc: isAr ? "نقدم لك دعماً برمجياً وفنياً متكاملاً للمنصة." : "We offer complete technical and code support." },
-      { title: isAr ? "تصميم متجاوب" : "Responsive Design", desc: isAr ? "يعمل بكفاءة مطلقة على كافة شاشات الهواتف والأجهزة." : "Works beautifully on all screen resolutions and devices." }
-    ],
-    techSpecs: ["React", "Next.js", "TailwindCSS"],
-    whyChooseUs: isAr ? "حل جاهز ومتكامل مع تجربة مستخدم ممتازة." : "A complete ready-to-launch solution with superb UX."
-  };
+    setLoading(true);
+    fetchAPI(`/products/${productId}`)
+      .then((data) => {
+        if (data) {
+          setProductData(data);
+        } else {
+          const localProd = products.find((p) => p.id === productId);
+          if (localProd) {
+            const localDetails = productDetails[productId]?.[language] || {
+              name: isAr ? localProd.name || "المنتج" : localProd.name || "Product",
+              category: isAr ? localProd.category || "برمجيات SaaS" : localProd.category || "SaaS Solution",
+              title: isAr ? localProd.title || "تصميم متكامل" : localProd.title || "Tailored Solution",
+              description: localProd.description,
+              features: [
+                { title: isAr ? "دعم كامل" : "Full Support", desc: isAr ? "نقدم لك دعماً برمجياً وفنياً متكاملاً للمنصة." : "We offer complete technical and code support." },
+                { title: isAr ? "تصميم متجاوب" : "Responsive Design", desc: isAr ? "يعمل بكفاءة مطلقة على كافة شاشات الهواتف والأجهزة." : "Works beautifully on all screen resolutions and devices." }
+              ],
+              techSpecs: ["React", "Next.js", "TailwindCSS"],
+              whyChooseUs: isAr ? "حل جاهز ومتكامل مع تجربة مستخدم ممتازة." : "A complete ready-to-launch solution with superb UX."
+            };
+            const localSamples = productSamplesMap[productId] || ["/portfolio/image-1.png", "/portfolio/image-2.png", "/portfolio/image-3.png", "/portfolio/image-4.png"];
+            setProductData({
+              id: localProd.id,
+              name: localDetails.name,
+              category: localDetails.category,
+              title: localDetails.title,
+              description: localDetails.description,
+              image: localProd.image,
+              demoLink: localProd.demoLink || '#',
+              orderLink: localProd.orderLink || '#',
+              features: localDetails.features,
+              techSpecs: localDetails.techSpecs,
+              whyChooseUs: localDetails.whyChooseUs,
+              samples: localSamples
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching product details:", err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [productId, language]);
+
+  useEffect(() => {
+    fetchAPI('/products')
+      .then((data) => {
+        if (data && Array.isArray(data)) {
+          setOtherProductsList(data.filter((p) => p.id !== productId).slice(0, 6));
+        } else {
+          setOtherProductsList(products.filter((p) => p.id !== productId).slice(0, 6));
+        }
+      })
+      .catch(() => {
+        setOtherProductsList(products.filter((p) => p.id !== productId).slice(0, 6));
+      });
+  }, [productId]);
+
+  if (loading || !productData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-16 h-16 border-4 border-[#F18805] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  const product = productData;
+  const details = productData;
+  const samples = productData.samples;
+  const otherProducts = otherProductsList;
 
   // Helper icons for the features grid (4 distinct modern SVG icons)
   const featureIcons = [
