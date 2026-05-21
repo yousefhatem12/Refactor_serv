@@ -123,6 +123,21 @@ const HostingOffers = ({ title, offersList }) => {
         };
       })
     : defaultOffers;
+  const showTabs = !offersList || offersList.length === 0;
+
+  let offersToRender = [...offers];
+  if (offersToRender.length === 3) {
+    const popularIndex = offersToRender.findIndex(o => o.isPopular);
+    if (popularIndex === 2) {
+      const temp = offersToRender[1];
+      offersToRender[1] = offersToRender[2];
+      offersToRender[2] = temp;
+    } else if (popularIndex === 0) {
+      const temp = offersToRender[1];
+      offersToRender[1] = offersToRender[0];
+      offersToRender[0] = temp;
+    }
+  }
 
   return (
     <section className="relative w-full py-24 px-4 sm:px-6 lg:px-6 z-20">
@@ -137,26 +152,34 @@ const HostingOffers = ({ title, offersList }) => {
         </motion.h2>
 
         {/* Tabs */}
-        <div className="flex  justify-center gap-3 mb-16">
-          {tabs.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-5 py-2.5 md:py-3 rounded-full border transition-all duration-300 text-xs md:text-sm font-semibold tracking-wider uppercase
-                ${
-                  activeTab === tab
-                    ? "border-[#D98B50] text-[#D98B50] bg-[#D98B50]/10 shadow-[0_0_15px_rgba(217,139,80,0.2)]"
-                    : "border-gray-500/50 text-gray-400 hover:border-gray-300 hover:text-white bg-white/5 backdrop-blur-sm"
-                }`}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
+        {showTabs && (
+          <div className="flex justify-center gap-3 mb-16">
+            {tabs.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-5 py-2.5 md:py-3 rounded-full border transition-all duration-300 text-xs md:text-sm font-semibold tracking-wider uppercase
+                  ${
+                    activeTab === tab
+                      ? "border-[#D98B50] text-[#D98B50] bg-[#D98B50]/10 shadow-[0_0_15px_rgba(217,139,80,0.2)]"
+                      : "border-gray-500/50 text-gray-400 hover:border-gray-300 hover:text-white bg-white/5 backdrop-blur-sm"
+                  }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 lg:gap-5 items-stretch pt-6">
-          {offers.map((offer, index) => (
+        <div
+          className={`grid gap-6 items-stretch pt-6 ${
+            offersToRender.length === 3
+              ? "grid-cols-1 md:grid-cols-3 max-w-6xl mx-auto"
+              : "grid-cols-1 md:grid-cols-2 xl:grid-cols-4"
+          }`}
+        >
+          {offersToRender.map((offer, index) => (
             <motion.div
               key={offer.id}
               initial={{ opacity: 0, y: 50 }}
