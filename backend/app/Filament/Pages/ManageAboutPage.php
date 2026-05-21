@@ -115,6 +115,26 @@ class ManageAboutPage extends Page implements HasForms
                                                         TextInput::make('icon')->label('Icon Name (e.g., FaRocket)'),
                                                     ])->columns(1),
                                             ]),
+                                        \Filament\Forms\Components\Builder\Block::make('global_reach')
+                                            ->label('Global Reach / Map Section')
+                                            ->schema([
+                                                TextInput::make('title')->required(),
+                                                Textarea::make('description'),
+                                                \Filament\Forms\Components\Repeater::make('items')
+                                                    ->schema([
+                                                        TextInput::make('city')->required(),
+                                                        TextInput::make('name')->label('Country Name')->required(),
+                                                        TextInput::make('details')->required(),
+                                                        TextInput::make('x')
+                                                            ->label('X Coordinate (%)')
+                                                            ->numeric()
+                                                            ->helperText('Horizontal position (0-100) on the map'),
+                                                        TextInput::make('y')
+                                                            ->label('Y Coordinate (%)')
+                                                            ->numeric()
+                                                            ->helperText('Vertical position (0-100) on the map'),
+                                                    ])->columns(2),
+                                            ]),
                                         \Filament\Forms\Components\Builder\Block::make('journey')
                                             ->label('Journey / Timeline Section')
                                             ->schema([
@@ -203,6 +223,26 @@ class ManageAboutPage extends Page implements HasForms
                                                         Textarea::make('description')->required(),
                                                         TextInput::make('icon')->label('Icon Name (Arabic)'),
                                                     ])->columns(1),
+                                            ]),
+                                        \Filament\Forms\Components\Builder\Block::make('global_reach')
+                                            ->label('Global Reach / Map Section')
+                                            ->schema([
+                                                TextInput::make('title')->required(),
+                                                Textarea::make('description'),
+                                                \Filament\Forms\Components\Repeater::make('items')
+                                                    ->schema([
+                                                        TextInput::make('city')->required(),
+                                                        TextInput::make('name')->label('Country Name')->required(),
+                                                        TextInput::make('details')->required(),
+                                                        TextInput::make('x')
+                                                            ->label('X Coordinate (%)')
+                                                            ->numeric()
+                                                            ->helperText('Horizontal position (0-100) on the map'),
+                                                        TextInput::make('y')
+                                                            ->label('Y Coordinate (%)')
+                                                            ->numeric()
+                                                            ->helperText('Vertical position (0-100) on the map'),
+                                                    ])->columns(2),
                                             ]),
                                         \Filament\Forms\Components\Builder\Block::make('journey')
                                             ->label('Journey / Timeline Section')

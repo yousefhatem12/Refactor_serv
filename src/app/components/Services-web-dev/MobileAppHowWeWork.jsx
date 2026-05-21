@@ -169,11 +169,19 @@ const MobileAppHowWeWork = ({ howWeWorkList }) => {
     subtitle: defaultTrans.subtitle,
     title: defaultTrans.title,
     steps: howWeWorkList && howWeWorkList.length > 0 
-      ? howWeWorkList.map((step, index) => ({
-          id: index + 1,
-          title: `${index + 1}. ${step.title}`,
-          items: step.desc ? step.desc.split('\n').filter(Boolean) : [],
-        }))
+      ? howWeWorkList.map((step, index) => {
+          const itemTitle = step.title && typeof step.title === "object"
+            ? (step.title[language] || step.title.en || "")
+            : (step.title || "");
+          const itemDesc = step.desc && typeof step.desc === "object"
+            ? (step.desc[language] || step.desc.en || "")
+            : (step.desc || "");
+          return {
+            id: index + 1,
+            title: `${index + 1}. ${itemTitle}`,
+            items: itemDesc ? itemDesc.split('\n').filter(Boolean) : [],
+          };
+        })
       : defaultTrans.steps
   };
 
