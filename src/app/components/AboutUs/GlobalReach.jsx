@@ -74,10 +74,28 @@ const locations = [
   },
 ];
 
-const GlobalReach = ({ minimal = false }) => {
+const GlobalReach = ({ data, minimal = false }) => {
   const { t, language } = useLanguage();
   const sectionRef = useRef(null);
   const dotsRef = useRef([]);
+
+  const taglineText = data?.title || t("aboutGlobalTag") || "WE ARE HERE FOR YOU";
+  const descriptionText = data?.description || t("aboutGlobalDesc") || "";
+
+  const hasDbItems = data?.items && data.items.length > 0;
+  const dbLocations = hasDbItems 
+    ? data.items.map((item, idx) => {
+        const defaultLoc = locations[idx % locations.length] || { x: 50, y: 50 };
+        return {
+          id: item.id || `loc-${idx}`,
+          name: item.name || item.country,
+          city: item.city,
+          details: item.details,
+          x: item.x || defaultLoc.x,
+          y: item.y || defaultLoc.y,
+        };
+      })
+    : locations;
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -137,7 +155,7 @@ const GlobalReach = ({ minimal = false }) => {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [dbLocations]); // Re-run effect when locations change
 
   return (
     <section
@@ -159,11 +177,13 @@ const GlobalReach = ({ minimal = false }) => {
         {!minimal && (
           <div className="text-center max-w-3xl mb-16">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#FF8A00] mb-6 tracking-wide">
-              {t("aboutGlobalTag")}
+              {taglineText}
             </h2>
-            <p className="text-gray-300 text-lg md:text-xl font-medium leading-relaxed">
-              {t("aboutGlobalDesc")}
-            </p>
+            {descriptionText && (
+              <p className="text-gray-300 text-lg md:text-xl font-medium leading-relaxed">
+                {descriptionText}
+              </p>
+            )}
           </div>
         )}
 
@@ -185,7 +205,7 @@ const GlobalReach = ({ minimal = false }) => {
           />
 
           {/* Sequentially Animated Dots */}
-          {locations.map((loc, index) => (
+          {dbLocations.map((loc, index) => (
             <div
               key={loc.id}
               ref={(el) => (dotsRef.current[index] = el)}

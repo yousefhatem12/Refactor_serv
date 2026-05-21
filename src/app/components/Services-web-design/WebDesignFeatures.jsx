@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useLanguage } from "../../context/LanguageContext";
 
 const WebDesignFeatures = ({ title, description, featuresList }) => {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const defaultFeatures = [
     {
       id: 1,
@@ -207,12 +207,20 @@ const WebDesignFeatures = ({ title, description, featuresList }) => {
   ];
 
   const displayFeatures = featuresList && featuresList.length > 0 
-    ? featuresList.map((f, i) => ({
-        id: i,
-        title: f.title || defaultFeatures[i % defaultFeatures.length]?.title,
-        desc: f.desc || defaultFeatures[i % defaultFeatures.length]?.desc,
-        icon: defaultFeatures[i % defaultFeatures.length]?.icon
-      }))
+    ? featuresList.map((f, i) => {
+        const itemTitle = f.title && typeof f.title === "object"
+          ? (f.title[language] || f.title.en || "")
+          : (f.title || defaultFeatures[i % defaultFeatures.length]?.title);
+        const itemDesc = f.desc && typeof f.desc === "object"
+          ? (f.desc[language] || f.desc.en || "")
+          : (f.desc || defaultFeatures[i % defaultFeatures.length]?.desc);
+        return {
+          id: i,
+          title: itemTitle,
+          desc: itemDesc,
+          icon: defaultFeatures[i % defaultFeatures.length]?.icon
+        };
+      })
     : defaultFeatures;
 
   return (

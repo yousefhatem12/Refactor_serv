@@ -487,13 +487,10 @@ class ApiController extends Controller
                 'title' => $this->trans($page->seo_title, $lang) ?: $this->trans($page->title, $lang),
                 'description' => $this->trans($page->seo_description, $lang) ?: $this->trans($page->subtitle, $lang),
             ],
-            'sections' => array_merge(
-                $page->sections[$lang] ?? [],
-                [
-                    'template' => $page->sections['template'] ?? null,
-                    'blocks' => $page->sections['blocks'] ?? []
-                ]
-            ),
+            'sections' => [
+                'template' => $page->sections['template'] ?? null,
+                'blocks' => $page->sections[$lang] ?? []
+            ],
         ]);
     }
 

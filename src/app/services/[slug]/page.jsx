@@ -177,8 +177,8 @@ function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, 
     case "digital_marketing":
       return (
         <DigitalMarketingServices
-          marketingTitle={data.title}
-          marketingSubtitle={data.subtitle}
+          marketingTitle={data.title?.[language] || data.title?.en || ""}
+          marketingSubtitle={data.subtitle?.[language] || data.subtitle?.en || ""}
           marketingList={data.items}
         />
       );
@@ -187,8 +187,8 @@ function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, 
     case "why_choose_us":
       return (
         <SocialMediaWhyChooseUs
-          whyTitle={data.title}
-          whySubtitle={data.subtitle}
+          whyTitle={data.title?.[language] || data.title?.en || ""}
+          whySubtitle={data.subtitle?.[language] || data.subtitle?.en || ""}
           whyList={data.items}
         />
       );

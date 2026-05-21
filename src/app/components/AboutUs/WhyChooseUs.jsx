@@ -3,16 +3,26 @@ import React from "react";
 import Image from "next/image";
 import { useLanguage } from "../../context/LanguageContext";
 
-const WhyChooseUs = () => {
+const WhyChooseUs = ({ data }) => {
   const { t } = useLanguage();
-  const cards = [
-    { num: "01", title: t("whyCard1Title") || "Trusted Partner", desc: t("whyCard1Desc") },
-    { num: "02", title: t("whyCard2Title") || "Innovative Solutions", desc: t("whyCard2Desc") },
-    { num: "03", title: t("whyCard3Title") || "Expert Team", desc: t("whyCard3Desc") },
-    { num: "04", title: t("whyCard4Title") || "Client-Centric", desc: t("whyCard4Desc") },
-    { num: "05", title: t("whyCard5Title") || "Proven Methodology", desc: t("whyCard5Desc") },
-    { num: "06", title: t("whyCard6Title") || "Continuous Support", desc: t("whyCard6Desc") },
-  ];
+  
+  const isUsingDefaultData = !(data?.items?.length > 0);
+  const cards = isUsingDefaultData 
+    ? [
+        { num: "01", title: t("whyCard1Title") || "Trusted Partner", desc: t("whyCard1Desc") },
+        { num: "02", title: t("whyCard2Title") || "Innovative Solutions", desc: t("whyCard2Desc") },
+        { num: "03", title: t("whyCard3Title") || "Expert Team", desc: t("whyCard3Desc") },
+        { num: "04", title: t("whyCard4Title") || "Client-Centric", desc: t("whyCard4Desc") },
+        { num: "05", title: t("whyCard5Title") || "Proven Methodology", desc: t("whyCard5Desc") },
+        { num: "06", title: t("whyCard6Title") || "Continuous Support", desc: t("whyCard6Desc") },
+      ]
+    : data.items.map((item, idx) => ({
+        num: String(idx + 1).padStart(2, '0'),
+        title: item.title,
+        desc: item.description,
+      }));
+
+  const sectionTitle = data?.title || t("aboutWhyTitle") || "Why Choose Us?";
 
   return (
     <section className="relative w-full min-h-screen py-24 px-6 md:px-16 lg:px-24">
@@ -30,7 +40,7 @@ const WhyChooseUs = () => {
       <div className="relative z-20 max-w-7xl mx-auto">
         <div className="mb-16">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-            {t("aboutWhyTitle")}
+            {sectionTitle}
           </h2>
         </div>
 

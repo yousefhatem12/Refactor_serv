@@ -6,10 +6,39 @@ import { getMediaUrl } from "@/lib/api";
 
 const TextImageSection = ({ data }) => {
   const isLeft = data.layout === 'text_left';
+  
+  // Detect if this is the Experience or Solutions section to apply beautiful astronaut/rocket images and styles
+  const taglineLower = data.tagline?.toLowerCase() || '';
+  const titleLower = data.title?.toLowerCase() || '';
+  
+  const isExperience = taglineLower.includes('experience') || titleLower.includes('experience');
+  const isSolutions = taglineLower.includes('solutions') || titleLower.includes('solution');
+
+  let imageUrl = data.image ? getMediaUrl(data.image) : null;
+  let glowColor = "bg-blue-600/20";
+  let imageClass = "object-contain";
+  
+  if (!imageUrl) {
+    if (isExperience) {
+      imageUrl = "/about-us/section-2-image.png";
+      glowColor = "bg-blue-600/20";
+      imageClass = "object-cover [mask-image:radial-gradient(circle,black_0%,transparent_100%)] [-webkit-mask-image:radial-gradient(circle,black_0%,transparent_100%)] mix-blend-screen brightness-[130%] contrast-[120%] saturate-[130%]";
+    } else if (isSolutions) {
+      imageUrl = "/about-us/section-3-image.png";
+      glowColor = "bg-purple-600/20";
+      imageClass = "object-cover [mask-image:radial-gradient(circle,black_0%,transparent_100%)] [-webkit-mask-image:radial-gradient(circle,black_0%,transparent_100%)] mix-blend-screen brightness-[130%] contrast-[120%] saturate-[130%]";
+    }
+  } else {
+    if (isExperience || isSolutions) {
+      imageClass = "object-cover [mask-image:radial-gradient(circle,black_0%,transparent_100%)] [-webkit-mask-image:radial-gradient(circle,black_0%,transparent_100%)] mix-blend-screen brightness-[130%] contrast-[120%] saturate-[130%]";
+      glowColor = isExperience ? "bg-blue-600/20" : "bg-purple-600/20";
+    }
+  }
+
   return (
     <section className="py-20 px-6 md:px-16 lg:px-24 w-full relative overflow-hidden">
       <div className={`max-w-7xl mx-auto flex flex-col ${isLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-12 lg:gap-20`}>
-        <div className="w-full lg:w-1/2">
+        <div className="w-full lg:w-1/2 flex flex-col justify-center">
           {data.tagline && (
             <div className="flex items-center gap-4 mb-4">
               <div className="w-12 h-1 bg-[#FF8A00] rounded-full"></div>
@@ -25,16 +54,19 @@ const TextImageSection = ({ data }) => {
             {data.content}
           </p>
         </div>
-        <div className="w-full lg:w-1/2 relative h-[300px] md:h-[400px]">
-          {data.image && (
-             <Image
-              src={getMediaUrl(data.image)}
-              alt={data.title}
-              fill
-              className="object-contain"
-            />
-          )}
-        </div>
+        {imageUrl && (
+          <div className="w-full lg:w-1/2 relative h-[300px] md:h-[400px] flex justify-center lg:justify-end">
+            <div className="relative w-full h-full">
+              <div className={`absolute inset-0 ${glowColor} blur-[100px] rounded-full -z-10`}></div>
+              <Image
+                src={imageUrl}
+                alt={data.title}
+                fill
+                className={imageClass}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
@@ -79,6 +111,8 @@ const FeaturesSection = ({ data }) => {
 import OurJourney from "../AboutUs/OurJourney";
 import Founders from "../AboutUs/Founders";
 import AboutCTA from "../AboutUs/AboutCTA";
+import WhyChooseUs from "../AboutUs/WhyChooseUs";
+import GlobalReach from "../AboutUs/GlobalReach";
 
 const PageSections = ({ sections }) => {
   if (!sections || !Array.isArray(sections)) return null;
@@ -92,7 +126,9 @@ const PageSections = ({ sections }) => {
           case 'stats':
             return <StatsSection key={index} data={section.data} />;
           case 'features':
-            return <FeaturesSection key={index} data={section.data} />;
+            return <WhyChooseUs key={index} data={section.data} />;
+          case 'global_reach':
+            return <GlobalReach key={index} data={section.data} />;
           case 'journey':
             return <OurJourney key={index} data={section.data} />;
           case 'team':
