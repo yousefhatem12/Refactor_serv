@@ -646,5 +646,33 @@ class ApiController extends Controller
 
         return response()->json(['message' => 'Application submitted successfully', 'data' => $app], 201);
     }
+
+    public function getBankAccounts()
+    {
+        $lang = $this->getLang();
+        $accounts = \App\Models\BankAccount::orderBy('sort_order', 'asc')->get()->map(function ($acc) use ($lang) {
+            return [
+                'id' => (string) $acc->id,
+                'name' => [
+                    'en' => $this->trans($acc->name, 'en'),
+                    'ar' => $this->trans($acc->name, 'ar'),
+                ],
+                'owner' => [
+                    'en' => $this->trans($acc->owner, 'en'),
+                    'ar' => $this->trans($acc->owner, 'ar'),
+                ],
+                'account' => [
+                    'en' => $this->trans($acc->account, 'en'),
+                    'ar' => $this->trans($acc->account, 'ar'),
+                ],
+                'image' => $acc->image ? (str_starts_with($acc->image, 'http') || str_starts_with($acc->image, '/') ? $acc->image : asset('storage/' . $acc->image)) : null,
+                'type' => $acc->type,
+                'country' => $acc->country,
+                'brandColor' => $acc->brand_color ?: 'from-[#05050f] to-[#101025]',
+                'shadow' => $acc->shadow ?: 'rgba(0,0,0,0)',
+            ];
+        });
+        return response()->json($accounts);
+    }
 }
 

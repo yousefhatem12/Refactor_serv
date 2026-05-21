@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="wuGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFCC00" />
+      <stop offset="100%" stop-color="#CCA300" />
+    </linearGradient>
+  </defs>
+  <rect width="100" height="100" rx="22" fill="url(#wuGrad)" />
+  <rect x="15" y="15" width="70" height="70" rx="12" fill="none" stroke="rgba(0,0,0,0.1)" stroke-width="1.5"/>
+  <text x="50" y="48" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="28" fill="#000000">WU</text>
+  <text x="50" y="70" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="8" fill="#000000" letter-spacing="0.5">WESTERN UNION</text>
+</svg>
