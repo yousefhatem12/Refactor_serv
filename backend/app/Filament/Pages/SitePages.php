@@ -11,6 +11,9 @@ use App\Filament\Pages\ManageFaqPage;
 use App\Filament\Resources\FaqResource;
 use App\Filament\Pages\ManageContactPage;
 use App\Filament\Resources\ContactMessageResource;
+use App\Filament\Resources\Products\ProductResource;
+use App\Filament\Resources\Careers\CareerResource;
+use App\Filament\Resources\CareerApplications\CareerApplicationResource;
 
 class SitePages extends Page
 {
@@ -59,6 +62,13 @@ class SitePages extends Page
                     'color' => 'success',
                 ],
                 [
+                    'title' => __('Our Products'),
+                    'description' => __('Manage showcase products and details.'),
+                    'icon' => 'heroicon-o-shopping-bag',
+                    'url' => ProductResource::getUrl(),
+                    'color' => 'primary',
+                ],
+                [
                     'title' => __('Our Work'),
                     'description' => __('Manage portfolio projects and works.'),
                     'icon' => 'heroicon-o-folder-open',
@@ -71,6 +81,20 @@ class SitePages extends Page
                     'icon' => 'heroicon-o-newspaper',
                     'url' => PostResource::getUrl(),
                     'color' => 'danger',
+                ],
+                [
+                    'title' => __('Careers'),
+                    'description' => __('Manage job postings and openings.'),
+                    'icon' => 'heroicon-o-briefcase',
+                    'url' => CareerResource::getUrl(),
+                    'color' => 'info',
+                ],
+                [
+                    'title' => __('Career Applications'),
+                    'description' => __('View and review received job applications.'),
+                    'icon' => 'heroicon-o-user-group',
+                    'url' => CareerApplicationResource::getUrl(),
+                    'color' => 'success',
                 ],
                 [
                     'title' => __('FAQ Page'),

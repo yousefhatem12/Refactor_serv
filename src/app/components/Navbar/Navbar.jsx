@@ -47,12 +47,12 @@ const Navbar = () => {
             dropdown: [
               ...dropdown,
               { name: t("consultationHeroTitle"), href: "/project-consultation" },
-              { name: t("careers"), href: "/careers" },
             ],
           },
           { name: t("portfolio"), href: "/portfolio" },
           { name: t("blog"), href: "/blog" },
           { name: t("ourProducts"), href: "/our-products" },
+          { name: t("careers"), href: "/careers" },
           { name: t("faq"), href: "/faq" },
           { name: t("contactUs"), href: "/contact-us" },
         ];
@@ -64,7 +64,7 @@ const Navbar = () => {
             // Inject dynamic services into any dropdown marked as services
             const enriched = data.map((link) => {
               if (link.dropdown) {
-                return { ...link, dropdown: [...serviceDropdown, { name: t("consultationHeroTitle"), href: "/project-consultation" }, { name: t("careers"), href: "/careers" }] };
+                return { ...link, dropdown: [...serviceDropdown, { name: t("consultationHeroTitle"), href: "/project-consultation" }] };
               }
               return link;
             });
@@ -91,12 +91,12 @@ const Navbar = () => {
               { name: t("catOnlineStores"), href: "/services/services-ecommerce" },
               { name: t("catMobileApps"), href: "/services/services-mobile-apps" },
               { name: t("consultationHeroTitle"), href: "/project-consultation" },
-              { name: t("careers"), href: "/careers" },
             ],
           },
           { name: t("portfolio"), href: "/portfolio" },
           { name: t("blog"), href: "/blog" },
           { name: t("ourProducts"), href: "/our-products" },
+          { name: t("careers"), href: "/careers" },
           { name: t("faq"), href: "/faq" },
           { name: t("contactUs"), href: "/contact-us" },
         ]);
