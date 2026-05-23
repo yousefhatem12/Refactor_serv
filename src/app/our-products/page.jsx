@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { products } from "../data/products";
 import { fetchAPI } from "../../lib/api";
 
 import { useLanguage } from "../context/LanguageContext";
@@ -19,12 +18,12 @@ const OurProductsListingPage = () => {
         if (data && Array.isArray(data)) {
           setProductsList(data);
         } else {
-          setProductsList(products);
+          setProductsList([]);
         }
       })
       .catch((err) => {
         console.error("Failed to fetch products:", err);
-        setProductsList(products);
+        setProductsList([]);
       })
       .finally(() => {
         setLoading(false);
@@ -100,7 +99,7 @@ const OurProductsListingPage = () => {
                     </p>
                     <div className="mt-auto flex items-center justify-between">
                       <span className="text-[#F18805] font-semibold text-sm flex items-center gap-2 group-hover:gap-3 transition-all">
-                        View Details
+                        {t("viewFullDetails")}
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>

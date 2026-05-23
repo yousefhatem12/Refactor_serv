@@ -167,7 +167,9 @@ const ServicesFeatures = ({ title, featuresData, featuresList }) => {
           icon: defaultFeatures[index % defaultFeatures.length]?.icon,
         };
       })
-    : defaultFeatures;
+    : [];
+
+  if (displayFeatures.length === 0) return null;
 
   return (
     <section className="relative w-full py-24 px-6 lg:px-20 z-20">

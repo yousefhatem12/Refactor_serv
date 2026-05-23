@@ -98,7 +98,9 @@ const WebDevHowWeWork = ({ howWeWorkList }) => {
           items: itemDesc ? itemDesc.split('\n').filter(Boolean) : [],
         };
       })
-    : defaultSteps;
+    : [];
+
+  if (steps.length === 0) return null;
 
   return (
     <section className="relative w-full py-24 px-6 lg:px-20 z-20" dir="ltr">

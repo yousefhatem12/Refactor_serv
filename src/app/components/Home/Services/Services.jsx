@@ -6,6 +6,7 @@ import {
   useTransform,
   AnimatePresence,
 } from "framer-motion";
+import Link from "next/link";
 import { fetchAPI } from "@/lib/api";
 import { useLanguage } from "../../../context/LanguageContext";
 
@@ -73,6 +74,15 @@ const Services = () => {
   const [services, setServices] = useState(initialServicesData);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+
+  const getServiceHref = (service) => {
+    if (!service) return "#";
+    if (service.id === "hosting") return "/services/services-cloud-hosting";
+    if (service.id === "marketing") return "/services/services-social-media";
+    if (service.id === "design-1") return "/services/services-ui-ux-design";
+    if (service.id === "design-2" || service.id === "design-3") return "/services/services-web-development";
+    return `/services/services-${service.id}`;
+  };
 
   // Backend Integration
   useEffect(() => {
@@ -272,9 +282,12 @@ const Services = () => {
             <p className="text-white text-sm sm:text-base md:text-xl max-w-2xl mx-auto leading-relaxed bg-gray-900/50 inline p-1 md:leading-[2]">
               {activeService.description}
             </p>
-            <button className="text-white border-b border-white/30 pb-1 block mx-auto mt-4 hover:border-white transition-colors uppercase tracking-widest text-sm font-medium pointer-events-auto">
+            <Link
+              href={getServiceHref(activeService)}
+              className="text-white border-b border-white/30 pb-1 block mx-auto mt-4 hover:border-white transition-colors uppercase tracking-widest text-sm font-medium pointer-events-auto w-max"
+            >
               {t("knowMore")}
-            </button>
+            </Link>
           </motion.div>
         </AnimatePresence>
       </motion.div>
