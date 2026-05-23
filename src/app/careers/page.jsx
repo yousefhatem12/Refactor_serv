@@ -46,12 +46,14 @@ export default function CareersPage() {
   }, []);
 
   // Departments list for filtering
+  const uniqueDepts = Array.from(new Set(jobsList.map(j => j.department).filter(Boolean)));
   const departments = [
     { id: "all", name: t("departmentAll") },
-    { id: "Development", name: t("depDevelopment") },
-    { id: "Design", name: t("depDesign") },
-    { id: "Marketing", name: t("depMarketing") },
-    { id: "HR", name: t("depHR") }
+    ...uniqueDepts.map(dept => {
+      const translationKey = `dep${dept}`;
+      const translatedName = t(translationKey) !== translationKey ? t(translationKey) : dept;
+      return { id: dept, name: translatedName };
+    })
   ];
 
   // Filtering Logic
