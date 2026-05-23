@@ -131,7 +131,7 @@ const ProductCard = ({ product, index }) => {
             {/* CTA Button */}
             <div className="overflow-hidden rounded-xl">
               <a 
-                href={product.url || "#"} 
+                href={product.demoLink || product.orderLink || product.url || "#"} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="block"
@@ -176,7 +176,7 @@ const OnlineWebsite = () => {
     const fetchProjects = async () => {
       try {
         setIsLoading(true);
-        const data = await fetchAPI(`/portfolio?lang=${language}&type=product`);
+        const data = await fetchAPI(`/products?lang=${language}`);
         if (data && data.length > 0) {
           setProducts(data);
         }

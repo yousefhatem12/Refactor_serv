@@ -26,7 +26,7 @@ export default function PortfolioGallery({ data }) {
     const fetchPortfolio = async () => {
       try {
         setIsLoading(true);
-        const data = await fetchAPI(`/portfolio?lang=${language}&type=portfolio`);
+        const data = await fetchAPI(`/portfolio?lang=${language}`);
         setPortfolioItems(data);
       } catch (error) {
         console.error("Failed to fetch portfolio:", error);
