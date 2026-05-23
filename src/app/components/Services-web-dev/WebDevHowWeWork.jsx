@@ -85,6 +85,7 @@ const WebDevHowWeWork = ({ howWeWorkList }) => {
 
   const steps = howWeWorkList && howWeWorkList.length > 0 
     ? howWeWorkList.map((step, index) => {
+        if (!step) return null;
         const itemTitle = step.title && typeof step.title === "object"
           ? (step.title[language] || step.title.en || "")
           : (step.title || "");
@@ -97,8 +98,8 @@ const WebDevHowWeWork = ({ howWeWorkList }) => {
           align: index % 2 === 0 ? "right" : "left",
           items: itemDesc ? itemDesc.split('\n').filter(Boolean) : [],
         };
-      })
-    : [];
+      }).filter(Boolean)
+    : defaultSteps;
 
   if (steps.length === 0) return null;
 

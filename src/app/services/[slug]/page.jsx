@@ -382,7 +382,13 @@ function OldFormatRenderer({ serviceData, language, t }) {
         return (
           <>
             {serviceData.show_hero !== false && <EcommerceHero data={serviceData} serviceId={serviceData.id} />}
-            {serviceData.show_features !== false && <EcommerceFeatures />}
+            {serviceData.show_features !== false && (
+              <EcommerceFeatures
+                title={serviceData.features_title}
+                subtitle={serviceData.features_subtitle}
+                featuresList={serviceData.features_list}
+              />
+            )}
             {serviceData.show_blogs !== false && <LatestBlogs />}
           </>
         );
