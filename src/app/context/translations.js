@@ -3,8 +3,6 @@ export const translations = {
     home: "Home",
     aboutUs: "About us",
     bankAccounts: "Bank Accounts",
-<<<<<<< Updated upstream
-=======
     teamWork: "Team Work",
     teamHeroTitle: "Meet the Minds Behind the Magic",
     teamHeroDesc: "We are a diverse group of designers, developers, and strategists united by a passion for creating exceptional digital experiences.",
@@ -13,7 +11,6 @@ export const translations = {
     deptDevelopment: "Development",
     deptDesign: "Design & UX",
     deptMarketing: "Marketing",
->>>>>>> Stashed changes
     paymentMethods: "Payment Methods",
     payFromEgypt: "From Egypt",
     payFromKSA: "From Saudi Arabia",
