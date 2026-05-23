@@ -195,7 +195,7 @@ const productDetails = {
 const ProductDetailsPage = () => {
   const params = useParams();
   const productId = params?.id;
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const isAr = language === "ar";
   const [activePreview, setActivePreview] = useState("desktop"); // 'desktop' or 'mobile'
   const [selectedImageIndex, setSelectedImageIndex] = useState(null); // Lightbox selected image index
@@ -223,40 +223,12 @@ const ProductDetailsPage = () => {
         if (data) {
           setProductData(data);
         } else {
-          const localProd = products.find((p) => p.id === productId);
-          if (localProd) {
-            const localDetails = productDetails[productId]?.[language] || {
-              name: isAr ? localProd.name || "المنتج" : localProd.name || "Product",
-              category: isAr ? localProd.category || "برمجيات SaaS" : localProd.category || "SaaS Solution",
-              title: isAr ? localProd.title || "تصميم متكامل" : localProd.title || "Tailored Solution",
-              description: localProd.description,
-              features: [
-                { title: isAr ? "دعم كامل" : "Full Support", desc: isAr ? "نقدم لك دعماً برمجياً وفنياً متكاملاً للمنصة." : "We offer complete technical and code support." },
-                { title: isAr ? "تصميم متجاوب" : "Responsive Design", desc: isAr ? "يعمل بكفاءة مطلقة على كافة شاشات الهواتف والأجهزة." : "Works beautifully on all screen resolutions and devices." }
-              ],
-              techSpecs: ["React", "Next.js", "TailwindCSS"],
-              whyChooseUs: isAr ? "حل جاهز ومتكامل مع تجربة مستخدم ممتازة." : "A complete ready-to-launch solution with superb UX."
-            };
-            const localSamples = productSamplesMap[productId] || ["/portfolio/image-1.png", "/portfolio/image-2.png", "/portfolio/image-3.png", "/portfolio/image-4.png"];
-            setProductData({
-              id: localProd.id,
-              name: localDetails.name,
-              category: localDetails.category,
-              title: localDetails.title,
-              description: localDetails.description,
-              image: localProd.image,
-              demoLink: localProd.demoLink || '#',
-              orderLink: localProd.orderLink || '#',
-              features: localDetails.features,
-              techSpecs: localDetails.techSpecs,
-              whyChooseUs: localDetails.whyChooseUs,
-              samples: localSamples
-            });
-          }
+          setProductData(null);
         }
       })
       .catch((err) => {
         console.error("Error fetching product details:", err);
+        setProductData(null);
       })
       .finally(() => {
         setLoading(false);
@@ -269,20 +241,24 @@ const ProductDetailsPage = () => {
         if (data && Array.isArray(data)) {
           setOtherProductsList(data.filter((p) => p.id !== productId).slice(0, 6));
         } else {
-          setOtherProductsList(products.filter((p) => p.id !== productId).slice(0, 6));
+          setOtherProductsList([]);
         }
       })
       .catch(() => {
-        setOtherProductsList(products.filter((p) => p.id !== productId).slice(0, 6));
+        setOtherProductsList([]);
       });
   }, [productId]);
 
-  if (loading || !productData) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="w-16 h-16 border-4 border-[#F18805] border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
+  }
+
+  if (!productData) {
+    notFound();
   }
 
   const product = productData;
@@ -355,7 +331,7 @@ const ProductDetailsPage = () => {
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
               </svg>
-              {isAr ? "الخصائص البرمجية والمميزات" : "Key Solution Features"}
+              {t("productFeaturesTitle")}
             </h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-2">
@@ -387,7 +363,7 @@ const ProductDetailsPage = () => {
           {/* Technology Specifications */}
           <div className="flex flex-col gap-3">
             <h4 className="text-xs font-semibold text-white/50 uppercase tracking-widest">
-              {isAr ? "التقنيات المستخدمة في المنصة" : "Technology Stack Specs"}
+              {t("productTechTitle")}
             </h4>
             <div className="flex flex-wrap gap-2.5">
               {details.techSpecs.map((tech, idx) => (
@@ -412,7 +388,7 @@ const ProductDetailsPage = () => {
               href={product.demoLink}
               className="relative overflow-hidden bg-[#F18805] hover:bg-[#d17604] text-white px-10 py-4 rounded-xl font-bold transition-all duration-300 shadow-[0_0_30px_rgba(241,136,5,0.25)] hover:shadow-[0_0_40px_rgba(241,136,5,0.4)] flex items-center gap-3 hover:-translate-y-0.5 group"
             >
-              <span>{isAr ? "معاينة النظام حياً" : "See Live Demo"}</span>
+              <span>{t("productLiveDemo")}</span>
               <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
               </svg>
@@ -421,7 +397,7 @@ const ProductDetailsPage = () => {
               href={product.orderLink}
               className="bg-transparent border-[2px] border-white/10 hover:border-[#F18805] hover:bg-[#F18805]/10 text-white px-10 py-4 rounded-xl font-bold transition-all duration-300 flex items-center gap-2 hover:-translate-y-0.5"
             >
-              <span>{isAr ? "اطلب نسختك الآن" : "Order Solution Now!"}</span>
+              <span>{t("productOrderNow")}</span>
             </Link>
           </motion.div>
         </div>
@@ -442,7 +418,7 @@ const ProductDetailsPage = () => {
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
-              {isAr ? "معاينة الحاسوب" : "Desktop View"}
+              {t("productDesktopView")}
             </button>
             <button
               onClick={() => setActivePreview("mobile")}
@@ -455,7 +431,7 @@ const ProductDetailsPage = () => {
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
               </svg>
-              {isAr ? "معاينة الجوال" : "Mobile View"}
+              {t("productMobileView")}
             </button>
           </div>
 
@@ -554,7 +530,7 @@ const ProductDetailsPage = () => {
       <section className="w-full max-w-[1400px] mx-auto px-6 md:px-10 py-16 flex flex-col items-center gap-12 relative z-10 border-t border-white/5 mt-12">
         <div className="flex flex-col items-center text-center gap-4 max-w-3xl">
           <span className="px-4 py-1.5 rounded-full text-[10px] md:text-xs font-bold bg-[#F18805]/10 border border-[#F18805]/20 text-[#F18805] shadow-[0_0_15px_rgba(241,136,5,0.05)] uppercase tracking-widest">
-            {isAr ? "لقطات حية من داخل النظام" : "Live Screenshots & Visuals"}
+            {t("liveScreenshotsBadge")}
           </span>
           <motion.h2
             initial={{ opacity: 0, y: 15 }}
@@ -563,12 +539,10 @@ const ProductDetailsPage = () => {
             transition={{ duration: 0.5 }}
             className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-white tracking-tight"
           >
-            {isAr ? "نماذج ولقطات حية من المنتج" : "Samples from Product (Screenshots)"}
+            {t("liveScreenshotsTitle")}
           </motion.h2>
           <p className="text-white/60 text-xs md:text-sm leading-relaxed font-light">
-            {isAr 
-              ? "استكشف واجهات النظام والمنصات الحقيقية، لوحات تحكم الإدارة، وتصاميم الشاشات التي تم تصميمها وتطويرها بالكامل بأعلى كفاءة وجودة."
-              : "Take a closer look at the actual interactive dashboards, administrative platforms, and high-fidelity layouts engineered within the solution."}
+            {t("liveScreenshotsDesc")}
           </p>
         </div>
 
@@ -600,7 +574,7 @@ const ProductDetailsPage = () => {
                   </svg>
                 </div>
                 <span className="text-white text-xs font-semibold mt-3 tracking-wide transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                  {isAr ? "عرض الشاشة" : "View Screen"}
+                  {t("viewScreen")}
                 </span>
               </div>
             </motion.div>
@@ -691,7 +665,7 @@ const ProductDetailsPage = () => {
           transition={{ duration: 0.5 }}
           className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-white text-center tracking-tight"
         >
-          {isAr ? "استكشف المزيد من حلولنا الذكية" : "More SaaS Products You Might Like"}
+          {t("moreProductsTitle")}
         </motion.h2>
 
         {/* Related grid */}
@@ -729,7 +703,7 @@ const ProductDetailsPage = () => {
                   </p>
                   <div className="mt-auto flex items-center justify-between">
                     <span className="text-[#F18805] font-bold text-xs md:text-sm flex items-center gap-2 group-hover:gap-3 transition-all duration-300">
-                      {isAr ? "عرض التفاصيل الكاملة" : "View Full Details"}
+                      {t("viewFullDetails")}
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
@@ -753,7 +727,7 @@ const ProductDetailsPage = () => {
             href="/our-products"
             className="inline-block bg-transparent border border-white/10 hover:border-[#F18805] hover:bg-[#F18805]/10 text-white px-10 py-3.5 rounded-xl font-bold transition-all duration-300"
           >
-            {isAr ? "استكشف كافة الحلول والمنتجات" : "Check All SaaS Products"}
+            {t("exploreAllProducts")}
           </Link>
         </motion.div>
       </section>
