@@ -636,8 +636,6 @@ export const translations = {
     home: "الرئيسية",
     aboutUs: "من نحن",
     bankAccounts: "الحسابات البنكية",
-<<<<<<< Updated upstream
-=======
     teamWork: "فريق العمل",
     teamHeroTitle: "تعرف على العقول المبدعة خلف كواليس نجاحنا",
     teamHeroDesc: "نحن مجموعة متنوعة من المصممين والمطورين والاستراتيجيين يجمعنا الشغف لابتكار تجارب رقمية استثنائية تفوق التوقعات.",
@@ -646,7 +644,6 @@ export const translations = {
     deptDevelopment: "التطوير والبرمجة",
     deptDesign: "التصميم والإبداع",
     deptMarketing: "التسويق",
->>>>>>> Stashed changes
     paymentMethods: "طرق الدفع",
     payFromEgypt: "من داخل مصر",
     payFromKSA: "من المملكة العربية السعودية",
