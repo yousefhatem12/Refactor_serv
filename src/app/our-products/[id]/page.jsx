@@ -4,193 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useParams, notFound } from "next/navigation";
-import { products } from "../../data/products";
 import { useLanguage } from "../../context/LanguageContext";
 import { fetchAPI } from "../../../lib/api";
-
-// Local highly-focused bilingual details dictionary for the SaaS products
-const productDetails = {
-  athath: {
-    en: {
-      name: "Athath",
-      category: "Furniture E-Commerce",
-      title: "Athath Furniture E-Commerce Solution",
-      description: "Athath is a high-end, premium e-commerce platform specifically optimized for furniture retailers and interior design studios. Combining minimalist aesthetics with incredibly powerful features, it delivers a smooth shopping experience that turns visitors into loyal customers.",
-      features: [
-        { title: "Dynamic High-Res Gallery", desc: "Showcase furniture textures and details with high-resolution responsive zooming." },
-        { title: "Smart Advanced Filtering", desc: "Enable customers to instantly filter by collection, material, color, and price." },
-        { title: "Seamless Glassmorphic Cart", desc: "A frictionless one-page checkout designed to reduce cart abandonment rates." },
-        { title: "Intelligent Inventory Control", desc: "Real-time stock management and order notifications for business owners." }
-      ],
-      techSpecs: ["Next.js", "React", "TailwindCSS", "Node.js", "MongoDB", "Framer Motion"],
-      whyChooseUs: "Ready-to-launch furniture store with ultra-fast page load speeds, pre-configured checkout, and SEO-optimized structure."
-    },
-    ar: {
-      name: "أثاث",
-      category: "تجارة إلكترونية للأثاث",
-      title: "منصة أثاث المتكاملة للتجارة الإلكترونية",
-      description: "منصة 'أثاث' هي حل تجارة إلكترونية راقٍ ومصمم خصيصاً لمعارض الأثاث واستوديوهات التصميم الداخلي. تجمع المنصة بين جماليات التصميم العصري والأداء البرمجي الفائق، لتوفر للعملاء تجربة تسوق تفاعلية سلسة تحول الزوار إلى عملاء دائمين.",
-      features: [
-        { title: "معرض صور تفاعلي دقيق", desc: "استعرض تفاصيل وخامات الأثاث بدقة متناهية مع خاصية التكبير والتفاعل الفائق." },
-        { title: "نظام فلترة ذكي ومتقدم", desc: "يتيح للعملاء العثور على قطع الأثاث المطلوبة فوراً عبر تصفية الخامات، الألوان، والأسعار." },
-        { title: "سلة دفع زجاجية ذكية", desc: "عملية دفع من صفحة واحدة خالية من التعقيد لزيادة نسبة إتمام المبيعات وتقليل مغادرة السلة." },
-        { title: "لوحة تحكم ذكية للمخزون", desc: "إدارة المخزون والطلبات فورياً وتلقي تنبيهات المبيعات أولاً بأول لأصحاب الأعمال." }
-      ],
-      techSpecs: ["Next.js", "React", "TailwindCSS", "Node.js", "MongoDB", "Framer Motion"],
-      whyChooseUs: "متجر أثاث متكامل جاهز للإطلاق الفوري، يتميز بسرعات تحميل فائقة، ونظام دفع مهيأ، وبنية برمجية مهيأة بالكامل لمحركات البحث (SEO)."
-    }
-  },
-  clinic: {
-    en: {
-      name: "Clinic+",
-      category: "Healthcare Management",
-      title: "Clinic+ Digital Medical System",
-      description: "Clinic+ is an enterprise-grade medical clinic management platform engineered to streamline patient booking, healthcare records, and daily medical workflows. Designed with clinical efficiency and patient ease of use in mind.",
-      features: [
-        { title: "Real-Time Scheduling", desc: "Avoid overlapping and booking conflicts with a dynamic smart medical calendar." },
-        { title: "Secure Health Records (EHR)", desc: "Confidential digital patient histories, active prescriptions, and diagnosis logs." },
-        { title: "Doctor & Receptionist Hub", desc: "Custom role-based logins with unique views to manage clinic operations." },
-        { title: "Automated Smart Reminders", desc: "Reduce patient no-shows with scheduled, automated notifications." }
-      ],
-      techSpecs: ["React", "Next.js", "TailwindCSS", "Express.js", "PostgreSQL", "Node.js"],
-      whyChooseUs: "HIPAA-compliant data handling structures, ultra-smooth clinic workflow management, and zero setup latency."
-    },
-    ar: {
-      name: "كلينيك بلس",
-      category: "إدارة الرعاية الصحية",
-      title: "نظام كلينيك بلس الطبي المتكامل",
-      description: "نظام 'كلينيك بلس' هو منصة متطورة لإدارة العيادات والمراكز الطبية بكافة تخصصاتها. تم تطويره بهدف تسهيل حجز مواعيد المرضى، وتنظيم الملفات الطبية الرقمية، وأتمتة المهام اليومية للأطباء والموظفين بكفاءة وسرية مطلقة.",
-      features: [
-        { title: "جدولة مواعيد ذكية وحية", desc: "حجز مواعيد متزامن بدون تعارض مع توفير جدول تقويمي ذكي للأطباء والمرضى." },
-        { title: "ملفات صحية رقمية آمنة", desc: "حفظ مشفر لتاريخ المرضى الطبي، الروشتات العلاجية، وتقارير التشخيص." },
-        { title: "بوابات مخصصة للكادر الطبي", desc: "لوحات تحكم بأدوار محددة وصلاحيات أمان صارمة لإدارة العيادة اليومية." },
-        { title: "تنبيهات وتذكيرات تلقائية", desc: "تقليل غياب المرضى عبر إرسال تذكيرات آلية عبر الرسائل القصيرة والبريد الإلكتروني." }
-      ],
-      techSpecs: ["React", "Next.js", "TailwindCSS", "Express.js", "PostgreSQL", "Node.js"],
-      whyChooseUs: "تصميم يتوافق مع معايير الأمان الطبية، إدارة مرنة للورديات، وتجربة مستخدم خالية من التعقيد للمرضى والأطباء."
-    }
-  },
-  "edu-platform": {
-    en: {
-      name: "EduLearn",
-      category: "E-Learning & LMS",
-      title: "EduLearn Educational Platform",
-      description: "EduLearn is a comprehensive Learning Management System (LMS) built to empower schools, academies, and private instructors. Create, host, and sell engaging courses in a modern virtual learning environment.",
-      features: [
-        { title: "Structured Course Builder", desc: "Organize lessons by chapters, upload video files, PDFs, and rich-text worksheets." },
-        { title: "Interactive Quiz Engine", desc: "Test student knowledge with auto-graded multiple-choice, essay, and time-bound quizzes." },
-        { title: "Progress & Analytics Tracker", desc: "Give students and parents real-time insights into course completion statistics." },
-        { title: "Smart Certificate Generator", desc: "Instantly reward graduating students with custom, dynamically-generated PDF credentials." }
-      ],
-      techSpecs: ["Next.js", "React", "Node.js", "TailwindCSS", "GraphQL", "PostgreSQL"],
-      whyChooseUs: "Robust video streaming integration, gamified learning dashboards, and seamless payment collection pipelines."
-    },
-    ar: {
-      name: "إديوليرن",
-      category: "المنصات التعليمية وأنظمة التعلم",
-      title: "منصة إديوليرن التعليمية والتدريبية",
-      description: "منصة 'إديوليرن' هي نظام إدارة تعلم (LMS) شامل ومبتكر لخدمة المدارس، الأكاديميات، والمحاضرين الخصوصيين. تتيح لك المنصة إنشاء، واستضافة، وبيع الكورسات التفاعلية بجودة ممتازة وبيئة تعليمية تواكب أحدث المعايير.",
-      features: [
-        { title: "منشئ كورسات منظم وهيكلي", desc: "تنظيم الدروس في فصول، ورفع مقاطع الفيديو، وملفات PDF، وأوراق العمل التفاعلية." },
-        { title: "نظام اختبارات متطور", desc: "تقييم معرفة الطلاب باختبارات مؤقتة وتصحيح تلقائي فوري متعدد الخيارات." },
-        { title: "تتبع التقدم والتحليلات للمتعلم", desc: "إحصائيات فورية وتفصيلية للطلاب وأولياء الأمور لمعرفة نسب الإنجاز وساعات التعلم." },
-        { title: "توليد تلقائي للشهادات الذكية", desc: "مكافأة الطلاب المتفوقين تلقائياً عند إنهاء الكورس بشهادات PDF احترافية باسمائهم." }
-      ],
-      techSpecs: ["Next.js", "React", "Node.js", "TailwindCSS", "GraphQL", "PostgreSQL"],
-      whyChooseUs: "حماية تامة لمحتوى الفيديو من السرقة، تصميم تفاعلي ممتع للطلاب، ونظام دفع آمن مدمج."
-    }
-  },
-  "real-estate": {
-    en: {
-      name: "RealEstate Pro",
-      category: "Property Directory",
-      title: "RealEstate Pro Management System",
-      description: "RealEstate Pro is an outstanding property portal and brokerage utility. Engineered with ultra-fast search engines and spatial maps, it serves as the ultimate digital gateway for buyers, sellers, and realtors.",
-      features: [
-        { title: "Interactive Spatial Maps", desc: "Locate houses and commercial properties instantly on a fluid GIS map." },
-        { title: "Virtual 3D Home Tours", desc: "Allow potential buyers to experience high-fidelity, interactive digital open houses." },
-        { title: "Automated Realtor CRM", desc: "Assign leads to agents, manage client inquiries, and track call histories easily." },
-        { title: "Mortgage & Cost Calculator", desc: "Built-in finance simulator that calculates monthly payments, deposits, and interest." }
-      ],
-      techSpecs: ["React", "Next.js", "TailwindCSS", "Node.js", "MongoDB", "Mapbox API"],
-      whyChooseUs: "SEO-friendly property directory, automated email alerts for new listings, and flawless responsiveness across mobile devices."
-    },
-    ar: {
-      name: "عقارات برو",
-      category: "منصات التسويق والوساطة العقارية",
-      title: "منصة عقارات برو الاحترافية",
-      description: "منصة 'عقارات برو' هي الحل الرقمي الشامل لشركات التطوير العقاري والوسطاء. مجهزة بمحركات بحث جغرافية فائقة السرعة على الخريطة وميزات عرض متطورة، تجعل رحلة البحث عن منزل أو عقار تجاري سهلة وممتعة للغاية للعملاء.",
-      features: [
-        { title: "البحث التفاعلي بالخرائط", desc: "تحديد مواقع الفلل والشقق والمحلات التجارية جغرافياً على خريطة تفاعلية ذكية." },
-        { title: "جولات افتراضية ثلاثية الأبعاد", desc: "تمكين المشترين المحتملين من القيام بجولة حية وتفاعلية داخل العقار من هواتفهم." },
-        { title: "نظام إدارة علاقات العملاء (CRM)", desc: "توزيع طلبات العملاء تلقائياً على الوكلاء، ومتابعة التواصل وتنظيم المبيعات." },
-        { title: "حاسبة تمويل عقاري مدمجة", desc: "تتيح للعميل محاكاة الأقساط الشهرية، الدفعات الأولى، ونسب الفائدة تلقائياً." }
-      ],
-      techSpecs: ["React", "Next.js", "TailwindCSS", "Node.js", "MongoDB", "Mapbox API"],
-      whyChooseUs: "تأهيل كامل لمحركات البحث لزيادة مبيعات عقاراتك، نظام إشعارات فوري للعملاء بالفرص الجديدة، وتوافق تام مع الجوال."
-    }
-  },
-  restaurant: {
-    en: {
-      name: "FoodieMenu",
-      category: "Digital Restaurant Ordering",
-      title: "FoodieMenu Self-Ordering System",
-      description: "FoodieMenu is a cutting-edge QR-based self-ordering ecosystem for restaurants, bistros, and coffee shops. Empower your guests to order and pay directly from their tables without app installs.",
-      features: [
-        { title: "No-Contact Table QR Ordering", desc: "Guests scan, order items, and checkout without waiting for a waiter." },
-        { title: "Vibrant Visual Menu Builder", desc: "Upload gorgeous pictures, display ingredient labels, and manage daily specials." },
-        { title: "Real-Time Kitchen KDS System", desc: "Direct order dispatch to kitchen screens ensuring lightning-fast preparation." },
-        { title: "Apple Pay & Wallet Integration", desc: "Seamless instant digital checkouts directly from the dining table." }
-      ],
-      techSpecs: ["Next.js", "React", "TailwindCSS", "Socket.io", "Firebase", "Node.js"],
-      whyChooseUs: "Increases average order value by up to 25% via smart upselling, minimizes waitstaff strain, and optimizes dining turnover."
-    },
-    ar: {
-      name: "فودي منيو",
-      category: "المنيو الرقمي والطلب الذاتي",
-      title: "منصة فودي منيو المتكاملة للمطاعم",
-      description: "منصة 'فودي منيو' هي نظام طلب ذاتي حديث يعتمد على رموز الـ QR ومصمم خصيصاً للمطاعم والمقاهي. تتيح المنصة لرواد مطعمك مسح الكود، طلب الوجبات، وتعديل إضافاتهم، ثم الدفع فوراً بكل سهولة ودون الحاجة لتنزيل أي تطبيق.",
-      features: [
-        { title: "الطلب الذاتي عبر QR الطاولة", desc: "يمسح العميل الكود، ويطلب ما يشاء مباشرة دون الحاجة لانتظار النادل لتسجيل الطلب." },
-        { title: "منيو تفاعلي مصور وجذاب", desc: "عرض أطباقك بصور عالية الدقة وتفاصيل المكونات، مع التحكم في إتاحة الأطباق يومياً." },
-        { title: "شاشة المطبخ الفورية (KDS)", desc: "إرسال الطلبات مباشرة لشاشات الطهاة في المطبخ لتسريع عملية التحضير وتقليل الأخطاء." },
-        { title: "تكامل الدفع الإلكتروني المباشر", desc: "دعم Apple Pay والبطاقات البنكية للدفع السريع والآمن مباشرة من الطاولة." }
-      ],
-      techSpecs: ["Next.js", "React", "TailwindCSS", "Socket.io", "Firebase", "Node.js"],
-      whyChooseUs: "يزيد متوسط قيمة الطلب بنسبة تصل لـ 25٪ بفضل الاقتراحات الذكية، ويوفر تكاليف المطبخ، ويسرع معدل تدوير الطاولات."
-    }
-  },
-  gym: {
-    en: {
-      name: "FitLife",
-      category: "Fitness & Club Utility",
-      title: "FitLife Gym & Health Club Platform",
-      description: "FitLife is a premium SaaS solution engineered for modern gym franchises, fitness centres, and martial arts clubs. Smoothly control your registrations, timetables, and staff with high efficiency.",
-      features: [
-        { title: "Dynamic Membership Plans", desc: "Create flexible subscription plans, auto-billing schedules, and digital gate entry." },
-        { title: "Interactive Class Booking", desc: "Let members book yoga, crossfit, or swimming sessions online through their portals." },
-        { title: "Trainer & Shift Schedulers", desc: "Distribute classes, schedule personal training shifts, and evaluate performance." },
-        { title: "Auto-Billing & Expiry Warnings", desc: "Reduce churn by sending subscription expiry warnings and bill collection invoices." }
-      ],
-      techSpecs: ["React", "Next.js", "TailwindCSS", "Node.js", "MongoDB", "Framer Motion"],
-      whyChooseUs: "Includes check-in QR scanner system, client progress trackers, and detailed financial reports for gym management."
-    },
-    ar: {
-      name: "فت لايف",
-      category: "إدارة الصالات والنوادي الرياضية",
-      title: "نظام فت لايف لإدارة مراكز اللياقة",
-      description: "نظام 'فت لايف' هو منصة برمجية متكاملة مخصصة لإدارة الصالات الرياضية ومراكز الصحة والجمال. ينظم النظام الاشتراكات، الجداول الزمنية للتمارين، وتتبع أداء المدربين والمنتسبين مع تقارير مالية تفصيلية ومؤتمتة.",
-      features: [
-        { title: "إدارة الاشتراكات والخطط المرنة", desc: "تخصيص باقات اشتراك مرنة، وتفعيل الفواتير المتكررة التلقائية، والدخول الإلكتروني." },
-        { title: "جدولة وحجز الحصص التدريبية", desc: "تمكين المشتركين من حجز حصص الكارديو، اليوغا، أو السباحة عبر بواباتهم بكل سهولة." },
-        { title: "بوابة المدربين والجداول الشخصية", desc: "تنظيم ورديات المدربين الشخصيين، وتعيين الحصص، وتتبع تقدم المتدربين معهم." },
-        { title: "تنبيهات وتذكيرات التجديد", desc: "نظام آلي لإرسال رسائل التذكير بقرب انتهاء الاشتراك والفواتير المعلقة لضمان الاستمرارية." }
-      ],
-      techSpecs: ["React", "Next.js", "TailwindCSS", "Node.js", "MongoDB", "Framer Motion"],
-      whyChooseUs: "مزود بنظام مسح باركود الدخول بالهاتف، وتتبع قياسات الجسم للأعضاء، مع لوحة إحصائيات مالية شاملة للإدارة."
-    }
-  }
-};
 
 const ProductDetailsPage = () => {
   const params = useParams();
@@ -689,17 +504,17 @@ const ProductDetailsPage = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#16161F] to-transparent opacity-80" />
                   <div className="absolute top-4 left-4 bg-[#F18805] text-white text-[10px] md:text-xs font-bold px-3 py-1 rounded-full shadow-md">
-                    {productDetails[item.id]?.[language]?.category || item.category}
+                    {item.category}
                   </div>
                 </div>
 
                 {/* Content Info */}
                 <div className="p-6 flex flex-col flex-grow text-start">
                   <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#F18805] transition-colors">
-                    {productDetails[item.id]?.[language]?.name || item.name}
+                    {item.name}
                   </h3>
                   <p className="text-white/60 text-xs md:text-sm leading-relaxed mb-6 flex-grow line-clamp-2 font-light">
-                    {productDetails[item.id]?.[language]?.description || item.description}
+                    {item.description}
                   </p>
                   <div className="mt-auto flex items-center justify-between">
                     <span className="text-[#F18805] font-bold text-xs md:text-sm flex items-center gap-2 group-hover:gap-3 transition-all duration-300">

@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../context/LanguageContext";
-import { jobs } from "../data/jobs";
 import { fetchAPI } from "../../lib/api";
 
 export default function CareersPage() {
