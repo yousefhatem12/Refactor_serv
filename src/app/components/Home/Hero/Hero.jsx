@@ -44,13 +44,20 @@ export default function Hero({ isPhaseTwo, data }) {
 
   const heroTitle1 = settings?.hero_title_1 || "";
   const heroTitle2 = settings?.hero_title_2 || "";
-  const defaultTitle =
-    t("innovativeSolutions") + " " + t("tailoredToYourNeeds");
 
-  const title =
-    (data?.title || data?.subtitle ? `${data?.title || ""} ${data?.subtitle || ""}`.trim() : null) ||
-    (heroTitle1 || heroTitle2 ? `${heroTitle1} ${heroTitle2}`.trim() : null) ||
-    defaultTitle;
+  let title1 = "";
+  let title2 = "";
+
+  if (data?.title || data?.subtitle) {
+    title1 = data?.title || "";
+    title2 = data?.subtitle || "";
+  } else if (heroTitle1 || heroTitle2) {
+    title1 = heroTitle1;
+    title2 = heroTitle2;
+  } else {
+    title1 = t("innovativeSolutions") || "";
+    title2 = t("tailoredToYourNeeds") || "";
+  }
 
   const subtitle = data?.content || settings?.hero_desc || t("heroDesc");
 
@@ -116,7 +123,15 @@ export default function Hero({ isPhaseTwo, data }) {
                 {isLoadingSettings ? (
                   <span className="opacity-0 text-white">Loading...</span>
                 ) : (
-                  title
+                  <>
+                    {title1}
+                    {title2 && (
+                      <>
+                        <br />
+                        {title2}
+                      </>
+                    )}
+                  </>
                 )}
               </motion.h1>
 

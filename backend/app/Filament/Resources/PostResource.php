@@ -8,6 +8,7 @@ use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\RichEditor\ToolbarButtonGroup;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
@@ -38,6 +39,27 @@ class PostResource extends Resource
         return __('Posts');
     }
 
+    public static function getRichEditorToolbarButtons(): array
+    {
+        return [
+            ['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+            [
+                ToolbarButtonGroup::make('Format', [
+                    'paragraph',
+                    'h2',
+                    'h3',
+                    'h4',
+                    'h5',
+                    'h6',
+                ])->textualButtons(),
+            ],
+            ['alignStart', 'alignCenter', 'alignEnd'],
+            ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+            ['table', 'attachFiles'],
+            ['undo', 'redo'],
+        ];
+    }
+
     public static function form(Schema $schema): Schema
     {
         return $schema
@@ -58,27 +80,61 @@ class PostResource extends Resource
                         RichEditor::make('content.en')
                             ->label('Content (English)')
                             ->required()
+                            ->toolbarButtons(self::getRichEditorToolbarButtons())
                             ->columnSpanFull(),
                         RichEditor::make('content.ar')
                             ->label('Content (Arabic)')
                             ->required()
+                            ->toolbarButtons(self::getRichEditorToolbarButtons())
                             ->columnSpanFull(),
                         FileUpload::make('image')
                             ->image()
                             ->directory('blog')
                             ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'blog')),
                         Select::make('category')
-                            ->options([
-                                'TECHNOLOGY' => 'Technology',
-                                'WEB DEVELOPMENT' => 'Web Development',
-                                'STARTUP' => 'Startup',
-                                'DROP SHIPPING' => 'Drop Shipping',
-                                'HARDWARE' => 'Hardware',
-                                'SOFTWARE' => 'Software',
-                                'MARKETING' => 'Marketing',
-                            ])
+                            ->options(function () {
+                                $defaults = [
+                                    'TECHNOLOGY' => 'Technology',
+                                    'WEB DEVELOPMENT' => 'Web Development',
+                                    'STARTUP' => 'Startup',
+                                    'DROP SHIPPING' => 'Drop Shipping',
+                                    'HARDWARE' => 'Hardware',
+                                    'SOFTWARE' => 'Software',
+                                    'MARKETING' => 'Marketing',
+                                ];
+
+                                try {
+                                    $existing = \App\Models\Post::distinct()->pluck('category')->filter()->toArray();
+                                } catch (\Exception $e) {
+                                    $existing = [];
+                                }
+
+                                $options = [];
+                                foreach ($defaults as $key => $val) {
+                                    $options[$key] = $val;
+                                }
+
+                                foreach ($existing as $cat) {
+                                    $key = strtoupper($cat);
+                                    if ($key !== 'OTHER' && !isset($options[$key])) {
+                                        $options[$key] = $cat;
+                                    }
+                                }
+
+                                $options['OTHER'] = 'Other Category';
+
+                                return $options;
+                            })
                             ->required()
-                            ->searchable(),
+                            ->live()
+                            ->searchable()
+                            ->dehydrateStateUsing(fn ($state, $get) => $state === 'OTHER' ? $get('custom_category') : $state),
+                        TextInput::make('custom_category')
+                            ->label('Custom Category')
+                            ->placeholder('Enter custom category name...')
+                            ->visible(fn ($get) => $get('category') === 'OTHER')
+                            ->required(fn ($get) => $get('category') === 'OTHER')
+                            ->dehydrated(false),
                         Toggle::make('is_published')
                             ->default(false),
                         Toggle::make('is_trending')

@@ -117,6 +117,13 @@ class SitePages extends Page
                     'url' => ContactMessageResource::getUrl(),
                     'color' => 'warning',
                 ],
+                [
+                    'title' => __('Quotations'),
+                    'description' => __('View and manage incoming quotation requests.'),
+                    'icon' => 'heroicon-o-document-text',
+                    'url' => \App\Filament\Resources\QuotationResource::getUrl(),
+                    'color' => 'success',
+                ],
             ]
         ];
     }

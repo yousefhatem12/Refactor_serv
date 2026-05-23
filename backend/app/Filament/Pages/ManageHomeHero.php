@@ -67,11 +67,6 @@ class ManageHomeHero extends Page implements HasForms
                                 TextInput::make('title.en')->label('Hero Title Line 1'),
                                 TextInput::make('subtitle.en')->label('Hero Title Line 2'),
                                 Textarea::make('content.en')->label('Hero Description')->rows(3),
-                                FileUpload::make('hero_image')
-                                    ->label('Hero Planet Image')
-                                    ->image()
-                                    ->directory('pages')
-                                    ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'pages')),
                                 TextInput::make('seo_title.en')->label('SEO Title'),
                                 Textarea::make('seo_description.en')->label('SEO Description'),
                                 \Filament\Forms\Components\Builder::make('sections.en')

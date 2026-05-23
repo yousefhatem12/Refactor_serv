@@ -8,6 +8,7 @@ import GlobalReach from "../components/AboutUs/GlobalReach";
 import WhyChooseUs from "../components/AboutUs/WhyChooseUs";
 import OurJourney from "../components/AboutUs/OurJourney";
 import Founders from "../components/AboutUs/Founders";
+import TeamWork from "../components/AboutUs/TeamWork";
 import AboutCTA from "../components/AboutUs/AboutCTA";
 
 
@@ -29,6 +30,7 @@ export default function AboutUsPage() {
   const hasWhyChooseUs = blocks.some(s => s.type === 'features');
   const hasJourney = blocks.some(s => s.type === 'journey');
   const hasTeam = blocks.some(s => s.type === 'team');
+  const hasTeamWork = blocks.some(s => s.type === 'team_work');
   const hasCta = blocks.some(s => s.type === 'cta');
 
   const textImageBlocks = blocks.filter(s => s.type === 'text_image');
@@ -66,6 +68,13 @@ export default function AboutUsPage() {
           <PageSections sections={blocks.filter(s => s.type === 'team')} />
         ) : (
           <Founders />
+        )}
+
+        {/* Render TeamWork dynamically from dashboard, or fallback to static */}
+        {hasTeamWork ? (
+          <PageSections sections={blocks.filter(s => s.type === 'team_work')} />
+        ) : (
+          <TeamWork />
         )}
 
         {/* Render CTA dynamically from dashboard, or fallback to static */}

@@ -38,6 +38,7 @@ Route::get('/bank-accounts', [ApiController::class, 'getBankAccounts']);
 // Protected endpoints
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/contact', [ApiController::class, 'submitContactMessage']);
+    Route::post('/quotations', [ApiController::class, 'submitQuotation']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
 });

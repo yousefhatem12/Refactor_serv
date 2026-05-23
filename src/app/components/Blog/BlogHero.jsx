@@ -24,7 +24,7 @@ const BlogHero = ({ data, posts = [] }) => {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Left Large Post */}
         {featuredPost ? (
-          <Link href={`/blog/${featuredPost.slug}`} className="w-full lg:w-3/5 group cursor-pointer">
+          <Link href={`/blog/${featuredPost.id}`} className="w-full lg:w-3/5 group cursor-pointer">
             <div className="relative w-full h-[300px] md:h-[400px] rounded-lg overflow-hidden mb-6">
               <Image
                 src={featuredPost.image || "/placeholder.png"}
@@ -52,7 +52,7 @@ const BlogHero = ({ data, posts = [] }) => {
             sidePosts.map((post, index) => (
               <Link
                 key={post.id}
-                href={`/blog/${post.slug}`}
+                href={`/blog/${post.id}`}
                 className="flex gap-4 group cursor-pointer items-center"
               >
                 <div className="relative w-1/3 h-[100px] md:h-[120px] rounded-lg overflow-hidden shrink-0">

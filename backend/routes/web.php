@@ -42,3 +42,4 @@ Route::get('/temp-login', function () {
     \Illuminate\Support\Facades\Auth::login($user);
     return redirect('/admin');
 });
+

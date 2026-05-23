@@ -6,22 +6,32 @@ import { motion, AnimatePresence } from "framer-motion";
 import { fetchAPI } from "@/lib/api";
 import { useLanguage } from "../../context/LanguageContext";
 
-const categories = [
-  "ALL",
-  "TECHNOLOGY",
-  "WEB DEVELOPMENT",
-  "STARTUP",
-  "DROP SHIPPING",
-  "HARDWARE",
-  "SOFTWARE",
-  "MARKETING",
-];
-
 const BlogGrid = ({ posts = [] }) => {
   const { t, language } = useLanguage();
   const [activeTab, setActiveTab] = useState("ALL");
 
-  const filteredPosts = activeTab === "ALL" ? posts : posts.filter(post => post.category === activeTab);
+  const defaultCategories = [
+    "ALL",
+    "TECHNOLOGY",
+    "WEB DEVELOPMENT",
+    "STARTUP",
+    "DROP SHIPPING",
+    "HARDWARE",
+    "SOFTWARE",
+    "MARKETING",
+  ];
+
+  // Combine default categories with any custom categories present in the posts
+  const categories = Array.from(
+    new Set([
+      ...defaultCategories,
+      ...posts.map(post => post.category?.toUpperCase()).filter(Boolean)
+    ])
+  );
+
+  const filteredPosts = activeTab === "ALL" 
+    ? posts 
+    : posts.filter(post => post.category?.toUpperCase() === activeTab);
 
   return (
     <section className="w-full max-w-7xl mx-auto px-6 py-12 text-white relative z-10">
@@ -61,7 +71,7 @@ const BlogGrid = ({ posts = [] }) => {
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
               >
-                <Link href={`/blog/${post.slug}`} className="group cursor-pointer flex flex-col h-full">
+                <Link href={`/blog/${post.id}`} className="group cursor-pointer flex flex-col h-full">
                   <div className="relative w-full h-[220px] rounded-lg overflow-hidden mb-4 bg-gray-800">
                     <Image
                       src={post.image || "/placeholder.png"}

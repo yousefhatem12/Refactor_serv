@@ -113,6 +113,7 @@ import Founders from "../AboutUs/Founders";
 import AboutCTA from "../AboutUs/AboutCTA";
 import WhyChooseUs from "../AboutUs/WhyChooseUs";
 import GlobalReach from "../AboutUs/GlobalReach";
+import TeamWork from "../AboutUs/TeamWork";
 
 const PageSections = ({ sections }) => {
   if (!sections || !Array.isArray(sections)) return null;
@@ -133,6 +134,8 @@ const PageSections = ({ sections }) => {
             return <OurJourney key={index} data={section.data} />;
           case 'team':
             return <Founders key={index} data={section.data} />;
+          case 'team_work':
+            return <TeamWork key={index} data={section.data} />;
           case 'cta':
             return <AboutCTA key={index} data={section.data} />;
           default:

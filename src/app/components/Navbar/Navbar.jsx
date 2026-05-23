@@ -47,6 +47,7 @@ const Navbar = () => {
             dropdown: [
               ...dropdown,
               { name: t("consultationHeroTitle"), href: "/project-consultation" },
+              { name: t("requestQuote"), href: "/request-quote" },
             ],
           },
           { name: t("portfolio"), href: "/portfolio" },
@@ -64,7 +65,7 @@ const Navbar = () => {
             // Inject dynamic services into any dropdown marked as services
             const enriched = data.map((link) => {
               if (link.dropdown) {
-                return { ...link, dropdown: [...serviceDropdown, { name: t("consultationHeroTitle"), href: "/project-consultation" }] };
+                return { ...link, dropdown: [...serviceDropdown, { name: t("consultationHeroTitle"), href: "/project-consultation" }, { name: t("requestQuote"), href: "/request-quote" }] };
               }
               return link;
             });
@@ -91,6 +92,7 @@ const Navbar = () => {
               { name: t("catOnlineStores"), href: "/services/services-ecommerce" },
               { name: t("catMobileApps"), href: "/services/services-mobile-apps" },
               { name: t("consultationHeroTitle"), href: "/project-consultation" },
+              { name: t("requestQuote"), href: "/request-quote" },
             ],
           },
           { name: t("portfolio"), href: "/portfolio" },

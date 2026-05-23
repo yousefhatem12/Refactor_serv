@@ -244,10 +244,16 @@ class ApiController extends Controller
         return response()->json($posts);
     }
 
-    public function getPost($slug)
+    public function getPost($idOrSlug)
     {
         $lang = $this->getLang();
-        $post = Post::with('author')->where('slug', $slug)->where('is_published', true)->firstOrFail();
+        $post = Post::with('author')
+            ->where('is_published', true)
+            ->where(function ($query) use ($idOrSlug) {
+                $query->where('slug', $idOrSlug)
+                      ->orWhere('id', $idOrSlug);
+            })
+            ->firstOrFail();
         return response()->json([
             'id' => $post->id,
             'title' => $this->trans($post->title, $lang),
@@ -313,6 +319,68 @@ class ApiController extends Controller
             ->sendToDatabase($admins);
 
         return response()->json(['message' => 'Message sent successfully', 'data' => $message], 201);
+    }
+
+    public function submitQuotation(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'company' => 'nullable|string|max:255',
+            'phone' => 'required|string|max:50',
+            'email' => 'required|email|max:255',
+            'country' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'request_type' => 'nullable|string|max:255',
+            'budget' => 'nullable|string|max:255',
+            'website_link' => 'nullable|string|max:255',
+            'content_managers' => 'nullable|string|max:255',
+            'pre_designed_logo' => 'nullable|string|max:255',
+            'design_images' => 'nullable|string|max:255',
+            'vision_goals' => 'nullable|string',
+            'product_brief' => 'nullable|string',
+            'color_preferences' => 'nullable|string',
+            'reference_sites' => 'nullable|string',
+            'additional_notes' => 'nullable|string',
+            'files.*' => 'nullable|file|image|max:10240',
+        ]);
+
+        $validated['user_id'] = auth()->id();
+
+        $filePaths = [];
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                try {
+                    $path = \App\Services\ImageService::convertToWebp($file, 'quotations');
+                } catch (\Exception $e) {
+                    $path = $file->store('quotations', 'public');
+                }
+                $filePaths[] = $path;
+            }
+        }
+        $validated['files'] = $filePaths;
+
+        $quotation = \App\Models\Quotation::create($validated);
+
+        $admins = User::role('super_admin')->get();
+        
+        Notification::make()
+            ->title('New Quotation Request')
+            ->body("A new quotation request has been submitted by {$validated['name']}.")
+            ->icon('heroicon-o-document-text')
+            ->success()
+            ->actions([
+                Action::make('view')
+                    ->label('View')
+                    ->link()
+                    ->url(fn () => \App\Filament\Resources\QuotationResource::getUrl('view', ['record' => $quotation]))
+                    ->markAsRead()
+                    ->extraAttributes([
+                        'x-on:click' => '$dispatch(\'close-database-notifications\')',
+                    ]),
+            ])
+            ->sendToDatabase($admins);
+
+        return response()->json(['message' => 'Quotation request submitted successfully', 'data' => $quotation], 201);
     }
 
     public function getSettings()

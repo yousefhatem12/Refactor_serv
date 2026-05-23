@@ -35,6 +35,7 @@ import MobileAppHowWeWork from "../../components/Services-web-dev/MobileAppHowWe
 
 // Shared
 import LatestBlogs from "../../components/Services-web-hosting/LatestBlogs";
+import QuotationForm from "../../components/Quotation/QuotationForm";
 
 // ── Default hero images per template ──
 // Hero images and styles are now fetched dynamically from the API (ServiceTemplate model)
@@ -220,10 +221,7 @@ function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, 
 
     // ── CONTACT / REQUEST ──
     case "contact_request":
-      if (data.style === "web_design") {
-        return <WebDesignRequest />;
-      }
-      return <SocialMediaContact />;
+      return <QuotationForm />;
 
     // ── HOSTING OFFERS ──
     case "hosting_offers":
@@ -340,7 +338,7 @@ function OldFormatRenderer({ serviceData, language, t }) {
               <WebDesignFeatures title={serviceData.features_title} description={serviceData.features_subtitle} featuresList={serviceData.features_list} />
             )}
             {serviceData.show_portfolio !== false && <WebDesignPortfolio />}
-            {serviceData.show_request !== false && <WebDesignRequest />}
+            {serviceData.show_request !== false && <QuotationForm />}
             {serviceData.show_blogs !== false && <LatestBlogs />}
           </>
         );
@@ -363,7 +361,7 @@ function OldFormatRenderer({ serviceData, language, t }) {
               <SocialMediaWhyChooseUs whyTitle={serviceData.why_choose_us_title} whySubtitle={serviceData.why_choose_us_subtitle} whyList={serviceData.why_choose_us_list} />
             )}
             {serviceData.show_how_we_work !== false && <SocialMediaHowWeWork howWeWorkList={serviceData.how_we_work_list} />}
-            {serviceData.show_request !== false && <SocialMediaContact />}
+            {serviceData.show_request !== false && <QuotationForm />}
             {serviceData.show_blogs !== false && <LatestBlogs />}
           </>
         );
@@ -399,7 +397,7 @@ function OldFormatRenderer({ serviceData, language, t }) {
             )}
             {serviceData.show_portfolio !== false && <WebDesignPortfolio isMobileApp={true} />}
             {serviceData.show_how_we_work !== false && <MobileAppHowWeWork howWeWorkList={serviceData.how_we_work_list} />}
-            {serviceData.show_request !== false && <WebDesignRequest />}
+            {serviceData.show_request !== false && <QuotationForm />}
             {serviceData.show_blogs !== false && <LatestBlogs />}
           </>
         );
