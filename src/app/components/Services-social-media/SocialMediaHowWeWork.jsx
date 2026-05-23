@@ -7,6 +7,7 @@ const SocialMediaHowWeWork = ({ howWeWorkTitle, howWeWorkSubtitle, howWeWorkList
   const { language, t } = useLanguage();
   const steps = (howWeWorkList && Array.isArray(howWeWorkList) && howWeWorkList.length > 0)
     ? howWeWorkList.map((item, index) => {
+        if (!item) return null;
         const idNum = index + 1;
         const idString = idNum < 10 ? `0${idNum}` : `${idNum}`;
         const icons = [
@@ -22,7 +23,7 @@ const SocialMediaHowWeWork = ({ howWeWorkTitle, howWeWorkSubtitle, howWeWorkList
           icon: icons[index % icons.length],
           align: index % 2 === 0 ? "left" : "right",
         };
-      })
+      }).filter(Boolean)
     : [];
 
   if (steps.length === 0) return null;
