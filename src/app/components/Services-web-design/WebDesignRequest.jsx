@@ -8,11 +8,17 @@ const WebDesignRequest = () => {
   return (
     <section className="relative w-full py-24 px-6 lg:px-20 z-20">
       {/* Small planet image acting as a background element */}
-      <div className="absolute left-1/2 -translate-x-1/2 top-0 -z-10 opacity-30 pointer-events-none mix-blend-screen max-w-[400px] w-full">
+      <div 
+        className="absolute inset-0 -z-10 pointer-events-none mix-blend-screen w-full h-full"
+        style={{
+          maskImage: "linear-gradient(to bottom, transparent 5%,  black 90%, transparent)",
+          WebkitMaskImage: "linear-gradient(to bottom, transparent 5%, black 90%, transparent)"
+        }}
+      >
         <img
-          src="/Services/Blue Planet.png"
+          src="/services-web-design/b966a362-46ae-4124-9f5d-60ce2a10e6d3.jfif"
           alt="Blue Planet Background"
-          className="w-full h-auto"
+          className="w-full h-full object-cover"
         />
       </div>
 

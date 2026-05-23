@@ -91,7 +91,7 @@ const OurBlog = () => {
                   {blogPosts.featured.content.replace(/<[^>]*>?/gm, '').substring(0, 300)}...
                 </p>
                 <a
-                  href={`/blog/${blogPosts.featured.slug}`}
+                  href={`/blog/${blogPosts.featured.id}`}
                   className="text-[#ff8a00] text-[0.8rem] font-extrabold underline underline-offset-4 tracking-[0.5px]"
                 >
                   {t("seeMore")}
@@ -128,7 +128,7 @@ const OurBlog = () => {
                     {post.title}
                   </h3>
                   <a
-                    href={`/blog/${post.slug}`}
+                    href={`/blog/${post.id}`}
                     className="text-[#ff8a00] text-[0.8rem] font-extrabold underline underline-offset-4 tracking-[0.5px]"
                   >
                     {t("seeMore")}
@@ -212,7 +212,7 @@ const OurBlog = () => {
                     key={item.id}
                     className="pb-[20px] border-b border-white/5 last:border-b-0"
                   >
-                    <a href={`/blog/${item.slug}`}>
+                    <a href={`/blog/${item.id}`}>
                       <h4 className="text-[1rem] font-semibold leading-[1.4] mb-2 text-[#e0e0e0] cursor-pointer transition-colors duration-300 hover:text-[#ff8a00]">
                         {item.title}
                       </h4>

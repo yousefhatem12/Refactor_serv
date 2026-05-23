@@ -19,6 +19,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Group;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Filament\Forms\Components\RichEditor\ToolbarButtonGroup;
 
 class PageBuilderResource extends Resource
 {
@@ -45,6 +46,27 @@ class PageBuilderResource extends Resource
     public static function getEloquentQuery(): EloquentBuilder
     {
         return parent::getEloquentQuery()->whereNotIn('slug', ['home', 'about', 'faq']);
+    }
+
+    public static function getRichEditorToolbarButtons(): array
+    {
+        return [
+            ['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+            [
+                ToolbarButtonGroup::make('Format', [
+                    'paragraph',
+                    'h2',
+                    'h3',
+                    'h4',
+                    'h5',
+                    'h6',
+                ])->textualButtons(),
+            ],
+            ['alignStart', 'alignCenter', 'alignEnd'],
+            ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+            ['table', 'attachFiles'],
+            ['undo', 'redo'],
+        ];
     }
 
     public static function form(Schema $schema): Schema
@@ -100,10 +122,10 @@ class PageBuilderResource extends Resource
                                             ->label('Text Content')
                                             ->icon('heroicon-o-document-text')
                                             ->schema([
-                                                TextInput::make('heading.en')->label('Heading (EN)'),
-                                                TextInput::make('heading.ar')->label('Heading (AR)'),
-                                                \Filament\Forms\Components\RichEditor::make('content.en')->label('Content (EN)')->columnSpanFull(),
-                                                \Filament\Forms\Components\RichEditor::make('content.ar')->label('Content (AR)')->columnSpanFull(),
+                                                 TextInput::make('heading.en')->label('Heading (EN)'),
+                                                 TextInput::make('heading.ar')->label('Heading (AR)'),
+                                                 \Filament\Forms\Components\RichEditor::make('content.en')->label('Content (EN)')->toolbarButtons(self::getRichEditorToolbarButtons())->columnSpanFull(),
+                                                 \Filament\Forms\Components\RichEditor::make('content.ar')->label('Content (AR)')->toolbarButtons(self::getRichEditorToolbarButtons())->columnSpanFull(),
                                             ]),
                                         Block::make('features_grid')
                                             ->label('Features/Services Grid')
@@ -143,8 +165,8 @@ class PageBuilderResource extends Resource
                                                     ->schema([
                                                         TextInput::make('question.en')->label('Question (EN)'),
                                                         TextInput::make('question.ar')->label('Question (AR)'),
-                                                        \Filament\Forms\Components\RichEditor::make('answer.en')->label('Answer (EN)')->columnSpanFull(),
-                                                        \Filament\Forms\Components\RichEditor::make('answer.ar')->label('Answer (AR)')->columnSpanFull(),
+                                                        \Filament\Forms\Components\RichEditor::make('answer.en')->toolbarButtons(self::getRichEditorToolbarButtons())->label('Answer (EN)')->columnSpanFull(),
+                                                        \Filament\Forms\Components\RichEditor::make('answer.ar')->toolbarButtons(self::getRichEditorToolbarButtons())->label('Answer (AR)')->columnSpanFull(),
                                                     ])->columns(2)
                                             ]),
                                         Block::make('split_block')
@@ -155,8 +177,8 @@ class PageBuilderResource extends Resource
                                                 FileUpload::make('image')->label('Image')->image(),
                                                 TextInput::make('title.en')->label('Title (EN)'),
                                                 TextInput::make('title.ar')->label('Title (AR)'),
-                                                \Filament\Forms\Components\RichEditor::make('content.en')->label('Content (EN)')->columnSpanFull(),
-                                                \Filament\Forms\Components\RichEditor::make('content.ar')->label('Content (AR)')->columnSpanFull(),
+                                                \Filament\Forms\Components\RichEditor::make('content.en')->label('Content (EN)')->toolbarButtons(self::getRichEditorToolbarButtons())->columnSpanFull(),
+                                                \Filament\Forms\Components\RichEditor::make('content.ar')->label('Content (AR)')->toolbarButtons(self::getRichEditorToolbarButtons())->columnSpanFull(),
                                             ]),
                                         Block::make('stats_block')
                                             ->label('Statistics Grid')

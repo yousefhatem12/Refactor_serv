@@ -166,6 +166,37 @@ class ManageAboutPage extends Page implements HasForms
                                                             ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'pages')),
                                                     ])->columns(2),
                                             ]),
+                                        \Filament\Forms\Components\Builder\Block::make('team_work')
+                                            ->label('Team Work Section')
+                                            ->schema([
+                                                TextInput::make('title')->required(),
+                                                Textarea::make('description'),
+                                                \Filament\Forms\Components\Repeater::make('pillars')
+                                                    ->schema([
+                                                        TextInput::make('title')->required(),
+                                                        Textarea::make('description')->required(),
+                                                        TextInput::make('icon')->label('Icon Name (e.g., FaUsers, FaCode)')->required(),
+                                                    ])->columns(3),
+                                                \Filament\Forms\Components\Repeater::make('members')
+                                                    ->schema([
+                                                        TextInput::make('name')->required(),
+                                                        TextInput::make('role')->required(),
+                                                        \Filament\Forms\Components\Select::make('dept')
+                                                            ->label('Department')
+                                                            ->options([
+                                                                'management' => 'Management',
+                                                                'development' => 'Development',
+                                                                'design' => 'Design',
+                                                                'marketing' => 'Marketing',
+                                                            ])->required(),
+                                                        \Filament\Forms\Components\FileUpload::make('image')->image()
+                                                            ->directory('pages')
+                                                            ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'pages')),
+                                                        TextInput::make('linkedin')->url()->label('LinkedIn URL'),
+                                                        TextInput::make('github')->url()->label('GitHub URL'),
+                                                        TextInput::make('twitter')->url()->label('Twitter / X URL'),
+                                                    ])->columns(2),
+                                            ]),
                                         \Filament\Forms\Components\Builder\Block::make('cta')
                                             ->label('Call To Action Section')
                                             ->schema([
@@ -273,6 +304,37 @@ class ManageAboutPage extends Page implements HasForms
                                                         \Filament\Forms\Components\FileUpload::make('image')->image()
                                                             ->directory('pages')
                                                             ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'pages')),
+                                                    ])->columns(2),
+                                            ]),
+                                        \Filament\Forms\Components\Builder\Block::make('team_work')
+                                            ->label('Team Work Section')
+                                            ->schema([
+                                                TextInput::make('title')->required(),
+                                                Textarea::make('description'),
+                                                \Filament\Forms\Components\Repeater::make('pillars')
+                                                    ->schema([
+                                                        TextInput::make('title')->required(),
+                                                        Textarea::make('description')->required(),
+                                                        TextInput::make('icon')->label('Icon Name (e.g., FaUsers, FaCode)')->required(),
+                                                    ])->columns(3),
+                                                \Filament\Forms\Components\Repeater::make('members')
+                                                    ->schema([
+                                                        TextInput::make('name')->required(),
+                                                        TextInput::make('role')->required(),
+                                                        \Filament\Forms\Components\Select::make('dept')
+                                                            ->label('Department')
+                                                            ->options([
+                                                                'management' => 'Management',
+                                                                'development' => 'Development',
+                                                                'design' => 'Design',
+                                                                'marketing' => 'Marketing',
+                                                            ])->required(),
+                                                        \Filament\Forms\Components\FileUpload::make('image')->image()
+                                                            ->directory('pages')
+                                                            ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'pages')),
+                                                        TextInput::make('linkedin')->url()->label('LinkedIn URL'),
+                                                        TextInput::make('github')->url()->label('GitHub URL'),
+                                                        TextInput::make('twitter')->url()->label('Twitter / X URL'),
                                                     ])->columns(2),
                                             ]),
                                         \Filament\Forms\Components\Builder\Block::make('cta')

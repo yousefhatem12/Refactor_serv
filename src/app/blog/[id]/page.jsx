@@ -44,7 +44,7 @@ export default function BlogPostDetails() {
       <div className="fixed inset-0 bg-[#040A37] -z-20 pointer-events-none" />
 
       <div className="w-full relative z-10 flex flex-col items-center pt-24 text-white">
-        <section className="max-w-7xl mx-auto px-6 lg:px-8 mb-32 relative z-10">
+        <section className="w-full max-w-7xl mx-auto px-6 lg:px-8 mb-32 relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
             <div className="w-full lg:w-1/2">
               <span className="text-[#FF8A00] font-bold mb-4 block uppercase tracking-widest">

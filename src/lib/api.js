@@ -21,16 +21,22 @@ export const fetchAPI = async (endpoint, options = {}) => {
   const token = typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null;
 
   try {
+    const isFormData = typeof FormData !== 'undefined' && options.body instanceof FormData;
+    const headers = {
+      'Accept': 'application/json',
+      'Accept-Language': lang,
+      ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+      ...options.headers,
+    };
+
+    if (!isFormData) {
+      headers['Content-Type'] = 'application/json';
+    }
+
     const response = await fetch(url.toString(), {
       ...options,
       cache: options.cache || 'no-store',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Accept-Language': lang,
-        ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
-        ...options.headers,
-      },
+      headers,
     });
 
     if (!response.ok) {
