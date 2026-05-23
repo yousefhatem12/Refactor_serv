@@ -122,8 +122,10 @@ const HostingOffers = ({ title, offersList }) => {
           features: filteredFeatures,
         };
       })
-    : defaultOffers;
-  const showTabs = !offersList || offersList.length === 0;
+    : [];
+
+  if (offers.length === 0) return null;
+  const showTabs = false;
 
   let offersToRender = [...offers];
   if (offersToRender.length === 3) {

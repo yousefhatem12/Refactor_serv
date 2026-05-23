@@ -19,15 +19,7 @@ const ProductDetailsPage = () => {
   const [otherProductsList, setOtherProductsList] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Samples mapping for screenshots (SaaS screens showcasing the system)
-  const productSamplesMap = {
-    athath: ["/portfolio/image-1.png", "/portfolio/image-2.png", "/portfolio/image-3.png", "/portfolio/image-4.png"],
-    clinic: ["/portfolio/image-2.png", "/portfolio/image-3.png", "/portfolio/image-4.png", "/portfolio/image-5.png"],
-    "edu-platform": ["/portfolio/image-3.png", "/portfolio/image-4.png", "/portfolio/image-5.png", "/portfolio/image-6.png"],
-    "real-estate": ["/portfolio/image-4.png", "/portfolio/image-5.png", "/portfolio/image-6.png", "/portfolio/image-1.png"],
-    restaurant: ["/portfolio/image-5.png", "/portfolio/image-6.png", "/portfolio/image-1.png", "/portfolio/image-2.png"],
-    gym: ["/portfolio/image-6.png", "/portfolio/image-1.png", "/portfolio/image-2.png", "/portfolio/image-3.png"]
-  };
+
 
   useEffect(() => {
     if (!productId) return;
@@ -141,56 +133,60 @@ const ProductDetailsPage = () => {
           </motion.div>
 
           {/* Product Key Features Grid */}
-          <div className="flex flex-col gap-5">
-            <h3 className="text-xl font-bold text-[#F18805] border-b border-[#F18805]/20 pb-3 flex items-center gap-2">
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-              </svg>
-              {t("productFeaturesTitle")}
-            </h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-2">
-              {details.features.map((feature, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: idx * 0.05 }}
-                  className="flex gap-4 p-4 rounded-xl bg-white/[0.01] hover:bg-white/[0.03] border border-white/[0.03] hover:border-white/10 transition-all duration-300 group"
-                >
-                  <div className="flex-shrink-0 w-11 h-11 rounded-lg bg-[#F18805]/10 border border-[#F18805]/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    {featureIcons[idx] || featureIcons[0]}
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <h4 className="font-bold text-white text-base group-hover:text-[#F18805] transition-colors">
-                      {feature.title}
-                    </h4>
-                    <p className="text-white/60 text-xs md:text-sm leading-relaxed font-light">
-                      {feature.desc}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
+          {details.features && details.features.length > 0 && (
+            <div className="flex flex-col gap-5">
+              <h3 className="text-xl font-bold text-[#F18805] border-b border-[#F18805]/20 pb-3 flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                </svg>
+                {t("productFeaturesTitle")}
+              </h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-2">
+                {details.features.map((feature, idx) => (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: idx * 0.05 }}
+                    className="flex gap-4 p-4 rounded-xl bg-white/[0.01] hover:bg-white/[0.03] border border-white/[0.03] hover:border-white/10 transition-all duration-300 group"
+                  >
+                    <div className="flex-shrink-0 w-11 h-11 rounded-lg bg-[#F18805]/10 border border-[#F18805]/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      {featureIcons[idx] || featureIcons[0]}
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <h4 className="font-bold text-white text-base group-hover:text-[#F18805] transition-colors">
+                        {feature.title}
+                      </h4>
+                      <p className="text-white/60 text-xs md:text-sm leading-relaxed font-light">
+                        {feature.desc}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Technology Specifications */}
-          <div className="flex flex-col gap-3">
-            <h4 className="text-xs font-semibold text-white/50 uppercase tracking-widest">
-              {t("productTechTitle")}
-            </h4>
-            <div className="flex flex-wrap gap-2.5">
-              {details.techSpecs.map((tech, idx) => (
-                <span 
-                  key={idx}
-                  className="px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 hover:border-white/10 text-white/95 transition-colors cursor-default"
-                >
-                  {tech}
-                </span>
-              ))}
+          {details.techSpecs && details.techSpecs.length > 0 && (
+            <div className="flex flex-col gap-3">
+              <h4 className="text-xs font-semibold text-white/50 uppercase tracking-widest">
+                {t("productTechTitle")}
+              </h4>
+              <div className="flex flex-wrap gap-2.5">
+                {details.techSpecs.map((tech, idx) => (
+                  <span 
+                    key={idx}
+                    className="px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 hover:border-white/10 text-white/95 transition-colors cursor-default"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Action CTAs */}
           <motion.div
@@ -199,21 +195,25 @@ const ProductDetailsPage = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="flex flex-wrap items-center gap-4 mt-4"
           >
-            <Link
-              href={product.demoLink}
-              className="relative overflow-hidden bg-[#F18805] hover:bg-[#d17604] text-white px-10 py-4 rounded-xl font-bold transition-all duration-300 shadow-[0_0_30px_rgba(241,136,5,0.25)] hover:shadow-[0_0_40px_rgba(241,136,5,0.4)] flex items-center gap-3 hover:-translate-y-0.5 group"
-            >
-              <span>{t("productLiveDemo")}</span>
-              <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
-            </Link>
-            <Link
-              href={product.orderLink}
-              className="bg-transparent border-[2px] border-white/10 hover:border-[#F18805] hover:bg-[#F18805]/10 text-white px-10 py-4 rounded-xl font-bold transition-all duration-300 flex items-center gap-2 hover:-translate-y-0.5"
-            >
-              <span>{t("productOrderNow")}</span>
-            </Link>
+            {product.demoLink && product.demoLink !== "#" && (
+              <Link
+                href={product.demoLink}
+                className="relative overflow-hidden bg-[#F18805] hover:bg-[#d17604] text-white px-10 py-4 rounded-xl font-bold transition-all duration-300 shadow-[0_0_30px_rgba(241,136,5,0.25)] hover:shadow-[0_0_40px_rgba(241,136,5,0.4)] flex items-center gap-3 hover:-translate-y-0.5 group"
+              >
+                <span>{t("productLiveDemo")}</span>
+                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </Link>
+            )}
+            {product.orderLink && product.orderLink !== "#" && (
+              <Link
+                href={product.orderLink}
+                className="bg-transparent border-[2px] border-white/10 hover:border-[#F18805] hover:bg-[#F18805]/10 text-white px-10 py-4 rounded-xl font-bold transition-all duration-300 flex items-center gap-2 hover:-translate-y-0.5"
+              >
+                <span>{t("productOrderNow")}</span>
+              </Link>
+            )}
           </motion.div>
         </div>
 
@@ -342,60 +342,62 @@ const ProductDetailsPage = () => {
       </section>
 
       {/* Samples from Product Gallery Section */}
-      <section className="w-full max-w-[1400px] mx-auto px-6 md:px-10 py-16 flex flex-col items-center gap-12 relative z-10 border-t border-white/5 mt-12">
-        <div className="flex flex-col items-center text-center gap-4 max-w-3xl">
-          <span className="px-4 py-1.5 rounded-full text-[10px] md:text-xs font-bold bg-[#F18805]/10 border border-[#F18805]/20 text-[#F18805] shadow-[0_0_15px_rgba(241,136,5,0.05)] uppercase tracking-widest">
-            {t("liveScreenshotsBadge")}
-          </span>
-          <motion.h2
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-white tracking-tight"
-          >
-            {t("liveScreenshotsTitle")}
-          </motion.h2>
-          <p className="text-white/60 text-xs md:text-sm leading-relaxed font-light">
-            {t("liveScreenshotsDesc")}
-          </p>
-        </div>
-
-        {/* Gallery Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 w-full">
-          {samples.map((img, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
+      {samples && samples.length > 0 && (
+        <section className="w-full max-w-[1400px] mx-auto px-6 md:px-10 py-16 flex flex-col items-center gap-12 relative z-10 border-t border-white/5 mt-12">
+          <div className="flex flex-col items-center text-center gap-4 max-w-3xl">
+            <span className="px-4 py-1.5 rounded-full text-[10px] md:text-xs font-bold bg-[#F18805]/10 border border-[#F18805]/20 text-[#F18805] shadow-[0_0_15px_rgba(241,136,5,0.05)] uppercase tracking-widest">
+              {t("liveScreenshotsBadge")}
+            </span>
+            <motion.h2
+              initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: idx * 0.05 }}
-              onClick={() => setSelectedImageIndex(idx)}
-              className="relative aspect-[16/10] rounded-xl overflow-hidden border border-white/5 hover:border-[#F18805]/40 bg-[#16161F] cursor-pointer group shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(241,136,5,0.15)]"
+              transition={{ duration: 0.5 }}
+              className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-white tracking-tight"
             >
-              {/* Thumbnail Image */}
-              <Image
-                src={img}
-                alt={`${details.name} Sample Screenshot ${idx + 1}`}
-                fill
-                className="object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              
-              {/* Glassmorphic Overlay Hover Effect */}
-              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 text-center backdrop-blur-[2px]">
-                <div className="w-10 h-10 rounded-full bg-[#F18805] text-white flex items-center justify-center shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
-                  </svg>
+              {t("liveScreenshotsTitle")}
+            </motion.h2>
+            <p className="text-white/60 text-xs md:text-sm leading-relaxed font-light">
+              {t("liveScreenshotsDesc")}
+            </p>
+          </div>
+
+          {/* Gallery Grid */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 w-full">
+            {samples.map((img, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: idx * 0.05 }}
+                onClick={() => setSelectedImageIndex(idx)}
+                className="relative aspect-[16/10] rounded-xl overflow-hidden border border-white/5 hover:border-[#F18805]/40 bg-[#16161F] cursor-pointer group shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(241,136,5,0.15)]"
+              >
+                {/* Thumbnail Image */}
+                <Image
+                  src={img}
+                  alt={`${details.name} Sample Screenshot ${idx + 1}`}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                
+                {/* Glassmorphic Overlay Hover Effect */}
+                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 text-center backdrop-blur-[2px]">
+                  <div className="w-10 h-10 rounded-full bg-[#F18805] text-white flex items-center justify-center shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                    </svg>
+                  </div>
+                  <span className="text-white text-xs font-semibold mt-3 tracking-wide transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                    {t("viewScreen")}
+                  </span>
                 </div>
-                <span className="text-white text-xs font-semibold mt-3 tracking-wide transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                  {t("viewScreen")}
-                </span>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Fullscreen Spring Lightbox Modal */}
       <AnimatePresence>

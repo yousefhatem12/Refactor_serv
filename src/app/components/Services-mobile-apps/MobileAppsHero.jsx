@@ -15,6 +15,9 @@ const MobileAppsHero = ({ data }) => {
     ? getMediaUrl(data.hero_image)
     : "/services-web-dev/hero.png";
 
+  const whatsappNumber = settings?.site_whatsapp ? settings.site_whatsapp.replace(/\D/g, '') : "201288863631";
+  const whatsappUrl = `https://api.whatsapp.com/send/?phone=${whatsappNumber}&text&type=phone_number&app_absent=0`;
+
   return (
     <section className="relative w-full min-h-[80vh] flex items-center justify-between px-6 lg:px-20 pt-20">
       {/* Background Image behind everything */}
@@ -50,7 +53,7 @@ const MobileAppsHero = ({ data }) => {
           className="flex flex-wrap items-center gap-6"
         >
           <a
-            href="https://api.whatsapp.com/send/?phone=201288863631&text&type=phone_number&app_absent=0"
+            href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 px-8 py-3 rounded-full bg-[#25D366] text-white font-semibold text-lg hover:bg-[#128C7E] transition-colors cursor-pointer border-none no-underline"

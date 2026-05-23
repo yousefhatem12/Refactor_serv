@@ -30,44 +30,9 @@ const DigitalMarketingServices = ({ marketingTitle, marketingSubtitle, marketing
           icon: icons[index % icons.length],
         };
       })
-    : [
-        {
-          id: 1,
-          title: t("dmService1Title") || "Social Media",
-          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-          icon: <FiVolume2 className="text-2xl" />,
-        },
-        {
-          id: 2,
-          title: t("dmService2Title") || "SEO",
-          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-          icon: <FiBarChart2 className="text-2xl" />,
-        },
-        {
-          id: 3,
-          title: t("dmService3Title") || "Media Buying",
-          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-          icon: <FiCrosshair className="text-2xl" />,
-        },
-        {
-          id: 4,
-          title: t("dmService4Title") || "Motion Graphic",
-          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-          icon: <FiVideo className="text-2xl" />,
-        },
-        {
-          id: 5,
-          title: t("dmService5Title") || "Digital Identity",
-          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-          icon: <FiTool className="text-2xl" />,
-        },
-        {
-          id: 6,
-          title: t("dmService6Title") || "Media Production",
-          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-          icon: <FiCamera className="text-2xl" />,
-        },
-      ];
+    : [];
+
+  if (services.length === 0) return null;
 
   return (
     <section className="relative w-full py-24 px-6 lg:px-20 z-20">
