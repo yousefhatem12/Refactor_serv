@@ -66,7 +66,7 @@ const EcommerceFeatures = ({ title, subtitle, featuresList }) => {
           icon: defaultFeatures[index % defaultFeatures.length]?.icon,
         };
       })
-    : [];
+    : defaultFeatures;
 
   if (features.length === 0) return null;
 

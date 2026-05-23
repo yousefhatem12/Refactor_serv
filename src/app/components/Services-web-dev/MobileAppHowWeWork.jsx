@@ -170,6 +170,7 @@ const MobileAppHowWeWork = ({ howWeWorkList }) => {
     title: defaultTrans.title,
     steps: howWeWorkList && howWeWorkList.length > 0 
       ? howWeWorkList.map((step, index) => {
+          if (!step) return null;
           const itemTitle = step.title && typeof step.title === "object"
             ? (step.title[language] || step.title.en || "")
             : (step.title || "");
@@ -181,8 +182,8 @@ const MobileAppHowWeWork = ({ howWeWorkList }) => {
             title: `${index + 1}. ${itemTitle}`,
             items: itemDesc ? itemDesc.split('\n').filter(Boolean) : [],
           };
-        })
-      : []
+        }).filter(Boolean)
+      : defaultTrans.steps
   };
 
   if (activeTrans.steps.length === 0) return null;

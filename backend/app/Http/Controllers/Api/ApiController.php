@@ -712,6 +712,32 @@ class ApiController extends Controller
     public function getCareers()
     {
         $careers = \App\Models\Career::where('is_active', true)->get()->map(function ($career) {
+            $responsibilities = ['en' => [], 'ar' => []];
+            if (is_array($career->responsibilities)) {
+                foreach (['en', 'ar'] as $l) {
+                    $list = $career->responsibilities[$l] ?? [];
+                    if (is_array($list)) {
+                        foreach ($list as $item) {
+                            $val = $item['responsibility'] ?? (is_string($item) ? $item : '');
+                            if ($val) $responsibilities[$l][] = $val;
+                        }
+                    }
+                }
+            }
+
+            $requirements = ['en' => [], 'ar' => []];
+            if (is_array($career->requirements)) {
+                foreach (['en', 'ar'] as $l) {
+                    $list = $career->requirements[$l] ?? [];
+                    if (is_array($list)) {
+                        foreach ($list as $item) {
+                            $val = $item['requirement'] ?? (is_string($item) ? $item : '');
+                            if ($val) $requirements[$l][] = $val;
+                        }
+                    }
+                }
+            }
+
             return [
                 'id' => $career->id,
                 'department' => $career->department,
@@ -719,8 +745,8 @@ class ApiController extends Controller
                 'location' => $career->location,
                 'salary' => $career->salary,
                 'description' => $career->description,
-                'responsibilities' => $career->responsibilities ?? ['en' => [], 'ar' => []],
-                'requirements' => $career->requirements ?? ['en' => [], 'ar' => []],
+                'responsibilities' => $responsibilities,
+                'requirements' => $requirements,
             ];
         });
         return response()->json($careers);

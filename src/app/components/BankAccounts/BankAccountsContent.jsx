@@ -46,8 +46,8 @@ const BankAccountsContent = () => {
 
   const currentMethods = activeTab === "egypt" ? egyptMethods : ksaMethods;
 
-  const whatsappNum = settings?.site_whatsapp ? settings.site_whatsapp.replace(/\D/g, '') : "201288863631";
-  const phoneNum = settings?.site_phone ? settings.site_phone.replace(/\D/g, '') : "00201288863631";
+  const whatsappNum = settings?.site_whatsapp ? settings.site_whatsapp.replace(/\D/g, '') : "";
+  const phoneNum = settings?.site_phone ? settings.site_phone.replace(/\D/g, '') : "";
 
   return (
     <div className="w-full max-w-[1280px] mx-auto px-6 md:px-12 py-8 relative">
@@ -230,23 +230,27 @@ const BankAccountsContent = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-          <a
-            href={`https://wa.me/${whatsappNum}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20ba5a] text-black font-bold text-xs md:text-sm tracking-wide py-4 px-8 rounded-2xl shadow-lg shadow-[#25D366]/20 transition-all duration-300 hover:-translate-y-1"
-          >
-            <FaWhatsapp className="w-5 h-5" />
-            <span>{t("confirmTransfer")}</span>
-          </a>
+          {whatsappNum && (
+            <a
+              href={`https://wa.me/${whatsappNum}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20ba5a] text-black font-bold text-xs md:text-sm tracking-wide py-4 px-8 rounded-2xl shadow-lg shadow-[#25D366]/20 transition-all duration-300 hover:-translate-y-1"
+            >
+              <FaWhatsapp className="w-5 h-5" />
+              <span>{t("confirmTransfer")}</span>
+            </a>
+          )}
           
-          <a
-            href={`tel:${phoneNum}`}
-            className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold text-xs md:text-sm tracking-wide py-4 px-8 rounded-2xl transition-all duration-300 hover:-translate-y-1"
-          >
-            <FaPhoneAlt className="w-4 h-4" />
-            <span>{t("callUs")}</span>
-          </a>
+          {phoneNum && (
+            <a
+              href={`tel:${phoneNum}`}
+              className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold text-xs md:text-sm tracking-wide py-4 px-8 rounded-2xl transition-all duration-300 hover:-translate-y-1"
+            >
+              <FaPhoneAlt className="w-4 h-4" />
+              <span>{t("callUs")}</span>
+            </a>
+          )}
         </div>
       </motion.div>
     </div>
