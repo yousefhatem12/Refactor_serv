@@ -210,10 +210,10 @@ const WebDesignFeatures = ({ title, description, featuresList }) => {
     ? featuresList.map((f, i) => {
         const itemTitle = f.title && typeof f.title === "object"
           ? (f.title[language] || f.title.en || "")
-          : (f.title || defaultFeatures[i % defaultFeatures.length]?.title);
+          : (f.title || "");
         const itemDesc = f.desc && typeof f.desc === "object"
           ? (f.desc[language] || f.desc.en || "")
-          : (f.desc || defaultFeatures[i % defaultFeatures.length]?.desc);
+          : (f.desc || f.content && typeof f.content === "object" ? (f.content[language] || f.content.en || "") : (f.content || ""));
         return {
           id: i,
           title: itemTitle,
@@ -221,7 +221,9 @@ const WebDesignFeatures = ({ title, description, featuresList }) => {
           icon: defaultFeatures[i % defaultFeatures.length]?.icon
         };
       })
-    : defaultFeatures;
+    : [];
+
+  if (displayFeatures.length === 0) return null;
 
   return (
     <section className="relative w-full py-24 px-6 lg:px-20 z-20">

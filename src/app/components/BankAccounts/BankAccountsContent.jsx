@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../../context/LanguageContext";
+import { useSettings } from "../../context/SettingsContext";
 import { fetchAPI } from "@/lib/api";
 import { 
   FaCopy, 
@@ -12,6 +13,7 @@ import {
 
 const BankAccountsContent = () => {
   const { t, language } = useLanguage();
+  const settings = useSettings();
   const [activeTab, setActiveTab] = useState("egypt"); // "egypt" or "ksa"
   const [copiedId, setCopiedId] = useState(null);
   const [methods, setMethods] = useState([]);
@@ -43,6 +45,9 @@ const BankAccountsContent = () => {
   const ksaMethods = methods.filter(m => m.country === "ksa");
 
   const currentMethods = activeTab === "egypt" ? egyptMethods : ksaMethods;
+
+  const whatsappNum = settings?.site_whatsapp ? settings.site_whatsapp.replace(/\D/g, '') : "201288863631";
+  const phoneNum = settings?.site_phone ? settings.site_phone.replace(/\D/g, '') : "00201288863631";
 
   return (
     <div className="w-full max-w-[1280px] mx-auto px-6 md:px-12 py-8 relative">
@@ -114,11 +119,13 @@ const BankAccountsContent = () => {
           {currentMethods.map((method, index) => {
             const imageUrl = method.image;
             const isCopied = copiedId === method.id;
-            const nameText = language === "ar" ? method.name.ar : method.name.en;
-            const ownerText = language === "ar" ? method.owner.ar : method.owner.en;
-            const accountText = language === "ar" ? method.account.ar : method.account.en;
+            const nameText = language === "ar" ? (method.name?.ar || method.name?.en || "") : (method.name?.en || method.name?.ar || "");
+            const ownerText = language === "ar" ? (method.owner?.ar || method.owner?.en || "") : (method.owner?.en || method.owner?.ar || "");
+            const accountText = language === "ar" ? (method.account?.ar || method.account?.en || "") : (method.account?.en || method.account?.ar || "");
             
             const clipboardString = `${nameText}\n${t("accName")}: ${ownerText}\n${t("accNumber")}: ${accountText}`;
+
+            const isContactAcc = accountText?.includes?.("تواصل") || accountText?.toLowerCase?.()?.includes?.("contact") || method.account?.ar?.includes?.("تواصل");
 
             return (
               <motion.div
@@ -170,7 +177,7 @@ const BankAccountsContent = () => {
                       <span className="text-xs text-white/40 font-medium tracking-wide">
                         {t("accNumber")}
                       </span>
-                      <span className={`text-sm font-bold ${method.account.ar.includes("تواصل") ? "text-[#FF8A00]/80 italic" : "text-white"}`}>
+                      <span className={`text-sm font-bold ${isContactAcc ? "text-[#FF8A00]/80 italic" : "text-white"}`}>
                         {accountText}
                       </span>
                     </div>
@@ -224,7 +231,7 @@ const BankAccountsContent = () => {
 
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
           <a
-            href="https://wa.me/201288863631"
+            href={`https://wa.me/${whatsappNum}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20ba5a] text-black font-bold text-xs md:text-sm tracking-wide py-4 px-8 rounded-2xl shadow-lg shadow-[#25D366]/20 transition-all duration-300 hover:-translate-y-1"
@@ -234,7 +241,7 @@ const BankAccountsContent = () => {
           </a>
           
           <a
-            href="tel:00201288863631"
+            href={`tel:${phoneNum}`}
             className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold text-xs md:text-sm tracking-wide py-4 px-8 rounded-2xl transition-all duration-300 hover:-translate-y-1"
           >
             <FaPhoneAlt className="w-4 h-4" />
