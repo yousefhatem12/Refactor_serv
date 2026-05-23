@@ -31,16 +31,16 @@ const Footer = () => {
   });
 
   useEffect(() => {
-    fetchAPI("/settings")
+    fetchAPI(`/settings?lang=${language}`)
       .then((data) => {
         if (data) setSettings(data);
       })
       .catch(console.error);
 
-    fetchAPI('/footer-data').then(data => {
+    fetchAPI(`/footer-data?lang=${language}`).then(data => {
       if (data) setFooterData(data);
     }).catch(console.error);
-  }, []);
+  }, [language]);
 
   const getSocialIconData = (platform) => {
     const map = {
