@@ -1,3 +1,0 @@
-module.exports=[26237,a=>{"use strict";var b=a.i(26985);async function c(){let a=await (0,b.fetchAPI)("/pages/home");return{title:a?.seo?.title||"Serv5 | Advanced Agentic Coding",description:a?.seo?.description||"Leading company in web development and AI solutions."}}a.s(["default",0,function({children:a}){return a},"generateMetadata",0,c])},78869,a=>{a.n(a.i(26237))}];
-
-//# sourceMappingURL=src_app_Home_layout_jsx_0ptu3en._.js.map
