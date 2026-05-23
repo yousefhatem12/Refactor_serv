@@ -308,13 +308,9 @@ const BankAccountsContent = () => {
     }
   ];
 
-  const egyptMethods = methods.filter(m => m.country === "egypt").length > 0
-    ? methods.filter(m => m.country === "egypt")
-    : defaultEgyptMethods;
+  const egyptMethods = methods.filter(m => m.country === "egypt");
 
-  const ksaMethods = methods.filter(m => m.country === "ksa").length > 0
-    ? methods.filter(m => m.country === "ksa")
-    : defaultKsaMethods;
+  const ksaMethods = methods.filter(m => m.country === "ksa");
 
   const currentMethods = activeTab === "egypt" ? egyptMethods : ksaMethods;
 
@@ -335,7 +331,7 @@ const BankAccountsContent = () => {
             {t("paymentMethods")}
           </span>
           <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
-            {language === "ar" ? "طرق الدفع والحسابات البنكية" : "Payment Methods & Bank Accounts"}
+            {t("paymentMethodsTitle")}
           </h1>
           <p className="text-white/60 text-sm md:text-base leading-relaxed">
             {activeTab === "egypt" ? t("egyptBanksDesc") : t("ksaBanksDesc")}
@@ -489,14 +485,10 @@ const BankAccountsContent = () => {
         
         <div className="text-center md:text-right flex-1">
           <h4 className="text-xl md:text-2xl font-bold text-white mb-3">
-            {language === "ar" 
-              ? "هل قمت بإتمام عملية التحويل؟" 
-              : "Have you completed the transfer?"}
+            {t("haveCompletedTransfer")}
           </h4>
           <p className="text-white/60 text-xs md:text-sm max-w-xl leading-relaxed">
-            {language === "ar"
-              ? "يرجى التواصل معنا وإرسال صورة إيصال التحويل مع تفاصيل الفاتورة لتأكيد الدفع وتفعيل الخدمة في أسرع وقت."
-              : "Please get in touch and send a screenshot of the transfer receipt with your invoice details to confirm payment."}
+            {t("haveCompletedTransferDesc")}
           </p>
         </div>
 
@@ -516,7 +508,7 @@ const BankAccountsContent = () => {
             className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold text-xs md:text-sm tracking-wide py-4 px-8 rounded-2xl transition-all duration-300 hover:-translate-y-1"
           >
             <FaPhoneAlt className="w-4 h-4" />
-            <span>{language === "ar" ? "اتصل بنا" : "Call Us"}</span>
+            <span>{t("callUs")}</span>
           </a>
         </div>
       </motion.div>
