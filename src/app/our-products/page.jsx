@@ -30,9 +30,9 @@ const OurProductsListingPage = () => {
       });
   }, []);
 
-  const titleText = t("our_products_title");
-  const words = titleText ? titleText.split(" ") : ["Our", "Products"];
-  const lastWord = words.pop();
+  const titleText = t("ourProducts") || "";
+  const words = titleText ? titleText.split(" ") : [];
+  const lastWord = words.pop() || "";
   const firstPart = words.join(" ");
 
   return (
@@ -54,7 +54,7 @@ const OurProductsListingPage = () => {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="text-white/80 text-sm md:text-lg leading-relaxed max-w-3xl"
         >
-          {t("our_products_description")}
+          {t("ourProductsDesc")}
         </motion.p>
       </section>
 

@@ -46,18 +46,21 @@ export default function CareersPage() {
   }, []);
 
   // Departments list for filtering
+  const uniqueDepts = Array.from(new Set(jobsList.map(j => j.department).filter(Boolean)));
   const departments = [
     { id: "all", name: t("departmentAll") },
-    { id: "Development", name: t("depDevelopment") },
-    { id: "Design", name: t("depDesign") },
-    { id: "Marketing", name: t("depMarketing") },
-    { id: "HR", name: t("depHR") }
+    ...uniqueDepts.map(dept => {
+      const translationKey = `dep${dept}`;
+      const translatedName = t(translationKey) !== translationKey ? t(translationKey) : dept;
+      return { id: dept, name: translatedName };
+    })
   ];
 
   // Filtering Logic
   const filteredJobs = jobsList.filter((job) => {
-    const jobTitle = (job.title[language] || job.title.en || '').toLowerCase();
-    const jobDesc = (job.description[language] || job.description.en || '').toLowerCase();
+    if (!job) return false;
+    const jobTitle = (job.title?.[language] || job.title?.en || '').toLowerCase();
+    const jobDesc = (job.description?.[language] || job.description?.en || '').toLowerCase();
     const matchesSearch =
       jobTitle.includes(searchQuery.toLowerCase()) ||
       jobDesc.includes(searchQuery.toLowerCase());
@@ -221,10 +224,10 @@ export default function CareersPage() {
               className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full"
             >
               {filteredJobs.map((job, idx) => {
-                const title = job.title[language] || job.title.en;
-                const desc = job.description[language] || job.description.en;
-                const loc = job.location[language] || job.location.en;
-                const sal = job.salary[language] || job.salary.en;
+                const title = job.title?.[language] || job.title?.en || "";
+                const desc = job.description?.[language] || job.description?.en || "";
+                const loc = job.location?.[language] || job.location?.en || "";
+                const sal = job.salary?.[language] || job.salary?.en || "";
 
                 return (
                   <motion.div
@@ -346,7 +349,7 @@ export default function CareersPage() {
                     {selectedJob.department}
                   </span>
                   <h2 className="text-xl md:text-2xl font-black text-white leading-tight mt-1">
-                    {selectedJob.title[language] || selectedJob.title.en}
+                    {selectedJob.title?.[language] || selectedJob.title?.en || ""}
                   </h2>
                 </div>
 
@@ -372,7 +375,7 @@ export default function CareersPage() {
                       <svg className="w-4 h-4 text-[#FF8A00]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       </svg>
-                      {selectedJob.location[language] || selectedJob.location.en}
+                      {selectedJob.location?.[language] || selectedJob.location?.en || ""}
                     </span>
                   </div>
                   <div className="flex flex-col gap-1">
@@ -381,7 +384,7 @@ export default function CareersPage() {
                       <svg className="w-4 h-4 text-[#FF8A00]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2" />
                       </svg>
-                      {selectedJob.salary[language] || selectedJob.salary.en}
+                      {selectedJob.salary?.[language] || selectedJob.salary?.en || ""}
                     </span>
                   </div>
                 </div>
@@ -393,7 +396,7 @@ export default function CareersPage() {
                     {t("roleOverview")}
                   </h4>
                   <p className="text-white/80 text-sm leading-relaxed font-light">
-                    {selectedJob.description[language] || selectedJob.description.en}
+                    {selectedJob.description?.[language] || selectedJob.description?.en || ""}
                   </p>
                 </div>
 
@@ -404,14 +407,17 @@ export default function CareersPage() {
                     {t("keyResponsibilities")}
                   </h4>
                   <ul className="flex flex-col gap-2.5 list-none pl-0">
-                    {(selectedJob.responsibilities[language] || selectedJob.responsibilities.en).map((resp, idx) => (
-                      <li key={idx} className="text-white/75 text-sm leading-relaxed font-light flex items-start gap-3">
-                        <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[#FF8A00]/10 border border-[#FF8A00]/30 text-[#FF8A00] flex items-center justify-center text-[10px] font-bold mt-0.5">
-                          {idx + 1}
-                        </span>
-                        <span>{resp}</span>
-                      </li>
-                    ))}
+                    {(selectedJob.responsibilities?.[language] || selectedJob.responsibilities?.en || []).map((resp, idx) => {
+                      const respText = typeof resp === 'object' ? (resp.responsibility || '') : resp;
+                      return (
+                        <li key={idx} className="text-white/75 text-sm leading-relaxed font-light flex items-start gap-3">
+                          <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[#FF8A00]/10 border border-[#FF8A00]/30 text-[#FF8A00] flex items-center justify-center text-[10px] font-bold mt-0.5">
+                            {idx + 1}
+                          </span>
+                          <span>{respText}</span>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
 
@@ -422,12 +428,15 @@ export default function CareersPage() {
                     {t("skillsRequirements")}
                   </h4>
                   <ul className="flex flex-col gap-2.5 list-none pl-0">
-                    {(selectedJob.requirements[language] || selectedJob.requirements.en).map((req, idx) => (
-                      <li key={idx} className="text-white/75 text-sm leading-relaxed font-light flex items-start gap-3">
-                        <span className="flex-shrink-0 w-2 h-2 rounded-full bg-[#FF8A00] mt-2 shadow-[0_0_8px_rgba(255,138,0,0.8)]" />
-                        <span>{req}</span>
-                      </li>
-                    ))}
+                    {(selectedJob.requirements?.[language] || selectedJob.requirements?.en || []).map((req, idx) => {
+                      const reqText = typeof req === 'object' ? (req.requirement || '') : req;
+                      return (
+                        <li key={idx} className="text-white/75 text-sm leading-relaxed font-light flex items-start gap-3">
+                          <span className="flex-shrink-0 w-2 h-2 rounded-full bg-[#FF8A00] mt-2 shadow-[0_0_8px_rgba(255,138,0,0.8)]" />
+                          <span>{reqText}</span>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
 
