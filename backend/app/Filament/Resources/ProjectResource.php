@@ -39,25 +39,21 @@ class ProjectResource extends Resource
             ->components([
                 Section::make('Project Details')
                     ->schema([
-                        Select::make('type')
-                            ->options([
-                                'portfolio' => 'Portfolio',
-                                'product' => 'Product',
-                            ])
-                            ->default('portfolio')
-                            ->required(),
+                        \Filament\Forms\Components\Hidden::make('type')
+                            ->default('portfolio'),
                         TextInput::make('name.en')
                             ->label('Name (English)')->required(),
                         TextInput::make('name.ar')
                             ->label('Name (Arabic)')->required(),
-                        Select::make('category')
+                        \Filament\Forms\Components\Select::make('category')
                             ->options([
-                                'Online Stores' => 'Online Stores',
-                                'Mobile Apps' => 'Mobile Apps',
-                                'Dashboards' => 'Dashboards',
-                                'Branding' => 'Branding',
+                                'websites' => 'Websites',
+                                'mobile' => 'Mobile Apps',
+                                'motion' => 'Motions Graphics',
+                                'digital' => 'Digital Identity',
+                                'social1' => 'Social Media',
                             ])
-                            ->default('Online Stores')
+                            ->default('websites')
                             ->required(),
                         Textarea::make('description.en')
                             ->label('Description (English)')->nullable(),
@@ -85,13 +81,7 @@ class ProjectResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('image'),
-                Tables\Columns\TextColumn::make('type')
-                    ->badge()
-                    ->colors([
-                        'primary' => 'portfolio',
-                        'success' => 'product',
-                    ])
-                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('name.en')
                     ->label('Name')
                     ->searchable()
