@@ -6,7 +6,10 @@ import { motion } from "framer-motion";
 import { products } from "../data/products";
 import { fetchAPI } from "../../lib/api";
 
+import { useLanguage } from "../context/LanguageContext";
+
 const OurProductsListingPage = () => {
+  const { language, t } = useLanguage();
   const [productsList, setProductsList] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -28,6 +31,11 @@ const OurProductsListingPage = () => {
       });
   }, []);
 
+  const titleText = t("our_products_title");
+  const words = titleText ? titleText.split(" ") : ["Our", "Products"];
+  const lastWord = words.pop();
+  const firstPart = words.join(" ");
+
   return (
     <main className="min-h-screen pt-32 pb-16 flex flex-col items-center">
       {/* Header Section */}
@@ -38,7 +46,8 @@ const OurProductsListingPage = () => {
           transition={{ duration: 0.6 }}
           className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6"
         >
-          <span className="text-white">Our </span> <span className="text-[#F18805]">Products</span>
+          {firstPart && <span className="text-white">{firstPart} </span>}
+          <span className="text-[#F18805]">{lastWord}</span>
         </motion.h1>
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
@@ -46,8 +55,7 @@ const OurProductsListingPage = () => {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="text-white/80 text-sm md:text-lg leading-relaxed max-w-3xl"
         >
-          Explore our powerful ready-made SaaS subscriptions and solutions tailored for your business needs. 
-          Get your digital presence running instantly with our proven platforms.
+          {t("our_products_description")}
         </motion.p>
       </section>
 
