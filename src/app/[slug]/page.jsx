@@ -269,7 +269,7 @@ export default function DynamicPage() {
                     <>
                       {serviceData.show_hero !== false && (
                         <SocialMediaHero
-                          title={serviceData.hero_title || serviceData.title || "Mobile Application Development"}
+                          title={serviceData.hero_title || serviceData.title || t("mobileAppDev")}
                           desc={serviceData.hero_subtitle || serviceData.description}
                           bgImage="/template/template-two-hero.png"
                           planetImage={null}
@@ -278,8 +278,8 @@ export default function DynamicPage() {
                       )}
                       {serviceData.show_features !== false && (
                         <WebDesignFeatures
-                          title={serviceData.features_title || "What distinguish us at Mobile app development?"}
-                          description={serviceData.features_subtitle || " "}
+                          title={serviceData.features_title || t("mobileAppFeaturesTitle")}
+                          description={serviceData.features_subtitle || ""}
                           featuresList={serviceData.features_list}
                         />
                       )}
@@ -297,7 +297,7 @@ export default function DynamicPage() {
                       {serviceData.show_hero !== false && (
                         <WebDevHero
                           data={{
-                            title: serviceData.hero_title || serviceData.title || "Digital Identity Management",
+                            title: serviceData.hero_title || serviceData.title || t("digitalIdentityDev"),
                             desc: serviceData.hero_subtitle || serviceData.description,
                             bg_image: "/template/template-three-hero.png",
                             hidePlanet: true,
@@ -309,8 +309,8 @@ export default function DynamicPage() {
                       )}
                       {serviceData.show_features !== false && (
                         <WebDesignFeatures
-                          title={serviceData.features_title || "Digital Identity Features from Serve5"}
-                          description={serviceData.features_subtitle || " "}
+                          title={serviceData.features_title || t("digitalIdentityFeaturesTitle")}
+                          description={serviceData.features_subtitle || ""}
                           featuresList={serviceData.features_list}
                         />
                       )}
@@ -318,7 +318,7 @@ export default function DynamicPage() {
                         <div className="py-10">
                           <div className="max-w-7xl mx-auto px-6 lg:px-20 text-center mb-10">
                             <h2 className="text-white text-3xl md:text-5xl font-bold leading-tight">
-                              Some of our Digital Identity Management at Serve5
+                              {t("diSomeWorks")}
                             </h2>
                           </div>
                           <WebDesignPortfolio />
@@ -328,7 +328,7 @@ export default function DynamicPage() {
                         <div className="pt-20">
                           <div className="max-w-7xl mx-auto px-6 lg:px-20 text-center mb-[-50px] relative z-30">
                             <h2 className="text-white text-3xl md:text-5xl font-bold leading-tight">
-                              Set up your site, pick a plan later
+                              {t("diSetUpSite")}
                             </h2>
                           </div>
                           <HostingOffers offersList={serviceData.hosting_offers_list} />
@@ -339,15 +339,15 @@ export default function DynamicPage() {
                           <section className="py-20 px-6 lg:px-20 max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12">
                             <div className="w-full lg:w-1/2">
                               <h2 className="text-white text-3xl md:text-5xl font-bold mb-8 leading-tight">
-                                Make bright ideas happen.
+                                {t("diMakeIdeas")}
                               </h2>
                               <ul className="space-y-4">
                                 {(serviceData.how_we_work_list || [
-                                  { title: "Enhance your workflow" },
-                                  { title: "Master management software" },
-                                  { title: "Create dynamic business records" },
-                                  { title: "Reorganize your application" },
-                                  { title: "And much more app capabilities" }
+                                  { title: t("diStep1") },
+                                  { title: t("diStep2") },
+                                  { title: t("diStep3") },
+                                  { title: t("diStep4") },
+                                  { title: t("diStep5") }
                                 ]).map((item, idx) => (
                                   <li key={idx} className="flex items-center gap-4 text-gray-300">
                                     <div className="w-6 h-6 rounded-full border border-[#D98B50] flex items-center justify-center shrink-0">
@@ -369,14 +369,13 @@ export default function DynamicPage() {
                           <section className="py-20 px-6 lg:px-20 max-w-7xl mx-auto flex flex-col lg:flex-row-reverse items-center gap-12">
                             <div className="w-full lg:w-1/2 flex flex-col items-start">
                               <h2 className="text-white text-3xl md:text-5xl font-bold mb-6 leading-tight">
-                                Build an online presence for your business
+                                {t("diBuildOnline")}
                               </h2>
                               <p className="text-gray-400 mb-8 leading-relaxed text-lg">
-                                Get massive site speed with Serv5 framework, your team has all the
-                                tools they need to build and maintain an online presence.
+                                {t("diGetMassiveSpeed")}
                               </p>
                               <p className="text-sm text-gray-500 uppercase tracking-widest mb-4 font-semibold">
-                                Trusted by hundreds of clients
+                                {t("diTrustedBy")}
                               </p>
                               <div className="flex flex-col sm:flex-row items-center gap-8">
                                 <div className="flex -space-x-4">
@@ -388,7 +387,7 @@ export default function DynamicPage() {
                                   </div>
                                 </div>
                                 <button className="px-10 py-4 rounded-full bg-[#D98B50] text-white font-bold hover:bg-orange-600 transition-colors shadow-lg shadow-[#D98B50]/20">
-                                  Get started
+                                  {t("diGetStarted")}
                                 </button>
                               </div>
                             </div>

@@ -30,9 +30,9 @@ const OurProductsListingPage = () => {
       });
   }, []);
 
-  const titleText = t("ourProducts") || "Our Products";
-  const words = titleText.split(" ");
-  const lastWord = words.pop();
+  const titleText = t("ourProducts") || "";
+  const words = titleText ? titleText.split(" ") : [];
+  const lastWord = words.pop() || "";
   const firstPart = words.join(" ");
 
   return (

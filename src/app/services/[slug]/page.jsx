@@ -396,10 +396,10 @@ function OldFormatRenderer({ serviceData, language, t }) {
         return (
           <>
             {serviceData.show_hero !== false && (
-              <SocialMediaHero title={serviceData.hero_title || serviceData.title || "Mobile Application Development"} desc={serviceData.hero_subtitle || serviceData.description} bgImage="/template/template-two-hero.png" planetImage={null} serviceId={serviceData.id} />
+              <SocialMediaHero title={serviceData.hero_title || serviceData.title || t("mobileAppDev")} desc={serviceData.hero_subtitle || serviceData.description} bgImage="/template/template-two-hero.png" planetImage={null} serviceId={serviceData.id} />
             )}
             {serviceData.show_features !== false && (
-              <WebDesignFeatures title={serviceData.features_title || "What distinguish us at Mobile app development?"} description={serviceData.features_subtitle || " "} featuresList={serviceData.features_list} />
+              <WebDesignFeatures title={serviceData.features_title || t("mobileAppFeaturesTitle")} description={serviceData.features_subtitle || ""} featuresList={serviceData.features_list} />
             )}
             {serviceData.show_portfolio !== false && <WebDesignPortfolio isMobileApp={true} />}
             {serviceData.show_how_we_work !== false && <MobileAppHowWeWork howWeWorkList={serviceData.how_we_work_list} />}
