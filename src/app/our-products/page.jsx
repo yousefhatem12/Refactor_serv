@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { products } from "../data/products";
 import { fetchAPI } from "../../lib/api";
 
 import { useLanguage } from "../context/LanguageContext";
