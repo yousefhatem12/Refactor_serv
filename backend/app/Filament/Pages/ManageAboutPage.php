@@ -192,9 +192,9 @@ class ManageAboutPage extends Page implements HasForms
                                                         \Filament\Forms\Components\FileUpload::make('image')->image()
                                                             ->directory('pages')
                                                             ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'pages')),
-                                                        TextInput::make('linkedin')->url()->label('LinkedIn URL'),
-                                                        TextInput::make('github')->url()->label('GitHub URL'),
-                                                        TextInput::make('twitter')->url()->label('Twitter / X URL'),
+                                                        TextInput::make('linkedin')->label('LinkedIn URL'),
+                                                        TextInput::make('github')->label('GitHub URL'),
+                                                        TextInput::make('twitter')->label('Twitter / X URL'),
                                                     ])->columns(2),
                                             ]),
                                         \Filament\Forms\Components\Builder\Block::make('cta')
@@ -332,9 +332,9 @@ class ManageAboutPage extends Page implements HasForms
                                                         \Filament\Forms\Components\FileUpload::make('image')->image()
                                                             ->directory('pages')
                                                             ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'pages')),
-                                                        TextInput::make('linkedin')->url()->label('LinkedIn URL'),
-                                                        TextInput::make('github')->url()->label('GitHub URL'),
-                                                        TextInput::make('twitter')->url()->label('Twitter / X URL'),
+                                                        TextInput::make('linkedin')->label('LinkedIn URL'),
+                                                        TextInput::make('github')->label('GitHub URL'),
+                                                        TextInput::make('twitter')->label('Twitter / X URL'),
                                                     ])->columns(2),
                                             ]),
                                         \Filament\Forms\Components\Builder\Block::make('cta')

@@ -405,7 +405,30 @@ class ApiController extends Controller
             if (is_string($value) && str_starts_with($value, '{')) {
                 $decoded = json_decode($value, true);
                 if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-                    $value = $decoded[$lang] ?? $decoded['en'] ?? $decoded['ar'] ?? $value;
+                    if (array_key_exists($lang, $decoded)) {
+                        $value = $decoded[$lang];
+                    } elseif (array_key_exists('en', $decoded)) {
+                        $value = $decoded['en'];
+                    } elseif (array_key_exists('ar', $decoded)) {
+                        $value = $decoded['ar'];
+                    } else {
+                        $value = '';
+                    }
+                }
+            }
+
+            // Handle array JSON settings (like multiple image upload)
+            if (is_string($value) && str_starts_with($value, '[')) {
+                $decoded = json_decode($value, true);
+                if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                    if ($setting->type === 'image' && $setting->value_source === 'file') {
+                        $value = array_map(function ($img) {
+                            return $img ? asset('storage/' . $img) : null;
+                        }, $decoded);
+                    } else {
+                        $value = $decoded;
+                    }
+                    return [$setting->key => $value];
                 }
             }
 

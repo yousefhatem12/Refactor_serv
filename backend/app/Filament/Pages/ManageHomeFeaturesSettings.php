@@ -4,6 +4,7 @@ namespace App\Filament\Pages;
 
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Schemas\Schema;
@@ -43,17 +44,27 @@ class ManageHomeFeaturesSettings extends Page implements HasForms
         $settingsKeys = [
             'features_title',
             'features_desc',
+            'features_image',
+            'features_partners',
         ];
         
         $settingsData = \App\Models\Setting::whereIn('key', $settingsKeys)->get()->pluck('value', 'key')->toArray();
 
         $formData = [];
-        foreach ($settingsKeys as $key) {
+        foreach (['features_title', 'features_desc'] as $key) {
             $val = $settingsData[$key] ?? null;
             $formData[$key] = is_string($val) ? json_decode($val, true) : ['en' => '', 'ar' => ''];
             if (!is_array($formData[$key])) {
                 $formData[$key] = ['en' => $val ?: '', 'ar' => $val ?: ''];
             }
+        }
+
+        $formData['features_image'] = $settingsData['features_image'] ?? null;
+        
+        $partnersVal = $settingsData['features_partners'] ?? null;
+        $formData['features_partners'] = is_string($partnersVal) ? json_decode($partnersVal, true) : [];
+        if (!is_array($formData['features_partners'])) {
+            $formData['features_partners'] = [];
         }
 
         $this->form->fill($formData);
@@ -69,6 +80,22 @@ class ManageHomeFeaturesSettings extends Page implements HasForms
                         TextInput::make('features_title.ar')->label('Title (Arabic)'),
                         Textarea::make('features_desc.en')->label('Description (English)')->rows(3),
                         Textarea::make('features_desc.ar')->label('Description (Arabic)')->rows(3),
+                    ])->columns(2),
+
+                \Filament\Schemas\Components\Section::make('Features Images & Partners')
+                    ->schema([
+                        FileUpload::make('features_image')
+                            ->label('Experience Image (e.g. 15 Years of Experience)')
+                            ->image()
+                            ->directory('settings')
+                            ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'settings')),
+
+                        FileUpload::make('features_partners')
+                            ->label('Partners / Client Logos')
+                            ->image()
+                            ->multiple()
+                            ->directory('settings')
+                            ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'settings')),
                     ])->columns(2),
             ])
             ->statePath('data');
@@ -88,12 +115,7 @@ class ManageHomeFeaturesSettings extends Page implements HasForms
         try {
             $data = $this->form->getState();
             
-            $settingsKeys = [
-                'features_title',
-                'features_desc',
-            ];
-            
-            foreach ($settingsKeys as $key) {
+            foreach (['features_title', 'features_desc'] as $key) {
                 \App\Models\Setting::updateOrCreate(
                     ['key' => $key],
                     [
@@ -103,6 +125,24 @@ class ManageHomeFeaturesSettings extends Page implements HasForms
                     ]
                 );
             }
+
+            \App\Models\Setting::updateOrCreate(
+                ['key' => 'features_image'],
+                [
+                    'value' => $data['features_image'] ?? null,
+                    'type' => 'image',
+                    'value_source' => 'file'
+                ]
+            );
+
+            \App\Models\Setting::updateOrCreate(
+                ['key' => 'features_partners'],
+                [
+                    'value' => json_encode($data['features_partners'] ?? []),
+                    'type' => 'image',
+                    'value_source' => 'file'
+                ]
+            );
 
             Notification::make()
                 ->title('Features settings saved successfully')

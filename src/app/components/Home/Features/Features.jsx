@@ -53,6 +53,12 @@ export default function Features() {
     ? features.map(f => f.title)
     : checkFeaturesKeys.map(k => t(k));
 
+  const displayPartners = (settings.features_partners && settings.features_partners.length > 0)
+    ? settings.features_partners
+    : partners;
+
+  const displayExperienceImage = settings.features_image || "/Features/15Y.png";
+
   return (
     <section
       ref={sectionRef}
@@ -106,7 +112,7 @@ export default function Features() {
               </motion.div>
 
               <img
-                src="/Features/15Y.png"
+                src={displayExperienceImage}
                 alt="15 Years of Experience"
                 className="w-full h-auto relative z-10 drop-shadow-[0_0_25px_rgba(217,139,80,0.4)]"
               />
@@ -234,7 +240,7 @@ export default function Features() {
               </motion.div>
 
               <img
-                src="/Features/15Y.png"
+                src={displayExperienceImage}
                 alt="15 Years of Experience"
                 className="w-full h-auto relative z-10 drop-shadow-[0_20px_50px_rgba(217,139,80,0.4)] object-contain"
               />
@@ -275,7 +281,7 @@ export default function Features() {
             </button>
 
             <div className="flex-1 flex flex-wrap justify-center items-center gap-6 sm:gap-8 md:gap-12 lg:gap-16">
-              {partners.map((partner, index) => (
+              {displayPartners.map((partner, index) => (
                 <motion.div
                   key={index}
                   whileHover={{ scale: 1.1, y: -5 }}
