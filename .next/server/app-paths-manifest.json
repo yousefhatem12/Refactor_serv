@@ -16,5 +16,7 @@
   "/page": "app/page.js",
   "/portfolio/page": "app/portfolio/page.js",
   "/project-consultation/page": "app/project-consultation/page.js",
-  "/services/[slug]/page": "app/services/[slug]/page.js"
+  "/request-quote/page": "app/request-quote/page.js",
+  "/services/[slug]/page": "app/services/[slug]/page.js",
+  "/team-work/page": "app/team-work/page.js"
 }

@@ -16,5 +16,7 @@
   "/page": "/",
   "/portfolio/page": "/portfolio",
   "/project-consultation/page": "/project-consultation",
-  "/services/[slug]/page": "/services/[slug]"
+  "/request-quote/page": "/request-quote",
+  "/services/[slug]/page": "/services/[slug]",
+  "/team-work/page": "/team-work"
 }

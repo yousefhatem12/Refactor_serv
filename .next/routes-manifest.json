@@ -139,6 +139,18 @@
       "regex": "^/project\\-consultation(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/project\\-consultation(?:/)?$"
+    },
+    {
+      "page": "/request-quote",
+      "regex": "^/request\\-quote(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/request\\-quote(?:/)?$"
+    },
+    {
+      "page": "/team-work",
+      "regex": "^/team\\-work(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/team\\-work(?:/)?$"
     }
   ],
   "dataRoutes": [],
