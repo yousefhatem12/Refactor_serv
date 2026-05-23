@@ -15,7 +15,13 @@ class InitialContentSeeder extends Seeder
         // Clear existing navigation links to avoid duplicates
         \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
         \App\Models\NavLink::truncate();
+        \App\Models\ProjectCategory::truncate();
         \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
+
+        // Project Categories
+        \App\Models\ProjectCategory::create(['slug' => 'websites', 'name' => ['en' => 'Websites & Web Apps', 'ar' => 'المواقع وتطبيقات الويب']]);
+        \App\Models\ProjectCategory::create(['slug' => 'mobile', 'name' => ['en' => 'Mobile Applications', 'ar' => 'تطبيقات الجوال']]);
+        \App\Models\ProjectCategory::create(['slug' => 'digital', 'name' => ['en' => 'Digital Marketing & Branding', 'ar' => 'التسويق الرقمي والهوية']]);
 
         // Navigation Links
         $home = \App\Models\NavLink::create(['url' => '/Home', 'label' => ['en' => 'Home', 'ar' => 'الرئيسية'], 'sort_order' => 1]);
@@ -27,7 +33,7 @@ class InitialContentSeeder extends Seeder
         \App\Models\NavLink::create(['url' => '/services-social-media', 'label' => ['en' => 'Social Media', 'ar' => 'سوشيال ميديا'], 'parent_id' => $services->id, 'sort_order' => 3]);
         \App\Models\NavLink::create(['url' => '/services-web-hosting', 'label' => ['en' => 'Web Hosting', 'ar' => 'استضافة المواقع'], 'parent_id' => $services->id, 'sort_order' => 4]);
 
-        \App\Models\NavLink::create(['url' => '/portfolio', 'label' => ['en' => 'Portfolio', 'ar' => 'أعمالنا'], 'sort_order' => 4]);
+        \App\Models\NavLink::create(['url' => '/portfolio', 'label' => ['en' => 'Our Works', 'ar' => 'أعمالنا'], 'sort_order' => 4]);
         \App\Models\NavLink::create(['url' => '/blog', 'label' => ['en' => 'Blog', 'ar' => 'المدونة'], 'sort_order' => 5]);
         \App\Models\NavLink::create(['url' => '/our-products', 'label' => ['en' => 'Our Products', 'ar' => 'منتجاتنا'], 'sort_order' => 6]);
         \App\Models\NavLink::create(['url' => '/careers', 'label' => ['en' => 'Careers', 'ar' => 'الوظائف'], 'sort_order' => 7]);
@@ -137,6 +143,104 @@ class InitialContentSeeder extends Seeder
                                 'button_text' => 'Contact Us',
                                 'button_url' => '/contact-us',
                             ]
+                        ],
+                        [
+                            'type' => 'team_work',
+                            'data' => [
+                                'title' => 'COLLABORATION, CRAFTSMANSHIP, & CREATIVE IMPACT',
+                                'description' => 'Fostering a creative environment where diverse ideas cross-pollinate to engineer cutting-edge digital products.',
+                                'pillars' => [
+                                    [
+                                        'title' => 'Synergy & Innovation',
+                                        'description' => 'Fostering a creative environment where diverse ideas cross-pollinate to engineer cutting-edge digital products.',
+                                        'icon' => 'FaUsers'
+                                    ],
+                                    [
+                                        'title' => 'Technical Excellence',
+                                        'description' => 'Committed to state-of-the-art software craftsmanship, solid system design, and clean, future-proof architectures.',
+                                        'icon' => 'FaCode'
+                                    ],
+                                    [
+                                        'title' => 'Impact-Driven Design',
+                                        'description' => 'Blending visual mastery with user psychology to forge beautiful, seamless, and high-converting customer journeys.',
+                                        'icon' => 'FaPaintBrush'
+                                    ]
+                                ],
+                                'members' => [
+                                    [
+                                        'name' => 'MOHAMED ABDELAL',
+                                        'role' => 'Chief Creative Officer & Founder',
+                                        'dept' => 'management',
+                                        'image' => 'pages/person-1.png',
+                                        'linkedin' => 'https://linkedin.com',
+                                        'github' => '#',
+                                        'twitter' => 'https://x.com'
+                                    ],
+                                    [
+                                        'name' => 'AHMED MOHAMED',
+                                        'role' => 'Chief Technology Officer & Founder',
+                                        'dept' => 'management',
+                                        'image' => 'pages/person-2.png',
+                                        'linkedin' => 'https://linkedin.com',
+                                        'github' => 'https://github.com',
+                                        'twitter' => 'https://x.com'
+                                    ],
+                                    [
+                                        'name' => 'AHMED RAMADAN',
+                                        'role' => 'Chief Marketing Officer & Founder',
+                                        'dept' => 'management',
+                                        'image' => 'pages/person-3.png',
+                                        'linkedin' => 'https://linkedin.com',
+                                        'github' => '#',
+                                        'twitter' => 'https://x.com'
+                                    ],
+                                    [
+                                        'name' => 'Sarah Jenkins',
+                                        'role' => 'Lead UI/UX Designer',
+                                        'dept' => 'design',
+                                        'image' => 'pages/person-1.png',
+                                        'linkedin' => 'https://linkedin.com',
+                                        'github' => '#',
+                                        'twitter' => 'https://x.com'
+                                    ],
+                                    [
+                                        'name' => 'David Chen',
+                                        'role' => 'Senior Full Stack Developer',
+                                        'dept' => 'development',
+                                        'image' => 'pages/person-2.png',
+                                        'linkedin' => 'https://linkedin.com',
+                                        'github' => 'https://github.com',
+                                        'twitter' => 'https://x.com'
+                                    ],
+                                    [
+                                        'name' => 'Amira Youssef',
+                                        'role' => 'Senior Frontend Engineer',
+                                        'dept' => 'development',
+                                        'image' => 'pages/person-3.png',
+                                        'linkedin' => 'https://linkedin.com',
+                                        'github' => 'https://github.com',
+                                        'twitter' => 'https://x.com'
+                                    ],
+                                    [
+                                        'name' => 'Kareem Mahmoud',
+                                        'role' => 'SEO & Growth Marketing Expert',
+                                        'dept' => 'marketing',
+                                        'image' => 'pages/person-2.png',
+                                        'linkedin' => 'https://linkedin.com',
+                                        'github' => '#',
+                                        'twitter' => 'https://x.com'
+                                    ],
+                                    [
+                                        'name' => 'Emily Taylor',
+                                        'role' => 'Art Director',
+                                        'dept' => 'design',
+                                        'image' => 'pages/person-1.png',
+                                        'linkedin' => 'https://linkedin.com',
+                                        'github' => '#',
+                                        'twitter' => 'https://x.com'
+                                    ]
+                                ]
+                            ]
                         ]
                     ],
                     'ar' => [
@@ -234,6 +338,104 @@ class InitialContentSeeder extends Seeder
                                 'description' => 'اتصل بنا اليوم لاستكشاف كيف يمكن لحلولنا البرمجية المبتكرة أن تدفع النمو وتبسط العمليات وتطلق العنان لإمكانياتك الكاملة في العصر الرقمي.',
                                 'button_text' => 'اتصل بنا',
                                 'button_url' => '/contact-us',
+                            ]
+                        ],
+                        [
+                            'type' => 'team_work',
+                            'data' => [
+                                'title' => 'التعاون، والإبداع والابتكار',
+                                'description' => 'خلق بيئة تفاعلية تتلاقى فيها الرؤى والأفكار لتقديم حلول برمجية استثنائية.',
+                                'pillars' => [
+                                    [
+                                        'title' => 'التعاون والابتكار',
+                                        'description' => 'خلق بيئة تفاعلية تتلاقى فيها الرؤى والأفكار لتقديم حلول برمجية استثنائية.',
+                                        'icon' => 'FaUsers'
+                                    ],
+                                    [
+                                        'title' => 'التميز التقني والبرمجي',
+                                        'description' => 'الالتزام بكتابة أكواد نظيفة، تصميم بنية تحتية قوية، واستخدام أحدث التقنيات التقنية.',
+                                        'icon' => 'FaCode'
+                                    ],
+                                    [
+                                        'title' => 'التصميم ذو الأثر الفعال',
+                                        'description' => 'دمج الذوق الإبداعي بمتطلبات تجربة المستخدم لخلق هويات رقمية مذهلة تحقق النتائج.',
+                                        'icon' => 'FaPaintBrush'
+                                    ]
+                                ],
+                                'members' => [
+                                    [
+                                        'name' => 'محمد عبد العال',
+                                        'role' => 'المدير الإبداعي التنفيذي وشريك مؤسس',
+                                        'dept' => 'management',
+                                        'image' => 'pages/person-1.png',
+                                        'linkedin' => 'https://linkedin.com',
+                                        'github' => '#',
+                                        'twitter' => 'https://x.com'
+                                    ],
+                                    [
+                                        'name' => 'أحمد محمد',
+                                        'role' => 'الرئيس التنفيذي للتكنولوجيا وشريك مؤسس',
+                                        'dept' => 'management',
+                                        'image' => 'pages/person-2.png',
+                                        'linkedin' => 'https://linkedin.com',
+                                        'github' => 'https://github.com',
+                                        'twitter' => 'https://x.com'
+                                    ],
+                                    [
+                                        'name' => 'أحمد رمضان',
+                                        'role' => 'رئيس قطاع التسويق وشريك مؤسس',
+                                        'dept' => 'management',
+                                        'image' => 'pages/person-3.png',
+                                        'linkedin' => 'https://linkedin.com',
+                                        'github' => '#',
+                                        'twitter' => 'https://x.com'
+                                    ],
+                                    [
+                                        'name' => 'سارة جينكينز',
+                                        'role' => 'رئيسة مصممي واجهة وتجربة المستخدم',
+                                        'dept' => 'design',
+                                        'image' => 'pages/person-1.png',
+                                        'linkedin' => 'https://linkedin.com',
+                                        'github' => '#',
+                                        'twitter' => 'https://x.com'
+                                    ],
+                                    [
+                                        'name' => 'ديفيد تشين',
+                                        'role' => 'مطور ويب متكامل أول',
+                                        'dept' => 'development',
+                                        'image' => 'pages/person-2.png',
+                                        'linkedin' => 'https://linkedin.com',
+                                        'github' => 'https://github.com',
+                                        'twitter' => 'https://x.com'
+                                    ],
+                                    [
+                                        'name' => 'أميرة يوسف',
+                                        'role' => 'مهندسة واجهات أمامية أولى',
+                                        'dept' => 'development',
+                                        'image' => 'pages/person-3.png',
+                                        'linkedin' => 'https://linkedin.com',
+                                        'github' => 'https://github.com',
+                                        'twitter' => 'https://x.com'
+                                    ],
+                                    [
+                                        'name' => 'كريم محمود',
+                                        'role' => 'خبير سيو وتسويق نمو رقمي',
+                                        'dept' => 'marketing',
+                                        'image' => 'pages/person-2.png',
+                                        'linkedin' => 'https://linkedin.com',
+                                        'github' => '#',
+                                        'twitter' => 'https://x.com'
+                                    ],
+                                    [
+                                        'name' => 'إيميلي تايلور',
+                                        'role' => 'المدير الفني الفني الإبداعي',
+                                        'dept' => 'design',
+                                        'image' => 'pages/person-1.png',
+                                        'linkedin' => 'https://linkedin.com',
+                                        'github' => '#',
+                                        'twitter' => 'https://x.com'
+                                    ]
+                                ]
                             ]
                         ]
                     ]

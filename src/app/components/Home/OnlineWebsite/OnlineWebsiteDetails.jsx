@@ -1,25 +1,33 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import OurPortfolio from "../Portfolio/OurPortfolio";
+import { fetchAPI } from "@/lib/api";
+import { useLanguage } from "../../../context/LanguageContext";
 
 const OnlineWebsiteDetails = () => {
+  const { language } = useLanguage();
   const [activeCategoryId, setActiveCategoryId] = useState("all");
+  const [categories, setCategories] = useState([]);
 
-  const categories = [
-    { name: "All", id: "all" },
-    { name: "Websites", id: "websites" },
-    { name: "Mobile Apps", id: "mobile" },
-    { name: "Motions Graphics", id: "motion" },
-    { name: "Digital Identity", id: "digital" },
-    { name: "Social Media", id: "social1" },
-    { name: "Social Media", id: "social2" },
-  ];
+  useEffect(() => {
+    fetchAPI(`/portfolio-categories?lang=${language}`)
+      .then((data) => {
+        if (data) {
+          setCategories([
+            { name: language === "ar" ? "الكل" : "All", id: "all" },
+            ...data.map((cat) => ({ name: cat.label, id: cat.id }))
+          ]);
+        }
+      })
+      .catch(console.error);
+  }, [language]);
 
   const getRotation = (index) => {
-    const total = categories.length;
+    const total = categories.length || 1;
     const startAngle = -42; // Spread out to match image
     const endAngle = 42;
+    if (total === 1) return 0;
     return startAngle + (index * (endAngle - startAngle)) / (total - 1);
   };
 

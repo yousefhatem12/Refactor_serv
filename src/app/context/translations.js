@@ -28,7 +28,7 @@ export const translations = {
     webDesign: "Web Design",
     socialMedia: "Social Media",
     webHosting: "Web Hosting",
-    portfolio: "Portfolio",
+    portfolio: "Our Works",
     blog: "Blog",
     faq: "FAQ",
     contactUs: "Contact us",

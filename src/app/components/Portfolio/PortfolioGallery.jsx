@@ -11,32 +11,33 @@ export default function PortfolioGallery({ data }) {
   const { t, language } = useLanguage();
   const [activeTab, setActiveTab] = useState("all");
   const [portfolioItems, setPortfolioItems] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const tabs = [
-    { label: t("portfolioTabsAll") || "ALL", id: "all" },
-    { label: t("portfolioTabsWeb") || "WEBSITES", id: "websites" },
-    { label: t("portfolioTabsMobile") || "MOBILE APPS", id: "mobile" },
-    { label: t("portfolioTabsMotion") || "MOTIONS GRAPHICS", id: "motion" },
-    { label: t("portfolioTabsDigital") || "DIGITAL IDENTITY", id: "digital" },
-    { label: t("portfolioTabsSocial") || "SOCIAL MEDIA", id: "social1" },
-  ];
-
   React.useEffect(() => {
-    const fetchPortfolio = async () => {
+    const fetchPortfolioData = async () => {
       try {
         setIsLoading(true);
-        const data = await fetchAPI(`/portfolio?lang=${language}`);
-        setPortfolioItems(data);
+        const [portfolioData, categoriesData] = await Promise.all([
+          fetchAPI(`/portfolio?lang=${language}`),
+          fetchAPI(`/portfolio-categories?lang=${language}`)
+        ]);
+        setPortfolioItems(portfolioData);
+        setCategories(categoriesData || []);
       } catch (error) {
-        console.error("Failed to fetch portfolio:", error);
+        console.error("Failed to fetch portfolio data:", error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchPortfolio();
+    fetchPortfolioData();
   }, [language]);
+
+  const tabs = [
+    { label: t("portfolioTabsAll") || "ALL", id: "all" },
+    ...categories.map(cat => ({ label: cat.label, id: cat.id }))
+  ];
 
   const items = Array.isArray(portfolioItems) ? portfolioItems : [];
   const filteredItems = activeTab === "all" 
