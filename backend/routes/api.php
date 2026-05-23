@@ -17,6 +17,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/services', [ApiController::class, 'getServices']);
 Route::get('/services/{slug}', [ApiController::class, 'getService']);
 Route::get('/portfolio', [ApiController::class, 'getProjects']);
+Route::get('/portfolio-categories', [ApiController::class, 'getProjectCategories']);
 Route::get('/blog', [ApiController::class, 'getPosts']);
 Route::get('/blog/{slug}', [ApiController::class, 'getPost']);
 Route::get('/trending-posts', [ApiController::class, 'getTrendingPosts']);

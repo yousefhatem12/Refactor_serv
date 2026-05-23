@@ -13,6 +13,7 @@ use App\Filament\Pages\ManageContactPage;
 use App\Filament\Resources\ContactMessageResource;
 use App\Filament\Resources\Products\ProductResource;
 use App\Filament\Resources\Careers\CareerResource;
+use App\Filament\Resources\ProjectCategoryResource;
 use App\Filament\Resources\CareerApplications\CareerApplicationResource;
 
 class SitePages extends Page
@@ -73,6 +74,13 @@ class SitePages extends Page
                     'description' => __('Manage portfolio projects and works.'),
                     'icon' => 'heroicon-o-folder-open',
                     'url' => ProjectResource::getUrl(),
+                    'color' => 'warning',
+                ],
+                [
+                    'title' => __('Portfolio Categories'),
+                    'description' => __('Manage categories for the portfolio section.'),
+                    'icon' => 'heroicon-o-tag',
+                    'url' => ProjectCategoryResource::getUrl(),
                     'color' => 'warning',
                 ],
                 [

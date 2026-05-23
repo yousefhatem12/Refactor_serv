@@ -20,22 +20,7 @@ const gradients = [
   "from-indigo-600/40 to-blue-900/40",
 ];
 
-// --- Mock Data (as fallback) ---
-const categoryKeys = [
-  "catAll",
-  "catOnlineStores",
-  "catMobileApps",
-  "catDashboards",
-  "catBranding",
-];
-
-const categoryMap = {
-  "catAll": "All",
-  "catOnlineStores": "Online Stores",
-  "catMobileApps": "Mobile Apps",
-  "catDashboards": "Dashboards",
-  "catBranding": "Branding",
-};
+// Dynamic categories will be generated from products
 
 // --- 3D Card Component ---
 const ProductCard = ({ product, index }) => {
@@ -163,7 +148,7 @@ const ProductCard = ({ product, index }) => {
 
 const OnlineWebsite = () => {
   const { t, language } = useLanguage();
-  const [activeTab, setActiveTab] = useState("catAll");
+  const [activeTab, setActiveTab] = useState("all");
   const sectionRef = useRef(null);
   const sliderRef = useRef(null);
   const [mounted, setMounted] = useState(false);
@@ -202,10 +187,18 @@ const OnlineWebsite = () => {
     }
   };
 
+  const uniqueCategories = [
+    { id: "all", label: language === "ar" ? "الكل" : "All" },
+    ...Array.from(new Set(products.map((p) => p.category).filter(Boolean))).map((cat) => ({
+      id: cat,
+      label: cat,
+    })),
+  ];
+
   const filteredProducts =
-    activeTab === "catAll"
+    activeTab === "all"
       ? products
-      : products.filter((p) => p.category === categoryMap[activeTab]);
+      : products.filter((p) => p.category === activeTab);
 
   if (!mounted) return null;
 
@@ -272,28 +265,28 @@ const OnlineWebsite = () => {
           className="flex flex-row lg:flex-col gap-3 overflow-x-auto pb-6 lg:pb-0 scrollbar-hide snap-x"
           style={{ msOverflowStyle: "none", scrollbarWidth: "none" }}
         >
-          {categoryKeys.map((catKey, index) => (
+          {uniqueCategories.map((cat, index) => (
             <motion.button
-              key={catKey}
+              key={cat.id}
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
               viewport={{ once: true }}
-              onClick={() => setActiveTab(catKey)}
+              onClick={() => setActiveTab(cat.id)}
               className={`relative px-3  py-4 text-left whitespace-nowrap rounded-2xl transition-all duration-300 snap-start flex items-center group overflow-hidden ${
-                activeTab === catKey
+                activeTab === cat.id
                   ? "text-white font-bold bg-white/10 border border-white/20 shadow-[0_0_30px_rgba(255,255,255,0.05)] backdrop-blur-md"
                   : "text-gray-500 font-medium hover:text-white hover:bg-white/5 border border-transparent"
               }`}
             >
-              {activeTab === catKey && (
+              {activeTab === cat.id && (
                 <motion.div
                   layoutId="activeTabIndicator"
                   className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-[#FF8A00] to-[#D98B50] rounded-l-2xl shadow-[0_0_15px_#FF8A00]"
                 />
               )}
               <span className="relative z-10 text-xs sm:text-base md:text-md lg:text-lg mr-5">
-                {t(catKey)}
+                {cat.label}
               </span>
 
               {/* Hover highlight */}

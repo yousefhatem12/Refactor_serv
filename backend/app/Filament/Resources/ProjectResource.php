@@ -46,14 +46,10 @@ class ProjectResource extends Resource
                         TextInput::make('name.ar')
                             ->label('Name (Arabic)')->required(),
                         \Filament\Forms\Components\Select::make('category')
-                            ->options([
-                                'websites' => 'Websites',
-                                'mobile' => 'Mobile Apps',
-                                'motion' => 'Motions Graphics',
-                                'digital' => 'Digital Identity',
-                                'social1' => 'Social Media',
-                            ])
-                            ->default('websites')
+                            ->options(fn () => \App\Models\ProjectCategory::all()->mapWithKeys(function ($cat) {
+                                $name = $cat->name[app()->getLocale()] ?? $cat->name['en'] ?? $cat->slug;
+                                return [$cat->slug => $name];
+                            }))
                             ->required(),
                         Textarea::make('description.en')
                             ->label('Description (English)')->nullable(),

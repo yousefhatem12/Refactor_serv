@@ -206,6 +206,18 @@ class ApiController extends Controller
         return response()->json($projects);
     }
 
+    public function getProjectCategories()
+    {
+        $lang = $this->getLang();
+        $categories = \App\Models\ProjectCategory::all()->map(function ($cat) use ($lang) {
+            return [
+                'id' => $cat->slug,
+                'label' => $this->trans($cat->name, $lang),
+            ];
+        });
+        return response()->json($categories);
+    }
+
     public function getPosts()
     {
         $lang = $this->getLang();
@@ -625,6 +637,7 @@ class ApiController extends Controller
                 'image' => $product->image ? (str_starts_with($product->image, 'http') || str_starts_with($product->image, '/') ? $product->image : asset('storage/' . $product->image)) : null,
                 'demoLink' => $product->demo_link ?? '#',
                 'orderLink' => $product->order_link ?? '#',
+                'tags' => $product->tech_specs ?? [],
             ];
         });
         return response()->json($products);
