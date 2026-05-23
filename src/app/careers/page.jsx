@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../context/LanguageContext";
-import { jobs } from "../data/jobs";
 import { fetchAPI } from "../../lib/api";
 
 export default function CareersPage() {
@@ -34,12 +33,12 @@ export default function CareersPage() {
         if (data && Array.isArray(data)) {
           setJobsList(data);
         } else {
-          setJobsList(jobs);
+          setJobsList([]);
         }
       })
       .catch((err) => {
         console.error("Failed to fetch careers:", err);
-        setJobsList(jobs);
+        setJobsList([]);
       })
       .finally(() => {
         setLoading(false);
@@ -82,15 +81,15 @@ export default function CareersPage() {
     e.preventDefault();
     const errors = {};
 
-    if (!formData.name.trim()) errors.name = isAr ? "الاسم مطلوب *" : "Name is required *";
+    if (!formData.name.trim()) errors.name = t("nameRequired");
     if (!formData.email.trim()) {
-      errors.email = isAr ? "البريد الإلكتروني مطلوب *" : "Email is required *";
+      errors.email = t("emailRequired");
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      errors.email = isAr ? "البريد الإلكتروني غير صالح *" : "Email is invalid *";
+      errors.email = t("emailInvalid");
     }
-    if (!formData.phone.trim()) errors.phone = isAr ? "رقم الهاتف مطلوب *" : "Phone is required *";
+    if (!formData.phone.trim()) errors.phone = t("phoneRequired");
     if (!formData.portfolio.trim()) {
-      errors.portfolio = isAr ? "رابط السيرة الذاتية مطلوب *" : "CV / Portfolio link is required *";
+      errors.portfolio = t("portfolioRequired");
     }
 
     if (Object.keys(errors).length > 0) {
@@ -124,13 +123,13 @@ export default function CareersPage() {
           });
           setFormErrors({});
         } else {
-          setFormErrors({ submit: isAr ? "حدث خطأ أثناء إرسال طلبك. يرجى المحاولة مرة أخرى." : "An error occurred while submitting. Please try again." });
+          setFormErrors({ submit: t("submitError") });
         }
       })
       .catch((err) => {
         console.error("Error submitting application:", err);
         setIsSubmitting(false);
-        setFormErrors({ submit: isAr ? "حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى." : "Connection error. Please try again." });
+        setFormErrors({ submit: t("connectionError") });
       });
   };
 
@@ -309,12 +308,10 @@ export default function CareersPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <h3 className="text-xl font-bold text-white">
-                {isAr ? "لا توجد وظائف مطابقة" : "No Matching Jobs Found"}
+                {t("noMatchingJobs")}
               </h3>
               <p className="text-white/50 text-xs md:text-sm leading-relaxed font-light">
-                {isAr 
-                  ? "لم نجد أي نتائج تطابق عملية بحثك. يرجى تجربة كلمات مفتاحية أخرى أو تصفح الأقسام الأخرى."
-                  : "We couldn't find any positions matching your criteria. Try another search or filter by different departments."}
+                {t("noMatchingJobsDesc")}
               </p>
             </motion.div>
           )}
@@ -393,7 +390,7 @@ export default function CareersPage() {
                 <div className="flex flex-col gap-3">
                   <h4 className="text-base font-bold text-[#FF8A00] flex items-center gap-2">
                     <span className="w-1.5 h-4 bg-[#FF8A00] rounded-full" />
-                    {isAr ? "نبذة عن الدور" : "Role Overview"}
+                    {t("roleOverview")}
                   </h4>
                   <p className="text-white/80 text-sm leading-relaxed font-light">
                     {selectedJob.description[language] || selectedJob.description.en}
@@ -404,7 +401,7 @@ export default function CareersPage() {
                 <div className="flex flex-col gap-3">
                   <h4 className="text-base font-bold text-[#FF8A00] flex items-center gap-2">
                     <span className="w-1.5 h-4 bg-[#FF8A00] rounded-full" />
-                    {isAr ? "المسؤوليات والمهام الرئيسية" : "Key Responsibilities"}
+                    {t("keyResponsibilities")}
                   </h4>
                   <ul className="flex flex-col gap-2.5 list-none pl-0">
                     {(selectedJob.responsibilities[language] || selectedJob.responsibilities.en).map((resp, idx) => (
@@ -422,7 +419,7 @@ export default function CareersPage() {
                 <div className="flex flex-col gap-3">
                   <h4 className="text-base font-bold text-[#FF8A00] flex items-center gap-2">
                     <span className="w-1.5 h-4 bg-[#FF8A00] rounded-full" />
-                    {isAr ? "الخبرات والمهارات المطلوبة" : "Skills & Requirements"}
+                    {t("skillsRequirements")}
                   </h4>
                   <ul className="flex flex-col gap-2.5 list-none pl-0">
                     {(selectedJob.requirements[language] || selectedJob.requirements.en).map((req, idx) => (
@@ -439,9 +436,7 @@ export default function CareersPage() {
                   <div className="flex flex-col gap-2">
                     <h3 className="text-lg font-black text-white">{t("applyNow")}</h3>
                     <p className="text-xs text-white/50 font-light">
-                      {isAr
-                        ? "املأ استمارة التقديم أدناه مع إرفاق رابط سيرتك الذاتية أو أعمالك وسيقوم فريق الموارد البشرية لدينا بالتواصل معك قريباً."
-                        : "Complete the application form below and provide your portfolio or CV link. Our HR team will reach out shortly."}
+                      {t("applyFormDesc")}
                     </p>
                   </div>
 
@@ -455,7 +450,7 @@ export default function CareersPage() {
                         value={formData.name}
                         onChange={handleInputChange}
                         className={`px-4 py-3 bg-black/40 border ${formErrors.name ? "border-red-500/50 focus:border-red-500" : "border-white/10 focus:border-[#FF8A00]/50"} rounded-xl text-sm focus:outline-none transition-all text-white`}
-                        placeholder={isAr ? "أدخل اسمك الكامل" : "Enter your full name"}
+                        placeholder={t("fullNamePlaceholder")}
                       />
                       {formErrors.name && <span className="text-red-400 text-[10px] font-bold mt-1">{formErrors.name}</span>}
                     </div>
@@ -471,7 +466,7 @@ export default function CareersPage() {
                           value={formData.email}
                           onChange={handleInputChange}
                           className={`px-4 py-3 bg-black/40 border ${formErrors.email ? "border-red-500/50 focus:border-red-500" : "border-white/10 focus:border-[#FF8A00]/50"} rounded-xl text-sm focus:outline-none transition-all text-white`}
-                          placeholder={isAr ? "example@mail.com" : "example@mail.com"}
+                          placeholder="example@mail.com"
                         />
                         {formErrors.email && <span className="text-red-400 text-[10px] font-bold mt-1">{formErrors.email}</span>}
                       </div>
@@ -485,7 +480,7 @@ export default function CareersPage() {
                           value={formData.phone}
                           onChange={handleInputChange}
                           className={`px-4 py-3 bg-black/40 border ${formErrors.phone ? "border-red-500/50 focus:border-red-500" : "border-white/10 focus:border-[#FF8A00]/50"} rounded-xl text-sm focus:outline-none transition-all text-white`}
-                          placeholder={isAr ? "01xxxxxxxxx" : "01xxxxxxxxx"}
+                          placeholder="01xxxxxxxxx"
                         />
                         {formErrors.phone && <span className="text-red-400 text-[10px] font-bold mt-1">{formErrors.phone}</span>}
                       </div>
@@ -514,7 +509,7 @@ export default function CareersPage() {
                         value={formData.message}
                         onChange={handleInputChange}
                         className="px-4 py-3 bg-black/40 border border-white/10 focus:border-[#FF8A00]/50 rounded-xl text-sm focus:outline-none transition-all text-white resize-none"
-                        placeholder={isAr ? "اكتب هنا أي تفاصيل أو مشاريع عملت عليها..." : "Share any key projects or reasons why you want to join us..."}
+                        placeholder={t("messagePlaceholder")}
                       />
                     </div>
 

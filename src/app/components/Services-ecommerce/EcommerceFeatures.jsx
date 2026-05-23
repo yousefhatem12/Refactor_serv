@@ -66,7 +66,9 @@ const EcommerceFeatures = ({ title, subtitle, featuresList }) => {
           icon: defaultFeatures[index % defaultFeatures.length]?.icon,
         };
       })
-    : defaultFeatures;
+    : [];
+
+  if (features.length === 0) return null;
 
   return (
     <section className="relative w-full py-24 px-6 lg:px-20 z-20">

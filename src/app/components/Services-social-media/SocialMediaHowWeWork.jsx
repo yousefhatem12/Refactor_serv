@@ -23,36 +23,9 @@ const SocialMediaHowWeWork = ({ howWeWorkTitle, howWeWorkSubtitle, howWeWorkList
           align: index % 2 === 0 ? "left" : "right",
         };
       })
-    : [
-        {
-          id: "01",
-          title: t("smStep1Title") || "Goal",
-          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-          icon: "/services-social-media/icon-1.png",
-          align: "left",
-        },
-        {
-          id: "02",
-          title: t("smStep2Title") || "Competitors",
-          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-          icon: "/services-social-media/icon-2.png",
-          align: "right",
-        },
-        {
-          id: "03",
-          title: t("smStep3Title") || "Strategy",
-          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-          icon: "/services-social-media/icon-3.png",
-          align: "left",
-        },
-        {
-          id: "04",
-          title: t("smStep4Title") || "Launch",
-          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-          icon: "/services-social-media/icon-4.png",
-          align: "right",
-        },
-      ];
+    : [];
+
+  if (steps.length === 0) return null;
 
   return (
     <section className="relative w-full py-24 px-6 lg:px-20 z-20">

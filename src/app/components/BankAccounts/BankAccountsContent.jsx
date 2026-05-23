@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../../context/LanguageContext";
+import { useSettings } from "../../context/SettingsContext";
 import { fetchAPI } from "@/lib/api";
 import { 
   FaCopy, 
@@ -12,6 +13,7 @@ import {
 
 const BankAccountsContent = () => {
   const { t, language } = useLanguage();
+  const settings = useSettings();
   const [activeTab, setActiveTab] = useState("egypt"); // "egypt" or "ksa"
   const [copiedId, setCopiedId] = useState(null);
   const [methods, setMethods] = useState([]);
@@ -36,287 +38,16 @@ const BankAccountsContent = () => {
     }, 2000);
   };
 
-  const defaultEgyptMethods = [
-    {
-      id: "eg_ahly",
-      name: {
-        ar: "البنك الأهلي المصري",
-        en: "National Bank of Egypt"
-      },
-      owner: {
-        ar: "سيرف فايف لخدمات الويب",
-        en: "Serv5 Web Services"
-      },
-      account: {
-        ar: "تواصل مع الإدارة للحصول عليه",
-        en: "Contact the administration"
-      },
-      image: "/images/banks/ahli_egypt.png",
-      type: "bank",
-      brandColor: "from-[#006A4E] to-[#128C7E]",
-      shadow: "rgba(0, 106, 78, 0.25)"
-    },
-    {
-      id: "eg_misr",
-      name: {
-        ar: "بنك مصر",
-        en: "Banque Misr"
-      },
-      owner: {
-        ar: "سيرف فايف لخدمات الويب",
-        en: "Serv5 Web Services"
-      },
-      account: {
-        ar: "تواصل مع الإدارة للحصول عليه",
-        en: "Contact the administration"
-      },
-      image: "/images/banks/misr_egypt.jpg",
-      type: "bank",
-      brandColor: "from-[#8B0000] to-[#D4AF37]",
-      shadow: "rgba(139, 0, 0, 0.25)"
-    },
-    {
-      id: "eg_credit",
-      name: {
-        ar: "كريدي أجريكول",
-        en: "Credit Agricole"
-      },
-      owner: {
-        ar: "سيرف فايف لخدمات الويب",
-        en: "Serv5 Web Services"
-      },
-      account: {
-        ar: "تواصل مع الإدارة للحصول عليه",
-        en: "Contact the administration"
-      },
-      image: "/images/banks/credit_agricole.jpg",
-      type: "bank",
-      brandColor: "from-[#005c3d] to-[#009257]",
-      shadow: "rgba(0, 92, 61, 0.25)"
-    },
-    {
-      id: "eg_united",
-      name: {
-        ar: "المصرف المتحد",
-        en: "The United Bank"
-      },
-      owner: {
-        ar: "سيرف فايف لخدمات الويب",
-        en: "Serv5 Web Services"
-      },
-      account: {
-        ar: "تواصل مع الإدارة للحصول عليه",
-        en: "Contact the administration"
-      },
-      image: "/images/banks/united_bank.jpg",
-      type: "bank",
-      brandColor: "from-[#112E51] to-[#1D70B8]",
-      shadow: "rgba(17, 46, 81, 0.25)"
-    },
-    {
-      id: "eg_post",
-      name: {
-        ar: "البريد المصري",
-        en: "Egyptian Post"
-      },
-      owner: {
-        ar: "سيرف فايف لخدمات الويب",
-        en: "Serv5 Web Services"
-      },
-      account: {
-        ar: "تواصل مع الإدارة للحصول عليه",
-        en: "Contact the administration"
-      },
-      image: "/images/banks/egypt_post.jpg",
-      type: "bank",
-      brandColor: "from-[#00875A] to-[#F1C40F]",
-      shadow: "rgba(0, 135, 90, 0.25)"
-    },
-    {
-      id: "eg_orange",
-      name: {
-        ar: "أورنج كاش",
-        en: "Orange Cash"
-      },
-      owner: {
-        ar: "تحويل مباشر للمحفظة",
-        en: "Direct Wallet Transfer"
-      },
-      account: {
-        ar: "تواصل مع الإدارة لتحديد الرقم",
-        en: "Contact administration for wallet number"
-      },
-      image: "/images/banks/orange_cash.png",
-      type: "wallet",
-      brandColor: "from-[#FF6600] to-[#FF8533]",
-      shadow: "rgba(255, 102, 0, 0.25)"
-    },
-    {
-      id: "eg_etisalat",
-      name: {
-        ar: "اتصالات كاش",
-        en: "Etisalat Cash"
-      },
-      owner: {
-        ar: "تحويل مباشر للمحفظة",
-        en: "Direct Wallet Transfer"
-      },
-      account: {
-        ar: "تواصل مع الإدارة لتحديد الرقم",
-        en: "Contact administration for wallet number"
-      },
-      image: "/images/banks/etisalat_cash.jpg",
-      type: "wallet",
-      brandColor: "from-[#71B000] to-[#9CD62C]",
-      shadow: "rgba(113, 176, 0, 0.25)"
-    },
-    {
-      id: "eg_vodafone",
-      name: {
-        ar: "فودافون كاش",
-        en: "Vodafone Cash"
-      },
-      owner: {
-        ar: "تحويل مباشر للمحفظة",
-        en: "Direct Wallet Transfer"
-      },
-      account: {
-        ar: "تواصل مع الإدارة لتحديد الرقم",
-        en: "Contact administration for wallet number"
-      },
-      image: "/images/banks/vodafone_cash.png",
-      type: "wallet",
-      brandColor: "from-[#E60000] to-[#FF3333]",
-      shadow: "rgba(230, 0, 0, 0.25)"
-    }
-  ];
 
-  const defaultKsaMethods = [
-    {
-      id: "ksa_rajhi",
-      name: {
-        ar: "مصرف الراجحي",
-        en: "Al Rajhi Bank"
-      },
-      owner: {
-        ar: "إسماعيل أحمد محمد",
-        en: "Ismail Ahmad Muhammad"
-      },
-      account: {
-        ar: "تواصل مع الإدارة للحصول عليه",
-        en: "Contact the administration"
-      },
-      image: "/images/banks/rajhi_ksa.png",
-      type: "bank",
-      brandColor: "from-[#005A9C] to-[#008BE6]",
-      shadow: "rgba(0, 90, 156, 0.25)"
-    },
-    {
-      id: "ksa_ahly",
-      name: {
-        ar: "البنك الأهلي السعودي (SNB)",
-        en: "Al Ahly Saudi Bank (SNB)"
-      },
-      owner: {
-        ar: "إسماعيل أحمد محمد",
-        en: "Ismail Ahmad Muhammad"
-      },
-      account: {
-        ar: "تواصل مع الإدارة للحصول عليه",
-        en: "Contact the administration"
-      },
-      image: "/images/banks/ahli_ksa.jpg",
-      type: "bank",
-      brandColor: "from-[#004F34] to-[#007F54]",
-      shadow: "rgba(0, 79, 52, 0.25)"
-    },
-    {
-      id: "ksa_bilad",
-      name: {
-        ar: "بنك البلاد",
-        en: "Bank Albilad"
-      },
-      owner: {
-        ar: "إسماعيل أحمد محمد",
-        en: "Ismail Ahmad Muhammad"
-      },
-      account: {
-        ar: "تواصل مع الإدارة للحصول عليه",
-        en: "Contact the administration"
-      },
-      image: "/images/banks/bilad_ksa.jpg",
-      type: "bank",
-      brandColor: "from-[#003E7E] to-[#DCAE1D]",
-      shadow: "rgba(0, 62, 126, 0.25)"
-    },
-    {
-      id: "ksa_united",
-      name: {
-        ar: "المصرف المتحد (تحويل دولي)",
-        en: "The United Bank (International)"
-      },
-      owner: {
-        ar: "سيرف فايف لخدمات التسويق الإلكتروني",
-        en: "Serv5 for E-Marketing Services"
-      },
-      account: {
-        ar: "تواصل مع الإدارة للحصول عليه",
-        en: "Contact the administration"
-      },
-      image: "/images/banks/united_bank.jpg",
-      type: "international",
-      brandColor: "from-[#112E51] to-[#3B71CA]",
-      shadow: "rgba(17, 46, 81, 0.25)"
-    },
-    {
-      id: "ksa_wu",
-      name: {
-        ar: "ويسترن يونيون",
-        en: "Western Union"
-      },
-      owner: {
-        ar: "سيرف فايف لخدمات التسويق الإلكتروني",
-        en: "Serv5 for E-Marketing Services"
-      },
-      account: {
-        ar: "تواصل مع الإدارة لتفاصيل المستلم",
-        en: "Contact administration for recipient details"
-      },
-      image: "/images/banks/western_union.jpg",
-      type: "international",
-      brandColor: "from-[#FFCC00] to-[#E6B800]",
-      shadow: "rgba(255, 204, 0, 0.25)"
-    },
-    {
-      id: "ksa_moneygram",
-      name: {
-        ar: "موني جرام",
-        en: "MoneyGram"
-      },
-      owner: {
-        ar: "سيرف فايف لخدمات التسويق الإلكتروني",
-        en: "Serv5 for E-Marketing Services"
-      },
-      account: {
-        ar: "تواصل مع الإدارة لتفاصيل المستلم",
-        en: "Contact administration for recipient details"
-      },
-      image: "/images/banks/moneygram.jpg",
-      type: "international",
-      brandColor: "from-[#E31B23] to-[#FF4D55]",
-      shadow: "rgba(227, 27, 35, 0.25)"
-    }
-  ];
 
-  const egyptMethods = methods.filter(m => m.country === "egypt").length > 0
-    ? methods.filter(m => m.country === "egypt")
-    : defaultEgyptMethods;
+  const egyptMethods = methods.filter(m => m.country === "egypt");
 
-  const ksaMethods = methods.filter(m => m.country === "ksa").length > 0
-    ? methods.filter(m => m.country === "ksa")
-    : defaultKsaMethods;
+  const ksaMethods = methods.filter(m => m.country === "ksa");
 
   const currentMethods = activeTab === "egypt" ? egyptMethods : ksaMethods;
+
+  const whatsappNum = settings?.site_whatsapp ? settings.site_whatsapp.replace(/\D/g, '') : "201288863631";
+  const phoneNum = settings?.site_phone ? settings.site_phone.replace(/\D/g, '') : "00201288863631";
 
   return (
     <div className="w-full max-w-[1280px] mx-auto px-6 md:px-12 py-8 relative">
@@ -335,7 +66,7 @@ const BankAccountsContent = () => {
             {t("paymentMethods")}
           </span>
           <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
-            {language === "ar" ? "طرق الدفع والحسابات البنكية" : "Payment Methods & Bank Accounts"}
+            {t("paymentMethodsTitle")}
           </h1>
           <p className="text-white/60 text-sm md:text-base leading-relaxed">
             {activeTab === "egypt" ? t("egyptBanksDesc") : t("ksaBanksDesc")}
@@ -388,11 +119,13 @@ const BankAccountsContent = () => {
           {currentMethods.map((method, index) => {
             const imageUrl = method.image;
             const isCopied = copiedId === method.id;
-            const nameText = language === "ar" ? method.name.ar : method.name.en;
-            const ownerText = language === "ar" ? method.owner.ar : method.owner.en;
-            const accountText = language === "ar" ? method.account.ar : method.account.en;
+            const nameText = language === "ar" ? (method.name?.ar || method.name?.en || "") : (method.name?.en || method.name?.ar || "");
+            const ownerText = language === "ar" ? (method.owner?.ar || method.owner?.en || "") : (method.owner?.en || method.owner?.ar || "");
+            const accountText = language === "ar" ? (method.account?.ar || method.account?.en || "") : (method.account?.en || method.account?.ar || "");
             
             const clipboardString = `${nameText}\n${t("accName")}: ${ownerText}\n${t("accNumber")}: ${accountText}`;
+
+            const isContactAcc = accountText?.includes?.("تواصل") || accountText?.toLowerCase?.()?.includes?.("contact") || method.account?.ar?.includes?.("تواصل");
 
             return (
               <motion.div
@@ -444,7 +177,7 @@ const BankAccountsContent = () => {
                       <span className="text-xs text-white/40 font-medium tracking-wide">
                         {t("accNumber")}
                       </span>
-                      <span className={`text-sm font-bold ${method.account.ar.includes("تواصل") ? "text-[#FF8A00]/80 italic" : "text-white"}`}>
+                      <span className={`text-sm font-bold ${isContactAcc ? "text-[#FF8A00]/80 italic" : "text-white"}`}>
                         {accountText}
                       </span>
                     </div>
@@ -489,20 +222,16 @@ const BankAccountsContent = () => {
         
         <div className="text-center md:text-right flex-1">
           <h4 className="text-xl md:text-2xl font-bold text-white mb-3">
-            {language === "ar" 
-              ? "هل قمت بإتمام عملية التحويل؟" 
-              : "Have you completed the transfer?"}
+            {t("haveCompletedTransfer")}
           </h4>
           <p className="text-white/60 text-xs md:text-sm max-w-xl leading-relaxed">
-            {language === "ar"
-              ? "يرجى التواصل معنا وإرسال صورة إيصال التحويل مع تفاصيل الفاتورة لتأكيد الدفع وتفعيل الخدمة في أسرع وقت."
-              : "Please get in touch and send a screenshot of the transfer receipt with your invoice details to confirm payment."}
+            {t("haveCompletedTransferDesc")}
           </p>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
           <a
-            href="https://wa.me/201288863631"
+            href={`https://wa.me/${whatsappNum}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20ba5a] text-black font-bold text-xs md:text-sm tracking-wide py-4 px-8 rounded-2xl shadow-lg shadow-[#25D366]/20 transition-all duration-300 hover:-translate-y-1"
@@ -512,11 +241,11 @@ const BankAccountsContent = () => {
           </a>
           
           <a
-            href="tel:00201288863631"
+            href={`tel:${phoneNum}`}
             className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold text-xs md:text-sm tracking-wide py-4 px-8 rounded-2xl transition-all duration-300 hover:-translate-y-1"
           >
             <FaPhoneAlt className="w-4 h-4" />
-            <span>{language === "ar" ? "اتصل بنا" : "Call Us"}</span>
+            <span>{t("callUs")}</span>
           </a>
         </div>
       </motion.div>

@@ -30,44 +30,9 @@ const SocialMediaWhyChooseUs = ({ whyTitle, whySubtitle, whyList }) => {
           icon: icons[index % icons.length],
         };
       })
-    : [
-        {
-          id: 1,
-          title: t("smReason1Title") || "Daily Reports",
-          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-          icon: <FiFileText className="text-4xl" />,
-        },
-        {
-          id: 2,
-          title: t("smReason2Title") || "Dedicated My Account",
-          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-          icon: <FiUserCheck className="text-4xl" />,
-        },
-        {
-          id: 3,
-          title: t("smReason3Title") || "Data protection",
-          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-          icon: <FiShield className="text-4xl" />,
-        },
-        {
-          id: 4,
-          title: t("smReason4Title") || "Proven track record",
-          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-          icon: <FiAward className="text-4xl" />,
-        },
-        {
-          id: 5,
-          title: t("smReason5Title") || "Data integration",
-          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-          icon: <FiShare2 className="text-4xl" />,
-        },
-        {
-          id: 6,
-          title: t("smReason6Title") || "Result Driven Work",
-          desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-          icon: <FiTarget className="text-4xl" />,
-        },
-      ];
+    : [];
+
+  if (reasons.length === 0) return null;
 
   return (
     <section className="relative w-full py-24 px-6 lg:px-20 overflow-hidden z-20">

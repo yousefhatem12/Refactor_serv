@@ -182,8 +182,10 @@ const MobileAppHowWeWork = ({ howWeWorkList }) => {
             items: itemDesc ? itemDesc.split('\n').filter(Boolean) : [],
           };
         })
-      : defaultTrans.steps
+      : []
   };
+
+  if (activeTrans.steps.length === 0) return null;
 
   // Exact coordinates for placing step cards horizontally (Desktop)
   // Aligned perfectly next to/inside loops to prevent overlapping

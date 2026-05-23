@@ -4,198 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useParams, notFound } from "next/navigation";
-import { products } from "../../data/products";
 import { useLanguage } from "../../context/LanguageContext";
 import { fetchAPI } from "../../../lib/api";
-
-// Local highly-focused bilingual details dictionary for the SaaS products
-const productDetails = {
-  athath: {
-    en: {
-      name: "Athath",
-      category: "Furniture E-Commerce",
-      title: "Athath Furniture E-Commerce Solution",
-      description: "Athath is a high-end, premium e-commerce platform specifically optimized for furniture retailers and interior design studios. Combining minimalist aesthetics with incredibly powerful features, it delivers a smooth shopping experience that turns visitors into loyal customers.",
-      features: [
-        { title: "Dynamic High-Res Gallery", desc: "Showcase furniture textures and details with high-resolution responsive zooming." },
-        { title: "Smart Advanced Filtering", desc: "Enable customers to instantly filter by collection, material, color, and price." },
-        { title: "Seamless Glassmorphic Cart", desc: "A frictionless one-page checkout designed to reduce cart abandonment rates." },
-        { title: "Intelligent Inventory Control", desc: "Real-time stock management and order notifications for business owners." }
-      ],
-      techSpecs: ["Next.js", "React", "TailwindCSS", "Node.js", "MongoDB", "Framer Motion"],
-      whyChooseUs: "Ready-to-launch furniture store with ultra-fast page load speeds, pre-configured checkout, and SEO-optimized structure."
-    },
-    ar: {
-      name: "أثاث",
-      category: "تجارة إلكترونية للأثاث",
-      title: "منصة أثاث المتكاملة للتجارة الإلكترونية",
-      description: "منصة 'أثاث' هي حل تجارة إلكترونية راقٍ ومصمم خصيصاً لمعارض الأثاث واستوديوهات التصميم الداخلي. تجمع المنصة بين جماليات التصميم العصري والأداء البرمجي الفائق، لتوفر للعملاء تجربة تسوق تفاعلية سلسة تحول الزوار إلى عملاء دائمين.",
-      features: [
-        { title: "معرض صور تفاعلي دقيق", desc: "استعرض تفاصيل وخامات الأثاث بدقة متناهية مع خاصية التكبير والتفاعل الفائق." },
-        { title: "نظام فلترة ذكي ومتقدم", desc: "يتيح للعملاء العثور على قطع الأثاث المطلوبة فوراً عبر تصفية الخامات، الألوان، والأسعار." },
-        { title: "سلة دفع زجاجية ذكية", desc: "عملية دفع من صفحة واحدة خالية من التعقيد لزيادة نسبة إتمام المبيعات وتقليل مغادرة السلة." },
-        { title: "لوحة تحكم ذكية للمخزون", desc: "إدارة المخزون والطلبات فورياً وتلقي تنبيهات المبيعات أولاً بأول لأصحاب الأعمال." }
-      ],
-      techSpecs: ["Next.js", "React", "TailwindCSS", "Node.js", "MongoDB", "Framer Motion"],
-      whyChooseUs: "متجر أثاث متكامل جاهز للإطلاق الفوري، يتميز بسرعات تحميل فائقة، ونظام دفع مهيأ، وبنية برمجية مهيأة بالكامل لمحركات البحث (SEO)."
-    }
-  },
-  clinic: {
-    en: {
-      name: "Clinic+",
-      category: "Healthcare Management",
-      title: "Clinic+ Digital Medical System",
-      description: "Clinic+ is an enterprise-grade medical clinic management platform engineered to streamline patient booking, healthcare records, and daily medical workflows. Designed with clinical efficiency and patient ease of use in mind.",
-      features: [
-        { title: "Real-Time Scheduling", desc: "Avoid overlapping and booking conflicts with a dynamic smart medical calendar." },
-        { title: "Secure Health Records (EHR)", desc: "Confidential digital patient histories, active prescriptions, and diagnosis logs." },
-        { title: "Doctor & Receptionist Hub", desc: "Custom role-based logins with unique views to manage clinic operations." },
-        { title: "Automated Smart Reminders", desc: "Reduce patient no-shows with scheduled, automated notifications." }
-      ],
-      techSpecs: ["React", "Next.js", "TailwindCSS", "Express.js", "PostgreSQL", "Node.js"],
-      whyChooseUs: "HIPAA-compliant data handling structures, ultra-smooth clinic workflow management, and zero setup latency."
-    },
-    ar: {
-      name: "كلينيك بلس",
-      category: "إدارة الرعاية الصحية",
-      title: "نظام كلينيك بلس الطبي المتكامل",
-      description: "نظام 'كلينيك بلس' هو منصة متطورة لإدارة العيادات والمراكز الطبية بكافة تخصصاتها. تم تطويره بهدف تسهيل حجز مواعيد المرضى، وتنظيم الملفات الطبية الرقمية، وأتمتة المهام اليومية للأطباء والموظفين بكفاءة وسرية مطلقة.",
-      features: [
-        { title: "جدولة مواعيد ذكية وحية", desc: "حجز مواعيد متزامن بدون تعارض مع توفير جدول تقويمي ذكي للأطباء والمرضى." },
-        { title: "ملفات صحية رقمية آمنة", desc: "حفظ مشفر لتاريخ المرضى الطبي، الروشتات العلاجية، وتقارير التشخيص." },
-        { title: "بوابات مخصصة للكادر الطبي", desc: "لوحات تحكم بأدوار محددة وصلاحيات أمان صارمة لإدارة العيادة اليومية." },
-        { title: "تنبيهات وتذكيرات تلقائية", desc: "تقليل غياب المرضى عبر إرسال تذكيرات آلية عبر الرسائل القصيرة والبريد الإلكتروني." }
-      ],
-      techSpecs: ["React", "Next.js", "TailwindCSS", "Express.js", "PostgreSQL", "Node.js"],
-      whyChooseUs: "تصميم يتوافق مع معايير الأمان الطبية، إدارة مرنة للورديات، وتجربة مستخدم خالية من التعقيد للمرضى والأطباء."
-    }
-  },
-  "edu-platform": {
-    en: {
-      name: "EduLearn",
-      category: "E-Learning & LMS",
-      title: "EduLearn Educational Platform",
-      description: "EduLearn is a comprehensive Learning Management System (LMS) built to empower schools, academies, and private instructors. Create, host, and sell engaging courses in a modern virtual learning environment.",
-      features: [
-        { title: "Structured Course Builder", desc: "Organize lessons by chapters, upload video files, PDFs, and rich-text worksheets." },
-        { title: "Interactive Quiz Engine", desc: "Test student knowledge with auto-graded multiple-choice, essay, and time-bound quizzes." },
-        { title: "Progress & Analytics Tracker", desc: "Give students and parents real-time insights into course completion statistics." },
-        { title: "Smart Certificate Generator", desc: "Instantly reward graduating students with custom, dynamically-generated PDF credentials." }
-      ],
-      techSpecs: ["Next.js", "React", "Node.js", "TailwindCSS", "GraphQL", "PostgreSQL"],
-      whyChooseUs: "Robust video streaming integration, gamified learning dashboards, and seamless payment collection pipelines."
-    },
-    ar: {
-      name: "إديوليرن",
-      category: "المنصات التعليمية وأنظمة التعلم",
-      title: "منصة إديوليرن التعليمية والتدريبية",
-      description: "منصة 'إديوليرن' هي نظام إدارة تعلم (LMS) شامل ومبتكر لخدمة المدارس، الأكاديميات، والمحاضرين الخصوصيين. تتيح لك المنصة إنشاء، واستضافة، وبيع الكورسات التفاعلية بجودة ممتازة وبيئة تعليمية تواكب أحدث المعايير.",
-      features: [
-        { title: "منشئ كورسات منظم وهيكلي", desc: "تنظيم الدروس في فصول، ورفع مقاطع الفيديو، وملفات PDF، وأوراق العمل التفاعلية." },
-        { title: "نظام اختبارات متطور", desc: "تقييم معرفة الطلاب باختبارات مؤقتة وتصحيح تلقائي فوري متعدد الخيارات." },
-        { title: "تتبع التقدم والتحليلات للمتعلم", desc: "إحصائيات فورية وتفصيلية للطلاب وأولياء الأمور لمعرفة نسب الإنجاز وساعات التعلم." },
-        { title: "توليد تلقائي للشهادات الذكية", desc: "مكافأة الطلاب المتفوقين تلقائياً عند إنهاء الكورس بشهادات PDF احترافية باسمائهم." }
-      ],
-      techSpecs: ["Next.js", "React", "Node.js", "TailwindCSS", "GraphQL", "PostgreSQL"],
-      whyChooseUs: "حماية تامة لمحتوى الفيديو من السرقة، تصميم تفاعلي ممتع للطلاب، ونظام دفع آمن مدمج."
-    }
-  },
-  "real-estate": {
-    en: {
-      name: "RealEstate Pro",
-      category: "Property Directory",
-      title: "RealEstate Pro Management System",
-      description: "RealEstate Pro is an outstanding property portal and brokerage utility. Engineered with ultra-fast search engines and spatial maps, it serves as the ultimate digital gateway for buyers, sellers, and realtors.",
-      features: [
-        { title: "Interactive Spatial Maps", desc: "Locate houses and commercial properties instantly on a fluid GIS map." },
-        { title: "Virtual 3D Home Tours", desc: "Allow potential buyers to experience high-fidelity, interactive digital open houses." },
-        { title: "Automated Realtor CRM", desc: "Assign leads to agents, manage client inquiries, and track call histories easily." },
-        { title: "Mortgage & Cost Calculator", desc: "Built-in finance simulator that calculates monthly payments, deposits, and interest." }
-      ],
-      techSpecs: ["React", "Next.js", "TailwindCSS", "Node.js", "MongoDB", "Mapbox API"],
-      whyChooseUs: "SEO-friendly property directory, automated email alerts for new listings, and flawless responsiveness across mobile devices."
-    },
-    ar: {
-      name: "عقارات برو",
-      category: "منصات التسويق والوساطة العقارية",
-      title: "منصة عقارات برو الاحترافية",
-      description: "منصة 'عقارات برو' هي الحل الرقمي الشامل لشركات التطوير العقاري والوسطاء. مجهزة بمحركات بحث جغرافية فائقة السرعة على الخريطة وميزات عرض متطورة، تجعل رحلة البحث عن منزل أو عقار تجاري سهلة وممتعة للغاية للعملاء.",
-      features: [
-        { title: "البحث التفاعلي بالخرائط", desc: "تحديد مواقع الفلل والشقق والمحلات التجارية جغرافياً على خريطة تفاعلية ذكية." },
-        { title: "جولات افتراضية ثلاثية الأبعاد", desc: "تمكين المشترين المحتملين من القيام بجولة حية وتفاعلية داخل العقار من هواتفهم." },
-        { title: "نظام إدارة علاقات العملاء (CRM)", desc: "توزيع طلبات العملاء تلقائياً على الوكلاء، ومتابعة التواصل وتنظيم المبيعات." },
-        { title: "حاسبة تمويل عقاري مدمجة", desc: "تتيح للعميل محاكاة الأقساط الشهرية، الدفعات الأولى، ونسب الفائدة تلقائياً." }
-      ],
-      techSpecs: ["React", "Next.js", "TailwindCSS", "Node.js", "MongoDB", "Mapbox API"],
-      whyChooseUs: "تأهيل كامل لمحركات البحث لزيادة مبيعات عقاراتك، نظام إشعارات فوري للعملاء بالفرص الجديدة، وتوافق تام مع الجوال."
-    }
-  },
-  restaurant: {
-    en: {
-      name: "FoodieMenu",
-      category: "Digital Restaurant Ordering",
-      title: "FoodieMenu Self-Ordering System",
-      description: "FoodieMenu is a cutting-edge QR-based self-ordering ecosystem for restaurants, bistros, and coffee shops. Empower your guests to order and pay directly from their tables without app installs.",
-      features: [
-        { title: "No-Contact Table QR Ordering", desc: "Guests scan, order items, and checkout without waiting for a waiter." },
-        { title: "Vibrant Visual Menu Builder", desc: "Upload gorgeous pictures, display ingredient labels, and manage daily specials." },
-        { title: "Real-Time Kitchen KDS System", desc: "Direct order dispatch to kitchen screens ensuring lightning-fast preparation." },
-        { title: "Apple Pay & Wallet Integration", desc: "Seamless instant digital checkouts directly from the dining table." }
-      ],
-      techSpecs: ["Next.js", "React", "TailwindCSS", "Socket.io", "Firebase", "Node.js"],
-      whyChooseUs: "Increases average order value by up to 25% via smart upselling, minimizes waitstaff strain, and optimizes dining turnover."
-    },
-    ar: {
-      name: "فودي منيو",
-      category: "المنيو الرقمي والطلب الذاتي",
-      title: "منصة فودي منيو المتكاملة للمطاعم",
-      description: "منصة 'فودي منيو' هي نظام طلب ذاتي حديث يعتمد على رموز الـ QR ومصمم خصيصاً للمطاعم والمقاهي. تتيح المنصة لرواد مطعمك مسح الكود، طلب الوجبات، وتعديل إضافاتهم، ثم الدفع فوراً بكل سهولة ودون الحاجة لتنزيل أي تطبيق.",
-      features: [
-        { title: "الطلب الذاتي عبر QR الطاولة", desc: "يمسح العميل الكود، ويطلب ما يشاء مباشرة دون الحاجة لانتظار النادل لتسجيل الطلب." },
-        { title: "منيو تفاعلي مصور وجذاب", desc: "عرض أطباقك بصور عالية الدقة وتفاصيل المكونات، مع التحكم في إتاحة الأطباق يومياً." },
-        { title: "شاشة المطبخ الفورية (KDS)", desc: "إرسال الطلبات مباشرة لشاشات الطهاة في المطبخ لتسريع عملية التحضير وتقليل الأخطاء." },
-        { title: "تكامل الدفع الإلكتروني المباشر", desc: "دعم Apple Pay والبطاقات البنكية للدفع السريع والآمن مباشرة من الطاولة." }
-      ],
-      techSpecs: ["Next.js", "React", "TailwindCSS", "Socket.io", "Firebase", "Node.js"],
-      whyChooseUs: "يزيد متوسط قيمة الطلب بنسبة تصل لـ 25٪ بفضل الاقتراحات الذكية، ويوفر تكاليف المطبخ، ويسرع معدل تدوير الطاولات."
-    }
-  },
-  gym: {
-    en: {
-      name: "FitLife",
-      category: "Fitness & Club Utility",
-      title: "FitLife Gym & Health Club Platform",
-      description: "FitLife is a premium SaaS solution engineered for modern gym franchises, fitness centres, and martial arts clubs. Smoothly control your registrations, timetables, and staff with high efficiency.",
-      features: [
-        { title: "Dynamic Membership Plans", desc: "Create flexible subscription plans, auto-billing schedules, and digital gate entry." },
-        { title: "Interactive Class Booking", desc: "Let members book yoga, crossfit, or swimming sessions online through their portals." },
-        { title: "Trainer & Shift Schedulers", desc: "Distribute classes, schedule personal training shifts, and evaluate performance." },
-        { title: "Auto-Billing & Expiry Warnings", desc: "Reduce churn by sending subscription expiry warnings and bill collection invoices." }
-      ],
-      techSpecs: ["React", "Next.js", "TailwindCSS", "Node.js", "MongoDB", "Framer Motion"],
-      whyChooseUs: "Includes check-in QR scanner system, client progress trackers, and detailed financial reports for gym management."
-    },
-    ar: {
-      name: "فت لايف",
-      category: "إدارة الصالات والنوادي الرياضية",
-      title: "نظام فت لايف لإدارة مراكز اللياقة",
-      description: "نظام 'فت لايف' هو منصة برمجية متكاملة مخصصة لإدارة الصالات الرياضية ومراكز الصحة والجمال. ينظم النظام الاشتراكات، الجداول الزمنية للتمارين، وتتبع أداء المدربين والمنتسبين مع تقارير مالية تفصيلية ومؤتمتة.",
-      features: [
-        { title: "إدارة الاشتراكات والخطط المرنة", desc: "تخصيص باقات اشتراك مرنة، وتفعيل الفواتير المتكررة التلقائية، والدخول الإلكتروني." },
-        { title: "جدولة وحجز الحصص التدريبية", desc: "تمكين المشتركين من حجز حصص الكارديو، اليوغا، أو السباحة عبر بواباتهم بكل سهولة." },
-        { title: "بوابة المدربين والجداول الشخصية", desc: "تنظيم ورديات المدربين الشخصيين، وتعيين الحصص، وتتبع تقدم المتدربين معهم." },
-        { title: "تنبيهات وتذكيرات التجديد", desc: "نظام آلي لإرسال رسائل التذكير بقرب انتهاء الاشتراك والفواتير المعلقة لضمان الاستمرارية." }
-      ],
-      techSpecs: ["React", "Next.js", "TailwindCSS", "Node.js", "MongoDB", "Framer Motion"],
-      whyChooseUs: "مزود بنظام مسح باركود الدخول بالهاتف، وتتبع قياسات الجسم للأعضاء، مع لوحة إحصائيات مالية شاملة للإدارة."
-    }
-  }
-};
 
 const ProductDetailsPage = () => {
   const params = useParams();
   const productId = params?.id;
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const isAr = language === "ar";
   const [activePreview, setActivePreview] = useState("desktop"); // 'desktop' or 'mobile'
   const [selectedImageIndex, setSelectedImageIndex] = useState(null); // Lightbox selected image index
@@ -204,15 +19,7 @@ const ProductDetailsPage = () => {
   const [otherProductsList, setOtherProductsList] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Samples mapping for screenshots (SaaS screens showcasing the system)
-  const productSamplesMap = {
-    athath: ["/portfolio/image-1.png", "/portfolio/image-2.png", "/portfolio/image-3.png", "/portfolio/image-4.png"],
-    clinic: ["/portfolio/image-2.png", "/portfolio/image-3.png", "/portfolio/image-4.png", "/portfolio/image-5.png"],
-    "edu-platform": ["/portfolio/image-3.png", "/portfolio/image-4.png", "/portfolio/image-5.png", "/portfolio/image-6.png"],
-    "real-estate": ["/portfolio/image-4.png", "/portfolio/image-5.png", "/portfolio/image-6.png", "/portfolio/image-1.png"],
-    restaurant: ["/portfolio/image-5.png", "/portfolio/image-6.png", "/portfolio/image-1.png", "/portfolio/image-2.png"],
-    gym: ["/portfolio/image-6.png", "/portfolio/image-1.png", "/portfolio/image-2.png", "/portfolio/image-3.png"]
-  };
+
 
   useEffect(() => {
     if (!productId) return;
@@ -223,40 +30,12 @@ const ProductDetailsPage = () => {
         if (data) {
           setProductData(data);
         } else {
-          const localProd = products.find((p) => p.id === productId);
-          if (localProd) {
-            const localDetails = productDetails[productId]?.[language] || {
-              name: isAr ? localProd.name || "المنتج" : localProd.name || "Product",
-              category: isAr ? localProd.category || "برمجيات SaaS" : localProd.category || "SaaS Solution",
-              title: isAr ? localProd.title || "تصميم متكامل" : localProd.title || "Tailored Solution",
-              description: localProd.description,
-              features: [
-                { title: isAr ? "دعم كامل" : "Full Support", desc: isAr ? "نقدم لك دعماً برمجياً وفنياً متكاملاً للمنصة." : "We offer complete technical and code support." },
-                { title: isAr ? "تصميم متجاوب" : "Responsive Design", desc: isAr ? "يعمل بكفاءة مطلقة على كافة شاشات الهواتف والأجهزة." : "Works beautifully on all screen resolutions and devices." }
-              ],
-              techSpecs: ["React", "Next.js", "TailwindCSS"],
-              whyChooseUs: isAr ? "حل جاهز ومتكامل مع تجربة مستخدم ممتازة." : "A complete ready-to-launch solution with superb UX."
-            };
-            const localSamples = productSamplesMap[productId] || ["/portfolio/image-1.png", "/portfolio/image-2.png", "/portfolio/image-3.png", "/portfolio/image-4.png"];
-            setProductData({
-              id: localProd.id,
-              name: localDetails.name,
-              category: localDetails.category,
-              title: localDetails.title,
-              description: localDetails.description,
-              image: localProd.image,
-              demoLink: localProd.demoLink || '#',
-              orderLink: localProd.orderLink || '#',
-              features: localDetails.features,
-              techSpecs: localDetails.techSpecs,
-              whyChooseUs: localDetails.whyChooseUs,
-              samples: localSamples
-            });
-          }
+          setProductData(null);
         }
       })
       .catch((err) => {
         console.error("Error fetching product details:", err);
+        setProductData(null);
       })
       .finally(() => {
         setLoading(false);
@@ -269,20 +48,24 @@ const ProductDetailsPage = () => {
         if (data && Array.isArray(data)) {
           setOtherProductsList(data.filter((p) => p.id !== productId).slice(0, 6));
         } else {
-          setOtherProductsList(products.filter((p) => p.id !== productId).slice(0, 6));
+          setOtherProductsList([]);
         }
       })
       .catch(() => {
-        setOtherProductsList(products.filter((p) => p.id !== productId).slice(0, 6));
+        setOtherProductsList([]);
       });
   }, [productId]);
 
-  if (loading || !productData) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="w-16 h-16 border-4 border-[#F18805] border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
+  }
+
+  if (!productData) {
+    notFound();
   }
 
   const product = productData;
@@ -350,56 +133,60 @@ const ProductDetailsPage = () => {
           </motion.div>
 
           {/* Product Key Features Grid */}
-          <div className="flex flex-col gap-5">
-            <h3 className="text-xl font-bold text-[#F18805] border-b border-[#F18805]/20 pb-3 flex items-center gap-2">
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-              </svg>
-              {isAr ? "الخصائص البرمجية والمميزات" : "Key Solution Features"}
-            </h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-2">
-              {details.features.map((feature, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: idx * 0.05 }}
-                  className="flex gap-4 p-4 rounded-xl bg-white/[0.01] hover:bg-white/[0.03] border border-white/[0.03] hover:border-white/10 transition-all duration-300 group"
-                >
-                  <div className="flex-shrink-0 w-11 h-11 rounded-lg bg-[#F18805]/10 border border-[#F18805]/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    {featureIcons[idx] || featureIcons[0]}
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <h4 className="font-bold text-white text-base group-hover:text-[#F18805] transition-colors">
-                      {feature.title}
-                    </h4>
-                    <p className="text-white/60 text-xs md:text-sm leading-relaxed font-light">
-                      {feature.desc}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
+          {details.features && details.features.length > 0 && (
+            <div className="flex flex-col gap-5">
+              <h3 className="text-xl font-bold text-[#F18805] border-b border-[#F18805]/20 pb-3 flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                </svg>
+                {t("productFeaturesTitle")}
+              </h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-2">
+                {details.features.map((feature, idx) => (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: idx * 0.05 }}
+                    className="flex gap-4 p-4 rounded-xl bg-white/[0.01] hover:bg-white/[0.03] border border-white/[0.03] hover:border-white/10 transition-all duration-300 group"
+                  >
+                    <div className="flex-shrink-0 w-11 h-11 rounded-lg bg-[#F18805]/10 border border-[#F18805]/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      {featureIcons[idx] || featureIcons[0]}
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <h4 className="font-bold text-white text-base group-hover:text-[#F18805] transition-colors">
+                        {feature.title}
+                      </h4>
+                      <p className="text-white/60 text-xs md:text-sm leading-relaxed font-light">
+                        {feature.desc}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Technology Specifications */}
-          <div className="flex flex-col gap-3">
-            <h4 className="text-xs font-semibold text-white/50 uppercase tracking-widest">
-              {isAr ? "التقنيات المستخدمة في المنصة" : "Technology Stack Specs"}
-            </h4>
-            <div className="flex flex-wrap gap-2.5">
-              {details.techSpecs.map((tech, idx) => (
-                <span 
-                  key={idx}
-                  className="px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 hover:border-white/10 text-white/95 transition-colors cursor-default"
-                >
-                  {tech}
-                </span>
-              ))}
+          {details.techSpecs && details.techSpecs.length > 0 && (
+            <div className="flex flex-col gap-3">
+              <h4 className="text-xs font-semibold text-white/50 uppercase tracking-widest">
+                {t("productTechTitle")}
+              </h4>
+              <div className="flex flex-wrap gap-2.5">
+                {details.techSpecs.map((tech, idx) => (
+                  <span 
+                    key={idx}
+                    className="px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 hover:border-white/10 text-white/95 transition-colors cursor-default"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Action CTAs */}
           <motion.div
@@ -408,21 +195,25 @@ const ProductDetailsPage = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="flex flex-wrap items-center gap-4 mt-4"
           >
-            <Link
-              href={product.demoLink}
-              className="relative overflow-hidden bg-[#F18805] hover:bg-[#d17604] text-white px-10 py-4 rounded-xl font-bold transition-all duration-300 shadow-[0_0_30px_rgba(241,136,5,0.25)] hover:shadow-[0_0_40px_rgba(241,136,5,0.4)] flex items-center gap-3 hover:-translate-y-0.5 group"
-            >
-              <span>{isAr ? "معاينة النظام حياً" : "See Live Demo"}</span>
-              <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
-            </Link>
-            <Link
-              href={product.orderLink}
-              className="bg-transparent border-[2px] border-white/10 hover:border-[#F18805] hover:bg-[#F18805]/10 text-white px-10 py-4 rounded-xl font-bold transition-all duration-300 flex items-center gap-2 hover:-translate-y-0.5"
-            >
-              <span>{isAr ? "اطلب نسختك الآن" : "Order Solution Now!"}</span>
-            </Link>
+            {product.demoLink && product.demoLink !== "#" && (
+              <Link
+                href={product.demoLink}
+                className="relative overflow-hidden bg-[#F18805] hover:bg-[#d17604] text-white px-10 py-4 rounded-xl font-bold transition-all duration-300 shadow-[0_0_30px_rgba(241,136,5,0.25)] hover:shadow-[0_0_40px_rgba(241,136,5,0.4)] flex items-center gap-3 hover:-translate-y-0.5 group"
+              >
+                <span>{t("productLiveDemo")}</span>
+                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </Link>
+            )}
+            {product.orderLink && product.orderLink !== "#" && (
+              <Link
+                href={product.orderLink}
+                className="bg-transparent border-[2px] border-white/10 hover:border-[#F18805] hover:bg-[#F18805]/10 text-white px-10 py-4 rounded-xl font-bold transition-all duration-300 flex items-center gap-2 hover:-translate-y-0.5"
+              >
+                <span>{t("productOrderNow")}</span>
+              </Link>
+            )}
           </motion.div>
         </div>
 
@@ -442,7 +233,7 @@ const ProductDetailsPage = () => {
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
-              {isAr ? "معاينة الحاسوب" : "Desktop View"}
+              {t("productDesktopView")}
             </button>
             <button
               onClick={() => setActivePreview("mobile")}
@@ -455,7 +246,7 @@ const ProductDetailsPage = () => {
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
               </svg>
-              {isAr ? "معاينة الجوال" : "Mobile View"}
+              {t("productMobileView")}
             </button>
           </div>
 
@@ -551,62 +342,62 @@ const ProductDetailsPage = () => {
       </section>
 
       {/* Samples from Product Gallery Section */}
-      <section className="w-full max-w-[1400px] mx-auto px-6 md:px-10 py-16 flex flex-col items-center gap-12 relative z-10 border-t border-white/5 mt-12">
-        <div className="flex flex-col items-center text-center gap-4 max-w-3xl">
-          <span className="px-4 py-1.5 rounded-full text-[10px] md:text-xs font-bold bg-[#F18805]/10 border border-[#F18805]/20 text-[#F18805] shadow-[0_0_15px_rgba(241,136,5,0.05)] uppercase tracking-widest">
-            {isAr ? "لقطات حية من داخل النظام" : "Live Screenshots & Visuals"}
-          </span>
-          <motion.h2
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-white tracking-tight"
-          >
-            {isAr ? "نماذج ولقطات حية من المنتج" : "Samples from Product (Screenshots)"}
-          </motion.h2>
-          <p className="text-white/60 text-xs md:text-sm leading-relaxed font-light">
-            {isAr 
-              ? "استكشف واجهات النظام والمنصات الحقيقية، لوحات تحكم الإدارة، وتصاميم الشاشات التي تم تصميمها وتطويرها بالكامل بأعلى كفاءة وجودة."
-              : "Take a closer look at the actual interactive dashboards, administrative platforms, and high-fidelity layouts engineered within the solution."}
-          </p>
-        </div>
-
-        {/* Gallery Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 w-full">
-          {samples.map((img, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
+      {samples && samples.length > 0 && (
+        <section className="w-full max-w-[1400px] mx-auto px-6 md:px-10 py-16 flex flex-col items-center gap-12 relative z-10 border-t border-white/5 mt-12">
+          <div className="flex flex-col items-center text-center gap-4 max-w-3xl">
+            <span className="px-4 py-1.5 rounded-full text-[10px] md:text-xs font-bold bg-[#F18805]/10 border border-[#F18805]/20 text-[#F18805] shadow-[0_0_15px_rgba(241,136,5,0.05)] uppercase tracking-widest">
+              {t("liveScreenshotsBadge")}
+            </span>
+            <motion.h2
+              initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: idx * 0.05 }}
-              onClick={() => setSelectedImageIndex(idx)}
-              className="relative aspect-[16/10] rounded-xl overflow-hidden border border-white/5 hover:border-[#F18805]/40 bg-[#16161F] cursor-pointer group shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(241,136,5,0.15)]"
+              transition={{ duration: 0.5 }}
+              className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-white tracking-tight"
             >
-              {/* Thumbnail Image */}
-              <Image
-                src={img}
-                alt={`${details.name} Sample Screenshot ${idx + 1}`}
-                fill
-                className="object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              
-              {/* Glassmorphic Overlay Hover Effect */}
-              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 text-center backdrop-blur-[2px]">
-                <div className="w-10 h-10 rounded-full bg-[#F18805] text-white flex items-center justify-center shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
-                  </svg>
+              {t("liveScreenshotsTitle")}
+            </motion.h2>
+            <p className="text-white/60 text-xs md:text-sm leading-relaxed font-light">
+              {t("liveScreenshotsDesc")}
+            </p>
+          </div>
+
+          {/* Gallery Grid */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 w-full">
+            {samples.map((img, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: idx * 0.05 }}
+                onClick={() => setSelectedImageIndex(idx)}
+                className="relative aspect-[16/10] rounded-xl overflow-hidden border border-white/5 hover:border-[#F18805]/40 bg-[#16161F] cursor-pointer group shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(241,136,5,0.15)]"
+              >
+                {/* Thumbnail Image */}
+                <Image
+                  src={img}
+                  alt={`${details.name} Sample Screenshot ${idx + 1}`}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                
+                {/* Glassmorphic Overlay Hover Effect */}
+                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 text-center backdrop-blur-[2px]">
+                  <div className="w-10 h-10 rounded-full bg-[#F18805] text-white flex items-center justify-center shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                    </svg>
+                  </div>
+                  <span className="text-white text-xs font-semibold mt-3 tracking-wide transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                    {t("viewScreen")}
+                  </span>
                 </div>
-                <span className="text-white text-xs font-semibold mt-3 tracking-wide transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                  {isAr ? "عرض الشاشة" : "View Screen"}
-                </span>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Fullscreen Spring Lightbox Modal */}
       <AnimatePresence>
@@ -691,7 +482,7 @@ const ProductDetailsPage = () => {
           transition={{ duration: 0.5 }}
           className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-white text-center tracking-tight"
         >
-          {isAr ? "استكشف المزيد من حلولنا الذكية" : "More SaaS Products You Might Like"}
+          {t("moreProductsTitle")}
         </motion.h2>
 
         {/* Related grid */}
@@ -715,21 +506,21 @@ const ProductDetailsPage = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#16161F] to-transparent opacity-80" />
                   <div className="absolute top-4 left-4 bg-[#F18805] text-white text-[10px] md:text-xs font-bold px-3 py-1 rounded-full shadow-md">
-                    {productDetails[item.id]?.[language]?.category || item.category}
+                    {item.category}
                   </div>
                 </div>
 
                 {/* Content Info */}
                 <div className="p-6 flex flex-col flex-grow text-start">
                   <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#F18805] transition-colors">
-                    {productDetails[item.id]?.[language]?.name || item.name}
+                    {item.name}
                   </h3>
                   <p className="text-white/60 text-xs md:text-sm leading-relaxed mb-6 flex-grow line-clamp-2 font-light">
-                    {productDetails[item.id]?.[language]?.description || item.description}
+                    {item.description}
                   </p>
                   <div className="mt-auto flex items-center justify-between">
                     <span className="text-[#F18805] font-bold text-xs md:text-sm flex items-center gap-2 group-hover:gap-3 transition-all duration-300">
-                      {isAr ? "عرض التفاصيل الكاملة" : "View Full Details"}
+                      {t("viewFullDetails")}
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
@@ -753,7 +544,7 @@ const ProductDetailsPage = () => {
             href="/our-products"
             className="inline-block bg-transparent border border-white/10 hover:border-[#F18805] hover:bg-[#F18805]/10 text-white px-10 py-3.5 rounded-xl font-bold transition-all duration-300"
           >
-            {isAr ? "استكشف كافة الحلول والمنتجات" : "Check All SaaS Products"}
+            {t("exploreAllProducts")}
           </Link>
         </motion.div>
       </section>
