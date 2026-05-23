@@ -64,7 +64,7 @@ const Navbar = () => {
           if (data && Array.isArray(data) && data.length > 0) {
             // Inject dynamic services into any dropdown marked as services
             const enriched = data.map((link) => {
-              if (link.dropdown) {
+              if (link.dropdown && link.name === t("services")) {
                 return { ...link, dropdown: [...serviceDropdown, { name: t("consultationHeroTitle"), href: "/project-consultation" }, { name: t("requestQuote"), href: "/request-quote" }] };
               }
               return link;
