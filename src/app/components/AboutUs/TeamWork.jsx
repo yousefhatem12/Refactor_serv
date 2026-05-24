@@ -106,7 +106,7 @@ export default function TeamWork({ data }) {
 
   useEffect(() => {
     if (!data) {
-      fetchAPI("/team")
+      fetchAPI(`/team?lang=${language}`)
         .then((res) => {
           if (res && Array.isArray(res) && res.length > 0) {
             setDbTeam(res);

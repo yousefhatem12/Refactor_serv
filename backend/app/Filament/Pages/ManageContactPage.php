@@ -64,6 +64,15 @@ class ManageContactPage extends Page implements HasForms
 
         $settings = Setting::whereIn('key', $keys)->get()->pluck('value', 'key')->toArray();
         
+        if (isset($settings['site_address']) && is_string($settings['site_address']) && str_starts_with($settings['site_address'], '{')) {
+            $settings['site_address'] = json_decode($settings['site_address'], true);
+        } else {
+            $settings['site_address'] = [
+                'en' => $settings['site_address'] ?? '',
+                'ar' => $settings['site_address'] ?? ''
+            ];
+        }
+
         $mergedData = array_merge($this->record->toArray(), $settings);
 
         $this->form->fill($mergedData);
@@ -103,7 +112,17 @@ class ManageContactPage extends Page implements HasForms
                                 TextInput::make('site_whatsapp')->label('WhatsApp Number / رقم الواتساب'),
                                 TextInput::make('site_email')->label('Email Address / البريد الإلكتروني')->email(),
                                 TextInput::make('site_skype')->label('Skype ID / حساب سكايب'),
-                                Textarea::make('site_address')->label('Address / العنوان')->rows(2)->columnSpanFull(),
+                                \Filament\Schemas\Components\Tabs::make('Address Translations')
+                                    ->tabs([
+                                        \Filament\Schemas\Components\Tabs\Tab::make('English')
+                                            ->schema([
+                                                Textarea::make('site_address.en')->label('Address')->rows(2),
+                                            ]),
+                                        \Filament\Schemas\Components\Tabs\Tab::make('Arabic')
+                                            ->schema([
+                                                Textarea::make('site_address.ar')->label('العنوان')->rows(2),
+                                            ]),
+                                    ])->columnSpanFull(),
                             ])->columns(2),
                     ])->columnSpanFull(),
             ])
@@ -131,6 +150,9 @@ class ManageContactPage extends Page implements HasForms
             // Save Settings Data
             $settingsData = collect($data)->only(['site_phone', 'site_whatsapp', 'site_email', 'site_skype', 'site_address'])->toArray();
             foreach ($settingsData as $key => $value) {
+                if ($key === 'site_address') {
+                    $value = json_encode($value);
+                }
                 Setting::updateOrCreate(['key' => $key], ['value' => $value]);
             }
 
