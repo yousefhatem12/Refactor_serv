@@ -23,7 +23,14 @@ class FeatureResource extends Resource
     protected static ?int $navigationSort = 2;
     public static function getNavigationLabel(): string { return __('Features'); }
 
-protected static ?string $recordTitleAttribute = 'title';
+    public static function getRecordTitle(?\Illuminate\Database\Eloquent\Model $record): ?string
+    {
+        if (is_array($record?->title)) {
+            return $record->title['en'] ?? $record->title['ar'] ?? null;
+        }
+
+        return $record?->title;
+    }
 
     public static function form(Schema $schema): Schema
     {

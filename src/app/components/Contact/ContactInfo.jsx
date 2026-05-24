@@ -18,18 +18,18 @@ const ContactInfo = ({ data }) => {
   const [socials, setSocials] = React.useState([]);
 
   React.useEffect(() => {
-    fetchAPI("/settings")
+    fetchAPI(`/settings?lang=${language}`)
       .then((data) => {
         if (data) setSettings(data);
       })
       .catch(console.error);
 
-    fetchAPI("/footer-data")
+    fetchAPI(`/footer-data?lang=${language}`)
       .then((data) => {
         if (data && data.socials) setSocials(data.socials);
       })
       .catch(console.error);
-  }, []);
+  }, [language]);
 
   // Split title if it has two parts in translation, or just use as is
   const title =

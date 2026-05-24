@@ -41,6 +41,52 @@ class ApiController extends Controller
         return $field[$lang] ?? $field['en'] ?? '';
     }
 
+    private function translateCategory($category, $lang)
+    {
+        if (!$category) return '';
+        $map = [
+            'design' => ['en' => 'Design', 'ar' => 'تصميم'],
+            'التصميم' => ['en' => 'Design', 'ar' => 'تصميم'],
+            'hosting' => ['en' => 'Hosting', 'ar' => 'استضافة'],
+            'الاستضافة' => ['en' => 'Hosting', 'ar' => 'استضافة'],
+            'marketing' => ['en' => 'Marketing', 'ar' => 'تسويق'],
+            'التسويق' => ['en' => 'Marketing', 'ar' => 'تسويق'],
+            'development' => ['en' => 'Development', 'ar' => 'تطوير'],
+            'التطوير' => ['en' => 'Development', 'ar' => 'تطوير'],
+            'security' => ['en' => 'Security', 'ar' => 'حماية'],
+            'الحماية' => ['en' => 'Security', 'ar' => 'حماية'],
+            
+            // Other possible categories
+            'artificial intelligence' => ['en' => 'Artificial Intelligence', 'ar' => 'الذكاء الاصطناعي'],
+            'software' => ['en' => 'Software', 'ar' => 'برمجيات'],
+            'startup' => ['en' => 'Startup', 'ar' => 'الشركات الناشئة'],
+        ];
+        
+        $key = strtolower(trim($category));
+        if (isset($map[$key])) {
+            return $map[$key][$lang] ?? $category;
+        }
+        return $category;
+    }
+
+    private function formatDate($date, $lang)
+    {
+        if (!$date) return '';
+        if ($lang === 'ar') {
+            $months = [
+                'Jan' => 'يناير', 'Feb' => 'فبراير', 'Mar' => 'مارس', 'Apr' => 'أبريل',
+                'May' => 'مايو', 'Jun' => 'يونيو', 'Jul' => 'يوليو', 'Aug' => 'أغسطس',
+                'Sep' => 'سبتمبر', 'Oct' => 'أكتوبر', 'Nov' => 'نوفمبر', 'Dec' => 'ديسمبر'
+            ];
+            $formatted = $date->format('d M Y'); // e.g. "21 May 2026"
+            foreach ($months as $en => $ar) {
+                $formatted = str_replace($en, $ar, $formatted);
+            }
+            return $formatted;
+        }
+        return $date->format('M d, Y');
+    }
+
     public function getServices()
     {
         $lang = $this->getLang();
@@ -58,7 +104,7 @@ class ApiController extends Controller
             $name = $this->trans($service->name, $lang);
             return [
                 'id' => $service->slug,
-                'title' => strtolower($this->trans($service->name, 'en')), // Keep internal title as english if needed, or translate
+                'title' => $lang === 'en' ? strtolower($name) : $name,
                 'label' => $name,
                 'description' => $this->trans($service->description, $lang),
                 'img' => $service->icon ?: '/Services/Purple Planet.png',
@@ -228,9 +274,9 @@ class ApiController extends Controller
                 'slug' => $post->slug,
                 'content' => $this->trans($post->content, $lang),
                 'author' => $post->author?->name ?? 'Admin',
-                'category' => $post->category,
+                'category' => $this->translateCategory($post->category, $lang),
                 'image' => $post->image ? asset('storage/' . $post->image) : null,
-                'published_at' => $post->created_at->format('M d, Y'),
+                'published_at' => $this->formatDate($post->created_at, $lang),
             ];
         });
         return response()->json($posts);
@@ -270,11 +316,11 @@ class ApiController extends Controller
             'id' => $post->id,
             'title' => $this->trans($post->title, $lang),
             'slug' => $post->slug,
-            'category' => $post->category,
+            'category' => $this->translateCategory($post->category, $lang),
             'content' => $this->trans($post->content, $lang),
             'author' => $post->author?->name ?? 'Admin',
             'image' => $post->image ? asset('storage/' . $post->image) : null,
-            'published_at' => $post->created_at->format('M d, Y'),
+            'published_at' => $this->formatDate($post->created_at, $lang),
             'seo' => [
                 'title' => $this->trans($post->seo_title, $lang) ?: $this->trans($post->title, $lang),
                 'description' => $this->trans($post->seo_description, $lang),
@@ -442,12 +488,13 @@ class ApiController extends Controller
 
     public function getTestimonials()
     {
-        $testimonials = Testimonial::where('is_active', true)->get()->map(function ($t) {
+        $lang = $this->getLang();
+        $testimonials = Testimonial::where('is_active', true)->get()->map(function ($t) use ($lang) {
             return [
                 'id' => $t->id,
-                'client_name' => $t->client_name,
-                'position' => $t->position,
-                'review' => $t->review,
+                'client_name' => $this->trans($t->client_name, $lang),
+                'position' => $this->trans($t->position, $lang),
+                'review' => $this->trans($t->review, $lang),
                 'image' => $t->image ? asset('storage/' . $t->image) : null,
             ];
         });
@@ -456,12 +503,13 @@ class ApiController extends Controller
 
     public function getTeamMembers()
     {
-        $team = TeamMember::where('is_active', true)->get()->map(function ($member) {
+        $lang = $this->getLang();
+        $team = TeamMember::where('is_active', true)->get()->map(function ($member) use ($lang) {
             return [
                 'id' => $member->id,
-                'name' => $member->name,
-                'role' => $member->role,
-                'bio' => $member->bio,
+                'name' => $this->trans($member->name, $lang),
+                'role' => $this->trans($member->role, $lang),
+                'bio' => $this->trans($member->bio, $lang),
                 'image' => $member->image ? asset('storage/' . $member->image) : null,
                 'facebook_url' => $member->facebook_url,
                 'linkedin_url' => $member->linkedin_url,
@@ -472,11 +520,12 @@ class ApiController extends Controller
 
     public function getFeatures()
     {
-        $features = Feature::where('is_active', true)->get()->map(function ($f) {
+        $lang = $this->getLang();
+        $features = Feature::where('is_active', true)->get()->map(function ($f) use ($lang) {
             return [
                 'id' => $f->id,
-                'title' => $f->title,
-                'description' => $f->description,
+                'title' => $this->trans($f->title, $lang),
+                'description' => $this->trans($f->description, $lang),
                 'icon' => $f->icon,
             ];
         });

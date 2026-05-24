@@ -5,7 +5,7 @@ import { fetchAPI } from "@/lib/api";
 import { useLanguage } from "../../../context/LanguageContext";
 
 const OurPortfolio = ({ activeCategoryId }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [portfolioItems, setPortfolioItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -13,7 +13,7 @@ const OurPortfolio = ({ activeCategoryId }) => {
     const fetchPortfolio = async () => {
       try {
         setIsLoading(true);
-        const data = await fetchAPI('/portfolio');
+        const data = await fetchAPI(`/portfolio?lang=${language}`);
         setPortfolioItems(data);
       } catch (error) {
         console.error("Failed to fetch portfolio:", error);
@@ -23,7 +23,7 @@ const OurPortfolio = ({ activeCategoryId }) => {
     };
 
     fetchPortfolio();
-  }, []);
+  }, [language]);
 
   // Filter items based on category if needed
   const items = Array.isArray(portfolioItems) ? portfolioItems : [];

@@ -98,7 +98,7 @@ export default function TeamWorkPage() {
       })
       .catch((err) => console.warn("Failed to fetch database team data:", err))
       .finally(() => setLoading(false));
-  }, []);
+  }, [language]);
 
   // Merge API data if exists, otherwise use fallback defaults
   const displayTeam = dbTeam.length > 0 

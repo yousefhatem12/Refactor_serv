@@ -61,7 +61,6 @@ class FooterSeeder extends Seeder
         // 4. Update Contact Info Settings
         Setting::updateOrCreate(['key' => 'site_phone'], ['value' => '00201288863831', 'type' => 'text', 'value_source' => 'link']);
         Setting::updateOrCreate(['key' => 'site_email'], ['value' => 'sales@serv5.com', 'type' => 'text', 'value_source' => 'link']);
-        Setting::updateOrCreate(['key' => 'site_address_en'], ['value' => 'Egypt-Mansoura-Suez Canal st. above Dr.Ramy pharmacy', 'type' => 'text', 'value_source' => 'link']);
-        Setting::updateOrCreate(['key' => 'site_address_ar'], ['value' => 'مصر - المنصورة - شارع قناة السويس - أعلى صيدلية د. رامي', 'type' => 'text', 'value_source' => 'link']);
+        Setting::updateOrCreate(['key' => 'site_address'], ['value' => json_encode(['en' => 'Egypt-Mansoura-Suez Canal st. above Dr.Ramy pharmacy', 'ar' => 'مصر - المنصورة - شارع قناة السويس - أعلى صيدلية د. رامي']), 'type' => 'text', 'value_source' => 'link']);
     }
 }

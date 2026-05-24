@@ -123,7 +123,7 @@ const ContactForm = () => {
             
             {authMode === "register" && (
               <div className="flex flex-col gap-2">
-                <label className="text-white text-xs opacity-70">Name</label>
+                <label className="text-white text-xs opacity-70">{language === 'ar' ? 'الاسم' : 'Name'}</label>
                 <input
                   type="text"
                   name="name"
@@ -136,7 +136,7 @@ const ContactForm = () => {
             )}
 
             <div className="flex flex-col gap-2">
-              <label className="text-white text-xs opacity-70">Email</label>
+              <label className="text-white text-xs opacity-70">{language === 'ar' ? 'البريد الإلكتروني' : 'Email'}</label>
               <input
                 type="email"
                 name="email"
@@ -148,7 +148,7 @@ const ContactForm = () => {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-white text-xs opacity-70">Password</label>
+              <label className="text-white text-xs opacity-70">{language === 'ar' ? 'كلمة المرور' : 'Password'}</label>
               <input
                 type="password"
                 name="password"
@@ -161,7 +161,7 @@ const ContactForm = () => {
 
             {authMode === "register" && (
               <div className="flex flex-col gap-2">
-                <label className="text-white text-xs opacity-70">Confirm Password</label>
+                <label className="text-white text-xs opacity-70">{language === 'ar' ? 'تأكيد كلمة المرور' : 'Confirm Password'}</label>
                 <input
                   type="password"
                   name="password_confirmation"
@@ -306,7 +306,7 @@ const ContactForm = () => {
               onChange={handleChange}
               required
               className="bg-transparent border-b border-gray-600 focus:border-blue-400 outline-none text-white pb-2 text-sm transition-colors resize-none h-10"
-              placeholder="Write your message.."
+              placeholder={language === 'ar' ? 'اكتب رسالتك هنا..' : 'Write your message..'}
             ></textarea>
           </div>
 

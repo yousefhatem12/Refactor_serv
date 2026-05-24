@@ -6,7 +6,7 @@ import { useLanguage } from "../../context/LanguageContext";
 import { fetchAPI, getMediaUrl } from "@/lib/api";
 
 const Founders = ({ data }) => {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
 
   // The DB team has 'name', 'role', 'image'
   // The global /team has 'name', 'role', 'image'
@@ -49,7 +49,7 @@ const Founders = ({ data }) => {
         })
         .catch(console.error);
     }
-  }, [data]);
+  }, [data, language]);
 
   const displayTeam =
     data?.items?.length > 0

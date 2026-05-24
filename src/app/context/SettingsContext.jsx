@@ -12,7 +12,7 @@ export const SettingsProvider = ({ children, initialSettings }) => {
   // Fetch new settings if the language changes on the client
   useEffect(() => {
     let mounted = true;
-    fetchAPI('/settings').then(data => {
+    fetchAPI(`/settings?lang=${language}`).then(data => {
       if (mounted && data) {
         setSettings(data);
       }
