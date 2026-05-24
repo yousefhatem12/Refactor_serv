@@ -117,7 +117,7 @@ export default function TeamWork({ data }) {
     } else {
       setLoading(false);
     }
-  }, [data]);
+  }, [data, language]);
 
   // Determine section titles & descriptions
   const sectionTitle = data?.title || t("teamHeroTitle");

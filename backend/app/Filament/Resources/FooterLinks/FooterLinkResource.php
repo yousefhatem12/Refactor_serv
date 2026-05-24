@@ -22,7 +22,14 @@ class FooterLinkResource extends Resource
     protected static ?int $navigationSort = 2;
     public static function getNavigationLabel(): string { return __('Footer Links'); }
 
-protected static ?string $recordTitleAttribute = 'label';
+    public static function getRecordTitle(?\Illuminate\Database\Eloquent\Model $record): ?string
+    {
+        if (is_array($record?->label)) {
+            return $record->label['en'] ?? $record->label['ar'] ?? null;
+        }
+
+        return $record?->label;
+    }
 
     public static function form(Schema $schema): Schema
     {

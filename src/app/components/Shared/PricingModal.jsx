@@ -21,7 +21,7 @@ const PricingModal = ({ isOpen, onClose, serviceId = null }) => {
   }, [serviceId]);
 
   useEffect(() => {
-    if (isOpen && services.length === 0) {
+    if (isOpen) {
       fetchAPI('/services', { cache: "no-store" })
         .then((data) => {
           if (data && data.length > 0) {
@@ -31,7 +31,7 @@ const PricingModal = ({ isOpen, onClose, serviceId = null }) => {
         })
         .catch(err => console.error("Failed to fetch services", err));
     }
-  }, [isOpen, services.length]);
+  }, [isOpen, language]);
 
   useEffect(() => {
     if (isOpen && activeServiceSlug) {
@@ -43,14 +43,14 @@ const PricingModal = ({ isOpen, onClose, serviceId = null }) => {
           } else {
              setPlans([]);
           }
-          setLoading(false);
+          setLoading(false)
         })
         .catch((err) => {
           console.error("Failed to fetch pricing plans", err);
           setLoading(false);
         });
     }
-  }, [isOpen, activeServiceSlug]);
+  }, [isOpen, activeServiceSlug, language]);
 
   return (
     <AnimatePresence>

@@ -15,7 +15,11 @@ class FeaturesTable
     {
         return $table
             ->columns([
-                TextColumn::make('title')
+                TextColumn::make('title.en')
+                    ->label('Title (English)')
+                    ->searchable(),
+                TextColumn::make('title.ar')
+                    ->label('Title (Arabic)')
                     ->searchable(),
                 TextColumn::make('icon')
                     ->searchable(),

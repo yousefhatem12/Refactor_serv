@@ -43,7 +43,7 @@ export default function CareersPage() {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [language]);
 
   // Departments list for filtering
   const uniqueDepts = Array.from(new Set(jobsList.map(j => j.department).filter(Boolean)));
