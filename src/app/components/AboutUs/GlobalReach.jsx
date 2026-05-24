@@ -16,62 +16,7 @@ const locations = [
     x: 59,
     y: 42,
   },
-  {
-    id: "saudi",
-    name: "Saudi Arabia",
-    city: "Riyadh",
-    details: "Headquarters",
-    x: 63,
-    y: 50,
-  },
-  {
-    id: "uae",
-    name: "UAE",
-    city: "Dubai",
-    details: "Innovation Hub",
-    x: 66,
-    y: 51,
-  },
-  {
-    id: "india",
-    name: "India",
-    city: "Mumbai",
-    details: "Tech Center",
-    x: 76,
-    y: 58,
-  },
-  {
-    id: "australia",
-    name: "Australia",
-    city: "Sydney",
-    details: "Growth Center",
-    x: 89,
-    y: 81,
-  },
-  {
-    id: "usa",
-    name: "USA",
-    city: "New York",
-    details: "Business Office",
-    x: 18,
-    y: 38,
-  },
-  {
-    id: "brazil",
-    name: "Brazil",
-    city: "São Paulo",
-    details: "Regional Center",
-    x: 31,
-    y: 74,
-  },
-  {
-    id: "south-africa",
-    name: "South Africa",
-    city: "Cape Town",
-    details: "Operations Hub",
-    x: 55,
-    y: 82,
-  },
+ 
 ];
 
 const GlobalReach = ({ data, minimal = false }) => {
@@ -95,7 +40,12 @@ const GlobalReach = ({ data, minimal = false }) => {
           y: item.y || defaultLoc.y,
         };
       })
-    : locations;
+    : locations.map(loc => ({
+        ...loc,
+        name: language === "ar" ? t("locationEgypt") : loc.name,
+        city: language === "ar" ? "المنصورة" : loc.city,
+        details: language === "ar" ? "شارع قناة السويس - أعلى صيدلية د. رامي" : loc.details
+      }));
 
   useEffect(() => {
     const ctx = gsap.context(() => {

@@ -8,45 +8,86 @@ export const getMediaUrl = (path) => {
   return `${baseUrl}/storage/${path.replace(/^\//, '')}`;
 };
 
+// In-memory cache to store GET promises and their timestamp
+const apiCache = new Map();
+const CACHE_TTL = 15000; // 15 seconds
+
 export const fetchAPI = async (endpoint, options = {}) => {
   let lang = 'en';
-  if (typeof document !== 'undefined') {
+  if (typeof window === 'undefined') {
+    try {
+      const { cookies } = await import('next/headers');
+      const cookieStore = await cookies();
+      const nextLocale = cookieStore.get('NEXT_LOCALE');
+      if (nextLocale) lang = nextLocale.value;
+    } catch (error) {
+      // Fallback if cookies API is unavailable
+    }
+  } else {
     const match = document.cookie.match(new RegExp('(^| )NEXT_LOCALE=([^;]+)'));
     if (match) lang = match[2];
   }
 
   const url = new URL(`${API_BASE_URL}${endpoint}`);
-  url.searchParams.append('lang', lang);
+  url.searchParams.set('lang', lang);
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null;
+  const method = (options.method || 'GET').toUpperCase();
+  const isGet = method === 'GET';
 
-  try {
-    const isFormData = typeof FormData !== 'undefined' && options.body instanceof FormData;
-    const headers = {
-      'Accept': 'application/json',
-      'Accept-Language': lang,
-      ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
-      ...options.headers,
-    };
+  // Construct cache key based on URL and auth state
+  let cacheKey = null;
+  if (isGet) {
+    const currentLang = url.searchParams.get('lang') || lang;
+    cacheKey = `${endpoint}?lang=${currentLang}:${token || ''}`;
 
-    if (!isFormData) {
-      headers['Content-Type'] = 'application/json';
+    const cached = apiCache.get(cacheKey);
+    if (cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
+      return cached.promise;
     }
-
-    const response = await fetch(url.toString(), {
-      ...options,
-      cache: options.cache || 'no-store',
-      headers,
-    });
-
-    if (!response.ok) {
-      console.warn(`API warning: ${response.statusText}`);
-      return null;
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.warn('API connection failed:', error.message);
-    return null; // Return null so the UI doesn't crash
   }
+
+  const fetchPromise = (async () => {
+    try {
+      const isFormData = typeof FormData !== 'undefined' && options.body instanceof FormData;
+      const headers = {
+        'Accept': 'application/json',
+        'Accept-Language': lang,
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+        ...options.headers,
+      };
+
+      if (!isFormData) {
+        headers['Content-Type'] = 'application/json';
+      }
+
+      const response = await fetch(url.toString(), {
+        ...options,
+        cache: options.cache || 'no-store',
+        headers,
+      });
+
+      if (!response.ok) {
+        console.warn(`API warning: ${response.statusText}`);
+        if (isGet && cacheKey) apiCache.delete(cacheKey); // Don't cache bad responses
+        return null;
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.warn('API connection failed:', error.message);
+      if (isGet && cacheKey) apiCache.delete(cacheKey); // Don't cache failures
+      return null; // Return null so the UI doesn't crash
+    }
+  })();
+
+  if (isGet && cacheKey) {
+    apiCache.set(cacheKey, {
+      promise: fetchPromise,
+      timestamp: Date.now(),
+    });
+  }
+
+  return fetchPromise;
 };
+

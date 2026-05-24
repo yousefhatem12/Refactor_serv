@@ -10,6 +10,8 @@ import OurJourney from "../components/AboutUs/OurJourney";
 import Founders from "../components/AboutUs/Founders";
 import TeamWork from "../components/AboutUs/TeamWork";
 import AboutCTA from "../components/AboutUs/AboutCTA";
+import Experience from "../components/AboutUs/Experience";
+import Solutions from "../components/AboutUs/Solutions";
 
 
 export default function AboutUsPage() {
@@ -40,7 +42,14 @@ export default function AboutUsPage() {
       <div className="w-full relative z-10 pb-10">
         <AboutHero data={pageData} />
         {/* Render text_image sections (Experience & Solutions) right after the hero cards */}
-        <PageSections sections={textImageBlocks} />
+        {textImageBlocks.length > 0 ? (
+          <PageSections sections={textImageBlocks} />
+        ) : (
+          <>
+            <Experience />
+            <Solutions />
+          </>
+        )}
         
         {/* Render GlobalReach dynamically from dashboard, or fallback to static */}
         {hasGlobalReach ? (
