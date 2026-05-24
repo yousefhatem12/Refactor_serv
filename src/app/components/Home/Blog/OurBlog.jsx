@@ -5,7 +5,7 @@ import { fetchAPI } from "@/lib/api";
 import { useLanguage } from "../../../context/LanguageContext";
 
 const OurBlog = () => {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const [showAllPosts, setShowAllPosts] = useState(false);
 
   const [blogPosts, setBlogPosts] = useState({
@@ -42,7 +42,7 @@ const OurBlog = () => {
     };
 
     fetchBlog();
-  }, []);
+  }, [language]);
 
   return (
     <section className="py-10 md:py-20 bg-transparent text-white relative z-0">

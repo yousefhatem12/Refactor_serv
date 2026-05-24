@@ -472,11 +472,12 @@ class ApiController extends Controller
 
     public function getFeatures()
     {
-        $features = Feature::where('is_active', true)->get()->map(function ($f) {
+        $lang = $this->getLang();
+        $features = Feature::where('is_active', true)->get()->map(function ($f) use ($lang) {
             return [
                 'id' => $f->id,
-                'title' => $f->title,
-                'description' => $f->description,
+                'title' => $this->trans($f->title, $lang),
+                'description' => $this->trans($f->description, $lang),
                 'icon' => $f->icon,
             ];
         });

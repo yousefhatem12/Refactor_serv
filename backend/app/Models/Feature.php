@@ -7,4 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Feature extends Model
 {
     protected $fillable = ['title', 'description', 'icon', 'is_active'];
+
+    protected $casts = [
+        'title' => 'json',
+        'description' => 'json',
+        'is_active' => 'boolean',
+    ];
 }

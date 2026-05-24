@@ -28,7 +28,7 @@ const OurProductsListingPage = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [language]);
 
   const titleText = t("ourProducts") || "";
   const words = titleText ? titleText.split(" ") : [];

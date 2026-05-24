@@ -85,9 +85,24 @@ foreach ($services as $svc) {
 // 3. Features
 Feature::truncate();
 $features = [
-    ['title' => 'Cutting-edge Tech', 'description' => 'We use the latest frameworks like Laravel 12 and React 19.', 'icon' => 'heroicon-o-cpu-chip', 'is_active' => true],
-    ['title' => 'Fast Delivery', 'description' => 'Agile methodology ensuring your project launches on time.', 'icon' => 'heroicon-o-rocket-launch', 'is_active' => true],
-    ['title' => '24/7 Support', 'description' => 'Our experts are always here to help you with any issues.', 'icon' => 'heroicon-o-chat-bubble-left-right', 'is_active' => true],
+    [
+        'title' => ['en' => 'Cutting-edge Tech', 'ar' => 'تقنيات متطورة'],
+        'description' => ['en' => 'We use the latest frameworks like Laravel 12 and React 19.', 'ar' => 'نستخدم أحدث إطارات العمل مثل لارافيل 12 وريأكت 19.'],
+        'icon' => 'heroicon-o-cpu-chip',
+        'is_active' => true
+    ],
+    [
+        'title' => ['en' => 'Fast Delivery', 'ar' => 'سرعة التسليم'],
+        'description' => ['en' => 'Agile methodology ensuring your project launches on time.', 'ar' => 'منهجية العمل الرشيقة تضمن إطلاق مشروعك في الوقت المحدد.'],
+        'icon' => 'heroicon-o-rocket-launch',
+        'is_active' => true
+    ],
+    [
+        'title' => ['en' => '24/7 Support', 'ar' => 'دعم على مدار الساعة'],
+        'description' => ['en' => 'Our experts are always here to help you with any issues.', 'ar' => 'خبراؤنا متواجدون دائماً لمساعدتك في أي مشكلات.'],
+        'icon' => 'heroicon-o-chat-bubble-left-right',
+        'is_active' => true
+    ],
 ];
 foreach ($features as $f) {
     Feature::create($f);

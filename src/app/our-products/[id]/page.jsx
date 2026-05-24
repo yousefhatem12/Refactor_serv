@@ -54,7 +54,7 @@ const ProductDetailsPage = () => {
       .catch(() => {
         setOtherProductsList([]);
       });
-  }, [productId]);
+  }, [productId, language]);
 
   if (loading) {
     return (
