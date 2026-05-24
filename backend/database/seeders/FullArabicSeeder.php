@@ -198,8 +198,7 @@ class FullArabicSeeder extends Seeder
         // ── SETTINGS ──
         \App\Models\Setting::updateOrCreate(['key' => 'site_phone'], ['value' => '00201288863831', 'type' => 'text']);
         \App\Models\Setting::updateOrCreate(['key' => 'site_email'], ['value' => 'sales@serv5.com', 'type' => 'text']);
-        \App\Models\Setting::updateOrCreate(['key' => 'site_address_en'], ['value' => 'مصر - المنصورة - شارع قناة السويس - أعلى صيدلية د. رامي', 'type' => 'text']);
-        \App\Models\Setting::updateOrCreate(['key' => 'site_address_ar'], ['value' => 'مصر - المنصورة - شارع قناة السويس - أعلى صيدلية د. رامي', 'type' => 'text']);
+        \App\Models\Setting::updateOrCreate(['key' => 'site_address'], ['value' => json_encode(['en' => 'Egypt-Mansoura-Suez Canal st. above Dr.Ramy pharmacy', 'ar' => 'مصر - المنصورة - شارع قناة السويس - أعلى صيدلية د. رامي']), 'type' => 'text']);
         \App\Models\Setting::updateOrCreate(['key' => 'footer_heading'], ['value' => json_encode($this->t('امتلك تصميم ويب رائع<br/>مع شركة Serv5.')), 'type' => 'text']);
         \App\Models\Setting::updateOrCreate(['key' => 'footer_description'], ['value' => json_encode($this->t('تتخصص شركة Serv5 في تقديم الحلول البرمجية الحديثة وتصميم المواقع وتطبيقات الهواتف بجودة ممتازة.')), 'type' => 'text']);
         \App\Models\Setting::updateOrCreate(['key' => 'footer_button_text'], ['value' => json_encode($this->t('ابدأ معنا الآن')), 'type' => 'text']);
@@ -214,9 +213,33 @@ class FullArabicSeeder extends Seeder
 
         // ── TESTIMONIALS ──
         \App\Models\Testimonial::truncate();
-        \App\Models\Testimonial::create(['client_name' => 'جيمس ويلسون', 'position' => 'الرئيس التنفيذي لشركة تيك سوليوشنز', 'review' => 'قدمت لنا Serv5 منصة تجارة إلكترونية استثنائية غيرت مجرى أعمالنا تماماً. كان فريقهم محترفاً للغاية ومتعاوناً وتجاوز توقعاتنا بكثير.', 'is_active' => true]);
-        \App\Models\Testimonial::create(['client_name' => 'سارة جونسون', 'position' => 'مديرة التسويق في براند كو', 'review' => 'الاستراتيجية الإعلانية المتميزة والتسويق عبر وسائل التواصل التي صممتها Serv5 رفعت نسبة التفاعل لدينا بمعدل 300%. نتائج مذهلة فعلاً.', 'is_active' => true]);
-        \App\Models\Testimonial::create(['client_name' => 'مايكل براون', 'position' => 'المدير التقني لتطبيق فاينانس آب', 'review' => 'كان العمل مع شركة Serv5 لتطوير تطبيق الهاتف الخاص بنا تجربة رائعة ومريحة. سلمونا تطبيقاً متكاملاً بجودة ممتازة في الوقت المحدد تماماً.', 'is_active' => true]);
+        \App\Models\Testimonial::create([
+            'client_name' => ['en' => 'James Wilson', 'ar' => 'جيمس ويلسون'],
+            'position' => ['en' => 'CEO, Tech Solutions', 'ar' => 'الرئيس التنفيذي لشركة تيك سوليوشنز'],
+            'review' => [
+                'en' => 'Serv5 delivered an exceptional e-commerce platform that transformed our business. Their team was professional, responsive, and went above expectations.',
+                'ar' => 'قدمت لنا Serv5 منصة تجارة إلكترونية استثنائية غيرت مجرى أعمالنا تماماً. كان فريقهم محترفاً للغاية ومتعاوناً وتجاوز توقعاتنا بكثير.'
+            ],
+            'is_active' => true
+        ]);
+        \App\Models\Testimonial::create([
+            'client_name' => ['en' => 'Sarah Johnson', 'ar' => 'سارة جونسون'],
+            'position' => ['en' => 'Marketing Director, BrandCo', 'ar' => 'مديرة التسويق في براند كو'],
+            'review' => [
+                'en' => 'The social media strategy developed by Serv5 increased our engagement by 300%. Their creative approach and data-driven decisions are outstanding.',
+                'ar' => 'الاستراتيجية الإعلانية المتميزة والتسويق عبر وسائل التواصل التي صممتها Serv5 رفعت نسبة التفاعل لدينا بمعدل 300%. نتائج مذهلة فعلاً.'
+            ],
+            'is_active' => true
+        ]);
+        \App\Models\Testimonial::create([
+            'client_name' => ['en' => 'Michael Brown', 'ar' => 'مايكل براون'],
+            'position' => ['en' => 'CTO, FinanceApp', 'ar' => 'المدير التقني لتطبيق فاينانس آب'],
+            'review' => [
+                'en' => 'Working with Serv5 on our mobile app was a great experience. They delivered a high-quality product on time and within budget. Highly recommended!',
+                'ar' => 'كان العمل مع شركة Serv5 لتطوير تطبيق الهاتف الخاص بنا تجربة رائعة ومريحة. سلمونا تطبيقاً متكاملاً بجودة ممتازة في الوقت المحدد تماماً.'
+            ],
+            'is_active' => true
+        ]);
 
         Schema::enableForeignKeyConstraints();
         $this->command->info('Full Arabic content seeded successfully!');

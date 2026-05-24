@@ -68,7 +68,7 @@ const Testimonial = () => {
 
   const [data, setData] = useState([]);
   useEffect(() => {
-    fetchAPI('/testimonials').then(res => {
+    fetchAPI(`/testimonials?lang=${language}`).then(res => {
       if (res && res.length > 0) setData(res);
     }).catch(console.error);
   }, [language]);

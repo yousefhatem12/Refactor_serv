@@ -7,4 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class TeamMember extends Model
 {
     protected $fillable = ['name', 'role', 'bio', 'image', 'facebook_url', 'linkedin_url', 'is_active'];
+
+    protected $casts = [
+        'name' => 'json',
+        'role' => 'json',
+        'bio' => 'json',
+    ];
 }

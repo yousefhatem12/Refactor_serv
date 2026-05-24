@@ -13,6 +13,22 @@ Route::get('/user', function (Request $request) {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+// Temporary seeding endpoint
+Route::get('/run-seeders', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'FullEnglishSeeder']);
+        return response()->json([
+            'status' => 'success',
+            'output' => \Illuminate\Support\Facades\Artisan::output()
+        ]);
+    } catch (\Throwable $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage()
+        ], 500);
+    }
+});
+
 // Public endpoints
 Route::get('/services', [ApiController::class, 'getServices']);
 Route::get('/services/{slug}', [ApiController::class, 'getService']);
