@@ -13,17 +13,17 @@ const Founders = ({ data }) => {
   // We use data.items if available, otherwise fetch from /team, otherwise fallback.
   const founders = [
     {
-      name: t("founder1Name") || "MOHAMED ABDELAL",
+      name: language === "ar" ? "جون دو" : "John Doe",
       role: t("founder1Role"),
       image: "person-1.png",
     },
     {
-      name: t("founder2Name") || "AHMED MOHAMED",
+      name: language === "ar" ? "جين سميث" : "Jane Smith",
       role: t("founder2Role"),
       image: "person-2.png",
     },
     {
-      name: t("founder3Name") || "AHMED RAMADAN",
+      name: language === "ar" ? "أحمد علي" : "Ahmed Ali",
       role: t("founder3Role"),
       image: "person-3.png",
     },
@@ -64,7 +64,7 @@ const Founders = ({ data }) => {
         ? team.map((member) => ({
             name: member.name,
             role: member.role,
-            image: member.image || "/about-us/person-1.png",
+            image: member.image ? getMediaUrl(member.image) : "/about-us/person-1.png",
           }))
         : founders;
 

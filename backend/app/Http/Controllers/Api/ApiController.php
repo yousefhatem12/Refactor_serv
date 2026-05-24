@@ -23,7 +23,10 @@ class ApiController extends Controller
     private function getLang()
     {
         $lang = request('lang', request()->header('Accept-Language', 'en'));
-        return str_starts_with(strtolower($lang), 'ar') ? 'ar' : 'en';
+        if (is_array($lang)) {
+            $lang = reset($lang);
+        }
+        return str_starts_with(strtolower((string)$lang), 'ar') ? 'ar' : 'en';
     }
 
     private function trans($field, $lang)
@@ -536,10 +539,10 @@ class ApiController extends Controller
     {
         $lang = $this->getLang();
         $texts = [
-            'heading' => Setting::where('key', 'footer_heading')->value('value') ?? 'Have a Good Web Design<br/>With Serv5.',
-            'description' => Setting::where('key', 'footer_description')->value('value') ?? 'Serv5 specializes in modern web solutions...',
-            'button_text' => Setting::where('key', 'footer_button_text')->value('value') ?? 'Get Started',
-            'copyright' => Setting::where('key', 'footer_copyright')->value('value') ?? '2026 © Serv5. All Rights Reserved.'
+            'heading' => $this->trans(Setting::where('key', 'footer_heading')->value('value'), $lang) ?: 'Have a Good Web Design<br/>With Serv5.',
+            'description' => $this->trans(Setting::where('key', 'footer_description')->value('value'), $lang) ?: 'Serv5 specializes in modern web solutions...',
+            'button_text' => $this->trans(Setting::where('key', 'footer_button_text')->value('value'), $lang) ?: 'Get Started',
+            'copyright' => $this->trans(Setting::where('key', 'footer_copyright')->value('value'), $lang) ?: '2026 © Serv5. All Rights Reserved.'
         ];
 
         $links = \App\Models\FooterLink::orderBy('sort_order')->get()->groupBy('column_name')->map(function ($group) use ($lang) {

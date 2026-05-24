@@ -22,52 +22,7 @@ const OurJourney = ({ data }) => {
       users: "10",
       description: t("journeyDummyText"),
     },
-    {
-      year: "2011",
-      planet: "planet-2.png",
-      location: t("locationEgypt"),
-      users: "20",
-      description: t("journeyDummyText"),
-    },
-    {
-      year: "2013",
-      planet: "planet-3.png",
-      location: t("locationEgyptSaudi"),
-      users: "35",
-      description: t("journeyDummyText"),
-    },
-    {
-      year: "2015",
-      planet: "planet-4.png",
-      location: t("locationEgyptSaudi"),
-      users: "40",
-      partnership: t("partnershipEtihad"),
-      description: t("journeyDummyText"),
-    },
-    {
-      year: "2017",
-      planet: "planet-5.png",
-      location: t("locationEgyptSaudi"),
-      users: "35",
-      partnership: t("partnershipEtihad"),
-      description: t("journeyDummyText"),
-    },
-    {
-      year: "2020",
-      planet: "planet-6.png",
-      location: t("locationEgyptSaudi"),
-      users: "35",
-      partnership: t("partnershipEtihad"),
-      description: t("journeyDummyText"),
-    },
-    {
-      year: "2024",
-      planet: "planet-7.png",
-      location: t("locationEgyptSaudi"),
-      users: "35",
-      partnership: t("partnershipEtihad"),
-      description: t("journeyDummyText"),
-    },
+
   ];
 
   const isUsingDefaultData = !(data?.items?.length > 0);

@@ -21,8 +21,8 @@ import { fetchAPI } from "@/lib/api";
 export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [pageData, setPageData] = useState(null);
-  const [isPhaseTwo, setIsPhaseTwo] = useState(false);
-  const [canScroll, setCanScroll] = useState(false);
+  const [isPhaseTwo, setIsPhaseTwo] = useState(true);
+  const [canScroll, setCanScroll] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef(null);
   const { language } = useLanguage();
@@ -45,40 +45,25 @@ export default function HomePage() {
     window.history.scrollRestoration = "manual";
     window.scrollTo(0, 0);
 
-    // Disable scroll globally
-    document.body.style.overflow = "hidden";
-
     const loadingTimer = setTimeout(() => {
       setIsLoading(false);
     }, 50);
 
-    const timer = setTimeout(() => {
-      setIsPhaseTwo(true);
-    }, 500); // 0.5 seconds instead of 4
-
-    const scrollTimer = setTimeout(() => {
-      setCanScroll(true);
-      document.body.style.overflow = "auto";
-      document.body.style.overflowX = "hidden";
-
-      // Fix anchor links (like #services) since the page locks scroll initially
-      if (window.location.hash) {
-        setTimeout(() => {
-          const id = window.location.hash.substring(1);
-          const el = document.getElementById(id);
-          if (el) {
-            el.scrollIntoView({ behavior: "smooth" });
-          }
-        }, 500); // Give dynamic components time to render
-      }
-    }, 1500);
-    // 6 seconds (4s delay + 2s animation)
+    // Fix anchor links (like #services) since the page locks scroll initially
+    let scrollTimer;
+    if (window.location.hash) {
+      scrollTimer = setTimeout(() => {
+        const id = window.location.hash.substring(1);
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 500); // Give dynamic components time to render
+    }
 
     return () => {
-      document.body.style.overflow = "";
       clearTimeout(loadingTimer);
-      clearTimeout(timer);
-      clearTimeout(scrollTimer);
+      if (scrollTimer) clearTimeout(scrollTimer);
     };
   }, []);
 
