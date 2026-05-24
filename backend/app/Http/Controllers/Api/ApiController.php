@@ -530,7 +530,7 @@ class ApiController extends Controller
         $servicesDropdown = \App\Models\Service::where('is_active', true)->get()->map(function ($service) use ($lang) {
             return [
                 'name' => $this->trans($service->name, $lang),
-                'href' => '/services-' . $service->slug,
+                'href' => '/services/services-' . $service->slug,
             ];
         })->toArray();
 
