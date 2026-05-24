@@ -34,7 +34,7 @@ const Star = ({ className }) => (
 
 export default function Features() {
   const sectionRef = useRef(null);
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
 
   const [features, setFeatures] = useState([]);
   const [settings, setSettings] = useState({});
@@ -47,7 +47,7 @@ export default function Features() {
     fetchAPI('/settings').then(data => {
       if (data) setSettings(data);
     }).catch(console.error);
-  }, []);
+  }, [language]);
 
   const displayFeatures = features.length > 0
     ? features.map(f => f.title)

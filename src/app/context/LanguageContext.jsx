@@ -27,7 +27,7 @@ export const LanguageProvider = ({ children }) => {
     const fetchSettings = async () => {
       try {
         const { fetchAPI } = await import("@/lib/api");
-        const data = await fetchAPI("/settings");
+        const data = await fetchAPI(`/settings?lang=${language}`);
         if (mounted && data) {
           setSettings(data);
         }

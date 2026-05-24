@@ -64,14 +64,14 @@ const StarRating = ({ rating }) => {
 const Testimonial = () => {
   const [activeMedia, setActiveMedia] = useState(null);
   const sliderRef = useRef(null);
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
 
   const [data, setData] = useState([]);
   useEffect(() => {
-    fetchAPI('/testimonials').then(res => {
+    fetchAPI(`/testimonials?lang=${language}`).then(res => {
       if (res && res.length > 0) setData(res);
     }).catch(console.error);
-  }, []);
+  }, [language]);
 
   const displayTestimonials = data.length > 0 ? data.map(item => ({
     id: item.id,
