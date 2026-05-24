@@ -61,11 +61,13 @@ export const fetchAPI = async (endpoint, options = {}) => {
         headers['Content-Type'] = 'application/json';
       }
 
+      console.log(`[fetchAPI] Fetching: ${url.toString()}`);
       const response = await fetch(url.toString(), {
         ...options,
         cache: options.cache || 'no-store',
         headers,
       });
+      console.log(`[fetchAPI] Received response for: ${url.toString()} - Status: ${response.status}`);
 
       if (!response.ok) {
         console.warn(`API warning: ${response.statusText}`);

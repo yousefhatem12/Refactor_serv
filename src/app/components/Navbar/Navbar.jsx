@@ -21,11 +21,42 @@ const Navbar = () => {
 
   const pathname = usePathname();
 
+  const getDefaultLinks = (t) => [
+    { name: t("home") || "Home", href: "/Home" },
+    { name: t("aboutUs") || "About Us", href: "/about-us" },
+    {
+      name: t("services") || "Services",
+      href: "#",
+      dropdown: [
+        { name: t("webDevelopment") || "Web Development", href: "/services/services-web-development" },
+        { name: t("webDesign") || "Web Design", href: "/services/services-ui-ux-design" },
+        { name: t("socialMedia") || "Social Media", href: "/services/services-social-media" },
+        { name: t("webHosting") || "Web Hosting", href: "/services/services-cloud-hosting" },
+        { name: t("catOnlineStores") || "Online Stores", href: "/services/services-ecommerce" },
+        { name: t("catMobileApps") || "Mobile Apps", href: "/services/services-mobile-apps" },
+        { name: t("consultationHeroTitle") || "Consultation", href: "/project-consultation" },
+        { name: t("requestQuote") || "Request Quote", href: "/request-quote" },
+      ],
+    },
+    { name: t("portfolio") || "Portfolio", href: "/portfolio" },
+    { name: t("blog") || "Blog", href: "/blog" },
+    { name: t("ourProducts") || "Our Products", href: "/our-products" },
+    { name: t("careers") || "Careers", href: "/careers" },
+    { name: t("faq") || "FAQ", href: "/faq" },
+    { name: t("contactUs") || "Contact Us", href: "/contact-us" },
+  ];
+
+  const activeLinks = navLinks && navLinks.length > 0 ? navLinks : getDefaultLinks(t);
+
   useEffect(() => {
     const fetchLinks = async () => {
       try {
-        // Fetch services dynamically from the database to auto-build the dropdown
-        const servicesData = await fetchAPI(`/services?lang=${language}`);
+        // Fetch services and nav links in parallel to minimize waiting time
+        const [servicesData, navLinksData] = await Promise.all([
+          fetchAPI(`/services?lang=${language}`).catch(() => null),
+          fetchAPI(`/nav-links?lang=${language}`).catch(() => null),
+        ]);
+
         const serviceDropdown = servicesData && Array.isArray(servicesData) && servicesData.length > 0
           ? servicesData.map((s) => ({
               name: s.label || s.title,
@@ -58,50 +89,27 @@ const Navbar = () => {
           { name: t("contactUs"), href: "/contact-us" },
         ];
 
-        // Try to get nav-links from API first (admin-defined order/links)
-        try {
-          const data = await fetchAPI(`/nav-links?lang=${language}`);
-          if (data && Array.isArray(data) && data.length > 0) {
-            // Inject dynamic services into any dropdown marked as services
-            const enriched = data.map((link) => {
-              if (link.dropdown && link.name === t("services")) {
-                return { ...link, dropdown: [...serviceDropdown, { name: t("consultationHeroTitle"), href: "/project-consultation" }, { name: t("requestQuote"), href: "/request-quote" }] };
-              }
-              return link;
-            });
-            setNavLinks(enriched);
-          } else {
-            setNavLinks(buildLinks(serviceDropdown));
-          }
-        } catch {
+        if (navLinksData && Array.isArray(navLinksData) && navLinksData.length > 0) {
+          // Inject dynamic services into any dropdown marked as services
+          const enriched = navLinksData.map((link) => {
+            if (link.dropdown && link.name === t("services")) {
+              return {
+                ...link,
+                dropdown: [
+                  ...serviceDropdown,
+                  { name: t("consultationHeroTitle"), href: "/project-consultation" },
+                  { name: t("requestQuote"), href: "/request-quote" },
+                ],
+              };
+            }
+            return link;
+          });
+          setNavLinks(enriched);
+        } else {
           setNavLinks(buildLinks(serviceDropdown));
         }
       } catch (error) {
-        console.warn("Failed to fetch services for nav, using hardcoded fallback:", error);
-        setNavLinks([
-          { name: t("home"), href: "/Home" },
-          { name: t("aboutUs"), href: "/about-us" },
-          {
-            name: t("services"),
-            href: "#",
-            dropdown: [
-              { name: t("webDevelopment"), href: "/services/services-web-development" },
-              { name: t("webDesign"), href: "/services/services-ui-ux-design" },
-              { name: t("socialMedia"), href: "/services/services-social-media" },
-              { name: t("webHosting"), href: "/services/services-cloud-hosting" },
-              { name: t("catOnlineStores"), href: "/services/services-ecommerce" },
-              { name: t("catMobileApps"), href: "/services/services-mobile-apps" },
-              { name: t("consultationHeroTitle"), href: "/project-consultation" },
-              { name: t("requestQuote"), href: "/request-quote" },
-            ],
-          },
-          { name: t("portfolio"), href: "/portfolio" },
-          { name: t("blog"), href: "/blog" },
-          { name: t("ourProducts"), href: "/our-products" },
-          { name: t("careers"), href: "/careers" },
-          { name: t("faq"), href: "/faq" },
-          { name: t("contactUs"), href: "/contact-us" },
-        ]);
+        console.warn("Failed to fetch nav links, using fallback:", error);
       } finally {
         setLoading(false);
       }
@@ -132,7 +140,7 @@ const Navbar = () => {
       // ScrollSpy Logic
       let currentHash = "";
       // Only look for hashes on the current page
-      const pageHashLinks = navLinks
+      const pageHashLinks = activeLinks
         .filter((link) => link.href.startsWith(pathname + "#"))
         .map((link) => link.href.split("#")[1]);
 
@@ -185,7 +193,7 @@ const Navbar = () => {
 
         {/* Desktop Links */}
         <div className="hidden lg:flex items-center gap-8">
-          {navLinks.map((link) => {
+          {activeLinks.map((link) => {
             const isHashLink = link.href.includes("#");
             const targetPath = link.href.split("#")[0];
             const targetHash = "#" + (link.href.split("#")[1] || "");
@@ -349,7 +357,7 @@ const Navbar = () => {
                 </button>
               </div>
               <div className="flex flex-col gap-6">
-                {navLinks.map((link) => {
+                {activeLinks.map((link) => {
                   const isHashLink = link.href.includes("#");
                   const targetPath = link.href.split("#")[0];
                   const targetHash = "#" + (link.href.split("#")[1] || "");
