@@ -56,16 +56,9 @@ const QuotationForm = () => {
     additionalNotes: "",
   });
 
-  const [files, setFiles] = useState([]);
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  
-  const fileInputRef = useRef(null);
-
-  const isRtl = language === "ar";
-
-  useEffect(() => {
+  const [prevUser, setPrevUser] = useState(user);
+  if (user !== prevUser) {
+    setPrevUser(user);
     if (user) {
       setFormData(prev => {
         const nextName = prev.name || user.name || "";
@@ -80,7 +73,16 @@ const QuotationForm = () => {
         };
       });
     }
-  }, [user]);
+  }
+
+  const [files, setFiles] = useState([]);
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  
+  const fileInputRef = useRef(null);
+
+  const isRtl = language === "ar";
 
   const handleAuthChange = (e) => {
     const { name, value } = e.target;
