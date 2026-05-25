@@ -13,24 +13,31 @@ import { useLanguage } from "../../context/LanguageContext";
 
 const SocialMediaWhyChooseUs = ({ whyTitle, whySubtitle, whyList }) => {
   const { language, t } = useLanguage();
-  const reasons = (whyList && Array.isArray(whyList) && whyList.length > 0)
-    ? whyList.map((item, index) => {
-        const icons = [
-          <FiFileText className="text-4xl" key="1" />,
-          <FiUserCheck className="text-4xl" key="2" />,
-          <FiShield className="text-4xl" key="3" />,
-          <FiAward className="text-4xl" key="4" />,
-          <FiShare2 className="text-4xl" key="5" />,
-          <FiTarget className="text-4xl" key="6" />,
-        ];
-        return {
-          id: index + 1,
-          title: item.title?.[language] || item.title || "",
-          desc: item.desc?.[language] || item.desc || item.content?.[language] || item.content || "",
-          icon: icons[index % icons.length],
-        };
-      })
-    : [];
+  const isRtl = language === "ar";
+  const reasons =
+    whyList && Array.isArray(whyList) && whyList.length > 0
+      ? whyList.map((item, index) => {
+          const icons = [
+            <FiFileText className="text-4xl" key="1" />,
+            <FiUserCheck className="text-4xl" key="2" />,
+            <FiShield className="text-4xl" key="3" />,
+            <FiAward className="text-4xl" key="4" />,
+            <FiShare2 className="text-4xl" key="5" />,
+            <FiTarget className="text-4xl" key="6" />,
+          ];
+          return {
+            id: index + 1,
+            title: item.title?.[language] || item.title || "",
+            desc:
+              item.desc?.[language] ||
+              item.desc ||
+              item.content?.[language] ||
+              item.content ||
+              "",
+            icon: icons[index % icons.length],
+          };
+        })
+      : [];
 
   if (reasons.length === 0) return null;
 
@@ -40,10 +47,10 @@ const SocialMediaWhyChooseUs = ({ whyTitle, whySubtitle, whyList }) => {
         {/* Left Content */}
         <div className="w-full lg:w-[65%] z-20">
           <motion.div
-             initial={{ opacity: 0, y: 20 }}
-             whileInView={{ opacity: 1, y: 0 }}
-             viewport={{ once: true }}
-             className="mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-12"
           >
             <p className="text-[#D98B50] font-semibold uppercase tracking-wider mb-2">
               {whySubtitle?.[language] || whySubtitle || t("ourBenefits")}
@@ -79,18 +86,22 @@ const SocialMediaWhyChooseUs = ({ whyTitle, whySubtitle, whyList }) => {
           </div>
         </div>
 
-        {/* Right Image (Earth) */}
+        {/* Right/Left Image (Earth) */}
         <motion.div
-          initial={{ opacity: 0, x: 50 }}
+          initial={{ opacity: 0, x: isRtl ? -50 : 50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1 }}
-          className="absolute right-0 top-1/2 -translate-y-1/2 w-[40%] max-w-[600px] pointer-events-none hidden lg:block z-10"
+          className={`absolute ${isRtl ? "left-0" : "right-0"} top-1/2 -translate-y-1/2 w-[40%] max-w-[600px] pointer-events-none hidden lg:block z-10`}
         >
           <img
             src="/Hero/earth.png"
             alt="Earth"
-            className="w-full max-h-[110vh] object-contain translate-x-[250px] scale-120 opacity-50 brightness-50 contrast-125 "
+            className={`w-full max-h-[110vh] object-contain opacity-50 brightness-50 contrast-125 ${
+              isRtl
+                ? "-translate-x-[250px] scale-x-[-1.2] scale-y-[1.2]"
+                : "translate-x-[250px] scale-[1.2]"
+            }`}
           />
         </motion.div>
       </div>

@@ -13,7 +13,6 @@ import AboutCTA from "../components/AboutUs/AboutCTA";
 import Experience from "../components/AboutUs/Experience";
 import Solutions from "../components/AboutUs/Solutions";
 
-
 export default function AboutUsPage() {
   const { language } = useLanguage();
   const [pageData, setPageData] = useState(null);
@@ -27,15 +26,15 @@ export default function AboutUsPage() {
   }, [language]);
 
   const blocks = pageData?.sections?.blocks || [];
-  
-  const hasGlobalReach = blocks.some(s => s.type === 'global_reach');
-  const hasWhyChooseUs = blocks.some(s => s.type === 'features');
-  const hasJourney = blocks.some(s => s.type === 'journey');
-  const hasTeam = blocks.some(s => s.type === 'team');
-  const hasTeamWork = blocks.some(s => s.type === 'team_work');
-  const hasCta = blocks.some(s => s.type === 'cta');
 
-  const textImageBlocks = blocks.filter(s => s.type === 'text_image');
+  const hasGlobalReach = blocks.some((s) => s.type === "global_reach");
+  const hasWhyChooseUs = blocks.some((s) => s.type === "features");
+  const hasJourney = blocks.some((s) => s.type === "journey");
+  const hasTeam = blocks.some((s) => s.type === "team");
+  const hasTeamWork = blocks.some((s) => s.type === "team_work");
+  const hasCta = blocks.some((s) => s.type === "cta");
+
+  const textImageBlocks = blocks.filter((s) => s.type === "text_image");
 
   return (
     <main className="flex min-h-screen flex-col relative overflow-x-hidden">
@@ -50,45 +49,51 @@ export default function AboutUsPage() {
             <Solutions />
           </>
         )}
-        
+
         {/* Render GlobalReach dynamically from dashboard, or fallback to static */}
         {hasGlobalReach ? (
-          <PageSections sections={blocks.filter(s => s.type === 'global_reach')} />
+          <PageSections
+            sections={blocks.filter((s) => s.type === "global_reach")}
+          />
         ) : (
           <GlobalReach />
         )}
 
         {/* Render WhyChooseUs dynamically from dashboard, or fallback to static */}
         {hasWhyChooseUs ? (
-          <PageSections sections={blocks.filter(s => s.type === 'features')} />
+          <PageSections
+            sections={blocks.filter((s) => s.type === "features")}
+          />
         ) : (
           <WhyChooseUs />
         )}
 
         {/* Render OurJourney dynamically from dashboard, or fallback to static */}
         {hasJourney ? (
-          <PageSections sections={blocks.filter(s => s.type === 'journey')} />
+          <PageSections sections={blocks.filter((s) => s.type === "journey")} />
         ) : (
           <OurJourney />
         )}
 
         {/* Render Founders dynamically from dashboard, or fallback to static */}
         {hasTeam ? (
-          <PageSections sections={blocks.filter(s => s.type === 'team')} />
+          <PageSections sections={blocks.filter((s) => s.type === "team")} />
         ) : (
           <Founders />
         )}
 
         {/* Render TeamWork dynamically from dashboard, or fallback to static */}
         {hasTeamWork ? (
-          <PageSections sections={blocks.filter(s => s.type === 'team_work')} />
+          <PageSections
+            sections={blocks.filter((s) => s.type === "team_work")}
+          />
         ) : (
           <TeamWork />
         )}
 
         {/* Render CTA dynamically from dashboard, or fallback to static */}
         {hasCta ? (
-          <PageSections sections={blocks.filter(s => s.type === 'cta')} />
+          <PageSections sections={blocks.filter((s) => s.type === "cta")} />
         ) : (
           <AboutCTA />
         )}

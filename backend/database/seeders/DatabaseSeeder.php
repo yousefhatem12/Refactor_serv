@@ -17,18 +17,26 @@ class DatabaseSeeder extends Seeder
     {
         $role = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
 
-        $user = User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        $adminEmail = env('ADMIN_EMAIL', 'admin@serv5.com');
+        $adminPassword = env('ADMIN_PASSWORD', 'admin123456');
 
-        $user->assignRole($role);
+        $user = User::updateOrCreate(
+            ['email' => $adminEmail],
+            [
+                'name' => 'Super Admin',
+                'password' => bcrypt($adminPassword),
+            ]
+        );
+
+        $user->syncRoles([$role]);
 
         $this->call([
             InitialContentSeeder::class,
             FooterSeeder::class,
             ProductsAndCareersSeeder::class,
             ProjectSeeder::class,
+            BlogSeeder::class,
+            TestimonialSeeder::class,
             ServiceSeeder::class,
             LinkPricingPlansToServicesSeeder::class,
         ]);

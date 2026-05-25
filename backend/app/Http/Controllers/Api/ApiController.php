@@ -258,7 +258,7 @@ class ApiController extends Controller
                 'name' => $this->trans($project->name, $lang),
                 'category' => $project->category,
                 'description' => $this->trans($project->description, $lang),
-                'image' => $project->image ? asset('storage/' . $project->image) : null,
+                'image' => $project->image ? (str_starts_with($project->image, 'http') || str_starts_with($project->image, '/') ? $project->image : asset('storage/' . $project->image)) : null,
                 'client' => $project->client,
                 'url' => $project->url,
                 'tags' => $project->tags ?? [],
@@ -301,7 +301,7 @@ class ApiController extends Controller
                 'author' => $post->author?->name ?? 'Admin',
                 'category' => $categoryName,
                 'category_raw' => $categoryRaw,
-                'image' => $post->image ? asset('storage/' . $post->image) : null,
+                'image' => $post->image ? (str_starts_with($post->image, 'http') || str_starts_with($post->image, '/') ? $post->image : asset('storage/' . $post->image)) : null,
                 'published_at' => $this->formatDate($post->created_at, $lang),
             ];
         });
@@ -357,7 +357,7 @@ class ApiController extends Controller
             'category_raw' => $categoryRaw,
             'content' => $this->trans($post->content, $lang),
             'author' => $post->author?->name ?? 'Admin',
-            'image' => $post->image ? asset('storage/' . $post->image) : null,
+            'image' => $post->image ? (str_starts_with($post->image, 'http') || str_starts_with($post->image, '/') ? $post->image : asset('storage/' . $post->image)) : null,
             'published_at' => $this->formatDate($post->created_at, $lang),
             'seo' => [
                 'title' => $this->trans($post->seo_title, $lang) ?: $this->trans($post->title, $lang),
@@ -533,10 +533,10 @@ class ApiController extends Controller
                 'client_name' => $this->trans($t->client_name, $lang),
                 'position' => $this->trans($t->position, $lang),
                 'review' => $this->trans($t->review, $lang),
-                'image' => $t->image ? asset('storage/' . $t->image) : null,
+                'image' => $t->image ? (str_starts_with($t->image, 'http') || str_starts_with($t->image, '/') ? $t->image : asset('storage/' . $t->image)) : null,
                 'rating' => $t->rating,
                 'video_url' => $t->video_url,
-                'audio_url' => $t->audio_url ? asset('storage/' . $t->audio_url) : null,
+                'audio_url' => $t->audio_url ? (str_starts_with($t->audio_url, 'http') || str_starts_with($t->audio_url, '/') ? $t->audio_url : asset('storage/' . $t->audio_url)) : null,
             ];
         });
         return response()->json($testimonials);
@@ -577,10 +577,18 @@ class ApiController extends Controller
     {
         $lang = $this->getLang();
         $texts = [
-            'heading' => $this->trans(Setting::where('key', 'footer_heading')->value('value'), $lang) ?: 'Have a Good Web Design<br/>With Serv5.',
-            'description' => $this->trans(Setting::where('key', 'footer_description')->value('value'), $lang) ?: 'Serv5 specializes in modern web solutions...',
-            'button_text' => $this->trans(Setting::where('key', 'footer_button_text')->value('value'), $lang) ?: 'Get Started',
-            'copyright' => $this->trans(Setting::where('key', 'footer_copyright')->value('value'), $lang) ?: '2026 © Serv5. All Rights Reserved.'
+            'heading' => Setting::where('key', 'footer_heading_' . $lang)->value('value') 
+                ?: Setting::where('key', 'footer_heading_en')->value('value') 
+                ?: 'Have a Good Web Design<br/>With Serv5.',
+            'description' => Setting::where('key', 'footer_description_' . $lang)->value('value') 
+                ?: Setting::where('key', 'footer_description_en')->value('value') 
+                ?: 'Serv5 specializes in modern web solutions...',
+            'button_text' => Setting::where('key', 'footer_button_text_' . $lang)->value('value') 
+                ?: Setting::where('key', 'footer_button_text_en')->value('value') 
+                ?: 'Get Started',
+            'copyright' => Setting::where('key', 'footer_copyright_' . $lang)->value('value') 
+                ?: Setting::where('key', 'footer_copyright_en')->value('value') 
+                ?: '2026 © Serv5. All Rights Reserved.'
         ];
 
         $links = \App\Models\FooterLink::orderBy('sort_order')->get()->groupBy('column_name')->map(function ($group) use ($lang) {

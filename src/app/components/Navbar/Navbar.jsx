@@ -28,13 +28,34 @@ const Navbar = () => {
       name: t("services") || "Services",
       href: "#",
       dropdown: [
-        { name: t("webDevelopment") || "Web Development", href: "/services/services-web-development" },
-        { name: t("webDesign") || "Web Design", href: "/services/services-ui-ux-design" },
-        { name: t("socialMedia") || "Social Media", href: "/services/services-social-media" },
-        { name: t("webHosting") || "Web Hosting", href: "/services/services-cloud-hosting" },
-        { name: t("catOnlineStores") || "Online Stores", href: "/services/services-ecommerce" },
-        { name: t("catMobileApps") || "Mobile Apps", href: "/services/services-mobile-apps" },
-        { name: t("consultationHeroTitle") || "Consultation", href: "/project-consultation" },
+        {
+          name: t("webDevelopment") || "Web Development",
+          href: "/services/services-web-development",
+        },
+        {
+          name: t("webDesign") || "Web Design",
+          href: "/services/services-ui-ux-design",
+        },
+        {
+          name: t("socialMedia") || "Social Media",
+          href: "/services/services-social-media",
+        },
+        {
+          name: t("webHosting") || "Web Hosting",
+          href: "/services/services-cloud-hosting",
+        },
+        {
+          name: t("catOnlineStores") || "Online Stores",
+          href: "/services/services-ecommerce",
+        },
+        {
+          name: t("catMobileApps") || "Mobile Apps",
+          href: "/services/services-mobile-apps",
+        },
+        {
+          name: t("consultationHeroTitle") || "Consultation",
+          href: "/project-consultation",
+        },
         { name: t("requestQuote") || "Request Quote", href: "/request-quote" },
       ],
     },
@@ -46,7 +67,8 @@ const Navbar = () => {
     { name: t("contactUs") || "Contact Us", href: "/contact-us" },
   ];
 
-  const activeLinks = navLinks && navLinks.length > 0 ? navLinks : getDefaultLinks(t);
+  const activeLinks =
+    navLinks && navLinks.length > 0 ? navLinks : getDefaultLinks(t);
 
   useEffect(() => {
     const fetchLinks = async () => {
@@ -57,17 +79,30 @@ const Navbar = () => {
           fetchAPI(`/nav-links?lang=${language}`).catch(() => null),
         ]);
 
-        const serviceDropdown = servicesData && Array.isArray(servicesData) && servicesData.length > 0
-          ? servicesData.map((s) => ({
-              name: s.label || s.title,
-              href: `/services/services-${s.id}`,
-            }))
-          : [
-              { name: t("webDevelopment"), href: "/services/services-web-development" },
-              { name: t("webDesign"), href: "/services/services-ui-ux-design" },
-              { name: t("socialMedia"), href: "/services/services-social-media" },
-              { name: t("webHosting"), href: "/services/services-cloud-hosting" },
-            ];
+        const serviceDropdown =
+          servicesData && Array.isArray(servicesData) && servicesData.length > 0
+            ? servicesData.map((s) => ({
+                name: s.label || s.title,
+                href: `/services/services-${s.id}`,
+              }))
+            : [
+                {
+                  name: t("webDevelopment"),
+                  href: "/services/services-web-development",
+                },
+                {
+                  name: t("webDesign"),
+                  href: "/services/services-ui-ux-design",
+                },
+                {
+                  name: t("socialMedia"),
+                  href: "/services/services-social-media",
+                },
+                {
+                  name: t("webHosting"),
+                  href: "/services/services-cloud-hosting",
+                },
+              ];
 
         const buildLinks = (dropdown) => [
           { name: t("home"), href: "/Home" },
@@ -77,7 +112,10 @@ const Navbar = () => {
             href: "#",
             dropdown: [
               ...dropdown,
-              { name: t("consultationHeroTitle"), href: "/project-consultation" },
+              {
+                name: t("consultationHeroTitle"),
+                href: "/project-consultation",
+              },
               { name: t("requestQuote"), href: "/request-quote" },
             ],
           },
@@ -89,7 +127,11 @@ const Navbar = () => {
           { name: t("contactUs"), href: "/contact-us" },
         ];
 
-        if (navLinksData && Array.isArray(navLinksData) && navLinksData.length > 0) {
+        if (
+          navLinksData &&
+          Array.isArray(navLinksData) &&
+          navLinksData.length > 0
+        ) {
           // Inject dynamic services into any dropdown marked as services
           const enriched = navLinksData.map((link) => {
             if (link.dropdown && link.name === t("services")) {
@@ -97,7 +139,10 @@ const Navbar = () => {
                 ...link,
                 dropdown: [
                   ...serviceDropdown,
-                  { name: t("consultationHeroTitle"), href: "/project-consultation" },
+                  {
+                    name: t("consultationHeroTitle"),
+                    href: "/project-consultation",
+                  },
                   { name: t("requestQuote"), href: "/request-quote" },
                 ],
               };
@@ -117,7 +162,6 @@ const Navbar = () => {
 
     fetchLinks();
   }, [t, language]);
-
 
   useEffect(() => {
     const handleScroll = () => {
@@ -170,6 +214,8 @@ const Navbar = () => {
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, [pathname, navLinks]);
+
+  const isRtl = language === "ar";
 
   return (
     <nav
@@ -241,7 +287,7 @@ const Navbar = () => {
                     </svg>
                   )}
                   <span
-                    className={`absolute -bottom-1 left-0 h-[1px] bg-[#FF8A00] rounded-full transition-all duration-300 ${
+                    className={`absolute -bottom-1 ${isRtl ? "right-0" : "left-0"} h-[1px] bg-[#FF8A00] rounded-full transition-all duration-300 ${
                       isActive ? "w-full" : "w-0 group-hover:w-full"
                     }`}
                   />
@@ -249,8 +295,10 @@ const Navbar = () => {
 
                 {/* Desktop Dropdown */}
                 {link.dropdown && (
-                  <div className="absolute top-full left-0 pt-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-                    <div className="bg-[#05050f]/95 backdrop-blur-md border border-white/10 rounded-lg p-3 min-w-[220px] shadow-2xl flex flex-col gap-1">
+                  <div
+                    className={`absolute top-full ${isRtl ? "right-0" : "left-0"} pt-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50`}
+                  >
+                    <div className="bg-[#05050f]/95 backdrop-blur-md border border-white/10 rounded-xl p-4 min-w-[480px] shadow-2xl grid grid-cols-2 gap-2">
                       {link.dropdown.map((subLink) => (
                         <Link
                           key={subLink.name}
@@ -258,7 +306,7 @@ const Navbar = () => {
                           className={`block px-4 py-3 text-xs md:text-sm font-medium tracking-wide rounded-lg transition-all duration-200 ${
                             pathname === subLink.href
                               ? "text-[#FF8A00] bg-white/5 font-bold"
-                              : "text-white/50 hover:text-white hover:bg-white/5 hover:translate-x-1"
+                              : `text-white/50 hover:text-white hover:bg-white/5 ${isRtl ? "hover:-translate-x-1" : "hover:translate-x-1"}`
                           }`}
                         >
                           {subLink.name}
@@ -276,12 +324,12 @@ const Navbar = () => {
         <div className="flex items-center gap-3 md:gap-5">
           <button
             onClick={toggleLanguage}
-            className="text-white p-2 rounded-full hover:bg-white/10 transition-all duration-300 hover:-translate-y-0.5 cursor-pointer border-none bg-transparent"
+            className="flex items-center gap-1.5 text-white/90 hover:text-white px-3 py-1.5 rounded-full hover:bg-white/10 transition-all duration-300 hover:-translate-y-0.5 cursor-pointer border border-white/10 bg-white/5 text-xs font-semibold"
             aria-label="Toggle Language"
           >
             <svg
-              width="22"
-              height="22"
+              width="16"
+              height="16"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -293,6 +341,9 @@ const Navbar = () => {
               <line x1="2" y1="12" x2="22" y2="12" />
               <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
             </svg>
+            <span className="font-medium tracking-wide">
+              {language === "ar" ? "العربية" : "English"}
+            </span>
           </button>
 
           <button
@@ -330,13 +381,15 @@ const Navbar = () => {
 
             {/* Menu Panel */}
             <motion.div
-              initial={{ x: "100%" }}
+              initial={{ x: isRtl ? "-100%" : "100%" }}
               animate={{ x: 0 }}
-              exit={{ x: "100%" }}
+              exit={{ x: isRtl ? "-100%" : "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 w-[300px] h-screen bg-[#05050f] border-l border-white/10 z-[1002] p-8 shadow-2xl flex flex-col lg:hidden overflow-y-auto"
+              className={`fixed top-0 ${isRtl ? "left-0 border-r" : "right-0 border-l"} w-[300px] h-screen bg-[#05050f] border-white/10 z-[1002] p-8 shadow-2xl flex flex-col lg:hidden overflow-y-auto`}
             >
-              <div className="flex justify-end mb-10">
+              <div
+                className={`flex ${isRtl ? "justify-start" : "justify-end"} mb-10`}
+              >
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="text-white hover:text-[#D98B50] transition-colors cursor-pointer border-none bg-transparent"
@@ -428,7 +481,7 @@ const Navbar = () => {
                               initial={{ height: 0, opacity: 0 }}
                               animate={{ height: "auto", opacity: 1 }}
                               exit={{ height: 0, opacity: 0 }}
-                              className="flex flex-col gap-4 pl-4 overflow-hidden border-l-2 border-white/10 ml-2"
+                              className={`flex flex-col gap-4 ${isRtl ? "pr-4 border-r-2 mr-2" : "pl-4 border-l-2 ml-2"} overflow-hidden border-white/10`}
                             >
                               {link.dropdown.map((subLink) => (
                                 <Link

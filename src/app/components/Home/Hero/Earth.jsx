@@ -64,7 +64,7 @@ export default function Earth({ isPhaseTwo }) {
     if (isPhaseTwo) {
       // Main container smooth scale & move
       gsap.to(containerRef.current, {
-        x: isMobile ? "0%" : (isRtl ? "-25%" : "25%"),
+        x: isMobile ? "0%" : isRtl ? "-25%" : "25%",
         scale: isMobile ? 1 : 1.2, // Reduced from 1.6 to make it smaller
         duration: 3.5,
         ease: "power3.inOut",
@@ -74,7 +74,13 @@ export default function Earth({ isPhaseTwo }) {
       if (!isMobile) {
         gsap.fromTo(
           astronautWrapperRef.current,
-          { x: isRtl ? "-300%" : "300%", y: "50%", opacity: 0, rotation: isRtl ? -45 : 45, scale: 0.5 },
+          {
+            x: isRtl ? "-300%" : "300%",
+            y: "50%",
+            opacity: 0,
+            rotation: isRtl ? -45 : 45,
+            scale: 0.5,
+          },
           {
             x: isRtl ? "100%" : "-100%",
             y: "100%",
@@ -152,12 +158,20 @@ export default function Earth({ isPhaseTwo }) {
           ref={astronautWrapperRef}
           className={`absolute top-0 ${isRtl ? "left-0" : "right-0"} z-30 w-[150px] h-[150px] md:w-[180px] md:h-[180px] lg:w-[240px] lg:h-[240px] pointer-events-none opacity-0 hidden md:block`}
         >
-          <img
-            ref={astronautImgRef}
-            src="/Hero/astronaut.svg"
-            alt="Astronaut"
-            className="w-full h-full object-contain"
-          />
+          <div
+            style={{
+              transform: isRtl ? "scaleX(-1) rotate(70deg)" : "none",
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            <img
+              ref={astronautImgRef}
+              src="/Hero/astronaut.svg"
+              alt="Astronaut"
+              className="w-full h-full object-contain"
+            />
+          </div>
         </div>
       </div>
     </div>

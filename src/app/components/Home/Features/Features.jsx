@@ -28,7 +28,10 @@ const Star = ({ className }) => (
         <stop offset="100%" stopColor="#f3a871" />
       </linearGradient>
     </defs>
-    <path fill="url(#star-gradient)" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+    <path
+      fill="url(#star-gradient)"
+      d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+    />
   </svg>
 );
 
@@ -57,22 +60,28 @@ export default function Features() {
   const [settings, setSettings] = useState({});
 
   useEffect(() => {
-    fetchAPI('/features').then(data => {
-      if (data && data.length > 0) setFeatures(data);
-    }).catch(console.error);
+    fetchAPI("/features")
+      .then((data) => {
+        if (data && data.length > 0) setFeatures(data);
+      })
+      .catch(console.error);
 
-    fetchAPI('/settings').then(data => {
-      if (data) setSettings(data);
-    }).catch(console.error);
+    fetchAPI("/settings")
+      .then((data) => {
+        if (data) setSettings(data);
+      })
+      .catch(console.error);
   }, [language]);
 
-  const displayFeatures = features.length > 0
-    ? features.map(f => f.title)
-    : checkFeaturesKeys.map(k => t(k));
+  const displayFeatures =
+    features.length > 0
+      ? features.map((f) => f.title)
+      : checkFeaturesKeys.map((k) => t(k));
 
-  const displayPartners = (settings.features_partners && settings.features_partners.length > 0)
-    ? settings.features_partners.map(p => getMediaUrl(p))
-    : partners;
+  const displayPartners =
+    settings.features_partners && settings.features_partners.length > 0
+      ? settings.features_partners.map((p) => getMediaUrl(p))
+      : partners;
 
   const displayExperienceImage = settings.features_image
     ? getMediaUrl(settings.features_image)
@@ -138,7 +147,7 @@ export default function Features() {
             </motion.div>
 
             {/* Subtitle */}
-            <div className="flex items-center gap-3 mb-4 md:mb-6">
+            <div className="flex  items-center gap-3 mb-4 md:mb-6">
               <motion.span
                 initial={{ width: 0 }}
                 whileInView={{ width: "40px" }}
@@ -146,24 +155,27 @@ export default function Features() {
                 viewport={{ once: true }}
                 className="h-[2px] bg-[#D98B50]"
               ></motion.span>
-              <span className="text-[#D98B50] font-bold tracking-[0.2em] uppercase text-xs md:text-sm">
+              <span className="text-[#D98B50] font-bold tracking-[0.2em] uppercase text-xs md:text-sm lg:text-3xl">
                 {t("whoWeAre")}
               </span>
             </div>
 
             {/* Main Title */}
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold mb-6 leading-[1.2] md:leading-[1.1] text-white">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-5xl font-extrabold mb-6 leading-[1.2] md:leading-[1.1] text-white">
               {settings.features_title ? (
-                <span dangerouslySetInnerHTML={{ __html: settings.features_title }} />
+                <span
+                  dangerouslySetInnerHTML={{ __html: settings.features_title }}
+                />
               ) : (
                 <>
-                  {t("featuresTitlePart1")} <br className="hidden sm:block" />
-                  {t("featuresTitlePart2")} <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D98B50] to-[#f3a871]">
+                  {t("featuresTitlePart1")}
+                  <span> </span>
+                  {t("featuresTitlePart2")}
+                  <span> </span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r py-4 from-[#D98B50] to-[#f3a871]">
                     {t("featuresTitlePart3")}
                   </span>
-                  <br />
-                  {t("featuresTitlePart4")}
+                  <span className="mt-4"> {t("featuresTitlePart4")}</span>
                 </>
               )}
             </h2>
@@ -319,7 +331,11 @@ export default function Features() {
                       src={partner}
                       alt={`Partner ${index + 1}`}
                       className="h-6 sm:h-8 md:h-10 lg:h-12 w-auto object-contain group-hover:opacity-100 transition-all duration-300"
-                      style={partner.includes('/Features/') ? { filter: "brightness(0) invert(1)" } : {}}
+                      style={
+                        partner.includes("/Features/")
+                          ? { filter: "brightness(0) invert(1)" }
+                          : {}
+                      }
                     />
                     <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1/3 h-[2px] bg-[#D98B50] opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-[1px]"></div>
                   </motion.div>

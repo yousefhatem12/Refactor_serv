@@ -32,8 +32,10 @@ const OurPortfolio = ({ activeCategoryId }) => {
       ? items
       : items.filter((item) => item.category === activeCategoryId);
 
+  const isRtl = language === "ar";
+
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 md:px-8 py-12 overflow-x-hidden">
+    <div className="w-full max-w-7xl mx-auto px-4 md:px-8 py-12 rtl:pr-0 overflow-x-hidden">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -43,7 +45,9 @@ const OurPortfolio = ({ activeCategoryId }) => {
         <h2 className="text-4xl md:text-5xl lg:text-6xl font-black inline-block relative pb-4">
           <span className="text-[#FF8A00]">{t("our")}</span>{" "}
           <span className="text-white">{t("portfolio")}</span>
-          <div className="absolute bottom-0 left-0 w-[40%] h-1.5 bg-[#FF8A00] rounded-full shadow-[0_0_10px_#FF8A00]"></div>
+          <div
+            className={`absolute bottom-0 ${isRtl ? "right-0" : "left-0"} w-[40%] h-1.5 bg-[#FF8A00] rounded-full shadow-[0_0_10px_#FF8A00]`}
+          ></div>
         </h2>
       </motion.div>
       <div className="flex-1 h-auto lg:h-[700px] overflow-y-visible lg:overflow-y-auto overflow-x-hidden custom-scrollbar">
@@ -62,7 +66,7 @@ const OurPortfolio = ({ activeCategoryId }) => {
                   ease: "easeOut",
                   delay: index * 0.15,
                 }}
-                className={`relative flex flex-col ${isReversed ? "lg:flex-row-reverse" : "lg:flex-row"} items-stretch gap-0 lg:gap-16 group rounded-2xl lg:rounded-none overflow-hidden lg:overflow-visible min-h-[250px] md:min-h-[350px] lg:min-h-0`}
+                className={`relative flex flex-col ${isReversed ? "lg:flex-row-reverse" : "lg:flex-row"} items-stretch gap-0 lg:gap-8 group rounded-2xl lg:rounded-none overflow-hidden lg:overflow-visible min-h-[250px] md:min-h-[350px] lg:min-h-0`}
               >
                 {/* Image Side */}
                 <div className="w-full lg:w-1/2 flex absolute inset-0 lg:relative lg:inset-auto z-0">
@@ -78,17 +82,17 @@ const OurPortfolio = ({ activeCategoryId }) => {
                 </div>
 
                 {/* Text Side */}
-                <div className="relative z-10 w-full lg:w-1/2 flex flex-col justify-end lg:justify-center p-4 md:p-6 lg:p-0 lg:py-4 h-auto mt-auto pt-24 lg:pt-4 bg-gradient-to-t from-black via-black/80 to-transparent lg:bg-none">
-                  <h3 className="text-xl md:text-3xl lg:text-4xl xl:text-6xl font-bold text-white mb-2 lg:mb-6 tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] lg:drop-shadow-none">
+                <div className="relative z-10 w-full lg:w-1/2 flex flex-col justify-end lg:justify-center p-4 md:p-6 lg:p-0 lg:py-4 h-auto  pt-24 lg:pt-4 bg-gradient-to-t from-black via-black/80 to-transparent lg:bg-none">
+                  <h3 className="text-xl md:text-3xl lg:text-3xl font-bold text-white mb-2  tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] lg:drop-shadow-none">
                     {item.name}
                   </h3>
-                  <p className="text-gray-200 text-xs md:text-sm lg:text-lg xl:text-xl leading-relaxed mb-4 lg:mb-8 max-w-xl line-clamp-2 lg:line-clamp-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] lg:drop-shadow-none">
+                  <p className="text-gray-200 text-xs md:text-sm lg:text-md leading-relaxed mb-4 lg:mb-2 max-w-xl line-clamp-2 lg:line-clamp-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] lg:drop-shadow-none">
                     {item.description}
                   </p>
-                  <div className="flex flex-row lg:flex-col gap-3 lg:gap-6 justify-between items-center lg:items-start lg:justify-start mt-auto lg:mt-0">
+                  <div className="flex flex-row gap-3 lg:gap-6 justify-between items-center lg:items-start lg:justify-start mt-auto lg:mt-0">
                     <a
                       href="#"
-                      className="flex items-center gap-1 lg:gap-2 text-white/90 hover:text-white transition-colors group text-xs md:text-sm lg:text-lg font-medium drop-shadow-md lg:drop-shadow-none"
+                      className="flex items-center gap-1 lg:gap-2 lg:mt-4 text-white/90 hover:text-white transition-colors group text-xs md:text-sm lg:text-lg font-medium drop-shadow-md lg:drop-shadow-none"
                     >
                       <span className="hidden lg:inline">{t("learnMore")}</span>
                       <span className="lg:hidden">{t("details")}</span>
@@ -99,7 +103,7 @@ const OurPortfolio = ({ activeCategoryId }) => {
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 transition-transform group-hover:translate-x-1 lg:group-hover:translate-x-2"
+                        className={`w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 transition-transform ${isRtl ? "rotate-180 group-hover:-translate-x-1 lg:group-hover:-translate-x-2" : "group-hover:translate-x-1 lg:group-hover:translate-x-2"}`}
                       >
                         <path d="M5 12h14M12 5l7 7-7 7" />
                       </svg>

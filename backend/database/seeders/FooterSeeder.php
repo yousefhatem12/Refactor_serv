@@ -62,5 +62,18 @@ class FooterSeeder extends Seeder
         Setting::updateOrCreate(['key' => 'site_phone'], ['value' => '00201288863831', 'type' => 'text', 'value_source' => 'link']);
         Setting::updateOrCreate(['key' => 'site_email'], ['value' => 'sales@serv5.com', 'type' => 'text', 'value_source' => 'link']);
         Setting::updateOrCreate(['key' => 'site_address'], ['value' => json_encode(['en' => 'Egypt-Mansoura-Suez Canal st. above Dr.Ramy pharmacy', 'ar' => 'مصر - المنصورة - شارع قناة السويس - أعلى صيدلية د. رامي']), 'type' => 'text', 'value_source' => 'link']);
+
+        // 5. Update Footer Translation Settings
+        Setting::updateOrCreate(['key' => 'footer_heading_en'], ['value' => "Have a Good Web \n Design Today", 'type' => 'text']);
+        Setting::updateOrCreate(['key' => 'footer_heading_ar'], ['value' => "احصل على تصميم ويب \n رائع اليوم", 'type' => 'text']);
+        
+        Setting::updateOrCreate(['key' => 'footer_description_en'], ['value' => 'High level experience in web design and development knowledge, producing quality work.', 'type' => 'text']);
+        Setting::updateOrCreate(['key' => 'footer_description_ar'], ['value' => 'خبرة عالية المستوى في معرفة تصميم وتطوير الويب، وإنتاج أعمال عالية الجودة.', 'type' => 'text']);
+        
+        Setting::updateOrCreate(['key' => 'footer_button_text_en'], ['value' => 'Get started', 'type' => 'text']);
+        Setting::updateOrCreate(['key' => 'footer_button_text_ar'], ['value' => 'ابدأ الآن', 'type' => 'text']);
+        
+        Setting::updateOrCreate(['key' => 'footer_copyright_en'], ['value' => '© 2024 All Rights Reserved', 'type' => 'text']);
+        Setting::updateOrCreate(['key' => 'footer_copyright_ar'], ['value' => '© 2024 جميع الحقوق محفوظة', 'type' => 'text']);
     }
 }

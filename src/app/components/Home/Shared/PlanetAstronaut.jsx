@@ -1,8 +1,12 @@
 "use client";
 import React from "react";
 import { motion, useTransform, useMotionValue } from "framer-motion";
+import { useLanguage } from "@/app/context/LanguageContext";
 
 const PlanetAstronaut = ({ className = "", progress, ...props }) => {
+  const { language } = useLanguage();
+  const isRtl = language === "ar";
+
   const fallbackProgress = useMotionValue(0);
   const p = progress || fallbackProgress;
 
@@ -12,9 +16,7 @@ const PlanetAstronaut = ({ className = "", progress, ...props }) => {
       {...props}
     >
       {/* The Planet & Astronaut Wrapper */}
-      <motion.div 
-        className="relative w-full aspect-square flex items-center justify-center"
-      >
+      <motion.div className="relative w-full aspect-square flex items-center justify-center">
         <div className="relative w-full aspect-square">
           <img
             src="/Hero/orange-planet.png"
@@ -26,21 +28,26 @@ const PlanetAstronaut = ({ className = "", progress, ...props }) => {
         </div>
 
         {/* The Astronaut */}
-        <motion.img
-          src="/Hero/astronaut.svg"
-          alt="Astronaut"
-          className="absolute top-1/2 left-1/4 w-[80%] h-auto object-contain z-10"
-          animate={{
-            x: ["-50%", "-52%", "-50%"],
-            y: ["-50%", "-55%", "-50%"],
-            rotate: [0, 5, 0],
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
+        <div
+          className="absolute top-1/2 left-0 w-[80%] h-auto z-10"
+          style={{ transform: isRtl ? "scaleX(-1)" : "none" }}
+        >
+          <motion.img
+            src="/Hero/astronaut.svg"
+            alt="Astronaut"
+            className="w-full h-auto object-contain"
+            animate={{
+              x: ["-50%", "-52%", "-50%"],
+              y: ["-50%", "-55%", "-50%"],
+              rotate: [0, 5, 0],
+            }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        </div>
       </motion.div>
     </div>
   );

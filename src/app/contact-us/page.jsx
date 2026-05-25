@@ -11,9 +11,11 @@ export default function ContactUsPage() {
   const [pageData, setPageData] = useState(null);
 
   useEffect(() => {
-    fetchAPI(`/pages/contact-us?lang=${language}`).then(data => {
-      if (data) setPageData(data);
-    }).catch(console.error);
+    fetchAPI(`/pages/contact-us?lang=${language}`)
+      .then((data) => {
+        if (data) setPageData(data);
+      })
+      .catch(console.error);
   }, [language]);
 
   return (

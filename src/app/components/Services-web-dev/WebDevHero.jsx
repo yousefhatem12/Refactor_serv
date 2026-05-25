@@ -17,19 +17,23 @@ const WebDevHero = ({ data, serviceId = "web-development" }) => {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [isPricingModalOpen, setIsPricingModalOpen] = useState(false);
 
-  const heroImage = data?.bg_image || (data?.hero_image
-    ? getMediaUrl(data.hero_image)
-    : "/services-web-dev/hero.png");
+  const heroImage =
+    data?.bg_image ||
+    (data?.hero_image
+      ? getMediaUrl(data.hero_image)
+      : "/services-web-dev/hero.png");
 
   return (
     <section className="relative w-full min-h-[80vh] flex items-center justify-between px-6 lg:px-20 pt-20">
       {/* Background Image behind everything */}
       <div
-        className={`absolute inset-[-100px] h-screen z-0 bg-no-repeat bg-cover ${data?.bgPosition || "bg-center"} mix-blend-screen`}
+        className={`absolute inset-[-100px] h-screen z-0 bg-no-repeat bg-cover ${data?.bgPosition || "bg-center"} mix-blend-screen ${isRtl ? "scale-x-[-1]" : ""}`}
         style={{ backgroundImage: `url('${heroImage}')` }}
       />
       {data?.overlay && (
-        <div className={`absolute inset-[-100px] h-screen z-10 pointer-events-none ${data.overlay}`} />
+        <div
+          className={`absolute inset-[-100px] h-screen z-10 pointer-events-none ${data.overlay}`}
+        />
       )}
 
       {/* Content */}
@@ -49,7 +53,10 @@ const WebDevHero = ({ data, serviceId = "web-development" }) => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-gray-300 text-lg md:text-xl leading-relaxed mb-10"
         >
-          {data?.hero_subtitle || data?.subtitle || data?.description || t("webDevHeroDesc")}
+          {data?.hero_subtitle ||
+            data?.subtitle ||
+            data?.description ||
+            t("webDevHeroDesc")}
         </motion.p>
 
         <motion.div
@@ -59,7 +66,7 @@ const WebDevHero = ({ data, serviceId = "web-development" }) => {
           className="flex flex-wrap items-center gap-6"
         >
           <button
-            onClick={() => router.push('/contact-us')}
+            onClick={() => router.push("/contact-us")}
             className="px-8 py-3 rounded-full bg-white text-[#040A37] font-semibold text-lg hover:bg-gray-200 transition-colors cursor-pointer border-none"
           >
             {settings?.hero_cta_text || t("getStarted")}

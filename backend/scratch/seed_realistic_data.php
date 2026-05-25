@@ -35,10 +35,14 @@ $settings = [
     // ['key' => 'hero_planet', 'value' => 'settings/hero_planet.png', 'type' => 'image', 'value_source' => 'file'],
     
     // Footer
-    ['key' => 'footer_heading', 'value' => 'Ready to Conquer the Web?', 'type' => 'text'],
-    ['key' => 'footer_description', 'value' => 'Serv5 is your ultimate partner for digital transformation. We blend creativity with technology to build exceptional experiences.', 'type' => 'text'],
-    ['key' => 'footer_button_text', 'value' => 'Get a Quote', 'type' => 'text'],
-    ['key' => 'footer_copyright', 'value' => '2026 © Serv5. All Rights Reserved. Designed with passion.', 'type' => 'text'],
+    ['key' => 'footer_heading_en', 'value' => "Ready to Conquer the Web?", 'type' => 'text'],
+    ['key' => 'footer_heading_ar', 'value' => "هل أنت جاهز لغزو الويب؟", 'type' => 'text'],
+    ['key' => 'footer_description_en', 'value' => 'Serv5 is your ultimate partner for digital transformation. We blend creativity with technology to build exceptional experiences.', 'type' => 'text'],
+    ['key' => 'footer_description_ar', 'value' => 'شركة Serv5 هي شريكك الأمثل للتحول الرقمي. نحن نمزج الإبداع مع التكنولوجيا لبناء تجارب استثنائية.', 'type' => 'text'],
+    ['key' => 'footer_button_text_en', 'value' => 'Get a Quote', 'type' => 'text'],
+    ['key' => 'footer_button_text_ar', 'value' => 'اطلب تسعيرة', 'type' => 'text'],
+    ['key' => 'footer_copyright_en', 'value' => '2026 © Serv5. All Rights Reserved. Designed with passion.', 'type' => 'text'],
+    ['key' => 'footer_copyright_ar', 'value' => '٢٠٢٦ © Serv5. جميع الحقوق محفوظة. صُمم بشغف.', 'type' => 'text'],
     
     // Contact
     ['key' => 'contact_email', 'value' => 'info@serv5.com', 'type' => 'text'],
