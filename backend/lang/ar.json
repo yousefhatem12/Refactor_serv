@@ -7,6 +7,15 @@
     "Services": "الخدمات",
     "Our Work": "أعمالنا",
     "Testimonials": "آراء العملاء",
+    "Testimonial": "رأي عميل",
+    "Rating (Stars)": "التقييم (النجوم)",
+    "Video Link (YouTube/MP4)": "رابط فيديو (يوتيوب/MP4)",
+    "Audio File (Voice Record)": "ملف صوتي (تسجيل صوتي)",
+    "Client Image": "صورة العميل",
+    "Active": "نشط",
+    "Client Name": "اسم العميل",
+    "Position": "المسمى الوظيفي",
+    "Review": "الرأي / التقييم",
     "Site Pages": "صفحات الموقع",
     "Blog": "المدونة",
     "Page Builder": "باني الصفحات",
@@ -29,5 +38,6 @@
     "Header Settings": "إعدادات الهيدر",
     "Footer Settings": "إعدادات الفوتر",
     "System Settings": "إعدادات النظام",
-    "Contact Us": "اتصل بنا"
+    "Contact Us": "اتصل بنا",
+    "Manage the contact page content, phone numbers, and addresses.": "إدارة محتوى صفحة اتصل بنا، أرقام الهواتف، والعناوين."
 }

@@ -6,10 +6,12 @@ import { useLanguage } from "../../../context/LanguageContext";
 import { fetchAPI } from "@/lib/api";
 import PricingModal from "../../Shared/PricingModal";
 import ContactModal from "../../Shared/ContactModal";
+import { useRouter } from "next/navigation";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const CTA = () => {
+  const router = useRouter();
   const sectionRef = useRef(null);
   const { t } = useLanguage();
   const slide1Ref = useRef(null);
@@ -130,8 +132,8 @@ const CTA = () => {
           </p>
           <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
             <button 
-              onClick={() => setIsPricingModalOpen(true)}
-              className="bg-[#FF8A00] hover:bg-[#e67e00] text-white px-6 md:px-8 py-2 md:py-3 rounded-lg font-bold text-sm md:text-base transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,138,0,0.3)]"
+              onClick={() => router.push('/contact-us')}
+              className="bg-[#FF8A00] hover:bg-[#e67e00] text-white px-6 md:px-8 py-2 md:py-3 rounded-lg font-bold text-sm md:text-base transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,138,0,0.3)] cursor-pointer"
             >
               {t("getAQuote")}
             </button>
@@ -172,8 +174,8 @@ const CTA = () => {
           
           <div className="flex flex-col w-full gap-3 sm:gap-4">
             <button 
-              onClick={() => setIsPricingModalOpen(true)}
-              className="w-full bg-gradient-to-r from-[#FF8A00] to-[#E1804E] hover:from-[#e67e00] hover:to-[#c96d3f] text-white py-3 sm:py-3.5 rounded-xl font-bold text-xs sm:text-sm shadow-[0_0_20px_rgba(255,138,0,0.4)] active:scale-95 transition-all uppercase tracking-wider"
+              onClick={() => router.push('/contact-us')}
+              className="w-full bg-gradient-to-r from-[#FF8A00] to-[#E1804E] hover:from-[#e67e00] hover:to-[#c96d3f] text-white py-3 sm:py-3.5 rounded-xl font-bold text-xs sm:text-sm shadow-[0_0_20px_rgba(255,138,0,0.4)] active:scale-95 transition-all uppercase tracking-wider cursor-pointer"
             >
               {t("getAQuote")}
             </button>

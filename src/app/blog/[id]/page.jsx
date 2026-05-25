@@ -4,16 +4,28 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { fetchAPI } from "@/lib/api";
 import Loader from "../../components/Loader/Loader";
+import { useLanguage } from "../../context/LanguageContext";
 
 export default function BlogPostDetails() {
+  const { language } = useLanguage();
   const params = useParams();
   const slug = params?.id; // The folder is still named [id] but it receives the slug from URL
   const [post, setPost] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Adjust state during render to avoid synchronous setState inside useEffect
+  const [prevSlug, setPrevSlug] = useState(slug);
+  const [prevLang, setPrevLang] = useState(language);
+
+  if (slug !== prevSlug || language !== prevLang) {
+    setPrevSlug(slug);
+    setPrevLang(language);
+    setIsLoading(true);
+  }
+
   useEffect(() => {
     if (slug) {
-      fetchAPI(`/blog/${slug}`).then(data => {
+      fetchAPI(`/blog/${slug}?lang=${language}`).then(data => {
         setPost(data);
         setIsLoading(false);
       }).catch(err => {
@@ -21,7 +33,7 @@ export default function BlogPostDetails() {
         setIsLoading(false);
       });
     }
-  }, [slug]);
+  }, [slug, language]);
 
   if (isLoading) {
     return (
@@ -34,13 +46,17 @@ export default function BlogPostDetails() {
   if (!post) {
     return (
       <div className="min-h-screen flex items-center justify-center text-white bg-[#040A37]">
-        <h1>Post not found</h1>
+        <h1 className="text-2xl font-bold">
+          {language === 'ar' ? 'المقال غير موجود' : 'Post not found'}
+        </h1>
       </div>
     );
   }
 
+  const isRtl = language === "ar";
+
   return (
-    <main className="flex min-h-screen flex-col relative overflow-x-hidden pt-10 pb-10">
+    <main className="flex min-h-screen flex-col relative overflow-x-hidden pt-10 pb-10" dir={isRtl ? "rtl" : "ltr"}>
       <div className="fixed inset-0 bg-[#040A37] -z-20 pointer-events-none" />
 
       <div className="w-full relative z-10 flex flex-col items-center pt-24 text-white">
@@ -48,7 +64,7 @@ export default function BlogPostDetails() {
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
             <div className="w-full lg:w-1/2">
               <span className="text-[#FF8A00] font-bold mb-4 block uppercase tracking-widest">
-                {post.category}
+                {post.category || (language === 'ar' ? 'تكنولوجيا' : 'Technology')}
               </span>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight uppercase">
                 {post.title}
@@ -58,7 +74,9 @@ export default function BlogPostDetails() {
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
               <div className="flex items-center gap-4 text-sm text-gray-400">
-                <span>By {post.author}</span>
+                <span>
+                  {language === 'ar' ? 'بواسطة' : 'By'} {post.author}
+                </span>
                 <span>•</span>
                 <span>{post.published_at}</span>
               </div>
@@ -71,6 +89,7 @@ export default function BlogPostDetails() {
                   alt={post.title}
                   fill
                   className="object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                  priority
                 />
               )}
             </div>

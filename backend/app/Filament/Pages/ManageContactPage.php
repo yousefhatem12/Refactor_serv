@@ -60,6 +60,7 @@ class ManageContactPage extends Page implements HasForms
             'site_email',
             'site_skype',
             'site_address',
+            'site_branches',
         ];
 
         $settings = Setting::whereIn('key', $keys)->get()->pluck('value', 'key')->toArray();
@@ -71,6 +72,18 @@ class ManageContactPage extends Page implements HasForms
                 'en' => $settings['site_address'] ?? '',
                 'ar' => $settings['site_address'] ?? ''
             ];
+        }
+
+        if (!isset($settings['site_branches'])) {
+            $settings['site_branches'] = [
+                ['flag' => '🇪🇬', 'name_en' => 'Egypt', 'name_ar' => 'مصر', 'is_active' => true],
+                ['flag' => '🇸🇦', 'name_en' => 'Saudi Arabia', 'name_ar' => 'المملكة العربية السعودية', 'is_active' => false],
+                ['flag' => '🇰🇼', 'name_en' => 'Kuwait', 'name_ar' => 'الكويت', 'is_active' => false],
+            ];
+        } else if (is_string($settings['site_branches']) && str_starts_with($settings['site_branches'], '[')) {
+            $settings['site_branches'] = json_decode($settings['site_branches'], true);
+        } else {
+            $settings['site_branches'] = [];
         }
 
         $mergedData = array_merge($this->record->toArray(), $settings);
@@ -123,6 +136,14 @@ class ManageContactPage extends Page implements HasForms
                                                 Textarea::make('site_address.ar')->label('العنوان')->rows(2),
                                             ]),
                                     ])->columnSpanFull(),
+                                \Filament\Forms\Components\Repeater::make('site_branches')
+                                    ->label('الفروع / Branches')
+                                    ->schema([
+                                        TextInput::make('flag')->label('العلم (Emoji) / Flag')->placeholder('e.g. 🇪🇬, 🇸🇦')->required(),
+                                        TextInput::make('name_en')->label('Name (English)')->required(),
+                                        TextInput::make('name_ar')->label('الاسم (عربي)')->required(),
+                                        \Filament\Forms\Components\Toggle::make('is_active')->label('نشط / Active (Show pin)')->default(false),
+                                    ])->columns(2)->columnSpanFull(),
                             ])->columns(2),
                     ])->columnSpanFull(),
             ])
@@ -148,9 +169,9 @@ class ManageContactPage extends Page implements HasForms
             $this->record->update($pageData);
 
             // Save Settings Data
-            $settingsData = collect($data)->only(['site_phone', 'site_whatsapp', 'site_email', 'site_skype', 'site_address'])->toArray();
+            $settingsData = collect($data)->only(['site_phone', 'site_whatsapp', 'site_email', 'site_skype', 'site_address', 'site_branches'])->toArray();
             foreach ($settingsData as $key => $value) {
-                if ($key === 'site_address') {
+                if ($key === 'site_address' || $key === 'site_branches') {
                     $value = json_encode($value);
                 }
                 Setting::updateOrCreate(['key' => $key], ['value' => $value]);

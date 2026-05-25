@@ -16,6 +16,7 @@ class Post extends Model
         'content',
         'image',
         'category',
+        'blog_category_id',
         'is_published',
         'is_trending',
         'author_id',
@@ -35,6 +36,11 @@ class Post extends Model
     public function author()
     {
         return $this->belongsTo(User::class, 'author_id');
+    }
+
+    public function blogCategory()
+    {
+        return $this->belongsTo(BlogCategory::class, 'blog_category_id');
     }
 
     protected static function boot()

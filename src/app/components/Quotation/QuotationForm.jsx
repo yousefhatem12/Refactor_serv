@@ -506,137 +506,24 @@ const QuotationForm = () => {
     }
   };
 
-  if (!user) {
-    return (
-      <div className="relative z-20 max-w-lg mx-auto px-6 pb-20">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[30px] p-8 md:p-10 shadow-2xl text-center"
-        >
-          <h2 className="text-2xl font-bold text-white mb-4">{t("mustLoginQuote")}</h2>
-          <p className="text-gray-400 text-sm mb-6">
-            {isRtl 
-              ? "يجب تسجيل الدخول لتقديم طلب عرض سعر." 
-              : "You must login to submit a quotation request."}
-          </p>
-          <div className="flex justify-center gap-4 mb-8">
-            <button 
-              onClick={() => { setAuthMode("login"); setAuthStatus(null); }}
-              className={`px-6 py-2 rounded-full transition-all text-sm font-semibold border-none cursor-pointer ${
-                authMode === 'login' ? 'bg-[#FF8A00] text-white' : 'bg-white/10 text-gray-400'
-              }`}
-            >
-              {t("loginNow")}
-            </button>
-            <button 
-              onClick={() => { setAuthMode("register"); setAuthStatus(null); }}
-              className={`px-6 py-2 rounded-full transition-all text-sm font-semibold border-none cursor-pointer ${
-                authMode === 'register' ? 'bg-[#FF8A00] text-white' : 'bg-white/10 text-gray-400'
-              }`}
-            >
-              {t("registerNow")}
-            </button>
-          </div>
-
-          <form onSubmit={handleAuthSubmit} className="flex flex-col gap-6 text-left" style={{ direction: isRtl ? "rtl" : "ltr" }}>
-            {authStatus && (
-              <div className={`p-4 rounded-xl text-sm text-center ${authStatus.type === 'success' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
-                {authStatus.message}
-              </div>
-            )}
-            
-            {authMode === "register" && (
-              <div className="flex flex-col gap-2">
-                <label className="text-gray-400 text-xs px-1">{isRtl ? "الاسم" : "Name"}</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={authData.name}
-                  onChange={handleAuthChange}
-                  required
-                  className="w-full p-3.5 rounded-xl bg-white/5 border border-white/10 text-white outline-none text-sm transition-colors focus:border-blue-500"
-                />
-              </div>
-            )}
-
-            <div className="flex flex-col gap-2">
-              <label className="text-gray-400 text-xs px-1">{isRtl ? "البريد الإلكتروني" : "Email"}</label>
-              <input
-                type="email"
-                name="email"
-                value={authData.email}
-                onChange={handleAuthChange}
-                required
-                className="w-full p-3.5 rounded-xl bg-white/5 border border-white/10 text-white outline-none text-sm transition-colors focus:border-blue-500"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-gray-400 text-xs px-1">{isRtl ? "كلمة المرور" : "Password"}</label>
-              <input
-                type="password"
-                name="password"
-                value={authData.password}
-                onChange={handleAuthChange}
-                required
-                className="w-full p-3.5 rounded-xl bg-white/5 border border-white/10 text-white outline-none text-sm transition-colors focus:border-blue-500"
-              />
-            </div>
-
-            {authMode === "register" && (
-              <div className="flex flex-col gap-2">
-                <label className="text-gray-400 text-xs px-1">{isRtl ? "تأكيد كلمة المرور" : "Confirm Password"}</label>
-                <input
-                  type="password"
-                  name="password_confirmation"
-                  value={authData.password_confirmation}
-                  onChange={handleAuthChange}
-                  required
-                  className="w-full p-3.5 rounded-xl bg-white/5 border border-white/10 text-white outline-none text-sm transition-colors focus:border-blue-500"
-                />
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full bg-gradient-to-r from-blue-600 to-[#FF8A00] text-white py-3.5 rounded-xl font-bold mt-4 hover:scale-[1.02] transition-all disabled:opacity-50 border-none cursor-pointer"
-            >
-              {isSubmitting ? '...' : (authMode === 'login' ? t("loginNow") : t("registerNow"))}
-            </button>
-
-            <p className="text-gray-400 text-xs text-center mt-2">
-              {authMode === 'login' ? t("donthaveAccount") : t("alreadyhaveAccount")}{' '}
-              <span 
-                onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')}
-                className="text-[#FF8A00] cursor-pointer hover:underline"
-              >
-                {authMode === 'login' ? t("registerNow") : t("loginNow")}
-              </span>
-            </p>
-          </form>
-        </motion.div>
-      </div>
-    );
-  }
-
   return (
     <div className="relative z-20 max-w-4xl mx-auto px-6 pb-20">
-      <div className="flex justify-between items-center max-w-4xl mx-auto mb-6 px-4">
-        <p className="text-gray-400 text-sm">
-          {isRtl ? "مرحباً، " : "Welcome, "}<span className="text-white font-bold">{user.name}</span>
-        </p>
-        <button 
-          onClick={() => {
-            localStorage.removeItem('auth_token');
-            window.location.reload();
-          }} 
-          className="text-xs text-[#FF8A00] hover:underline bg-transparent border-none cursor-pointer font-semibold"
-        >
-          {isRtl ? "تسجيل الخروج" : "Logout"}
-        </button>
-      </div>
+      {user && (
+        <div className="flex justify-between items-center max-w-4xl mx-auto mb-6 px-4">
+          <p className="text-gray-400 text-sm">
+            {isRtl ? "مرحباً، " : "Welcome, "}<span className="text-white font-bold">{user.name}</span>
+          </p>
+          <button 
+            onClick={() => {
+              localStorage.removeItem('auth_token');
+              window.location.reload();
+            }} 
+            className="text-xs text-[#FF8A00] hover:underline bg-transparent border-none cursor-pointer font-semibold"
+          >
+            {isRtl ? "تسجيل الخروج" : "Logout"}
+          </button>
+        </div>
+      )}
 
       <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[40px] p-8 md:p-12 shadow-2xl relative overflow-hidden">
         

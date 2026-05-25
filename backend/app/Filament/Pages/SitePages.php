@@ -91,6 +91,13 @@ class SitePages extends Page
                     'color' => 'danger',
                 ],
                 [
+                    'title' => app()->getLocale() === 'ar' ? 'تصنيفات المقالات' : 'Blog Categories',
+                    'description' => app()->getLocale() === 'ar' ? 'إدارة تصنيفات مقالات المدونة.' : 'Manage categories for blog posts.',
+                    'icon' => 'heroicon-o-tag',
+                    'url' => \App\Filament\Resources\BlogCategoryResource::getUrl(),
+                    'color' => 'danger',
+                ],
+                [
                     'title' => __('Careers'),
                     'description' => __('Manage job postings and openings.'),
                     'icon' => 'heroicon-o-briefcase',

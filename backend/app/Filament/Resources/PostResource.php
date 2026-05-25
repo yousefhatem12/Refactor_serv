@@ -27,8 +27,6 @@ class PostResource extends Resource
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-newspaper';
     public static function getNavigationLabel(): string { return __('Blog'); }
 
-
-
     public static function getModelLabel(): string
     {
         return __('Post');
@@ -62,103 +60,71 @@ class PostResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
+        $isAr = app()->getLocale() === 'ar';
         return $schema
             ->components([
-                Section::make('Post Details')
+                Section::make($isAr ? 'تفاصيل المقال' : 'Post Details')
                     ->schema([
                         TextInput::make('title.en')
-                            ->label('Title (English)')
+                            ->label($isAr ? 'العنوان (إنجليزي)' : 'Title (English)')
                             ->required()
                             ->live(onBlur: true)
                             ->afterStateUpdated(fn (string $operation, $state, $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null),
                         TextInput::make('title.ar')
-                            ->label('Title (Arabic)')
+                            ->label($isAr ? 'العنوان (عربي)' : 'Title (Arabic)')
                             ->required(),
                         TextInput::make('slug')
+                            ->label($isAr ? 'الرابط الفرعي (Slug)' : 'Slug')
                             ->required()
                             ->unique(Post::class, 'slug', ignoreRecord: true),
                         RichEditor::make('content.en')
-                            ->label('Content (English)')
+                            ->label($isAr ? 'المحتوى (إنجليزي)' : 'Content (English)')
                             ->required()
                             ->toolbarButtons(self::getRichEditorToolbarButtons())
                             ->columnSpanFull(),
                         RichEditor::make('content.ar')
-                            ->label('Content (Arabic)')
+                            ->label($isAr ? 'المحتوى (عربي)' : 'Content (Arabic)')
                             ->required()
                             ->toolbarButtons(self::getRichEditorToolbarButtons())
                             ->columnSpanFull(),
                         FileUpload::make('image')
+                            ->label($isAr ? 'الصورة' : 'Image')
                             ->image()
                             ->directory('blog')
                             ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'blog')),
-                        Select::make('category')
-                            ->options(function () {
-                                $defaults = [
-                                    'TECHNOLOGY' => 'Technology',
-                                    'WEB DEVELOPMENT' => 'Web Development',
-                                    'STARTUP' => 'Startup',
-                                    'DROP SHIPPING' => 'Drop Shipping',
-                                    'HARDWARE' => 'Hardware',
-                                    'SOFTWARE' => 'Software',
-                                    'MARKETING' => 'Marketing',
-                                ];
-
-                                try {
-                                    $existing = \App\Models\Post::distinct()->pluck('category')->filter()->toArray();
-                                } catch (\Exception $e) {
-                                    $existing = [];
-                                }
-
-                                $options = [];
-                                foreach ($defaults as $key => $val) {
-                                    $options[$key] = $val;
-                                }
-
-                                foreach ($existing as $cat) {
-                                    $key = strtoupper($cat);
-                                    if ($key !== 'OTHER' && !isset($options[$key])) {
-                                        $options[$key] = $cat;
-                                    }
-                                }
-
-                                $options['OTHER'] = 'Other Category';
-
-                                return $options;
-                            })
-                            ->required()
-                            ->live()
+                        Select::make('blog_category_id')
+                            ->label($isAr ? 'التصنيف' : 'Category')
+                            ->options(fn () => \App\Models\BlogCategory::all()->mapWithKeys(fn ($item) => [
+                                $item->id => is_array($item->name) ? ($item->name[app()->getLocale()] ?? $item->name['en'] ?? '') : $item->name
+                            ]))
                             ->searchable()
-                            ->dehydrateStateUsing(fn ($state, $get) => $state === 'OTHER' ? $get('custom_category') : $state),
-                        TextInput::make('custom_category')
-                            ->label('Custom Category')
-                            ->placeholder('Enter custom category name...')
-                            ->visible(fn ($get) => $get('category') === 'OTHER')
-                            ->required(fn ($get) => $get('category') === 'OTHER')
-                            ->dehydrated(false),
+                            ->required(),
                         Toggle::make('is_published')
+                            ->label($isAr ? 'منشور' : 'Published')
                             ->default(false),
                         Toggle::make('is_trending')
-                            ->label('Trending')
+                            ->label($isAr ? 'رائج (Trending)' : 'Trending')
                             ->default(false),
                         Select::make('author_id')
+                            ->label($isAr ? 'الكاتب' : 'Author')
                             ->relationship('author', 'name')
                             ->default(auth()->id())
                             ->required()
                             ->searchable(),
                     ]),
-                Section::make('SEO Settings')
+                Section::make($isAr ? 'إعدادات السيو (SEO)' : 'SEO Settings')
                     ->schema([
                         TextInput::make('seo_title.en')
-                            ->label('SEO Title (EN)')
+                            ->label($isAr ? 'عنوان السيو (إنجليزي)' : 'SEO Title (EN)')
                             ->nullable(),
                         TextInput::make('seo_title.ar')
-                            ->label('SEO Title (AR)')
+                            ->label($isAr ? 'عنوان السيو (عربي)' : 'SEO Title (AR)')
                             ->nullable(),
                         \Filament\Forms\Components\Textarea::make('seo_description.en')
-                            ->label('Meta Description (EN)')
+                            ->label($isAr ? 'وصف السيو (إنجليزي)' : 'Meta Description (EN)')
                             ->nullable(),
                         \Filament\Forms\Components\Textarea::make('seo_description.ar')
-                            ->label('Meta Description (AR)')
+                            ->label($isAr ? 'وصف السيو (عربي)' : 'Meta Description (AR)')
                             ->nullable(),
                     ]),
             ]);
@@ -166,31 +132,55 @@ class PostResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $isAr = app()->getLocale() === 'ar';
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('image'),
-                Tables\Columns\TextColumn::make('title.en')
-                    ->label('Title')
+                Tables\Columns\ImageColumn::make('image')
+                    ->label($isAr ? 'الصورة' : 'Image'),
+                Tables\Columns\TextColumn::make($isAr ? 'title.ar' : 'title.en')
+                    ->label($isAr ? 'العنوان' : 'Title')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('author.name')
-                    ->label('Author')
+                    ->label($isAr ? 'الكاتب' : 'Author')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('slug')
+                    ->label($isAr ? 'الرابط (Slug)' : 'Slug')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('category')
+                Tables\Columns\TextColumn::make('blogCategory.name')
+                    ->label($isAr ? 'التصنيف' : 'Category')
                     ->badge()
+                    ->getStateUsing(function ($record) use ($isAr) {
+                        if ($record->blogCategory) {
+                            $name = $record->blogCategory->name;
+                            return is_array($name) ? ($name[app()->getLocale()] ?? $name['en'] ?? '') : $name;
+                        }
+                        $cat = $record->category;
+                        if (!$cat) return '';
+                        $map = [
+                            'TECHNOLOGY' => $isAr ? 'تكنولوجيا' : 'Technology',
+                            'WEB DEVELOPMENT' => $isAr ? 'تطوير الويب' : 'Web Development',
+                            'STARTUP' => $isAr ? 'شركات ناشئة' : 'Startup',
+                            'DROP SHIPPING' => $isAr ? 'دروب شيبنج' : 'Drop Shipping',
+                            'HARDWARE' => $isAr ? 'عتاد هاردوير' : 'Hardware',
+                            'SOFTWARE' => $isAr ? 'برمجيات' : 'Software',
+                            'MARKETING' => $isAr ? 'تسويق' : 'Marketing',
+                        ];
+                        $key = strtoupper(trim($cat));
+                        return $map[$key] ?? $cat;
+                    })
                     ->sortable(),
                 Tables\Columns\IconColumn::make('is_published')
+                    ->label($isAr ? 'منشور' : 'Published')
                     ->boolean()
                     ->sortable(),
                 Tables\Columns\IconColumn::make('is_trending')
-                    ->label('Trending')
+                    ->label($isAr ? 'رائج (Trending)' : 'Trending')
                     ->boolean()
                     ->sortable(),
                 Tables\Columns\IconColumn::make('seo_description')
-                    ->label('SEO')
+                    ->label($isAr ? 'السيو (SEO)' : 'SEO')
                     ->getStateUsing(fn ($record) => !empty($record->seo_description['ar']) || !empty($record->seo_description['en']))
                     ->boolean()
                     ->sortable(),

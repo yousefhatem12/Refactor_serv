@@ -7,8 +7,10 @@ import { useSettings } from "../../context/SettingsContext";
 import { getMediaUrl } from "@/lib/api";
 import VideoModal from "../Shared/VideoModal";
 import PricingModal from "../Shared/PricingModal";
+import { useRouter } from "next/navigation";
 
 const WebDevHero = ({ data, serviceId = "web-development" }) => {
+  const router = useRouter();
   const { language, t } = useLanguage();
   const isRtl = language === "ar";
   const settings = useSettings();
@@ -57,7 +59,7 @@ const WebDevHero = ({ data, serviceId = "web-development" }) => {
           className="flex flex-wrap items-center gap-6"
         >
           <button
-            onClick={() => setIsPricingModalOpen(true)}
+            onClick={() => router.push('/contact-us')}
             className="px-8 py-3 rounded-full bg-white text-[#040A37] font-semibold text-lg hover:bg-gray-200 transition-colors cursor-pointer border-none"
           >
             {settings?.hero_cta_text || t("getStarted")}

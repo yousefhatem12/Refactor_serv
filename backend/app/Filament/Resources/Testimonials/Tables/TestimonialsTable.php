@@ -16,10 +16,17 @@ class TestimonialsTable
     {
         return $table
             ->columns([
-                TextColumn::make('client_name')
+                TextColumn::make('client_name.en')
+                    ->label('Client Name')
                     ->searchable(),
-                TextColumn::make('position')
+                TextColumn::make('position.en')
+                    ->label('Position')
                     ->searchable(),
+                TextColumn::make('rating')
+                    ->label('Rating')
+                    ->badge()
+                    ->color('warning')
+                    ->sortable(),
                 ImageColumn::make('image'),
                 IconColumn::make('is_active')
                     ->boolean(),

@@ -23,7 +23,24 @@ class TestimonialResource extends Resource
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-chat-bubble-left-right';
     public static function getNavigationLabel(): string { return __('Testimonials'); }
 
-protected static ?string $recordTitleAttribute = 'client_name';
+    public static function getModelLabel(): string
+    {
+        return __('Testimonial');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Testimonials');
+    }
+
+    public static function getRecordTitle(?\Illuminate\Database\Eloquent\Model $record): ?string
+    {
+        if (is_array($record?->client_name)) {
+            return $record->client_name['en'] ?? $record->client_name['ar'] ?? null;
+        }
+
+        return $record?->client_name;
+    }
 
     public static function form(Schema $schema): Schema
     {
