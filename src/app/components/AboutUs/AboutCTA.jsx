@@ -5,8 +5,10 @@ import { useSettings } from "../../context/SettingsContext";
 import VideoModal from "../Shared/VideoModal";
 import PricingModal from "../Shared/PricingModal";
 import ContactModal from "../Shared/ContactModal";
+import { useRouter } from "next/navigation";
 
 const AboutCTA = ({ data }) => {
+  const router = useRouter();
   const { t } = useLanguage();
   const settings = useSettings();
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
@@ -30,7 +32,7 @@ const AboutCTA = ({ data }) => {
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
           <button 
-            onClick={() => setIsPricingModalOpen(true)}
+            onClick={() => router.push('/contact-us')}
             className="bg-white text-black px-10 py-4 rounded-md font-bold text-lg hover:bg-gray-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.2)]"
           >
             {data?.button_text || t("getAQuote")}

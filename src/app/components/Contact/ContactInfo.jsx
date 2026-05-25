@@ -97,37 +97,53 @@ const ContactInfo = ({ data }) => {
         </p>
 
         {/* Flags Section */}
-        <div className="flex items-center gap-4 mb-12">
-          <span className="text-sm font-semibold tracking-wide uppercase">
-            {t("findUsIn")}
-          </span>
-          <div className="flex items-center gap-3">
-            <div className="relative cursor-pointer group">
-              <div className="w-8 h-8 rounded-full overflow-hidden border border-white/20 relative flex items-center justify-center bg-white shadow-lg group-hover:scale-110 transition-transform">
-                <span className="text-2xl leading-none">🇪🇬</span>
+        {(() => {
+          const branches = settings.site_branches || [
+            { flag: "🇪🇬", name_en: "Egypt", name_ar: "مصر", is_active: true },
+            { flag: "🇸🇦", name_en: "Saudi Arabia", name_ar: "المملكة العربية السعودية", is_active: false },
+            { flag: "🇰🇼", name_en: "Kuwait", name_ar: "الكويت", is_active: false }
+          ];
+          const getBranchName = (branch) => {
+            return language === 'ar' ? (branch.name_ar || branch.flag) : (branch.name_en || branch.flag);
+          };
+          return (
+            <div className="flex items-center gap-4 mb-12">
+              <span className="text-sm font-semibold tracking-wide uppercase">
+                {t("findUsIn")}
+              </span>
+              <div className="flex items-center gap-3">
+                {branches.map((branch, index) => (
+                  <div 
+                    key={index} 
+                    className={`relative cursor-pointer group ${
+                      branch.is_active ? '' : 'opacity-70 hover:opacity-100'
+                    }`}
+                    title={getBranchName(branch)}
+                  >
+                    <div className="w-8 h-8 rounded-full overflow-hidden border border-white/20 relative flex items-center justify-center bg-white shadow-lg group-hover:scale-110 transition-transform">
+                      <span className="text-2xl leading-none">{branch.flag}</span>
+                    </div>
+                    {/* Active Pin */}
+                    {branch.is_active && (
+                      <div className="absolute -bottom-2 -right-2 bg-black rounded-full p-0.5 border border-white">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="10"
+                          height="10"
+                          viewBox="0 0 24 24"
+                          fill="white"
+                          stroke="none"
+                        >
+                          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
-              {/* Active Pin */}
-              <div className="absolute -bottom-2 -right-2 bg-black rounded-full p-0.5 border border-white">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="10"
-                  height="10"
-                  viewBox="0 0 24 24"
-                  fill="white"
-                  stroke="none"
-                >
-                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-                </svg>
-              </div>
             </div>
-            <div className="w-8 h-8 rounded-full overflow-hidden border border-white/20 relative flex items-center justify-center bg-white cursor-pointer hover:scale-110 transition-transform opacity-70 hover:opacity-100">
-              <span className="text-2xl leading-none">🇸🇦</span>
-            </div>
-            <div className="w-8 h-8 rounded-full overflow-hidden border border-white/20 relative flex items-center justify-center bg-white cursor-pointer hover:scale-110 transition-transform opacity-70 hover:opacity-100">
-              <span className="text-2xl leading-none">🇰🇼</span>
-            </div>
-          </div>
-        </div>
+          );
+        })()}
 
         {/* Contact Details */}
         <div className="space-y-4 mb-12">

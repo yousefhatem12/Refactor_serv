@@ -54,6 +54,7 @@ class ApiController extends Controller
             'الاستضافة' => ['en' => 'Hosting', 'ar' => 'استضافة'],
             'marketing' => ['en' => 'Marketing', 'ar' => 'تسويق'],
             'التسويق' => ['en' => 'Marketing', 'ar' => 'تسويق'],
+            'تسويق' => ['en' => 'Marketing', 'ar' => 'تسويق'],
             'development' => ['en' => 'Development', 'ar' => 'تطوير'],
             'التطوير' => ['en' => 'Development', 'ar' => 'تطوير'],
             'security' => ['en' => 'Security', 'ar' => 'حماية'],
@@ -61,8 +62,19 @@ class ApiController extends Controller
             
             // Other possible categories
             'artificial intelligence' => ['en' => 'Artificial Intelligence', 'ar' => 'الذكاء الاصطناعي'],
+            'الذكاء الاصطناعي' => ['en' => 'Artificial Intelligence', 'ar' => 'الذكاء الاصطناعي'],
             'software' => ['en' => 'Software', 'ar' => 'برمجيات'],
-            'startup' => ['en' => 'Startup', 'ar' => 'الشركات الناشئة'],
+            'برمجيات' => ['en' => 'Software', 'ar' => 'برمجيات'],
+            'startup' => ['en' => 'Startup', 'ar' => 'شركات ناشئة'],
+            'شركات ناشئة' => ['en' => 'Startup', 'ar' => 'شركات ناشئة'],
+            'technology' => ['en' => 'Technology', 'ar' => 'تكنولوجيا'],
+            'تكنولوجيا' => ['en' => 'Technology', 'ar' => 'تكنولوجيا'],
+            'web development' => ['en' => 'Web Development', 'ar' => 'تطوير الويب'],
+            'تطوير الويب' => ['en' => 'Web Development', 'ar' => 'تطوير الويب'],
+            'drop shipping' => ['en' => 'Drop Shipping', 'ar' => 'دروب شيبنج'],
+            'دروب شيبنج' => ['en' => 'Drop Shipping', 'ar' => 'دروب شيبنج'],
+            'hardware' => ['en' => 'Hardware', 'ar' => 'عتاد هاردوير'],
+            'عتاد هاردوير' => ['en' => 'Hardware', 'ar' => 'عتاد هاردوير'],
         ];
         
         $key = strtolower(trim($category));
@@ -270,14 +282,25 @@ class ApiController extends Controller
     public function getPosts()
     {
         $lang = $this->getLang();
-        $posts = Post::with('author')->where('is_published', true)->latest()->get()->map(function ($post) use ($lang) {
+        $posts = Post::with(['author', 'blogCategory'])->where('is_published', true)->latest()->get()->map(function ($post) use ($lang) {
+            $categoryName = '';
+            $categoryRaw = '';
+            if ($post->blogCategory) {
+                $categoryName = $this->trans($post->blogCategory->name, $lang);
+                $categoryRaw = strtoupper(trim($this->trans($post->blogCategory->name, 'en')));
+            } else if ($post->category) {
+                $categoryName = $this->translateCategory($post->category, $lang);
+                $categoryRaw = strtoupper(trim($post->category));
+            }
+
             return [
                 'id' => $post->id,
                 'title' => $this->trans($post->title, $lang),
                 'slug' => $post->slug,
                 'content' => $this->trans($post->content, $lang),
                 'author' => $post->author?->name ?? 'Admin',
-                'category' => $this->translateCategory($post->category, $lang),
+                'category' => $categoryName,
+                'category_raw' => $categoryRaw,
                 'image' => $post->image ? asset('storage/' . $post->image) : null,
                 'published_at' => $this->formatDate($post->created_at, $lang),
             ];
@@ -308,18 +331,30 @@ class ApiController extends Controller
     public function getPost($idOrSlug)
     {
         $lang = $this->getLang();
-        $post = Post::with('author')
+        $post = Post::with(['author', 'blogCategory'])
             ->where('is_published', true)
             ->where(function ($query) use ($idOrSlug) {
                 $query->where('slug', $idOrSlug)
                       ->orWhere('id', $idOrSlug);
             })
             ->firstOrFail();
+
+        $categoryName = '';
+        $categoryRaw = '';
+        if ($post->blogCategory) {
+            $categoryName = $this->trans($post->blogCategory->name, $lang);
+            $categoryRaw = strtoupper(trim($this->trans($post->blogCategory->name, 'en')));
+        } else if ($post->category) {
+            $categoryName = $this->translateCategory($post->category, $lang);
+            $categoryRaw = strtoupper(trim($post->category));
+        }
+
         return response()->json([
             'id' => $post->id,
             'title' => $this->trans($post->title, $lang),
             'slug' => $post->slug,
-            'category' => $this->translateCategory($post->category, $lang),
+            'category' => $categoryName,
+            'category_raw' => $categoryRaw,
             'content' => $this->trans($post->content, $lang),
             'author' => $post->author?->name ?? 'Admin',
             'image' => $post->image ? asset('storage/' . $post->image) : null,
@@ -499,6 +534,9 @@ class ApiController extends Controller
                 'position' => $this->trans($t->position, $lang),
                 'review' => $this->trans($t->review, $lang),
                 'image' => $t->image ? asset('storage/' . $t->image) : null,
+                'rating' => $t->rating,
+                'video_url' => $t->video_url,
+                'audio_url' => $t->audio_url ? asset('storage/' . $t->audio_url) : null,
             ];
         });
         return response()->json($testimonials);

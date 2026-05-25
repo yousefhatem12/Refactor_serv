@@ -10,28 +10,66 @@ const BlogGrid = ({ posts = [] }) => {
   const { t, language } = useLanguage();
   const [activeTab, setActiveTab] = useState("ALL");
 
-  const defaultCategories = [
-    "ALL",
-    "TECHNOLOGY",
-    "WEB DEVELOPMENT",
-    "STARTUP",
-    "DROP SHIPPING",
-    "HARDWARE",
-    "SOFTWARE",
-    "MARKETING",
-  ];
+  const categoryTranslations = {
+    en: {
+      "ALL": "All",
+      "TECHNOLOGY": "Technology",
+      "WEB DEVELOPMENT": "Web Development",
+      "STARTUP": "Startup",
+      "DROP SHIPPING": "Drop Shipping",
+      "HARDWARE": "Hardware",
+      "SOFTWARE": "Software",
+      "MARKETING": "Marketing",
+      "DESIGN": "Design",
+      "HOSTING": "Hosting",
+      "SECURITY": "Security",
+      "ARTIFICIAL INTELLIGENCE": "Artificial Intelligence",
+    },
+    ar: {
+      "ALL": "الكل",
+      "TECHNOLOGY": "تكنولوجيا",
+      "WEB DEVELOPMENT": "تطوير الويب",
+      "STARTUP": "شركات ناشئة",
+      "DROP SHIPPING": "دروب شيبنج",
+      "HARDWARE": "عتاد هاردوير",
+      "SOFTWARE": "برمجيات",
+      "MARKETING": "تسويق",
+      "DESIGN": "تصميم",
+      "HOSTING": "استضافة",
+      "SECURITY": "حماية",
+      "ARTIFICIAL INTELLIGENCE": "الذكاء الاصطناعي",
+    }
+  };
 
-  // Combine default categories with any custom categories present in the posts
+  // Build a map of raw category keys to their translated labels dynamically
+  const categoryMap = {};
+  const lang = language === "ar" ? "ar" : "en";
+  const defaults = categoryTranslations[lang] || categoryTranslations.en;
+  
+  Object.keys(defaults).forEach(key => {
+    categoryMap[key] = defaults[key];
+  });
+  
+  // Add/overwrite custom categories from the posts
+  posts.forEach(post => {
+    if (post.category_raw && post.category) {
+      if (!categoryMap[post.category_raw]) {
+        categoryMap[post.category_raw] = post.category;
+      }
+    }
+  });
+
+  // Dynamic categories list for the tabs (always starts with ALL, followed by categories actually present in the posts)
   const categories = Array.from(
     new Set([
-      ...defaultCategories,
-      ...posts.map(post => post.category?.toUpperCase()).filter(Boolean)
+      "ALL",
+      ...posts.map(post => post.category_raw).filter(Boolean)
     ])
   );
 
   const filteredPosts = activeTab === "ALL" 
     ? posts 
-    : posts.filter(post => post.category?.toUpperCase() === activeTab);
+    : posts.filter(post => post.category_raw === activeTab);
 
   return (
     <section className="w-full max-w-7xl mx-auto px-6 py-12 text-white relative z-10">
@@ -52,7 +90,7 @@ const BlogGrid = ({ posts = [] }) => {
                   : "border-blue-500/50 text-gray-300 hover:border-blue-400 hover:text-white"
               }`}
             >
-              {cat}
+              {categoryMap[cat] || cat}
             </button>
           ))}
         </div>
@@ -71,7 +109,7 @@ const BlogGrid = ({ posts = [] }) => {
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
               >
-                <Link href={`/blog/${post.id}`} className="group cursor-pointer flex flex-col h-full">
+                <Link href={`/blog/${post.slug || post.id}`} className="group cursor-pointer flex flex-col h-full">
                   <div className="relative w-full h-[220px] rounded-lg overflow-hidden mb-4 bg-gray-800">
                     <Image
                       src={post.image || "/placeholder.png"}
@@ -86,7 +124,7 @@ const BlogGrid = ({ posts = [] }) => {
                     </div>
                     <span className="w-1.5 h-1.5 rounded-full bg-gray-600"></span>
                     <div className="text-orange-400 text-xs font-semibold tracking-wider uppercase">
-                      {post.category || 'Technology'}
+                      {post.category || (language === 'ar' ? 'تكنولوجيا' : 'Technology')}
                     </div>
                   </div>
                   <h3 className="text-lg font-bold mb-3 leading-snug group-hover:text-blue-400 transition-colors uppercase">
@@ -116,11 +154,11 @@ const BlogGrid = ({ posts = [] }) => {
         </AnimatePresence>
       </motion.div>
 
-      {/* Read More Button */}
+      {/* Load More Button */}
       {filteredPosts.length > 0 && (
         <motion.div layout className="flex justify-center">
-          <button className="px-8 py-3 rounded-full border border-gray-500 text-gray-300 hover:bg-white/10 transition-colors flex items-center gap-2">
-            {t("readMore")}
+          <button className="px-8 py-3 rounded-full border border-gray-500 text-gray-300 hover:bg-white/10 transition-colors flex items-center gap-2 cursor-pointer">
+            {t("loadMore")}
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`${language === 'ar' ? 'rotate-180' : ''}`}>
               <path d="m9 18 6-6-6-6"/>
             </svg>

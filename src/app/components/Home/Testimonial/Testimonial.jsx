@@ -78,8 +78,10 @@ const Testimonial = () => {
     name: item.client_name,
     role: item.position,
     quote: item.review,
-    rating: 5,
+    rating: item.rating || 5,
     avatar: item.image || "/user-placeholder.png",
+    videoUrl: item.video_url || null,
+    audioUrl: item.audio_url || null,
   })) : defaultTestimonials;
 
   const scrollLeft = () => {
@@ -222,13 +224,21 @@ const Testimonial = () => {
                       </p>
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20 overflow-hidden shrink-0">
-                          <svg
-                            className="w-6 h-6 text-white/50"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                          </svg>
+                          {item.avatar && item.avatar !== "/user-placeholder.png" ? (
+                            <img
+                              src={item.avatar}
+                              alt={item.name}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <svg
+                              className="w-6 h-6 text-white/50"
+                              fill="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                            </svg>
+                          )}
                         </div>
                         <div>
                           <h4 className="text-white font-bold text-sm leading-tight">
@@ -276,13 +286,21 @@ const Testimonial = () => {
                     <StarRating rating={item.rating} />
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20 overflow-hidden shrink-0">
-                        <svg
-                          className="w-6 h-6 text-white/50"
-                          fill="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                        </svg>
+                        {item.avatar && item.avatar !== "/user-placeholder.png" ? (
+                          <img
+                            src={item.avatar}
+                            alt={item.name}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <svg
+                            className="w-6 h-6 text-white/50"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                          </svg>
+                        )}
                       </div>
                       <div>
                         <h4 className="text-white font-bold text-sm leading-tight">
@@ -328,13 +346,21 @@ const Testimonial = () => {
                         <div className="relative shrink-0">
                           <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FF8A00] to-orange-600 p-[2px] group-hover/card:shadow-[0_0_15px_rgba(255,138,0,0.4)] transition-all">
                             <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center overflow-hidden">
-                              <svg
-                                className="w-6 h-6 text-white/70"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                              </svg>
+                              {item.avatar && item.avatar !== "/user-placeholder.png" ? (
+                                <img
+                                  src={item.avatar}
+                                  alt={item.name}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <svg
+                                  className="w-6 h-6 text-white/70"
+                                  fill="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                                </svg>
+                              )}
                             </div>
                           </div>
                         </div>

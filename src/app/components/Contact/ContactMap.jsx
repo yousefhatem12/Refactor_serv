@@ -1,10 +1,25 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "../../context/LanguageContext";
+import { fetchAPI } from "@/lib/api";
 
 const ContactMap = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const [settings, setSettings] = useState({});
+
+  useEffect(() => {
+    fetchAPI(`/settings?lang=${language}`)
+      .then((data) => {
+        if (data) setSettings(data);
+      })
+      .catch(console.error);
+  }, [language]);
+
+  const searchQuery = settings.site_address 
+    ? encodeURIComponent(settings.site_address) 
+    : "Mansoura,%20Egypt";
+
   return (
     <div className="w-full mt-32 mb-20 flex flex-col lg:flex-row items-center gap-12 lg:gap-20 relative z-10">
       {/* Left side text */}
@@ -84,7 +99,7 @@ const ContactMap = () => {
         className="w-full lg:w-2/3 h-[250px] md:h-[300px] bg-white rounded-lg overflow-hidden border-2 border-white/20 shadow-2xl relative"
       >
         <iframe
-          src="https://maps.google.com/maps?q=Mansoura,%20Egypt&t=&z=13&ie=UTF8&iwloc=&output=embed"
+          src={`https://maps.google.com/maps?q=${searchQuery}&t=&z=13&ie=UTF8&iwloc=&output=embed`}
           width="100%"
           height="100%"
           style={{ border: 0, filter: "opacity(0.9)" }}

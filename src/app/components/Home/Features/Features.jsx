@@ -2,7 +2,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "../../../context/LanguageContext";
-import { fetchAPI } from "@/lib/api";
+import { fetchAPI, getMediaUrl } from "@/lib/api";
 
 const partners = [
   "/Features/2-300x300-1.png.svg",
@@ -34,7 +34,24 @@ const Star = ({ className }) => (
 
 export default function Features() {
   const sectionRef = useRef(null);
+  const partnersRef = useRef(null);
   const { language, t } = useLanguage();
+
+  const scrollLeft = () => {
+    if (partnersRef.current) {
+      // In RTL, clicking the left arrow scrolls right (positive value) to show next items
+      const speed = language === "ar" ? 200 : -200;
+      partnersRef.current.scrollBy({ left: speed, behavior: "smooth" });
+    }
+  };
+
+  const scrollRight = () => {
+    if (partnersRef.current) {
+      // In RTL, clicking the right arrow scrolls left (negative value) to show previous items
+      const speed = language === "ar" ? -200 : 200;
+      partnersRef.current.scrollBy({ left: speed, behavior: "smooth" });
+    }
+  };
 
   const [features, setFeatures] = useState([]);
   const [settings, setSettings] = useState({});
@@ -54,10 +71,12 @@ export default function Features() {
     : checkFeaturesKeys.map(k => t(k));
 
   const displayPartners = (settings.features_partners && settings.features_partners.length > 0)
-    ? settings.features_partners
+    ? settings.features_partners.map(p => getMediaUrl(p))
     : partners;
 
-  const displayExperienceImage = settings.features_image || "/Features/15Y.png";
+  const displayExperienceImage = settings.features_image
+    ? getMediaUrl(settings.features_image)
+    : "/Features/15Y.png";
 
   return (
     <section
@@ -264,7 +283,10 @@ export default function Features() {
           </p>
 
           <div className="flex items-center justify-between gap-4 max-w-6xl mx-auto px-2">
-            <button className="hidden sm:flex w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm items-center justify-center text-gray-400 hover:text-white hover:bg-[#D98B50] hover:border-[#D98B50] hover:shadow-[0_0_20px_rgba(217,139,80,0.4)] transition-all duration-300 shrink-0 group">
+            <button
+              onClick={scrollLeft}
+              className="hidden sm:flex w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm items-center justify-center text-gray-400 hover:text-white hover:bg-[#D98B50] hover:border-[#D98B50] hover:shadow-[0_0_20px_rgba(217,139,80,0.4)] transition-all duration-300 shrink-0 group"
+            >
               <svg
                 width="20"
                 height="20"
@@ -280,26 +302,35 @@ export default function Features() {
               </svg>
             </button>
 
-            <div className="flex-1 flex flex-wrap justify-center items-center gap-6 sm:gap-8 md:gap-12 lg:gap-16">
-              {displayPartners.map((partner, index) => (
-                <motion.div
-                  key={index}
-                  whileHover={{ scale: 1.1, y: -5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                  className="relative group cursor-pointer p-2"
-                >
-                  <img
-                    src={partner}
-                    alt={`Partner ${index + 1}`}
-                    className="h-6 sm:h-8 md:h-10 lg:h-12 w-auto object-contain  group-hover:opacity-100 transition-all duration-300"
-                    style={{ filter: "brightness(0) invert(1)" }}
-                  />
-                  <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1/3 h-[2px] bg-[#D98B50] opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-[1px]"></div>
-                </motion.div>
-              ))}
+            <div className="flex-1 overflow-hidden">
+              <div
+                ref={partnersRef}
+                className="flex items-center justify-start lg:justify-center gap-6 sm:gap-8 md:gap-12 lg:gap-16 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory flex-nowrap"
+                style={{ msOverflowStyle: "none", scrollbarWidth: "none" }}
+              >
+                {displayPartners.map((partner, index) => (
+                  <motion.div
+                    key={index}
+                    whileHover={{ scale: 1.1, y: -5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    className="relative group cursor-pointer p-2 shrink-0 snap-center"
+                  >
+                    <img
+                      src={partner}
+                      alt={`Partner ${index + 1}`}
+                      className="h-6 sm:h-8 md:h-10 lg:h-12 w-auto object-contain group-hover:opacity-100 transition-all duration-300"
+                      style={partner.includes('/Features/') ? { filter: "brightness(0) invert(1)" } : {}}
+                    />
+                    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1/3 h-[2px] bg-[#D98B50] opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-[1px]"></div>
+                  </motion.div>
+                ))}
+              </div>
             </div>
 
-            <button className="hidden sm:flex w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm items-center justify-center text-gray-400 hover:text-white hover:bg-[#D98B50] hover:border-[#D98B50] hover:shadow-[0_0_20px_rgba(217,139,80,0.4)] transition-all duration-300 shrink-0 group">
+            <button
+              onClick={scrollRight}
+              className="hidden sm:flex w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm items-center justify-center text-gray-400 hover:text-white hover:bg-[#D98B50] hover:border-[#D98B50] hover:shadow-[0_0_20px_rgba(217,139,80,0.4)] transition-all duration-300 shrink-0 group"
+            >
               <svg
                 width="20"
                 height="20"
@@ -317,6 +348,15 @@ export default function Features() {
           </div>
         </motion.div>
       </div>
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+      `,
+        }}
+      />
     </section>
   );
 }

@@ -22,7 +22,7 @@ use Illuminate\Support\Str;
 class ServiceResource extends Resource
 {
     protected static ?string $model = Service::class;
-    protected static bool $shouldRegisterNavigation = false;
+    protected static bool $shouldRegisterNavigation = true;
     public static function getNavigationGroup(): ?string { return __('Pages'); }
     protected static ?int $navigationSort = 2;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-briefcase';

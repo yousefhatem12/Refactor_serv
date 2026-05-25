@@ -6,6 +6,7 @@ import { useLanguage } from "../../context/LanguageContext";
 import { useSettings } from "../../context/SettingsContext";
 import VideoModal from "../Shared/VideoModal";
 import PricingModal from "../Shared/PricingModal";
+import { useRouter } from "next/navigation";
 
 const SocialMediaHero = ({
   title,
@@ -14,6 +15,7 @@ const SocialMediaHero = ({
   planetImage = "/Services/Blue Planet.png",
   serviceId = "social-media",
 }) => {
+  const router = useRouter();
   const { t } = useLanguage();
   const settings = useSettings();
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
@@ -54,7 +56,7 @@ const SocialMediaHero = ({
           className="flex flex-wrap items-center gap-6"
         >
           <button
-            onClick={() => setIsPricingModalOpen(true)}
+            onClick={() => router.push('/contact-us')}
             className="px-8 py-3 rounded-full bg-white text-[#040A37] font-semibold text-lg hover:bg-gray-200 transition-colors border-none cursor-pointer"
           >
             {settings?.hero_cta_text || t("startProject")}

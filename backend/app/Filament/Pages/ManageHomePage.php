@@ -84,6 +84,13 @@ class ManageHomePage extends Page
                     'url' => ManageHomeCTA::getUrl(),
                     'color' => 'danger',
                 ],
+                [
+                    'title' => __('Contact Us'),
+                    'description' => __('Manage the contact page content, phone numbers, and addresses.'),
+                    'icon' => 'heroicon-o-phone-arrow-up-right',
+                    'url' => \App\Filament\Pages\ManageContactPage::getUrl(),
+                    'color' => 'success',
+                ],
             ]
         ];
     }

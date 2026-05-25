@@ -51,11 +51,11 @@ Route::get('/products/{slug}', [ApiController::class, 'getProduct']);
 Route::get('/careers', [ApiController::class, 'getCareers']);
 Route::post('/careers/apply', [ApiController::class, 'submitCareerApplication']);
 Route::get('/bank-accounts', [ApiController::class, 'getBankAccounts']);
+Route::post('/contact', [ApiController::class, 'submitContactMessage']);
+Route::post('/quotations', [ApiController::class, 'submitQuotation']);
 
 // Protected endpoints
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/contact', [ApiController::class, 'submitContactMessage']);
-    Route::post('/quotations', [ApiController::class, 'submitQuotation']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
 });

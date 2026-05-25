@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useLanguage } from "../../context/LanguageContext";
 import { fetchAPI } from "@/lib/api";
 import { motion } from "framer-motion";
@@ -21,6 +21,7 @@ import { RiTwitterXFill } from "react-icons/ri";
 const Footer = () => {
   const { t, language } = useLanguage();
   const pathname = usePathname();
+  const router = useRouter();
   const isHomePage = pathname === "/" || pathname === "/Home";
 
   const [settings, setSettings] = useState({});
@@ -98,6 +99,7 @@ const Footer = () => {
               {footerData.texts?.description || t("footerDesc")}
             </motion.p>
             <motion.button
+              onClick={() => router.push('/contact-us')}
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
@@ -107,7 +109,7 @@ const Footer = () => {
                 boxShadow: "0 0 20px rgba(255,255,255,0.2)",
               }}
               whileTap={{ scale: 0.95 }}
-              className="px-12 py-4 rounded-full border border-white/30 bg-white/5 backdrop-blur-md text-white font-semibold hover:bg-white hover:text-[#020617] transition-all duration-300 text-lg"
+              className="px-12 py-4 rounded-full border border-white/30 bg-white/5 backdrop-blur-md text-white font-semibold hover:bg-white hover:text-[#020617] transition-all duration-300 text-lg cursor-pointer"
             >
               {footerData.texts?.button_text || t("getStarted")}
             </motion.button>

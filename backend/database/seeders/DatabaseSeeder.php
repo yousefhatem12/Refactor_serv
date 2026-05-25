@@ -15,16 +15,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->create([
+        $role = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
+
+        $user = User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        $user->assignRole($role);
 
         $this->call([
             InitialContentSeeder::class,
             FooterSeeder::class,
             ProductsAndCareersSeeder::class,
             ProjectSeeder::class,
+            ServiceSeeder::class,
             LinkPricingPlansToServicesSeeder::class,
         ]);
     }

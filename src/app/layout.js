@@ -46,10 +46,10 @@ export default async function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${montserrat.variable} ${poppins.variable} ${alexandria.variable} h-full antialiased`}
+      className={`${montserrat.variable} ${poppins.variable} ${alexandria.variable} min-h-screen antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col" suppressHydrationWarning>
+      <body className="min-h-screen flex flex-col" suppressHydrationWarning>
         {settings?.custom_header_code && (
           <div
             dangerouslySetInnerHTML={{ __html: settings.custom_header_code }}

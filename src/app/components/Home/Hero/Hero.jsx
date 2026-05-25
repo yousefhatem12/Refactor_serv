@@ -12,6 +12,7 @@ import { useSettings } from "@/app/context/SettingsContext";
 import { fetchAPI } from "@/lib/api";
 import VideoModal from "../../Shared/VideoModal";
 import PricingModal from "../../Shared/PricingModal";
+import { useRouter } from "next/navigation";
 
 // Staggered animation variants
 const containerVariants = {
@@ -31,6 +32,7 @@ const itemVariants = {
 };
 
 export default function Hero({ isPhaseTwo, data }) {
+  const router = useRouter();
   const { scrollY } = useScroll();
   const { t, language } = useLanguage();
   const isRtl = language === "ar";
@@ -151,7 +153,7 @@ export default function Hero({ isPhaseTwo, data }) {
                 className="flex flex-row flex-wrap items-center justify-center md:justify-start gap-4 sm:gap-6 w-full"
               >
                 <button
-                  onClick={() => setIsPricingModalOpen(true)}
+                  onClick={() => router.push('/contact-us')}
                   className="bg-gradient-to-r from-[#FF8A00] to-[#FF5C00] hover:from-[#FF5C00] hover:to-[#FF8A00] text-white text-sm sm:text-base px-8 py-4 rounded-2xl font-black uppercase tracking-widest flex items-center gap-3 transition-all transform hover:scale-105 shadow-[0_20px_40px_-10px_rgba(255,138,0,0.5)] active:scale-95 cursor-pointer border-none"
                 >
                   <span className="bg-white/20 p-1 sm:p-1.5 rounded-full">
