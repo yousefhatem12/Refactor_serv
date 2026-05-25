@@ -67,11 +67,18 @@ const QuotationForm = () => {
 
   useEffect(() => {
     if (user) {
-      setFormData(prev => ({
-        ...prev,
-        name: prev.name || user.name || "",
-        email: prev.email || user.email || ""
-      }));
+      setFormData(prev => {
+        const nextName = prev.name || user.name || "";
+        const nextEmail = prev.email || user.email || "";
+        if (prev.name === nextName && prev.email === nextEmail) {
+          return prev;
+        }
+        return {
+          ...prev,
+          name: nextName,
+          email: nextEmail
+        };
+      });
     }
   }, [user]);
 
