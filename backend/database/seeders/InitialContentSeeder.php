@@ -19,9 +19,11 @@ class InitialContentSeeder extends Seeder
         \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
 
         // Project Categories
-        \App\Models\ProjectCategory::create(['slug' => 'websites', 'name' => ['en' => 'Websites & Web Apps', 'ar' => 'المواقع وتطبيقات الويب']]);
-        \App\Models\ProjectCategory::create(['slug' => 'mobile', 'name' => ['en' => 'Mobile Applications', 'ar' => 'تطبيقات الجوال']]);
-        \App\Models\ProjectCategory::create(['slug' => 'digital', 'name' => ['en' => 'Digital Marketing & Branding', 'ar' => 'التسويق الرقمي والهوية']]);
+        \App\Models\ProjectCategory::create(['slug' => 'websites', 'name' => ['en' => 'Websites & Web Apps', 'ar' => 'مواقع إلكترونية']]);
+        \App\Models\ProjectCategory::create(['slug' => 'mobile', 'name' => ['en' => 'Mobile Applications', 'ar' => 'تطبيقات جوال']]);
+        \App\Models\ProjectCategory::create(['slug' => 'motion', 'name' => ['en' => 'Motion Graphics', 'ar' => 'موشن جرافيك']]);
+        \App\Models\ProjectCategory::create(['slug' => 'digital', 'name' => ['en' => 'Digital Identity & Branding', 'ar' => 'هوية رقمية']]);
+        \App\Models\ProjectCategory::create(['slug' => 'social', 'name' => ['en' => 'Social Media Designs', 'ar' => 'سوشيال ميديا']]);
 
         // Navigation Links
         $home = \App\Models\NavLink::create(['url' => '/Home', 'label' => ['en' => 'Home', 'ar' => 'الرئيسية'], 'sort_order' => 1]);
@@ -476,5 +478,34 @@ class InitialContentSeeder extends Seeder
         foreach ($pages as $page) {
             \App\Models\Page::updateOrCreate(['slug' => $page['slug']], $page);
         }
+
+        // Hero settings translations
+        \App\Models\Setting::updateOrCreate(
+            ['key' => 'hero_title_1'],
+            [
+                'value' => json_encode(['en' => 'Building The Future', 'ar' => 'بناء المستقبل']),
+                'type' => 'text',
+                'value_source' => 'link'
+            ]
+        );
+        \App\Models\Setting::updateOrCreate(
+            ['key' => 'hero_title_2'],
+            [
+                'value' => json_encode(['en' => 'Of Your Business', 'ar' => 'لأعمالك']),
+                'type' => 'text',
+                'value_source' => 'link'
+            ]
+        );
+        \App\Models\Setting::updateOrCreate(
+            ['key' => 'hero_desc'],
+            [
+                'value' => json_encode([
+                    'en' => 'We provide state-of-the-art web solutions, from stunning designs to powerful backend systems, helping you dominate the digital galaxy.',
+                    'ar' => 'نحن نقدم أحدث حلول الويب، بدءاً من التصاميم المذهلة إلى الأنظمة الخلفية القوية، لمساعدتك في السيطرة على المجرة الرقمية.'
+                ]),
+                'type' => 'text',
+                'value_source' => 'link'
+            ]
+        );
     }
 }

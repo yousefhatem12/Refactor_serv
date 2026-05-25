@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Ts Damas Sans Free Bold";
+  src: url("/fonts/TsDamasSansFreeBold.woff2") format("woff2");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --background: #0a0a0a;
   --foreground: #ededed;
@@ -42,16 +50,22 @@ body {
     line-height: 1.1;
   }
 
-  /* Support for Arabic specifically */
+  /* Support for Ts Damas Sans Free Bold on all Arabic pages */
   [lang="ar"],
-  [dir="rtl"] {
-    font-family: var(--font-arabic);
+  [dir="rtl"],
+  [lang="ar"] *,
+  [dir="rtl"] * {
+    font-family:
+      "Ts Damas Sans Free Bold", var(--font-arabic), sans-serif !important;
   }
 }
 
+html[lang="ar"],
+html[dir="rtl"] {
+  font-size: 108%;
+}
+
 @layer utilities {
-
-
   .text-balance {
     text-wrap: balance;
   }

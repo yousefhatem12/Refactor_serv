@@ -13,7 +13,7 @@ const OurProductsListingPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchAPI('/products')
+    fetchAPI("/products")
       .then((data) => {
         if (data && Array.isArray(data)) {
           setProductsList(data);
@@ -39,7 +39,7 @@ const OurProductsListingPage = () => {
     <main className="min-h-screen pt-32 pb-16 flex flex-col items-center">
       {/* Header Section */}
       <section className="w-full max-w-[1400px] mx-auto px-6 md:px-10 mb-16 flex flex-col items-center text-center z-10">
-        <motion.h1 
+        <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -48,7 +48,7 @@ const OurProductsListingPage = () => {
           {firstPart && <span className="text-white">{firstPart} </span>}
           <span className="text-[#F18805]">{lastWord}</span>
         </motion.h1>
-        <motion.p 
+        <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
@@ -67,8 +67,12 @@ const OurProductsListingPage = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
             {productsList.map((item, index) => (
-              <Link href={`/our-products/${item.id}`} key={item.id} className="block group">
-                <motion.div 
+              <Link
+                href={`/our-products/${item.id}`}
+                key={item.id}
+                className="block group"
+              >
+                <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -77,9 +81,9 @@ const OurProductsListingPage = () => {
                 >
                   {/* Image Container */}
                   <div className="relative w-full aspect-video overflow-hidden bg-[#2a2a35]">
-                    <Image 
-                      src={item.image || "/portfolio/image-1.png"} 
-                      alt={item.title || item.name} 
+                    <Image
+                      src={item.image || "/portfolio/image-1.png"}
+                      alt={item.title || item.name}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-110"
                     />
@@ -100,8 +104,20 @@ const OurProductsListingPage = () => {
                     <div className="mt-auto flex items-center justify-between">
                       <span className="text-[#F18805] font-semibold text-sm flex items-center gap-2 group-hover:gap-3 transition-all">
                         {t("viewFullDetails")}
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M5 12H19M19 12L12 5M19 12L12 19"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
                         </svg>
                       </span>
                     </div>

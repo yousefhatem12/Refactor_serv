@@ -16,7 +16,8 @@ const SocialMediaHero = ({
   serviceId = "social-media",
 }) => {
   const router = useRouter();
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
+  const isRtl = language === "ar";
   const settings = useSettings();
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [isPricingModalOpen, setIsPricingModalOpen] = useState(false);
@@ -25,7 +26,7 @@ const SocialMediaHero = ({
     <section className="relative w-full min-h-[80vh] flex items-center  justify-between px-6 lg:px-20 pt-20">
       {/* Background Image behind everything */}
       <div
-        className="absolute inset-[-100px] h-screen z-0 bg-no-repeat bg-cover bg-center mix-blend-screen"
+        className={`absolute inset-[-100px] h-screen z-0 bg-no-repeat bg-cover bg-center mix-blend-screen ${isRtl ? "scale-x-[-1]" : ""}`}
         style={{ backgroundImage: `url('${bgImage}')` }}
       />
 
@@ -56,7 +57,7 @@ const SocialMediaHero = ({
           className="flex flex-wrap items-center gap-6"
         >
           <button
-            onClick={() => router.push('/contact-us')}
+            onClick={() => router.push("/contact-us")}
             className="px-8 py-3 rounded-full bg-white text-[#040A37] font-semibold text-lg hover:bg-gray-200 transition-colors border-none cursor-pointer"
           >
             {settings?.hero_cta_text || t("startProject")}

@@ -16,25 +16,33 @@ const ContactMap = () => {
       .catch(console.error);
   }, [language]);
 
-  const searchQuery = settings.site_address 
-    ? encodeURIComponent(settings.site_address) 
+  const searchQuery = settings.site_address
+    ? encodeURIComponent(settings.site_address)
     : "Mansoura,%20Egypt";
 
   return (
-    <div className="w-full mt-32 mb-20 flex flex-col lg:flex-row items-center gap-12 lg:gap-20 relative z-10">
+    <div className="w-full mt-32 mb-20 flex flex-col lg:flex-row items-center gap-12 lg:gap-20 relative z-10 ">
       {/* Left side text */}
       <motion.div
         initial={{ opacity: 0, x: -30 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
-        className="w-full lg:w-1/3 relative flex items-center justify-center lg:justify-start"
+        className="w-full lg:w-1/3 relative flex items-center justify-center lg:justify-start "
       >
         {/* Background Image */}
-        <div className="absolute inset-0 z-0 flex items-center justify-center -translate-x-10 lg:-translate-x-20 scale-[1.8] md:scale-[2] pointer-events-none opacity-50 ">
+        <div
+          className={`absolute inset-0 z-0 flex items-center justify-center overflow-hidden scale-[1.8] md:scale-[2] pointer-events-none opacity-50 ${
+            language === "ar"
+              ? "translate-x-10 lg:translate-x-20"
+              : "-translate-x-10 lg:-translate-x-20"
+          }`}
+        >
           <img
             src="/contact-us/Element.png"
             alt=""
-            className="w-full h-auto object-cover mix-blend-luminosity"
+            className={`w-full h-auto object-cover mix-blend-luminosity ${
+              language === "ar" ? "scale-x-[-1]" : ""
+            }`}
           />
         </div>
 

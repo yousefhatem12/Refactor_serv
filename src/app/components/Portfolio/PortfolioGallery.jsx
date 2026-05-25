@@ -16,19 +16,34 @@ export default function PortfolioGallery({ data }) {
 
   React.useEffect(() => {
     const fetchPortfolioData = async () => {
-      try {
-        setIsLoading(true);
-        const [portfolioData, categoriesData] = await Promise.all([
-          fetchAPI(`/portfolio?lang=${language}`),
-          fetchAPI(`/portfolio-categories?lang=${language}`)
-        ]);
-        setPortfolioItems(portfolioData);
-        setCategories(categoriesData || []);
-      } catch (error) {
-        console.error("Failed to fetch portfolio data:", error);
-      } finally {
-        setIsLoading(false);
-      }
+      setIsLoading(true);
+      const endpoints = [
+        { url: `/portfolio?lang=${language}`, setter: setPortfolioItems },
+        {
+          url: `/portfolio-categories?lang=${language}`,
+          setter: (val) => setCategories(val || []),
+        },
+      ];
+      let resolvedCount = 0;
+      const threshold = Math.ceil(endpoints.length / 4); // 25% of 2 is 1
+
+      endpoints.forEach(({ url, setter }) => {
+        fetchAPI(url)
+          .then((data) => {
+            setter(data);
+            resolvedCount++;
+            if (resolvedCount >= threshold) {
+              setIsLoading(false);
+            }
+          })
+          .catch((err) => {
+            console.error(`Failed to fetch ${url}:`, err);
+            resolvedCount++;
+            if (resolvedCount >= threshold) {
+              setIsLoading(false);
+            }
+          });
+      });
     };
 
     fetchPortfolioData();
@@ -36,13 +51,14 @@ export default function PortfolioGallery({ data }) {
 
   const tabs = [
     { label: t("portfolioTabsAll") || "ALL", id: "all" },
-    ...categories.map(cat => ({ label: cat.label, id: cat.id }))
+    ...categories.map((cat) => ({ label: cat.label, id: cat.id })),
   ];
 
   const items = Array.isArray(portfolioItems) ? portfolioItems : [];
-  const filteredItems = activeTab === "all" 
-    ? items 
-    : items.filter(item => item.category === activeTab);
+  const filteredItems =
+    activeTab === "all"
+      ? items
+      : items.filter((item) => item.category === activeTab);
 
   return (
     <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 relative z-20">
@@ -116,8 +132,18 @@ export default function PortfolioGallery({ data }) {
                     className="inline-flex items-center gap-2 text-[#FF8A00] font-medium hover:text-[#ffb800] transition-colors translate-y-4 group-hover:translate-y-0 duration-300 delay-100 w-fit"
                   >
                     <span>{t("visitProject")}</span>
-                    <svg className={`w-4 h-4 ${language === 'ar' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    <svg
+                      className={`w-4 h-4 ${language === "ar" ? "rotate-180" : ""}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                      />
                     </svg>
                   </a>
                 )}

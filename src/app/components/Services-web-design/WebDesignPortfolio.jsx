@@ -22,7 +22,9 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
   }, [language]);
 
   const targetCategory = isMobileApp ? "mobile" : "websites";
-  const items = portfolioItems.filter(item => item.category === targetCategory);
+  const items = portfolioItems.filter(
+    (item) => item.category === targetCategory,
+  );
 
   if (loading) {
     return (
@@ -39,28 +41,31 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
 
   if (isMobileApp) {
     tabs = items.map((item) => ({ id: item.id.toString(), label: item.name }));
-    const activeId = items.some(item => item.id.toString() === activeTab)
+    const activeId = items.some((item) => item.id.toString() === activeTab)
       ? activeTab
       : items[0]?.id.toString();
-    const activeItem = items.find(item => item.id.toString() === activeId);
+    const activeItem = items.find((item) => item.id.toString() === activeId);
     filteredItems = activeItem ? [activeItem] : [];
   } else {
     const allTags = new Set();
-    items.forEach(item => {
+    items.forEach((item) => {
       if (Array.isArray(item.tags)) {
-        item.tags.forEach(tag => allTags.add(tag));
+        item.tags.forEach((tag) => allTags.add(tag));
       }
     });
     const uniqueTags = Array.from(allTags);
-    
+
     tabs = [
       { id: "all", label: t("portfolioTabsAll") || "All" },
-      ...uniqueTags.map(tag => ({ id: tag, label: tag.toUpperCase() }))
+      ...uniqueTags.map((tag) => ({ id: tag, label: tag.toUpperCase() })),
     ];
 
-    filteredItems = activeTab === "all"
-      ? items
-      : items.filter(item => Array.isArray(item.tags) && item.tags.includes(activeTab));
+    filteredItems =
+      activeTab === "all"
+        ? items
+        : items.filter(
+            (item) => Array.isArray(item.tags) && item.tags.includes(activeTab),
+          );
   }
 
   return (
@@ -75,7 +80,10 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
               viewport={{ once: true }}
               className="text-white text-3xl md:text-5xl font-bold mb-6 leading-tight"
             >
-              {isMobileApp ? t("maPortfolioTitle") || "Some of our Mobile app development work at Serve5" : t("wdPortfolioTitle")}
+              {isMobileApp
+                ? t("maPortfolioTitle") ||
+                  "Some of our Mobile app development work at Serve5"
+                : t("wdPortfolioTitle")}
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -84,11 +92,14 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
               transition={{ delay: 0.2 }}
               className="text-gray-400 text-lg mb-10 leading-relaxed"
             >
-              {isMobileApp ? t("maPortfolioDesc") || "The latest of Serv5 works, as you brows our portfolio. Select the market in which you want to see works to find everything you look for." : t("wdPortfolioDesc")}
+              {isMobileApp
+                ? t("maPortfolioDesc") ||
+                  "The latest of Serv5 works, as you brows our portfolio. Select the market in which you want to see works to find everything you look for."
+                : t("wdPortfolioDesc")}
             </motion.p>
 
             {tabs.length > 1 && (
-              <div className="flex flex-col gap-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+              <div className="flex flex-col gap-2 max-h-[300px] overflow-y-auto overflow-x-hidden custom-scrollbar">
                 {tabs.map((tab, index) => (
                   <motion.button
                     key={tab.id}
@@ -98,7 +109,9 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
                     transition={{ delay: 0.3 + index * 0.1 }}
                     onClick={() => setActiveTab(tab.id)}
                     className={`text-left px-6 py-4 rounded-xl text-lg font-medium transition-all ${
-                      (activeTab === tab.id || (isMobileApp && filteredItems[0]?.id.toString() === tab.id))
+                      activeTab === tab.id ||
+                      (isMobileApp &&
+                        filteredItems[0]?.id.toString() === tab.id)
                         ? "bg-[#0A1128] text-[#D98B50] border-l-4 border-[#D98B50]"
                         : "text-gray-400 hover:text-white hover:bg-white/5 border-l-4 border-transparent"
                     }`}
@@ -131,7 +144,9 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
                   {filteredItems[0] && (
                     <div className="absolute top-[3%] left-[5%] right-[5%] bottom-[3%] z-0 rounded-[2.5rem] overflow-hidden">
                       <img
-                        src={filteredItems[0].image || "/services-page/card-1.png"}
+                        src={
+                          filteredItems[0].image || "/services-page/card-1.png"
+                        }
                         alt={filteredItems[0].name}
                         className="w-full h-full object-cover"
                       />
@@ -158,7 +173,9 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       />
                       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 text-center">
-                        <h4 className="text-white text-lg font-bold mb-2">{item.name}</h4>
+                        <h4 className="text-white text-lg font-bold mb-2">
+                          {item.name}
+                        </h4>
                         {item.url && (
                           <a
                             href={item.url}

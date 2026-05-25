@@ -28,10 +28,14 @@ class ManageFooter extends Page implements HasForms
     public function mount(): void
     {
         $keys = [
-            'footer_heading',
-            'footer_description',
-            'footer_button_text',
-            'footer_copyright',
+            'footer_heading_en',
+            'footer_heading_ar',
+            'footer_description_en',
+            'footer_description_ar',
+            'footer_button_text_en',
+            'footer_button_text_ar',
+            'footer_copyright_en',
+            'footer_copyright_ar',
             'custom_footer_code',
         ];
 
@@ -44,22 +48,31 @@ class ManageFooter extends Page implements HasForms
     {
         return $schema
             ->schema([
-                Section::make('Footer Content')
-                    ->description('Manage footer text and call-to-action')
+                Section::make('Footer Content - English')
+                    ->description('Manage English footer text and call-to-action')
                     ->schema([
-                        TextInput::make('footer_heading')->required(),
-                        Textarea::make('footer_description')->required()->rows(3),
-                        TextInput::make('footer_button_text')->required(),
-                        TextInput::make('footer_copyright')->required(),
+                        TextInput::make('footer_heading_en')->label('Heading (EN)')->required(),
+                        Textarea::make('footer_description_en')->label('Description (EN)')->required()->rows(3),
+                        TextInput::make('footer_button_text_en')->label('Button Text (EN)')->required(),
+                        TextInput::make('footer_copyright_en')->label('Copyright (EN)')->required(),
+                    ])->columns(2),
+
+                Section::make('Footer Content - Arabic (التعريب)')
+                    ->description('Manage Arabic footer text and call-to-action')
+                    ->schema([
+                        TextInput::make('footer_heading_ar')->label('Heading (AR)')->required(),
+                        Textarea::make('footer_description_ar')->label('Description (AR)')->required()->rows(3),
+                        TextInput::make('footer_button_text_ar')->label('Button Text (AR)')->required(),
+                        TextInput::make('footer_copyright_ar')->label('Copyright (AR)')->required(),
                     ])->columns(2),
 
                 Section::make('Custom Code')
                     ->description('Inject custom HTML/JS code before the closing </body> tag')
                     ->schema([
                         \Filament\Forms\Components\Textarea::make('custom_footer_code')
-                            ->label('Footer Code (e.g. Chat widgets, external scripts)')
-                            ->rows(5)
-                            ->columnSpanFull(),
+                             ->label('Footer Code (e.g. Chat widgets, external scripts)')
+                             ->rows(5)
+                             ->columnSpanFull(),
                     ]),
             ])
             ->statePath('data');

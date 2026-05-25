@@ -15,8 +15,8 @@ try {
     echo "Roles created/found.\n";
 
     // 2. Create the admin user
-    $adminEmail = 'admin@serv5.com';
-    $adminPassword = 'password'; // You can change this
+    $adminEmail = env('ADMIN_EMAIL', 'admin@serv5.com');
+    $adminPassword = env('ADMIN_PASSWORD', 'admin123456');
     
     $user = User::where('email', $adminEmail)->first();
     if (!$user) {
@@ -27,7 +27,10 @@ try {
         ]);
         echo "Admin user created successfully.\n";
     } else {
-        echo "Admin user already exists.\n";
+        $user->update([
+            'password' => Hash::make($adminPassword),
+        ]);
+        echo "Admin user password updated successfully.\n";
     }
 
     // 3. Assign super_admin role to the user

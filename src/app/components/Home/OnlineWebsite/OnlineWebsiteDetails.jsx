@@ -10,18 +10,20 @@ const OnlineWebsiteDetails = () => {
   const [activeCategoryId, setActiveCategoryId] = useState("all");
   const [categories, setCategories] = useState([]);
 
+  const isRtl = language === "ar";
+
   useEffect(() => {
     fetchAPI(`/portfolio-categories?lang=${language}`)
       .then((data) => {
         if (data) {
           setCategories([
-            { name: language === "ar" ? "الكل" : "All", id: "all" },
-            ...data.map((cat) => ({ name: cat.label, id: cat.id }))
+            { name: isRtl ? "الكل" : "All", id: "all" },
+            ...data.map((cat) => ({ name: cat.label, id: cat.id })),
           ]);
         }
       })
       .catch(console.error);
-  }, [language]);
+  }, [language, isRtl]);
 
   const getRotation = (index) => {
     const total = categories.length || 1;
@@ -37,9 +39,7 @@ const OnlineWebsiteDetails = () => {
 
       <div className="w-full h-full relative flex flex-col lg:flex-row p-0  lg:pt-0">
         {/* Mobile Categories Menu */}
-        <div
-          className="w-full flex flex-wrap justify-center lg:hidden gap-3 px-4 py-4 z-20"
-        >
+        <div className="w-full flex flex-wrap justify-center lg:hidden gap-3 px-4 py-4 z-20">
           {categories.map((cat) => (
             <button
               key={cat.id}
@@ -55,31 +55,38 @@ const OnlineWebsiteDetails = () => {
           ))}
         </div>
 
-        {/* Left Planet Section */}
+        {/* Left/Right Planet Section */}
         <div className="relative hidden lg:flex w-[45%] h-screen items-center z-10">
           <motion.div
-            initial={{ x: -200, opacity: 0, rotate: -10 }}
+            initial={{
+              x: isRtl ? 200 : -200,
+              opacity: 0,
+              rotate: isRtl ? 10 : -10,
+            }}
             whileInView={{ x: 0, opacity: 1, rotate: 0 }}
             transition={{ duration: 1.5, ease: "easeOut" }}
-            className="absolute w-[100vh] left-[-45.5vh] top-1/2 -translate-y-1/2 z-10 flex items-center justify-center"
+            className={`absolute w-[100vh] ${isRtl ? "right-[-45.5vh] left-auto" : "left-[-45.5vh] right-auto"} top-1/2 -translate-y-1/2 z-10 flex items-center justify-center`}
           >
             <img
               src="/aside/MArs 2.png"
               alt="Planet Mars"
-              className="w-full h-full object-contain drop-shadow-[0_0_80px_rgba(255,138,0,0.3)]"
+              className={`w-full h-full object-contain drop-shadow-[0_0_80px_rgba(255,138,0,0.3)] ${isRtl ? "scale-x-[-1]" : ""}`}
             />
             {/* The white arc */}
             <img
               src="/aside/circle.png"
               alt="Arc"
-              className="absolute top-[5%] left-[90px] w-[90%] h-[100%] scale-y-[90%]  object-contain opacity-40 -z-10 pointer-events-none"
+              className={`absolute top-[5%] ${isRtl ? "right-[90px] left-auto" : "left-[90px] right-auto"} w-[90%] h-[100%] object-contain opacity-40 -z-10 pointer-events-none`}
+              style={{
+                transform: `scaleY(0.9) ${isRtl ? "scaleX(-1)" : "scaleX(1)"}`,
+              }}
             />
           </motion.div>
 
           {/* Navigation Menu along the Arc */}
           <div className="absolute left-0 top-0 w-full h-full z-20 pointer-events-none">
             {categories.map((cat, index) => {
-              const rotation = getRotation(index);
+              const rotation = isRtl ? -getRotation(index) : getRotation(index);
               const isActive = activeCategoryId === cat.id;
 
               return (
@@ -89,12 +96,15 @@ const OnlineWebsiteDetails = () => {
                   whileInView={{ opacity: 1, rotate: rotation }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.2 + index * 0.1, duration: 0.8 }}
-                  className="absolute left-0 top-1/2 [transform-origin:0%_50%] pointer-events-none "
-                  style={{ y: "-30%" }}
+                  className={`absolute ${isRtl ? "right-0 left-auto" : "left-0 right-auto"} top-1/2 pointer-events-none`}
+                  style={{
+                    y: "-30%",
+                    transformOrigin: isRtl ? "100% 50%" : "0% 50%",
+                  }}
                 >
                   <motion.div
                     initial={{ x: 0 }}
-                    whileInView={{ x: "32vh" }}
+                    whileInView={{ x: isRtl ? "-32vh" : "32vh" }}
                     viewport={{ once: true }}
                     transition={{
                       delay: 0.2 + index * 0.1,
@@ -136,8 +146,12 @@ const OnlineWebsiteDetails = () => {
       </div>
 
       {/* Decorative smaller planets */}
-      <div className="absolute hidden lg:block w-[60px] h-[60px] top-[15%] left-[18%] rounded-full bg-[radial-gradient(circle_at_30%_30%,#8b4513,#2f1b0c)] shadow-[inset_-10px_-10px_20px_rgba(0,0,0,0.7),0_0_30px_rgba(255,138,0,0.2)] z-[5]"></div>
-      <div className="absolute hidden lg:block w-[75px] h-[75px] bottom-[12%] left-[20%] rounded-full bg-[radial-gradient(circle_at_30%_30%,#5d4037,#1b1b1b)] shadow-[inset_-10px_-10px_20px_rgba(0,0,0,0.7),0_0_30px_rgba(255,138,0,0.2)] z-[5]"></div>
+      <div
+        className={`absolute hidden lg:block w-[60px] h-[60px] top-[15%] ${isRtl ? "right-[18%] left-auto" : "left-[18%] right-auto"} rounded-full bg-[radial-gradient(circle_at_30%_30%,#8b4513,#2f1b0c)] shadow-[inset_-10px_-10px_20px_rgba(0,0,0,0.7),0_0_30px_rgba(255,138,0,0.2)] z-[5]`}
+      ></div>
+      <div
+        className={`absolute hidden lg:block w-[75px] h-[75px] bottom-[12%] ${isRtl ? "right-[20%] left-auto" : "left-[20%] right-auto"} rounded-full bg-[radial-gradient(circle_at_30%_30%,#5d4037,#1b1b1b)] shadow-[inset_-10px_-10px_20px_rgba(0,0,0,0.7),0_0_30px_rgba(255,138,0,0.2)] z-[5]`}
+      ></div>
     </section>
   );
 };

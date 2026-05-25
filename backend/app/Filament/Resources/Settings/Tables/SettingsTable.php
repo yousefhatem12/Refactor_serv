@@ -17,6 +17,10 @@ class SettingsTable
                 'hero_title_1', 'hero_title_2', 'hero_desc', 'hero_planet',
                 'site_logo', 'site_title',
                 'footer_heading', 'footer_description', 'footer_button_text', 'footer_copyright',
+                'footer_heading_en', 'footer_heading_ar',
+                'footer_description_en', 'footer_description_ar',
+                'footer_button_text_en', 'footer_button_text_ar',
+                'footer_copyright_en', 'footer_copyright_ar',
                 'site_phone', 'site_email', 'site_address'
             ]))
             ->columns([

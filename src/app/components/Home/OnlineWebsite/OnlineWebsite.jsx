@@ -85,7 +85,7 @@ const ProductCard = ({ product, index }) => {
           </div>
 
           <div style={{ transform: "translateZ(50px)" }}>
-            <div className="h-16 sm:h-20 md:h-24 mb-4 lg:mb-6 flex items-center">
+            <div className="h-16 sm:h-20 md:h-24 mb-4 lg:mb-6 flex items-center justify-center">
               <img
                 src={product.image || product.logo}
                 alt={product.name || product.title}
@@ -115,9 +115,11 @@ const ProductCard = ({ product, index }) => {
 
             {/* CTA Button */}
             <div className="overflow-hidden rounded-xl">
-              <a 
-                href={product.demoLink || product.orderLink || product.url || "#"} 
-                target="_blank" 
+              <a
+                href={
+                  product.demoLink || product.orderLink || product.url || "#"
+                }
+                target="_blank"
                 rel="noopener noreferrer"
                 className="block"
               >
@@ -157,7 +159,7 @@ const OnlineWebsite = () => {
 
   useEffect(() => {
     setMounted(true);
-    
+
     const fetchProjects = async () => {
       try {
         setIsLoading(true);
@@ -189,10 +191,12 @@ const OnlineWebsite = () => {
 
   const uniqueCategories = [
     { id: "all", label: language === "ar" ? "الكل" : "All" },
-    ...Array.from(new Set(products.map((p) => p.category).filter(Boolean))).map((cat) => ({
-      id: cat,
-      label: cat,
-    })),
+    ...Array.from(new Set(products.map((p) => p.category).filter(Boolean))).map(
+      (cat) => ({
+        id: cat,
+        label: cat,
+      }),
+    ),
   ];
 
   const filteredProducts =
@@ -261,36 +265,46 @@ const OnlineWebsite = () => {
         </motion.div>
 
         {/* Categories / Tabs */}
-        <div
-          className="flex flex-row lg:flex-col gap-3 overflow-x-auto pb-6 lg:pb-0 scrollbar-hide snap-x"
-          style={{ msOverflowStyle: "none", scrollbarWidth: "none" }}
-        >
+        <div className="grid grid-cols-3 sm:grid-cols-3 lg:flex lg:flex-col gap-3 w-full">
           {uniqueCategories.map((cat, index) => (
             <motion.button
               key={cat.id}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1, duration: 0.5 }}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05, duration: 0.4 }}
               viewport={{ once: true }}
               onClick={() => setActiveTab(cat.id)}
-              className={`relative px-3  py-4 text-left whitespace-nowrap rounded-2xl transition-all duration-300 snap-start flex items-center group overflow-hidden ${
+              className={`relative px-4 py-3 lg:px-3 lg:py-4 text-center lg:text-left whitespace-nowrap rounded-xl lg:rounded-2xl transition-all duration-300 flex items-center justify-center lg:justify-start group overflow-hidden z-10 ${
                 activeTab === cat.id
-                  ? "text-white font-bold bg-white/10 border border-white/20 shadow-[0_0_30px_rgba(255,255,255,0.05)] backdrop-blur-md"
-                  : "text-gray-500 font-medium hover:text-white hover:bg-white/5 border border-transparent"
+                  ? "text-white font-bold bg-transparent lg:bg-white/10 border border-transparent lg:border-white/20 shadow-none lg:shadow-[0_0_30px_rgba(255,255,255,0.05)] lg:backdrop-blur-md"
+                  : "text-gray-400 lg:text-gray-500 font-medium bg-white/[0.03] lg:bg-transparent border border-white/[0.08] lg:border-transparent hover:text-white hover:bg-white/5"
               }`}
             >
               {activeTab === cat.id && (
-                <motion.div
-                  layoutId="activeTabIndicator"
-                  className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-[#FF8A00] to-[#D98B50] rounded-l-2xl shadow-[0_0_15px_#FF8A00]"
-                />
+                <>
+                  {/* Desktop active vertical indicator (with RTL support) */}
+                  <motion.div
+                    layoutId="activeTabIndicatorVertical"
+                    className={`absolute top-0 bottom-0 w-1.5 bg-gradient-to-b from-[#FF8A00] to-[#D98B50] shadow-[0_0_15px_#FF8A00] hidden lg:block ${
+                      language === "ar"
+                        ? "right-0 rounded-r-2xl"
+                        : "left-0 rounded-l-2xl"
+                    }`}
+                  />
+                  {/* Mobile active background slider */}
+                  <motion.div
+                    layoutId="activeTabBackgroundMobile"
+                    className="absolute inset-0 bg-gradient-to-r from-[#FF8A00] to-[#D98B50] rounded-xl -z-10 lg:hidden shadow-[0_0_20px_rgba(255,138,0,0.3)]"
+                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                  />
+                </>
               )}
-              <span className="relative z-10 text-xs sm:text-base md:text-md lg:text-lg mr-5">
+              <span className="relative z-10 text-xs sm:text-sm md:text-base lg:text-lg mr-0 lg:mr-5">
                 {cat.label}
               </span>
 
               {/* Hover highlight */}
-              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/5 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
+              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/5 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out pointer-events-none" />
             </motion.button>
           ))}
         </div>

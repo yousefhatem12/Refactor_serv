@@ -29,9 +29,59 @@ export default function HomePage() {
   const isRtl = language === "ar";
 
   useEffect(() => {
-    fetchAPI(`/pages/home?lang=${language}`).then(data => {
-      if (data) setPageData(data);
-    }).catch(console.error);
+    setIsLoading(true);
+    const endpoints = [
+      `/pages/home?lang=${language}`,
+      `/features`,
+      `/settings?lang=${language}`,
+      `/settings`,
+      `/services?lang=${language}`,
+      `/products?lang=${language}`,
+      `/portfolio-categories?lang=${language}`,
+      `/blog?lang=${language}`,
+      `/trending-posts?lang=${language}`,
+      `/testimonials?lang=${language}`,
+    ];
+
+    let primaryResolved = false;
+    let featuresResolved = false;
+
+    const checkAndDismissLoader = (data, index) => {
+      if (index === 0) {
+        primaryResolved = true;
+        if (data) {
+          setPageData(data);
+        }
+      }
+      if (index === 1) {
+        featuresResolved = true;
+      }
+      if (primaryResolved && featuresResolved) {
+        setIsLoading(false);
+      }
+    };
+
+    const promises = endpoints.map((endpoint, index) => {
+      return fetchAPI(endpoint)
+        .then((data) => {
+          checkAndDismissLoader(data, index);
+          return data;
+        })
+        .catch((err) => {
+          console.warn(`Failed to preload ${endpoint}:`, err);
+          checkAndDismissLoader(null, index);
+          return null;
+        });
+    });
+
+    Promise.all(promises)
+      .then(() => {
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.error("Failed to preload home page data:", err);
+        setIsLoading(false);
+      });
   }, [language]);
 
   useEffect(() => {
@@ -42,30 +92,27 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    window.history.scrollRestoration = "manual";
-    window.scrollTo(0, 0);
+    if (!isLoading) {
+      window.history.scrollRestoration = "manual";
+      window.scrollTo(0, 0);
 
-    const loadingTimer = setTimeout(() => {
-      setIsLoading(false);
-    }, 50);
+      // Fix anchor links (like #services) since the page locks scroll initially
+      let scrollTimer;
+      if (window.location.hash) {
+        scrollTimer = setTimeout(() => {
+          const id = window.location.hash.substring(1);
+          const el = document.getElementById(id);
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 500); // Give dynamic components time to render
+      }
 
-    // Fix anchor links (like #services) since the page locks scroll initially
-    let scrollTimer;
-    if (window.location.hash) {
-      scrollTimer = setTimeout(() => {
-        const id = window.location.hash.substring(1);
-        const el = document.getElementById(id);
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth" });
-        }
-      }, 500); // Give dynamic components time to render
+      return () => {
+        if (scrollTimer) clearTimeout(scrollTimer);
+      };
     }
-
-    return () => {
-      clearTimeout(loadingTimer);
-      if (scrollTimer) clearTimeout(scrollTimer);
-    };
-  }, []);
+  }, [isLoading]);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -98,7 +145,7 @@ export default function HomePage() {
   const earthX = useTransform(
     smoothProgress,
     [0, 0.2],
-    isMobile ? ["0%", "0%"] : (isRtl ? ["0%", "5%"] : ["0%", "-5%"])
+    isMobile ? ["0%", "0%"] : isRtl ? ["0%", "5%"] : ["0%", "-5%"],
   );
 
   // PlanetAstronaut movement: CTA to Footer
@@ -110,7 +157,7 @@ export default function HomePage() {
   const planetX = useTransform(
     smoothProgress,
     [0.88, 0.95, 1],
-    isRtl ? ["25%", "-45%", "-45%"] : ["-25%", "45%", "45%"]
+    isRtl ? ["25%", "-45%", "-45%"] : ["-25%", "45%", "45%"],
   );
   const planetY = useTransform(
     smoothProgress,
@@ -131,7 +178,7 @@ export default function HomePage() {
   const planetFilter = useTransform(
     smoothProgress,
     [0.88, 1],
-    ["contrast(100%) brightness(100%)", "contrast(60%) brightness(60%)"] // Reduces contrast and brightness at the bottom
+    ["contrast(100%) brightness(100%)", "contrast(60%) brightness(60%)"], // Reduces contrast and brightness at the bottom
   );
   return (
     <main

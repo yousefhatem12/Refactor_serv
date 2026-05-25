@@ -38,9 +38,11 @@ const Footer = () => {
       })
       .catch(console.error);
 
-    fetchAPI(`/footer-data?lang=${language}`).then(data => {
-      if (data) setFooterData(data);
-    }).catch(console.error);
+    fetchAPI(`/footer-data?lang=${language}`)
+      .then((data) => {
+        if (data) setFooterData(data);
+      })
+      .catch(console.error);
   }, [language]);
 
   const getSocialIconData = (platform) => {
@@ -68,13 +70,15 @@ const Footer = () => {
       <img
         src="/Element.png"
         alt="Element"
-        className="absolute top-0 -left-[80px] mix-blend-luminosity opacity-50 w-48 md:w-[500px]  object-contain pointer-events-none z-0 "
+        className={`absolute top-0 ${language === "ar" ? "-right-[80px] scale-x-[-1]" : "-left-[80px]"} mix-blend-luminosity opacity-50 w-48 md:w-[500px]  object-contain pointer-events-none z-0 `}
       />
 
       <div className=" mx-auto px-6 lg:px-20 relative z-10">
         {/* Top Section: Heading & Astronaut */}
         <div className="flex relative flex-col md:flex-row items-center justify-between  relative">
-          <div className="max-w-2xl text-center  md:text-left z-20">
+          <div
+            className={`max-w-2xl text-center ${language === "ar" ? "md:text-right" : "md:text-left"} z-20`}
+          >
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -99,7 +103,7 @@ const Footer = () => {
               {footerData.texts?.description || t("footerDesc")}
             </motion.p>
             <motion.button
-              onClick={() => router.push('/contact-us')}
+              onClick={() => router.push("/contact-us")}
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
@@ -116,7 +120,9 @@ const Footer = () => {
           </div>
 
           {/* Space reserved for global planet transition */}
-          <div className="absolute top-[-10%] right-[-10%] w-full md:w-1/2 flex justify-center md:justify-end pr-10 pointer-events-none invisible lg:visible">
+          <div
+            className={`absolute top-[-10%] ${language === "ar" ? "left-[-10%]" : "right-[-10%]"} w-full md:w-1/2 flex justify-center ${language === "ar" ? "md:justify-start pl-10" : "md:justify-end pr-10"} pointer-events-none invisible lg:visible`}
+          >
             <div
               className={`w-72 md:w-[500px] lg:w-[600px] aspect-square ${!isHomePage ? "opacity-[0.35]" : ""}`}
               style={
@@ -124,7 +130,9 @@ const Footer = () => {
                   ? {
                       filter: "contrast(60%) brightness(60%)",
                       transform:
-                        "rotate(10deg) translatey(-6rem) translatex(12rem) ",
+                        language === "ar"
+                          ? "rotate(-10deg) translatey(-6rem) translatex(-12rem) "
+                          : "rotate(10deg) translatey(-6rem) translatex(12rem) ",
                     }
                   : {}
               }
@@ -275,7 +283,9 @@ const Footer = () => {
                   </svg>
                 </div>
                 <span className="text-gray-400 text-base font-medium group-hover:text-white transition-colors pt-1 whitespace-pre-line">
-                  {settings[`site_address_${language}`] || settings.site_address || t("address")}
+                  {settings[`site_address_${language}`] ||
+                    settings.site_address ||
+                    t("address")}
                 </span>
               </li>
             </ul>

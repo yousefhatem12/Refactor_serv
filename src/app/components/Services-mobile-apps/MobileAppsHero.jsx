@@ -15,14 +15,16 @@ const MobileAppsHero = ({ data }) => {
     ? getMediaUrl(data.hero_image)
     : "/services-web-dev/hero.png";
 
-  const whatsappNumber = settings?.site_whatsapp ? settings.site_whatsapp.replace(/\D/g, '') : "201288863631";
+  const whatsappNumber = settings?.site_whatsapp
+    ? settings.site_whatsapp.replace(/\D/g, "")
+    : "201288863631";
   const whatsappUrl = `https://api.whatsapp.com/send/?phone=${whatsappNumber}&text&type=phone_number&app_absent=0`;
 
   return (
     <section className="relative w-full min-h-[80vh] flex items-center justify-between px-6 lg:px-20 pt-20">
       {/* Background Image behind everything */}
       <div
-        className="absolute inset-[-100px] h-screen z-0 bg-no-repeat bg-cover bg-center mix-blend-screen"
+        className={`absolute inset-[-100px] h-screen z-0 bg-no-repeat bg-cover bg-center mix-blend-screen ${isRtl ? "scale-x-[-1]" : ""}`}
         style={{ backgroundImage: `url('${heroImage}')` }}
       />
 

@@ -10,7 +10,8 @@ import { useRouter } from "next/navigation";
 
 const ServicesHero = ({ serviceId = "cloud-hosting", title, desc }) => {
   const router = useRouter();
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
+  const isRtl = language === "ar";
   const settings = useSettings();
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [isPricingModalOpen, setIsPricingModalOpen] = useState(false);
@@ -19,7 +20,7 @@ const ServicesHero = ({ serviceId = "cloud-hosting", title, desc }) => {
     <section className="relative w-full min-h-[80vh] flex items-center justify-between px-6 lg:px-20 pt-20">
       {/* Background Image behind everything */}
       <div
-        className="absolute inset-0 h-screen z-0 bg-no-repeat bg-cover bg-center mix-blend-screen"
+        className={`absolute inset-0 h-screen z-0 bg-no-repeat bg-cover bg-center mix-blend-screen ${isRtl ? "scale-x-[-1]" : ""}`}
         style={{ backgroundImage: "url('/services-page/hero.png')" }}
       />
 
@@ -49,14 +50,14 @@ const ServicesHero = ({ serviceId = "cloud-hosting", title, desc }) => {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="flex flex-wrap items-center gap-6"
         >
-          <button 
-            onClick={() => router.push('/contact-us')}
+          <button
+            onClick={() => router.push("/contact-us")}
             className="px-8 py-3 rounded-full bg-white text-[#040A37] font-semibold text-lg hover:bg-gray-200 transition-colors border-none cursor-pointer"
           >
             {settings?.hero_cta_text || t("getStarted")}
           </button>
 
-          <button 
+          <button
             onClick={() => setIsVideoModalOpen(true)}
             className="flex items-center gap-3 text-white hover:text-gray-300 transition-colors group bg-transparent border-none cursor-pointer"
           >
@@ -68,7 +69,6 @@ const ServicesHero = ({ serviceId = "cloud-hosting", title, desc }) => {
             </span>
           </button>
         </motion.div>
-
       </div>
 
       {/* Right Image (Planet) */}
