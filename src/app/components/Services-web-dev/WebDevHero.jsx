@@ -42,7 +42,7 @@ const WebDevHero = ({ data, serviceId = "web-development" }) => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-white text-5xl md:text-7xl font-bold mb-6 tracking-tight uppercase"
+          className="text-white text-5xl md:text-5xl font-bold mb-6 tracking-tight uppercase"
         >
           {data?.hero_title || data?.title || t("webDevHeroTitle")}
         </motion.h1>

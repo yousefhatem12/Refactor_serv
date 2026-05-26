@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { fetchAPI } from "../../lib/api";
+import Loading from "../loading";
 import { useLanguage } from "../context/LanguageContext";
 import Navbar from "../components/Navbar/Navbar";
 import Footer from "../components/Footer/Footer";
@@ -131,11 +132,7 @@ export default function DynamicPage() {
   }, [slug, language, router]);
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-[#020617] flex items-center justify-center">
-        <div className="w-16 h-16 border-4 border-[#FF8A00] border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (!isServicePage && !pageData) return null;

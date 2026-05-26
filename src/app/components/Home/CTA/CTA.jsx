@@ -35,61 +35,72 @@ const CTA = () => {
   }, []);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const mm = gsap.matchMedia();
-      const isRtl = language === "ar";
+    let ctx;
 
-      mm.add("(min-width: 768px)", () => {
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top top",
-            end: "+=150%", // How long the animation lasts relative to scroll
-            scrub: 1,
-            pin: true,
-            anticipatePin: 1,
-          },
-        });
+    const initGsap = () => {
+      ctx = gsap.context(() => {
+        const mm = gsap.matchMedia();
+        const isRtl = language === "ar";
 
-        // Split Slide 1
-        tl.to(text1Ref.current, { x: -500, opacity: 0, duration: 1 }, 0)
-          // Show Slide 2
-          .fromTo(
-            slide2Ref.current,
-            { opacity: 0, scale: 0.9, y: 50 },
-            { opacity: 1, scale: 1, y: 0, duration: 1 },
-            0.5,
-          );
-
-        // Local planet animation on non-home pages
-        if (!isHomePage && localPlanetRef.current) {
-          gsap.set(localPlanetRef.current, {
-            x: isRtl ? "25%" : "-25%",
-            opacity: 0.8,
-            scale: 0.8,
-            rotation: 0,
+        mm.add("(min-width: 768px)", () => {
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top top",
+              end: "+=150%", // How long the animation lasts relative to scroll
+              scrub: 1,
+              pin: true,
+              anticipatePin: 1,
+              invalidateOnRefresh: true, // Re-calculate triggers on page refreshes or updates
+            },
           });
 
-          tl.to(
-            localPlanetRef.current,
-            {
-              x: isRtl ? "-45%" : "45%",
-              scale: 1,
-              rotation: 10,
-              duration: 1,
-            },
-            0.2,
-          ).to(
-            localPlanetRef.current,
-            {
-              opacity: 0.35,
-              duration: 0.5,
-            },
-            1.0,
-          );
-        }
-      });
-    }, sectionRef);
+          // Split Slide 1
+          tl.to(text1Ref.current, { x: -500, opacity: 0, duration: 1 }, 0)
+            // Show Slide 2
+            .fromTo(
+              slide2Ref.current,
+              { opacity: 0, scale: 0.9, y: 50 },
+              { opacity: 1, scale: 1, y: 0, duration: 1 },
+              0.5,
+            );
+
+          // Local planet animation on non-home pages
+          if (!isHomePage && localPlanetRef.current) {
+            gsap.set(localPlanetRef.current, {
+              x: isRtl ? "25%" : "-25%",
+              opacity: 0.8,
+              scale: 0.8,
+              rotation: 0,
+            });
+
+            tl.to(
+              localPlanetRef.current,
+              {
+                x: isRtl ? "-45%" : "45%",
+                scale: 1,
+                rotation: 10,
+                duration: 1,
+              },
+              0.2,
+            ).to(
+              localPlanetRef.current,
+              {
+                opacity: 0.35,
+                duration: 0.5,
+              },
+              1.0,
+            );
+          }
+        });
+      }, sectionRef);
+
+      // Force refresh to map the newly created scroll triggers correctly
+      ScrollTrigger.refresh();
+    };
+
+    // Delay initialization to allow the page layout and dynamic data to fully load/render
+    const timer = setTimeout(initGsap, 500);
 
     // Ensure ScrollTrigger recalculates if the body height changes
     // (e.g. when the initial h-screen loading lock is removed)
@@ -99,8 +110,9 @@ const CTA = () => {
     resizeObserver.observe(document.body);
 
     return () => {
+      clearTimeout(timer);
       resizeObserver.disconnect();
-      ctx.revert();
+      if (ctx) ctx.revert();
     };
   }, [language, isHomePage]);
 

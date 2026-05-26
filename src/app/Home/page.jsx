@@ -14,22 +14,19 @@ import CTA from "../components/Home/CTA/CTA";
 import Footer from "../components/Footer/Footer";
 import PlanetAstronaut from "../components/Home/Shared/PlanetAstronaut";
 import PageSections from "../components/Shared/PageSections";
-import Loader from "../components/Loader/Loader";
 import { useLanguage } from "../context/LanguageContext";
 import { fetchAPI } from "@/lib/api";
 
 export default function HomePage() {
-  const [isLoading, setIsLoading] = useState(true);
   const [pageData, setPageData] = useState(null);
-  const [isPhaseTwo, setIsPhaseTwo] = useState(true);
-  const [canScroll, setCanScroll] = useState(true);
+  const [isPhaseTwo, setIsPhaseTwo] = useState(false);
+  const [canScroll, setCanScroll] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef(null);
   const { language } = useLanguage();
   const isRtl = language === "ar";
 
   useEffect(() => {
-    setIsLoading(true);
     const endpoints = [
       `/pages/home?lang=${language}`,
       `/features`,
@@ -43,45 +40,18 @@ export default function HomePage() {
       `/testimonials?lang=${language}`,
     ];
 
-    let primaryResolved = false;
-    let featuresResolved = false;
-
-    const checkAndDismissLoader = (data, index) => {
-      if (index === 0) {
-        primaryResolved = true;
-        if (data) {
-          setPageData(data);
-        }
-      }
-      if (index === 1) {
-        featuresResolved = true;
-      }
-      if (primaryResolved && featuresResolved) {
-        setIsLoading(false);
-      }
-    };
-
-    const promises = endpoints.map((endpoint, index) => {
-      return fetchAPI(endpoint)
+    endpoints.forEach((endpoint, index) => {
+      fetchAPI(endpoint)
         .then((data) => {
-          checkAndDismissLoader(data, index);
-          return data;
+          if (index === 0 && data) {
+            setPageData(data);
+            log;
+          }
         })
         .catch((err) => {
           console.warn(`Failed to preload ${endpoint}:`, err);
-          checkAndDismissLoader(null, index);
-          return null;
         });
     });
-
-    Promise.all(promises)
-      .then(() => {
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.error("Failed to preload home page data:", err);
-        setIsLoading(false);
-      });
   }, [language]);
 
   useEffect(() => {
@@ -92,27 +62,50 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    if (!isLoading) {
-      window.history.scrollRestoration = "manual";
-      window.scrollTo(0, 0);
+    // 5-second timer to start the animation and unlock scroll
+    const timer = setTimeout(() => {
+      setIsPhaseTwo(true);
+      setCanScroll(true);
+    }, 5000);
 
-      // Fix anchor links (like #services) since the page locks scroll initially
-      let scrollTimer;
-      if (window.location.hash) {
-        scrollTimer = setTimeout(() => {
-          const id = window.location.hash.substring(1);
-          const el = document.getElementById(id);
-          if (el) {
-            el.scrollIntoView({ behavior: "smooth" });
-          }
-        }, 500); // Give dynamic components time to render
-      }
+    return () => clearTimeout(timer);
+  }, []);
 
-      return () => {
-        if (scrollTimer) clearTimeout(scrollTimer);
-      };
+  useEffect(() => {
+    // Dynamically manage body/html overflow to lock scrolling
+    if (!canScroll) {
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     }
-  }, [isLoading]);
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
+  }, [canScroll]);
+
+  useEffect(() => {
+    window.history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
+
+    // Fix anchor links (like #services) since the page locks scroll initially
+    let scrollTimer;
+    if (window.location.hash) {
+      scrollTimer = setTimeout(() => {
+        const id = window.location.hash.substring(1);
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 500); // Give dynamic components time to render
+    }
+
+    return () => {
+      if (scrollTimer) clearTimeout(scrollTimer);
+    };
+  }, [pageData]);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -184,11 +177,6 @@ export default function HomePage() {
     <main
       className={`flex min-h-screen flex-col relative ${!canScroll ? "h-screen overflow-hidden" : "overflow-hidden"}`}
     >
-      {isLoading && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black">
-          <Loader />
-        </div>
-      )}
       <div className="relative" ref={containerRef}>
         <div className="w-full">
           <Hero isPhaseTwo={isPhaseTwo} data={pageData} />

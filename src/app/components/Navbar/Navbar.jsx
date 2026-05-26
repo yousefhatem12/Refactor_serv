@@ -298,7 +298,7 @@ const Navbar = () => {
                   <div
                     className={`absolute top-full ${isRtl ? "right-0" : "left-0"} pt-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50`}
                   >
-                    <div className="bg-[#05050f]/95 backdrop-blur-md border border-white/10 rounded-xl p-4 min-w-[480px] shadow-2xl grid grid-cols-2 gap-2">
+                    <div className="bg-[#05050f]/30 backdrop-blur-md border border-white/10 rounded-xl p-4 min-w-[480px] shadow-2xl grid grid-cols-2 gap-2">
                       {link.dropdown.map((subLink) => (
                         <Link
                           key={subLink.name}

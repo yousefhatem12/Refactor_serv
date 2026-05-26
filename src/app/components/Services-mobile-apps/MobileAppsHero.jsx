@@ -34,7 +34,7 @@ const MobileAppsHero = ({ data }) => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight uppercase leading-tight md:leading-[1.1]"
+          className="text-white text-4xl md:text-5xl  font-bold mb-6 tracking-tight uppercase leading-tight md:leading-[1.1]"
         >
           {data?.title || t("mobileAppsHeroTitle")}
         </motion.h1>
