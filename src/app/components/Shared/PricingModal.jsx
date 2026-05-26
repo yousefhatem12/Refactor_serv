@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { fetchAPI } from "@/lib/api";
 import { useLanguage } from "@/app/context/LanguageContext";
-import Loader from "../Loader/Loader";
 
 const PricingModal = ({ isOpen, onClose, serviceId = null }) => {
   const [step, setStep] = useState(1); // 1: Form, 2: Plans
@@ -137,7 +136,7 @@ const PricingModal = ({ isOpen, onClose, serviceId = null }) => {
 
               {loading ? (
                 <div className="flex justify-center items-center py-20">
-                  <Loader />
+                  <div className="loader"></div>
                 </div>
               ) : (
                 <motion.div

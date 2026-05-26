@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { fetchAPI } from "@/lib/api";
-import Loader from "../../components/Loader/Loader";
+import Loading from "../../loading";
 import { useLanguage } from "../../context/LanguageContext";
 
 export default function BlogPostDetails() {
@@ -25,29 +25,27 @@ export default function BlogPostDetails() {
 
   useEffect(() => {
     if (slug) {
-      fetchAPI(`/blog/${slug}?lang=${language}`).then(data => {
-        setPost(data);
-        setIsLoading(false);
-      }).catch(err => {
-        console.error(err);
-        setIsLoading(false);
-      });
+      fetchAPI(`/blog/${slug}?lang=${language}`)
+        .then((data) => {
+          setPost(data);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.error(err);
+          setIsLoading(false);
+        });
     }
   }, [slug, language]);
 
   if (isLoading) {
-    return (
-      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black">
-        <Loader />
-      </div>
-    );
+    return <Loading />;
   }
 
   if (!post) {
     return (
       <div className="min-h-screen flex items-center justify-center text-white bg-[#040A37]">
         <h1 className="text-2xl font-bold">
-          {language === 'ar' ? 'المقال غير موجود' : 'Post not found'}
+          {language === "ar" ? "المقال غير موجود" : "Post not found"}
         </h1>
       </div>
     );
@@ -56,7 +54,10 @@ export default function BlogPostDetails() {
   const isRtl = language === "ar";
 
   return (
-    <main className="flex min-h-screen flex-col relative overflow-x-hidden pt-10 pb-10" dir={isRtl ? "rtl" : "ltr"}>
+    <main
+      className="flex min-h-screen flex-col relative overflow-x-hidden pt-10 pb-10"
+      dir={isRtl ? "rtl" : "ltr"}
+    >
       <div className="fixed inset-0 bg-[#040A37] -z-20 pointer-events-none" />
 
       <div className="w-full relative z-10 flex flex-col items-center pt-24 text-white">
@@ -64,18 +65,19 @@ export default function BlogPostDetails() {
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
             <div className="w-full lg:w-1/2">
               <span className="text-[#FF8A00] font-bold mb-4 block uppercase tracking-widest">
-                {post.category || (language === 'ar' ? 'تكنولوجيا' : 'Technology')}
+                {post.category ||
+                  (language === "ar" ? "تكنولوجيا" : "Technology")}
               </span>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight uppercase">
                 {post.title}
               </h1>
-              <div 
+              <div
                 className="text-gray-300 text-lg leading-relaxed mb-10 prose prose-invert max-w-none"
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
               <div className="flex items-center gap-4 text-sm text-gray-400">
                 <span>
-                  {language === 'ar' ? 'بواسطة' : 'By'} {post.author}
+                  {language === "ar" ? "بواسطة" : "By"} {post.author}
                 </span>
                 <span>•</span>
                 <span>{post.published_at}</span>
