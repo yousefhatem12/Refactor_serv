@@ -71,7 +71,7 @@ const ProductCard = ({ product, index }) => {
           rotateY,
           transformStyle: "preserve-3d",
         }}
-        className={`relative w-full h-[350px] md:h-[380px] rounded-3xl bg-gradient-to-br ${cardGradient} p-[1px] group cursor-pointer`}
+        className={`relative w-full h-[350px] md:h-[400px] lg:h-[420px] rounded-3xl bg-gradient-to-br ${cardGradient} p-[1px] group cursor-pointer`}
       >
         {/* Glow border on hover */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl blur-md" />
@@ -123,7 +123,7 @@ const ProductCard = ({ product, index }) => {
                 rel="noopener noreferrer"
                 className="block"
               >
-                <motion.button className="w-full py-2.5 md:py-3 bg-gradient-to-r from-[#FF8A00] to-[#D98B50] text-white font-bold text-[10px] sm:text-xs md:text-sm tracking-widest uppercase flex items-center justify-center gap-2 transform translate-y-[120%] group-hover:translate-y-0 transition-transform duration-500 ease-out hover:brightness-110 shadow-[0_0_20px_rgba(255,138,0,0.3)]">
+                <motion.button className="w-full py-2.5 md:py-3 bg-gradient-to-r from-[#FF8A00] to-[#D98B50] text-white font-bold text-[10px] sm:text-xs md:text-sm tracking-widest uppercase flex items-center justify-center gap-2 transition-all duration-300 hover:brightness-110 hover:scale-[1.02] shadow-[0_0_20px_rgba(255,138,0,0.3)]">
                   {t("viewProject")}
                   <svg
                     className="w-3.5 h-3.5 md:w-4 md:h-4"
