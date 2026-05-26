@@ -1,6 +1,10 @@
 import React from "react";
-import Loader from "./components/Loader/Loader";
-
+import HomeBackground from "./components/Home/HomeBackground";
 export default function Loading() {
-  return <Loader />;
+  return (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#0a0a0a]">
+      <HomeBackground />
+      <div className="loader"></div>
+    </div>
+  );
 }
