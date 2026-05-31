@@ -10,35 +10,85 @@ const FAQContent = ({ data }) => {
   const [loading, setLoading] = useState(true);
   const { t, language } = useLanguage();
 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+
   const title =
     data?.title || t("faqTitle1") + " " + t("faqTitle2") + " " + t("faqTitle3");
   const description = data?.content || "";
   const heroImage = data?.hero_image || "/Hero/earth.png";
 
   useEffect(() => {
-    const loadFaqs = async () => {
-      try {
-        setLoading(true);
-        const data = await fetchAPI(`/faqs?lang=${language}`);
-        const formattedData = Array.isArray(data)
-          ? data.map((item, index) => ({
+    const delayDebounceFn = setTimeout(() => {
+      const loadInitialFaqs = async () => {
+        try {
+          setLoading(true);
+          setCurrentPage(1);
+          const encodedSearch = searchQuery ? encodeURIComponent(searchQuery) : "";
+          const res = await fetchAPI(`/faqs?lang=${language}&page=1&per_page=6&search=${encodedSearch}`);
+          
+          if (res && Array.isArray(res.data)) {
+            const formattedData = res.data.map((item, index) => ({
               ...item,
               displayId: (index + 1).toString().padStart(2, "0"),
-            }))
-          : [];
-        setFaqs(formattedData);
-        if (formattedData.length > 0) {
-          setOpenId(formattedData[0].id);
+            }));
+            setFaqs(formattedData);
+            setHasMore(res.has_more);
+            if (formattedData.length > 0) {
+              setOpenId(formattedData[0].id);
+            } else {
+              setOpenId(null);
+            }
+          } else {
+            setFaqs([]);
+            setHasMore(false);
+            setOpenId(null);
+          }
+        } catch (error) {
+          console.error("Failed to fetch FAQs:", error);
+          setFaqs([]);
+          setHasMore(false);
+          setOpenId(null);
+        } finally {
+          setLoading(false);
         }
-      } catch (error) {
-        console.error("Failed to fetch FAQs:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      };
 
-    loadFaqs();
-  }, [language]);
+      loadInitialFaqs();
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [language, searchQuery]);
+
+  const loadMoreFaqs = async () => {
+    if (isLoadingMore || !hasMore) return;
+    try {
+      setIsLoadingMore(true);
+      const nextPage = currentPage + 1;
+      const encodedSearch = searchQuery ? encodeURIComponent(searchQuery) : "";
+      const res = await fetchAPI(`/faqs?lang=${language}&page=${nextPage}&per_page=6&search=${encodedSearch}`);
+      
+      if (res && Array.isArray(res.data)) {
+        setFaqs((prev) => {
+          const startIdx = prev.length;
+          const formatted = res.data.map((item, index) => ({
+            ...item,
+            displayId: (startIdx + index + 1).toString().padStart(2, "0"),
+          }));
+          const newFaqs = formatted.filter((item) => !prev.some((p) => p.id === item.id));
+          return [...prev, ...newFaqs];
+        });
+        setHasMore(res.has_more);
+        setCurrentPage(nextPage);
+      }
+    } catch (error) {
+      console.error("Failed to load more FAQs:", error);
+    } finally {
+      setIsLoadingMore(false);
+    }
+  };
 
   const toggleAccordion = (id) => {
     setOpenId(openId === id ? null : id);
@@ -64,14 +114,31 @@ const FAQContent = ({ data }) => {
             )}
           </motion.div>
 
+          {/* Search Input */}
+          <div className="relative w-full mb-8 z-30">
+            <span className={`absolute inset-y-0 ${language === "ar" ? "left-4" : "right-4"} flex items-center`}>
+              <svg className="w-5 h-5 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </span>
+            <input
+              type="text"
+              placeholder={language === "ar" ? "ابحث عن الأسئلة الشائعة..." : "Search frequently asked questions..."}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={`w-full px-5 py-4 bg-[#1a2650]/20 hover:bg-[#1a2650]/30 focus:bg-[#1a2650]/45 border border-white/15 focus:border-[#4B79A1] rounded-xl text-sm focus:outline-none transition-all text-white placeholder-white/30 backdrop-blur-md shadow-2xl ${language === "ar" ? "pl-12" : "pr-12"}`}
+            />
+          </div>
+
           <div className="flex flex-col gap-4">
             {loading ? (
-              <div className="text-white text-center py-10">
-                Loading FAQs...
+              <div className="text-white text-center py-10 flex flex-col items-center justify-center gap-3">
+                <div className="w-10 h-10 border-4 border-[#4B79A1] border-t-transparent rounded-full animate-spin"></div>
+                <span>{language === 'ar' ? 'جاري التحميل...' : 'Loading FAQs...'}</span>
               </div>
             ) : faqs.length === 0 ? (
-              <div className="text-white text-center py-10">
-                No FAQs available.
+              <div className="text-white/50 text-center py-12 bg-[#05050f]/30 border border-white/5 rounded-xl">
+                {language === 'ar' ? 'لا توجد نتائج مطابقة لبحثك.' : 'No FAQs match your search.'}
               </div>
             ) : (
               faqs.map((item) => {
@@ -81,22 +148,22 @@ const FAQContent = ({ data }) => {
                     key={item.id}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className={`border ${isOpen ? "border-[#304880] bg-[#1a2650]/40" : "border-white/10 bg-[#05050f]/60"} rounded-lg overflow-hidden backdrop-blur-md transition-colors duration-300`}
+                    className={`border ${isOpen ? "border-[#4B79A1]/60 bg-[#1a2650]/40 shadow-[0_0_20px_rgba(75,121,161,0.15)]" : "border-white/10 bg-[#05050f]/60 hover:border-white/20"} rounded-xl overflow-hidden backdrop-blur-md transition-all duration-300`}
                   >
                     <button
                       onClick={() => toggleAccordion(item.id)}
-                      className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none"
+                      className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none cursor-pointer"
                     >
                       <div className="flex items-center gap-6">
-                        <span className="text-white font-bold text-lg">
+                        <span className="text-[#4B79A1] font-extrabold text-lg">
                           {item.displayId}
                         </span>
-                        <span className="text-white font-bold text-base md:text-lg">
+                        <span className="text-white font-bold text-base md:text-lg transition-colors duration-300 hover:text-[#4B79A1] text-start">
                           {item.question}
                         </span>
                       </div>
                       <div
-                        className={`w-10 h-10 flex items-center justify-center rounded-md shrink-0 transition-colors ${isOpen ? "bg-[#4B79A1]" : "bg-[#294a73] hover:bg-[#345c8c]"} `}
+                        className={`w-10 h-10 flex items-center justify-center rounded-lg shrink-0 transition-colors ${isOpen ? "bg-[#4B79A1]" : "bg-[#1a2650] hover:bg-[#294a73]"} `}
                       >
                         {isOpen ? (
                           <svg
@@ -134,11 +201,11 @@ const FAQContent = ({ data }) => {
                           exit={{ height: 0, opacity: 0 }}
                           transition={{ duration: 0.3 }}
                         >
-                          <div className="px-6 pb-6 pl-[4.5rem] text-white/70 text-sm leading-relaxed space-y-4">
+                          <div className={`px-6 pb-6 ${language === 'ar' ? 'pr-[4.5rem]' : 'pl-[4.5rem]'} text-white/70 text-sm leading-relaxed space-y-4`}>
                             {(item.answer || "")
                               .split("\n")
                               .map((paragraph, idx) => (
-                                <p key={idx}>{paragraph}</p>
+                                <p key={idx} className="font-light">{paragraph}</p>
                               ))}
                           </div>
                         </motion.div>
@@ -150,6 +217,25 @@ const FAQContent = ({ data }) => {
             )}
           </div>
 
+          {/* Load More Button */}
+          {hasMore && (
+            <div className="flex justify-center mt-8 w-full">
+              <button
+                onClick={loadMoreFaqs}
+                disabled={isLoadingMore}
+                className="flex items-center gap-2 px-8 py-3.5 bg-[#4B79A1] hover:bg-[#3d6385] disabled:bg-gray-700 text-white font-semibold rounded-lg transition-all duration-300 cursor-pointer shadow-[0_0_15px_rgba(75,121,161,0.3)] hover:shadow-[0_0_25px_rgba(75,121,161,0.55)] disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isLoadingMore ? (
+                  <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                ) : null}
+                <span>{isLoadingMore ? (t("loading") || (language === 'ar' ? 'جاري التحميل...' : 'Loading...')) : (t("loadMore") || 'Load More')}</span>
+              </button>
+            </div>
+          )}
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -159,7 +245,7 @@ const FAQContent = ({ data }) => {
             <h3 className="text-3xl font-bold text-white">
               {t("faqStillQuestions")}
             </h3>
-            <button className="px-8 py-3 bg-[#D98B50] hover:bg-[#c47c45] text-white font-semibold rounded-md transition-colors shadow-[0_0_15px_rgba(217,139,80,0.4)]">
+            <button className="px-8 py-3 bg-[#D98B50] hover:bg-[#c47c45] text-white font-semibold rounded-md transition-colors shadow-[0_0_15px_rgba(217,139,80,0.4)] cursor-pointer">
               {t("getInTouch2")}
             </button>
           </motion.div>

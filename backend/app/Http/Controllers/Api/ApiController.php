@@ -105,28 +105,32 @@ class ApiController extends Controller
     public function getServices()
     {
         $lang = $this->getLang();
-        $services = Service::where('is_active', true)->get();
+        $cacheKey = "services_{$lang}";
 
-        $mapped = $services->map(function ($service, $index) use ($lang) {
-            $gradients = [
-                ['from' => '#A855F7', 'to' => '#6366F1', 'dot' => '#A855F7', 'shadow' => 'shadow-[0_0_20px_#A855F7]'],
-                ['from' => '#3B82F6', 'to' => '#22C55E', 'dot' => '#22C55E', 'shadow' => 'shadow-[0_0_20px_#22C55E]'],
-                ['from' => '#F97316', 'to' => '#EAB308', 'dot' => '#F97316', 'shadow' => 'shadow-[0_0_20px_#F97316]'],
-                ['from' => '#10B981', 'to' => '#059669', 'dot' => '#10B981', 'shadow' => 'shadow-[0_0_20px_#10B981]'],
-            ];
-            $style = $gradients[$index % count($gradients)];
+        $mapped = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () use ($lang) {
+            $services = Service::where('is_active', true)->get();
 
-            $name = $this->trans($service->name, $lang);
-            return [
-                'id' => $service->slug,
-                'title' => $lang === 'en' ? strtolower($name) : $name,
-                'label' => $name,
-                'description' => $this->trans($service->description, $lang),
-                'img' => $service->icon ?: '/Services/Purple Planet.png',
-                'gradient' => "from-[{$style['from']}] to-[{$style['to']}]",
-                'dotColor' => "bg-[{$style['dot']}]",
-                'shadow' => $style['shadow'],
-            ];
+            return $services->map(function ($service, $index) use ($lang) {
+                $gradients = [
+                    ['from' => '#A855F7', 'to' => '#6366F1', 'dot' => '#A855F7', 'shadow' => 'shadow-[0_0_20px_#A855F7]'],
+                    ['from' => '#3B82F6', 'to' => '#22C55E', 'dot' => '#22C55E', 'shadow' => 'shadow-[0_0_20px_#22C55E]'],
+                    ['from' => '#F97316', 'to' => '#EAB308', 'dot' => '#F97316', 'shadow' => 'shadow-[0_0_20px_#F97316]'],
+                    ['from' => '#10B981', 'to' => '#059669', 'dot' => '#10B981', 'shadow' => 'shadow-[0_0_20px_#10B981]'],
+                ];
+                $style = $gradients[$index % count($gradients)];
+
+                $name = $this->trans($service->name, $lang);
+                return [
+                    'id' => $service->slug,
+                    'title' => $lang === 'en' ? strtolower($name) : $name,
+                    'label' => $name,
+                    'description' => $this->trans($service->description, $lang),
+                    'img' => $service->icon ?: '/Services/Purple Planet.png',
+                    'gradient' => "from-[{$style['from']}] to-[{$style['to']}]",
+                    'dotColor' => "bg-[{$style['dot']}]",
+                    'shadow' => $style['shadow'],
+                ];
+            });
         });
 
         return response()->json($mapped);
@@ -248,83 +252,245 @@ class ApiController extends Controller
     {
         $lang = $this->getLang();
         $type = $request->query('type');
-        $query = Project::query();
-        if ($type) {
-            $query->where('type', $type);
-        }
-        $projects = $query->latest()->get()->map(function ($project) use ($lang) {
+        $category = $request->query('category');
+        $limit = $request->query('limit');
+        $page = $request->query('page');
+        $perPage = $request->query('per_page', 9);
+
+        // Generate cache key containing all query parameters
+        $cacheKey = "projects_{$lang}_type_" . ($type ?: 'all') . "_cat_" . ($category ?: 'all') . "_limit_" . ($limit ?: 'none') . "_page_" . ($page ?: 'none') . "_per_" . $perPage;
+
+        $response = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () use ($lang, $type, $category, $limit, $page, $perPage) {
+            $query = Project::query()->orderBy('id', 'desc');
+
+            if ($type) {
+                $query->where('type', $type);
+            }
+
+            if ($category && strtolower($category) !== 'all') {
+                $query->where('category', strtolower($category));
+            }
+
+            if ($limit) {
+                $projects = $query->take($limit)->get()->map(function ($project) use ($lang) {
+                    return [
+                        'id' => $project->id,
+                        'name' => $this->trans($project->name, $lang),
+                        'category' => $project->category,
+                        'description' => $this->trans($project->description, $lang),
+                        'image' => $project->image ? (str_starts_with($project->image, 'http') || str_starts_with($project->image, '/') ? $project->image : asset('storage/' . $project->image)) : null,
+                        'client' => $project->client,
+                        'url' => $project->url,
+                        'tags' => $project->tags ?? [],
+                    ];
+                });
+                return ['type' => 'flat', 'data' => $projects];
+            }
+
+            if ($page) {
+                $projectsPaginated = $query->paginate($perPage);
+                $transformedItems = collect($projectsPaginated->items())->map(function ($project) use ($lang) {
+                    return [
+                        'id' => $project->id,
+                        'name' => $this->trans($project->name, $lang),
+                        'category' => $project->category,
+                        'description' => $this->trans($project->description, $lang),
+                        'image' => $project->image ? (str_starts_with($project->image, 'http') || str_starts_with($project->image, '/') ? $project->image : asset('storage/' . $project->image)) : null,
+                        'client' => $project->client,
+                        'url' => $project->url,
+                        'tags' => $project->tags ?? [],
+                    ];
+                });
+
+                return [
+                    'type' => 'paginated',
+                    'data' => [
+                        'data' => $transformedItems,
+                        'current_page' => $projectsPaginated->currentPage(),
+                        'last_page' => $projectsPaginated->lastPage(),
+                        'has_more' => $projectsPaginated->hasMorePages(),
+                    ]
+                ];
+            }
+
+            // Fallback: return all projects as flat array
+            $projects = $query->get()->map(function ($project) use ($lang) {
+                return [
+                    'id' => $project->id,
+                    'name' => $this->trans($project->name, $lang),
+                    'category' => $project->category,
+                    'description' => $this->trans($project->description, $lang),
+                    'image' => $project->image ? (str_starts_with($project->image, 'http') || str_starts_with($project->image, '/') ? $project->image : asset('storage/' . $project->image)) : null,
+                    'client' => $project->client,
+                    'url' => $project->url,
+                    'tags' => $project->tags ?? [],
+                ];
+            });
+            return ['type' => 'flat', 'data' => $projects];
+        });
+
+        return response()->json($response['data']);
+    }
+
+    public function getProject($id)
+    {
+        $lang = $this->getLang();
+        $cacheKey = "project_{$id}_{$lang}";
+
+        $project = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () use ($id, $lang) {
+            $record = \App\Models\Project::findOrFail($id);
             return [
-                'id' => $project->id,
-                'name' => $this->trans($project->name, $lang),
-                'category' => $project->category,
-                'description' => $this->trans($project->description, $lang),
-                'image' => $project->image ? (str_starts_with($project->image, 'http') || str_starts_with($project->image, '/') ? $project->image : asset('storage/' . $project->image)) : null,
-                'client' => $project->client,
-                'url' => $project->url,
-                'tags' => $project->tags ?? [],
+                'id' => $record->id,
+                'name' => $this->trans($record->name, $lang),
+                'category' => $record->category,
+                'description' => $this->trans($record->description, $lang),
+                'image' => $record->image ? (str_starts_with($record->image, 'http') || str_starts_with($record->image, '/') ? $record->image : asset('storage/' . $record->image)) : null,
+                'client' => $record->client,
+                'url' => $record->url,
+                'tags' => $record->tags ?? [],
             ];
         });
-        return response()->json($projects);
+
+        return response()->json($project);
     }
 
     public function getProjectCategories()
     {
         $lang = $this->getLang();
-        $categories = \App\Models\ProjectCategory::all()->map(function ($cat) use ($lang) {
-            return [
-                'id' => $cat->slug,
-                'label' => $this->trans($cat->name, $lang),
-            ];
+        $cacheKey = "project_categories_{$lang}";
+
+        $categories = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () use ($lang) {
+            return \App\Models\ProjectCategory::all()->map(function ($cat) use ($lang) {
+                return [
+                    'id' => $cat->slug,
+                    'label' => $this->trans($cat->name, $lang),
+                ];
+            });
         });
         return response()->json($categories);
     }
 
-    public function getPosts()
+    private function transformPost($post, $lang)
+    {
+        $categoryName = '';
+        $categoryRaw = '';
+        if ($post->blogCategory) {
+            $categoryName = $this->trans($post->blogCategory->name, $lang);
+            $categoryRaw = strtoupper(trim($this->trans($post->blogCategory->name, 'en')));
+        } else if ($post->category) {
+            $categoryName = $this->translateCategory($post->category, $lang);
+            $categoryRaw = strtoupper(trim($post->category));
+        }
+
+        return [
+            'id' => $post->id,
+            'title' => $this->trans($post->title, $lang),
+            'slug' => $post->slug,
+            'content' => $this->trans($post->content, $lang),
+            'author' => $post->author?->name ?? 'Admin',
+            'category' => $categoryName,
+            'category_raw' => $categoryRaw,
+            'image' => $post->image ? (str_starts_with($post->image, 'http') || str_starts_with($post->image, '/') ? $post->image : asset('storage/' . $post->image)) : null,
+            'published_at' => $this->formatDate($post->created_at, $lang),
+        ];
+    }
+
+    public function getPosts(\Illuminate\Http\Request $request)
     {
         $lang = $this->getLang();
-        $posts = Post::with(['author', 'blogCategory'])->where('is_published', true)->latest()->get()->map(function ($post) use ($lang) {
-            $categoryName = '';
-            $categoryRaw = '';
-            if ($post->blogCategory) {
-                $categoryName = $this->trans($post->blogCategory->name, $lang);
-                $categoryRaw = strtoupper(trim($this->trans($post->blogCategory->name, 'en')));
-            } else if ($post->category) {
-                $categoryName = $this->translateCategory($post->category, $lang);
-                $categoryRaw = strtoupper(trim($post->category));
+        $limit = $request->query('limit');
+        $categoryRaw = $request->query('category_raw');
+        $page = $request->query('page');
+        $perPage = $request->query('per_page', 9);
+
+        // Generate cache key containing all query parameters
+        $cacheKey = "posts_{$lang}_cat_" . ($categoryRaw ?: 'all') . "_limit_" . ($limit ?: 'none') . "_page_" . ($page ?: 'none') . "_per_" . $perPage;
+
+        $response = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () use ($lang, $limit, $categoryRaw, $page, $perPage) {
+            $query = Post::with(['author', 'blogCategory'])
+                ->where('is_published', true)
+                ->latest();
+
+            if ($categoryRaw && strtoupper($categoryRaw) !== 'ALL') {
+                $query->where(function ($q) use ($categoryRaw) {
+                    $q->whereHas('blogCategory', function ($sub) use ($categoryRaw) {
+                        $sub->where('slug', strtolower($categoryRaw));
+                    })->orWhere('category', strtolower($categoryRaw));
+                });
             }
 
-            return [
-                'id' => $post->id,
-                'title' => $this->trans($post->title, $lang),
-                'slug' => $post->slug,
-                'content' => $this->trans($post->content, $lang),
-                'author' => $post->author?->name ?? 'Admin',
-                'category' => $categoryName,
-                'category_raw' => $categoryRaw,
-                'image' => $post->image ? (str_starts_with($post->image, 'http') || str_starts_with($post->image, '/') ? $post->image : asset('storage/' . $post->image)) : null,
-                'published_at' => $this->formatDate($post->created_at, $lang),
-            ];
+            if ($limit) {
+                $posts = $query->take($limit)->get()->map(function ($post) use ($lang) {
+                    return $this->transformPost($post, $lang);
+                });
+                return ['type' => 'flat', 'data' => $posts];
+            }
+
+            if ($page) {
+                $postsPaginated = $query->paginate($perPage);
+                $transformedItems = collect($postsPaginated->items())->map(function ($post) use ($lang) {
+                    return $this->transformPost($post, $lang);
+                });
+
+                return [
+                    'type' => 'paginated',
+                    'data' => [
+                        'data' => $transformedItems,
+                        'current_page' => $postsPaginated->currentPage(),
+                        'last_page' => $postsPaginated->lastPage(),
+                        'has_more' => $postsPaginated->hasMorePages(),
+                    ]
+                ];
+            }
+
+            // Fallback: return all posts as flat array
+            $posts = $query->get()->map(function ($post) use ($lang) {
+                return $this->transformPost($post, $lang);
+            });
+            return ['type' => 'flat', 'data' => $posts];
         });
-        return response()->json($posts);
+
+        return response()->json($response['data']);
+    }
+
+    public function getBlogCategories()
+    {
+        $lang = $this->getLang();
+        $cacheKey = "blog_categories_{$lang}";
+        
+        $categories = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () use ($lang) {
+            return \App\Models\BlogCategory::all()->map(function ($cat) use ($lang) {
+                return [
+                    'id' => strtoupper(trim($cat->slug)),
+                    'label' => $this->trans($cat->name, $lang),
+                ];
+            });
+        });
+        
+        return response()->json($categories);
     }
 
     public function getTrendingPosts()
     {
         $lang = $this->getLang();
-        $posts = Post::with('author')
-            ->where('is_published', true)
-            ->where('is_trending', true)
-            ->latest()
-            ->take(5)
-            ->get()
-            ->map(function ($post) use ($lang) {
-                return [
-                    'id' => $post->id,
-                    'title' => $this->trans($post->title, $lang),
-                    'slug' => $post->slug,
-                    'author' => $post->author?->name ?? 'Admin',
-                ];
-            });
+        $cacheKey = "trending_posts_{$lang}";
+
+        $posts = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () use ($lang) {
+            return Post::with('author')
+                ->where('is_published', true)
+                ->where('is_trending', true)
+                ->latest()
+                ->take(5)
+                ->get()
+                ->map(function ($post) use ($lang) {
+                    return [
+                        'id' => $post->id,
+                        'title' => $this->trans($post->title, $lang),
+                        'slug' => $post->slug,
+                        'author' => $post->author?->name ?? 'Admin',
+                    ];
+                });
+        });
         return response()->json($posts);
     }
 
@@ -366,16 +532,46 @@ class ApiController extends Controller
         ]);
     }
 
-    public function getFaqs()
+    public function getFaqs(\Illuminate\Http\Request $request)
     {
         $lang = $this->getLang();
-        $faqs = Faq::where('is_active', true)->get()->map(function ($faq) use ($lang) {
+        $search = $request->query('search');
+        $page = $request->query('page');
+        $perPage = $request->query('per_page', 6);
+
+        $query = Faq::where('is_active', true)->orderBy('id', 'asc');
+
+        if ($search) {
+            $search = strtolower($search);
+            $query->where(function ($q) use ($search) {
+                $q->where('question->en', 'like', "%{$search}%")
+                  ->orWhere('question->ar', 'like', "%{$search}%")
+                  ->orWhere('answer->en', 'like', "%{$search}%")
+                  ->orWhere('answer->ar', 'like', "%{$search}%");
+            });
+        }
+
+        $transformer = function ($faq) use ($lang) {
             return [
                 'id' => $faq->id,
                 'question' => $this->trans($faq->question, $lang),
                 'answer' => $this->trans($faq->answer, $lang),
             ];
-        });
+        };
+
+        if ($page) {
+            $faqsPaginated = $query->paginate($perPage);
+            $transformedItems = collect($faqsPaginated->items())->map($transformer);
+
+            return response()->json([
+                'data' => $transformedItems,
+                'current_page' => $faqsPaginated->currentPage(),
+                'last_page' => $faqsPaginated->lastPage(),
+                'has_more' => $faqsPaginated->hasMorePages(),
+            ]);
+        }
+
+        $faqs = $query->get()->map($transformer);
         return response()->json($faqs);
     }
 
@@ -482,44 +678,48 @@ class ApiController extends Controller
     public function getSettings()
     {
         $lang = $this->getLang();
-        $settings = Setting::all()->mapWithKeys(function ($setting) use ($lang) {
-            $value = $setting->value;
+        $cacheKey = "settings_{$lang}";
 
-            // Handle multilingual JSON settings
-            if (is_string($value) && str_starts_with($value, '{')) {
-                $decoded = json_decode($value, true);
-                if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-                    if (array_key_exists($lang, $decoded)) {
-                        $value = $decoded[$lang];
-                    } elseif (array_key_exists('en', $decoded)) {
-                        $value = $decoded['en'];
-                    } elseif (array_key_exists('ar', $decoded)) {
-                        $value = $decoded['ar'];
-                    } else {
-                        $value = '';
+        $settings = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () use ($lang) {
+            return Setting::all()->mapWithKeys(function ($setting) use ($lang) {
+                $value = $setting->value;
+
+                // Handle multilingual JSON settings
+                if (is_string($value) && str_starts_with($value, '{')) {
+                    $decoded = json_decode($value, true);
+                    if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                        if (array_key_exists($lang, $decoded)) {
+                            $value = $decoded[$lang];
+                        } elseif (array_key_exists('en', $decoded)) {
+                            $value = $decoded['en'];
+                        } elseif (array_key_exists('ar', $decoded)) {
+                            $value = $decoded['ar'];
+                        } else {
+                            $value = '';
+                        }
                     }
                 }
-            }
 
-            // Handle array JSON settings (like multiple image upload)
-            if (is_string($value) && str_starts_with($value, '[')) {
-                $decoded = json_decode($value, true);
-                if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-                    if ($setting->type === 'image' && $setting->value_source === 'file') {
-                        $value = array_map(function ($img) {
-                            return $img ? asset('storage/' . $img) : null;
-                        }, $decoded);
-                    } else {
-                        $value = $decoded;
+                // Handle array JSON settings (like multiple image upload)
+                if (is_string($value) && str_starts_with($value, '[')) {
+                    $decoded = json_decode($value, true);
+                    if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                        if ($setting->type === 'image' && $setting->value_source === 'file') {
+                            $value = array_map(function ($img) {
+                                return $img ? asset('storage/' . $img) : null;
+                            }, $decoded);
+                        } else {
+                            $value = $decoded;
+                        }
+                        return [$setting->key => $value];
                     }
-                    return [$setting->key => $value];
                 }
-            }
 
-            if ($setting->type === 'image' && $setting->value_source === 'file' && $value) {
-                $value = asset('storage/' . $value);
-            }
-            return [$setting->key => $value];
+                if ($setting->type === 'image' && $setting->value_source === 'file' && $value) {
+                    $value = asset('storage/' . $value);
+                }
+                return [$setting->key => $value];
+            });
         });
         return response()->json($settings);
     }
@@ -527,17 +727,21 @@ class ApiController extends Controller
     public function getTestimonials()
     {
         $lang = $this->getLang();
-        $testimonials = Testimonial::where('is_active', true)->get()->map(function ($t) use ($lang) {
-            return [
-                'id' => $t->id,
-                'client_name' => $this->trans($t->client_name, $lang),
-                'position' => $this->trans($t->position, $lang),
-                'review' => $this->trans($t->review, $lang),
-                'image' => $t->image ? (str_starts_with($t->image, 'http') || str_starts_with($t->image, '/') ? $t->image : asset('storage/' . $t->image)) : null,
-                'rating' => $t->rating,
-                'video_url' => $t->video_url,
-                'audio_url' => $t->audio_url ? (str_starts_with($t->audio_url, 'http') || str_starts_with($t->audio_url, '/') ? $t->audio_url : asset('storage/' . $t->audio_url)) : null,
-            ];
+        $cacheKey = "testimonials_{$lang}";
+
+        $testimonials = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () use ($lang) {
+            return Testimonial::where('is_active', true)->get()->map(function ($t) use ($lang) {
+                return [
+                    'id' => $t->id,
+                    'client_name' => $this->trans($t->client_name, $lang),
+                    'position' => $this->trans($t->position, $lang),
+                    'review' => $this->trans($t->review, $lang),
+                    'image' => $t->image ? (str_starts_with($t->image, 'http') || str_starts_with($t->image, '/') ? $t->image : asset('storage/' . $t->image)) : null,
+                    'rating' => $t->rating,
+                    'video_url' => $t->video_url,
+                    'audio_url' => $t->audio_url ? (str_starts_with($t->audio_url, 'http') || str_starts_with($t->audio_url, '/') ? $t->audio_url : asset('storage/' . $t->audio_url)) : null,
+                ];
+            });
         });
         return response()->json($testimonials);
     }
@@ -545,16 +749,20 @@ class ApiController extends Controller
     public function getTeamMembers()
     {
         $lang = $this->getLang();
-        $team = TeamMember::where('is_active', true)->get()->map(function ($member) use ($lang) {
-            return [
-                'id' => $member->id,
-                'name' => $this->trans($member->name, $lang),
-                'role' => $this->trans($member->role, $lang),
-                'bio' => $this->trans($member->bio, $lang),
-                'image' => $member->image ? asset('storage/' . $member->image) : null,
-                'facebook_url' => $member->facebook_url,
-                'linkedin_url' => $member->linkedin_url,
-            ];
+        $cacheKey = "team_members_{$lang}";
+
+        $team = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () use ($lang) {
+            return TeamMember::where('is_active', true)->get()->map(function ($member) use ($lang) {
+                return [
+                    'id' => $member->id,
+                    'name' => $this->trans($member->name, $lang),
+                    'role' => $this->trans($member->role, $lang),
+                    'bio' => $this->trans($member->bio, $lang),
+                    'image' => $member->image ? asset('storage/' . $member->image) : null,
+                    'facebook_url' => $member->facebook_url,
+                    'linkedin_url' => $member->linkedin_url,
+                ];
+            });
         });
         return response()->json($team);
     }
@@ -562,13 +770,17 @@ class ApiController extends Controller
     public function getFeatures()
     {
         $lang = $this->getLang();
-        $features = Feature::where('is_active', true)->get()->map(function ($f) use ($lang) {
-            return [
-                'id' => $f->id,
-                'title' => $this->trans($f->title, $lang),
-                'description' => $this->trans($f->description, $lang),
-                'icon' => $f->icon,
-            ];
+        $cacheKey = "features_{$lang}";
+
+        $features = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () use ($lang) {
+            return Feature::where('is_active', true)->get()->map(function ($f) use ($lang) {
+                return [
+                    'id' => $f->id,
+                    'title' => $this->trans($f->title, $lang),
+                    'description' => $this->trans($f->description, $lang),
+                    'icon' => $f->icon,
+                ];
+            });
         });
         return response()->json($features);
     }
@@ -672,96 +884,178 @@ class ApiController extends Controller
     public function getPageContent($slug)
     {
         $lang = $this->getLang();
-        $page = \App\Models\Page::where('slug', $slug)->first();
+        $cacheKey = "page_{$slug}_{$lang}";
 
-        if (!$page) {
+        $pageData = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () use ($slug, $lang) {
+            $page = \App\Models\Page::where('slug', $slug)->first();
+
+            if (!$page) {
+                return null;
+            }
+
+            return [
+                'slug' => $page->slug,
+                'title' => $this->trans($page->title, $lang),
+                'subtitle' => $this->trans($page->subtitle, $lang),
+                'hero_image' => $page->hero_image ? asset('storage/' . $page->hero_image) : null,
+                'content' => $this->trans($page->content, $lang),
+                'seo' => [
+                    'title' => $this->trans($page->seo_title, $lang) ?: $this->trans($page->title, $lang),
+                    'description' => $this->trans($page->seo_description, $lang) ?: $this->trans($page->subtitle, $lang),
+                ],
+                'sections' => [
+                    'template' => $page->sections['template'] ?? null,
+                    'blocks' => $page->sections[$lang] ?? []
+                ],
+            ];
+        });
+
+        if (!$pageData) {
             return response()->json(['message' => 'Page not found'], 404);
         }
 
-        return response()->json([
-            'slug' => $page->slug,
-            'title' => $this->trans($page->title, $lang),
-            'subtitle' => $this->trans($page->subtitle, $lang),
-            'hero_image' => $page->hero_image ? asset('storage/' . $page->hero_image) : null,
-            'content' => $this->trans($page->content, $lang),
-            'seo' => [
-                'title' => $this->trans($page->seo_title, $lang) ?: $this->trans($page->title, $lang),
-                'description' => $this->trans($page->seo_description, $lang) ?: $this->trans($page->subtitle, $lang),
-            ],
-            'sections' => [
-                'template' => $page->sections['template'] ?? null,
-                'blocks' => $page->sections[$lang] ?? []
-            ],
-        ]);
+        return response()->json($pageData);
     }
 
     public function getPricingPlans()
     {
         $lang = $this->getLang();
         $serviceId = request('service_id');
+        $cacheKey = "pricing_plans_{$lang}_service_" . ($serviceId ?: 'all');
 
-        $query = \App\Models\PricingPlan::where('is_active', true);
+        $plans = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () use ($lang, $serviceId) {
+            $query = \App\Models\PricingPlan::where('is_active', true);
 
-        if ($serviceId) {
-            if (!is_numeric($serviceId)) {
-                $service = \App\Models\Service::where('slug', $serviceId)->first();
-                $serviceId = $service ? $service->id : 999999;
+            if ($serviceId) {
+                if (!is_numeric($serviceId)) {
+                    $service = \App\Models\Service::where('slug', $serviceId)->first();
+                    $serviceId = $service ? $service->id : 999999;
+                }
+                $query->where('service_id', $serviceId);
             }
-            $query->where('service_id', $serviceId);
-        }
 
-        $plans = $query->orderBy('sort_order')
-            ->get()
-            ->map(function ($plan) use ($lang) {
-                // $plan->features is an array of arrays if using repeater e.g. [{"feature": "f1"}, {"feature": "f2"}]
-                // But we used a repeater with state path `features.en` which creates `{"en": [{"feature": "x"}], "ar": [{"feature": "y"}]}`
-                $features = [];
-                if (is_array($plan->features)) {
-                    $langFeatures = $plan->features[$lang] ?? $plan->features['en'] ?? [];
-                    if (is_array($langFeatures)) {
-                        foreach ($langFeatures as $f) {
-                            if (isset($f['feature'])) {
-                                $features[] = $f['feature'];
-                            } elseif (is_string($f)) {
-                                $features[] = $f;
+            return $query->orderBy('sort_order')
+                ->get()
+                ->map(function ($plan) use ($lang) {
+                    // $plan->features is an array of arrays if using repeater e.g. [{"feature": "f1"}, {"feature": "f2"}]
+                    // But we used a repeater with state path `features.en` which creates `{"en": [{"feature": "x"}], "ar": [{"feature": "y"}]}`
+                    $features = [];
+                    if (is_array($plan->features)) {
+                        $langFeatures = $plan->features[$lang] ?? $plan->features['en'] ?? [];
+                        if (is_array($langFeatures)) {
+                            foreach ($langFeatures as $f) {
+                                if (isset($f['feature'])) {
+                                    $features[] = $f['feature'];
+                                } elseif (is_string($f)) {
+                                    $features[] = $f;
+                                }
                             }
                         }
                     }
-                }
 
-                return [
-                    'id' => $plan->id,
-                    'name' => $this->trans($plan->name, $lang),
-                    'price' => $plan->price,
-                    'currency' => $plan->currency,
-                    'period' => $this->trans($plan->period, $lang),
-                    'features' => $features,
-                    'is_popular' => $plan->is_popular,
-                    'button_text' => $this->trans($plan->button_text, $lang),
-                    'button_url' => $plan->button_url,
-                ];
-            });
+                    return [
+                        'id' => $plan->id,
+                        'name' => $this->trans($plan->name, $lang),
+                        'price' => $plan->price,
+                        'currency' => $plan->currency,
+                        'period' => $this->trans($plan->period, $lang),
+                        'features' => $features,
+                        'is_popular' => $plan->is_popular,
+                        'button_text' => $this->trans($plan->button_text, $lang),
+                        'button_url' => $plan->button_url,
+                    ];
+                });
+        });
 
         return response()->json($plans);
     }
 
-    public function getProducts()
+    public function getProducts(\Illuminate\Http\Request $request)
     {
         $lang = $this->getLang();
-        $products = \App\Models\Product::where('is_active', true)->get()->map(function ($product) use ($lang) {
-            return [
-                'id' => $product->slug,
-                'name' => $this->trans($product->name, $lang),
-                'category' => $this->trans($product->category, $lang),
-                'title' => $this->trans($product->title, $lang),
-                'description' => $this->trans($product->description, $lang),
-                'image' => $product->image ? (str_starts_with($product->image, 'http') || str_starts_with($product->image, '/') ? $product->image : asset('storage/' . $product->image)) : null,
-                'demoLink' => $product->demo_link ?? '#',
-                'orderLink' => $product->order_link ?? '#',
-                'tags' => $product->tech_specs ?? [],
-            ];
+        $page = $request->query('page');
+        $perPage = $request->query('per_page', 9);
+        $category = $request->query('category');
+
+        $cacheKey = "products_{$lang}_cat_" . ($category ?: 'all') . "_page_" . ($page ?: 'none') . "_per_" . $perPage;
+
+        $response = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () use ($lang, $page, $perPage, $category) {
+            $query = \App\Models\Product::where('is_active', true)->orderBy('id', 'asc');
+
+            if ($category && strtolower($category) !== 'all') {
+                $query->where(function ($q) use ($category) {
+                    $q->where('category->en', $category)
+                      ->orWhere('category->ar', $category)
+                      ->orWhere('category', $category);
+                });
+            }
+
+            if ($page) {
+                $productsPaginated = $query->paginate($perPage);
+                $transformedItems = collect($productsPaginated->items())->map(function ($product) use ($lang) {
+                    return [
+                        'id' => $product->slug,
+                        'name' => $this->trans($product->name, $lang),
+                        'category' => $this->trans($product->category, $lang),
+                        'title' => $this->trans($product->title, $lang),
+                        'description' => $this->trans($product->description, $lang),
+                        'image' => $product->image ? (str_starts_with($product->image, 'http') || str_starts_with($product->image, '/') ? $product->image : asset('storage/' . $product->image)) : null,
+                        'demoLink' => $product->demo_link ?? '#',
+                        'orderLink' => $product->order_link ?? '#',
+                        'tags' => $product->tech_specs ?? [],
+                    ];
+                });
+
+                return [
+                    'type' => 'paginated',
+                    'data' => [
+                        'data' => $transformedItems,
+                        'current_page' => $productsPaginated->currentPage(),
+                        'last_page' => $productsPaginated->lastPage(),
+                        'has_more' => $productsPaginated->hasMorePages(),
+                    ]
+                ];
+            }
+
+            $products = $query->get()->map(function ($product) use ($lang) {
+                return [
+                    'id' => $product->slug,
+                    'name' => $this->trans($product->name, $lang),
+                    'category' => $this->trans($product->category, $lang),
+                    'title' => $this->trans($product->title, $lang),
+                    'description' => $this->trans($product->description, $lang),
+                    'image' => $product->image ? (str_starts_with($product->image, 'http') || str_starts_with($product->image, '/') ? $product->image : asset('storage/' . $product->image)) : null,
+                    'demoLink' => $product->demo_link ?? '#',
+                    'orderLink' => $product->order_link ?? '#',
+                    'tags' => $product->tech_specs ?? [],
+                ];
+            });
+            return ['type' => 'flat', 'data' => $products];
         });
-        return response()->json($products);
+
+        return response()->json($response['data']);
+    }
+
+    public function getProductCategories()
+    {
+        $lang = $this->getLang();
+        $cacheKey = "product_categories_{$lang}";
+
+        $categories = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () use ($lang) {
+            $products = \App\Models\Product::where('is_active', true)->get();
+            $cats = $products->map(function ($p) use ($lang) {
+                return $this->trans($p->category, $lang);
+            })->filter()->unique()->values();
+
+            return $cats->map(function ($cat) {
+                return [
+                    'id' => $cat,
+                    'label' => $cat,
+                ];
+            })->toArray();
+        });
+
+        return response()->json($categories);
     }
 
     public function getProduct($slug)
@@ -807,9 +1101,34 @@ class ApiController extends Controller
         ]);
     }
 
-    public function getCareers()
+    public function getCareers(\Illuminate\Http\Request $request)
     {
-        $careers = \App\Models\Career::where('is_active', true)->get()->map(function ($career) {
+        $lang = $this->getLang();
+        $department = $request->query('department');
+        $search = $request->query('search');
+        $page = $request->query('page');
+        $perPage = $request->query('per_page', 9);
+
+        $query = \App\Models\Career::where('is_active', true)->orderBy('id', 'desc');
+
+        if ($department && strtolower($department) !== 'all') {
+            $query->where('department', $department);
+        }
+
+        if ($search) {
+            $search = strtolower($search);
+            $query->where(function ($q) use ($search) {
+                $q->where('title->en', 'like', "%{$search}%")
+                  ->orWhere('title->ar', 'like', "%{$search}%")
+                  ->orWhere('description->en', 'like', "%{$search}%")
+                  ->orWhere('description->ar', 'like', "%{$search}%")
+                  ->orWhere('department', 'like', "%{$search}%");
+            });
+        }
+
+        $uniqueDepts = \App\Models\Career::where('is_active', true)->distinct()->pluck('department')->filter()->values();
+
+        $transformer = function ($career) {
             $responsibilities = ['en' => [], 'ar' => []];
             if (is_array($career->responsibilities)) {
                 foreach (['en', 'ar'] as $l) {
@@ -846,7 +1165,22 @@ class ApiController extends Controller
                 'responsibilities' => $responsibilities,
                 'requirements' => $requirements,
             ];
-        });
+        };
+
+        if ($page) {
+            $careersPaginated = $query->paginate($perPage);
+            $transformedItems = collect($careersPaginated->items())->map($transformer);
+
+            return response()->json([
+                'data' => $transformedItems,
+                'current_page' => $careersPaginated->currentPage(),
+                'last_page' => $careersPaginated->lastPage(),
+                'has_more' => $careersPaginated->hasMorePages(),
+                'departments' => $uniqueDepts,
+            ]);
+        }
+
+        $careers = $query->get()->map($transformer);
         return response()->json($careers);
     }
 
@@ -878,27 +1212,31 @@ class ApiController extends Controller
     public function getBankAccounts()
     {
         $lang = $this->getLang();
-        $accounts = \App\Models\BankAccount::orderBy('sort_order', 'asc')->get()->map(function ($acc) use ($lang) {
-            return [
-                'id' => (string) $acc->id,
-                'name' => [
-                    'en' => $this->trans($acc->name, 'en'),
-                    'ar' => $this->trans($acc->name, 'ar'),
-                ],
-                'owner' => [
-                    'en' => $this->trans($acc->owner, 'en'),
-                    'ar' => $this->trans($acc->owner, 'ar'),
-                ],
-                'account' => [
-                    'en' => $this->trans($acc->account, 'en'),
-                    'ar' => $this->trans($acc->account, 'ar'),
-                ],
-                'image' => $acc->image ? (str_starts_with($acc->image, 'http') || str_starts_with($acc->image, '/') ? $acc->image : asset('storage/' . $acc->image)) : null,
-                'type' => $acc->type,
-                'country' => $acc->country,
-                'brandColor' => $acc->brand_color ?: 'from-[#05050f] to-[#101025]',
-                'shadow' => $acc->shadow ?: 'rgba(0,0,0,0)',
-            ];
+        $cacheKey = "bank_accounts_{$lang}";
+
+        $accounts = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () use ($lang) {
+            return \App\Models\BankAccount::orderBy('sort_order', 'asc')->get()->map(function ($acc) use ($lang) {
+                return [
+                    'id' => (string) $acc->id,
+                    'name' => [
+                        'en' => $this->trans($acc->name, 'en'),
+                        'ar' => $this->trans($acc->name, 'ar'),
+                    ],
+                    'owner' => [
+                        'en' => $this->trans($acc->owner, 'en'),
+                        'ar' => $this->trans($acc->owner, 'ar'),
+                    ],
+                    'account' => [
+                        'en' => $this->trans($acc->account, 'en'),
+                        'ar' => $this->trans($acc->account, 'ar'),
+                    ],
+                    'image' => $acc->image ? (str_starts_with($acc->image, 'http') || str_starts_with($acc->image, '/') ? $acc->image : asset('storage/' . $acc->image)) : null,
+                    'type' => $acc->type,
+                    'country' => $acc->country,
+                    'brandColor' => $acc->brand_color ?: 'from-[#05050f] to-[#101025]',
+                    'shadow' => $acc->shadow ?: 'rgba(0,0,0,0)',
+                ];
+            });
         });
         return response()->json($accounts);
     }

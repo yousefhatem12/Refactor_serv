@@ -37,26 +37,49 @@ export async function generateMetadata() {
   };
 }
 
+import { cookies } from "next/headers";
 import { LanguageProvider } from "./context/LanguageContext";
 import { AuthProvider } from "./context/AuthContext";
 import { SettingsProvider } from "./context/SettingsContext";
 
 export default async function RootLayout({ children }) {
+  const cookieStore = await cookies();
+  const defaultLanguage = cookieStore.get("NEXT_LOCALE")?.value || "en";
   const settings = await fetchAPI("/settings");
   return (
     <html
-      lang="en"
+      lang={defaultLanguage}
       className={`${montserrat.variable} ${poppins.variable} ${alexandria.variable} min-h-screen antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-screen flex flex-col" suppressHydrationWarning>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const orgSet = Element.prototype.setAttribute;
+                  Element.prototype.setAttribute = function(name, value) {
+                    if (name === 'bis_skin_checked') return;
+                    orgSet.apply(this, arguments);
+                  };
+                  const orgSetNS = Element.prototype.setAttributeNS;
+                  Element.prototype.setAttributeNS = function(ns, name, value) {
+                    if (name === 'bis_skin_checked') return;
+                    orgSetNS.apply(this, arguments);
+                  };
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
         {settings?.custom_header_code && (
           <div
             dangerouslySetInnerHTML={{ __html: settings.custom_header_code }}
             style={{ display: "none" }}
           />
         )}
-        <LanguageProvider>
+        <LanguageProvider defaultLanguage={defaultLanguage}>
           <AuthProvider>
             <SettingsProvider initialSettings={settings || {}}>
               <HomeBackground />

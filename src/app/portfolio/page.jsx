@@ -4,16 +4,23 @@ import PortfolioGallery from "../components/Portfolio/PortfolioGallery";
 import CTA from "../components/Home/CTA/CTA";
 import { fetchAPI } from "@/lib/api";
 import { useLanguage } from "../context/LanguageContext";
+import Loading from "../loading";
 
 export default function PortfolioPage() {
   const { language } = useLanguage();
   const [pageData, setPageData] = useState(null);
 
   useEffect(() => {
-    fetchAPI(`/pages/portfolio?lang=${language}`).then(data => {
-      if (data) setPageData(data);
-    }).catch(console.error);
+    fetchAPI(`/pages/portfolio?lang=${language}`)
+      .then((data) => {
+        if (data) setPageData(data);
+      })
+      .catch(console.error);
   }, [language]);
+
+  if (!pageData) {
+    return <Loading />;
+  }
 
   return (
     <main className="flex min-h-screen flex-col relative overflow-x-hidden">
