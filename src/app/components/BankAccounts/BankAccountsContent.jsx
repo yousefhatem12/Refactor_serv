@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../../context/LanguageContext";
 import { useSettings } from "../../context/SettingsContext";
+import Loading from "../../loading";
 import { fetchAPI } from "@/lib/api";
 import { 
   FaCopy, 
@@ -17,18 +18,54 @@ const BankAccountsContent = () => {
   const [activeTab, setActiveTab] = useState("egypt"); // "egypt" or "ksa"
   const [copiedId, setCopiedId] = useState(null);
   const [methods, setMethods] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   useEffect(() => {
-    fetchAPI(`/bank-accounts?lang=${language}`)
-      .then((data) => {
-        if (data && Array.isArray(data)) {
-          setMethods(data);
+    setLoading(true);
+    setCurrentPage(1);
+    fetchAPI(`/bank-accounts?lang=${language}&country=${activeTab}&page=1&per_page=6`)
+      .then((res) => {
+        if (res && Array.isArray(res.data)) {
+          setMethods(res.data);
+          setHasMore(res.has_more);
+        } else {
+          setMethods([]);
+          setHasMore(false);
         }
       })
-      .catch((err) => console.error("Error fetching bank accounts:", err))
+      .catch((err) => {
+        console.error("Error fetching bank accounts:", err);
+        setMethods([]);
+        setHasMore(false);
+      })
       .finally(() => setLoading(false));
-  }, [language]);
+  }, [language, activeTab]);
+
+  const loadMoreMethods = () => {
+    if (isLoadingMore || !hasMore) return;
+    setIsLoadingMore(true);
+    const nextPage = currentPage + 1;
+    fetchAPI(`/bank-accounts?lang=${language}&country=${activeTab}&page=${nextPage}&per_page=6`)
+      .then((res) => {
+        if (res && Array.isArray(res.data)) {
+          setMethods((prev) => {
+            const newMethods = res.data.filter((item) => !prev.some((p) => p.id === item.id));
+            return [...prev, ...newMethods];
+          });
+          setHasMore(res.has_more);
+          setCurrentPage(nextPage);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to load more bank accounts:", err);
+      })
+      .finally(() => {
+        setIsLoadingMore(false);
+      });
+  };
 
   const handleCopy = (id, textToCopy) => {
     navigator.clipboard.writeText(textToCopy);
@@ -38,13 +75,11 @@ const BankAccountsContent = () => {
     }, 2000);
   };
 
+  if (loading) {
+    return <Loading />;
+  }
 
-
-  const egyptMethods = methods.filter(m => m.country === "egypt");
-
-  const ksaMethods = methods.filter(m => m.country === "ksa");
-
-  const currentMethods = activeTab === "egypt" ? egyptMethods : ksaMethods;
+  const currentMethods = methods;
 
   const whatsappNum = settings?.site_whatsapp ? settings.site_whatsapp.replace(/\D/g, '') : "";
   const phoneNum = settings?.site_phone ? settings.site_phone.replace(/\D/g, '') : "";
@@ -209,7 +244,75 @@ const BankAccountsContent = () => {
             );
           })}
         </AnimatePresence>
+        {isLoadingMore && [1, 2, 3].map((i) => (
+          <div
+            key={`skeleton-more-${i}`}
+            className="group relative bg-[#05050f]/80 border border-white/5 rounded-2xl p-6 md:p-8 backdrop-blur-md flex flex-col justify-between overflow-hidden shadow-2xl animate-pulse min-h-[350px]"
+          >
+            <div className="absolute top-0 left-0 right-0 h-[3px] bg-white/10" />
+            <div>
+              <div className="flex items-center justify-between mb-8">
+                <div className="w-14 h-14 rounded-xl bg-white/10" />
+                <div className="w-16 h-6 rounded-full bg-white/10" />
+              </div>
+              <div className="w-32 h-6 bg-white/10 rounded mb-6" />
+              <div className="space-y-4 mb-8">
+                <div className="flex flex-col gap-1 border-b border-white/5 pb-3">
+                  <div className="w-16 h-3 bg-white/10 rounded mb-1" />
+                  <div className="w-24 h-4 bg-white/10 rounded" />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <div className="w-16 h-3 bg-white/10 rounded mb-1" />
+                  <div className="w-32 h-4 bg-white/10 rounded" />
+                </div>
+              </div>
+            </div>
+            <div className="w-full h-12 bg-white/5 rounded-xl" />
+          </div>
+        ))}
       </motion.div>
+
+      {/* Load More Button */}
+      {hasMore && (
+        <div className="flex justify-center mt-12 w-full z-10">
+          <button
+            onClick={loadMoreMethods}
+            disabled={isLoadingMore}
+            className="flex items-center gap-2 px-8 py-3 text-white bg-transparent border border-[#FF8A00] hover:bg-[#FF8A00] rounded-full transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-base font-semibold"
+          >
+            {isLoadingMore ? (
+              <svg
+                className="w-5 h-5 animate-spin"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            ) : (
+              <svg
+                className="w-5 h-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M19 13H5v-2h14v2z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M12 5v14M5 12h14"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            )}
+            {isLoadingMore ? (t("loading") || (language === 'ar' ? 'جاري التحميل...' : 'Loading...')) : (t("loadMore") || (language === 'ar' ? 'تحميل المزيد' : 'Load More'))}
+          </button>
+        </div>
+      )}
 
       {/* Global CTA Section */}
       <motion.div
