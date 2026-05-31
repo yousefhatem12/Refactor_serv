@@ -1209,13 +1209,23 @@ class ApiController extends Controller
         return response()->json(['message' => 'Application submitted successfully', 'data' => $app], 201);
     }
 
-    public function getBankAccounts()
+    public function getBankAccounts(\Illuminate\Http\Request $request)
     {
         $lang = $this->getLang();
-        $cacheKey = "bank_accounts_{$lang}";
+        $country = $request->query('country');
+        $page = $request->query('page');
+        $perPage = $request->query('per_page', 9);
 
-        $accounts = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () use ($lang) {
-            return \App\Models\BankAccount::orderBy('sort_order', 'asc')->get()->map(function ($acc) use ($lang) {
+        $cacheKey = "bank_accounts_{$lang}_country_" . ($country ?: 'all') . "_page_" . ($page ?: 'none') . "_per_" . $perPage;
+
+        $response = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () use ($lang, $country, $page, $perPage) {
+            $query = \App\Models\BankAccount::orderBy('sort_order', 'asc');
+
+            if ($country) {
+                $query->where('country', $country);
+            }
+
+            $transformer = function ($acc) use ($lang) {
                 return [
                     'id' => (string) $acc->id,
                     'name' => [
@@ -1236,9 +1246,28 @@ class ApiController extends Controller
                     'brandColor' => $acc->brand_color ?: 'from-[#05050f] to-[#101025]',
                     'shadow' => $acc->shadow ?: 'rgba(0,0,0,0)',
                 ];
-            });
+            };
+
+            if ($page) {
+                $accountsPaginated = $query->paginate($perPage);
+                $transformedItems = collect($accountsPaginated->items())->map($transformer);
+
+                return [
+                    'type' => 'paginated',
+                    'data' => [
+                        'data' => $transformedItems,
+                        'current_page' => $accountsPaginated->currentPage(),
+                        'last_page' => $accountsPaginated->lastPage(),
+                        'has_more' => $accountsPaginated->hasMorePages(),
+                    ]
+                ];
+            }
+
+            $accounts = $query->get()->map($transformer);
+            return ['type' => 'flat', 'data' => $accounts];
         });
-        return response()->json($accounts);
+
+        return response()->json($response['data']);
     }
 }
 

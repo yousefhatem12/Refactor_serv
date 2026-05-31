@@ -11,7 +11,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
 
   const { toggleLanguage, t, language } = useLanguage();
   const settings = useSettings();
@@ -23,7 +23,14 @@ const Navbar = () => {
 
   const getDefaultLinks = (t) => [
     { name: t("home") || "Home", href: "/Home" },
-    { name: t("aboutUs") || "About Us", href: "/about-us" },
+    {
+      name: t("aboutUs") || "About Us",
+      href: "#",
+      dropdown: [
+        { name: t("aboutUs") || "About Us", href: "/about-us" },
+        { name: t("bankAccounts") || "Bank Accounts", href: "/bank-accounts" },
+      ],
+    },
     {
       name: t("services") || "Services",
       href: "#",
@@ -106,7 +113,14 @@ const Navbar = () => {
 
         const buildLinks = (dropdown) => [
           { name: t("home"), href: "/Home" },
-          { name: t("aboutUs"), href: "/about-us" },
+          {
+            name: t("aboutUs"),
+            href: "#",
+            dropdown: [
+              { name: t("aboutUs"), href: "/about-us" },
+              { name: t("bankAccounts"), href: "/bank-accounts" },
+            ],
+          },
           {
             name: t("services"),
             href: "#",
@@ -144,6 +158,16 @@ const Navbar = () => {
                     href: "/project-consultation",
                   },
                   { name: t("requestQuote"), href: "/request-quote" },
+                ],
+              };
+            }
+            if (link.href === "/about-us" || link.name === t("aboutUs")) {
+              return {
+                name: t("aboutUs"),
+                href: "#",
+                dropdown: [
+                  { name: t("aboutUs") || "About Us", href: "/about-us" },
+                  { name: t("bankAccounts") || "Bank Accounts", href: "/bank-accounts" },
                 ],
               };
             }
@@ -298,7 +322,11 @@ const Navbar = () => {
                   <div
                     className={`absolute top-full ${isRtl ? "right-0" : "left-0"} pt-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50`}
                   >
-                    <div className="bg-[#05050f]/30 backdrop-blur-md border border-white/10 rounded-xl p-4 min-w-[480px] shadow-2xl grid grid-cols-2 gap-2">
+                    <div className={`bg-[#05050f]/30 backdrop-blur-md border border-white/10 rounded-xl p-4 shadow-2xl ${
+                      link.dropdown.length > 3
+                        ? "min-w-[480px] grid grid-cols-2 gap-2"
+                        : "min-w-[220px] flex flex-col gap-1"
+                    }`}>
                       {link.dropdown.map((subLink) => (
                         <Link
                           key={subLink.name}
@@ -435,7 +463,9 @@ const Navbar = () => {
                         className="flex items-center justify-between cursor-pointer"
                         onClick={() => {
                           if (link.dropdown) {
-                            setMobileServicesOpen(!mobileServicesOpen);
+                            setOpenMobileDropdown(
+                              openMobileDropdown === link.name ? null : link.name
+                            );
                           } else {
                             setIsMobileMenuOpen(false);
                           }
@@ -457,7 +487,7 @@ const Navbar = () => {
                         {link.dropdown && (
                           <button className="text-white/80 hover:text-white transition-colors cursor-pointer bg-transparent border-none p-1">
                             <svg
-                              className={`w-6 h-6 transition-transform duration-300 ${mobileServicesOpen ? "rotate-180" : ""}`}
+                              className={`w-6 h-6 transition-transform duration-300 ${openMobileDropdown === link.name ? "rotate-180" : ""}`}
                               fill="none"
                               viewBox="0 0 24 24"
                               stroke="currentColor"
@@ -476,7 +506,7 @@ const Navbar = () => {
                       {/* Mobile Dropdown */}
                       {link.dropdown && (
                         <AnimatePresence>
-                          {mobileServicesOpen && (
+                          {openMobileDropdown === link.name && (
                             <motion.div
                               initial={{ height: 0, opacity: 0 }}
                               animate={{ height: "auto", opacity: 1 }}
