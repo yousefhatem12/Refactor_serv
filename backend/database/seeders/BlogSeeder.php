@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class BlogSeeder extends Seeder
 {
@@ -48,92 +49,117 @@ class BlogSeeder extends Seeder
             $categoryModels[$key] = BlogCategory::create($catData);
         }
 
-        // --- Create Posts ---
-        $posts = [
-            [
-                'title' => ['en' => 'The Future of AI in Modern Web Development', 'ar' => 'مستقبل الذكاء الاصطناعي في تطوير الويب الحديث'],
-                'slug' => 'future-ai-modern-web-development',
-                'content' => [
-                    'en' => 'Artificial intelligence is changing the way we design and write code. From copilots to automated testing, AI is an essential tool for future developers to streamline their workflows and build highly robust web applications.',
-                    'ar' => 'يغير الذكاء الاصطناعي طريقة تصميمنا وكتابتنا للأكواد. من المساعدين البرمجيين إلى الاختبار الآلي، يعد الذكاء الاصطناعي أداة أساسية لمطوري المستقبل لتسريع سير العمل وبناء تطبيقات ويب قوية.'
-                ],
-                'image' => '/our-blog/Link → post-landscape-1.jpg.png',
-                'blog_category_id' => $categoryModels['technology']->id,
-                'category' => 'technology',
-                'is_published' => true,
-                'is_trending' => true,
-                'author_id' => $authorId,
-                'seo_title' => ['en' => 'Future of AI in Web Dev', 'ar' => 'مستقبل الذكاء الاصطناعي في الويب'],
-                'seo_description' => ['en' => 'Discover how AI is shaping the future of frontend and backend web development.', 'ar' => 'اكتشف كيف يشكل الذكاء الاصطناعي مستقبل تطوير الويب الأمامي والخلفي.'],
+        // --- Unsplash Images per Category ---
+        $images = [
+            'technology' => [
+                'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80',
             ],
-            [
-                'title' => ['en' => '10 Essential UI/UX Design Rules for 2026', 'ar' => 'أهم 10 قواعد لتصميم واجهة المستخدم وتجربة المستخدم لعام 2026'],
-                'slug' => 'ui-ux-design-rules-2026',
-                'content' => [
-                    'en' => 'Good UI/UX is the key to customer retention. In this article, we outline ten essential rules for crafting premium, beautiful, and highly responsive user interfaces that captivate and delight users.',
-                    'ar' => 'واجهة المستخدم الجيدة هي المفتاح للاحتفاظ بالعملاء. في هذه المقالة، نستعرض عشرة قواعد أساسية لبناء واجهات مستخدم متميزة وجميلة وسريعة الاستجابة تجذب المستخدم وتسعده.'
-                ],
-                'image' => '/our-blog/Link → post-landscape-2.jpg.png',
-                'blog_category_id' => $categoryModels['design']->id,
-                'category' => 'design',
-                'is_published' => true,
-                'is_trending' => false,
-                'author_id' => $authorId,
-                'seo_title' => ['en' => '10 UI/UX Design Rules', 'ar' => '10 قواعد لتصميم واجهة المستخدم'],
-                'seo_description' => ['en' => 'Learn the most important design principles to elevate your product UX.', 'ar' => 'تعلم أهم مبادئ التصميم لرفع مستوى تجربة المستخدم لمنتجك.'],
+            'design' => [
+                'https://images.unsplash.com/photo-1561070791-26c113006238?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1541462608141-2ff580dd0e4e?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=800&q=80',
             ],
-            [
-                'title' => ['en' => 'Why Next.js is the Ultimate React Framework', 'ar' => 'لماذا يعتبر إطار عمل Next.js الخيار الأمثل لـ React'],
-                'slug' => 'nextjs-ultimate-react-framework',
-                'content' => [
-                    'en' => 'Next.js provides the best developer experience with all the features you need for production: hybrid static & server rendering, TypeScript support, smart bundling, and route pre-fetching.',
-                    'ar' => 'يوفر Next.js أفضل تجربة للمطورين مع جميع الميزات التي تحتاجها للإنتاج: العرض الثابت والمختلط، دعم لغة TypeScript، التجميع الذكي والتحميل المسبق للمسارات.'
-                ],
-                'image' => '/our-blog/Link → post-landscape-3.jpg.png',
-                'blog_category_id' => $categoryModels['development']->id,
-                'category' => 'development',
-                'is_published' => true,
-                'is_trending' => true,
-                'author_id' => $authorId,
-                'seo_title' => ['en' => 'Next.js: Ultimate React Framework', 'ar' => 'لماذا نستخدم Next.js مع React'],
-                'seo_description' => ['en' => 'Find out why developers prefer Next.js for building scalable web apps.', 'ar' => 'تعرف على سبب تفضيل المطورين لـ Next.js لبناء تطبيقات ويب قابلة للتطوير.'],
+            'development' => [
+                'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=800&q=80',
             ],
-            [
-                'title' => ['en' => 'SEO Strategies to Rank #1 on Google Search', 'ar' => 'استراتيجيات تحسين محركات البحث لتصدر نتائج بحث جوجل'],
-                'slug' => 'seo-strategies-rank-first-google',
-                'content' => [
-                    'en' => 'SEO is constantly evolving. Learn the top strategies for search engine optimization to boost organic traffic to your site and rank first in search results through structured data, high performance, and keyword optimization.',
-                    'ar' => 'سيو يتطور باستمرار. تعلم أهم استراتيجيات تحسين محركات البحث لزيادة عدد الزيارات الطبيعية لموقعك وتصدر نتائج البحث الأولى من خلال البيانات المنظمة والأداء العالي وتحسين الكلمات المفتاحية.'
-                ],
-                'image' => '/our-blog/Linfgd post-landscape-6.jpg.png',
-                'blog_category_id' => $categoryModels['marketing']->id,
-                'category' => 'marketing',
-                'is_published' => true,
-                'is_trending' => false,
-                'author_id' => $authorId,
-                'seo_title' => ['en' => 'SEO Strategies for Google Rank', 'ar' => 'كيف تتصدر نتائج بحث جوجل'],
-                'seo_description' => ['en' => 'Discover latest SEO trends and hacks to rank first on search engines.', 'ar' => 'اكتشف أحدث صيغ وحيل السيو لتصدر نتائج محركات البحث الأولى.'],
-            ],
-            [
-                'title' => ['en' => 'A Guide to Customizing Filament Admin Panels', 'ar' => 'دليل تخصيص لوحات تحكم فيلامينت Filament'],
-                'slug' => 'guide-customizing-filament-admin-panels',
-                'content' => [
-                    'en' => 'Filament is a highly extensible administration panel builder for Laravel. This guide walks you through building custom resource widgets, custom charts, and custom actions to build powerful back offices.',
-                    'ar' => 'فيلامينت هو أداة بناء لوحات تحكم قابلة للتوسيع بشكل كبير لـ Laravel. يوضح لك هذا الدليل كيفية إنشاء أدوات الموارد المخصصة والرسوم البيانية والإجراءات المخصصة لبناء خلفية قوية.'
-                ],
-                'image' => '/our-blog/Link post-landscape-3.jpg.png',
-                'blog_category_id' => $categoryModels['development']->id,
-                'category' => 'development',
-                'is_published' => true,
-                'is_trending' => true,
-                'author_id' => $authorId,
-                'seo_title' => ['en' => 'Customizing Filament Admin Guide', 'ar' => 'دليل تخصيص لوحات تحكم Filament'],
-                'seo_description' => ['en' => 'Step-by-step tutorial to customize resources and dashboards in Filament PHP.', 'ar' => 'درس خطوة بخطوة لتخصيص الموارد ولوحات القيادة في Filament PHP.'],
+            'marketing' => [
+                'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1533750349088-cd871a92f311?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1432821596592-e2c18b78144f?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80',
             ],
         ];
 
-        foreach ($posts as $postData) {
-            Post::create($postData);
+        // --- Vocabulary for Random Generation ---
+        $vocab = [
+            'technology' => [
+                'topics' => ['Artificial Intelligence', 'Cybersecurity', 'Cloud Computing', 'Quantum Cryptography', 'Edge Analytics', 'Blockchain Nodes', 'SaaS Architectures', '5G Infrastructure', 'Internet of Things', 'Big Data Engineering'],
+                'topics_ar' => ['الذكاء الاصطناعي', 'الأمن السيبراني', 'الحوسبة السحابية', 'التشفير الكمي', 'تحليلات الحافة', 'عقد البلوكشين', 'بنيات البرمجيات كخدمة', 'بنية الجيل الخامس 5G', 'إنترنت الأشياء', 'هندسة البيانات الضخمة'],
+                'impact' => ['Revolutionizing Software Development', 'Enhancing Enterprise Efficiency', 'Empowering Global Communities', 'Securing Online Transactions', 'Optimizing Machine Learning Models', 'Redefining Digital Workspaces'],
+                'impact_ar' => ['ثورة في تطوير البرمجيات', 'تعزيز كفاءة الشركات', 'تمكين المجتمعات العالمية', 'تأمين المعاملات عبر الإنترنت', 'تحسين نماذج تعلم الآلة', 'إعادة تعريف مساحات العمل الرقمية'],
+            ],
+            'design' => [
+                'topics' => ['User Experience Design', 'Responsive Micro-interactions', 'Bento Grid UI Layouts', 'Glassmorphic Themes', 'Accessible Design Systems', 'Minimalist Aesthetics', 'Dynamic Page Transitions', 'Typography Hierarchies'],
+                'topics_ar' => ['تصميم تجربة المستخدم', 'التفاعلات الدقيقة سريعة الاستجابة', 'تخطيطات واجهة شبكة بينتو', 'السمات الزجاجية', 'أنظمة التصميم سهلة الوصول', 'الجماليات البسيطة المينيماليزم', 'انتقالات الصفحات الديناميكية', 'التسلسل الهرمي للخطوط'],
+                'impact' => ['Maximizing User Retention', 'Creating Premium Brand Impressions', 'Simplifying Interface Navigation', 'Elevating Customer Engagement', 'Optimizing Web Accessibility', 'Enhancing Interactive Experiences'],
+                'impact_ar' => ['زيادة الاحتفاظ بالمستخدمين', 'إنشاء انطباع مميز للعلامة التجارية', 'تبسيط التنقل في الواجهة', 'رفع مستوى تفاعل العملاء', 'تحسين إمكانية الوصول إلى الويب', 'تعزيز التجارب التفاعلية'],
+            ],
+            'development' => [
+                'topics' => ['Next.js App Routers', 'TypeScript Compilation', 'Prisma ORM Implementations', 'Laravel Filament Dashboards', 'Tailwind Utility Engines', 'NodeJS Cluster Pools', 'GraphQL Subscriptions', 'Dockerized Multi-Containers'],
+                'topics_ar' => ['موجهات تطبيقات Next.js', 'تجميع لغة TypeScript', 'تطبيقات Prisma ORM', 'لوحات تحكم Laravel Filament', 'محركات أدوات Tailwind CSS', 'تجميع خوادم NodeJS Cluster', 'اشتراكات ومزامنة GraphQL', 'حاويات Docker المتعددة'],
+                'impact' => ['Boosting Web Application Performance', 'Reducing Hydration Layout Shifts', 'Securing RESTful Web Services', 'Scaling Backend Node Servers', 'Enabling Fullstack Edge Deploys', 'Streamlining Git Workflows'],
+                'impact_ar' => ['زيادة أداء تطبيقات الويب', 'تقليل تغيرات تخطيط الهيدريشن', 'تأمين خدمات الويب RESTful', 'توسيع خوادم العقد الخلفية', 'تمكين نشر خوادم الحافة المتكاملة', 'تبسيط عمليات Git وسير العمل'],
+            ],
+            'marketing' => [
+                'topics' => ['Search Engine Optimization (SEO)', 'High-Converting Copywriting', 'Google Analytics 4 Tracking', 'Email Sequence Automations', 'Vibrant Content Creation', 'Brand Social Strategy', 'PPC Bid Strategies', 'Affiliate Revenue Funnels'],
+                'topics_ar' => ['تحسين محركات البحث (SEO)', 'كتابة النصوص عالية التحويل', 'تتبع تحليلات جوجل GA4', 'أتمتة تسلسلات البريد الإلكتروني', 'إنشاء المحتوى الإبداعي النابض', 'استراتيجية العلامات التجارية للتواصل الاجتماعي', 'استراتيجيات عروض أسعار النقرات', 'أقماع إيرادات التسويق بالعمولة'],
+                'impact' => ['Generating Organic Leads', 'Driving Targeted Traffic', 'Increasing ROI Performance', 'Building Sustainable Audience Engagement', 'Scaling Customer Lifespans', 'Unlocking Market Potential'],
+                'impact_ar' => ['توليد عملاء محتملين بشكل طبيعي', 'توجيه الزيارات المستهدفة للموقع', 'زيادة عائد الاستثمار ROI', 'بناء تفاعل مستدام مع الجمهور', 'توسيع دورة حياة العميل', 'إطلاق العنان للإمكانيات الكاملة للماركت'],
+            ],
+        ];
+
+        // Seed posts
+        $categoryKeys = array_keys($categories);
+        $totalPosts = 1000;
+
+        $createdAtBase = Carbon::now()->subDays($totalPosts);
+
+        for ($i = 1; $i <= $totalPosts; $i++) {
+            $catKey = $categoryKeys[$i % count($categoryKeys)];
+            $catModel = $categoryModels[$catKey];
+            
+            // Randomly select items from vocabulary
+            $topics = $vocab[$catKey]['topics'];
+            $topicsAr = $vocab[$catKey]['topics_ar'];
+            $impacts = $vocab[$catKey]['impact'];
+            $impactsAr = $vocab[$catKey]['impact_ar'];
+            
+            $topic = $topics[array_rand($topics)];
+            $topicAr = $topicsAr[array_rand($topicsAr)];
+            $impact = $impacts[array_rand($impacts)];
+            $impactAr = $impactsAr[array_rand($impactsAr)];
+            
+            $titleEn = "$topic: $impact ($i)";
+            $titleAr = "$topicAr: $impactAr ($i)";
+            
+            $slug = Str::slug($titleEn);
+            
+            $contentEn = "Discover how $topic is $impact. We explore best practices, modern tools, and expert tips to help you build outstanding products. In this comprehensive guide, we cover step-by-step procedures to optimize performance and elevate your business. Start implementing these strategies today!";
+            $contentAr = "اكتشف كيف يساهم $topicAr في $impactAr. نحن نستكشف أفضل الممارسات، الأدوات الحديثة، ونصائح الخبراء لمساعدتك على بناء منتجات رائعة. في هذا الدليل الشامل، نغطي الإجراءات خطوة بخطوة لتحسين الأداء ورفع مستوى عملك. ابدأ بتطبيق هذه الاستراتيجيات اليوم!";
+            
+            $randomImageArray = $images[$catKey];
+            $image = $randomImageArray[array_rand($randomImageArray)];
+            
+            $isTrending = ($i % 20 === 0); // 5% trending
+            
+            $postDate = (clone $createdAtBase)->addDays($i)->addHours(rand(0, 23))->addMinutes(rand(0, 59));
+
+            Post::create([
+                'title' => ['en' => $titleEn, 'ar' => $titleAr],
+                'slug' => $slug,
+                'content' => ['en' => $contentEn, 'ar' => $contentAr],
+                'image' => $image,
+                'blog_category_id' => $catModel->id,
+                'category' => $catKey,
+                'is_published' => true,
+                'is_trending' => $isTrending,
+                'author_id' => $authorId,
+                'seo_title' => ['en' => "Learn about $topic", 'ar' => "تعلم المزيد عن $topicAr"],
+                'seo_description' => ['en' => "Find out details on $topic and $impact.", 'ar' => "تعرف على التفاصيل المتعلقة بـ $topicAr وكيف يؤثر على $impactAr."],
+                'created_at' => $postDate,
+                'updated_at' => $postDate,
+            ]);
         }
     }
 }

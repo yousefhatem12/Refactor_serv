@@ -39,6 +39,7 @@ class DatabaseSeeder extends Seeder
             TestimonialSeeder::class,
             ServiceSeeder::class,
             LinkPricingPlansToServicesSeeder::class,
+            FaqSeeder::class,
         ]);
     }
 }

@@ -3,12 +3,11 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { fetchAPI } from "@/lib/api";
 import { useLanguage } from "../../context/LanguageContext";
-
 import { useAuth } from "../../context/AuthContext";
 
 const ContactForm = () => {
   const { t, language } = useLanguage();
-  const { user, login, register } = useAuth();
+  const { user, login, register, logout } = useAuth();
   const [authMode, setAuthMode] = useState("login"); // 'login' or 'register'
   const [authData, setAuthData] = useState({
     name: "",
@@ -20,7 +19,6 @@ const ContactForm = () => {
     firstName: "",
     lastName: "",
     email: "",
-    phone: "",
     phone: "",
     subject: "inquiry",
     message: "",
@@ -45,7 +43,7 @@ const ContactForm = () => {
     }
     
     if (res.success) {
-      setStatus({ type: 'success', message: 'Success!' });
+      setStatus({ type: 'success', message: language === 'ar' ? 'تم تسجيل الدخول بنجاح!' : 'Success!' });
     } else {
       setStatus({ type: 'error', message: res.message });
     }
@@ -68,7 +66,7 @@ const ContactForm = () => {
           type: formData.subject,
         }),
       });
-      setStatus({ type: 'success', message: t("contactSuccess") || 'Message sent successfully!' });
+      setStatus({ type: 'success', message: t("contactSuccess") || (language === 'ar' ? 'تم إرسال رسالتك بنجاح!' : 'Message sent successfully!') });
       setFormData({
         firstName: "",
         lastName: "",
@@ -79,7 +77,7 @@ const ContactForm = () => {
       });
     } catch (error) {
       console.error("Failed to submit message:", error);
-      setStatus({ type: 'error', message: t("contactError") || 'Failed to send message. Please try again.' });
+      setStatus({ type: 'error', message: t("contactError") || (language === 'ar' ? 'فشل إرسال الرسالة. يرجى المحاولة مرة أخرى.' : 'Failed to send message. Please try again.') });
     } finally {
       setIsSubmitting(false);
     }
@@ -92,100 +90,118 @@ const ContactForm = () => {
 
   if (!user) {
     return (
-      <div className="w-full lg:w-1/2 mt-12 lg:mt-0">
+      <div className="w-full lg:w-1/2 mt-12 lg:mt-0 relative z-10">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-[#0b0f2c]/60 backdrop-blur-md border border-white/10 rounded-2xl p-8 lg:p-12 shadow-2xl text-center"
+          transition={{ duration: 0.5 }}
+          className="bg-[#0b0f2c]/40 backdrop-blur-md border border-white/10 rounded-3xl p-8 lg:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.3)] shadow-[#FF8A00]/5 flex flex-col hover:border-white/20 transition-all duration-300"
         >
-          <h2 className="text-2xl font-bold text-white mb-4">{t("mustLogin")}</h2>
-          <div className="flex justify-center gap-4 mb-8">
+          <h2 className="text-2xl font-bold text-white mb-6 text-center">{t("mustLogin")}</h2>
+          
+          <div className="inline-flex p-1 rounded-full bg-white/[0.03] border border-white/10 mb-8 self-center">
             <button 
+              type="button"
               onClick={() => { setAuthMode("login"); setStatus(null); }}
-              className={`px-6 py-2 rounded-full transition-all ${authMode === 'login' ? 'bg-[#D98B50] text-white' : 'bg-white/10 text-gray-400'}`}
+              className={`px-6 py-2 rounded-full text-xs md:text-sm font-semibold transition-all duration-300 ${
+                authMode === 'login' 
+                  ? 'bg-gradient-to-r from-[#FF8A00] to-[#FF6A00] text-white shadow-[0_4px_15px_rgba(255,138,0,0.3)]' 
+                  : 'text-white/60 hover:text-white hover:bg-white/5'
+              }`}
             >
               {t("loginNow")}
             </button>
             <button 
+              type="button"
               onClick={() => { setAuthMode("register"); setStatus(null); }}
-              className={`px-6 py-2 rounded-full transition-all ${authMode === 'register' ? 'bg-[#D98B50] text-white' : 'bg-white/10 text-gray-400'}`}
+              className={`px-6 py-2 rounded-full text-xs md:text-sm font-semibold transition-all duration-300 ${
+                authMode === 'register' 
+                  ? 'bg-gradient-to-r from-[#FF8A00] to-[#FF6A00] text-white shadow-[0_4px_15px_rgba(255,138,0,0.3)]' 
+                  : 'text-white/60 hover:text-white hover:bg-white/5'
+              }`}
             >
               {t("registerNow")}
             </button>
           </div>
 
-          <form onSubmit={handleAuthSubmit} className="flex flex-col gap-6 text-left">
+          <form onSubmit={handleAuthSubmit} className="flex flex-col gap-5 text-left w-full">
             {status && (
-              <div className={`p-4 rounded-md text-sm ${status.type === 'success' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+              <div className={`p-4 rounded-xl text-sm font-medium ${status.type === 'success' ? 'bg-green-500/10 border border-green-500/20 text-green-400' : 'bg-red-500/10 border border-red-500/20 text-red-400'}`}>
                 {status.message}
               </div>
             )}
             
             {authMode === "register" && (
               <div className="flex flex-col gap-2">
-                <label className="text-white text-xs opacity-70">{language === 'ar' ? 'الاسم' : 'Name'}</label>
+                <label className="text-white/80 text-xs font-semibold uppercase tracking-wider">{language === 'ar' ? 'الاسم' : 'Name'}</label>
                 <input
                   type="text"
                   name="name"
                   value={authData.name}
                   onChange={handleAuthChange}
                   required
-                  className="bg-transparent border-b border-gray-600 focus:border-blue-400 outline-none text-white pb-2 text-sm transition-colors"
+                  className="w-full bg-white/[0.03] border border-white/10 focus:border-[#FF8A00] focus:bg-[#FF8A00]/5 rounded-xl px-4 py-3 outline-none text-white text-sm transition-all duration-300 focus:shadow-[0_0_15px_rgba(255,138,0,0.2)] placeholder-white/20"
+                  placeholder={language === 'ar' ? 'الاسم الكامل' : 'Full Name'}
                 />
               </div>
             )}
 
             <div className="flex flex-col gap-2">
-              <label className="text-white text-xs opacity-70">{language === 'ar' ? 'البريد الإلكتروني' : 'Email'}</label>
+              <label className="text-white/80 text-xs font-semibold uppercase tracking-wider">{language === 'ar' ? 'البريد الإلكتروني' : 'Email'}</label>
               <input
                 type="email"
                 name="email"
                 value={authData.email}
                 onChange={handleAuthChange}
                 required
-                className="bg-transparent border-b border-gray-600 focus:border-blue-400 outline-none text-white pb-2 text-sm transition-colors"
+                className="w-full bg-white/[0.03] border border-white/10 focus:border-[#FF8A00] focus:bg-[#FF8A00]/5 rounded-xl px-4 py-3 outline-none text-white text-sm transition-all duration-300 focus:shadow-[0_0_15px_rgba(255,138,0,0.2)] placeholder-white/20"
+                placeholder="example@email.com"
               />
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-white text-xs opacity-70">{language === 'ar' ? 'كلمة المرور' : 'Password'}</label>
+              <label className="text-white/80 text-xs font-semibold uppercase tracking-wider">{language === 'ar' ? 'كلمة المرور' : 'Password'}</label>
               <input
                 type="password"
                 name="password"
                 value={authData.password}
                 onChange={handleAuthChange}
                 required
-                className="bg-transparent border-b border-gray-600 focus:border-blue-400 outline-none text-white pb-2 text-sm transition-colors"
+                className="w-full bg-white/[0.03] border border-white/10 focus:border-[#FF8A00] focus:bg-[#FF8A00]/5 rounded-xl px-4 py-3 outline-none text-white text-sm transition-all duration-300 focus:shadow-[0_0_15px_rgba(255,138,0,0.2)] placeholder-white/20"
+                placeholder="••••••••"
               />
             </div>
 
             {authMode === "register" && (
               <div className="flex flex-col gap-2">
-                <label className="text-white text-xs opacity-70">{language === 'ar' ? 'تأكيد كلمة المرور' : 'Confirm Password'}</label>
+                <label className="text-white/80 text-xs font-semibold uppercase tracking-wider">{language === 'ar' ? 'تأكيد كلمة المرور' : 'Confirm Password'}</label>
                 <input
                   type="password"
                   name="password_confirmation"
                   value={authData.password_confirmation}
                   onChange={handleAuthChange}
                   required
-                  className="bg-transparent border-b border-gray-600 focus:border-blue-400 outline-none text-white pb-2 text-sm transition-colors"
+                  className="w-full bg-white/[0.03] border border-white/10 focus:border-[#FF8A00] focus:bg-[#FF8A00]/5 rounded-xl px-4 py-3 outline-none text-white text-sm transition-all duration-300 focus:shadow-[0_0_15px_rgba(255,138,0,0.2)] placeholder-white/20"
+                  placeholder="••••••••"
                 />
               </div>
             )}
 
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02, boxShadow: "0 0 20px rgba(255, 138, 0, 0.4)" }}
+              whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-white text-black py-3 rounded-md font-bold mt-4 hover:bg-gray-200 disabled:opacity-50 transition-all"
+              className="w-full bg-gradient-to-r from-[#FF8A00] to-[#FF6A00] text-white py-3.5 rounded-xl font-bold mt-4 hover:brightness-110 disabled:opacity-50 transition-all shadow-[0_4px_20px_rgba(255,138,0,0.25)]"
             >
               {isSubmitting ? '...' : (authMode === 'login' ? t("loginNow") : t("registerNow"))}
-            </button>
+            </motion.button>
 
-            <p className="text-gray-400 text-xs text-center mt-2">
+            <p className="text-white/40 text-xs text-center mt-4">
               {authMode === 'login' ? t("donthaveAccount") : t("alreadyhaveAccount")}{' '}
               <span 
                 onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')}
-                className="text-[#D98B50] cursor-pointer hover:underline"
+                className="text-[#FF8A00] font-semibold cursor-pointer hover:underline"
               >
                 {authMode === 'login' ? t("registerNow") : t("loginNow")}
               </span>
@@ -197,128 +213,148 @@ const ContactForm = () => {
   }
 
   return (
-    <div className="w-full lg:w-1/2 mt-12 lg:mt-0">
+    <div className="w-full lg:w-1/2 mt-12 lg:mt-0 relative z-10">
       <motion.div
-        initial={{ opacity: 0, x: 20 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true }}
-        className="bg-[#0b0f2c]/60 backdrop-blur-md border border-white/10 rounded-2xl p-8 lg:p-12 shadow-2xl"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className="bg-[#0b0f2c]/40 backdrop-blur-md border border-white/10 rounded-3xl p-8 lg:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.3)] shadow-[#FF8A00]/5 flex flex-col hover:border-white/20 transition-all duration-300"
       >
-        <div className="flex justify-between items-center mb-6">
-          <p className="text-gray-400 text-sm">Welcome, <span className="text-white font-bold">{user.name}</span></p>
-          <button onClick={() => window.location.reload()} className="text-xs text-[#D98B50] hover:underline">Logout</button>
+        <div className="flex justify-between items-center mb-8 pb-4 border-b border-white/5">
+          <p className="text-white/60 text-sm">
+            {language === 'ar' ? 'مرحباً، ' : 'Welcome, '} 
+            <span className="text-white font-semibold">{user.name}</span>
+          </p>
+          <button 
+            type="button"
+            onClick={logout} 
+            className="text-xs font-semibold text-[#FF8A00] hover:text-[#FF6A00] transition-colors border border-[#FF8A00]/30 hover:border-[#FF8A00] px-3 py-1.5 rounded-lg bg-[#FF8A00]/5 hover:bg-[#FF8A00]/10"
+          >
+            {language === 'ar' ? 'تسجيل الخروج' : 'Logout'}
+          </button>
         </div>
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col gap-8"
-        >
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           {status && (
-            <div className={`p-4 rounded-md ${status.type === 'success' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+            <div className={`p-4 rounded-xl text-sm font-medium ${status.type === 'success' ? 'bg-green-500/10 border border-green-500/20 text-green-400' : 'bg-red-500/10 border border-red-500/20 text-red-400'}`}>
               {status.message}
             </div>
           )}
+
           {/* Row 1 */}
-          <div className="flex flex-col md:flex-row gap-8">
+          <div className="flex flex-col md:flex-row gap-6">
             <div className="w-full md:w-1/2 flex flex-col gap-2">
-              <label className="text-white text-sm">{t("contactFirstName")}</label>
+              <label className="text-white/80 text-xs font-semibold uppercase tracking-wider">{t("contactFirstName")}</label>
               <input
                 type="text"
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleChange}
                 required
-                className="bg-transparent border-b border-gray-600 focus:border-blue-400 outline-none text-white pb-2 text-sm transition-colors"
-                placeholder=""
+                className="w-full bg-white/[0.03] border border-white/10 focus:border-[#FF8A00] focus:bg-[#FF8A00]/5 rounded-xl px-4 py-3 outline-none text-white text-sm transition-all duration-300 focus:shadow-[0_0_15px_rgba(255,138,0,0.2)] placeholder-white/20"
+                placeholder={language === 'ar' ? 'الاسم الأول' : 'First Name'}
               />
             </div>
             <div className="w-full md:w-1/2 flex flex-col gap-2">
-              <label className="text-white text-sm">{t("contactLastName")}</label>
+              <label className="text-white/80 text-xs font-semibold uppercase tracking-wider">{t("contactLastName")}</label>
               <input
                 type="text"
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
-                className="bg-transparent border-b border-gray-600 focus:border-blue-400 outline-none text-white pb-2 text-sm transition-colors"
-                placeholder="Doe"
+                className="w-full bg-white/[0.03] border border-white/10 focus:border-[#FF8A00] focus:bg-[#FF8A00]/5 rounded-xl px-4 py-3 outline-none text-white text-sm transition-all duration-300 focus:shadow-[0_0_15px_rgba(255,138,0,0.2)] placeholder-white/20"
+                placeholder={language === 'ar' ? 'الاسم الأخير' : 'Last Name'}
               />
             </div>
           </div>
 
           {/* Row 2 */}
-          <div className="flex flex-col md:flex-row gap-8">
+          <div className="flex flex-col md:flex-row gap-6">
             <div className="w-full md:w-1/2 flex flex-col gap-2">
-              <label className="text-white text-sm">{t("contactEmail")}</label>
+              <label className="text-white/80 text-xs font-semibold uppercase tracking-wider">{t("contactEmail")}</label>
               <input
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="bg-transparent border-b border-gray-600 focus:border-blue-400 outline-none text-white pb-2 text-sm transition-colors"
-                placeholder=""
+                className="w-full bg-white/[0.03] border border-white/10 focus:border-[#FF8A00] focus:bg-[#FF8A00]/5 rounded-xl px-4 py-3 outline-none text-white text-sm transition-all duration-300 focus:shadow-[0_0_15px_rgba(255,138,0,0.2)] placeholder-white/20"
+                placeholder="example@email.com"
               />
             </div>
-            <div className="w-full md:w-1/2 flex flex-col gap-2 relative">
-              <label className="text-white text-sm">{t("contactPhone")}</label>
+            <div className="w-full md:w-1/2 flex flex-col gap-2">
+              <label className="text-white/80 text-xs font-semibold uppercase tracking-wider">{t("contactPhone")}</label>
               <input
                 type="tel"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                className="bg-transparent border-b border-gray-600 focus:border-blue-400 outline-none text-white pb-2 text-sm transition-colors pr-8"
+                className="w-full bg-white/[0.03] border border-white/10 focus:border-[#FF8A00] focus:bg-[#FF8A00]/5 rounded-xl px-4 py-3 outline-none text-white text-sm transition-all duration-300 focus:shadow-[0_0_15px_rgba(255,138,0,0.2)] placeholder-white/20"
                 placeholder="+1 012 3456 789"
               />
             </div>
           </div>
 
-          {/* Subject Radio Buttons */}
-          <div className="flex flex-col gap-4 mt-2">
-            <label className="text-white font-semibold">{t("contactSubject")}</label>
-            <div className="flex flex-wrap gap-6 text-sm text-gray-300">
+          {/* Subject Selector Chips */}
+          <div className="flex flex-col gap-3">
+            <label className="text-white/80 text-xs font-semibold uppercase tracking-wider">{t("contactSubject")}</label>
+            <div className="flex flex-wrap gap-2 text-sm text-gray-300">
               {[
                 { value: 'inquiry', label: language === 'ar' ? 'استفسار عام' : 'General Inquiry' },
                 { value: 'pricing', label: language === 'ar' ? 'أسعار ومبيعات' : 'Pricing & Sales' },
                 { value: 'complaint', label: language === 'ar' ? 'شكاوى' : 'Complaints' },
                 { value: 'support', label: language === 'ar' ? 'دعم فني' : 'Technical Support' },
                 { value: 'job', label: language === 'ar' ? 'طلب توظيف' : 'Job Application' },
-              ].map((sub) => (
-                <label key={sub.value} className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="subject"
-                    value={sub.value}
-                    checked={formData.subject === sub.value}
-                    onChange={handleChange}
-                    className="accent-blue-500 w-4 h-4"
-                  />
-                  {sub.label}
-                </label>
-              ))}
+              ].map((sub) => {
+                const isSelected = formData.subject === sub.value;
+                return (
+                  <label 
+                    key={sub.value} 
+                    className={`flex items-center justify-center px-4 py-2.5 rounded-xl border text-xs md:text-sm font-medium cursor-pointer transition-all duration-300 ${
+                      isSelected 
+                        ? 'border-[#FF8A00] bg-[#FF8A00]/10 text-white shadow-[0_0_15px_rgba(255,138,0,0.15)]' 
+                        : 'border-white/10 bg-white/[0.02] text-white/60 hover:border-white/20 hover:bg-white/[0.05]'
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="subject"
+                      value={sub.value}
+                      checked={isSelected}
+                      onChange={handleChange}
+                      className="sr-only"
+                    />
+                    {sub.label}
+                  </label>
+                );
+              })}
             </div>
           </div>
 
           {/* Message */}
-          <div className="flex flex-col gap-2 mt-4">
-            <label className="text-white text-sm">{t("contactMessageLabel")}</label>
+          <div className="flex flex-col gap-2">
+            <label className="text-white/80 text-xs font-semibold uppercase tracking-wider">{t("contactMessageLabel")}</label>
             <textarea
               name="message"
               value={formData.message}
               onChange={handleChange}
               required
-              className="bg-transparent border-b border-gray-600 focus:border-blue-400 outline-none text-white pb-2 text-sm transition-colors resize-none h-10"
+              className="w-full bg-white/[0.03] border border-white/10 focus:border-[#FF8A00] focus:bg-[#FF8A00]/5 rounded-xl px-4 py-3 outline-none text-white text-sm transition-all duration-300 focus:shadow-[0_0_15px_rgba(255,138,0,0.2)] resize-none h-32 placeholder-white/20"
               placeholder={language === 'ar' ? 'اكتب رسالتك هنا..' : 'Write your message..'}
             ></textarea>
           </div>
 
           {/* Submit Button */}
           <div className="flex justify-end mt-4">
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(255, 138, 0, 0.5)" }}
+              whileTap={{ scale: 0.95 }}
               type="submit"
               disabled={isSubmitting}
-              className="bg-white text-black px-8 py-3 rounded-md font-semibold text-sm hover:bg-gray-200 transition-colors shadow-lg disabled:opacity-50"
+              className="bg-gradient-to-r from-[#FF8A00] to-[#FF6A00] text-white px-8 py-3.5 rounded-xl font-bold text-sm hover:brightness-110 transition-all shadow-[0_4px_20px_rgba(255,138,0,0.25)] disabled:opacity-50"
             >
-              {isSubmitting ? t("contactSending") || 'Sending...' : t("contactSendMessage") || 'Send Message'}
-            </button>
+              {isSubmitting ? (t("contactSending") || 'Sending...') : (t("contactSendMessage") || 'Send Message')}
+            </motion.button>
           </div>
         </form>
       </motion.div>

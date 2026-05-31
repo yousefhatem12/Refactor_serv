@@ -154,28 +154,96 @@ const OnlineWebsite = () => {
   const sectionRef = useRef(null);
   const sliderRef = useRef(null);
   const [mounted, setMounted] = useState(false);
-  const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
 
+  // Pagination & Loading States
+  const [productsList, setProductsList] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+  // Fetch categories dynamically on mount
   useEffect(() => {
     setMounted(true);
-
-    const fetchProjects = async () => {
-      try {
-        setIsLoading(true);
-        const data = await fetchAPI(`/products?lang=${language}`);
-        if (data && data.length > 0) {
-          setProducts(data);
+    fetchAPI(`/product-categories?lang=${language}`)
+      .then((data) => {
+        if (data && Array.isArray(data)) {
+          setCategories([
+            { id: "all", label: language === "ar" ? "الكل" : "All" },
+            ...data,
+          ]);
         }
-      } catch (error) {
-        console.error("Failed to fetch projects:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchProjects();
+      })
+      .catch((err) => {
+        console.error("Failed to fetch product categories:", err);
+      });
   }, [language]);
+
+  // Fetch products dynamically when tab, page, or language changes
+  useEffect(() => {
+    let isMounted = true;
+
+    if (currentPage === 1) {
+      setIsLoading(true);
+    } else {
+      setIsLoadingMore(true);
+    }
+
+    const categoryQuery = activeTab === "all" ? "all" : activeTab;
+
+    fetchAPI(
+      `/products?lang=${language}&category=${categoryQuery}&page=${currentPage}&per_page=3`,
+    )
+      .then((res) => {
+        if (!isMounted) return;
+
+        if (res && Array.isArray(res.data)) {
+          if (currentPage === 1) {
+            setProductsList(res.data);
+          } else {
+            setProductsList((prev) => {
+              const newProducts = res.data.filter(
+                (item) => !prev.some((p) => p.id === item.id),
+              );
+              return [...prev, ...newProducts];
+            });
+          }
+          setHasMore(res.has_more);
+        } else if (res && Array.isArray(res)) {
+          setProductsList(res);
+          setHasMore(false);
+        } else {
+          if (currentPage === 1) {
+            setProductsList([]);
+          }
+          setHasMore(false);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to fetch products:", err);
+        if (currentPage === 1 && isMounted) {
+          setProductsList([]);
+          setHasMore(false);
+        }
+      })
+      .finally(() => {
+        if (isMounted) {
+          setIsLoading(false);
+          setIsLoadingMore(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [activeTab, currentPage, language]);
+
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    setCurrentPage(1);
+    setProductsList([]); // Clear previous list immediately to trigger skeleton
+  };
 
   const scrollLeft = () => {
     if (sliderRef.current) {
@@ -188,21 +256,6 @@ const OnlineWebsite = () => {
       sliderRef.current.scrollBy({ left: 320, behavior: "smooth" });
     }
   };
-
-  const uniqueCategories = [
-    { id: "all", label: language === "ar" ? "الكل" : "All" },
-    ...Array.from(new Set(products.map((p) => p.category).filter(Boolean))).map(
-      (cat) => ({
-        id: cat,
-        label: cat,
-      }),
-    ),
-  ];
-
-  const filteredProducts =
-    activeTab === "all"
-      ? products
-      : products.filter((p) => p.category === activeTab);
 
   if (!mounted) return null;
 
@@ -266,14 +319,14 @@ const OnlineWebsite = () => {
 
         {/* Categories / Tabs */}
         <div className="grid grid-cols-3 sm:grid-cols-3 lg:flex lg:flex-col gap-3 w-full">
-          {uniqueCategories.map((cat, index) => (
+          {categories.map((cat, index) => (
             <motion.button
               key={cat.id}
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05, duration: 0.4 }}
               viewport={{ once: true }}
-              onClick={() => setActiveTab(cat.id)}
+              onClick={() => handleTabChange(cat.id)}
               className={`relative px-4 py-3 lg:px-3 lg:py-4 text-center lg:text-left whitespace-nowrap rounded-xl lg:rounded-2xl transition-all duration-300 flex items-center justify-center lg:justify-start group overflow-hidden z-10 ${
                 activeTab === cat.id
                   ? "text-white font-bold bg-transparent lg:bg-white/10 border border-transparent lg:border-white/20 shadow-none lg:shadow-[0_0_30px_rgba(255,255,255,0.05)] lg:backdrop-blur-md"
@@ -371,9 +424,103 @@ const OnlineWebsite = () => {
             <div className="w-8 lg:w-16 shrink-0" />
 
             <AnimatePresence mode="popLayout">
-              {filteredProducts.map((product, index) => (
-                <ProductCard key={product.id} product={product} index={index} />
-              ))}
+              {isLoading ? (
+                // Initial page loading skeletons (3 cards)
+                [1, 2, 3].map((i) => (
+                  <div
+                    key={`skeleton-init-${i}`}
+                    className="shrink-0 snap-center w-[250px] md:w-[280px] py-10"
+                  >
+                    <div className="relative w-full h-[350px] md:h-[400px] lg:h-[420px] rounded-3xl bg-white/5 border border-white/10 animate-pulse" />
+                  </div>
+                ))
+              ) : productsList.length > 0 ? (
+                <>
+                  {productsList.map((product, index) => (
+                    <ProductCard
+                      key={product.id}
+                      product={product}
+                      index={index}
+                    />
+                  ))}
+
+                  {/* Skeletons while loading more */}
+                  {isLoadingMore &&
+                    [1, 2].map((i) => (
+                      <div
+                        key={`skeleton-more-${i}`}
+                        className="shrink-0 snap-center w-[250px] md:w-[280px] py-10"
+                      >
+                        <div className="relative w-full h-[350px] md:h-[400px] lg:h-[420px] rounded-3xl bg-white/5 border border-white/10 animate-pulse" />
+                      </div>
+                    ))}
+
+                  {/* Gorgeous glowing "Load More" Card */}
+                  {hasMore && !isLoadingMore && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      transition={{ duration: 0.4 }}
+                      className="shrink-0 snap-center w-[250px] md:w-[280px] perspective-[1000px] py-10"
+                    >
+                      <div
+                        onClick={() => setCurrentPage((prev) => prev + 1)}
+                        className="relative w-full h-[350px] md:h-[400px] lg:h-[420px] rounded-3xl bg-gradient-to-br from-orange-600/20 to-red-900/20 p-[1px] group cursor-pointer"
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl blur-md" />
+                        <div className="relative w-full h-full bg-[#0a0a0f]/80 backdrop-blur-2xl rounded-3xl p-6 flex flex-col items-center justify-center border border-white/5 group-hover:border-[#FF8A00]/30 transition-all duration-500 text-center">
+                          <div className="w-16 h-16 rounded-full bg-[#FF8A00]/10 border border-[#FF8A00]/30 flex items-center justify-center mb-6 group-hover:bg-[#FF8A00] group-hover:text-white group-hover:scale-110 transition-all duration-500 shadow-[0_0_20px_rgba(255,138,0,0.2)]">
+                            <svg
+                              className="w-8 h-8 text-[#FF8A00] group-hover:text-white transition-colors"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2.5}
+                                d="M12 4v16m8-8H4"
+                              />
+                            </svg>
+                          </div>
+                          <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#FF8A00] transition-colors uppercase tracking-wide">
+                            {t("loadMore") ||
+                              (language === "ar" ? "عرض المزيد" : "Load More")}
+                          </h3>
+                          <p className="text-gray-400 text-xs leading-relaxed max-w-[180px]">
+                            {language === "ar"
+                              ? "اكتشف المزيد من المنتجات والمشاريع التقنية المميزة"
+                              : "Discover more premium tech products and solutions"}
+                          </p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </>
+              ) : (
+                <div className="col-span-full py-16 flex flex-col items-center justify-center text-center w-full min-w-[300px]">
+                  <svg
+                    className="w-12 h-12 text-gray-500 mb-4 opacity-50"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                    />
+                  </svg>
+                  <p className="text-gray-400 font-medium">
+                    {language === "ar"
+                      ? "لا توجد منتجات في هذا القسم حالياً"
+                      : "No products found in this category"}
+                  </p>
+                </div>
+              )}
             </AnimatePresence>
 
             {/* Empty spacer for horizontal scroll end padding */}

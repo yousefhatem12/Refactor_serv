@@ -216,6 +216,72 @@ class ProductsAndCareersSeeder extends Seeder
             Product::updateOrCreate(['slug' => $data['slug']], $data);
         }
 
+        // Seed 1000 dummy products
+        $categories = [
+            ['en' => 'Furniture Store', 'ar' => 'تجارة إلكترونية للأثاث'],
+            ['en' => 'Medical Clinic', 'ar' => 'إدارة الرعاية الصحية'],
+            ['en' => 'E-Learning', 'ar' => 'المنصات التعليمية وأنظمة التعلم'],
+            ['en' => 'Real Estate', 'ar' => 'منصات التسويق والوساطة العقارية'],
+            ['en' => 'Restaurant & Cafe', 'ar' => 'المنيو الرقمي والطلب الذاتي'],
+            ['en' => 'Fitness & Gym', 'ar' => 'إدارة الصالات والنوادي الرياضية'],
+        ];
+
+        $techSpecsOptions = [
+            ['Next.js', 'React', 'TailwindCSS', 'Node.js', 'MongoDB', 'Framer Motion'],
+            ['React', 'Next.js', 'TailwindCSS', 'Express.js', 'PostgreSQL', 'Node.js'],
+            ['Next.js', 'React', 'Node.js', 'TailwindCSS', 'GraphQL', 'PostgreSQL'],
+            ['React', 'Next.js', 'TailwindCSS', 'Node.js', 'MongoDB', 'Mapbox API'],
+            ['Next.js', 'React', 'TailwindCSS', 'Socket.io', 'Firebase', 'Node.js'],
+        ];
+
+        for ($i = 1; $i <= 1000; $i++) {
+            $cat = $categories[$i % count($categories)];
+            $tech = $techSpecsOptions[$i % count($techSpecsOptions)];
+            $imgNum = ($i % 6) + 1;
+            Product::updateOrCreate(
+                ['slug' => "dummy-product-{$i}"],
+                [
+                    'name' => [
+                        'en' => "Premium Product {$i}",
+                        'ar' => "منتج مميز رقم {$i}"
+                    ],
+                    'category' => $cat,
+                    'title' => [
+                        'en' => "Professional Product Design {$i}",
+                        'ar' => "تصميم منتج احترافي رقم {$i}"
+                    ],
+                    'description' => [
+                        'en' => "This is a detailed description for Premium Product {$i}. It offers state-of-the-art features, elegant design, and seamless performance built on modern tech stack.",
+                        'ar' => "هذا وصف تفصيلي للمنتج المميز رقم {$i}. يوفر ميزات متطورة وتصميماً أنيقاً وأداءً سلساً مبنياً على أحدث التقنيات الحديثة."
+                    ],
+                    'image' => "/portfolio/image-{$imgNum}.png",
+                    'demo_link' => '#',
+                    'order_link' => '#',
+                    'features' => [
+                        'en' => [
+                            ['title' => "Feature A for {$i}", 'desc' => "Advanced feature description for item {$i}"],
+                            ['title' => "Feature B for {$i}", 'desc' => "Responsive visual capabilities for item {$i}"]
+                        ],
+                        'ar' => [
+                            ['title' => "ميزة أ للمنتج {$i}", 'desc' => "وصف الميزة المتقدمة للمنتج رقم {$i}"],
+                            ['title' => "ميزة ب للمنتج {$i}", 'desc' => "قدرات بصرية متجاوبة للمنتج رقم {$i}"]
+                        ]
+                    ],
+                    'tech_specs' => $tech,
+                    'why_choose_us' => [
+                        'en' => "High scalability, low latency, and modern design templates.",
+                        'ar' => "قابلية عالية للتوسع، سرعة استجابة فائقة، وقوالب تصميم حديثة."
+                    ],
+                    'samples' => [
+                        "/portfolio/image-1.png",
+                        "/portfolio/image-2.png",
+                        "/portfolio/image-3.png",
+                    ],
+                    'is_active' => true
+                ]
+            );
+        }
+
         // 2. Seed Careers
         $jobsData = [
             [
@@ -562,6 +628,38 @@ class ProductsAndCareersSeeder extends Seeder
 
         foreach ($jobsData as $data) {
             Career::updateOrCreate(['title->en' => $data['title']['en']], $data);
+        }
+
+        // Seed 1000 dummy careers
+        $departmentsList = ['Development', 'Design', 'Marketing', 'HR'];
+        for ($i = 1; $i <= 1000; $i++) {
+            $baseJob = $jobsData[$i % count($jobsData)];
+            $dept = $departmentsList[$i % count($departmentsList)];
+            Career::updateOrCreate(
+                ['title->en' => $baseJob['title']['en'] . " #{$i}"],
+                [
+                    'title' => [
+                        'en' => $baseJob['title']['en'] . " #{$i}",
+                        'ar' => $baseJob['title']['ar'] . " رقم {$i}"
+                    ],
+                    'department' => $dept,
+                    'location' => [
+                        'en' => $baseJob['location']['en'],
+                        'ar' => $baseJob['location']['ar']
+                    ],
+                    'salary' => [
+                        'en' => $baseJob['salary']['en'],
+                        'ar' => $baseJob['salary']['ar']
+                    ],
+                    'description' => [
+                        'en' => $baseJob['description']['en'] . " (Reference #{$i})",
+                        'ar' => $baseJob['description']['ar'] . " (مرجع رقم {$i})"
+                    ],
+                    'responsibilities' => $baseJob['responsibilities'],
+                    'requirements' => $baseJob['requirements'],
+                    'is_active' => true
+                ]
+            );
         }
     }
 }
