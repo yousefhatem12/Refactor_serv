@@ -23,9 +23,17 @@ const BankAccountsContent = () => {
   const [loading, setLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  useEffect(() => {
+  const [prevTab, setPrevTab] = useState(activeTab);
+  const [prevLang, setPrevLang] = useState(language);
+
+  if (activeTab !== prevTab || language !== prevLang) {
+    setPrevTab(activeTab);
+    setPrevLang(language);
     setLoading(true);
     setCurrentPage(1);
+  }
+
+  useEffect(() => {
     fetchAPI(`/bank-accounts?lang=${language}&country=${activeTab}&page=1&per_page=6`)
       .then((res) => {
         if (res && Array.isArray(res.data)) {
