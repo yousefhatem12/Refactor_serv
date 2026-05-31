@@ -7,23 +7,70 @@ import { useLanguage } from "../../../context/LanguageContext";
 const OurPortfolio = ({ activeCategoryId }) => {
   const { t, language } = useLanguage();
   const [portfolioItems, setPortfolioItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+  // Reset page and items when language changes
+  useEffect(() => {
+    setCurrentPage(1);
+    setPortfolioItems([]);
+  }, [language]);
 
   useEffect(() => {
-    const fetchPortfolio = async () => {
-      try {
-        setIsLoading(true);
-        const data = await fetchAPI(`/portfolio?lang=${language}`);
-        setPortfolioItems(data);
-      } catch (error) {
-        console.error("Failed to fetch portfolio:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    let isMounted = true;
 
-    fetchPortfolio();
-  }, [language]);
+    if (currentPage === 1) {
+      setIsLoading(true);
+    } else {
+      setIsLoadingMore(true);
+    }
+
+    fetchAPI(`/portfolio?lang=${language}&page=${currentPage}&per_page=3`)
+      .then((res) => {
+        if (!isMounted) return;
+
+        if (res && Array.isArray(res.data)) {
+          if (currentPage === 1) {
+            setPortfolioItems(res.data);
+          } else {
+            setPortfolioItems((prev) => {
+              const newItems = res.data.filter(
+                (item) => !prev.some((p) => p.id === item.id),
+              );
+              return [...prev, ...newItems];
+            });
+          }
+          setHasMore(res.has_more);
+        } else if (res && Array.isArray(res)) {
+          setPortfolioItems(res);
+          setHasMore(false);
+        } else {
+          if (currentPage === 1) {
+            setPortfolioItems([]);
+          }
+          setHasMore(false);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to fetch portfolio:", err);
+        if (currentPage === 1 && isMounted) {
+          setPortfolioItems([]);
+          setHasMore(false);
+        }
+      })
+      .finally(() => {
+        if (isMounted) {
+          setIsLoading(false);
+          setIsLoadingMore(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [currentPage, language]);
 
   // Filter items based on category if needed
   const items = Array.isArray(portfolioItems) ? portfolioItems : [];
@@ -136,6 +183,59 @@ const OurPortfolio = ({ activeCategoryId }) => {
               </motion.div>
             );
           })}
+
+          {hasMore && (
+            <div className="flex justify-center mt-12 w-full col-span-2">
+              <button
+                onClick={() => setCurrentPage((prev) => prev + 1)}
+                disabled={isLoadingMore}
+                className="flex items-center justify-center gap-2 px-8 py-3.5 bg-gradient-to-r from-[#FF8A00] to-[#E1804E] hover:from-[#E1804E] hover:to-[#FF8A00] text-white font-bold rounded-xl shadow-[0_0_20px_rgba(255,138,0,0.3)] hover:shadow-[0_0_30px_rgba(255,138,0,0.5)] active:scale-95 disabled:opacity-50 transition-all cursor-pointer border-none uppercase tracking-wider text-sm"
+              >
+                {isLoadingMore ? (
+                  <>
+                    <svg
+                      className="animate-spin h-5 w-5 text-white"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                      />
+                    </svg>
+                    {language === "ar" ? "جاري التحميل..." : "Loading..."}
+                  </>
+                ) : (
+                  <>
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2.5"
+                        d="M12 4v16m8-8H4"
+                      />
+                    </svg>
+                    {t("loadMore") ||
+                      (language === "ar" ? "عرض المزيد" : "Load More")}
+                  </>
+                )}
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

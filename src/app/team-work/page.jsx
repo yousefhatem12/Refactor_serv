@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../context/LanguageContext";
 import { fetchAPI, getMediaUrl } from "@/lib/api";
+import Loading from "../loading";
 import {
   FaLinkedin,
   FaGithub,
@@ -144,6 +145,10 @@ export default function TeamWorkPage() {
       .catch((err) => console.warn("Failed to fetch database team data:", err))
       .finally(() => setLoading(false));
   }, [language]);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   // Merge API data if exists, otherwise use fallback defaults
   const displayTeam =

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import FAQContent from "../components/FAQ/FAQContent";
 import { fetchAPI } from "@/lib/api";
 import { useLanguage } from "../context/LanguageContext";
+import Loading from "../loading";
 
 export default function FAQPage() {
   const { language } = useLanguage();
@@ -13,6 +14,10 @@ export default function FAQPage() {
       if (data) setPageData(data);
     }).catch(console.error);
   }, [language]);
+
+  if (!pageData) {
+    return <Loading />;
+  }
 
   return (
     <main className="flex min-h-screen flex-col relative overflow-x-hidden">

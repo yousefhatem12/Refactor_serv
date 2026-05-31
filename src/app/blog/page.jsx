@@ -16,7 +16,7 @@ export default function BlogPage() {
       if (data) setPageData(data);
     }).catch(console.error);
 
-    fetchAPI(`/blog?lang=${language}`).then(data => {
+    fetchAPI(`/blog?lang=${language}&limit=4`).then(data => {
       if (data) setPosts(data);
     }).catch(console.error);
   }, [language]);

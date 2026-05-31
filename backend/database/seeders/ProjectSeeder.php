@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Project;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 class ProjectSeeder extends Seeder
 {
@@ -15,130 +16,115 @@ class ProjectSeeder extends Seeder
         Project::truncate();
         Schema::enableForeignKeyConstraints();
 
-        $projects = [
-            // --- WEBSITES ---
-            [
-                'name' => ['en' => 'SaaS Enterprise ERP', 'ar' => 'نظام تخطيط موارد المؤسسات ERP'],
-                'category' => 'websites',
-                'description' => ['en' => 'A comprehensive cloud-based ERP solution for managing sales, inventory, and human resources with advanced analytics.', 'ar' => 'حل سحابي شامل لإدارة المبيعات والمخازن والموارد البشرية مع تحليلات متقدمة ولوحة تحكم ذكية.'],
-                'client' => 'Al-Futtaim Group',
-                'url' => 'https://example.com',
-                'tags' => ['Laravel', 'React', 'Tailwind CSS'],
-                'type' => 'portfolio',
-                'image' => '/portfolio/image-1.png',
+        // --- Unsplash Images per Category ---
+        $images = [
+            'websites' => [
+                'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1541462608141-2ff580dd0e4e?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&w=800&q=80',
             ],
-            [
-                'name' => ['en' => 'Real Estate Listing Hub', 'ar' => 'منصة عقارات دوت كوم'],
-                'category' => 'websites',
-                'description' => ['en' => 'A premium property listing platform featuring map search, virtual tours, and mortgage calculators for buyers and brokers.', 'ar' => 'منصة متكاملة لعرض وإدارة العقارات تتميز بالبحث الذكي على الخريطة والجولات الافتراضية وحساب القروض.'],
-                'client' => 'Diyar Real Estate',
-                'url' => 'https://example.com',
-                'tags' => ['React', 'Node.js', 'Google Maps API', 'MongoDB'],
-                'type' => 'portfolio',
-                'image' => '/portfolio/image-2.png',
+            'mobile' => [
+                'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1551650975-87deedd944c3?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1581291518655-9523c932dedf?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&w=800&q=80',
             ],
-            [
-                'name' => ['en' => 'Educational Academy LMS', 'ar' => 'أكاديمية التعليم الذكي LMS'],
-                'category' => 'websites',
-                'description' => ['en' => 'An interactive learning management system supporting live classrooms, online exams, and certification workflows.', 'ar' => 'منصة تعليم تفاعلية تدعم البث المباشر للمحاضرات، الاختبارات الإلكترونية وإصدار الشهادات التلقائية.'],
-                'client' => 'Rowad Academy',
-                'url' => 'https://example.com',
-                'tags' => ['Vue.js', 'Laravel', 'WebRTC', 'MySQL'],
-                'type' => 'portfolio',
-                'image' => '/portfolio/image-3.png',
+            'motion' => [
+                'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1536240478700-b869070f9279?auto=format&fit=crop&w=800&q=80',
             ],
-
-            // --- MOBILE APPS ---
-            [
-                'name' => ['en' => 'QuickDelivery Rider App', 'ar' => 'تطبيق كويك ديليفري للمندوبين'],
-                'category' => 'mobile',
-                'description' => ['en' => 'On-demand delivery mobile application with real-time routing, customer notifications, and secure payment processing.', 'ar' => 'تطبيق توصيل سريع يدعم تتبع خط السير الحي للمناديب، التنبيهات الفورية وبوابات الدفع الآمنة.'],
-                'client' => 'QuickExpress',
-                'url' => 'https://example.com',
-                'tags' => ['Flutter', 'Firebase', 'Google Maps SDK', 'Stripe'],
-                'type' => 'portfolio',
-                'image' => '/portfolio/image-4.png',
+            'digital' => [
+                'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1561070791-26c113006238?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&w=800&q=80',
             ],
-            [
-                'name' => ['en' => 'MedConsult Telehealth', 'ar' => 'تطبيق استشارتي الطبية'],
-                'category' => 'mobile',
-                'description' => ['en' => 'A secure telehealth application connecting patients with certified doctors via video consultation and e-prescriptions.', 'ar' => 'تطبيق رعاية صحية يتيح للمرضى حجز الاستشارات الطبية عبر الفيديو مع الأطباء المعتمدين والوصفات الإلكترونية.'],
-                'client' => 'Saudi Health Ministry',
-                'url' => 'https://example.com',
-                'tags' => ['React Native', 'WebRTC', 'Node.js', 'AWS'],
-                'type' => 'portfolio',
-                'image' => '/portfolio/image-5.png',
-            ],
-
-            // --- MOTION GRAPHICS ---
-            [
-                'name' => ['en' => 'Brand Launch Explainer', 'ar' => 'فيديو موشن تعريفي للهوية'],
-                'category' => 'motion',
-                'description' => ['en' => 'An engaging 2D animation explainer video introducing the new corporate brand identity and target vision.', 'ar' => 'فيديو رسوم متحركة ثنائي الأبعاد 2D مشوق يعرف بالهوية البصرية الجديدة للمؤسسة ورؤيتها المستقبلية.'],
-                'client' => 'Serv5 Solutions',
-                'url' => 'https://example.com',
-                'tags' => ['After Effects', 'Illustrator', '2D Animation'],
-                'type' => 'portfolio',
-                'image' => '/portfolio/image-6.png',
-            ],
-            [
-                'name' => ['en' => 'Cybersecurity Awareness Video', 'ar' => 'فيديو توعية بالأمن السيبراني'],
-                'category' => 'motion',
-                'description' => ['en' => 'Animated educational short video illustrating common online threats and best safety practices for employees.', 'ar' => 'فيديو موشن جرافيك كرتوني توعوي يوضح التهديدات الأمنية الشائعة وطرق الوقاية منها للموظفين.'],
-                'client' => 'SDAIA',
-                'url' => 'https://example.com',
-                'tags' => ['After Effects', 'Cinema 4D', 'Sound Design'],
-                'type' => 'portfolio',
-                'image' => '/portfolio/image-7.png',
-            ],
-
-            // --- DIGITAL IDENTITY ---
-            [
-                'name' => ['en' => 'Vanguard Brand Guidelines', 'ar' => 'دليل الهوية البصرية لفانغارد'],
-                'category' => 'digital',
-                'description' => ['en' => 'Complete corporate identity design including logo development, typography standards, and color palettes.', 'ar' => 'تصميم هوية بصرية متكاملة للشركة تشمل تصميم الشعار، اختيار الخطوط الرسمية وتنسيقات الألوان.'],
-                'client' => 'Vanguard Holding',
-                'url' => 'https://example.com',
-                'tags' => ['Adobe Illustrator', 'Branding Book', 'Visual Design'],
-                'type' => 'portfolio',
-                'image' => '/portfolio/image-8.png',
-            ],
-            [
-                'name' => ['en' => 'EcoGreens Sustainable Packaging', 'ar' => 'تصميم تغليف المنتجات المستدامة'],
-                'category' => 'digital',
-                'description' => ['en' => 'Eco-friendly product packaging and label designs aligned with the brands green vision.', 'ar' => 'تصميم عبوات وأغلفة منتجات صديقة للبيئة تعبر عن الرؤية الخضراء المستدامة للعلامة التجارية.'],
-                'client' => 'EcoGreens Ltd',
-                'url' => 'https://example.com',
-                'tags' => ['Packaging Design', 'Photoshop', '3D Mockup'],
-                'type' => 'portfolio',
-                'image' => '/portfolio/image-9.png',
-            ],
-
-            // --- SOCIAL MEDIA ---
-            [
-                'name' => ['en' => 'Ramadan Campaign Visuals', 'ar' => 'تصاميم حملة رمضان المبارك'],
-                'category' => 'social',
-                'description' => ['en' => 'A set of cohesive social media posts and banners celebrating Ramadan with Islamic motifs and sleek typography.', 'ar' => 'مجموعة تصاميم متناسقة لوسائل التواصل الاجتماعي والبنرات الاحتفالية بشهر رمضان المبارك.'],
-                'client' => 'STC Saudi',
-                'url' => 'https://example.com',
-                'tags' => ['Social Media Kit', 'Photoshop', 'Marketing Graphics'],
-                'type' => 'portfolio',
-                'image' => '/portfolio/image-3.png',
-            ],
-            [
-                'name' => ['en' => 'Tech Summit Promotional Kit', 'ar' => 'حزمة منشورات القمة التقنية'],
-                'category' => 'social',
-                'description' => ['en' => 'Dynamic social media templates, countdown posts, and speaker profiles for a major tech summit.', 'ar' => 'قوالب تصاميم ديناميكية، منشورات العد التنازلي وبطاقات المتحدثين للترويج للقمة التقنية الكبرى.'],
-                'client' => 'Digital Riyadh',
-                'url' => 'https://example.com',
-                'tags' => ['Social Media Kit', 'Figma', 'Promotional Design'],
-                'type' => 'portfolio',
-                'image' => '/portfolio/image-4.png',
+            'social' => [
+                'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1611926653458-09294b3142bf?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1432821596592-e2c18b78144f?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1611606063065-ee7946f0787a?auto=format&fit=crop&w=800&q=80',
             ],
         ];
 
-        foreach ($projects as $project) {
-            Project::create($project);
+        // --- Vocabulary for Random Generation ---
+        $vocab = [
+            'websites' => [
+                'names' => ['Enterprise ERP Cloud', 'Real Estate Listing Hub', 'Educational LMS Academy', 'Fintech Capital Portal', 'Eco-Commerce Hub', 'Corporate Digital Portal'],
+                'names_ar' => ['منصة ERP السحابية للمؤسسات', 'منصة عقارات دوت كوم', 'أكاديمية التعليم الذكي LMS', 'بوابة فينتك المالية', 'منصة التجارة الخضراء المستدامة', 'البوابة الرقمية للشركات'],
+                'desc' => ['A highly scalable web portal featuring real-time analytics, dynamic widgets, and secure multi-tenant architectures.', 'An immersive custom web application designed to simplify workflows, boost conversions, and elevate user engagement.'],
+                'desc_ar' => ['بوابة ويب قابلة للتوسع بشكل كبير تتميز بتحليلات فورية وأدوات تفاعلية وبنية متعددة الشركات آمنة.', 'تطبيق ويب مخصص وتفاعلي مصمم لتبسيط سير العمل وزيادة نسب التحويل وتعزيز تفاعل المستخدمين.'],
+                'tags' => ['React', 'Next.js', 'Tailwind CSS', 'Laravel', 'MySQL', 'MongoDB'],
+            ],
+            'mobile' => [
+                'names' => ['QuickDelivery Express Rider', 'MedConsult Telehealth App', 'FitLife Fitness Companion', 'Smart Wallet Pay', 'EcoShop Mobile App', 'EventPulse Booking Helper'],
+                'names_ar' => ['تطبيق كويك ديليفري للمندوبين', 'تطبيق استشارتي الطبية للرعاية', 'تطبيق فت لايف للياقة البدنية', 'محفظة الدفع الذكية سمارت باي', 'تطبيق متجر إيكو شوب للهواتف', 'تطبيق حجز تذاكر إيفنت بلس'],
+                'desc' => ['A native iOS and Android application with real-time mapping, biometric security, and premium interactive gestures.', 'A highly responsive multiplatform app connecting users to vital services with seamless user flows and offline storage.'],
+                'desc_ar' => ['تطبيق أصيل لأنظمة iOS وأندرويد يتميز بخرائط تفاعلية فورية وحماية البصمة وإيماءات تفاعلية مميزة.', 'تطبيق متعدد الأنظمة سريع الاستجابة يربط المستخدمين بالخدمات الحيوية مع تدفقات مستخدم سلسة وتخزين بدون إنترنت.'],
+                'tags' => ['Flutter', 'React Native', 'Firebase', 'iOS SDK', 'Android SDK', 'Stripe'],
+            ],
+            'motion' => [
+                'names' => ['Brand Launch Explainer', 'Cybersecurity Awareness Video', 'Product Feature Demo', 'Isometric Architecture Tour', 'Animated Interface Intro', 'Global Summit Promo'],
+                'names_ar' => ['فيديو موشن تعريفي للهوية', 'فيديو توعية بالأمن السيبراني', 'فيديو استعراض ميزات المنتج', 'جولة الهندسة المعمارية أيزومتريك', 'مقدمة متحركة لواجهة المستخدم', 'برومو القمة التقنية العالمية'],
+                'desc' => ['An engaging 2D/3D motion graphics animation with professional voiceover, custom vectors, and cinematic sound design.', 'A high-impact visual explanation video showcasing product benefits through smooth transitions and stylized character animations.'],
+                'desc_ar' => ['رسوم متحركة موشن جرافيك 2D/3D ممتعة مع تعليق صوتي احترافي ومتجهات مخصصة وتصميم صوت سينمائي.', 'فيديو شرح مرئي عالي التأثير يستعرض مزايا المنتج من خلال انتقالات سلسة ورسوم كرتونية مميزة للشخصيات.'],
+                'tags' => ['After Effects', 'Cinema 4D', 'Illustrator', 'Sound Design', '2D Animation', 'Premiere Pro'],
+            ],
+            'digital' => [
+                'names' => ['Vanguard Brand Guidelines', 'EcoGreens Packaging Suite', 'OmniCorp Visual Identity', 'Apex Typography & Logo', 'Summit Conference Identity', 'Horizon Rebranding Book'],
+                'names_ar' => ['دليل الهوية البصرية لفانغارد', 'دليل تغليف وتعبئة إيكو جرينز', 'الهوية البصرية المتكاملة لأومني كورب', 'تصميم خط وشعار شركة أبكس', 'الهوية الرقمية لمؤتمر القمة التقني', 'كتاب إعادة بناء الهوية لهورايزون'],
+                'desc' => ['A comprehensive brand identity design including modern vector logo development, typography systems, and color palettes.', 'A premium visual identity kit designed to set standards in packaging, digital footprint, and brand recognition.'],
+                'desc_ar' => ['تصميم هوية بصرية متكاملة للعلامة التجارية يشمل تطوير الشعار المتجهي، أنظمة الخطوط وتنسيقات الألوان الرسمية.', 'حزمة الهوية المرئية المتميزة المصممة لوضع معايير في التعبئة والتغليف، البصمة الرقمية والوعي بالعلامة التجارية.'],
+                'tags' => ['Figma', 'Photoshop', 'Illustrator', 'Branding Book', 'Visual Design', 'Typography'],
+            ],
+            'social' => [
+                'names' => ['Ramadan Campaign Visuals', 'Tech Summit Promotional Kit', 'Black Friday Retail Banners', 'New Year Countdown Graphics', 'Client Testimonial Templates', 'Founders Day Post Pack'],
+                'names_ar' => ['تصاميم حملة رمضان المبارك', 'حزمة منشورات القمة التقنية', 'بنرات مبيعات الجمعة البيضاء', 'منشورات العد التنازلي للعام الجديد', 'قوالب استعراض آراء العملاء', 'مجموعة منشورات يوم التأسيس الرسمي'],
+                'desc' => ['A set of creative social media templates optimized for high engagement, pixel-perfect layout sizes, and uniform theme aesthetics.', 'Visual assets and design templates tailored to drive conversion, boost organic outreach, and establish brand voice on social feeds.'],
+                'desc_ar' => ['مجموعة قوالب إبداعية لشبكات التواصل الاجتماعي محسنة لزيادة التفاعل، بأبعاد دقيقة لجميع المنصات وبجماليات متناسقة.', 'أصول مرئية وقوالب تصميم مخصصة لزيادة المبيعات، تعزيز الوصول العضوي وترسيخ صوت العلامة التجارية في منصات التواصل.'],
+                'tags' => ['Figma', 'Photoshop', 'Social Media Kit', 'Visual Design', 'Marketing Graphics'],
+            ],
+        ];
+
+        $clients = ['Al-Futtaim Group', 'STC Saudi', 'Saudi Health Ministry', 'Diyar Real Estate', 'SDAIA', 'EcoGreens Ltd', 'Digital Riyadh', 'Vanguard Holding'];
+        $categoriesKeys = array_keys($vocab);
+        $totalProjects = 500;
+
+        for ($i = 1; $i <= $totalProjects; $i++) {
+            $catKey = $categoriesKeys[$i % count($categoriesKeys)];
+            
+            $names = $vocab[$catKey]['names'];
+            $namesAr = $vocab[$catKey]['names_ar'];
+            $descs = $vocab[$catKey]['desc'];
+            $descsAr = $vocab[$catKey]['desc_ar'];
+            $tagsPool = $vocab[$catKey]['tags'];
+
+            $nameEn = $names[array_rand($names)] . " ($i)";
+            $nameAr = $namesAr[array_rand($namesAr)] . " ($i)";
+
+            $descEn = $descs[array_rand($descs)];
+            $descAr = $descsAr[array_rand($descsAr)];
+
+            $randomImages = $images[$catKey];
+            $image = $randomImages[array_rand($randomImages)];
+
+            // Select 2-3 random tags
+            shuffle($tagsPool);
+            $tags = array_slice($tagsPool, 0, rand(2, 3));
+
+            Project::create([
+                'name' => ['en' => $nameEn, 'ar' => $nameAr],
+                'category' => $catKey,
+                'description' => ['en' => $descEn, 'ar' => $descAr],
+                'client' => $clients[array_rand($clients)],
+                'url' => 'https://example.com',
+                'tags' => $tags,
+                'type' => 'portfolio',
+                'image' => $image,
+            ]);
         }
     }
 }

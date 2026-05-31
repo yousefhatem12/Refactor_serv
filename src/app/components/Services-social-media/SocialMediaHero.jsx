@@ -83,7 +83,7 @@ const SocialMediaHero = ({
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, ease: "easeOut" }}
-          className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 w-1/2 max-w-[800px] pointer-events-none z-10"
+          className={`hidden lg:block absolute ${isRtl ? "left-0" : "right-0"} top-1/2 -translate-y-1/2 w-1/2 max-w-[800px] pointer-events-none z-10`}
         >
           <motion.div
             animate={{ y: [0, -20, 0] }}
@@ -92,7 +92,7 @@ const SocialMediaHero = ({
             <img
               src={planetImage}
               alt="Planet"
-              className="w-full h-auto object-contain drop-shadow-[0_0_50px_rgba(56,189,248,0.3)] scale-75 translate-x-[10%]"
+              className={`w-full h-auto object-contain drop-shadow-[0_0_50px_rgba(56,189,248,0.3)] scale-75 ${isRtl ? "-translate-x-[10%]" : "translate-x-[10%]"}`}
             />
           </motion.div>
         </motion.div>

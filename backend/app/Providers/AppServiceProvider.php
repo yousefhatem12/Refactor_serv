@@ -37,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
             \App\Models\TeamMember::class, \App\Models\Feature::class, \App\Models\Statistic::class,
             \App\Models\FooterLink::class, \App\Models\SocialLink::class, \App\Models\NavLink::class,
             \App\Models\Page::class, \App\Models\PricingPlan::class,
+            \App\Models\Product::class, \App\Models\BankAccount::class,
         ];
 
         foreach ($cachedModels as $model) {

@@ -5,6 +5,7 @@ import ContactForm from "../components/Contact/ContactForm";
 import ContactMap from "../components/Contact/ContactMap";
 import { fetchAPI } from "@/lib/api";
 import { useLanguage } from "../context/LanguageContext";
+import Loading from "../loading";
 
 export default function ContactUsPage() {
   const { language } = useLanguage();
@@ -18,13 +19,18 @@ export default function ContactUsPage() {
       .catch(console.error);
   }, [language]);
 
+  if (!pageData) {
+    return <Loading />;
+  }
+
   return (
-    <main className="flex min-h-screen flex-col relative overflow-x-hidden">
-      {/* Background Color Layer */}
-      <div className="fixed inset-0 bg-[#040A37] -z-20 pointer-events-none" />
+    <main className="flex min-h-screen flex-col relative overflow-x-hidden text-white z-10">
+      {/* Visual background glows */}
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#FF8A00]/5 rounded-full filter blur-[120px] pointer-events-none z-0" />
+      <div className="absolute top-1/2 right-1/4 w-[600px] h-[600px] bg-blue-500/5 rounded-full filter blur-[150px] pointer-events-none z-0" />
 
       <div className="w-full max-w-7xl mx-auto px-6 relative z-10 pt-32 pb-10">
-        <div className="flex flex-col lg:flex-row items-start justify-between">
+        <div className="flex flex-col lg:flex-row items-start justify-between gap-12 lg:gap-8">
           <ContactInfo data={pageData} />
           <ContactForm />
         </div>

@@ -66,7 +66,7 @@ export default function Earth({ isPhaseTwo }) {
       gsap.to(containerRef.current, {
         x: isMobile ? "0%" : isRtl ? "-25%" : "25%",
         scale: isMobile ? 1 : 1.2, // Reduced from 1.6 to make it smaller
-        duration: 3.5,
+        duration: 1.5,
         ease: "power3.inOut",
       });
 
@@ -87,8 +87,8 @@ export default function Earth({ isPhaseTwo }) {
             opacity: 1,
             rotation: isRtl ? 65 : 0,
             scale: 2,
-            duration: 3,
-            delay: 0.8,
+            duration: 1.5,
+            delay: 0.3,
             ease: "power3.out",
           },
         );
@@ -98,7 +98,7 @@ export default function Earth({ isPhaseTwo }) {
       gsap.to(containerRef.current, {
         x: "0%",
         scale: isMobile ? 0.8 : 0.6, // Reduced from 0.8 to make it smaller
-        duration: 3.5,
+        duration: 1.5,
         ease: "power3.inOut",
       });
 
