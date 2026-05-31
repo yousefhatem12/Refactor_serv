@@ -64,7 +64,9 @@ const Founders = ({ data }) => {
         ? team.map((member) => ({
             name: member.name,
             role: member.role,
-            image: member.image ? getMediaUrl(member.image) : "/about-us/person-1.png",
+            image: member.image
+              ? getMediaUrl(member.image)
+              : "/about-us/person-1.png",
           }))
         : founders;
 
@@ -126,7 +128,7 @@ const Founders = ({ data }) => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-14 w-full max-w-6xl"
+          className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 w-full max-w-6xl"
         >
           {displayTeam.map((founder, index) => (
             <motion.div
@@ -159,11 +161,11 @@ const Founders = ({ data }) => {
 
                 {/* Content Overlay (Mobile-friendly reveal) */}
                 <div className="absolute bottom-0 left-0 w-full p-8 translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                  <h3 className="text-white font-black text-xl md:text-3xl tracking-tight mb-2">
+                  <h3 className="text-white font-black transform translate-y-10 group-hover:translate-y-0 transition-transform duration-400 text-xl md:text-xl tracking-tight mb-2">
                     {founder.name}
                   </h3>
-                  <div className="h-[2px] w-0 bg-blue-500 group-hover:w-16 transition-all duration-700 ease-out mb-4"></div>
-                  <p className="text-blue-400 text-xs font-black tracking-[0.2em] uppercase opacity-0 group-hover:opacity-100 transition-all duration-700 delay-100">
+                  <div className="h-[2px] w-0 bg-blue-500 group-hover:w-16 transition-all duration-700 ease-out mb-4 delay-100"></div>
+                  <p className="text-blue-400 text-xs font-black tracking-[0.2em] uppercase hidden  group-hover:block opacity-0 group-hover:opacity-100 transition-all duration-700 delay-100">
                     {founder.role}
                   </p>
                 </div>
