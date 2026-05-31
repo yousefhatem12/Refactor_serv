@@ -100,7 +100,7 @@ const CTA = () => {
     };
 
     // Delay initialization to allow the page layout and dynamic data to fully load/render
-    const timer = setTimeout(initGsap, 500);
+    initGsap();
 
     // Ensure ScrollTrigger recalculates if the body height changes
     // (e.g. when the initial h-screen loading lock is removed)
@@ -110,7 +110,6 @@ const CTA = () => {
     resizeObserver.observe(document.body);
 
     return () => {
-      clearTimeout(timer);
       resizeObserver.disconnect();
       if (ctx) ctx.revert();
     };

@@ -16,42 +16,74 @@ import PlanetAstronaut from "../components/Home/Shared/PlanetAstronaut";
 import PageSections from "../components/Shared/PageSections";
 import { useLanguage } from "../context/LanguageContext";
 import { fetchAPI } from "@/lib/api";
+import Loading from "../loading";
 
 export default function HomePage() {
+  const { language } = useLanguage();
   const [pageData, setPageData] = useState(null);
   const [isPhaseTwo, setIsPhaseTwo] = useState(false);
   const [canScroll, setCanScroll] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef(null);
-  const { language } = useLanguage();
   const isRtl = language === "ar";
 
   useEffect(() => {
-    const endpoints = [
-      `/pages/home?lang=${language}`,
-      `/features`,
-      `/settings?lang=${language}`,
-      `/settings`,
-      `/services?lang=${language}`,
-      `/products?lang=${language}`,
-      `/portfolio-categories?lang=${language}`,
-      `/blog?lang=${language}`,
-      `/trending-posts?lang=${language}`,
-      `/testimonials?lang=${language}`,
-    ];
+    let isMounted = true;
 
-    endpoints.forEach((endpoint, index) => {
-      fetchAPI(endpoint)
-        .then((data) => {
-          if (index === 0 && data) {
-            setPageData(data);
-            log;
+    const loadDataSequentially = async () => {
+      try {
+        // 1. Fetch critical home page structure, portfolio, and products in parallel from the database
+        const [homeData, portfolioData, productsData] = await Promise.all([
+          fetchAPI(`/pages/home?lang=${language}`),
+          fetchAPI(`/portfolio?lang=${language}&page=1&per_page=3`),
+          fetchAPI(`/products?lang=${language}&category=all&page=1&per_page=3`)
+        ]);
+
+        if (!isMounted) return;
+
+        if (homeData) {
+          setPageData(homeData);
+          if (typeof window !== "undefined") {
+            try {
+              localStorage.setItem(`cached_home_data_${language}`, JSON.stringify(homeData));
+              localStorage.setItem(`cached_portfolio_data_${language}`, JSON.stringify(portfolioData));
+              localStorage.setItem(`cached_products_data_${language}`, JSON.stringify(productsData));
+            } catch (e) {
+              console.error("Cache write error:", e);
+            }
           }
-        })
-        .catch((err) => {
-          console.warn(`Failed to preload ${endpoint}:`, err);
+        }
+
+        // 2. Fetch the remaining endpoints in parallel in background to populate cache
+        const remainingEndpoints = [
+          `/settings?lang=${language}`,
+          `/settings`,
+          `/features`,
+          `/services?lang=${language}`,
+          `/product-categories?lang=${language}`,
+          `/portfolio-categories?lang=${language}`,
+          `/blog?lang=${language}&limit=5`,
+          `/trending-posts?lang=${language}`,
+          `/testimonials?lang=${language}`,
+        ];
+
+        Promise.allSettled(
+          remainingEndpoints.map((endpoint) => fetchAPI(endpoint)),
+        ).then(() => {
+          if (isMounted) {
+            console.log("Parallel preloading completed successfully");
+          }
         });
-    });
+      } catch (error) {
+        console.error("Error in parallel preloading:", error);
+      }
+    };
+
+    loadDataSequentially();
+
+    return () => {
+      isMounted = false;
+    };
   }, [language]);
 
   useEffect(() => {
@@ -62,13 +94,11 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    // 5-second timer to start the animation and unlock scroll
-    const timer = setTimeout(() => {
-      setIsPhaseTwo(true);
-      setCanScroll(true);
-    }, 5000);
-
-    return () => clearTimeout(timer);
+    setIsPhaseTwo(true);
+    setCanScroll(true);
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("seenHomeIntro", "true");
+    }
   }, []);
 
   useEffect(() => {
@@ -91,20 +121,13 @@ export default function HomePage() {
     window.scrollTo(0, 0);
 
     // Fix anchor links (like #services) since the page locks scroll initially
-    let scrollTimer;
     if (window.location.hash) {
-      scrollTimer = setTimeout(() => {
-        const id = window.location.hash.substring(1);
-        const el = document.getElementById(id);
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth" });
-        }
-      }, 500); // Give dynamic components time to render
+      const id = window.location.hash.substring(1);
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
     }
-
-    return () => {
-      if (scrollTimer) clearTimeout(scrollTimer);
-    };
   }, [pageData]);
 
   const { scrollYProgress } = useScroll({
@@ -175,23 +198,29 @@ export default function HomePage() {
   );
   return (
     <main
-      className={`flex min-h-screen flex-col relative ${!canScroll ? "h-screen overflow-hidden" : "overflow-hidden"}`}
+      className={`flex min-h-screen flex-col relative ${!canScroll || !pageData ? "h-screen overflow-hidden" : "overflow-hidden"}`}
     >
       <div className="relative" ref={containerRef}>
         <div className="w-full">
-          <Hero isPhaseTwo={isPhaseTwo} data={pageData} />
+          {!pageData ? (
+            <Loading />
+          ) : (
+            <>
+              <Hero isPhaseTwo={isPhaseTwo} data={pageData} />
 
-          {/* Dynamic Sections from Dashboard */}
-          <PageSections sections={pageData?.sections} />
+              {/* Dynamic Sections from Dashboard */}
+              <PageSections sections={pageData?.sections} />
 
-          <Features />
-          <Services />
-          <OnlineWebsite />
-          <OnlineWebsiteDetails />
-          <OurBlog />
-          <Testimonial />
-          <ContactUs />
-          <CTA />
+              <Features />
+              <Services />
+              <OnlineWebsite />
+              <OnlineWebsiteDetails />
+              <OurBlog />
+              <Testimonial />
+              <ContactUs />
+              <CTA />
+            </>
+          )}
 
           <div className="absolute inset-0 pointer-events-none z-40">
             {/* Global Earth */}

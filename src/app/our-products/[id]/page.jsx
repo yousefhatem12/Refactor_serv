@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useParams, notFound } from "next/navigation";
 import { useLanguage } from "../../context/LanguageContext";
 import { fetchAPI } from "../../../lib/api";
+import Loading from "../../loading";
 
 const ProductDetailsPage = () => {
   const params = useParams();
@@ -57,11 +58,7 @@ const ProductDetailsPage = () => {
   }, [productId, language]);
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-16 h-16 border-4 border-[#F18805] border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (!productData) {

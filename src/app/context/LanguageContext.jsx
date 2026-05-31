@@ -7,20 +7,20 @@ const LanguageContext = createContext();
 
 import { translations } from "./translations";
 
-export const LanguageProvider = ({ children }) => {
-  const [language, setLanguage] = useState("en"); // Default to English
+export const LanguageProvider = ({ children, defaultLanguage = "en" }) => {
+  const [language, setLanguage] = useState(defaultLanguage); // Initialized from defaultLanguage
   const [settings, setSettings] = useState({});
   const router = useRouter();
 
   useEffect(() => {
     // Read from cookie on initial load if we want to persist it
     const match = document.cookie.match(new RegExp('(^| )NEXT_LOCALE=([^;]+)'));
-    const storedLang = match ? match[2] : "en";
+    const storedLang = match ? match[2] : defaultLanguage;
     
     setLanguage(storedLang);
     document.documentElement.lang = storedLang;
     document.documentElement.dir = storedLang === "ar" ? "rtl" : "ltr";
-  }, []);
+  }, [defaultLanguage]);
 
   useEffect(() => {
     let mounted = true;
@@ -41,17 +41,13 @@ export const LanguageProvider = ({ children }) => {
 
   const toggleLanguage = () => {
     const newLang = language === "en" ? "ar" : "en";
-    setLanguage(newLang);
     
     // Set cookie for Server Components
     document.cookie = `NEXT_LOCALE=${newLang}; path=/; max-age=31536000`; // 1 year
     
-    // Update HTML attributes
-    document.documentElement.lang = newLang;
-    document.documentElement.dir = newLang === "ar" ? "rtl" : "ltr";
-    
-    // Refresh Server Components
-    router.refresh();
+    // Reload the page immediately. This prevents React from updating state and
+    // rendering static translations before the reload, avoiding a mixed-language flash.
+    window.location.reload();
   };
 
   const t = (key) => {

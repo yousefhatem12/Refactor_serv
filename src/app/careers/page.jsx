@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../context/LanguageContext";
 import { fetchAPI } from "../../lib/api";
+import Loading from "../loading";
 
 export default function CareersPage() {
   const { language, t } = useLanguage();
@@ -16,6 +17,11 @@ export default function CareersPage() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [jobsList, setJobsList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [serverDepts, setServerDepts] = useState([]);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -27,48 +33,82 @@ export default function CareersPage() {
   });
   const [formErrors, setFormErrors] = useState({});
 
+  // Debounced search and filter effect
   useEffect(() => {
-    fetchAPI('/careers')
-      .then((data) => {
-        if (data && Array.isArray(data)) {
-          setJobsList(data);
-        } else {
+    const delayDebounceFn = setTimeout(() => {
+      setLoading(true);
+      setCurrentPage(1);
+
+      const deptQuery = selectedDept === "all" ? "all" : selectedDept;
+      const searchQueryParam = searchQuery ? encodeURIComponent(searchQuery) : "";
+
+      fetchAPI(`/careers?lang=${language}&page=1&per_page=9&department=${deptQuery}&search=${searchQueryParam}`)
+        .then((res) => {
+          if (res && Array.isArray(res.data)) {
+            setJobsList(res.data);
+            setHasMore(res.has_more);
+            if (res.departments) {
+              setServerDepts(res.departments);
+            }
+          } else {
+            setJobsList([]);
+            setHasMore(false);
+          }
+        })
+        .catch((err) => {
+          console.error("Failed to fetch careers:", err);
           setJobsList([]);
+          setHasMore(false);
+        })
+        .finally(() => {
+          setLoading(false);
+          setIsInitialLoading(false);
+        });
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [selectedDept, searchQuery, language]);
+
+  if (isInitialLoading) {
+    return <Loading />;
+  }
+
+  // Load more jobs
+  const loadMoreJobs = () => {
+    if (isLoadingMore || !hasMore) return;
+    setIsLoadingMore(true);
+    const nextPage = currentPage + 1;
+    const deptQuery = selectedDept === "all" ? "all" : selectedDept;
+    const searchQueryParam = searchQuery ? encodeURIComponent(searchQuery) : "";
+
+    fetchAPI(`/careers?lang=${language}&page=${nextPage}&per_page=9&department=${deptQuery}&search=${searchQueryParam}`)
+      .then((res) => {
+        if (res && Array.isArray(res.data)) {
+          setJobsList((prev) => {
+            const newJobs = res.data.filter((item) => !prev.some((j) => j.id === item.id));
+            return [...prev, ...newJobs];
+          });
+          setHasMore(res.has_more);
+          setCurrentPage(nextPage);
         }
       })
       .catch((err) => {
-        console.error("Failed to fetch careers:", err);
-        setJobsList([]);
+        console.error("Failed to load more careers:", err);
       })
       .finally(() => {
-        setLoading(false);
+        setIsLoadingMore(false);
       });
-  }, [language]);
+  };
 
   // Departments list for filtering
-  const uniqueDepts = Array.from(new Set(jobsList.map(j => j.department).filter(Boolean)));
   const departments = [
     { id: "all", name: t("departmentAll") },
-    ...uniqueDepts.map(dept => {
+    ...serverDepts.map(dept => {
       const translationKey = `dep${dept}`;
       const translatedName = t(translationKey) !== translationKey ? t(translationKey) : dept;
       return { id: dept, name: translatedName };
     })
   ];
-
-  // Filtering Logic
-  const filteredJobs = jobsList.filter((job) => {
-    if (!job) return false;
-    const jobTitle = (job.title?.[language] || job.title?.en || '').toLowerCase();
-    const jobDesc = (job.description?.[language] || job.description?.en || '').toLowerCase();
-    const matchesSearch =
-      jobTitle.includes(searchQuery.toLowerCase()) ||
-      jobDesc.includes(searchQuery.toLowerCase());
-
-    const matchesDept = selectedDept === "all" || job.department === selectedDept;
-
-    return matchesSearch && matchesDept;
-  });
 
   // Handle Form Change
   const handleInputChange = (e) => {
@@ -215,7 +255,7 @@ export default function CareersPage() {
             >
               <div className="w-12 h-12 border-4 border-[#FF8A00] border-t-transparent rounded-full animate-spin"></div>
             </motion.div>
-          ) : filteredJobs.length > 0 ? (
+          ) : jobsList.length > 0 ? (
             <motion.div
               layout
               initial={{ opacity: 0 }}
@@ -223,7 +263,7 @@ export default function CareersPage() {
               exit={{ opacity: 0 }}
               className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full"
             >
-              {filteredJobs.map((job, idx) => {
+              {jobsList.map((job, idx) => {
                 const title = job.title?.[language] || job.title?.en || "";
                 const desc = job.description?.[language] || job.description?.en || "";
                 const loc = job.location?.[language] || job.location?.en || "";
@@ -235,7 +275,7 @@ export default function CareersPage() {
                     layout
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: idx * 0.05 }}
+                    transition={{ duration: 0.4, delay: (idx % 9) * 0.05 }}
                     className="p-6 rounded-2xl bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[#FF8A00]/30 transition-all duration-300 flex flex-col h-full shadow-lg group relative overflow-hidden"
                   >
                     {/* Glowing corner hover decorator */}
@@ -299,6 +339,12 @@ export default function CareersPage() {
                   </motion.div>
                 );
               })}
+              {isLoadingMore && [1, 2, 3].map((i) => (
+                <div
+                  key={`skeleton-more-${i}`}
+                  className="p-6 rounded-2xl bg-white/[0.01] border border-white/5 animate-pulse aspect-video min-h-[300px]"
+                />
+              ))}
             </motion.div>
           ) : (
             <motion.div
@@ -319,6 +365,25 @@ export default function CareersPage() {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Load More Button */}
+        {hasMore && (
+          <div className="flex justify-center mt-12 w-full">
+            <button
+              onClick={loadMoreJobs}
+              disabled={isLoadingMore}
+              className="flex items-center gap-2 px-8 py-3.5 bg-gradient-to-r from-[#FF8A00] to-[#e07b00] hover:from-[#e07b00] hover:to-[#FF8A00] disabled:bg-gray-700 text-white font-bold rounded-xl shadow-[0_0_25px_rgba(255,138,0,0.2)] hover:shadow-[0_0_35px_rgba(255,138,0,0.35)] disabled:shadow-none transition-all duration-300 cursor-pointer border border-[#FF8A00]/40 text-sm tracking-wide transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoadingMore ? (
+                <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+              ) : null}
+              <span>{isLoadingMore ? (t("loading") || (language === 'ar' ? 'جاري التحميل...' : 'Loading...')) : t("loadMore")}</span>
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Slide-out / Expandable Job Details & Application Drawer */}

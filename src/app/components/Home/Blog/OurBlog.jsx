@@ -20,8 +20,8 @@ const OurBlog = () => {
       try {
         setIsLoading(true);
         const [postsData, trendingData] = await Promise.all([
-          fetchAPI(`/blog?lang=${language}`),
-          fetchAPI(`/trending-posts?lang=${language}`)
+          fetchAPI(`/blog?lang=${language}&limit=5`),
+          fetchAPI(`/trending-posts?lang=${language}`),
         ]);
 
         if (postsData && postsData.length > 0) {
@@ -72,7 +72,10 @@ const OurBlog = () => {
               >
                 <div className="relative rounded-xl overflow-hidden mb-5 bg-white/5 group aspect-[16/10]">
                   <img
-                    src={blogPosts.featured.image || "/our-blog/Link → post-landscape-1.jpg.png"}
+                    src={
+                      blogPosts.featured.image ||
+                      "/our-blog/Link → post-landscape-1.jpg.png"
+                    }
                     alt={blogPosts.featured.title}
                     className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />
@@ -82,13 +85,18 @@ const OurBlog = () => {
                     {blogPosts.featured.category || t("news")}
                   </span>
                   <span className="w-1 h-1 bg-[#ff8a00] rounded-full"></span>
-                  <span className="text-[#666]">{blogPosts.featured.published_at}</span>
+                  <span className="text-[#666]">
+                    {blogPosts.featured.published_at}
+                  </span>
                 </div>
                 <h3 className="font-extrabold leading-[1.3] mb-[15px] text-white transition-colors duration-300 hover:text-[#ff8a00] text-[1.4rem] md:text-[2rem]">
                   {blogPosts.featured.title}
                 </h3>
                 <p className="text-[#a0a0a0] text-[0.95rem] leading-[1.6] mb-5 line-clamp-4">
-                  {blogPosts.featured.content.replace(/<[^>]*>?/gm, '').substring(0, 300)}...
+                  {blogPosts.featured.content
+                    .replace(/<[^>]*>?/gm, "")
+                    .substring(0, 300)}
+                  ...
                 </p>
                 <a
                   href={`/blog/${blogPosts.featured.id}`}
@@ -114,13 +122,18 @@ const OurBlog = () => {
                 >
                   <div className="relative rounded-xl overflow-hidden mb-5 bg-white/5 group aspect-[16/11]">
                     <img
-                      src={post.image || "/our-blog/Link → post-landscape-2.jpg.png"}
+                      src={
+                        post.image ||
+                        "/our-blog/Link → post-landscape-2.jpg.png"
+                      }
                       alt={post.title}
                       className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                     />
                   </div>
                   <div className="flex items-center gap-2.5 mb-3 text-[0.85rem] font-bold tracking-[1px]">
-                    <span className="text-[#a0a0a0]">{post.category || t("news")}</span>
+                    <span className="text-[#a0a0a0]">
+                      {post.category || t("news")}
+                    </span>
                     <span className="w-1 h-1 bg-[#ff8a00] rounded-full"></span>
                     <span className="text-[#666]">{post.published_at}</span>
                   </div>

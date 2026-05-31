@@ -50,7 +50,7 @@ const QuotationHero = () => {
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1, ease: "easeOut" }}
-        className="absolute -right-20 top-0 w-64 h-64 pointer-events-none z-10 opacity-30 blur-sm lg:blur-none lg:opacity-50"
+        className={`absolute ${language === "ar" ? "-left-20" : "-right-20"} top-0 w-64 h-64 pointer-events-none z-10 opacity-30 blur-sm lg:blur-none lg:opacity-50`}
       >
         <img
           src="/Services/new/blue.png"

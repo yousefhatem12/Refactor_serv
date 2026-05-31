@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../../context/LanguageContext";
 import { fetchAPI } from "@/lib/api";
+import Link from "next/link";
 
 const WebDesignPortfolio = ({ isMobileApp }) => {
   const { language, t } = useLanguage();
@@ -10,8 +11,10 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
   const [portfolioItems, setPortfolioItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const targetCategory = isMobileApp ? "mobile" : "websites";
+
   useEffect(() => {
-    fetchAPI(`/portfolio?lang=${language}`)
+    fetchAPI(`/portfolio?lang=${language}&category=${targetCategory}`)
       .then((data) => {
         if (data && Array.isArray(data)) {
           setPortfolioItems(data);
@@ -19,9 +22,8 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
       })
       .catch((err) => console.error("Error fetching portfolio:", err))
       .finally(() => setLoading(false));
-  }, [language]);
+  }, [language, targetCategory]);
 
-  const targetCategory = isMobileApp ? "mobile" : "websites";
   const items = portfolioItems.filter(
     (item) => item.category === targetCategory,
   );
@@ -178,16 +180,12 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
                         <h4 className="text-white text-lg font-bold mb-2">
                           {item.name}
                         </h4>
-                        {item.url && (
-                          <a
-                            href={item.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-white font-semibold tracking-wider uppercase text-xs border border-white px-4 py-2 rounded-full backdrop-blur-sm hover:bg-white hover:text-black transition-colors"
-                          >
-                            {t("viewProject")}
-                          </a>
-                        )}
+                        <Link
+                          href={`/portfolio/${item.id}`}
+                          className="text-white font-semibold tracking-wider uppercase text-xs border border-white px-4 py-2 rounded-full backdrop-blur-sm hover:bg-white hover:text-black transition-colors"
+                        >
+                          {t("viewProject") || "View Project"}
+                        </Link>
                       </div>
                     </div>
                   ))}
