@@ -78,7 +78,7 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-white text-3xl md:text-5xl font-bold mb-6 leading-tight"
+              className="text-white text-3xl xl:text-5xl font-bold mb-6 leading-tight"
             >
               {isMobileApp
                 ? t("maPortfolioTitle") ||
@@ -99,26 +99,28 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
             </motion.p>
 
             {tabs.length > 1 && (
-              <div className="flex flex-col gap-2 max-h-[300px] overflow-y-auto overflow-x-hidden custom-scrollbar">
-                {tabs.map((tab, index) => (
-                  <motion.button
-                    key={tab.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.3 + index * 0.1 }}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`text-left px-6 py-4 rounded-xl text-lg font-medium transition-all ${
-                      activeTab === tab.id ||
-                      (isMobileApp &&
-                        filteredItems[0]?.id.toString() === tab.id)
-                        ? "bg-[#0A1128] text-[#D98B50] border-l-4 border-[#D98B50]"
-                        : "text-gray-400 hover:text-white hover:bg-white/5 border-l-4 border-transparent"
-                    }`}
-                  >
-                    {tab.label}
-                  </motion.button>
-                ))}
+              <div className="flex flex-wrap lg:flex-nowrap lg:flex-col gap-2 lg:max-h-[300px] lg:overflow-y-auto custom-scrollbar pb-3 lg:pb-0">
+                <div className="me-2">
+                  {tabs.map((tab, index) => (
+                    <motion.button
+                      key={tab.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.3 + index * 0.1 }}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`text-center lg:text-left px-5 py-3 lg:px-6 lg:py-4 rounded-xl text-sm lg:text-lg font-semibold transition-all lg:w-full whitespace-nowrap flex-shrink-0 ${
+                        activeTab === tab.id ||
+                        (isMobileApp &&
+                          filteredItems[0]?.id.toString() === tab.id)
+                          ? "bg-[#0A1128] text-[#D98B50] border-b-2 lg:border-b-0 lg:border-l-4 border-[#D98B50]"
+                          : "text-gray-400 hover:text-white hover:bg-white/5 border-b-2 lg:border-b-0 lg:border-l-4 border-transparent"
+                      }`}
+                    >
+                      {tab.label}
+                    </motion.button>
+                  ))}
+                </div>
               </div>
             )}
           </div>
@@ -160,7 +162,7 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.4 }}
-                  className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full"
+                  className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-6 w-full"
                 >
                   {filteredItems.map((item, index) => (
                     <div
