@@ -70,7 +70,7 @@ const OurBlog = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
               >
-                <div className="relative rounded-xl overflow-hidden mb-5 bg-white/5 group aspect-[16/10]">
+                <div className="relative rounded-xl  overflow-hidden mb-5 bg-white/5 group aspect-[16/10]">
                   <img
                     src={
                       blogPosts.featured.image ||
@@ -106,7 +106,7 @@ const OurBlog = () => {
                 </a>
               </motion.div>
             )}
-
+            {/* لابلابللب */}
             {/* Grid Posts Area */}
             <div
               className={`grid grid-cols-1 md:grid-cols-2 gap-[30px] relative ${!showAllPosts ? "max-md:max-h-[300px] max-md:overflow-hidden max-md:rounded-b-[25px]" : ""}`}
