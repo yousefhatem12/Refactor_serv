@@ -17,7 +17,7 @@ const OurJourney = ({ data }) => {
   const defaultItems = [
     {
       year: "2009",
-      planet: "planet1.png",
+      planet: "planet1.webp",
       location: t("locationEgypt"),
       users: "10",
       description: t("journeyDummyText"),
@@ -65,7 +65,7 @@ const OurJourney = ({ data }) => {
 
     return {
       year: item.year,
-      planet: `/about-us/planet${((idx % 7) + 1) === 1 ? '1' : `-${(idx % 7) + 1}`}.png`,
+      planet: `/about-us/planet${((idx % 7) + 1) === 1 ? '1' : `-${(idx % 7) + 1}`}.webp`,
       yOffset: style.yOffset,
       size: style.size,
       mix: style.mix,
@@ -161,7 +161,7 @@ const OurJourney = ({ data }) => {
       >
         <div className="absolute left-[-300px] lg:left-[-400px] top-1/2 -translate-y-1/2 w-[600px] h-[600px] lg:w-[800px] lg:h-[800px] z-10 pointer-events-none opacity-50">
           <Image
-            src="/Hero/orange-planet.png"
+            src="/Hero/orange-planet.webp"
             alt="Decoration"
             fill
             className="object-contain"
@@ -169,7 +169,7 @@ const OurJourney = ({ data }) => {
         </div>
         <div className="absolute right-0 left-0 top-[-15%] w-[1500px] h-[1500px] z-5 opacity-40">
           <Image
-            src="/about-us/orbit.png"
+            src="/about-us/orbit.webp"
             alt="Orbit"
             fill
             className="object-contain object-center"

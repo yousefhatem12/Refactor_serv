@@ -5,11 +5,11 @@ import { useLanguage } from "../../../context/LanguageContext";
 import { fetchAPI, getMediaUrl } from "@/lib/api";
 
 const partners = [
-  "/Features/2-300x300-1.png.svg",
-  "/Features/5-300x300-1.png.svg",
-  "/Features/6-300x300-1.png.svg",
-  "/Features/clients-ksa-20-300x300-1.png.svg",
-  "/Features/clients-ksa-25-300x300-1.png.svg",
+  "/Features/2-300x300-1.webp.svg",
+  "/Features/5-300x300-1.webp.svg",
+  "/Features/6-300x300-1.webp.svg",
+  "/Features/clients-ksa-20-300x300-1.webp.svg",
+  "/Features/clients-ksa-25-300x300-1.webp.svg",
 ];
 
 const checkFeaturesKeys = [
@@ -85,7 +85,7 @@ export default function Features() {
 
   const displayExperienceImage = settings.features_image
     ? getMediaUrl(settings.features_image)
-    : "/Features/15Y.png";
+    : "/Features/15Y.webp";
 
   return (
     <section

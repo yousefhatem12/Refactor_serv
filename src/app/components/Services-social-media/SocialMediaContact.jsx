@@ -10,7 +10,7 @@ const SocialMediaContact = () => {
       {/* Background image with screen blend mode to hide black pixels */}
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-60 mix-blend-screen pointer-events-none"
-        style={{ backgroundImage: "url('/services-social-media/section-5.png')" }}
+        style={{ backgroundImage: "url('/services-social-media/section-5.webp')" }}
       ></div>
       
       <div className="max-w-4xl mx-auto text-center flex flex-col items-center relative z-10">

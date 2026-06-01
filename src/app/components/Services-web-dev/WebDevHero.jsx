@@ -21,7 +21,7 @@ const WebDevHero = ({ data, serviceId = "web-development" }) => {
     data?.bg_image ||
     (data?.hero_image
       ? getMediaUrl(data.hero_image)
-      : "/services-web-dev/hero.png");
+      : "/services-web-dev/hero.webp");
 
   return (
     <section className="relative w-full h-[calc(100dvh-80px)] min-h-[550px] lg:h-[calc(100vh-80px)] flex items-center justify-between px-6 lg:px-20 pt-8 pb-12 lg:py-0 overflow-hidden">
@@ -99,7 +99,7 @@ const WebDevHero = ({ data, serviceId = "web-development" }) => {
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           >
             <img
-              src="/Services/new/green.png"
+              src="/Services/new/green.webp"
               alt="Green Planet"
               className={`w-full h-auto object-contain drop-shadow-[0_0_50px_rgba(34,197,94,0.3)] scale-110 ${isRtl ? "-translate-x-[10%]" : "translate-x-[10%]"}`}
             />

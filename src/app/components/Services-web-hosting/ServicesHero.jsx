@@ -21,7 +21,7 @@ const ServicesHero = ({ serviceId = "cloud-hosting", title, desc }) => {
       {/* Background Image behind everything */}
       <div
         className={`absolute inset-0 w-full h-full z-0 bg-no-repeat bg-cover bg-center mix-blend-screen ${isRtl ? "scale-x-[-1]" : ""}`}
-        style={{ backgroundImage: "url('/services-page/hero.png')" }}
+        style={{ backgroundImage: "url('/services-page/hero.webp')" }}
       />
 
       {/* Left Content */}
@@ -83,7 +83,7 @@ const ServicesHero = ({ serviceId = "cloud-hosting", title, desc }) => {
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
         >
           <img
-            src="/Services/Purple Planet.png"
+            src="/Services/Purple Planet.webp"
             alt="Purple Planet"
             className={`w-full h-auto object-contain drop-shadow-[0_0_50px_rgba(168,85,247,0.3)] scale-110 ${isRtl ? "-translate-x-[10%]" : "translate-x-[10%]"}`}
           />

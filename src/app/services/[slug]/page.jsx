@@ -83,7 +83,7 @@ export default function DynamicServicePage() {
   if (!serviceData) return null;
 
   const heroStyle = serviceData.hero_style || "social_media_hero";
-  const defaultHeroImage = serviceData.default_hero_image || "/template/template-one-hero.png";
+  const defaultHeroImage = serviceData.default_hero_image || "/template/template-one-hero.webp";
   const blocks = serviceData.blocks;
 
   // ═══════════════════════════════════════════════════
@@ -350,7 +350,7 @@ function OldFormatRenderer({ serviceData, language, t }) {
               <SocialMediaHero
                 title={serviceData.hero_title || serviceData.title}
                 desc={serviceData.hero_subtitle || serviceData.description}
-                bgImage={serviceData.id === "seo-optimization" || serviceData.id === "network-marketing" ? "/template/template-one-hero.png" : undefined}
+                bgImage={serviceData.id === "seo-optimization" || serviceData.id === "network-marketing" ? "/template/template-one-hero.webp" : undefined}
                 planetImage={null}
                 serviceId={serviceData.id}
               />
@@ -397,7 +397,7 @@ function OldFormatRenderer({ serviceData, language, t }) {
         return (
           <>
             {serviceData.show_hero !== false && (
-              <SocialMediaHero title={serviceData.hero_title || serviceData.title || t("mobileAppDev")} desc={serviceData.hero_subtitle || serviceData.description} bgImage="/template/template-two-hero.png" planetImage={null} serviceId={serviceData.id} />
+              <SocialMediaHero title={serviceData.hero_title || serviceData.title || t("mobileAppDev")} desc={serviceData.hero_subtitle || serviceData.description} bgImage="/template/template-two-hero.webp" planetImage={null} serviceId={serviceData.id} />
             )}
             {serviceData.show_features !== false && (
               <WebDesignFeatures title={serviceData.features_title || t("mobileAppFeaturesTitle")} description={serviceData.features_subtitle || ""} featuresList={serviceData.features_list} />

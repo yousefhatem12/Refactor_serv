@@ -68,13 +68,13 @@ const OnlineWebsiteDetails = () => {
             className={`absolute w-[100vh] ${isRtl ? "right-[-45.5vh] left-auto" : "left-[-45.5vh] right-auto"} top-1/2 -translate-y-1/2 z-10 flex items-center justify-center`}
           >
             <img
-              src="/aside/MArs 2.png"
+              src="/aside/MArs 2.webp"
               alt="Planet Mars"
               className={`w-full h-full object-contain drop-shadow-[0_0_80px_rgba(255,138,0,0.3)] ${isRtl ? "scale-x-[-1]" : ""}`}
             />
             {/* The white arc */}
             <img
-              src="/aside/circle.png"
+              src="/aside/circle.webp"
               alt="Arc"
               className={`absolute top-[5%] ${isRtl ? "right-[90px] left-auto" : "left-[90px] right-auto"} w-[90%] h-[100%] object-contain opacity-40 -z-10 pointer-events-none`}
               style={{

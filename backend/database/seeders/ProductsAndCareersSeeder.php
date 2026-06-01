@@ -21,7 +21,7 @@ class ProductsAndCareersSeeder extends Seeder
                     'en' => 'Athath is a complete e-commerce solution for furniture stores. It offers a modern, responsive design with advanced product filtering, seamless checkout, and an elegant presentation of your furniture collections. Perfect for establishing a strong online presence.',
                     'ar' => 'منصة "أثاث" هي حل تجارة إلكترونية راقٍ ومصمم خصيصاً لمعارض الأثاث واستوديوهات التصميم الداخلي. تجمع المنصة بين جماليات التصميم العصري والأداء البرمجي الفائق، لتوفر للعملاء تجربة تسوق تفاعلية سلسة تحول الزوار إلى عملاء دائمين.'
                 ],
-                'image' => '/portfolio/image-1.png',
+                'image' => '/portfolio/image-1.webp',
                 'demo_link' => '#',
                 'order_link' => '#',
                 'features' => [
@@ -43,7 +43,7 @@ class ProductsAndCareersSeeder extends Seeder
                     'en' => 'Ready-to-launch furniture store with ultra-fast page load speeds, pre-configured checkout, and SEO-optimized structure.',
                     'ar' => 'متجر أثاث متكامل جاهز للإطلاق الفوري، يتميز بسرعات تحميل فائقة، ونظام دفع مهيأ، وبنية برمجية مهيأة بالكامل لمحركات البحث (SEO).'
                 ],
-                'samples' => ["/portfolio/image-1.png", "/portfolio/image-2.png", "/portfolio/image-3.png", "/portfolio/image-4.png"]
+                'samples' => ["/portfolio/image-1.webp", "/portfolio/image-2.webp", "/portfolio/image-3.webp", "/portfolio/image-4.webp"]
             ],
             [
                 'slug' => 'clinic',
@@ -54,7 +54,7 @@ class ProductsAndCareersSeeder extends Seeder
                     'en' => 'A comprehensive medical clinic management system. Allows patients to book appointments, view their medical history, and interact with doctors. It includes a complete dashboard for doctors and receptionists.',
                     'ar' => 'نظام "كلينيك بلس" هو منصة متطورة لإدارة العيادات والمراكز الطبية بكافة تخصصاتها. تم تطويره بهدف تسهيل حجز مواعيد المرضى، وتنظيم الملفات الطبية الرقمية، وأتمتة المهام اليومية للأطباء والموظفين بكفاءة وسرية مطلقة.'
                 ],
-                'image' => '/portfolio/image-2.png',
+                'image' => '/portfolio/image-2.webp',
                 'demo_link' => '#',
                 'order_link' => '#',
                 'features' => [
@@ -76,7 +76,7 @@ class ProductsAndCareersSeeder extends Seeder
                     'en' => 'HIPAA-compliant data handling structures, ultra-smooth clinic workflow management, and zero setup latency.',
                     'ar' => 'تصميم يتوافق مع معايير الأمان الطبية، إدارة مرنة للورديات، وتجربة مستخدم خالية من التعقيد للمرضى والأطباء.'
                 ],
-                'samples' => ["/portfolio/image-2.png", "/portfolio/image-3.png", "/portfolio/image-4.png", "/portfolio/image-5.png"]
+                'samples' => ["/portfolio/image-2.webp", "/portfolio/image-3.webp", "/portfolio/image-4.webp", "/portfolio/image-5.webp"]
             ],
             [
                 'slug' => 'edu-platform',
@@ -87,7 +87,7 @@ class ProductsAndCareersSeeder extends Seeder
                     'en' => 'A complete online learning management system. Instructors can upload courses, track student progress, and conduct live sessions. Students enjoy an interactive learning environment with quizzes and certificates.',
                     'ar' => 'منصة "إديوليرن" هي نظام إدارة تعلم (LMS) شامل ومبتكر لخدمة المدارس، الأكاديميات، والمحاضرين الخصوصيين. تتيح لك المنصة إنشاء، واستضافة، وبيع الكورسات التفاعلية بجودة ممتازة وبيئة تعليمية تواكب أحدث المعايير.'
                 ],
-                'image' => '/portfolio/image-3.png',
+                'image' => '/portfolio/image-3.webp',
                 'demo_link' => '#',
                 'order_link' => '#',
                 'features' => [
@@ -109,7 +109,7 @@ class ProductsAndCareersSeeder extends Seeder
                     'en' => 'Robust video streaming integration, gamified learning dashboards, and seamless payment collection pipelines.',
                     'ar' => 'حماية تامة لمحتوى الفيديو من السرقة، تصميم تفاعلي ممتع للطلاب، ونظام دفع آمن مدمج.'
                 ],
-                'samples' => ["/portfolio/image-3.png", "/portfolio/image-4.png", "/portfolio/image-5.png", "/portfolio/image-6.png"]
+                'samples' => ["/portfolio/image-3.webp", "/portfolio/image-4.webp", "/portfolio/image-5.webp", "/portfolio/image-6.webp"]
             ],
             [
                 'slug' => 'real-estate',
@@ -120,7 +120,7 @@ class ProductsAndCareersSeeder extends Seeder
                     'en' => 'A powerful platform for real estate agencies to list properties, manage agents, and handle customer inquiries. Features an advanced map search, virtual tours integration, and a mobile-friendly design.',
                     'ar' => 'منصة "عقارات برو" هي الحل الرقمي الشامل لشركات التطوير العقاري والوسطاء. مجهزة بمحركات بحث جغرافية فائقة السرعة على الخريطة وميزات عرض متطورة، تجعل رحلة البحث عن منزل أو عقار تجاري سهلة وممتعة للغاية للعملاء.'
                 ],
-                'image' => '/portfolio/image-4.png',
+                'image' => '/portfolio/image-4.webp',
                 'demo_link' => '#',
                 'order_link' => '#',
                 'features' => [
@@ -142,7 +142,7 @@ class ProductsAndCareersSeeder extends Seeder
                     'en' => 'SEO-friendly property directory, automated email alerts for new listings, and flawless responsiveness across mobile devices.',
                     'ar' => 'تأهيل كامل لمحركات البحث لزيادة مبيعات عقاراتك، نظام إشعارات فوري للعملاء بالفرص الجديدة، وتوافق تام مع الجوال.'
                 ],
-                'samples' => ["/portfolio/image-4.png", "/portfolio/image-5.png", "/portfolio/image-6.png", "/portfolio/image-1.png"]
+                'samples' => ["/portfolio/image-4.webp", "/portfolio/image-5.webp", "/portfolio/image-6.webp", "/portfolio/image-1.webp"]
             ],
             [
                 'slug' => 'restaurant',
@@ -153,7 +153,7 @@ class ProductsAndCareersSeeder extends Seeder
                     'en' => 'A contactless menu and ordering system for restaurants. Customers can scan a QR code, view the interactive menu, place orders directly from their phones, and make payments online.',
                     'ar' => 'منصة "فودي منيو" هي نظام طلب ذاتي حديث يعتمد على رموز الـ QR ومصمم خصيصاً للمطاعم والمقاهي. تتيح المنصة لرواد مطعمك مسح الكود، طلب الوجبات، وتعديل إضافاتهم، ثم الدفع فوراً بكل سهولة ودون الحاجة لتنزيل أي تطبيق.'
                 ],
-                'image' => '/portfolio/image-5.png',
+                'image' => '/portfolio/image-5.webp',
                 'demo_link' => '#',
                 'order_link' => '#',
                 'features' => [
@@ -175,7 +175,7 @@ class ProductsAndCareersSeeder extends Seeder
                     'en' => 'Increases average order value by up to 25% via smart upselling, minimizes waitstaff strain, and optimizes dining turnover.',
                     'ar' => 'يزيد متوسط قيمة الطلب بنسبة تصل لـ 25٪ بفضل الاقتراحات الذكية، ويوفر تكاليف المطبخ، ويسرع معدل تدوير الطاولات.'
                 ],
-                'samples' => ["/portfolio/image-5.png", "/portfolio/image-6.png", "/portfolio/image-1.png", "/portfolio/image-2.png"]
+                'samples' => ["/portfolio/image-5.webp", "/portfolio/image-6.webp", "/portfolio/image-1.webp", "/portfolio/image-2.webp"]
             ],
             [
                 'slug' => 'gym',
@@ -186,7 +186,7 @@ class ProductsAndCareersSeeder extends Seeder
                     'en' => 'Manage your gym memberships, class schedules, and trainers efficiently. Members can book classes, track their fitness progress, and renew their subscriptions easily through the FitLife portal.',
                     'ar' => 'نظام "فت لايف" هو منصة برمجية متكاملة مخصصة لإدارة الصالات الرياضية ومراكز الصحة والجمال. ينظم النظام الاشتراكات، الجداول الزمنية للتمارين، وتتبع أداء المدربين والمنتسبين مع تقارير مالية تفصيلية ومؤتمتة.'
                 ],
-                'image' => '/portfolio/image-6.png',
+                'image' => '/portfolio/image-6.webp',
                 'demo_link' => '#',
                 'order_link' => '#',
                 'features' => [
@@ -208,7 +208,7 @@ class ProductsAndCareersSeeder extends Seeder
                     'en' => 'Includes check-in QR scanner system, client progress trackers, and detailed financial reports for gym management.',
                     'ar' => 'مزيد بنظام مسح باركود الدخول بالهاتف، وتتبع قياسات الجسم للأعضاء، مع لوحة إحصائيات مالية شاملة للإدارة.'
                 ],
-                'samples' => ["/portfolio/image-6.png", "/portfolio/image-1.png", "/portfolio/image-2.png", "/portfolio/image-3.png"]
+                'samples' => ["/portfolio/image-6.webp", "/portfolio/image-1.webp", "/portfolio/image-2.webp", "/portfolio/image-3.webp"]
             ]
         ];
 
@@ -254,7 +254,7 @@ class ProductsAndCareersSeeder extends Seeder
                         'en' => "This is a detailed description for Premium Product {$i}. It offers state-of-the-art features, elegant design, and seamless performance built on modern tech stack.",
                         'ar' => "هذا وصف تفصيلي للمنتج المميز رقم {$i}. يوفر ميزات متطورة وتصميماً أنيقاً وأداءً سلساً مبنياً على أحدث التقنيات الحديثة."
                     ],
-                    'image' => "/portfolio/image-{$imgNum}.png",
+                    'image' => "/portfolio/image-{$imgNum}.webp",
                     'demo_link' => '#',
                     'order_link' => '#',
                     'features' => [
@@ -273,9 +273,9 @@ class ProductsAndCareersSeeder extends Seeder
                         'ar' => "قابلية عالية للتوسع، سرعة استجابة فائقة، وقوالب تصميم حديثة."
                     ],
                     'samples' => [
-                        "/portfolio/image-1.png",
-                        "/portfolio/image-2.png",
-                        "/portfolio/image-3.png",
+                        "/portfolio/image-1.webp",
+                        "/portfolio/image-2.webp",
+                        "/portfolio/image-3.webp",
                     ],
                     'is_active' => true
                 ]

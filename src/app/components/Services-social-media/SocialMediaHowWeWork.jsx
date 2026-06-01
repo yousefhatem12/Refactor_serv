@@ -18,10 +18,10 @@ const SocialMediaHowWeWork = ({
             const idNum = index + 1;
             const idString = idNum < 10 ? `0${idNum}` : `${idNum}`;
             const icons = [
-              "/services-social-media/icon-1.png",
-              "/services-social-media/icon-2.png",
-              "/services-social-media/icon-3.png",
-              "/services-social-media/icon-4.png",
+              "/services-social-media/icon-1.webp",
+              "/services-social-media/icon-2.webp",
+              "/services-social-media/icon-3.webp",
+              "/services-social-media/icon-4.webp",
             ];
             return {
               id: idString,

@@ -9,7 +9,7 @@ const Newsletter = () => {
     <section className="w-full py-24 text-white relative z-10 flex flex-col items-center justify-center text-center overflow-hidden">
       <div className="absolute inset-0 w-full h-full -z-10 pointer-events-none mix-blend-screen opacity-80">
         <Image
-          src="/our-blog/get-our-blog.png"
+          src="/our-blog/get-our-blog.webp"
           alt="Newsletter Background"
           fill
           className="object-cover object-center mix-blend-screen opacity-80 [mask-image:radial-gradient(ellipse,black_20%,transparent_70%)] [-webkit-mask-image:radial-gradient(ellipse,black_20%,transparent_70%)] mix-blend-screen brightness-[130%] contrast-[120%] saturate-[130%]"

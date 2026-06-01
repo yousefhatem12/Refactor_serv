@@ -15,17 +15,17 @@ const Founders = ({ data }) => {
     {
       name: language === "ar" ? "جون دو" : "John Doe",
       role: t("founder1Role"),
-      image: "person-1.png",
+      image: "person-1.webp",
     },
     {
       name: language === "ar" ? "جين سميث" : "Jane Smith",
       role: t("founder2Role"),
-      image: "person-2.png",
+      image: "person-2.webp",
     },
     {
       name: language === "ar" ? "أحمد علي" : "Ahmed Ali",
       role: t("founder3Role"),
-      image: "person-3.png",
+      image: "person-3.webp",
     },
   ];
 
@@ -58,7 +58,7 @@ const Founders = ({ data }) => {
           role: member.role,
           image: member.image
             ? getMediaUrl(member.image)
-            : "/about-us/person-1.png",
+            : "/about-us/person-1.webp",
         }))
       : team.length > 0
         ? team.map((member) => ({
@@ -66,7 +66,7 @@ const Founders = ({ data }) => {
             role: member.role,
             image: member.image
               ? getMediaUrl(member.image)
-              : "/about-us/person-1.png",
+              : "/about-us/person-1.webp",
           }))
         : founders;
 

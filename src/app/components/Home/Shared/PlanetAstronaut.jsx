@@ -19,7 +19,7 @@ const PlanetAstronaut = ({ className = "", progress, ...props }) => {
       <motion.div className="relative w-full aspect-square flex items-center justify-center">
         <div className="relative w-full aspect-square">
           <img
-            src="/Hero/orange-planet.png"
+            src="/Hero/orange-planet.webp"
             alt="Planet"
             className="w-full h-full object-contain drop-shadow-[0_0_80px_rgba(255,138,0,0.4)] animate-[spin_60s_linear_infinite]"
           />
@@ -33,7 +33,7 @@ const PlanetAstronaut = ({ className = "", progress, ...props }) => {
           style={{ transform: isRtl ? "scaleX(-1)" : "none" }}
         >
           <motion.img
-            src="/Hero/astronaut.svg"
+            src="/Hero/astronaut.webp"
             alt="Astronaut"
             className="w-full h-auto object-contain"
             animate={{

@@ -8,7 +8,7 @@ import Loading from "../../loading";
 import { useLanguage } from "../../context/LanguageContext";
 
 const ProjectImage = ({ src, alt }) => {
-  const defaultImage = "/our-portfolio/Rectangle 6.png";
+  const defaultImage = "/our-portfolio/Rectangle 6.webp";
   const [imgSrc, setImgSrc] = useState(src || defaultImage);
 
   useEffect(() => {

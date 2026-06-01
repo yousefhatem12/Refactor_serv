@@ -53,7 +53,7 @@ const QuotationHero = () => {
         className={`absolute ${language === "ar" ? "-left-20" : "-right-20"} top-0 w-64 h-64 pointer-events-none z-10 opacity-30 blur-sm lg:blur-none lg:opacity-50`}
       >
         <img
-          src="/Services/new/blue.png"
+          src="/Services/new/blue.webp"
           alt="Decorative Planet"
           className="w-full h-auto object-contain animate-pulse-slow"
         />

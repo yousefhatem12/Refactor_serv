@@ -119,11 +119,11 @@ const OurPortfolio = ({ activeCategoryId }) => {
                 <div className="w-full lg:w-1/2 flex absolute inset-0 lg:relative lg:inset-auto md lg:h-[400px] z-0">
                   <div className="relative w-full h-full group overflow-hidden lg:rounded-xl lg:bg-white/5 lg:border lg:border-white/10 lg:shadow-2xl">
                     <img
-                      src={item.image || "/our-portfolio/Rectangle 6.png"}
+                      src={item.image || "/our-portfolio/Rectangle 6.webp"}
                       alt={item.name}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       onError={(e) => {
-                        e.target.src = "/our-portfolio/Rectangle 6.png";
+                        e.target.src = "/our-portfolio/Rectangle 6.webp";
                       }}
                     />
                     {/* Dark overlay specifically for hover on desktop */}

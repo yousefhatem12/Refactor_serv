@@ -27,7 +27,7 @@ const BlogHero = ({ data, posts = [] }) => {
           <Link href={`/blog/${featuredPost.slug || featuredPost.id}`} className="w-full lg:w-3/5 group cursor-pointer">
             <div className="relative w-full h-[300px] md:h-[400px] rounded-lg overflow-hidden mb-6">
               <Image
-                src={featuredPost.image || "/placeholder.png"}
+                src={featuredPost.image || "/placeholder.webp"}
                 alt={featuredPost.title}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -57,7 +57,7 @@ const BlogHero = ({ data, posts = [] }) => {
               >
                 <div className="relative w-1/3 h-[100px] md:h-[120px] rounded-lg overflow-hidden shrink-0">
                   <Image
-                    src={post.image || "/placeholder.png"}
+                    src={post.image || "/placeholder.webp"}
                     alt={post.title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"

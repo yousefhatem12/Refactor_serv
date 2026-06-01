@@ -13,7 +13,7 @@ const MobileAppsHero = ({ data }) => {
 
   const heroImage = data?.hero_image
     ? getMediaUrl(data.hero_image)
-    : "/services-web-dev/hero.png";
+    : "/services-web-dev/hero.webp";
 
   const whatsappNumber = settings?.site_whatsapp
     ? settings.site_whatsapp.replace(/\D/g, "")
@@ -78,7 +78,7 @@ const MobileAppsHero = ({ data }) => {
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
         >
           <img
-            src="/Services/new/green.png"
+            src="/Services/new/green.webp"
             alt="Green Planet"
             className={`w-full h-auto object-contain drop-shadow-[0_0_50px_rgba(34,197,94,0.3)] scale-110 ${isRtl ? "-translate-x-[10%]" : "translate-x-[10%]"}`}
           />

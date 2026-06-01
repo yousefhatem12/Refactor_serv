@@ -29,7 +29,7 @@ const WhyChooseUs = ({ data }) => {
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/about-us/sectiom-5-bg.png"
+          src="/about-us/sectiom-5-bg.webp"
           alt="Why Choose Us Background"
           fill
           className="object-cover object-center opacity-80"

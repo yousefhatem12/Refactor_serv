@@ -38,7 +38,7 @@ const ContactMap = () => {
           }`}
         >
           <img
-            src="/contact-us/Element.png"
+            src="/contact-us/Element.webp"
             alt=""
             className={`w-full h-auto object-cover mix-blend-luminosity ${
               language === "ar" ? "scale-x-[-1]" : ""

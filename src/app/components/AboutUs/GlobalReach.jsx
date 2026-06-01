@@ -16,7 +16,7 @@ const locations = [
     x: 59,
     y: 42,
   },
- 
+
 ];
 
 const GlobalReach = ({ data, minimal = false }) => {
@@ -28,24 +28,24 @@ const GlobalReach = ({ data, minimal = false }) => {
   const descriptionText = data?.description || t("aboutGlobalDesc") || "";
 
   const hasDbItems = data?.items && data.items.length > 0;
-  const dbLocations = hasDbItems 
+  const dbLocations = hasDbItems
     ? data.items.map((item, idx) => {
-        const defaultLoc = locations[idx % locations.length] || { x: 50, y: 50 };
-        return {
-          id: item.id || `loc-${idx}`,
-          name: item.name || item.country,
-          city: item.city,
-          details: item.details,
-          x: item.x || defaultLoc.x,
-          y: item.y || defaultLoc.y,
-        };
-      })
+      const defaultLoc = locations[idx % locations.length] || { x: 60, y: 100 };
+      return {
+        id: item.id || `loc-${idx}`,
+        name: item.name || item.country,
+        city: item.city,
+        details: item.details,
+        x: item.x || defaultLoc.x,
+        y: item.y || defaultLoc.y,
+      };
+    })
     : locations.map(loc => ({
-        ...loc,
-        name: language === "ar" ? t("locationEgypt") : loc.name,
-        city: language === "ar" ? "المنصورة" : loc.city,
-        details: language === "ar" ? "شارع قناة السويس - أعلى صيدلية د. رامي" : loc.details
-      }));
+      ...loc,
+      name: language === "ar" ? t("locationEgypt") : loc.name,
+      city: language === "ar" ? "المنصورة" : loc.city,
+      details: language === "ar" ? "شارع قناة السويس - أعلى صيدلية د. رامي" : loc.details
+    }));
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -148,7 +148,7 @@ const GlobalReach = ({ data, minimal = false }) => {
         >
           <div className="absolute inset-0 bg-blue-500/5 blur-[120px] rounded-full -z-10"></div>
           <Image
-            src="/about-us/Contents.png"
+            src="/about-us/Contents.webp"
             alt="Global Reach Map"
             fill
             className="object-contain opacity-80"

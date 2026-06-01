@@ -167,7 +167,7 @@ export default function Earth({ isPhaseTwo }) {
           >
             <img
               ref={astronautImgRef}
-              src="/Hero/astronaut.svg"
+              src="/Hero/astronaut.webp"
               alt="Astronaut"
               className="w-full h-full object-contain"
             />

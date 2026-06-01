@@ -192,7 +192,7 @@ export default function DynamicPage() {
                   heroStyle={serviceData.hero_style || "social_media_hero"}
                   defaultHeroImage={
                     serviceData.default_hero_image ||
-                    "/template/template-one-hero.png"
+                    "/template/template-one-hero.webp"
                   }
                   serviceId={serviceData.id}
                   language={language}
@@ -267,7 +267,7 @@ export default function DynamicPage() {
                             bgImage={
                               serviceData.id === "seo-optimization" ||
                               serviceData.id === "network-marketing"
-                                ? "/template/template-one-hero.png"
+                                ? "/template/template-one-hero.webp"
                                 : undefined
                             }
                             planetImage={null}
@@ -362,7 +362,7 @@ export default function DynamicPage() {
                               serviceData.hero_subtitle ||
                               serviceData.description
                             }
-                            bgImage="/template/template-two-hero.png"
+                            bgImage="/template/template-two-hero.webp"
                             planetImage={null}
                             serviceId={serviceData.id}
                           />
@@ -404,7 +404,7 @@ export default function DynamicPage() {
                               desc:
                                 serviceData.hero_subtitle ||
                                 serviceData.description,
-                              bg_image: "/template/template-three-hero.png",
+                              bg_image: "/template/template-three-hero.webp",
                               hidePlanet: true,
                               bgPosition: "bg-bottom",
                               overlay: "bg-black/20",
@@ -477,7 +477,7 @@ export default function DynamicPage() {
                               </div>
                               <div className="w-full lg:w-1/2 relative">
                                 <img
-                                  src="/template/Mask group.png"
+                                  src="/template/Mask group.webp"
                                   alt="Analytics Dashboard"
                                   className="w-full h-auto object-contain drop-shadow-2xl"
                                 />
@@ -510,7 +510,7 @@ export default function DynamicPage() {
                               </div>
                               <div className="w-full lg:w-1/2 relative">
                                 <img
-                                  src="/template/stephen-phillips-hostreviews-co-uk-shr_Xn8S8QU-unsplash 1.png"
+                                  src="/template/stephen-phillips-hostreviews-co-uk-shr_Xn8S8QU-unsplash 1.webp"
                                   alt="Laptop showing website"
                                   className="w-full h-auto object-contain drop-shadow-[0_0_40px_rgba(255,255,255,0.05)]"
                                 />

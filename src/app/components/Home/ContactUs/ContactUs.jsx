@@ -425,11 +425,11 @@ const ContactUs = () => {
           </div>
         </motion.div>
 
-        {/* Right Side: Replaced Map with Contents.png */}
+        {/* Right Side: Replaced Map with Contents.webp */}
         <div className="w-full h-full flex items-center justify-center relative min-h-[300px] md:min-h-[450px]">
           {/* Falling Meteor */}
           <motion.img
-            src="/CTA/meteor2.png"
+            src="/CTA/meteor2.webp"
             alt="Meteor"
             className="absolute z-30 w-32 md:w-48 pointer-events-none drop-shadow-[0_0_40px_rgba(255,138,0,0.8)]"
             initial={{
@@ -457,7 +457,7 @@ const ContactUs = () => {
 
           {/* Explosion */}
           <motion.img
-            src="/CTA/explosion.png"
+            src="/CTA/explosion.webp"
             alt="Explosion"
             className="absolute z-40 w-64 md:w-96 pointer-events-none mix-blend-screen"
             initial={{ opacity: 0, scale: 0.2 }}

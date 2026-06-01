@@ -30,12 +30,12 @@ const TextImageSection = ({ data }) => {
   let imageClass = "object-contain";
 
   if (isExperience) {
-    imageUrl = "/about-us/section-2-image.png";
+    imageUrl = "/about-us/section-2-image.webp";
     glowColor = "bg-blue-600/20";
     imageClass =
       "object-cover [mask-image:radial-gradient(circle,black_0%,transparent_100%)] [-webkit-mask-image:radial-gradient(circle,black_0%,transparent_100%)] mix-blend-screen brightness-[130%] contrast-[120%] saturate-[130%]";
   } else if (isSolutions) {
-    imageUrl = "/about-us/section-3-image.png";
+    imageUrl = "/about-us/section-3-image.webp";
     glowColor = "bg-purple-600/20";
     imageClass =
       "object-cover [mask-image:radial-gradient(circle,black_0%,transparent_100%)] [-webkit-mask-image:radial-gradient(circle,black_0%,transparent_100%)] mix-blend-screen brightness-[130%] contrast-[120%] saturate-[130%]";

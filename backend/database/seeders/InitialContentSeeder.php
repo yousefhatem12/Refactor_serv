@@ -173,7 +173,7 @@ class InitialContentSeeder extends Seeder
                                         'name' => 'MOHAMED ABDELAL',
                                         'role' => 'Chief Creative Officer & Founder',
                                         'dept' => 'management',
-                                        'image' => 'pages/person-1.png',
+                                        'image' => 'pages/person-1.webp',
                                         'linkedin' => 'https://linkedin.com',
                                         'github' => '#',
                                         'twitter' => 'https://x.com'
@@ -182,7 +182,7 @@ class InitialContentSeeder extends Seeder
                                         'name' => 'AHMED MOHAMED',
                                         'role' => 'Chief Technology Officer & Founder',
                                         'dept' => 'management',
-                                        'image' => 'pages/person-2.png',
+                                        'image' => 'pages/person-2.webp',
                                         'linkedin' => 'https://linkedin.com',
                                         'github' => 'https://github.com',
                                         'twitter' => 'https://x.com'
@@ -191,7 +191,7 @@ class InitialContentSeeder extends Seeder
                                         'name' => 'AHMED RAMADAN',
                                         'role' => 'Chief Marketing Officer & Founder',
                                         'dept' => 'management',
-                                        'image' => 'pages/person-3.png',
+                                        'image' => 'pages/person-3.webp',
                                         'linkedin' => 'https://linkedin.com',
                                         'github' => '#',
                                         'twitter' => 'https://x.com'
@@ -200,7 +200,7 @@ class InitialContentSeeder extends Seeder
                                         'name' => 'Sarah Jenkins',
                                         'role' => 'Lead UI/UX Designer',
                                         'dept' => 'design',
-                                        'image' => 'pages/person-1.png',
+                                        'image' => 'pages/person-1.webp',
                                         'linkedin' => 'https://linkedin.com',
                                         'github' => '#',
                                         'twitter' => 'https://x.com'
@@ -209,7 +209,7 @@ class InitialContentSeeder extends Seeder
                                         'name' => 'David Chen',
                                         'role' => 'Senior Full Stack Developer',
                                         'dept' => 'development',
-                                        'image' => 'pages/person-2.png',
+                                        'image' => 'pages/person-2.webp',
                                         'linkedin' => 'https://linkedin.com',
                                         'github' => 'https://github.com',
                                         'twitter' => 'https://x.com'
@@ -218,7 +218,7 @@ class InitialContentSeeder extends Seeder
                                         'name' => 'Amira Youssef',
                                         'role' => 'Senior Frontend Engineer',
                                         'dept' => 'development',
-                                        'image' => 'pages/person-3.png',
+                                        'image' => 'pages/person-3.webp',
                                         'linkedin' => 'https://linkedin.com',
                                         'github' => 'https://github.com',
                                         'twitter' => 'https://x.com'
@@ -227,7 +227,7 @@ class InitialContentSeeder extends Seeder
                                         'name' => 'Kareem Mahmoud',
                                         'role' => 'SEO & Growth Marketing Expert',
                                         'dept' => 'marketing',
-                                        'image' => 'pages/person-2.png',
+                                        'image' => 'pages/person-2.webp',
                                         'linkedin' => 'https://linkedin.com',
                                         'github' => '#',
                                         'twitter' => 'https://x.com'
@@ -236,7 +236,7 @@ class InitialContentSeeder extends Seeder
                                         'name' => 'Emily Taylor',
                                         'role' => 'Art Director',
                                         'dept' => 'design',
-                                        'image' => 'pages/person-1.png',
+                                        'image' => 'pages/person-1.webp',
                                         'linkedin' => 'https://linkedin.com',
                                         'github' => '#',
                                         'twitter' => 'https://x.com'
@@ -369,7 +369,7 @@ class InitialContentSeeder extends Seeder
                                         'name' => 'محمد عبد العال',
                                         'role' => 'المدير الإبداعي التنفيذي وشريك مؤسس',
                                         'dept' => 'management',
-                                        'image' => 'pages/person-1.png',
+                                        'image' => 'pages/person-1.webp',
                                         'linkedin' => 'https://linkedin.com',
                                         'github' => '#',
                                         'twitter' => 'https://x.com'
@@ -378,7 +378,7 @@ class InitialContentSeeder extends Seeder
                                         'name' => 'أحمد محمد',
                                         'role' => 'الرئيس التنفيذي للتكنولوجيا وشريك مؤسس',
                                         'dept' => 'management',
-                                        'image' => 'pages/person-2.png',
+                                        'image' => 'pages/person-2.webp',
                                         'linkedin' => 'https://linkedin.com',
                                         'github' => 'https://github.com',
                                         'twitter' => 'https://x.com'
@@ -387,7 +387,7 @@ class InitialContentSeeder extends Seeder
                                         'name' => 'أحمد رمضان',
                                         'role' => 'رئيس قطاع التسويق وشريك مؤسس',
                                         'dept' => 'management',
-                                        'image' => 'pages/person-3.png',
+                                        'image' => 'pages/person-3.webp',
                                         'linkedin' => 'https://linkedin.com',
                                         'github' => '#',
                                         'twitter' => 'https://x.com'
@@ -396,7 +396,7 @@ class InitialContentSeeder extends Seeder
                                         'name' => 'سارة جينكينز',
                                         'role' => 'رئيسة مصممي واجهة وتجربة المستخدم',
                                         'dept' => 'design',
-                                        'image' => 'pages/person-1.png',
+                                        'image' => 'pages/person-1.webp',
                                         'linkedin' => 'https://linkedin.com',
                                         'github' => '#',
                                         'twitter' => 'https://x.com'
@@ -405,7 +405,7 @@ class InitialContentSeeder extends Seeder
                                         'name' => 'ديفيد تشين',
                                         'role' => 'مطور ويب متكامل أول',
                                         'dept' => 'development',
-                                        'image' => 'pages/person-2.png',
+                                        'image' => 'pages/person-2.webp',
                                         'linkedin' => 'https://linkedin.com',
                                         'github' => 'https://github.com',
                                         'twitter' => 'https://x.com'
@@ -414,7 +414,7 @@ class InitialContentSeeder extends Seeder
                                         'name' => 'أميرة يوسف',
                                         'role' => 'مهندسة واجهات أمامية أولى',
                                         'dept' => 'development',
-                                        'image' => 'pages/person-3.png',
+                                        'image' => 'pages/person-3.webp',
                                         'linkedin' => 'https://linkedin.com',
                                         'github' => 'https://github.com',
                                         'twitter' => 'https://x.com'
@@ -423,7 +423,7 @@ class InitialContentSeeder extends Seeder
                                         'name' => 'كريم محمود',
                                         'role' => 'خبير سيو وتسويق نمو رقمي',
                                         'dept' => 'marketing',
-                                        'image' => 'pages/person-2.png',
+                                        'image' => 'pages/person-2.webp',
                                         'linkedin' => 'https://linkedin.com',
                                         'github' => '#',
                                         'twitter' => 'https://x.com'
@@ -432,7 +432,7 @@ class InitialContentSeeder extends Seeder
                                         'name' => 'إيميلي تايلور',
                                         'role' => 'المدير الفني الفني الإبداعي',
                                         'dept' => 'design',
-                                        'image' => 'pages/person-1.png',
+                                        'image' => 'pages/person-1.webp',
                                         'linkedin' => 'https://linkedin.com',
                                         'github' => '#',
                                         'twitter' => 'https://x.com'

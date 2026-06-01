@@ -40,7 +40,7 @@ const Testimonial = () => {
     role: item.position,
     quote: item.review,
     rating: item.rating || 5,
-    avatar: item.image || "/user-placeholder.png",
+    avatar: item.image || "/user-placeholder.webp",
     videoUrl: item.video_url || null,
     audioUrl: item.audio_url || null,
   }));
@@ -188,7 +188,7 @@ const Testimonial = () => {
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20 overflow-hidden shrink-0">
                             {item.avatar &&
-                            item.avatar !== "/user-placeholder.png" ? (
+                            item.avatar !== "/user-placeholder.webp" ? (
                               <img
                                 src={item.avatar}
                                 alt={item.name}
@@ -251,7 +251,7 @@ const Testimonial = () => {
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20 overflow-hidden shrink-0">
                           {item.avatar &&
-                          item.avatar !== "/user-placeholder.png" ? (
+                          item.avatar !== "/user-placeholder.webp" ? (
                             <img
                               src={item.avatar}
                               alt={item.name}
@@ -324,7 +324,7 @@ const Testimonial = () => {
                             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FF8A00] to-orange-600 p-[2px] group-hover/card:shadow-[0_0_15px_rgba(255,138,0,0.4)] transition-all">
                               <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center overflow-hidden">
                                 {item.avatar &&
-                                item.avatar !== "/user-placeholder.png" ? (
+                                item.avatar !== "/user-placeholder.webp" ? (
                                   <img
                                     src={item.avatar}
                                     alt={item.name}

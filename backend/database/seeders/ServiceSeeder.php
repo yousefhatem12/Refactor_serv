@@ -12,7 +12,7 @@ class ServiceSeeder extends Seeder
         $services = [
             [
                 'slug' => 'web-hosting',
-                'icon' => '/Services/Purple Planet.png',
+                'icon' => '/Services/Purple Planet.webp',
                 'is_active' => true,
                 'name' => ['en' => 'Web Hosting', 'ar' => 'استضافة المواقع'],
                 'description' => [
@@ -23,7 +23,7 @@ class ServiceSeeder extends Seeder
             ],
             [
                 'slug' => 'digital-marketing',
-                'icon' => '/Services/Blue Planet.png',
+                'icon' => '/Services/Blue Planet.webp',
                 'is_active' => true,
                 'name' => ['en' => 'Digital Marketing', 'ar' => 'التسويق الرقمي'],
                 'description' => [
@@ -45,7 +45,7 @@ class ServiceSeeder extends Seeder
             ],
             [
                 'slug' => 'creative-design',
-                'icon' => '/Services/new/green.png',
+                'icon' => '/Services/new/green.webp',
                 'is_active' => true,
                 'name' => ['en' => 'Creative Design', 'ar' => 'التصميم الإبداعي'],
                 'description' => [

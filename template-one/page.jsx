@@ -16,7 +16,7 @@ export default function TemplateOnePage() {
         <SocialMediaHero 
           title="Network Marketing"
           desc="Network marketing is a business model that depends on person-to-person sales by independent representatives, often working from home. A network marketing business may require you to build a network of business partners or salespeople to assist with lead generation and closing sales."
-          bgImage="/template/template-one-hero.png"
+          bgImage="/template/template-one-hero.webp"
           planetImage={null}
         />
         <ServicesFeatures 
@@ -83,7 +83,7 @@ export default function TemplateOnePage() {
               {[1, 2, 3, 4, 5, 6].map((item) => (
                 <div key={item} className="relative group overflow-hidden rounded-xl aspect-[1.6/1] bg-[#ffffff10] border border-[#ffffff20]">
                   <Image
-                    src={`/portfolio/image-${item}.png`}
+                    src={`/portfolio/image-${item}.webp`}
                     alt={`Portfolio Work ${item}`}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
