@@ -184,8 +184,8 @@ const BlogGrid = () => {
               key={cat.id}
               onClick={() => handleTabChange(cat.id)}
               className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 border ${activeTab === cat.id
-                  ? "bg-[#FF8A00] border-[#FF8A00] text-white"
-                  : "border-blue-500/50 text-gray-300 hover:border-blue-400 hover:text-white"
+                ? "bg-[#FF8A00] border-[#FF8A00] text-white"
+                : "border-blue-500/50 text-gray-300 hover:border-blue-400 hover:text-white"
                 }`}
             >
               {cat.label}
@@ -272,7 +272,7 @@ const BlogGrid = () => {
           >
             {loading ? (
               <>
-                <span className="w-4 h-4 border-2 border-gray-300 border-t-transparent rounded-full animate-spin"></span>
+                <span className="w-4 h-4   border-2 border-gray-300 border-t-transparent rounded-full animate-spin"></span>
                 {t("loading")}
               </>
             ) : (
