@@ -24,25 +24,25 @@ const WebDevHero = ({ data, serviceId = "web-development" }) => {
       : "/services-web-dev/hero.png");
 
   return (
-    <section className="relative w-full min-h-[80vh] flex items-center justify-between px-6 lg:px-20 pt-20">
+    <section className="relative w-full h-[calc(100dvh-80px)] min-h-[550px] lg:h-[calc(100vh-80px)] flex items-center justify-between px-6 lg:px-20 pt-8 pb-12 lg:py-0 overflow-hidden">
       {/* Background Image behind everything */}
       <div
-        className={`absolute inset-[-100px] h-screen z-0 bg-no-repeat bg-cover ${data?.bgPosition || "bg-center"} mix-blend-screen ${isRtl ? "scale-x-[-1]" : ""}`}
+        className={`absolute inset-0 w-full h-full z-0 bg-no-repeat bg-cover ${data?.bgPosition || "bg-center"} mix-blend-screen ${isRtl ? "scale-x-[-1]" : ""}`}
         style={{ backgroundImage: `url('${heroImage}')` }}
       />
       {data?.overlay && (
         <div
-          className={`absolute inset-[-100px] h-screen z-10 pointer-events-none ${data.overlay}`}
+          className={`absolute inset-0 w-full h-full z-10 pointer-events-none ${data.overlay}`}
         />
       )}
 
       {/* Content */}
-      <div className="relative z-20 max-w-2xl w-full lg:w-1/2">
+      <div className="relative z-20 max-w-2xl w-full lg:w-1/2 flex flex-col justify-center">
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-white text-5xl md:text-5xl font-bold mb-6 tracking-tight uppercase"
+          className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 tracking-tight uppercase leading-tight"
         >
           {data?.hero_title || data?.title || t("webDevHeroTitle")}
         </motion.h1>
@@ -51,7 +51,7 @@ const WebDevHero = ({ data, serviceId = "web-development" }) => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-gray-300 text-lg md:text-xl leading-relaxed mb-10"
+          className="text-gray-300 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed mb-6 md:mb-8 lg:mb-10 max-h-[30vh] overflow-y-auto custom-scrollbar pr-2"
         >
           {data?.hero_subtitle ||
             data?.subtitle ||
@@ -63,23 +63,23 @@ const WebDevHero = ({ data, serviceId = "web-development" }) => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="flex flex-wrap items-center gap-6"
+          className="flex flex-wrap items-center gap-4 md:gap-6"
         >
           <button
             onClick={() => router.push("/contact-us")}
-            className="px-8 py-3 rounded-full bg-white text-[#040A37] font-semibold text-lg hover:bg-gray-200 transition-colors cursor-pointer border-none"
+            className="px-6 py-2.5 md:px-8 md:py-3 rounded-full bg-white text-[#040A37] font-semibold text-base md:text-lg hover:bg-gray-200 transition-colors cursor-pointer border-none"
           >
             {settings?.hero_cta_text || t("getStarted")}
           </button>
 
           <button
             onClick={() => setIsVideoModalOpen(true)}
-            className="flex items-center gap-3 text-white hover:text-gray-300 transition-colors group bg-transparent border-none cursor-pointer"
+            className="flex items-center gap-2 md:gap-3 text-white hover:text-gray-300 transition-colors group bg-transparent border-none cursor-pointer"
           >
-            <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center group-hover:border-white transition-colors">
-              <FaPlay className="text-white ml-1 text-sm" />
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/30 flex items-center justify-center group-hover:border-white transition-colors">
+              <FaPlay className="text-white ml-1 text-xs md:text-sm" />
             </div>
-            <span className="font-semibold text-lg">
+            <span className="font-semibold text-base md:text-lg">
               {settings?.hero_video_button_text || t("knowMore")}
             </span>
           </button>

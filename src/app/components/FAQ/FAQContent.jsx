@@ -28,7 +28,7 @@ const FAQContent = ({ data }) => {
           setCurrentPage(1);
           const encodedSearch = searchQuery ? encodeURIComponent(searchQuery) : "";
           const res = await fetchAPI(`/faqs?lang=${language}&page=1&per_page=6&search=${encodedSearch}`);
-          
+
           if (res && Array.isArray(res.data)) {
             const formattedData = res.data.map((item, index) => ({
               ...item,
@@ -69,7 +69,7 @@ const FAQContent = ({ data }) => {
       const nextPage = currentPage + 1;
       const encodedSearch = searchQuery ? encodeURIComponent(searchQuery) : "";
       const res = await fetchAPI(`/faqs?lang=${language}&page=${nextPage}&per_page=6&search=${encodedSearch}`);
-      
+
       if (res && Array.isArray(res.data)) {
         setFaqs((prev) => {
           const startIdx = prev.length;
@@ -231,7 +231,7 @@ const FAQContent = ({ data }) => {
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                   </svg>
                 ) : null}
-                <span>{isLoadingMore ? (t("loading") || (language === 'ar' ? 'جاري التحميل...' : 'Loading...')) : (t("loadMore") || 'Load More')}</span>
+                <span>{isLoadingMore ? t("loading") : t("loadMore")}</span>
               </button>
             </div>
           )}
@@ -254,11 +254,10 @@ const FAQContent = ({ data }) => {
 
       {/* Right Side: Earth Image */}
       <div
-        className={`absolute top-[5%] md:w-[500px] lg:w-[800px] h-auto z-10 pointer-events-none hidden md:block ${
-          language === "ar"
+        className={`absolute top-[5%] md:w-[500px] lg:w-[800px] h-auto z-10 pointer-events-none hidden md:block ${language === "ar"
             ? "md:left-[-25%] lg:left-[-25%] md:right-auto lg:right-auto"
             : "md:right-[-25%] lg:right-[-25%] md:left-auto lg:left-auto"
-        }`}
+          }`}
       >
         <motion.img
           initial={{ opacity: 0, rotate: -10 }}
@@ -266,9 +265,8 @@ const FAQContent = ({ data }) => {
           transition={{ duration: 1.5, ease: "easeOut" }}
           src={heroImage}
           alt="FAQ Illustration"
-          className={`w-full h-full object-contain drop-shadow-[0_0_40px_rgba(59,130,246,0.3)] ${
-            language === "ar" ? "scale-x-[-1]" : ""
-          }`}
+          className={`w-full h-full object-contain drop-shadow-[0_0_40px_rgba(59,130,246,0.3)] ${language === "ar" ? "scale-x-[-1]" : ""
+            }`}
         />
       </div>
     </div>

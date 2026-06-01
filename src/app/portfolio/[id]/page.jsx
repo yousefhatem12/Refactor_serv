@@ -7,6 +7,26 @@ import { fetchAPI } from "@/lib/api";
 import Loading from "../../loading";
 import { useLanguage } from "../../context/LanguageContext";
 
+const ProjectImage = ({ src, alt }) => {
+  const defaultImage = "/our-portfolio/Rectangle 6.png";
+  const [imgSrc, setImgSrc] = useState(src || defaultImage);
+
+  useEffect(() => {
+    setImgSrc(src || defaultImage);
+  }, [src]);
+
+  return (
+    <Image
+      src={imgSrc}
+      alt={alt}
+      fill
+      className="object-cover object-center group-hover:scale-102 transition-transform duration-700"
+      priority
+      onError={() => setImgSrc(defaultImage)}
+    />
+  );
+};
+
 export default function ProjectDetails() {
   const { language } = useLanguage();
   const params = useParams();
@@ -145,7 +165,7 @@ export default function ProjectDetails() {
                       {getCategoryLabel(project.category)}
                     </span>
                   </div>
-                  
+
                   {/* Tags */}
                   {project.tags && project.tags.length > 0 && (
                     <div className="flex flex-col gap-2 py-2">
@@ -201,15 +221,7 @@ export default function ProjectDetails() {
             {/* Right Column - Media */}
             <div className="w-full lg:w-1/2 sticky top-32">
               <div className="relative w-full aspect-[1.6/1] md:aspect-[1.5/1] rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-gray-800/80 group">
-                {project.image && (
-                  <Image
-                    src={project.image}
-                    alt={project.name}
-                    fill
-                    className="object-cover object-center group-hover:scale-102 transition-transform duration-700"
-                    priority
-                  />
-                )}
+                <ProjectImage src={project.image} alt={project.name} />
                 {/* Visual Glass Effect Border */}
                 <div className="absolute inset-0 border border-white/10 pointer-events-none rounded-2xl" />
               </div>

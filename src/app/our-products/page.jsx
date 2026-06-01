@@ -207,7 +207,7 @@ const OurProductsListingPage = () => {
                       />
                     </svg>
                   )}
-                  {isLoadingMore ? (t("loading") || (language === 'ar' ? 'جاري التحميل...' : 'Loading...')) : (t("loadMore") || (language === 'ar' ? 'تحميل المزيد' : 'Load More'))}
+                  {isLoadingMore ? t("loading") : t("loadMore")}
                 </button>
               </div>
             )}

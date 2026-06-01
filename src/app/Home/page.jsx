@@ -248,7 +248,7 @@ export default function HomePage() {
               zIndex: planetZIndex,
               filter: planetFilter,
             }}
-            className="fixed inset-0 pointer-events-none hidden md:flex items-center justify-center h-screen"
+            className="fixed inset-0 pointer-events-none hidden lg:flex items-center justify-center h-screen"
           >
             <div className="w-[300px] md:w-[450px] lg:w-[550px] aspect-square">
               <PlanetAstronaut progress={smoothProgress} />

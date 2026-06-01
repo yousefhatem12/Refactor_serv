@@ -21,9 +21,9 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20, scale: 0.96 },
-  show: { 
-    opacity: 1, 
-    y: 0, 
+  show: {
+    opacity: 1,
+    y: 0,
     scale: 1,
     transition: {
       type: "spring",
@@ -31,8 +31,8 @@ const itemVariants = {
       damping: 15,
     }
   },
-  exit: { 
-    opacity: 0, 
+  exit: {
+    opacity: 0,
     scale: 0.96,
     transition: { duration: 0.2 }
   }
@@ -55,9 +55,8 @@ const BlogCard = ({ post, t, language, categoryMap }) => {
             src={post.image || "/placeholder.png"}
             alt={post.title}
             fill
-            className={`object-cover transition-all duration-700 group-hover:scale-105 ${
-              isImageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
-            }`}
+            className={`object-cover transition-all duration-700 group-hover:scale-105 ${isImageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
+              }`}
             onLoad={() => setIsImageLoaded(true)}
           />
         </div>
@@ -97,7 +96,7 @@ const BlogGrid = () => {
         if (data) {
           const allCat = { id: "ALL", label: language === "ar" ? "الكل" : "All" };
           setCategories([allCat, ...data]);
-          
+
           const map = { ALL: language === "ar" ? "الكل" : "All" };
           data.forEach((cat) => {
             map[cat.id] = cat.label;
@@ -177,18 +176,17 @@ const BlogGrid = () => {
         <h2 className="text-2xl md:text-3xl font-bold mb-6 uppercase tracking-wide">
           {t("recentBlogPosts") || (language === 'ar' ? 'أحدث المقالات' : 'Recent Blog Posts')}
         </h2>
-        
+
         {/* Tabs */}
         <div className="flex flex-wrap gap-3 mb-10">
           {categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => handleTabChange(cat.id)}
-              className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 border ${
-                activeTab === cat.id
+              className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 border ${activeTab === cat.id
                   ? "bg-[#FF8A00] border-[#FF8A00] text-white"
                   : "border-blue-500/50 text-gray-300 hover:border-blue-400 hover:text-white"
-              }`}
+                }`}
             >
               {cat.label}
             </button>
@@ -197,8 +195,8 @@ const BlogGrid = () => {
       </div>
 
       {/* Grid */}
-      <motion.div 
-        layout 
+      <motion.div
+        layout
         variants={containerVariants}
         initial="hidden"
         animate="show"
@@ -217,10 +215,10 @@ const BlogGrid = () => {
                 />
               ))}
               {loading && [1, 2, 3].map((i) => (
-                <motion.div 
+                <motion.div
                   layout
                   variants={itemVariants}
-                  key={`skeleton-more-${i}`} 
+                  key={`skeleton-more-${i}`}
                   className="flex flex-col h-full animate-pulse"
                 >
                   <div className="w-full h-[220px] rounded-lg bg-gray-800/50 mb-4" />
@@ -233,9 +231,9 @@ const BlogGrid = () => {
             </>
           ) : loading ? (
             [1, 2, 3, 4, 5, 6].map((i) => (
-              <motion.div 
+              <motion.div
                 variants={itemVariants}
-                key={`skeleton-${i}`} 
+                key={`skeleton-${i}`}
                 className="flex flex-col h-full animate-pulse"
               >
                 <div className="w-full h-[220px] rounded-lg bg-gray-800/50 mb-4" />
@@ -253,9 +251,9 @@ const BlogGrid = () => {
               className="col-span-full flex flex-col items-center justify-center py-20 text-gray-400"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="mb-4 opacity-50">
-                <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
-                <path d="M3 9h18"/>
-                <path d="M9 21V9"/>
+                <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+                <path d="M3 9h18" />
+                <path d="M9 21V9" />
               </svg>
               <p className="text-lg font-medium">{t("blogNoPosts") || (language === 'ar' ? 'لا توجد مقالات' : 'No posts found')}</p>
               <p className="text-sm">{t("blogCheckBack") || (language === 'ar' ? 'الرجاء التحقق لاحقاً' : 'Please check back later')}</p>
@@ -275,13 +273,13 @@ const BlogGrid = () => {
             {loading ? (
               <>
                 <span className="w-4 h-4 border-2 border-gray-300 border-t-transparent rounded-full animate-spin"></span>
-                {t("loading") || (language === 'ar' ? 'جاري التحميل...' : 'Loading...')}
+                {t("loading")}
               </>
             ) : (
               <>
-                {t("loadMore") || (language === 'ar' ? 'تحميل المزيد' : 'Load More')}
+                {t("loadMore")}
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`${language === 'ar' ? 'rotate-180' : ''}`}>
-                  <path d="m9 18 6-6-6-6"/>
+                  <path d="m9 18 6-6-6-6" />
                 </svg>
               </>
             )}

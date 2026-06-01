@@ -39,7 +39,13 @@ const itemVariants = {
 };
 
 const PortfolioCard = ({ item, t, language }) => {
+  const defaultImage = "/our-portfolio/Rectangle 6.png";
+  const [imgSrc, setImgSrc] = useState(item.image || defaultImage);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+
+  useEffect(() => {
+    setImgSrc(item.image || defaultImage);
+  }, [item.image]);
 
   return (
     <motion.div
@@ -53,13 +59,13 @@ const PortfolioCard = ({ item, t, language }) => {
       )}
 
       <Image
-        src={item.image || "/our-portfolio/Rectangle 6.png"}
+        src={imgSrc}
         alt={item.name}
         fill
-        className={`object-cover transition-all duration-700 group-hover:scale-110 ${
-          isImageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
-        }`}
+        className={`object-cover transition-all duration-700 group-hover:scale-110 ${isImageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
+          }`}
         onLoad={() => setIsImageLoaded(true)}
+        onError={() => setImgSrc(defaultImage)}
       />
 
       {/* Overlay with Details */}
@@ -212,27 +218,26 @@ export default function PortfolioGallery({ data }) {
       <div className="flex flex-wrap justify-center gap-4 mb-12">
         {!categoriesLoaded
           ? // Tabs loading skeleton
-            Array.from({ length: 5 }).map((_, i) => (
-              <div
-                key={`tab-skeleton-${i}`}
-                className="h-10 w-24 bg-white/5 border border-white/10 rounded-[2px] animate-pulse"
-              />
-            ))
+          Array.from({ length: 5 }).map((_, i) => (
+            <div
+              key={`tab-skeleton-${i}`}
+              className="h-10 w-24 bg-white/5 border border-white/10 rounded-[2px] animate-pulse"
+            />
+          ))
           : tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => handleTabChange(tab.id)}
-                className={`px-6 py-2 text-sm md:text-base font-medium uppercase transition-colors duration-300 rounded-[2px]
-                ${
-                  activeTab === tab.id
-                    ? "bg-white text-[#040A37]"
-                    : "bg-transparent text-white border border-[#ffffff40] hover:border-white"
+            <button
+              key={tab.id}
+              onClick={() => handleTabChange(tab.id)}
+              className={`px-6 py-2 text-sm md:text-base font-medium uppercase transition-colors duration-300 rounded-[2px]
+                ${activeTab === tab.id
+                  ? "bg-white text-[#040A37]"
+                  : "bg-transparent text-white border border-[#ffffff40] hover:border-white"
                 }
               `}
-              >
-                {tab.label}
-              </button>
-            ))}
+            >
+              {tab.label}
+            </button>
+          ))}
       </div>
 
       {/* Grid */}
@@ -329,11 +334,7 @@ export default function PortfolioGallery({ data }) {
                 />
               </svg>
             )}
-            {isLoading
-              ? t("loading") ||
-                (language === "ar" ? "جاري التحميل..." : "Loading...")
-              : t("loadMore") ||
-                (language === "ar" ? "تحميل المزيد" : "Load More")}
+            {isLoading ? t("loading") : t("loadMore")}
           </button>
         </div>
       )}

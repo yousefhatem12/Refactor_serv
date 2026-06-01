@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, notFound } from "next/navigation";
 import { fetchAPI } from "../../lib/api";
 import Loading from "../loading";
 import { useLanguage } from "../context/LanguageContext";
@@ -72,6 +72,7 @@ export default function DynamicPage() {
   const [isServicePage, setIsServicePage] = useState(false);
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
+  const [notFoundError, setNotFoundError] = useState(false);
 
   useEffect(() => {
     const loadPage = async () => {
@@ -83,7 +84,7 @@ export default function DynamicPage() {
             `/services/${serviceSlug}?lang=${language}`,
           );
           if (!data || data.message === "Service not found") {
-            router.push("/404");
+            setNotFoundError(true);
             return;
           }
           setServiceData(data);
@@ -92,7 +93,7 @@ export default function DynamicPage() {
           setIsServicePage(false);
           const data = await fetchAPI(`/pages/${slug}?lang=${language}`);
           if (!data || data.message === "Page not found") {
-            router.push("/404");
+            setNotFoundError(true);
             return;
           }
           setPageData(data);
@@ -114,8 +115,7 @@ export default function DynamicPage() {
         }
       } catch (error) {
         console.error("Error loading page:", error);
-        router.push("/404");
-        setLoading(false);
+        setNotFoundError(true);
       }
     };
 
@@ -130,6 +130,10 @@ export default function DynamicPage() {
       setLoading(false); // Should be handled by specific routes
     }
   }, [slug, language, router]);
+
+  if (notFoundError) {
+    notFound();
+  }
 
   if (loading) {
     return <Loading />;
