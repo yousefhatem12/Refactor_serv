@@ -10,6 +10,7 @@ import GlobalReach from "../../AboutUs/GlobalReach";
 const ContactUs = () => {
   const { t, language } = useLanguage();
   const { user, login, register } = useAuth();
+  const isAr = language === "ar";
 
   const [authMode, setAuthMode] = React.useState("login"); // 'login' or 'register'
   const [authData, setAuthData] = React.useState({
@@ -431,16 +432,24 @@ const ContactUs = () => {
             src="/CTA/meteor2.png"
             alt="Meteor"
             className="absolute z-30 w-32 md:w-48 pointer-events-none drop-shadow-[0_0_40px_rgba(255,138,0,0.8)]"
-            initial={{ opacity: 0, x: -1000, y: -200, scale: 0.5, rotate: 15 }}
+            initial={{
+              opacity: 0,
+              x: isAr ? 1000 : -1000,
+              y: -200,
+              scaleX: isAr ? -0.5 : 0.5,
+              scaleY: 0.5,
+              rotate: isAr ? -15 : 15,
+            }}
             whileInView={{
               opacity: [0, 1, 1, 0],
-              x: [-1000, -500, 0, 0],
+              x: isAr ? [1000, 500, 0, 0] : [-1000, -500, 0, 0],
               y: [-200, -100, 0, 0],
-              scale: [0.5, 1, 1.5, 0],
+              scaleX: isAr ? [-0.5, -1, -1.5, 0] : [0.5, 1, 1.5, 0],
+              scaleY: [0.5, 1, 1.5, 0],
             }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{
-              duration: 2.5,
+              duration: 1.0,
               times: [0, 0.1, 0.98, 1],
               ease: "easeIn",
             }}
@@ -457,7 +466,7 @@ const ContactUs = () => {
               scale: [0.2, 1.5, 2, 2.2],
             }}
             viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 1, delay: 2.4, times: [0, 0.2, 0.8, 1] }}
+            transition={{ duration: 1, delay: 0.9, times: [0, 0.2, 0.8, 1] }}
           />
 
           {/* Global Reach Interactive Map */}
@@ -476,7 +485,7 @@ const ContactUs = () => {
             viewport={{ once: true, amount: 0.3 }}
             transition={{
               duration: 1.2,
-              delay: 2.9, // Appears as explosion fades
+              delay: 1.4, // Appears as explosion fades
               type: "spring",
               stiffness: 80,
             }}

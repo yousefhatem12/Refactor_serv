@@ -122,7 +122,7 @@ export default function Earth({ isPhaseTwo }) {
           className="absolute overflow-hidden inset-0 z-10 will-change-transform hidden md:block"
         >
           <img
-            src="/Hero/earth.png"
+            src="/Hero/earth.webp"
             alt="Earth"
             className="w-full h-full object-contain"
           />

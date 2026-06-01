@@ -4,6 +4,7 @@ import AboutHero from "../components/AboutUs/AboutHero";
 import PageSections from "../components/Shared/PageSections";
 import { fetchAPI } from "@/lib/api";
 import { useLanguage } from "../context/LanguageContext";
+import Loading from "../loading";
 import GlobalReach from "../components/AboutUs/GlobalReach";
 import WhyChooseUs from "../components/AboutUs/WhyChooseUs";
 import OurJourney from "../components/AboutUs/OurJourney";
@@ -16,14 +17,21 @@ import Solutions from "../components/AboutUs/Solutions";
 export default function AboutUsPage() {
   const { language } = useLanguage();
   const [pageData, setPageData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     fetchAPI(`/pages/about-us?lang=${language}`)
       .then((data) => {
         if (data) setPageData(data);
       })
-      .catch(console.error);
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, [language]);
+
+  if (loading || !pageData) {
+    return <Loading />;
+  }
 
   const blocks = pageData?.sections?.blocks || [];
 

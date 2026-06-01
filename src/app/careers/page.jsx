@@ -183,7 +183,7 @@ export default function CareersPage() {
       <div className="absolute top-1/2 right-1/4 w-[600px] h-[600px] bg-blue-500/5 rounded-full filter blur-[150px] pointer-events-none z-0" />
 
       <div className="w-full max-w-[1200px] mx-auto px-6 md:px-10 relative z-10 flex flex-col items-center">
-        
+
         {/* Hero Headers */}
         <div className="text-center flex flex-col items-center gap-4 max-w-3xl mb-12">
           <span className="px-4 py-1.5 rounded-full text-xs font-bold bg-[#FF8A00]/10 border border-[#FF8A00]/30 text-[#FF8A00] shadow-[0_0_15px_rgba(255,138,0,0.1)] uppercase tracking-widest">
@@ -231,11 +231,10 @@ export default function CareersPage() {
               <button
                 key={dept.id}
                 onClick={() => setSelectedDept(dept.id)}
-                className={`px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all cursor-pointer ${
-                  selectedDept === dept.id
+                className={`px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all cursor-pointer ${selectedDept === dept.id
                     ? "bg-[#FF8A00] text-white shadow-[0_4px_15px_rgba(255,138,0,0.25)]"
                     : "bg-white/[0.03] border border-white/5 text-white/70 hover:text-white hover:bg-white/5"
-                }`}
+                  }`}
               >
                 {dept.name}
               </button>
@@ -291,7 +290,7 @@ export default function CareersPage() {
                           {title}
                         </h3>
                       </div>
-                      
+
                       {/* Active Status Badge */}
                       <span className="flex items-center gap-1.5 bg-green-500/10 border border-green-500/20 text-green-400 text-[10px] font-semibold px-2.5 py-1 rounded-full shadow-[0_0_10px_rgba(34,197,94,0.05)]">
                         <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
@@ -380,7 +379,7 @@ export default function CareersPage() {
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                 </svg>
               ) : null}
-              <span>{isLoadingMore ? (t("loading") || (language === 'ar' ? 'جاري التحميل...' : 'Loading...')) : t("loadMore")}</span>
+              <span>{isLoadingMore ? t("loading") : t("loadMore")}</span>
             </button>
           </div>
         )}
@@ -431,7 +430,7 @@ export default function CareersPage() {
 
               {/* Drawer Scrollable Content */}
               <div className="p-6 md:p-8 flex flex-col gap-8 text-start">
-                
+
                 {/* Meta details list */}
                 <div className="grid grid-cols-2 gap-4 p-4 rounded-xl bg-white/[0.01] border border-white/5">
                   <div className="flex flex-col gap-1">

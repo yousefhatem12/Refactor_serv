@@ -5,7 +5,7 @@ import ConsultationForm from "../components/Consultation/ConsultationForm";
 
 export default function ProjectConsultationPage() {
   return (
-    <main className="flex min-h-screen flex-col relative overflow-x-hidden bg-[#040A37]">
+    <main className="flex min-h-screen flex-col relative overflow-x-hidden">
       {/* Background elements consistent with other pages */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 blur-[150px] rounded-full" />

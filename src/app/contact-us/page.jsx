@@ -6,18 +6,31 @@ import ContactMap from "../components/Contact/ContactMap";
 import { fetchAPI } from "@/lib/api";
 import { useLanguage } from "../context/LanguageContext";
 import Loading from "../loading";
+import { notFound } from "next/navigation";
 
 export default function ContactUsPage() {
   const { language } = useLanguage();
   const [pageData, setPageData] = useState(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     fetchAPI(`/pages/contact-us?lang=${language}`)
       .then((data) => {
-        if (data) setPageData(data);
+        if (data) {
+          setPageData(data);
+        } else {
+          setError(true);
+        }
       })
-      .catch(console.error);
+      .catch((err) => {
+        console.error(err);
+        setError(true);
+      });
   }, [language]);
+
+  if (error) {
+    notFound();
+  }
 
   if (!pageData) {
     return <Loading />;

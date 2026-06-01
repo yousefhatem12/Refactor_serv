@@ -65,6 +65,8 @@ export const translations = {
     faq: "FAQ",
     contactUs: "Contact us",
     ourProducts: "Our Products",
+    more: "More",
+
 
     // Footer
     haveAGoodWebDesign: "Have a Good Web \n Design Today",
@@ -83,6 +85,7 @@ export const translations = {
     // Common
     readMore: "Read More",
     viewAll: "View All",
+    loading: "Loading...",
     // Hero
     innovativeSolutions: "Innovative Solutions",
     tailoredToYourNeeds: "Tailored to Your Needs",
@@ -676,6 +679,9 @@ export const translations = {
     diStep3: "Create dynamic business records",
     diStep4: "Reorganize your application",
     diStep5: "And much more app capabilities",
+    pageNotFound: "Page Not Found",
+    pageNotFoundDesc: "Sorry, the page you are looking for doesn't exist or has been moved.",
+    goBackHome: "Go Back Home",
   },
   ar: {
     home: "الرئيسية",
@@ -743,6 +749,8 @@ export const translations = {
     faq: "الأسئلة الشائعة",
     contactUs: "اتصل بنا",
     ourProducts: "منتجاتنا",
+    more: "المزيد",
+
 
     // Footer
     haveAGoodWebDesign: "احصل على تصميم ويب \n رائع اليوم",
@@ -761,6 +769,7 @@ export const translations = {
     // Common
     readMore: "اقرأ المزيد",
     viewAll: "عرض الكل",
+    loading: "جاري التحميل...",
 
     // Hero
     innovativeSolutions: "حلول مبتكرة",
@@ -1352,5 +1361,8 @@ export const translations = {
     diStep3: "إنشاء سجلات أعمال ديناميكية",
     diStep4: "إعادة تنظيم تطبيقك",
     diStep5: "والكثير من إمكانيات التطبيق الأخرى",
+    pageNotFound: "الصفحة غير موجودة",
+    pageNotFoundDesc: "عذراً، الصفحة التي تبحث عنها غير موجودة أو تم نقلها لمكان آخر.",
+    goBackHome: "العودة للرئيسية",
   },
 };

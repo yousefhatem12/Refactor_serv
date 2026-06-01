@@ -113,15 +113,18 @@ const OurPortfolio = ({ activeCategoryId }) => {
                   ease: "easeOut",
                   delay: index * 0.15,
                 }}
-                className={`relative flex flex-col ${isReversed ? "lg:flex-row-reverse" : "lg:flex-row"} items-stretch gap-0 lg:gap-8 group rounded-2xl lg:rounded-none overflow-hidden lg:overflow-visible min-h-[250px] md:min-h-[350px] lg:min-h-0`}
+                className={`relative flex flex-col ${isReversed ? "lg:flex-row-reverse" : "lg:flex-row"} items-stretch gap-0 lg:gap-8 group rounded-2xl lg:rounded-none overflow-hidden lg:overflow-visible min-h-[250px] md:min-h-[350px] lg:min-h-[380px]`}
               >
                 {/* Image Side */}
-                <div className="w-full lg:w-1/2 flex absolute inset-0 lg:relative lg:inset-auto z-0">
+                <div className="w-full lg:w-1/2 flex absolute inset-0 lg:relative lg:inset-auto md lg:h-[400px] z-0">
                   <div className="relative w-full h-full group overflow-hidden lg:rounded-xl lg:bg-white/5 lg:border lg:border-white/10 lg:shadow-2xl">
                     <img
                       src={item.image || "/our-portfolio/Rectangle 6.png"}
                       alt={item.name}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      onError={(e) => {
+                        e.target.src = "/our-portfolio/Rectangle 6.png";
+                      }}
                     />
                     {/* Dark overlay specifically for hover on desktop */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 hidden lg:block"></div>
@@ -129,14 +132,14 @@ const OurPortfolio = ({ activeCategoryId }) => {
                 </div>
 
                 {/* Text Side */}
-                <div className="relative z-10 w-full lg:w-1/2 flex flex-col justify-end lg:justify-center p-4 md:p-6 lg:p-0 lg:py-4 h-auto  pt-24 lg:pt-4 bg-gradient-to-t from-black via-black/80 to-transparent lg:bg-none">
-                  <h3 className="text-xl md:text-3xl lg:text-3xl font-bold text-white mb-2  tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] lg:drop-shadow-none">
+                <div className="relative z-10 w-full lg:w-1/2 flex flex-col justify-end lg:justify-center p-4 md:p-6 lg:p-0 lg:py-4 flex-1 pt-24 lg:pt-4 bg-gradient-to-t from-black via-black/80 to-transparent lg:bg-none">
+                  <h3 className="text-xl md:text-3xl lg:text-3xl font-bold text-white mb-2 tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] lg:drop-shadow-none mt-auto lg:mt-0">
                     {item.name}
                   </h3>
                   <p className="text-gray-200 text-xs md:text-sm lg:text-md leading-relaxed mb-4 lg:mb-2 max-w-xl line-clamp-2 lg:line-clamp-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] lg:drop-shadow-none">
                     {item.description}
                   </p>
-                  <div className="flex flex-row gap-3 lg:gap-6 justify-between items-center lg:items-start lg:justify-start mt-auto lg:mt-0">
+                  <div className="flex flex-row gap-3 lg:gap-6 justify-between items-center lg:items-start lg:justify-start mt-4 lg:mt-0">
                     <a
                       href="#"
                       className="flex items-center gap-1 lg:gap-2 lg:mt-4 text-white/90 hover:text-white transition-colors group text-xs md:text-sm lg:text-lg font-medium drop-shadow-md lg:drop-shadow-none"
@@ -185,7 +188,7 @@ const OurPortfolio = ({ activeCategoryId }) => {
           })}
 
           {hasMore && (
-            <div className="flex justify-center mt-12 w-full col-span-2">
+            <div className="flex hidden justify-center mt-12 w-full col-span-2">
               <button
                 onClick={() => setCurrentPage((prev) => prev + 1)}
                 disabled={isLoadingMore}
@@ -212,7 +215,7 @@ const OurPortfolio = ({ activeCategoryId }) => {
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
                       />
                     </svg>
-                    {language === "ar" ? "جاري التحميل..." : "Loading..."}
+                    {t("loading")}
                   </>
                 ) : (
                   <>
@@ -229,8 +232,7 @@ const OurPortfolio = ({ activeCategoryId }) => {
                         d="M12 4v16m8-8H4"
                       />
                     </svg>
-                    {t("loadMore") ||
-                      (language === "ar" ? "عرض المزيد" : "Load More")}
+                    {t("loadMore")}
                   </>
                 )}
               </button>

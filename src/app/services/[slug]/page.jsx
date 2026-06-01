@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, notFound } from "next/navigation";
 import { fetchAPI } from "@/lib/api";
 import { useLanguage } from "../../context/LanguageContext";
 
-// Web Development
+import Loading from "../../loading";
 import WebDevHero from "../../components/Services-web-dev/WebDevHero";
 import WebDesignFeatures from "../../components/Services-web-design/WebDesignFeatures";
 import WebDevHowWeWork from "../../components/Services-web-dev/WebDevHowWeWork";
@@ -48,6 +48,7 @@ export default function DynamicServicePage() {
   const router = useRouter();
   const [serviceData, setServiceData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [notFoundError, setNotFoundError] = useState(false);
 
   const apiSlug = slug?.startsWith("services-") ? slug.replace("services-", "") : slug;
 
@@ -57,26 +58,26 @@ export default function DynamicServicePage() {
     fetchAPI(`/services/${apiSlug}?lang=${language}`)
       .then((data) => {
         if (!data || data.message === "Service not found") {
-          router.push("/404");
+          setNotFoundError(true);
           return;
         }
         setServiceData(data);
       })
       .catch((error) => {
         console.error("Error fetching service:", error);
-        router.push("/404");
+        setNotFoundError(true);
       })
       .finally(() => {
         setLoading(false);
       });
   }, [apiSlug, language, router]);
 
+  if (notFoundError) {
+    notFound();
+  }
+
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-16 h-16 border-4 border-[#FF8A00] border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (!serviceData) return null;
