@@ -95,7 +95,7 @@ const SocialMediaWhyChooseUs = ({ whyTitle, whySubtitle, whyList }) => {
           className={`absolute ${isRtl ? "left-0" : "right-0"} top-1/2 -translate-y-1/2 w-[40%] max-w-[600px] pointer-events-none hidden lg:block z-10`}
         >
           <img
-            src="/Hero/earth.png"
+            src="/Hero/earth.webp"
             alt="Earth"
             className={`w-full max-h-[110vh] object-contain opacity-50 brightness-50 contrast-125 ${
               isRtl

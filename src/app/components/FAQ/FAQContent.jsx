@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import { useLanguage } from "../../context/LanguageContext";
 import { fetchAPI } from "../../../lib/api";
 
@@ -18,7 +19,7 @@ const FAQContent = ({ data }) => {
   const title =
     data?.title || t("faqTitle1") + " " + t("faqTitle2") + " " + t("faqTitle3");
   const description = data?.content || "";
-  const heroImage = data?.hero_image || "/Hero/earth.png";
+  const heroImage = data?.hero_image || "/Hero/earth.webp";
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -245,9 +246,11 @@ const FAQContent = ({ data }) => {
             <h3 className="text-3xl font-bold text-white">
               {t("faqStillQuestions")}
             </h3>
-            <button className="px-8 py-3 bg-[#D98B50] hover:bg-[#c47c45] text-white font-semibold rounded-md transition-colors shadow-[0_0_15px_rgba(217,139,80,0.4)] cursor-pointer">
-              {t("getInTouch2")}
-            </button>
+            <Link href="/contact-us">
+              <button className="px-8 py-3 bg-[#D98B50] hover:bg-[#c47c45] text-white font-semibold rounded-md transition-colors shadow-[0_0_15px_rgba(217,139,80,0.4)] cursor-pointer">
+                {t("getInTouch2")}
+              </button>
+            </Link>
           </motion.div>
         </div>
       </div>

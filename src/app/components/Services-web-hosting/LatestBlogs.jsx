@@ -67,7 +67,7 @@ const LatestBlogs = () => {
               <Link href={`/blog/${blog.id}`} className="block relative h-[450px] w-full">
                 {/* Background Image */}
                 <img
-                  src={blog.image || "/placeholder.png"}
+                  src={blog.image || "/placeholder.webp"}
                   alt={blog.title}
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />

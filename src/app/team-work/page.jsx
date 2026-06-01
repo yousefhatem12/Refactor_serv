@@ -23,7 +23,7 @@ const defaultTeam = [
     nameAr: "محمد عبد العال",
     roleEn: "Chief Creative Officer & Founder",
     roleAr: "المدير الإبداعي التنفيذي وشريك مؤسس",
-    image: "/about-us/person-1.png",
+    image: "/about-us/person-1.webp",
     dept: "management",
     socials: {
       linkedin: "https://linkedin.com",
@@ -36,7 +36,7 @@ const defaultTeam = [
     nameAr: "أحمد محمد",
     roleEn: "Chief Technology Officer & Founder",
     roleAr: "الرئيس التنفيذي للتكنولوجيا وشريك مؤسس",
-    image: "/about-us/person-2.png",
+    image: "/about-us/person-2.webp",
     dept: "management",
     socials: {
       linkedin: "https://linkedin.com",
@@ -49,7 +49,7 @@ const defaultTeam = [
     nameAr: "أحمد رمضان",
     roleEn: "Chief Marketing Officer & Founder",
     roleAr: "رئيس قطاع التسويق وشريك مؤسس",
-    image: "/about-us/person-3.png",
+    image: "/about-us/person-3.webp",
     dept: "management",
     socials: {
       linkedin: "https://linkedin.com",
@@ -62,7 +62,7 @@ const defaultTeam = [
     nameAr: "سارة جينكينز",
     roleEn: "Lead UI/UX Designer",
     roleAr: "رئيسة مصممي واجهة وتجربة المستخدم",
-    image: "/about-us/person-1.png",
+    image: "/about-us/person-1.webp",
     dept: "design",
     socials: {
       linkedin: "https://linkedin.com",
@@ -75,7 +75,7 @@ const defaultTeam = [
     nameAr: "ديفيد تشين",
     roleEn: "Senior Full Stack Developer",
     roleAr: "مطور ويب متكامل أول",
-    image: "/about-us/person-2.png",
+    image: "/about-us/person-2.webp",
     dept: "development",
     socials: {
       linkedin: "https://linkedin.com",
@@ -88,7 +88,7 @@ const defaultTeam = [
     nameAr: "أميرة يوسف",
     roleEn: "Senior Frontend Engineer",
     roleAr: "مهندسة واجهات أمامية أولى",
-    image: "/about-us/person-3.png",
+    image: "/about-us/person-3.webp",
     dept: "development",
     socials: {
       linkedin: "https://linkedin.com",
@@ -101,7 +101,7 @@ const defaultTeam = [
     nameAr: "كريم محمود",
     roleEn: "SEO & Growth Marketing Expert",
     roleAr: "خبير سيو وتسويق نمو رقمي",
-    image: "/about-us/person-2.png",
+    image: "/about-us/person-2.webp",
     dept: "marketing",
     socials: {
       linkedin: "https://linkedin.com",
@@ -114,7 +114,7 @@ const defaultTeam = [
     nameAr: "إيميلي تايلور",
     roleEn: "Art Director",
     roleAr: "المدير الفني الفني الإبداعي",
-    image: "/about-us/person-1.png",
+    image: "/about-us/person-1.webp",
     dept: "design",
     socials: {
       linkedin: "https://linkedin.com",
@@ -158,7 +158,7 @@ export default function TeamWorkPage() {
           role: member.role,
           image: member.image
             ? getMediaUrl(member.image)
-            : "/about-us/person-1.png",
+            : "/about-us/person-1.webp",
           dept: member.department || "development",
           socials: {
             linkedin: member.linkedin || "https://linkedin.com",
@@ -246,7 +246,7 @@ export default function TeamWorkPage() {
       {/* Background Starry Sky and Planet Decor */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         {/* <Image
-          src="/about-us/hero.png"
+          src="/about-us/hero.webp"
           alt="Starry Space Background"
           fill
           className="object-cover object-top opacity-60"

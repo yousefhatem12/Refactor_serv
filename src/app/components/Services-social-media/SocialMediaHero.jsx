@@ -11,8 +11,8 @@ import { useRouter } from "next/navigation";
 const SocialMediaHero = ({
   title,
   desc,
-  bgImage = "/services-web-dev/hero.png",
-  planetImage = "/Services/Blue Planet.png",
+  bgImage = "/services-web-dev/hero.webp",
+  planetImage = "/Services/Blue Planet.webp",
   serviceId = "social-media",
 }) => {
   const router = useRouter();

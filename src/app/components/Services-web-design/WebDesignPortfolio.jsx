@@ -140,7 +140,7 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
                   className="relative w-full max-w-[320px] mx-auto"
                 >
                   <img
-                    src="/template/iphone13.png"
+                    src="/template/iphone13.webp"
                     alt="iPhone Frame"
                     className="relative z-10 w-full h-auto drop-shadow-2xl"
                   />
@@ -149,7 +149,7 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
                     <div className="absolute top-[3%] left-[5%] right-[5%] bottom-[3%] z-0 rounded-[2.5rem] overflow-hidden">
                       <img
                         src={
-                          filteredItems[0].image || "/services-page/card-1.png"
+                          filteredItems[0].image || "/services-page/card-1.webp"
                         }
                         alt={filteredItems[0].name}
                         className="w-full h-full object-cover"
@@ -172,7 +172,7 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
                       className="relative group rounded-xl overflow-hidden aspect-[4/3] bg-white/5 border border-white/5"
                     >
                       <img
-                        src={item.image || "/services-page/card-1.png"}
+                        src={item.image || "/services-page/card-1.webp"}
                         alt={item.name}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       />

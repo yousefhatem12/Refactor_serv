@@ -52,7 +52,7 @@ const BlogCard = ({ post, t, language, categoryMap }) => {
             <div className="absolute inset-0 bg-white/5 animate-pulse z-0" />
           )}
           <Image
-            src={post.image || "/placeholder.png"}
+            src={post.image || "/placeholder.webp"}
             alt={post.title}
             fill
             className={`object-cover transition-all duration-700 group-hover:scale-105 ${isImageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"

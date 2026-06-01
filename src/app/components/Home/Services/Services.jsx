@@ -188,7 +188,7 @@ const Services = () => {
             ].map((widthClass, index) => (
               <motion.img
                 key={index}
-                src="/Services/Outline 6.png"
+                src="/Services/Outline 6.webp"
                 alt=""
                 className={`absolute top-[100%] left-1/2 -translate-x-1/2 -translate-y-1/2 h-auto max-w-none ${widthClass}`}
                 style={{

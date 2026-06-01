@@ -15,7 +15,7 @@ export default function TemplateTwoPage() {
         <SocialMediaHero
           title="Mobile Application Development"
           desc="If your dream is to own a website with distinctive design that remains in your place with servers, for we will ... an integrated team is available that work to provide the best web design service with the latest technology. If your dream is to own a website with distinctive design that remains in your place with servers, for we will ... an integrated team is available that work to provide the best ..."
-          bgImage="/template/template-two-hero.png"
+          bgImage="/template/template-two-hero.webp"
           planetImage={null}
         />
         <WebDesignFeatures

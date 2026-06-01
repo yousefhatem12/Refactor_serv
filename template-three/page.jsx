@@ -13,7 +13,7 @@ export default function TemplateThreePage() {
         <WebDevHero
           data={{
             title: "Digital Identity Management",
-            bg_image: "/template/template-three-hero.png",
+            bg_image: "/template/template-three-hero.webp",
             hidePlanet: true,
             bgPosition: "bg-bottom",
             overlay: "bg-black/20",
@@ -84,7 +84,7 @@ export default function TemplateThreePage() {
           </div>
           <div className="w-full lg:w-1/2 relative">
             <img
-              src="/template/Mask group.png"
+              src="/template/Mask group.webp"
               alt="Analytics Dashboard"
               className="w-full h-auto object-contain drop-shadow-2xl"
             />
@@ -120,7 +120,7 @@ export default function TemplateThreePage() {
           </div>
           <div className="w-full lg:w-1/2 relative">
             <img
-              src="/template/stephen-phillips-hostreviews-co-uk-shr_Xn8S8QU-unsplash 1.png"
+              src="/template/stephen-phillips-hostreviews-co-uk-shr_Xn8S8QU-unsplash 1.webp"
               alt="Laptop showing website"
               className="w-full h-auto object-contain drop-shadow-[0_0_40px_rgba(255,255,255,0.05)]"
             />

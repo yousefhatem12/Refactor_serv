@@ -101,7 +101,7 @@ export default function Hero({ isPhaseTwo, data }) {
               src={
                 data?.hero_image ||
                 settings?.hero_planet ||
-                "/Hero/orange-planet.png"
+                "/Hero/orange-planet.webp"
               }
               alt="Orange Planet"
               className="w-[400px] md:w-[600px] lg:w-[750px] opacity-80"

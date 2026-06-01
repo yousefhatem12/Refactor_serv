@@ -39,7 +39,7 @@ const itemVariants = {
 };
 
 const PortfolioCard = ({ item, t, language }) => {
-  const defaultImage = "/our-portfolio/Rectangle 6.png";
+  const defaultImage = "/our-portfolio/Rectangle 6.webp";
   const [imgSrc, setImgSrc] = useState(item.image || defaultImage);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 

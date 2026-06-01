@@ -14,7 +14,7 @@ const Solutions = () => {
           <div className="relative w-full h-[300px] lg:h-auto">
             <div className="absolute inset-0 bg-purple-600/20 blur-[100px] rounded-full -z-10"></div>
             <Image
-              src="/about-us/section-3-image.png"
+              src="/about-us/section-3-image.webp"
               alt="Innovative Solutions"
               fill
               className="object-cover [mask-image:radial-gradient(circle,black_0%,transparent_100%)]

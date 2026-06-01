@@ -10,25 +10,25 @@ const SocialMediaFeatures = () => {
       id: 1,
       title: t("smFeature1Title") || "Content Creation",
       desc: t("smFeature1Desc") || "Creating attractive and engaging content that speaks to your audience.",
-      icon: "/services-social-media/icon-1.png",
+      icon: "/services-social-media/icon-1.webp",
     },
     {
       id: 2,
       title: t("smFeature2Title") || "Account Management",
       desc: t("smFeature2Desc") || "Professional management of all your social media platforms.",
-      icon: "/services-social-media/icon-2.png",
+      icon: "/services-social-media/icon-2.webp",
     },
     {
       id: 3,
       title: t("smFeature3Title") || "Ad Campaigns",
       desc: t("smFeature3Desc") || "Targeted advertising campaigns that bring real results.",
-      icon: "/services-social-media/icon-3.png",
+      icon: "/services-social-media/icon-3.webp",
     },
     {
       id: 4,
       title: t("smFeature4Title") || "Performance Analysis",
       desc: t("smFeature4Desc") || "Detailed reports and analysis to track your success.",
-      icon: "/services-social-media/icon-4.png",
+      icon: "/services-social-media/icon-4.webp",
     },
   ];
 

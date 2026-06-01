@@ -68,7 +68,7 @@ const Footer = () => {
 
       {/* Decorative Element */}
       <img
-        src="/Element.png"
+        src="/Element.webp"
         alt="Element"
         className={`absolute top-0 ${language === "ar" ? "-right-[80px] scale-x-[-1]" : "-left-[80px]"} mix-blend-luminosity opacity-50 w-48 md:w-[500px]  object-contain pointer-events-none z-0 `}
       />

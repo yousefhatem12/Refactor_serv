@@ -21,7 +21,7 @@ const WebDesignHero = ({ data, serviceId = "ui-ux-design" }) => {
       {/* Background Image behind everything */}
       <div
         className={`absolute inset-0 w-full h-full z-0 bg-no-repeat bg-cover bg-center mix-blend-screen ${isRtl ? "scale-x-[-1]" : ""}`}
-        style={{ backgroundImage: "url('/services-web-design/hero.png')" }}
+        style={{ backgroundImage: "url('/services-web-design/hero.webp')" }}
       />
 
       {/* Left Content */}

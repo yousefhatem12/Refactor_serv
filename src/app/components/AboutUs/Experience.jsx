@@ -32,7 +32,7 @@ const Experience = () => {
           <div className="relative w-full h-[300px] lg:h-auto">
             <div className="absolute inset-0 bg-blue-600/20 blur-[100px] rounded-full -z-10"></div>
             <Image
-              src="/about-us/section-2-image.png"
+              src="/about-us/section-2-image.webp"
               alt="Experience in Software Development"
               fill
               className="object-cover [mask-image:radial-gradient(circle,black_0%,transparent_100%)]

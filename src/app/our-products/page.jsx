@@ -119,7 +119,7 @@ const OurProductsListingPage = () => {
                     {/* Image Container */}
                     <div className="relative w-full aspect-video overflow-hidden bg-[#2a2a35]">
                       <Image
-                        src={item.image || "/portfolio/image-1.png"}
+                        src={item.image || "/portfolio/image-1.webp"}
                         alt={item.title || item.name}
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-110"
