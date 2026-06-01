@@ -30,7 +30,7 @@ const GlobalReach = ({ data, minimal = false }) => {
   const hasDbItems = data?.items && data.items.length > 0;
   const dbLocations = hasDbItems
     ? data.items.map((item, idx) => {
-      const defaultLoc = locations[idx % locations.length] || { x: 60, y: 100 };
+      const defaultLoc = locations[idx % locations.length] || { x: 40, y: 40 };
       return {
         id: item.id || `loc-${idx}`,
         name: item.name || item.country,
@@ -119,7 +119,7 @@ const GlobalReach = ({ data, minimal = false }) => {
       <div
         className={
           minimal
-            ? "w-full flex flex-col items-center"
+            ? "w-full flex  flex-col items-center"
             : "max-w-7xl mx-auto flex flex-col items-center"
         }
       >

@@ -258,8 +258,8 @@ const FAQContent = ({ data }) => {
       {/* Right Side: Earth Image */}
       <div
         className={`absolute top-[5%] md:w-[500px] lg:w-[800px] h-auto z-10 pointer-events-none hidden md:block ${language === "ar"
-            ? "md:left-[-25%] lg:left-[-25%] md:right-auto lg:right-auto"
-            : "md:right-[-25%] lg:right-[-25%] md:left-auto lg:left-auto"
+          ? "md:left-[-25%] lg:left-[-25%] md:right-auto lg:right-auto"
+          : "md:right-[-25%] lg:right-[-25%] md:left-auto lg:left-auto"
           }`}
       >
         <motion.img
