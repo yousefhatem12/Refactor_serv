@@ -41,7 +41,7 @@ export default function PortfolioPage() {
       <div className="fixed inset-0 bg-[#040A37] -z-20 pointer-events-none" />
 
       <div className="w-full relative z-10">
-        <PortfolioGallery data={pageData} />
+        <PortfolioGallery data={pageData} perPage={9} />
         <CTA />
       </div>
     </main>

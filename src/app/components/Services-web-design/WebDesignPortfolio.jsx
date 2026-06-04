@@ -10,6 +10,7 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
   const [activeTab, setActiveTab] = useState("all");
   const [portfolioItems, setPortfolioItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(4);
 
   const targetCategory = isMobileApp ? "mobile" : "websites";
 
@@ -23,6 +24,10 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
       .catch((err) => console.error("Error fetching portfolio:", err))
       .finally(() => setLoading(false));
   }, [language, targetCategory]);
+
+  useEffect(() => {
+    setVisibleCount(4);
+  }, [activeTab]);
 
   const items = portfolioItems.filter(
     (item) => item.category === targetCategory,
@@ -69,6 +74,8 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
             (item) => Array.isArray(item.tags) && item.tags.includes(activeTab),
           );
   }
+
+  const displayedItems = filteredItems.slice(0, visibleCount);
 
   return (
     <section className="relative w-full py-24 px-6 lg:px-20 z-20">
@@ -164,31 +171,41 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.4 }}
-                  className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-6 w-full"
+                  className="flex flex-col items-center gap-8 w-full"
                 >
-                  {filteredItems.map((item, index) => (
-                    <div
-                      key={item.id}
-                      className="relative group rounded-xl overflow-hidden aspect-[4/3] bg-white/5 border border-white/5"
-                    >
-                      <img
-                        src={item.image || "/services-page/card-1.webp"}
-                        alt={item.name}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 text-center">
-                        <h4 className="text-white text-lg font-bold mb-2">
-                          {item.name}
-                        </h4>
-                        <Link
-                          href={`/portfolio/${item.id}`}
-                          className="text-white font-semibold tracking-wider uppercase text-xs border border-white px-4 py-2 rounded-full backdrop-blur-sm hover:bg-white hover:text-black transition-colors"
-                        >
-                          {t("viewProject") || "View Project"}
-                        </Link>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-6 w-full">
+                    {displayedItems.map((item, index) => (
+                      <div
+                        key={item.id}
+                        className="relative group rounded-xl overflow-hidden aspect-[4/3] bg-white/5 border border-white/5"
+                      >
+                        <img
+                          src={item.image || "/services-page/card-1.webp"}
+                          alt={item.name}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 text-center">
+                          <h4 className="text-white text-lg font-bold mb-2">
+                            {item.name}
+                          </h4>
+                          <Link
+                            href={`/portfolio/${item.id}`}
+                            className="text-white font-semibold tracking-wider uppercase text-xs border border-white px-4 py-2 rounded-full backdrop-blur-sm hover:bg-white hover:text-black transition-colors"
+                          >
+                            {t("viewProject") || "View Project"}
+                          </Link>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
+                  {filteredItems.length > visibleCount && (
+                    <button
+                      onClick={() => setVisibleCount((prev) => prev + 4)}
+                      className="flex items-center justify-center gap-2 px-8 py-3 text-sm md:text-base font-semibold text-white bg-transparent border border-white/20 hover:border-[#D98B50] hover:text-[#D98B50] rounded-xl transition-all duration-300 cursor-pointer"
+                    >
+                      {t("loadMore") || (language === "ar" ? "عرض المزيد" : "Load More")}
+                    </button>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>

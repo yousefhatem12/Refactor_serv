@@ -32,11 +32,10 @@ export default function HomePage() {
 
     const loadDataSequentially = async () => {
       try {
-        // 1. Fetch critical home page structure, portfolio, and products in parallel from the database
-        const [homeData, portfolioData, productsData] = await Promise.all([
+        // 1. Fetch critical home page structure and products in parallel from the database
+        const [homeData, productsData] = await Promise.all([
           fetchAPI(`/pages/home?lang=${language}`),
-          fetchAPI(`/portfolio?lang=${language}&page=1&per_page=3`),
-          fetchAPI(`/products?lang=${language}&category=all&page=1&per_page=3`)
+          fetchAPI(`/products?lang=${language}&category=all&page=1&per_page=3`),
         ]);
 
         if (!isMounted) return;
@@ -45,9 +44,14 @@ export default function HomePage() {
           setPageData(homeData);
           if (typeof window !== "undefined") {
             try {
-              localStorage.setItem(`cached_home_data_${language}`, JSON.stringify(homeData));
-              localStorage.setItem(`cached_portfolio_data_${language}`, JSON.stringify(portfolioData));
-              localStorage.setItem(`cached_products_data_${language}`, JSON.stringify(productsData));
+              localStorage.setItem(
+                `cached_home_data_${language}`,
+                JSON.stringify(homeData),
+              );
+              localStorage.setItem(
+                `cached_products_data_${language}`,
+                JSON.stringify(productsData),
+              );
             } catch (e) {
               console.error("Cache write error:", e);
             }

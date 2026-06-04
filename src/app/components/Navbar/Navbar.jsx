@@ -7,6 +7,19 @@ import { useLanguage } from "../../context/LanguageContext";
 import { useSettings } from "../../context/SettingsContext";
 import { fetchAPI } from "@/lib/api";
 
+const getDropdownGridClass = (dropdown) => {
+  if (!dropdown) return "min-w-[220px] flex flex-col gap-1";
+  const count = dropdown.length;
+  if (count <= 5) {
+    return "min-w-[220px] flex flex-col gap-1";
+  }
+  const cols = Math.min(Math.ceil(count / 5), 5);
+  if (cols === 2) return "min-w-[480px] grid grid-cols-2 gap-2";
+  if (cols === 3) return "min-w-[720px] grid grid-cols-3 gap-2";
+  if (cols === 4) return "min-w-[960px] grid grid-cols-4 gap-2";
+  return "min-w-[1200px] grid grid-cols-5 gap-2";
+};
+
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
@@ -30,7 +43,6 @@ const Navbar = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
 
   const getDefaultLinks = (t) => [
     { name: t("home") || "Home", href: "/Home" },
@@ -93,7 +105,6 @@ const Navbar = () => {
   const dropdownLinks = isUnder1300 ? activeLinks.slice(5) : [];
 
   useEffect(() => {
-
     const fetchLinks = async () => {
       try {
         // Fetch services and nav links in parallel to minimize waiting time
@@ -105,27 +116,27 @@ const Navbar = () => {
         const serviceDropdown =
           servicesData && Array.isArray(servicesData) && servicesData.length > 0
             ? servicesData.map((s) => ({
-              name: s.label || s.title,
-              href: `/services/services-${s.id}`,
-            }))
+                name: s.label || s.title,
+                href: `/services/services-${s.id}`,
+              }))
             : [
-              {
-                name: t("webDevelopment"),
-                href: "/services/services-web-development",
-              },
-              {
-                name: t("webDesign"),
-                href: "/services/services-ui-ux-design",
-              },
-              {
-                name: t("socialMedia"),
-                href: "/services/services-social-media",
-              },
-              {
-                name: t("webHosting"),
-                href: "/services/services-cloud-hosting",
-              },
-            ];
+                {
+                  name: t("webDevelopment"),
+                  href: "/services/services-web-development",
+                },
+                {
+                  name: t("webDesign"),
+                  href: "/services/services-ui-ux-design",
+                },
+                {
+                  name: t("socialMedia"),
+                  href: "/services/services-social-media",
+                },
+                {
+                  name: t("webHosting"),
+                  href: "/services/services-cloud-hosting",
+                },
+              ];
 
         const buildLinks = (dropdown) => [
           { name: t("home"), href: "/Home" },
@@ -183,7 +194,10 @@ const Navbar = () => {
                 href: "#",
                 dropdown: [
                   { name: t("aboutUs") || "About Us", href: "/about-us" },
-                  { name: t("bankAccounts") || "Bank Accounts", href: "/bank-accounts" },
+                  {
+                    name: t("bankAccounts") || "Bank Accounts",
+                    href: "/bank-accounts",
+                  },
                 ],
               };
             }
@@ -256,13 +270,18 @@ const Navbar = () => {
   }, [pathname, navLinks]);
 
   const isRtl = language === "ar";
+  const isHomePageHero =
+    (pathname === "/Home" || pathname === "/") && !isScrolled;
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-[1000] transition-all duration-500 ease-in-out ${isScrolled
+      className={`fixed top-0 left-0 w-full z-[1000] transition-all duration-500 ease-in-out ${
+        isScrolled
           ? "py-4 bg-[#05050f]/5 backdrop-blur-md shadow-lg "
-          : "py-6 bg-transparent"
-        } ${isHidden ? "-translate-y-full opacity-0 pointer-events-none" : "translate-y-0 opacity-100"}`}
+          : isHomePageHero
+            ? "py-4 lg:py-5 bg-transparent"
+            : "py-6 bg-transparent"
+      } ${isHidden ? "-translate-y-full opacity-0 pointer-events-none" : "translate-y-0 opacity-100"}`}
     >
       <div className="max-w-[1400px] mx-auto px-6 md:px-10 flex items-center justify-between">
         {/* Logo */}
@@ -303,10 +322,11 @@ const Navbar = () => {
               <div key={link.name} className="relative group">
                 <Link
                   href={link.href}
-                  className={`flex items-center gap-1 text-xs md:text-sm font-semibold tracking-[0.1em] uppercase transition-all duration-300 ${isActive
+                  className={`flex items-center gap-1 text-xs md:text-sm font-semibold tracking-[0.1em] uppercase transition-all duration-300 ${
+                    isActive
                       ? "text-[#FF8A00]"
                       : "text-white/60 hover:text-white"
-                    }`}
+                  }`}
                 >
                   {link.name}
                   {link.dropdown && (
@@ -325,8 +345,9 @@ const Navbar = () => {
                     </svg>
                   )}
                   <span
-                    className={`absolute -bottom-1 ${isRtl ? "right-0" : "left-0"} h-[1px] bg-[#FF8A00] rounded-full transition-all duration-300 ${isActive ? "w-full" : "w-0 group-hover:w-full"
-                      }`}
+                    className={`absolute -bottom-1 ${isRtl ? "right-0" : "left-0"} h-[1px] bg-[#FF8A00] rounded-full transition-all duration-300 ${
+                      isActive ? "w-full" : "w-0 group-hover:w-full"
+                    }`}
                   />
                 </Link>
 
@@ -335,18 +356,18 @@ const Navbar = () => {
                   <div
                     className={`absolute top-full ${isRtl ? "right-0" : "left-0"} pt-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50`}
                   >
-                    <div className={`bg-[#05050f]/30 backdrop-blur-md border border-white/10 rounded-xl p-4 shadow-2xl ${link.dropdown.length > 3
-                        ? "min-w-[480px] grid grid-cols-2 gap-2"
-                        : "min-w-[220px] flex flex-col gap-1"
-                      }`}>
+                    <div
+                      className={`bg-[#05050f]/50 backdrop-blur-md border border-white/10 rounded-xl p-4 shadow-2xl ${getDropdownGridClass(link.dropdown)}`}
+                    >
                       {link.dropdown.map((subLink) => (
                         <Link
                           key={subLink.name}
                           href={subLink.href}
-                          className={`block px-4 py-3 text-xs md:text-sm font-medium tracking-wide rounded-lg transition-all duration-200 ${pathname === subLink.href
+                          className={`block px-4 py-3 text-xs md:text-sm font-medium tracking-wide rounded-lg transition-all duration-200 ${
+                            pathname === subLink.href
                               ? "text-[#FF8A00] bg-white/5 font-bold"
                               : `text-white/50 hover:text-white hover:bg-white/5 ${isRtl ? "hover:-translate-x-1" : "hover:translate-x-1"}`
-                            }`}
+                          }`}
                         >
                           {subLink.name}
                         </Link>
@@ -362,18 +383,26 @@ const Navbar = () => {
           {dropdownLinks.length > 0 && (
             <div className="relative group">
               <button
-                className={`flex items-center gap-1 text-xs md:text-sm font-semibold tracking-[0.1em] uppercase transition-all duration-300 border-none bg-transparent cursor-pointer relative ${dropdownLinks.some((link) => {
-                  const isHashLink = link.href.includes("#");
-                  const targetPath = link.href.split("#")[0];
-                  const targetHash = "#" + (link.href.split("#")[1] || "");
-                  if (link.dropdown && link.dropdown.some((sub) => pathname === sub.href)) return true;
-                  if (isHashLink) return pathname === targetPath && activeHash === targetHash;
-                  const hasActiveHash = activeHash !== "";
-                  return pathname === link.href && !hasActiveHash;
-                })
+                className={`flex items-center gap-1 text-xs md:text-sm font-semibold tracking-[0.1em] uppercase transition-all duration-300 border-none bg-transparent cursor-pointer relative ${
+                  dropdownLinks.some((link) => {
+                    const isHashLink = link.href.includes("#");
+                    const targetPath = link.href.split("#")[0];
+                    const targetHash = "#" + (link.href.split("#")[1] || "");
+                    if (
+                      link.dropdown &&
+                      link.dropdown.some((sub) => pathname === sub.href)
+                    )
+                      return true;
+                    if (isHashLink)
+                      return (
+                        pathname === targetPath && activeHash === targetHash
+                      );
+                    const hasActiveHash = activeHash !== "";
+                    return pathname === link.href && !hasActiveHash;
+                  })
                     ? "text-[#FF8A00]"
                     : "text-white/60 hover:text-white"
-                  }`}
+                }`}
               >
                 {t("more") || (isRtl ? "المزيد" : "More")}
                 <svg
@@ -390,18 +419,26 @@ const Navbar = () => {
                   />
                 </svg>
                 <span
-                  className={`absolute -bottom-1 ${isRtl ? "right-0" : "left-0"} h-[1px] bg-[#FF8A00] rounded-full transition-all duration-300 ${dropdownLinks.some((link) => {
-                    const isHashLink = link.href.includes("#");
-                    const targetPath = link.href.split("#")[0];
-                    const targetHash = "#" + (link.href.split("#")[1] || "");
-                    if (link.dropdown && link.dropdown.some((sub) => pathname === sub.href)) return true;
-                    if (isHashLink) return pathname === targetPath && activeHash === targetHash;
-                    const hasActiveHash = activeHash !== "";
-                    return pathname === link.href && !hasActiveHash;
-                  })
+                  className={`absolute -bottom-1 ${isRtl ? "right-0" : "left-0"} h-[1px] bg-[#FF8A00] rounded-full transition-all duration-300 ${
+                    dropdownLinks.some((link) => {
+                      const isHashLink = link.href.includes("#");
+                      const targetPath = link.href.split("#")[0];
+                      const targetHash = "#" + (link.href.split("#")[1] || "");
+                      if (
+                        link.dropdown &&
+                        link.dropdown.some((sub) => pathname === sub.href)
+                      )
+                        return true;
+                      if (isHashLink)
+                        return (
+                          pathname === targetPath && activeHash === targetHash
+                        );
+                      const hasActiveHash = activeHash !== "";
+                      return pathname === link.href && !hasActiveHash;
+                    })
                       ? "w-full"
                       : "w-0 group-hover:w-full"
-                    }`}
+                  }`}
                 />
               </button>
 
@@ -423,7 +460,8 @@ const Navbar = () => {
                     ) {
                       isActive = true;
                     } else if (isHashLink) {
-                      isActive = pathname === targetPath && activeHash === targetHash;
+                      isActive =
+                        pathname === targetPath && activeHash === targetHash;
                     } else {
                       const hasActiveHash = activeHash !== "";
                       isActive = pathname === link.href && !hasActiveHash;
@@ -433,10 +471,11 @@ const Navbar = () => {
                       <Link
                         key={link.name}
                         href={link.href}
-                        className={`block px-4 py-3 text-xs md:text-sm font-medium tracking-wide rounded-lg transition-all duration-200 ${isActive
+                        className={`block px-4 py-3 text-xs md:text-sm font-medium tracking-wide rounded-lg transition-all duration-200 ${
+                          isActive
                             ? "text-[#FF8A00] bg-white/5 font-bold"
                             : `text-white/50 hover:text-white hover:bg-white/5 ${isRtl ? "hover:-translate-x-1" : "hover:translate-x-1"}`
-                          }`}
+                        }`}
                       >
                         {link.name}
                       </Link>
@@ -447,7 +486,6 @@ const Navbar = () => {
             </div>
           )}
         </div>
-
 
         {/* Actions (Globe & Menu) */}
         <div className="flex items-center gap-3 md:gap-5">
@@ -565,7 +603,9 @@ const Navbar = () => {
                         onClick={() => {
                           if (link.dropdown) {
                             setOpenMobileDropdown(
-                              openMobileDropdown === link.name ? null : link.name
+                              openMobileDropdown === link.name
+                                ? null
+                                : link.name,
                             );
                           } else {
                             setIsMobileMenuOpen(false);
@@ -574,10 +614,11 @@ const Navbar = () => {
                       >
                         <Link
                           href={link.dropdown ? "#" : link.href}
-                          className={`text-xl font-semibold tracking-wide transition-colors ${isActive
+                          className={`text-xl font-semibold tracking-wide transition-colors ${
+                            isActive
                               ? "text-[#D98B50]"
                               : "text-white/80 hover:text-white"
-                            }`}
+                          }`}
                           onClick={(e) => {
                             if (link.dropdown) e.preventDefault();
                           }}
@@ -617,10 +658,11 @@ const Navbar = () => {
                                 <Link
                                   key={subLink.name}
                                   href={subLink.href}
-                                  className={`text-lg py-1 transition-colors ${pathname === subLink.href
+                                  className={`text-lg py-1 transition-colors ${
+                                    pathname === subLink.href
                                       ? "text-[#D98B50] font-medium"
                                       : "text-white/60 hover:text-white"
-                                    }`}
+                                  }`}
                                   onClick={() => setIsMobileMenuOpen(false)}
                                 >
                                   {subLink.name}

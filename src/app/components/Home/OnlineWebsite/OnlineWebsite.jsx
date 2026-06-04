@@ -102,16 +102,18 @@ const ProductCard = ({ product, index }) => {
           </div>
 
           <div style={{ transform: "translateZ(40px)" }} className="mt-auto">
-            <div className="flex flex-wrap gap-1.5 mb-4 md:mb-5">
-              {(product.tags || []).map((tag) => (
-                <span
-                  key={tag}
-                  className="text-[8px] sm:text-[9px] md:text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded-full bg-white/5 text-white/70 border border-white/10"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+            {product.tags && product.tags.length > 0 && (
+              <div className="flex flex-wrap h-[26px] md:h-[30px] overflow-hidden gap-1.5 mb-4 md:mb-5">
+                {product.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-[8px] sm:text-[9px] md:text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded-full bg-white/5 text-white/70 border border-white/10"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
 
             {/* CTA Button */}
             <div className="rounded-xl">
@@ -327,20 +329,22 @@ const OnlineWebsite = () => {
               transition={{ delay: index * 0.05, duration: 0.4 }}
               viewport={{ once: true }}
               onClick={() => handleTabChange(cat.id)}
-              className={`relative px-4 py-3 lg:px-3 lg:py-4 text-center lg:text-left whitespace-nowrap rounded-xl lg:rounded-2xl transition-all duration-300 flex items-center justify-center lg:justify-start group overflow-hidden z-10 ${activeTab === cat.id
-                ? "text-white font-bold bg-transparent lg:bg-white/10 border border-transparent lg:border-white/20 shadow-none lg:shadow-[0_0_30px_rgba(255,255,255,0.05)] lg:backdrop-blur-md"
-                : "text-gray-400 lg:text-gray-500 font-medium bg-white/[0.03] lg:bg-transparent border border-white/[0.08] lg:border-transparent hover:text-white hover:bg-white/5"
-                }`}
+              className={`relative px-4 py-3 lg:px-3 lg:py-4 text-center lg:text-left whitespace-nowrap rounded-xl lg:rounded-2xl transition-all duration-300 flex items-center justify-center lg:justify-start group overflow-hidden z-10 ${
+                activeTab === cat.id
+                  ? "text-white font-bold bg-transparent lg:bg-white/10 border border-transparent lg:border-white/20 shadow-none lg:shadow-[0_0_30px_rgba(255,255,255,0.05)] lg:backdrop-blur-md"
+                  : "text-gray-400 lg:text-gray-500 font-medium bg-white/[0.03] lg:bg-transparent border border-white/[0.08] lg:border-transparent hover:text-white hover:bg-white/5"
+              }`}
             >
               {activeTab === cat.id && (
                 <>
                   {/* Desktop active vertical indicator (with RTL support) */}
                   <motion.div
                     layoutId="activeTabIndicatorVertical"
-                    className={`absolute top-0 bottom-0 w-1.5 bg-gradient-to-b from-[#FF8A00] to-[#D98B50] shadow-[0_0_15px_#FF8A00] hidden lg:block ${language === "ar"
-                      ? "right-0 rounded-r-2xl"
-                      : "left-0 rounded-l-2xl"
-                      }`}
+                    className={`absolute top-0 bottom-0 w-1.5 bg-gradient-to-b from-[#FF8A00] to-[#D98B50] shadow-[0_0_15px_#FF8A00] hidden lg:block ${
+                      language === "ar"
+                        ? "right-0 rounded-r-2xl"
+                        : "left-0 rounded-l-2xl"
+                    }`}
                   />
                   {/* Mobile active background slider */}
                   <motion.div

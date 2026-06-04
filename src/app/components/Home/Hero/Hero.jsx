@@ -104,7 +104,7 @@ export default function Hero({ isPhaseTwo, data }) {
                 "/Hero/orange-planet.webp"
               }
               alt="Orange Planet"
-              className="w-[400px] md:w-[600px] lg:w-[750px] opacity-80"
+              className="w-[320px] md:w-[480px] lg:w-[580px] opacity-80"
             />
           </motion.div>
         )}
@@ -120,11 +120,11 @@ export default function Hero({ isPhaseTwo, data }) {
               initial="hidden"
               animate="show"
               style={{ y: textY, opacity: textOpacity }}
-              className="w-full md:w-[60%] lg:w-[50%] max-w-2xl text-white text-center md:text-start flex flex-col items-center md:items-start"
+              className="w-full md:w-[55%] lg:w-[48%] max-w-xl text-white text-center md:text-start flex flex-col items-center md:items-start"
             >
               <motion.h1
                 variants={itemVariants}
-                className="text-4xl md:text-5xl lg:text-5xl font-bold text-white mb-6 leading-tight"
+                className="text-3xl md:text-4xl lg:text-[38px] lg:leading-[1.2] font-bold text-white mb-4 leading-tight"
               >
                 {isLoadingSettings ? (
                   <span className="opacity-0 text-white">Loading...</span>
@@ -143,7 +143,7 @@ export default function Hero({ isPhaseTwo, data }) {
 
               <motion.p
                 variants={itemVariants}
-                className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-400 mb-10 max-w-xl leading-relaxed font-light text-balance opacity-90"
+                className="text-sm sm:text-base md:text-lg lg:text-lg text-gray-400 mb-8 max-w-lg leading-relaxed font-light text-balance opacity-90"
               >
                 {isLoadingSettings ? (
                   <span className="opacity-0 text-white">Loading...</span>
@@ -154,17 +154,17 @@ export default function Hero({ isPhaseTwo, data }) {
 
               <motion.div
                 variants={itemVariants}
-                className="flex flex-row flex-wrap items-center justify-center md:justify-start gap-4 sm:gap-6 w-full"
+                className="flex flex-row flex-wrap items-center justify-center md:justify-start gap-3.5 sm:gap-4 w-full"
               >
                 <button
                   onClick={() => router.push("/contact-us")}
-                  className="bg-gradient-to-r from-[#FF8A00] to-[#FF5C00] hover:from-[#FF5C00] hover:to-[#FF8A00] text-white text-sm sm:text-base px-8 py-4 rounded-2xl font-black uppercase tracking-widest flex items-center gap-3 transition-all transform hover:scale-105 shadow-[0_20px_40px_-10px_rgba(255,138,0,0.5)] active:scale-95 cursor-pointer border-none"
+                  className="bg-gradient-to-r from-[#FF8A00] to-[#FF5C00] hover:from-[#FF5C00] hover:to-[#FF8A00] text-white text-xs sm:text-sm px-6 py-3 rounded-xl font-black uppercase tracking-widest flex items-center gap-2.5 transition-all transform hover:scale-105 shadow-[0_15px_30px_-10px_rgba(255,138,0,0.5)] active:scale-95 cursor-pointer border-none"
                 >
                   <span className="bg-white/20 p-1 sm:p-1.5 rounded-full">
                     <svg
-                      width="16"
-                      height="16"
-                      className="sm:w-[18px] sm:h-[18px]"
+                      width="14"
+                      height="14"
+                      className="sm:w-[16px] sm:h-[16px]"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -183,15 +183,15 @@ export default function Hero({ isPhaseTwo, data }) {
                   )}
                 </button>
 
-                <div className="flex items-center gap-4 group">
+                <div className="flex items-center gap-3.5 group">
                   <button
                     onClick={() => setIsVideoModalOpen(true)}
-                    className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg active:scale-95 group cursor-pointer border-none"
+                    className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-full bg-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg active:scale-95 group cursor-pointer border-none"
                   >
                     <svg
-                      width="20"
-                      height="20"
-                      className="sm:w-[24px] sm:h-[24px] text-black ml-1 group-hover:text-[#D98B50] transition-colors"
+                      width="16"
+                      height="16"
+                      className="sm:w-[18px] sm:h-[18px] text-black ml-0.5 group-hover:text-[#D98B50] transition-colors"
                       viewBox="0 0 24 24"
                       fill="currentColor"
                     >
@@ -200,7 +200,7 @@ export default function Hero({ isPhaseTwo, data }) {
                   </button>
                   <span
                     onClick={() => setIsVideoModalOpen(true)}
-                    className="text-white font-bold text-sm sm:text-base cursor-pointer hover:text-[#D98B50] transition-colors"
+                    className="text-white font-bold text-xs sm:text-sm cursor-pointer hover:text-[#D98B50] transition-colors"
                   >
                     {isLoadingSettings ? (
                       <span className="opacity-0">Loading...</span>
