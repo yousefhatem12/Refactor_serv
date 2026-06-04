@@ -82,11 +82,11 @@ export default function Earth({ isPhaseTwo }) {
             scale: 0.5,
           },
           {
-            x: isRtl ? "100%" : "-100%",
-            y: "100%",
+            x: isRtl ? "85%" : "-85%",
+            y: "85%",
             opacity: 1,
             rotation: isRtl ? 65 : 0,
-            scale: 2,
+            scale: 1.5,
             duration: 1.5,
             delay: 0.3,
             ease: "power3.out",
@@ -112,7 +112,7 @@ export default function Earth({ isPhaseTwo }) {
       ref={containerRef}
       className="relative flex items-center justify-center w-full h-screen  will-change-transform"
     >
-      <div className="relative w-[400px] h-[400px] lg:w-[550px] lg:h-[550px]">
+      <div className="relative w-[400px] h-[400px] lg:w-[400px] lg:h-[400px]">
         {/* Earth Background Glow */}
         <div className="absolute inset-0 rounded-full bg-blue-500/20 blur-[80px] animate-pulse overflow-hidden will-change-opacity hidden md:block" />
 
@@ -129,7 +129,7 @@ export default function Earth({ isPhaseTwo }) {
         </div>
 
         {/* Sunlight Layer */}
-        <div className="absolute inset-[5px] lg:inset-[7px] z-10 rounded-full overflow-hidden pointer-events-none hidden md:block">
+        <div className="absolute inset-[5px] lg:inset-[5px] z-10 rounded-full overflow-hidden pointer-events-none hidden md:block">
           <div
             ref={sunlightRef}
             className="absolute inset-y-0 left-0 w-[200%] bg-[linear-gradient(to_right,rgba(0,0,0,0.8)_0%,rgba(0,0,0,0.8)_50%,transparent_65%)] mix-blend-multiply will-change-transform"
@@ -156,7 +156,7 @@ export default function Earth({ isPhaseTwo }) {
         {/* Astronaut - Phase 2 Entrance */}
         <div
           ref={astronautWrapperRef}
-          className={`absolute top-0 ${isRtl ? "left-0" : "right-0"} z-30 w-[150px] h-[150px] md:w-[180px] md:h-[180px] lg:w-[240px] lg:h-[240px] pointer-events-none opacity-0 hidden md:block`}
+          className={`absolute top-0 ${isRtl ? "left-0" : "right-0"} z-30 w-[100px] h-[100px] md:w-[130px] md:h-[130px] lg:w-[200px] lg:h-[200px] pointer-events-none opacity-0 hidden md:block`}
         >
           <div
             style={{

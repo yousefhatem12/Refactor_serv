@@ -556,7 +556,7 @@ export default function DynamicPage() {
 
       {template === "portfolio" && (
         <div className="w-full relative z-10 pt-24">
-          <PortfolioGallery data={pageData} />
+          <PortfolioGallery data={pageData} perPage={4} />
           <CTA />
         </div>
       )}

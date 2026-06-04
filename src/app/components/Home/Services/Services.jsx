@@ -83,7 +83,7 @@ const Services = () => {
   const mainY = useTransform(
     scrollYProgress,
     [0, 0.4, 0.7, 1],
-    ["30vh", "0vh", "0vh", "-15vh"],
+    ["30vh", "0vh", "0vh", "-120vh"],
   );
   const mainScale = useTransform(
     scrollYProgress,
@@ -98,7 +98,7 @@ const Services = () => {
 
   // Side Planet Transforms (Slots -1, 1)
   const sideX = ["-30vw", "0vw", "0vw", "-20vw"];
-  const sideY = ["30vh", "0vh", "0vh", "-10vh"];
+  const sideY = ["30vh", "0vh", "0vh", "-120vh"];
 
   const leftX = useTransform(scrollYProgress, [0, 0.4, 0.7, 1], sideX);
   const leftY = useTransform(scrollYProgress, [0, 0.4, 0.7, 1], sideY);
@@ -136,7 +136,7 @@ const Services = () => {
   const farSideY = useTransform(
     scrollYProgress,
     [0, 0.4, 0.7, 1],
-    ["20vh", "0vh", "0vh", "0vh"],
+    ["20vh", "0vh", "0vh", "-120vh"],
   );
   const farSideOpacity = useTransform(
     scrollYProgress,

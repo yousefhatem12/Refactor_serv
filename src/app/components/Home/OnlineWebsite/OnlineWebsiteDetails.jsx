@@ -27,10 +27,13 @@ const OnlineWebsiteDetails = () => {
 
   const getRotation = (index) => {
     const total = categories.length || 1;
-    const startAngle = -42; // Spread out to match image
-    const endAngle = 42;
+    const maxSpread = 135; // Maximum total angle spread to keep within the semi-circle
+    const idealStep = 30; // Ideal angular step between tabs
+    const spread = Math.min(maxSpread, (total - 1) * idealStep);
+
     if (total === 1) return 0;
-    return startAngle + (index * (endAngle - startAngle)) / (total - 1);
+    const startAngle = -spread / 2;
+    return startAngle + (index * spread) / (total - 1);
   };
 
   return (
@@ -53,19 +56,18 @@ const OnlineWebsiteDetails = () => {
               {cat.name}
             </button>
           ))}
-        </div>
-
+        </div>{" "}
         {/* Left/Right Planet Section */}
         <div className="relative hidden lg:flex w-[45%] h-screen items-center z-10">
           <motion.div
             initial={{
-              x: isRtl ? 200 : -200,
+              x: isRtl ? 40 : -40,
               opacity: 0,
-              rotate: isRtl ? 10 : -10,
             }}
-            whileInView={{ x: 0, opacity: 1, rotate: 0 }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
-            className={`absolute w-[100vh] ${isRtl ? "right-[-45.5vh] left-auto" : "left-[-45.5vh] right-auto"} top-1/2 -translate-y-1/2 z-10 flex items-center justify-center`}
+            whileInView={{ x: 0, opacity: 1 }}
+            viewport={{ once: true, amount: 0.05 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className={`absolute w-[100vh] h-[100vh] ${isRtl ? "right-[-45.5vh] left-auto" : "left-[-45.5vh] right-auto"} top-1/2 -translate-y-1/2 z-10 flex items-center justify-center`}
           >
             <img
               src="/aside/MArs 2.webp"
@@ -76,55 +78,64 @@ const OnlineWebsiteDetails = () => {
             <img
               src="/aside/circle.webp"
               alt="Arc"
-              className={`absolute top-[5%] ${isRtl ? "right-[90px] left-auto" : "left-[90px] right-auto"} w-[90%] h-[100%] object-contain opacity-40 -z-10 pointer-events-none`}
+              className={`absolute top-[5%] ${isRtl ? "right-[8.3vh] left-auto" : "left-[8.3vh] right-auto"} w-[95%] h-[100%] object-contain opacity-40 -z-10 pointer-events-none`}
               style={{
                 transform: `scaleY(0.9) ${isRtl ? "scaleX(-1)" : "scaleX(1)"}`,
               }}
             />
-          </motion.div>
 
-          {/* Navigation Menu along the Arc */}
-          <div className="absolute left-0 top-0 w-full h-full z-20 pointer-events-none">
-            {categories.map((cat, index) => {
-              const rotation = isRtl ? -getRotation(index) : getRotation(index);
-              const isActive = activeCategoryId === cat.id;
+            {/* Navigation Menu along the Arc */}
+            <div
+              className={`absolute  inset-0 z-20  pointer-events-none ${isRtl ? "right-15" : " left-15"}`}
+              style={{
+                transform: `scaleY(0.9) ${isRtl ? "scaleX(-1) " : " scaleX(1)"}`,
+              }}
+            >
+              {categories.map((cat, index) => {
+                // To keep spacing perfectly even, we calculate Y coordinates linearly
+                // along the ellipse instead of using standard sinusoidal angles.
+                const total = categories.length || 1;
+                const spread = Math.min(135, (total - 1) * 30);
+                const maxAngle = spread / 2;
+                const maxRad = (maxAngle * Math.PI) / 180;
+                const sinMax = Math.sin(maxRad);
 
-              return (
-                <motion.div
-                  key={cat.id}
-                  initial={{ opacity: 0, rotate: rotation }}
-                  whileInView={{ opacity: 1, rotate: rotation }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2 + index * 0.1, duration: 0.8 }}
-                  className={`absolute ${isRtl ? "right-0 left-auto" : "left-0 right-auto"} top-1/2 pointer-events-none`}
-                  style={{
-                    y: "-30%",
-                    transformOrigin: isRtl ? "100% 50%" : "0% 50%",
-                  }}
-                >
+                const t = total === 1 ? 0 : -1 + (2 * index) / (total - 1);
+
+                // Radius in vh units placing the tabs exactly along the edge of Mars 2.webp
+                const radius = 36;
+                const targetY = radius * sinMax * t;
+                const targetX = radius * Math.sqrt(1 - Math.pow(sinMax * t, 2));
+
+                const isActive = activeCategoryId === cat.id;
+
+                return (
                   <motion.div
-                    initial={{ x: 0 }}
-                    whileInView={{ x: isRtl ? "-32vh" : "32vh" }}
-                    viewport={{ once: true }}
-                    transition={{
-                      delay: 0.2 + index * 0.1,
-                      duration: 1,
-                      ease: "easeOut",
+                    key={cat.id}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.1 }}
+                    className="absolute pointer-events-auto cursor-pointer"
+                    style={{
+                      left: `calc(50% + ${targetX}vh)`,
+                      top: `calc(50% + ${targetY}vh)`,
+                      x: "-50%",
+                      y: "-50%",
                     }}
-                    className="cursor-pointer pointer-events-auto "
                     onClick={() => setActiveCategoryId(cat.id)}
                   >
                     <span
-                      className={`text-[18px]   font-medium transition-all  duration-300 break-words inline-block relative drop-shadow-[0_0_10px_rgba(0,0,0,0.5)] ${
+                      className={`text-[18px] font-medium transition-all duration-300 whitespace-nowrap inline-block relative drop-shadow-[0_0_10px_rgba(0,0,0,0.5)] ${
                         isActive
                           ? "text-[#ffb800] font-bold scale-110 drop-shadow-[0_0_20px_rgba(255,184,0,0.5)]"
                           : "text-white/70 hover:text-[#ffb800]"
                       }`}
                       style={{
-                        transform: `rotate(-${rotation}deg)`,
+                        // Cancel scaleY(0.9) and scaleX(-1 for RTL) to keep text clean and readable without mirroring
+                        transform: `scaleY(${1 / 0.9}) ${isRtl ? "scaleX(-1)" : "scaleX(1)"}`,
                       }}
                     >
-                      <div className="">{cat.name}</div>
+                      <div>{cat.name}</div>
                       {isActive && (
                         <motion.div
                           layoutId="activeUnderline"
@@ -133,12 +144,11 @@ const OnlineWebsiteDetails = () => {
                       )}
                     </span>
                   </motion.div>
-                </motion.div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          </motion.div>
         </div>
-
         {/* Right Content Area */}
         <div className="w-full lg:w-[55%] relative z-20">
           <OurPortfolio activeCategoryId={activeCategoryId} />

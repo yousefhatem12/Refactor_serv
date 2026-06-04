@@ -62,8 +62,9 @@ const PortfolioCard = ({ item, t, language }) => {
         src={imgSrc}
         alt={item.name}
         fill
-        className={`object-cover transition-all duration-700 group-hover:scale-110 ${isImageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
-          }`}
+        className={`object-cover transition-all duration-700 group-hover:scale-110 ${
+          isImageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
+        }`}
         onLoad={() => setIsImageLoaded(true)}
         onError={() => setImgSrc(defaultImage)}
       />
@@ -102,7 +103,7 @@ const PortfolioCard = ({ item, t, language }) => {
   );
 };
 
-export default function PortfolioGallery({ data }) {
+export default function PortfolioGallery({ data, perPage = 9 }) {
   const { t, language } = useLanguage();
   const [activeTab, setActiveTab] = useState("all");
   const [portfolioItems, setPortfolioItems] = useState([]);
@@ -133,7 +134,7 @@ export default function PortfolioGallery({ data }) {
     let isMounted = true;
 
     const categoryQuery = activeTab === "all" ? "all" : activeTab;
-    const cacheKey = `${language}-${categoryQuery}-${currentPage}`;
+    const cacheKey = `${language}-${categoryQuery}-${currentPage}-${perPage}`;
 
     // Read from client-side cache first to avoid framework bootstrap delay
     if (portfolioCache[cacheKey]) {
@@ -142,7 +143,9 @@ export default function PortfolioGallery({ data }) {
         setPortfolioItems(cached.data);
       } else {
         setPortfolioItems((prev) => {
-          const newItems = cached.data.filter((item) => !prev.some((p) => p.id === item.id));
+          const newItems = cached.data.filter(
+            (item) => !prev.some((p) => p.id === item.id),
+          );
           return [...prev, ...newItems];
         });
       }
@@ -154,7 +157,7 @@ export default function PortfolioGallery({ data }) {
     setIsLoading(true);
 
     fetchAPI(
-      `/portfolio?lang=${language}&category=${categoryQuery}&page=${currentPage}&per_page=9`,
+      `/portfolio?lang=${language}&category=${categoryQuery}&page=${currentPage}&per_page=${perPage}`,
     )
       .then((res) => {
         if (!isMounted) return;
@@ -170,7 +173,9 @@ export default function PortfolioGallery({ data }) {
             setPortfolioItems(res.data);
           } else {
             setPortfolioItems((prev) => {
-              const newItems = res.data.filter((item) => !prev.some((p) => p.id === item.id));
+              const newItems = res.data.filter(
+                (item) => !prev.some((p) => p.id === item.id),
+              );
               return [...prev, ...newItems];
             });
           }
@@ -185,7 +190,7 @@ export default function PortfolioGallery({ data }) {
     return () => {
       isMounted = false;
     };
-  }, [activeTab, currentPage, language, categoriesLoaded]);
+  }, [activeTab, currentPage, language, categoriesLoaded, perPage]);
 
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
@@ -218,26 +223,27 @@ export default function PortfolioGallery({ data }) {
       <div className="flex flex-wrap justify-center gap-4 mb-12">
         {!categoriesLoaded
           ? // Tabs loading skeleton
-          Array.from({ length: 5 }).map((_, i) => (
-            <div
-              key={`tab-skeleton-${i}`}
-              className="h-10 w-24 bg-white/5 border border-white/10 rounded-[2px] animate-pulse"
-            />
-          ))
+            Array.from({ length: 5 }).map((_, i) => (
+              <div
+                key={`tab-skeleton-${i}`}
+                className="h-10 w-24 bg-white/5 border border-white/10 rounded-[2px] animate-pulse"
+              />
+            ))
           : tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => handleTabChange(tab.id)}
-              className={`px-6 py-2 text-sm md:text-base font-medium uppercase transition-colors duration-300 rounded-[2px]
-                ${activeTab === tab.id
-                  ? "bg-white text-[#040A37]"
-                  : "bg-transparent text-white border border-[#ffffff40] hover:border-white"
+              <button
+                key={tab.id}
+                onClick={() => handleTabChange(tab.id)}
+                className={`px-6 py-2 text-sm md:text-base font-medium uppercase transition-colors duration-300 rounded-[2px]
+                ${
+                  activeTab === tab.id
+                    ? "bg-white text-[#040A37]"
+                    : "bg-transparent text-white border border-[#ffffff40] hover:border-white"
                 }
               `}
-            >
-              {tab.label}
-            </button>
-          ))}
+              >
+                {tab.label}
+              </button>
+            ))}
       </div>
 
       {/* Grid */}
@@ -270,7 +276,7 @@ export default function PortfolioGallery({ data }) {
                 ))}
             </>
           ) : isLoading ? (
-            [1, 2, 3, 4, 5, 6].map((i) => (
+            Array.from({ length: perPage }).map((_, i) => (
               <motion.div
                 variants={itemVariants}
                 key={`skeleton-${i}`}

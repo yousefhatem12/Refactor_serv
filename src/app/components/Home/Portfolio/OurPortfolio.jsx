@@ -12,22 +12,25 @@ const OurPortfolio = ({ activeCategoryId }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  // Reset page and items when language changes
-  useEffect(() => {
+  const [prevCategory, setPrevCategory] = useState(activeCategoryId);
+  const [prevLanguage, setPrevLanguage] = useState(language);
+
+  if (activeCategoryId !== prevCategory || language !== prevLanguage) {
+    setPrevCategory(activeCategoryId);
+    setPrevLanguage(language);
     setCurrentPage(1);
     setPortfolioItems([]);
-  }, [language]);
+    setIsLoading(true);
+  }
 
   useEffect(() => {
     let isMounted = true;
 
-    if (currentPage === 1) {
-      setIsLoading(true);
-    } else {
-      setIsLoadingMore(true);
-    }
+    const categoryQuery = activeCategoryId === "all" ? "all" : activeCategoryId;
 
-    fetchAPI(`/portfolio?lang=${language}&page=${currentPage}&per_page=3`)
+    fetchAPI(
+      `/portfolio?lang=${language}&category=${categoryQuery}&page=${currentPage}&per_page=3`,
+    )
       .then((res) => {
         if (!isMounted) return;
 
@@ -70,15 +73,9 @@ const OurPortfolio = ({ activeCategoryId }) => {
     return () => {
       isMounted = false;
     };
-  }, [currentPage, language]);
+  }, [currentPage, language, activeCategoryId]);
 
-  // Filter items based on category if needed
-  const items = Array.isArray(portfolioItems) ? portfolioItems : [];
-  const filteredItems =
-    activeCategoryId === "all"
-      ? items
-      : items.filter((item) => item.category === activeCategoryId);
-
+  const filteredItems = Array.isArray(portfolioItems) ? portfolioItems : [];
   const isRtl = language === "ar";
 
   return (
@@ -89,7 +86,7 @@ const OurPortfolio = ({ activeCategoryId }) => {
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="text-center mb-16"
       >
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-black inline-block relative pb-4">
+        <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-black inline-block relative pb-4">
           <span className="text-[#FF8A00]">{t("our")}</span>{" "}
           <span className="text-white">{t("portfolio")}</span>
           <div
@@ -99,93 +96,128 @@ const OurPortfolio = ({ activeCategoryId }) => {
       </motion.div>
       <div className="flex-1 h-auto lg:h-[700px] overflow-y-visible lg:overflow-y-auto overflow-x-hidden custom-scrollbar">
         <div className="grid grid-cols-2 gap-4 md:gap-8 lg:flex lg:flex-col lg:gap-20">
-          {filteredItems.map((item, index) => {
-            const isReversed = index % 2 !== 0;
-
-            return (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, x: isReversed ? 50 : -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{
-                  duration: 0.6,
-                  ease: "easeOut",
-                  delay: index * 0.15,
-                }}
-                className={`relative flex flex-col ${isReversed ? "lg:flex-row-reverse" : "lg:flex-row"} items-stretch gap-0 lg:gap-8 group rounded-2xl lg:rounded-none overflow-hidden lg:overflow-visible min-h-[250px] md:min-h-[350px] lg:min-h-[380px]`}
-              >
-                {/* Image Side */}
-                <div className="w-full lg:w-1/2 flex absolute inset-0 lg:relative lg:inset-auto md lg:h-[400px] z-0">
-                  <div className="relative w-full h-full group overflow-hidden lg:rounded-xl lg:bg-white/5 lg:border lg:border-white/10 lg:shadow-2xl">
-                    <img
-                      src={item.image || "/our-portfolio/Rectangle 6.webp"}
-                      alt={item.name}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      onError={(e) => {
-                        e.target.src = "/our-portfolio/Rectangle 6.webp";
-                      }}
-                    />
-                    {/* Dark overlay specifically for hover on desktop */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 hidden lg:block"></div>
+          {isLoading ? (
+            Array.from({ length: 3 }).map((_, index) => {
+              const isReversed = index % 2 !== 0;
+              return (
+                <div
+                  key={`skeleton-${index}`}
+                  className={`relative flex flex-col ${isReversed ? "lg:flex-row-reverse" : "lg:flex-row"} items-stretch gap-0 lg:gap-8 rounded-2xl lg:rounded-none overflow-hidden lg:overflow-visible min-h-[250px] md:min-h-[350px] lg:min-h-[380px] animate-pulse`}
+                >
+                  {/* Image Side Skeleton */}
+                  <div className="w-full lg:w-1/2 flex absolute inset-0 lg:relative lg:inset-auto lg:h-[400px] z-0">
+                    <div className="w-full h-full bg-white/5 rounded-xl border border-white/10" />
+                  </div>
+                  {/* Text Side Skeleton */}
+                  <div className="relative z-10 w-full lg:w-1/2 flex flex-col justify-end lg:justify-center p-4 md:p-6 lg:p-0 lg:py-4 flex-1 pt-24 lg:pt-4 bg-gradient-to-t from-black via-black/80 to-transparent lg:bg-none">
+                    <div className="h-6 bg-white/10 rounded w-[60%] mb-3 animate-pulse" />
+                    <div className="h-4 bg-white/10 rounded w-[90%] mb-2 animate-pulse" />
+                    <div className="h-4 bg-white/10 rounded w-[80%] mb-4 animate-pulse" />
+                    <div className="flex flex-row gap-3 mt-4">
+                      <div className="h-8 bg-white/10 rounded w-[80px] animate-pulse" />
+                      <div className="h-8 bg-white/10 rounded w-[100px] animate-pulse" />
+                    </div>
                   </div>
                 </div>
+              );
+            })
+          ) : filteredItems.length > 0 ? (
+            filteredItems.map((item, index) => {
+              const isReversed = index % 2 !== 0;
 
-                {/* Text Side */}
-                <div className="relative z-10 w-full lg:w-1/2 flex flex-col justify-end lg:justify-center p-4 md:p-6 lg:p-0 lg:py-4 flex-1 pt-24 lg:pt-4 bg-gradient-to-t from-black via-black/80 to-transparent lg:bg-none">
-                  <h3 className="text-xl md:text-3xl lg:text-3xl font-bold text-white mb-2 tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] lg:drop-shadow-none mt-auto lg:mt-0">
-                    {item.name}
-                  </h3>
-                  <p className="text-gray-200 text-xs md:text-sm lg:text-md leading-relaxed mb-4 lg:mb-2 max-w-xl line-clamp-2 lg:line-clamp-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] lg:drop-shadow-none">
-                    {item.description}
-                  </p>
-                  <div className="flex flex-row gap-3 lg:gap-6 justify-between items-center lg:items-start lg:justify-start mt-4 lg:mt-0">
-                    <a
-                      href="#"
-                      className="flex items-center gap-1 lg:gap-2 lg:mt-4 text-white/90 hover:text-white transition-colors group text-xs md:text-sm lg:text-lg font-medium drop-shadow-md lg:drop-shadow-none"
-                    >
-                      <span className="hidden lg:inline">{t("learnMore")}</span>
-                      <span className="lg:hidden">{t("details")}</span>
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className={`w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 transition-transform ${isRtl ? "rotate-180 group-hover:-translate-x-1 lg:group-hover:-translate-x-2" : "group-hover:translate-x-1 lg:group-hover:translate-x-2"}`}
-                      >
-                        <path d="M5 12h14M12 5l7 7-7 7" />
-                      </svg>
-                    </a>
-
-                    <a
-                      href={item.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-1.5 lg:gap-3 w-fit px-3 py-1.5 md:px-4 md:py-2 lg:px-8 lg:py-3 bg-[#E1804E] hover:bg-[#c96d3f] text-white rounded-lg lg:rounded-xl transition-all shadow-[0_0_15px_rgba(225,128,78,0.4)] hover:shadow-[0_0_30px_rgba(225,128,78,0.5)] active:scale-95"
-                    >
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="w-3.5 h-3.5 md:w-4 md:h-4 lg:w-5 lg:h-5"
-                      >
-                        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
-                        <circle cx="12" cy="12" r="3" />
-                      </svg>
-                      <span className="font-bold text-xs md:text-sm lg:text-base whitespace-nowrap">
-                        {t("live")}
-                      </span>
-                    </a>
+              return (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, x: isReversed ? 50 : -50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{
+                    duration: 0.6,
+                    ease: "easeOut",
+                    delay: index * 0.15,
+                  }}
+                  className={`relative flex flex-col ${isReversed ? "lg:flex-row-reverse" : "lg:flex-row"} items-stretch gap-0 lg:gap-8 group rounded-2xl lg:rounded-none overflow-hidden lg:overflow-visible min-h-[250px] md:min-h-[350px] lg:min-h-[380px]`}
+                >
+                  {/* Image Side */}
+                  <div className="w-full lg:w-1/2 flex absolute inset-0 lg:relative lg:inset-auto md lg:h-[400px] z-0">
+                    <div className="relative w-full h-full group overflow-hidden lg:rounded-xl lg:bg-white/5 lg:border lg:border-white/10 lg:shadow-2xl">
+                      <img
+                        src={item.image || "/our-portfolio/Rectangle 6.webp"}
+                        alt={item.name}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        onError={(e) => {
+                          e.target.src = "/our-portfolio/Rectangle 6.webp";
+                        }}
+                      />
+                      {/* Dark overlay specifically for hover on desktop */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 hidden lg:block"></div>
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            );
-          })}
+
+                  {/* Text Side */}
+                  <div className="relative z-10 w-full lg:w-1/2 flex flex-col justify-end lg:justify-center p-4 md:p-6 lg:p-0 lg:py-4 flex-1 pt-24 lg:pt-4 bg-gradient-to-t from-black via-black/80 to-transparent lg:bg-none">
+                    <h3 className="text-sm sm:text-base md:text-3xl lg:text-3xl font-bold text-white mb-2 tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] lg:drop-shadow-none mt-auto lg:mt-0">
+                      {item.name}
+                    </h3>
+                    <p className="text-gray-200 text-[10px] sm:text-xs md:text-sm lg:text-md leading-relaxed mb-4 lg:mb-2 max-w-xl line-clamp-2 lg:line-clamp-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] lg:drop-shadow-none">
+                      {item.description}
+                    </p>
+                    <div className="flex flex-row gap-2 sm:gap-3 lg:gap-6 justify-between items-center lg:items-start lg:justify-start mt-4 lg:mt-0">
+                      <a
+                        href="#"
+                        className="flex items-center gap-1 lg:gap-2 lg:mt-4 text-white/90 hover:text-white transition-colors group text-[10px] sm:text-xs md:text-sm lg:text-lg font-medium drop-shadow-md lg:drop-shadow-none"
+                      >
+                        <span className="hidden lg:inline">
+                          {t("learnMore")}
+                        </span>
+                        <span className="lg:hidden">{t("details")}</span>
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className={`w-3.5 h-3.5 md:w-5 md:h-5 lg:w-6 lg:h-6 transition-transform ${isRtl ? "rotate-180 group-hover:-translate-x-1 lg:group-hover:-translate-x-2" : "group-hover:translate-x-1 lg:group-hover:translate-x-2"}`}
+                        >
+                          <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                      </a>
+
+                      <a
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-1 sm:gap-1.5 lg:gap-3 w-fit px-2 py-1.5 sm:px-3 sm:py-1.5 md:px-4 md:py-2 lg:px-8 lg:py-3 bg-[#E1804E] hover:bg-[#c96d3f] text-white rounded-lg lg:rounded-xl transition-all shadow-[0_0_15px_rgba(225,128,78,0.4)] hover:shadow-[0_0_30px_rgba(225,128,78,0.5)] active:scale-95"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 lg:w-5 lg:h-5"
+                        >
+                          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                          <circle cx="12" cy="12" r="3" />
+                        </svg>
+                        <span className="font-bold text-[10px] sm:text-xs md:text-sm lg:text-base whitespace-nowrap">
+                          {t("live")}
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })
+          ) : (
+            <div className="col-span-2 text-center py-20 text-gray-400 w-full">
+              {language === "ar"
+                ? "لا توجد أعمال في هذا القسم"
+                : "No projects found in this category"}
+            </div>
+          )}
 
           {hasMore && (
             <div className="flex hidden justify-center mt-12 w-full col-span-2">
