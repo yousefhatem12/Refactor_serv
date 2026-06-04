@@ -25,15 +25,23 @@ const alexandria = Alexandria({
   display: "swap",
 });
 
-import { fetchAPI } from "@/lib/api";
+import { fetchAPI, getMediaUrl } from "@/lib/api";
 
 export async function generateMetadata() {
   const settings = await fetchAPI("/settings");
+  const faviconUrl = settings?.site_favicon
+    ? getMediaUrl(settings.site_favicon)
+    : "/logo.ico";
   return {
     title: settings?.site_title || "Serv5 | Advanced Agentic Coding",
     description:
       settings?.site_description ||
       "Leading company in web development and AI solutions.",
+    icons: {
+      icon: faviconUrl,
+      shortcut: faviconUrl,
+      apple: faviconUrl,
+    },
   };
 }
 
