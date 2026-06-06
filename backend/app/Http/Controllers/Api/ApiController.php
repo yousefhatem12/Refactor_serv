@@ -125,7 +125,7 @@ class ApiController extends Controller
                     'title' => $lang === 'en' ? strtolower($name) : $name,
                     'label' => $name,
                     'description' => $this->trans($service->description, $lang),
-                    'img' => $service->icon ?: '/Services/Purple Planet.png',
+                    'img' => $service->icon ?: '/Services/Purple Planet.webp',
                     'gradient' => "from-[{$style['from']}] to-[{$style['to']}]",
                     'dotColor' => "bg-[{$style['dot']}]",
                     'shadow' => $style['shadow'],

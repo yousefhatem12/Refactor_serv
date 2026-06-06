@@ -23,7 +23,7 @@ DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 $settings = [
     // Header (Removed to avoid overwriting branding)
     // ['key' => 'site_name', 'value' => 'Serv5 Digital Solutions', 'type' => 'text'],
-    // ['key' => 'site_logo', 'value' => 'settings/logo.png', 'type' => 'image', 'value_source' => 'file'],
+    // ['key' => 'site_logo', 'value' => 'settings/logo.webp', 'type' => 'image', 'value_source' => 'file'],
     ['key' => 'company_video_url', 'value' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'type' => 'video', 'value_source' => 'link'],
     ['key' => 'hero_video_button_text', 'value' => 'Know more', 'type' => 'text'],
     
@@ -32,7 +32,7 @@ $settings = [
     // ['key' => 'hero_title_2', 'value' => 'Of Your Business', 'type' => 'text'],
     // ['key' => 'hero_desc', 'value' => 'We provide state-of-the-art web solutions, from stunning designs to powerful backend systems, helping you dominate the digital galaxy.', 'type' => 'text'],
     // ['key' => 'hero_cta_text', 'value' => 'Launch Your Project', 'type' => 'text'],
-    // ['key' => 'hero_planet', 'value' => 'settings/hero_planet.png', 'type' => 'image', 'value_source' => 'file'],
+    // ['key' => 'hero_planet', 'value' => 'settings/hero_planet.webp', 'type' => 'image', 'value_source' => 'file'],
     
     // Footer
     ['key' => 'footer_heading_en', 'value' => "Ready to Conquer the Web?", 'type' => 'text'],

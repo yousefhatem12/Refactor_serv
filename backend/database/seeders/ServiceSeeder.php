@@ -19,7 +19,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'Deploy your business applications on our enterprise-grade cloud servers. Experience instant NVMe SSD storage speeds, daily automatic backups, and DDoS protection with an uptime guarantee of 99.99%.',
                         'ar' => 'انشر تطبيقات أعمالك وموقعك على خوادمنا السحابية فائقة السرعة والموثوقية. استمتع بوحدات تخزين NVMe SSD فائقة الأداء، ونقاط استعادة يومية، مع حماية أمنية متكاملة تضمن بقاء موقعك متاحاً طوال الوقت.'
                     ],
-                    'hero_image' => 'services/heroes/hosting-hero.png',
+                    'hero_image' => 'services/heroes/hosting-hero.webp',
                 ]
             ],
             [
@@ -92,7 +92,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'Are you hosting somewhere else? Our system engineers will transfer your files, databases, and emails to our servers free of charge. We handle the technical details while you focus on your business, ensuring zero downtime and no data loss.',
                         'ar' => 'هل موقعك مستضاف لدى شركة أخرى؟ سيقوم مهندسو الأنظمة لدينا بنقل ملفاتك وقواعد بياناتك وحسابات بريدك الإلكتروني إلى خوادمنا مجاناً بالكامل. نتولى التفاصيل الفنية المعقدة بينما تركز أنت على أعمالك، مع ضمان عدم توقف موقعك لثانية واحدة.'
                     ],
-                    'image' => 'services/content/section-2-image.png',
+                    'image' => 'services/content/section-2-image.webp',
                     'image_on_right' => true,
                     'items' => [
                         ['title' => ['en' => 'Free database migration', 'ar' => 'نقل قواعد البيانات والملفات مجاناً']],
@@ -148,7 +148,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'We design beautiful, modern, and high-converting websites that express your brand identity. Tailored user experiences that engage visitors and convert them into loyal clients.',
                         'ar' => 'نصمم مواقع ويب جذابة وعصرية ومخصصة لزيادة المبيعات تعكس تفاصيل هويتك التجارية. نصنع تجربة مستخدم فريدة تأسر الزوار وتحولهم إلى عملاء دائمين.'
                     ],
-                    'hero_image' => 'services/heroes/web-design-hero.png',
+                    'hero_image' => 'services/heroes/web-design-hero.webp',
                 ]
             ],
             [
@@ -199,7 +199,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'Over 70% of web traffic comes from mobile devices. That is why our design philosophy is Mobile-First. We make sure that your navigation menus, images, texts, and call-to-actions adapt beautifully to smaller screens, providing an effortless experience for smartphone users.',
                         'ar' => 'أكثر من 70% من زوار مواقع الويب يأتون من الهواتف المحمولة. لذلك فإن فلسفتنا في التصميم تركز على الهاتف أولاً. نحن نضمن أن قوائم التصفح، والصور، والنصوص، وأزرار طلب الخدمة تتكيف بشكل جميل مع الشاشات الصغيرة، مما يوفر تجربة تصفح سلسة وسهلة لمستخدمي الهواتف الذكية.'
                     ],
-                    'image' => 'services/content/section-2-image.png',
+                    'image' => 'services/content/section-2-image.webp',
                     'image_on_right' => true,
                     'items' => [
                         ['title' => ['en' => 'Dynamic responsive scaling', 'ar' => 'تحجيم متجاوب وديناميكي بالكامل']],
@@ -274,7 +274,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'Build high-performance, secure, and scalable web applications tailored to your exact business specifications. We turn complex requirements into clean, future-proof code.',
                         'ar' => 'ابنِ تطبيقات ويب متطورة وآمنة وقابلة للتوسع تناسب متطلبات أعمالك بدقة متناهية. نحول المتطلبات المعقدة إلى أكواد برمجية نظيفة وجاهزة للمستقبل.'
                     ],
-                    'hero_image' => 'services/heroes/web-dev-hero.png',
+                    'hero_image' => 'services/heroes/web-dev-hero.webp',
                 ]
             ],
             [
@@ -318,7 +318,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'We design web applications that grow with your business. Using modular architectures, cloud-native setups, and secure APIs, we ensure your platform remains fast, reliable, and secure even during high-traffic events.',
                         'ar' => 'نصمم تطبيقات ويب تنمو مع نمو حجم أعمالك وسوقك. باستخدام بنيات برمجية مجزأة وإعدادات سحابية وواجهات ربط آمنة، نضمن بقاء منصتك سريعة وموثوقة ومحمية بالكامل حتى أثناء فترات الضغط وحركة المرور الكثيفة.'
                     ],
-                    'image' => 'services/content/section-3-image.png',
+                    'image' => 'services/content/section-3-image.webp',
                     'image_on_right' => false,
                     'items' => [
                         ['title' => ['en' => 'Modular microservices architecture', 'ar' => 'دعم البنية البرمجية المصغرة Modular']],
@@ -393,7 +393,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'Launch your online retail store with interactive layouts, secure checkout processes, and comprehensive inventory management systems. We build stores that sell.',
                         'ar' => 'أطلق متجرك الإلكتروني بواجهات تفاعلية مذهلة، وعمليات دفع آمنة وسهلة، ونظام متكامل لإدارة المخزون والطلبات. نصنع متاجر تزيد أرباحك.'
                     ],
-                    'hero_image' => 'services/heroes/web-design-hero.png',
+                    'hero_image' => 'services/heroes/web-design-hero.webp',
                 ]
             ],
             [
@@ -437,7 +437,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'Cart abandonment is the biggest enemy of online sales. Our checkout systems are designed to minimize friction, offering guest checkouts, one-click payment options, and responsive security, leading to a 30% increase in checkout completions.',
                         'ar' => 'تخلي العملاء عن سلة الشراء هو التحدي الأكبر للتجارة الإلكترونية. تم تصميم أنظمة الدفع لدينا لتقليل خطوات الشراء، وتوفير خيارات الدفع بنقرة واحدة، وحماية أمنية متكاملة، مما يضمن زيادة بنسبة 30% في إتمام الطلبات.'
                     ],
-                    'image' => 'services/content/section-2-image.png',
+                    'image' => 'services/content/section-2-image.webp',
                     'image_on_right' => true,
                     'items' => [
                         ['title' => ['en' => 'One-click checkout paths', 'ar' => 'خطوات شراء سريعة ومبسطة بنقرة واحدة']],
@@ -512,7 +512,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'Deploy custom iOS and Android mobile applications developed for high scale. Engaging layouts, native fluid animations, and robust database backends.',
                         'ar' => 'أطلق تطبيقك المخصص لهواتف أندرويد وآيفون بأعلى معايير الجودة والأداء الفائق. واجهات تفاعلية جذابة، حركات سلسة، وأنظمة خلفية شديدة الاستقرار.'
                     ],
-                    'hero_image' => 'services/heroes/services-hero.png',
+                    'hero_image' => 'services/heroes/services-hero.webp',
                 ]
             ],
             [
@@ -563,7 +563,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'A mobile app needs to be highly intuitive. We prioritize layout convenience, clean thumb-zones, and native components, ensuring your users enjoy a seamless experience from their very first launch.',
                         'ar' => 'تطبيق الجوال يجب أن يكون بسيطاً وبديهياً للغاية. نحن نضع سهولة التصفح، وإمكانية الوصول للأزرار بالإبهام، والمكونات المدمجة للهاتف كأولوية بصرية لتوفير أفضل تجربة استخدام.'
                     ],
-                    'image' => 'services/content/section-3-image.png',
+                    'image' => 'services/content/section-3-image.webp',
                     'image_on_right' => false,
                     'items' => [
                         ['title' => ['en' => 'Thumb-zone optimized layout arrays', 'ar' => 'توزيع أزرار ملائم لحركة اليد الطبيعية']],
@@ -638,7 +638,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'Expand your brand footprint, drive qualified organic traffic, and maximize sales conversions with our data-backed digital marketing strategies.',
                         'ar' => 'وسع نطاق انتشار علامتك التجارية، واجذب ملايين الزوار المهتمين، وضاعف مبيعاتك وأرباحك باستراتيجيات تسويقية رقمية مبنية على الأرقام والتحليل.'
                     ],
-                    'hero_image' => 'services/heroes/social-media-hero.png',
+                    'hero_image' => 'services/heroes/social-media-hero.webp',
                 ]
             ],
             [
@@ -682,7 +682,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'We do not guess; we measure. Our marketing experts use advanced analytical tracking tools to record every click, impression, and conversion. This ensures that every penny of your marketing budget is directed towards the most profitable channels and audiences.',
                         'ar' => 'نحن لا نخمن؛ بل نقيس بالتحليل الرقمي. يستخدم خبراء التسويق لدينا أدوات تتبع تحليلية متقدمة لتسجيل كل نقرة، وظهور، وتحويل. يضمن ذلك توجيه ميزانيتك التسويقية بالكامل نحو القنوات والجماهير الأكثر ربحية وتحقيقاً للمبيعات.'
                     ],
-                    'image' => 'services/content/section-3-image.png',
+                    'image' => 'services/content/section-3-image.webp',
                     'image_on_right' => false,
                     'items' => [
                         ['title' => ['en' => 'Dynamic Conversion Tracking setups', 'ar' => 'تتبع التحويل الديناميكي للمبيعات بدقة']],
@@ -757,7 +757,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'Leave a memorable impression on your customers. We design unique corporate brand identities, logos, marketing materials, and high-impact social media layouts.',
                         'ar' => 'اترك انطباعاً لا ينسى لدى عملائك. نصمم هويات بصرية فريدة للشركات، شعارات مبتكرة، مواد تسويقية مطبوعة ورقيمة، وتنسيقات جذابة لحسابات التواصل الاجتماعي.'
                     ],
-                    'hero_image' => 'services/heroes/services-hero.png',
+                    'hero_image' => 'services/heroes/services-hero.webp',
                 ]
             ],
             [
@@ -808,7 +808,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'A great brand is not just a logo; it is a consistent story told through colors, shapes, and typography. Our creative designers research your values and target market to establish a cohesive brand identity that speaks directly to your customers across all physical and digital platforms.',
                         'ar' => 'العلامة التجارية الناجحة ليست مجرد شعار؛ بل هي قصة متناسقة تُروى من خلال الألوان، والأشكال، والخطوط. يدرس مصممو الإبداع لدينا قيمك وسوقك المستهدف لتأسيس هوية بصرية متماسكة تتحدث مباشرة إلى عملائك عبر جميع المنصات المادية والرقمية.'
                     ],
-                    'image' => 'services/content/section-3-image.png',
+                    'image' => 'services/content/section-3-image.webp',
                     'image_on_right' => false,
                     'items' => [
                         ['title' => ['en' => 'Meaningful typography selection', 'ar' => 'اختيار خطوط ذات معنى ورسالة']],
@@ -860,7 +860,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'Protect your infrastructure, websites, and database from security threats, hacks, and malware attacks with our proactive defenses.',
                         'ar' => 'احمِ بنيتك التحتية ومواقعك وقواعد بياناتك من المخاطر الأمنية والاختراقات وهجمات البرمجيات الخبيثة بدفاعاتنا الاستباقية.'
                     ],
-                    'hero_image' => 'services/heroes/hosting-hero.png',
+                    'hero_image' => 'services/heroes/hosting-hero.webp',
                 ]
             ],
             [
@@ -904,7 +904,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'Security is not a single tool; it is a continuous posture. Our engineers monitor your systems, deploy automated vulnerability scanners, and perform simulation attacks to find and patch security gaps before hackers can exploit them.',
                         'ar' => 'الحماية ليست مجرد أداة واحدة، بل هي حالة دفاع مستمر. يقوم مهندسو الحماية لدينا بمراقبة أنظمتك، وتفعيل ماسحات الثغرات التلقائية، وإجراء محاكاة للاختراقات لاكتشاف وسد الفجوات الأمنية قبل استغلالها من المخترقين.'
                     ],
-                    'image' => 'services/content/section-2-image.png',
+                    'image' => 'services/content/section-2-image.webp',
                     'image_on_right' => true,
                     'items' => [
                         ['title' => ['en' => 'Active server security monitoring', 'ar' => 'مراقبة حية وأمنية مستمرة للخوادم']],
@@ -979,7 +979,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'Keep your digital systems running smoothly. We offer server monitoring, bug fixing, updates, and optimization at any hour.',
                         'ar' => 'حافظ على تشغيل أنظمتك الرقمية بسلاسة تامة. نقدم مراقبة الخوادم، إصلاح الأخطاء، التحديثات الدورية، وتحسين الأداء في أي وقت.'
                     ],
-                    'hero_image' => 'services/heroes/hosting-hero.png',
+                    'hero_image' => 'services/heroes/hosting-hero.webp',
                 ]
             ],
             [
@@ -1023,7 +1023,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'We believe in proactive maintenance rather than reactive patching. Our support team conducts routine database audits, cleans temporary system logs, checks server load capacities, and ensures all security patches are applied, keeping your downtime at absolute zero.',
                         'ar' => 'نحن نؤمن بالصيانة الاستباقية بدلاً من انتظار حدوث العطل. يجري فريق الدعم لدينا تدقيقاً دورياً لقواعد البيانات، وينظف سجلات النظام المؤقتة، ويفحص سعة استيعاب الخادم، ويضمن تثبيت كافة التحديثات الأمنية لتفادي التوقف.'
                     ],
-                    'image' => 'services/content/section-3-image.png',
+                    'image' => 'services/content/section-3-image.webp',
                     'image_on_right' => false,
                     'items' => [
                         ['title' => ['en' => 'Routine weekly database audits', 'ar' => 'تدقيق دوري أسبوعي لقواعد البيانات']],
@@ -1096,7 +1096,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'Get the most powerful, secure, and fast website hosting with high-performance storage and DDoS shield protection.',
                     'ar' => 'معنا، ستحصل على أقوى استضافة مواقع توفر لك ميزات فائقة الأداء وتساعدك في الحفاظ على أمن موقعك واستقراره.'
                 ],
-                'icon' => '/Services/Purple Planet.png',
+                'icon' => '/Services/Purple Planet.webp',
                 'template' => 'template-three',
                 'blocks' => $webHostingBlocks,
             ],
@@ -1106,7 +1106,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'Deploy your business websites on fully managed cloud infrastructure with scalable resources and automated backups.',
                     'ar' => 'انشر مواقع أعمالك على بنية تحتية سحابية مخصصة وسريعة تضمن استمرارية التشغيل الكاملة.'
                 ],
-                'icon' => '/Services/Purple Planet.png',
+                'icon' => '/Services/Purple Planet.webp',
                 'template' => 'template-three',
                 'blocks' => $webHostingBlocks,
             ],
@@ -1146,7 +1146,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'Custom full-stack web applications coded using React, Next.js, and Laravel, optimized for speed and scaling.',
                     'ar' => 'نطور تطبيقات ومواقع ويب مخصصة قوية وسريعة باستخدام أحدث تقنيات الويب لحلول برمجية متكاملة.'
                 ],
-                'icon' => '/Services/Blue Planet.png',
+                'icon' => '/Services/Blue Planet.webp',
                 'template' => 'template-one',
                 'blocks' => $webDevBlocks,
             ],
@@ -1166,7 +1166,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'High-capacity iOS and Android app development using Flutter and React Native, with secure APIs and notifications.',
                     'ar' => 'تطبيقات متميزة وسلسة لأجهزة آيفون وأندرويد بأحدث معايير الأمان والتوافق والربط السحابي.'
                 ],
-                'icon' => '/Services/new/green.png',
+                'icon' => '/Services/new/green.webp',
                 'template' => 'template-two',
                 'blocks' => $mobileAppBlocks,
             ],
@@ -1176,7 +1176,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'We code robust native iOS and Android apps, managing the development lifecycle from UI design to app store submission.',
                     'ar' => 'نقوم ببرمجة وتطوير تطبيقات الهواتف الذكية وتجهيزها ورفعها بالكامل على متجري آبل بلاي وجوجل بلاي.'
                 ],
-                'icon' => '/Services/new/green.png',
+                'icon' => '/Services/new/green.webp',
                 'template' => 'template-two',
                 'blocks' => $mobileAppBlocks,
             ],
@@ -1186,7 +1186,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'Increase your market reach, attract valuable organic leads, and scale your brand visibility with modern ad strategies.',
                     'ar' => 'وسع نطاق وصول علامتك التجارية، وابنِ الثقة، وحقق المبيعات باستراتيجياتنا التسويقية المتكاملة.'
                 ],
-                'icon' => '/Services/Blue Planet.png',
+                'icon' => '/Services/Blue Planet.webp',
                 'template' => 'template-one',
                 'blocks' => $digitalMarketingBlocks,
             ],
@@ -1196,7 +1196,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'Expert management of social media accounts with regular updates, graphic layouts, content plans, and paid ad funnels.',
                     'ar' => 'إدارة احترافية لحسابات التواصل الاجتماعي تشمل تصميم المنشورات وإعداد خطط المحتوى والحملات الإعلانية.'
                 ],
-                'icon' => '/Services/Blue Planet.png',
+                'icon' => '/Services/Blue Planet.webp',
                 'template' => 'template-one',
                 'blocks' => $digitalMarketingBlocks,
             ],
@@ -1206,7 +1206,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'Strategic affiliate networks and marketing setups to scale customer acquisition channels and generate recurring revenue.',
                     'ar' => 'استراتيجيات وخطط التسويق بالعمولة والشبكات لزيادة قنوات استقطاب العملاء وبناء دخل متكرر.'
                 ],
-                'icon' => '/Services/Blue Planet.png',
+                'icon' => '/Services/Blue Planet.webp',
                 'template' => 'template-one',
                 'blocks' => $digitalMarketingBlocks,
             ],
@@ -1216,7 +1216,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'On-page audits, technical SEO fixes, high-value keyword indexing, and backlink strategies to rank first on search engines.',
                     'ar' => 'تهيئة الموقع الفنية وتوفير الكلمات المفتاحية وبناء الروابط للحصول على ترتيب متقدم في جوجل.'
                 ],
-                'icon' => '/Services/Blue Planet.png',
+                'icon' => '/Services/Blue Planet.webp',
                 'template' => 'template-one',
                 'blocks' => $digitalMarketingBlocks,
             ],
@@ -1226,7 +1226,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'Craft premium logos, commercial packaging, marketing illustrations, and corporate banners that make a lasting impression.',
                     'ar' => 'اجعل أفكارك تنبض بالحياة من خلال حلول التصميم الإبداعي لدينا التي تبرز وتترك انطباعاً دائماً.'
                 ],
-                'icon' => '/Services/new/green.png',
+                'icon' => '/Services/new/green.webp',
                 'template' => 'template-two',
                 'blocks' => $creativeDesignBlocks,
             ],
@@ -1236,7 +1236,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'Enterprise-grade system protection, active network firewalls, vulnerability scanning, and secure compliance certifications.',
                     'ar' => 'تأمين كامل للبنية التحتية والمواقع الإلكترونية وقواعد البيانات ضد محاولات الاختراق والهجمات السيبرانية.'
                 ],
-                'icon' => '/Services/Purple Planet.png',
+                'icon' => '/Services/Purple Planet.webp',
                 'template' => 'template-three',
                 'blocks' => $cyberSecurityBlocks,
             ],
@@ -1246,7 +1246,7 @@ class ServiceSeeder extends Seeder
                     'en' => '24/7 technical monitoring, database optimization, daily health backups, and immediate bug resolution agreements.',
                     'ar' => 'دعم فني وصيانة متواصلة لحل أي مشكلات فنية أو برمجية في الخوادم أو المواقع على مدار الساعة.'
                 ],
-                'icon' => '/Services/Purple Planet.png',
+                'icon' => '/Services/Purple Planet.webp',
                 'template' => 'template-three',
                 'blocks' => $techSupportBlocks,
             ],
