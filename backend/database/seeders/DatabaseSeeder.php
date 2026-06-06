@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
             ServiceSeeder::class,
             LinkPricingPlansToServicesSeeder::class,
             FaqSeeder::class,
+            HomeFeaturesSeeder::class,
         ]);
     }
 }
