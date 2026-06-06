@@ -72,7 +72,7 @@ export default function Hero({ isPhaseTwo, data }) {
   const planetOpacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   return (
-    <section className="relative w-full   shadow-lg h-screen overflow-hidden flex items-center pt-10 lg:pt-28 scroll-mt-20 md:scroll-mt-28">
+    <section className="relative w-full h-screen overflow-hidden flex items-center pt-10 lg:pt-28 scroll-mt-20 md:scroll-mt-28">
       {/* Background Layer with Stars */}
       <Stars />
 
