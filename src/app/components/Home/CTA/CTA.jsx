@@ -141,10 +141,11 @@ const CTA = () => {
         {/* Text Side */}
         <div
           ref={text1Ref}
-          className={`text-center flex flex-col items-center w-full md:w-auto ${language === "ar"
+          className={`text-center flex flex-col items-center w-full md:w-auto ${
+            language === "ar"
               ? "md:items-end md:text-right"
               : "md:items-start md:text-left"
-            }`}
+          }`}
         >
           <h2 className="w-full text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-white mb-4 md:mb-6 leading-[1.1] tracking-tighter">
             {settings.cta_ready_for || t("readyFor")} <br />
@@ -171,10 +172,11 @@ const CTA = () => {
       >
         {/* Left Side: Content */}
         <div
-          className={`w-full lg:w-1/2 flex flex-col items-center ${language === "ar"
+          className={`w-full lg:w-1/2 flex flex-col items-center ${
+            language === "ar"
               ? "lg:items-end lg:text-right"
               : "lg:items-start lg:text-left"
-            } text-center z-20`}
+          } text-center z-20`}
         >
           <h2 className="w-full text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-6 md:mb-8 leading-tight">
             {settings.cta_unlock_power || t("unlockPower")}{" "}

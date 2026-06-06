@@ -38,7 +38,7 @@ export default function Stars() {
       />
 
       {/* Dark Gradient Overlay for Depth */}
-      <div className="absolute inset-0 bg-gradient-to-b from-blue-950/20 via-transparent to-black/40 z-30" />
+      <div className="absolute inset-0 bg-gradient-to-b from-blue-950/20 via-transparent to-transparent z-30" />
     </div>
   );
 }

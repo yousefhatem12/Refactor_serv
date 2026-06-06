@@ -58,19 +58,30 @@ export default function Features() {
 
   const [features, setFeatures] = useState([]);
   const [settings, setSettings] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [prevLanguage, setPrevLanguage] = useState(language);
+
+  if (language !== prevLanguage) {
+    setPrevLanguage(language);
+    setLoading(true);
+  }
 
   useEffect(() => {
-    fetchAPI("/features")
+    const fetchFeatures = fetchAPI("/features")
       .then((data) => {
         if (data && data.length > 0) setFeatures(data);
       })
       .catch(console.error);
 
-    fetchAPI("/settings")
+    const fetchSettings = fetchAPI("/settings")
       .then((data) => {
         if (data) setSettings(data);
       })
       .catch(console.error);
+
+    Promise.all([fetchFeatures, fetchSettings]).finally(() => {
+      setLoading(false);
+    });
   }, [language]);
 
   const displayFeatures =
@@ -320,27 +331,36 @@ export default function Features() {
                 className="flex items-center justify-start lg:justify-center gap-6 sm:gap-8 md:gap-12 lg:gap-16 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory flex-nowrap"
                 style={{ msOverflowStyle: "none", scrollbarWidth: "none" }}
               >
-                {displayPartners.map((partner, index) => (
-                  <motion.div
-                    key={index}
-                    whileHover={{ scale: 1.1, y: -5 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                    className="relative group cursor-pointer p-2 shrink-0 snap-center"
-                  >
-                    <img
-                      src={partner}
-                      alt={`Partner ${index + 1}`}
-                      className="h-6 sm:h-8 md:h-10 lg:h-12 w-auto object-contain opacity-60 group-hover:opacity-100 transition-all duration-300"
-                      style={
-                        partner.includes("/Features/") ||
-                        partner.includes("/settings/")
-                          ? { filter: "brightness(0) invert(1)" }
-                          : {}
-                      }
+                {loading ? (
+                  Array.from({ length: 5 }).map((_, index) => (
+                    <div
+                      key={index}
+                      className="h-6 sm:h-8 md:h-10 lg:h-12 w-20 sm:w-24 md:w-28 lg:w-32 rounded-lg bg-white/5 border border-white/10 animate-pulse shrink-0 snap-center"
                     />
-                    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1/3 h-[2px] bg-[#D98B50] opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-[1px]"></div>
-                  </motion.div>
-                ))}
+                  ))
+                ) : (
+                  displayPartners.map((partner, index) => (
+                    <motion.div
+                      key={index}
+                      whileHover={{ scale: 1.1, y: -5 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                      className="relative group cursor-pointer p-2 shrink-0 snap-center"
+                    >
+                      <img
+                        src={partner}
+                        alt={`Partner ${index + 1}`}
+                        className="h-6 sm:h-8 md:h-10 lg:h-12 w-auto object-contain opacity-60 group-hover:opacity-100 transition-all duration-300"
+                        style={
+                          partner.includes("/Features/") ||
+                          partner.includes("/settings/")
+                            ? { filter: "brightness(0) invert(1)" }
+                            : {}
+                        }
+                      />
+                      <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1/3 h-[2px] bg-[#D98B50] opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-[1px]"></div>
+                    </motion.div>
+                  ))
+                )}
               </div>
             </div>
 
