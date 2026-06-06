@@ -5,19 +5,19 @@ import { useLanguage } from "../../../context/LanguageContext";
 import { fetchAPI, getMediaUrl } from "@/lib/api";
 
 const partners = [
-  "/Features/2-300x300-1.webp.svg",
-  "/Features/5-300x300-1.webp.svg",
-  "/Features/6-300x300-1.webp.svg",
-  "/Features/clients-ksa-20-300x300-1.webp.svg",
-  "/Features/clients-ksa-25-300x300-1.webp.svg",
+  // "/Features/2-300x300-1.png.svg",
+  // "/Features/5-300x300-1.png.svg",
+  // "/Features/6-300x300-1.png.svg",
+  // "/Features/clients-ksa-20-300x300-1.png.svg",
+  // "/Features/clients-ksa-25-300x300-1.png.svg",
 ];
 
 const checkFeaturesKeys = [
-  "techSolutions",
-  "digitalMarketing",
-  "webSolutions",
-  "businessGrowth",
-  "productDesign",
+  // "techSolutions",
+  // "digitalMarketing",
+  // "webSolutions",
+  // "businessGrowth",
+  // "productDesign",
 ];
 
 const Star = ({ className }) => (
@@ -186,7 +186,7 @@ export default function Features() {
             </p>
 
             {/* Features Grid/Flex */}
-            <div className="flex flex-wrap gap-3 md:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2   gap-3 md:gap-4">
               {displayFeatures.map((featureText, index) => (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -194,9 +194,9 @@ export default function Features() {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
                   key={index}
-                  className="flex items-center gap-3 px-4 py-2.5 md:px-5 md:py-3 rounded-xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-[#D98B50]/50 hover:bg-white/10 transition-all duration-300 group shadow-lg"
+                  className="flex items-center gap-3 px-2 md:px-4 py-2.5 md:px-5 md:py-3 rounded-xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-[#D98B50]/50 hover:bg-white/10 transition-all duration-300 group shadow-lg"
                 >
-                  <div className="w-6 h-6 rounded-full bg-[#D98B50]/20 flex items-center justify-center group-hover:bg-[#D98B50] group-hover:shadow-[0_0_15px_rgba(217,139,80,0.6)] transition-all duration-300 shrink-0">
+                  <div className="w-4 h-4 md:w-6 md:h-6 rounded-full bg-[#D98B50]/20 flex items-center justify-center group-hover:bg-[#D98B50] group-hover:shadow-[0_0_15px_rgba(217,139,80,0.6)] transition-all duration-300 shrink-0">
                     <svg
                       width="12"
                       height="12"
@@ -211,7 +211,7 @@ export default function Features() {
                       <polyline points="20 6 9 17 4 12" />
                     </svg>
                   </div>
-                  <span className="text-gray-300 font-medium text-sm md:text-base group-hover:text-white transition-colors">
+                  <span className="text-gray-300 font-medium text-xs md:text-base group-hover:text-white transition-colors">
                     {featureText}
                   </span>
                 </motion.div>
@@ -330,9 +330,10 @@ export default function Features() {
                     <img
                       src={partner}
                       alt={`Partner ${index + 1}`}
-                      className="h-6 sm:h-8 md:h-10 lg:h-12 w-auto object-contain group-hover:opacity-100 transition-all duration-300"
+                      className="h-6 sm:h-8 md:h-10 lg:h-12 w-auto object-contain opacity-60 group-hover:opacity-100 transition-all duration-300"
                       style={
-                        partner.includes("/Features/")
+                        partner.includes("/Features/") ||
+                        partner.includes("/settings/")
                           ? { filter: "brightness(0) invert(1)" }
                           : {}
                       }

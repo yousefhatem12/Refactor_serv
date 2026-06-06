@@ -30,19 +30,24 @@ const Footer = () => {
     links: { usefulLinks: [], quickLinks: [], offers: [], company: [] },
     socials: [],
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchAPI(`/settings?lang=${language}`)
-      .then((data) => {
-        if (data) setSettings(data);
-      })
-      .catch(console.error);
-
-    fetchAPI(`/footer-data?lang=${language}`)
-      .then((data) => {
-        if (data) setFooterData(data);
-      })
-      .catch(console.error);
+    setLoading(true);
+    Promise.all([
+      fetchAPI(`/settings?lang=${language}`)
+        .then((data) => {
+          if (data) setSettings(data);
+        })
+        .catch(console.error),
+      fetchAPI(`/footer-data?lang=${language}`)
+        .then((data) => {
+          if (data) setFooterData(data);
+        })
+        .catch(console.error),
+    ]).finally(() => {
+      setLoading(false);
+    });
   }, [language]);
 
   const getSocialIconData = (platform) => {
@@ -59,6 +64,8 @@ const Footer = () => {
     };
     return map[platform] || map["facebook"];
   };
+
+  if (loading) return null;
 
   return (
     <footer className="bg-transparent text-white pt-10 pb-6 relative overflow-hidden">
