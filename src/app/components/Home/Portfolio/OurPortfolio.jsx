@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { fetchAPI } from "@/lib/api";
 import { useLanguage } from "../../../context/LanguageContext";
@@ -163,8 +164,8 @@ const OurPortfolio = ({ activeCategoryId }) => {
                       {item.description}
                     </p>
                     <div className="flex flex-row gap-2 sm:gap-3 lg:gap-6 justify-between items-center lg:items-start lg:justify-start mt-4 lg:mt-0">
-                      <a
-                        href="#"
+                      <Link
+                        href={`/portfolio/${item.id}`}
                         className="flex items-center gap-1 lg:gap-2 lg:mt-4 text-white/90 hover:text-white transition-colors group text-[10px] sm:text-xs md:text-sm lg:text-lg font-medium drop-shadow-md lg:drop-shadow-none"
                       >
                         <span className="hidden lg:inline">
@@ -182,12 +183,10 @@ const OurPortfolio = ({ activeCategoryId }) => {
                         >
                           <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg>
-                      </a>
+                      </Link>
 
-                      <a
-                        href={item.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <Link
+                        href={`/portfolio/${item.id}`}
                         className="flex items-center justify-center gap-1 sm:gap-1.5 lg:gap-3 w-fit px-2 py-1.5 sm:px-3 sm:py-1.5 md:px-4 md:py-2 lg:px-8 lg:py-3 bg-[#E1804E] hover:bg-[#c96d3f] text-white rounded-lg lg:rounded-xl transition-all shadow-[0_0_15px_rgba(225,128,78,0.4)] hover:shadow-[0_0_30px_rgba(225,128,78,0.5)] active:scale-95"
                       >
                         <svg
@@ -205,7 +204,7 @@ const OurPortfolio = ({ activeCategoryId }) => {
                         <span className="font-bold text-[10px] sm:text-xs md:text-sm lg:text-base whitespace-nowrap">
                           {t("live")}
                         </span>
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </motion.div>
