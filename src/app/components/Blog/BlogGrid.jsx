@@ -117,20 +117,25 @@ const BlogGrid = () => {
     // Read from client-side cache first to avoid framework bootstrap delay
     if (blogCache[cacheKey]) {
       const cached = blogCache[cacheKey];
-      if (currentPage === 1) {
-        setPostsList(cached.data);
-      } else {
-        setPostsList((prev) => {
-          const newPosts = cached.data.filter((post) => !prev.some((p) => p.id === post.id));
-          return [...prev, ...newPosts];
-        });
-      }
-      setHasMore(cached.hasMore);
-      setLoading(false);
+      Promise.resolve().then(() => {
+        if (!isMounted) return;
+        if (currentPage === 1) {
+          setPostsList(cached.data);
+        } else {
+          setPostsList((prev) => {
+            const newPosts = cached.data.filter((post) => !prev.some((p) => p.id === post.id));
+            return [...prev, ...newPosts];
+          });
+        }
+        setHasMore(cached.hasMore);
+        setLoading(false);
+      });
       return;
     }
 
-    setLoading(true);
+    Promise.resolve().then(() => {
+      if (isMounted) setLoading(true);
+    });
 
     fetchAPI(`/blog?lang=${language}&category_raw=${categoryQuery}&page=${currentPage}&per_page=9`)
       .then((res) => {
