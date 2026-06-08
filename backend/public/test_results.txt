@@ -1,14 +1,24 @@
 Command: ..\vendor\bin\phpunit --configuration ..\phpunit.xml
-Exit Code: 0
+Exit Code: 1
 
 PHPUnit 11.5.55 by Sebastian Bergmann and contributors.
 
 Runtime:       PHP 8.2.12
 Configuration: C:\xampp\htdocs\serv5-last-last\backend\phpunit.xml
 
-................................                                  32 / 32 (100%)
+...............F..................                                34 / 34 (100%)
 
-Time: 00:20.666, Memory: 76.00 MB
+Time: 00:29.601, Memory: 76.00 MB
 
-OK, but there were issues!
-Tests: 32, Assertions: 95, PHPUnit Deprecations: 30.
+There was 1 failure:
+
+1) Tests\Feature\ContactApiTest::a_user_can_submit_a_project_consultation
+Expected response status code [201] but received 500.
+Failed asserting that 500 is identical to 201.
+
+C:\xampp\htdocs\serv5-last-last\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+C:\xampp\htdocs\serv5-last-last\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:175
+C:\xampp\htdocs\serv5-last-last\backend\tests\Feature\ContactApiTest.php:102
+
+FAILURES!
+Tests: 34, Assertions: 101, Failures: 1, PHPUnit Deprecations: 32.

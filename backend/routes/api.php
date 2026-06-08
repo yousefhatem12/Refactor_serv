@@ -69,6 +69,7 @@ Route::prefix('v1')->group(function () {
     // Contact & Quotations
     Route::post('/contact', [ContactController::class, 'submitMessage'])->name('api.contact.submit');
     Route::post('/quotations', [ContactController::class, 'submitQuotation'])->name('api.quotations.submit');
+    Route::post('/consultations', [ContactController::class, 'submitConsultation'])->name('api.consultations.submit');
 
     // Settings & System Data
     Route::get('/settings', [SettingController::class, 'settings'])->name('api.settings');

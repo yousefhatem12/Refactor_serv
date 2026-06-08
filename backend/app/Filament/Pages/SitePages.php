@@ -139,6 +139,13 @@ class SitePages extends Page
                     'url' => \App\Filament\Resources\QuotationResource::getUrl(),
                     'color' => 'success',
                 ],
+                [
+                    'title' => app()->getLocale() === 'ar' ? 'استشارات المشاريع' : 'Project Consultations',
+                    'description' => app()->getLocale() === 'ar' ? 'عرض وإدارة طلبات استشارات المشاريع الواردة.' : 'View and manage incoming project consultation requests.',
+                    'icon' => 'heroicon-o-chat-bubble-left-right',
+                    'url' => \App\Filament\Resources\ProjectConsultationResource::getUrl(),
+                    'color' => 'primary',
+                ],
             ]
         ];
     }
