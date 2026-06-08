@@ -79,4 +79,47 @@ class ContactApiTest extends TestCase
             'email' => 'john@example.com',
         ]);
     }
+
+    /** @test */
+    public function a_user_can_submit_a_project_consultation()
+    {
+        $admin = User::factory()->create();
+        $admin->assignRole('super_admin');
+
+        $response = $this->postJson('/api/v1/consultations', [
+            'project_type' => 'website',
+            'has_docs' => 'yes',
+            'budget' => '12to35',
+            'timeline' => '1month',
+            'decision_maker' => 'me',
+            'references' => 'http://example.com',
+            'name' => 'Consultation seeker',
+            'phone' => '0555555555',
+            'email' => 'consult@example.com',
+            'company' => 'My Startup',
+        ]);
+
+        $response->assertStatus(201)
+            ->assertJsonPath('message', 'Consultation request submitted successfully');
+
+        $this->assertDatabaseHas('project_consultations', [
+            'project_type' => 'website',
+            'name' => 'Consultation seeker',
+            'email' => 'consult@example.com',
+            'company' => 'My Startup',
+        ]);
+    }
+
+    /** @test */
+    public function project_consultation_submission_validates_required_fields()
+    {
+        $response = $this->postJson('/api/v1/consultations', [
+            'name' => '',
+            'phone' => '',
+            'email' => 'invalid-email',
+        ]);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['name', 'phone', 'email']);
+    }
 }

@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\ContactMessage;
 use App\Models\Quotation;
+use App\Models\ProjectConsultation;
 use App\Models\User;
 use App\Http\Requests\StoreContactMessageRequest;
 use App\Http\Requests\StoreQuotationRequest;
+use App\Http\Requests\StoreProjectConsultationRequest;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
 
@@ -85,5 +87,34 @@ class ContactController extends BaseApiController
             ->sendToDatabase($admins);
 
         return response()->json(['message' => 'Quotation request submitted successfully', 'data' => $quotation], 201);
+    }
+
+    public function submitConsultation(StoreProjectConsultationRequest $request)
+    {
+        $validated = $request->validated();
+        $validated['user_id'] = Auth::id();
+
+        $consultation = ProjectConsultation::create($validated);
+        $admins = User::role('super_admin')->get();
+        
+        $actionClass = 'Filament\\Actions\\Action';
+        Notification::make()
+            ->title('New Project Consultation')
+            ->body("A new project consultation request has been submitted by {$validated['name']}.")
+            ->icon('heroicon-o-chat-bubble-left-right')
+            ->success()
+            ->actions([
+                $actionClass::make('view')
+                    ->label('View')
+                    ->link()
+                    ->url(fn () => \App\Filament\Resources\ProjectConsultationResource::getUrl('view', ['record' => $consultation]))
+                    ->markAsRead()
+                    ->extraAttributes([
+                        'x-on:click' => '$dispatch(\'close-database-notifications\')',
+                    ]),
+            ])
+            ->sendToDatabase($admins);
+
+        return response()->json(['message' => 'Consultation request submitted successfully', 'data' => $consultation], 201);
     }
 }
