@@ -14,7 +14,7 @@ gsap.registerPlugin(ScrollTrigger);
 const CTA = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const isHomePage = pathname === "/" || pathname === "/Home";
+  const isHomePage = pathname === "/" || pathname === "/ar" || pathname === "/en" || pathname === "/ar/" || pathname === "/en/";
   const sectionRef = useRef(null);
   const { t, language } = useLanguage();
   const slide1Ref = useRef(null);

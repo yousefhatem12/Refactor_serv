@@ -17,12 +17,18 @@ export const fetchAPI = async (endpoint, options = {}) => {
   let lang = "en";
   if (typeof window === "undefined") {
     try {
-      const { cookies } = await import("next/headers");
-      const cookieStore = await cookies();
-      const nextLocale = cookieStore.get("NEXT_LOCALE");
-      if (nextLocale) lang = nextLocale.value;
+      const { cookies, headers } = await import("next/headers");
+      const headersList = await headers();
+      const xLocale = headersList.get("x-locale");
+      if (xLocale) {
+        lang = xLocale;
+      } else {
+        const cookieStore = await cookies();
+        const nextLocale = cookieStore.get("NEXT_LOCALE");
+        if (nextLocale) lang = nextLocale.value;
+      }
     } catch (error) {
-      // Fallback if cookies API is unavailable
+      // Fallback if headers or cookies API is unavailable
     }
   } else {
     const match = document.cookie.match(new RegExp("(^| )NEXT_LOCALE=([^;]+)"));
@@ -63,15 +69,15 @@ export const fetchAPI = async (endpoint, options = {}) => {
         headers["Content-Type"] = "application/json";
       }
 
-      console.log(`[fetchAPI] Fetching: ${url.toString()}`);
+      // console.log(`[fetchAPI] Fetching: ${url.toString()}`);
       const response = await fetch(url.toString(), {
         ...options,
         cache: options.cache || "no-store",
         headers,
       });
-      console.log(
-        `[fetchAPI] Received response for: ${url.toString()} - Status: ${response.status}`,
-      );
+      // console.log(
+      //   `[fetchAPI] Received response for: ${url.toString()} - Status: ${response.status}`,
+      // );
 
       if (!response.ok) {
         console.warn(`API warning: ${response.statusText}`);

@@ -122,7 +122,7 @@ export default function DynamicPage() {
     if (
       slug &&
       !["home", "about", "faq", "blog", "portfolio", "contact-us"].includes(
-        slug,
+        slug.toLowerCase(),
       )
     ) {
       loadPage();
@@ -592,7 +592,7 @@ export default function DynamicPage() {
                       {block.data.image && (
                         <div className="mt-8 rounded-2xl overflow-hidden border border-white/10">
                           <img
-                            src={`http://127.0.0.1:8000/storage/${block.data.image}`}
+                            src={`${STORAGE_URL}/storage/${block.data.image}`}
                             alt="Hero"
                             className="w-full h-auto"
                           />
@@ -713,7 +713,7 @@ export default function DynamicPage() {
                         {block.data.image && (
                           <div className="rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(255,138,0,0.1)] border border-white/10">
                             <img
-                              src={`http://127.0.0.1:8000/storage/${block.data.image}`}
+                              src={`${STORAGE_URL}/storage/${block.data.image}`}
                               alt="Split Content"
                               className="w-full h-auto object-cover"
                             />

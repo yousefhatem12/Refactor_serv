@@ -41,7 +41,7 @@ export default function NotFound() {
 
         {/* Action Button */}
         <Link
-          href="/Home"
+          href="/"
           className="relative overflow-hidden bg-[#FF8A00] hover:bg-[#ff9c24] text-white px-8 py-4 rounded-xl font-bold transition-all duration-300 shadow-[0_4px_20px_rgba(255,138,0,0.3)] hover:shadow-[0_8px_30px_rgba(255,138,0,0.5)] hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-3 group/btn"
         >
           <span>{t("goBackHome")}</span>

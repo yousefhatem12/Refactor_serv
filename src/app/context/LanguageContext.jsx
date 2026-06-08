@@ -13,13 +13,26 @@ export const LanguageProvider = ({ children, defaultLanguage = "en" }) => {
   const router = useRouter();
 
   useEffect(() => {
-    // Read from cookie on initial load if we want to persist it
+    // Read from URL path first to keep URL as source of truth
+    const path = window.location.pathname;
+    let pathLang = null;
+    if (path.startsWith("/ar") || path === "/ar") {
+      pathLang = "ar";
+    } else if (path.startsWith("/en") || path === "/en") {
+      pathLang = "en";
+    }
+
     const match = document.cookie.match(new RegExp('(^| )NEXT_LOCALE=([^;]+)'));
-    const storedLang = match ? match[2] : defaultLanguage;
+    const storedLang = pathLang || (match ? match[2] : defaultLanguage);
     
     setLanguage(storedLang);
     document.documentElement.lang = storedLang;
     document.documentElement.dir = storedLang === "ar" ? "rtl" : "ltr";
+
+    // Keep the cookie synchronized with the URL path
+    if (pathLang && (!match || match[2] !== pathLang)) {
+      document.cookie = `NEXT_LOCALE=${pathLang}; path=/; max-age=31536000`; // 1 year
+    }
   }, [defaultLanguage]);
 
   useEffect(() => {
@@ -45,9 +58,18 @@ export const LanguageProvider = ({ children, defaultLanguage = "en" }) => {
     // Set cookie for Server Components
     document.cookie = `NEXT_LOCALE=${newLang}; path=/; max-age=31536000`; // 1 year
     
-    // Reload the page immediately. This prevents React from updating state and
-    // rendering static translations before the reload, avoiding a mixed-language flash.
-    window.location.reload();
+    // Update the browser URL with the new locale path prefix
+    const currentPath = window.location.pathname;
+    let newPath = currentPath;
+    if (currentPath.startsWith("/ar")) {
+      newPath = currentPath.replace("/ar", `/${newLang}`);
+    } else if (currentPath.startsWith("/en")) {
+      newPath = currentPath.replace("/en", `/${newLang}`);
+    } else {
+      newPath = `/${newLang}${currentPath === "/" ? "" : currentPath}`;
+    }
+
+    window.location.href = newPath;
   };
 
   const t = (key) => {

@@ -74,7 +74,7 @@ const OurBlog = () => {
                   <img
                     src={
                       blogPosts.featured.image ||
-                      "/our-blog/Link → post-landscape-1.webp.webp"
+                      "/our-blog/Link → post-landscape-1.jpg.webp"
                     }
                     alt={blogPosts.featured.title}
                     className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
@@ -124,7 +124,7 @@ const OurBlog = () => {
                     <img
                       src={
                         post.image ||
-                        "/our-blog/Link → post-landscape-2.webp.webp"
+                        "/our-blog/Link → post-landscape-2.jpg.webp"
                       }
                       alt={post.title}
                       className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"

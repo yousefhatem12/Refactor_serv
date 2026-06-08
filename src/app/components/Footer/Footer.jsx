@@ -22,7 +22,7 @@ const Footer = () => {
   const { t, language } = useLanguage();
   const pathname = usePathname();
   const router = useRouter();
-  const isHomePage = pathname === "/" || pathname === "/Home";
+  const isHomePage = pathname === "/" || pathname === "/ar" || pathname === "/en" || pathname === "/ar/" || pathname === "/en/";
 
   const [settings, setSettings] = useState({});
   const [footerData, setFooterData] = useState({
