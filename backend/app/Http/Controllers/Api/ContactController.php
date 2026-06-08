@@ -24,7 +24,7 @@ class ContactController extends BaseApiController
         $message = ContactMessage::create($validated);
         $admins = User::role('super_admin')->get();
         
-        $actionClass = 'Filament\\Notifications\\Actions\\Action';
+        $actionClass = 'Filament\\Actions\\Action';
         Notification::make()
             ->title('New Contact Message')
             ->body("You have received a new {$validated['type']} from {$validated['name']}.")
@@ -66,7 +66,7 @@ class ContactController extends BaseApiController
         $quotation = Quotation::create($validated);
         $admins = User::role('super_admin')->get();
         
-        $actionClass = 'Filament\\Notifications\\Actions\\Action';
+        $actionClass = 'Filament\\Actions\\Action';
         Notification::make()
             ->title('New Quotation Request')
             ->body("A new quotation request has been submitted by {$validated['name']}.")
