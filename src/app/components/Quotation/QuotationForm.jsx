@@ -79,7 +79,46 @@ const QuotationForm = () => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Load initial data from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const savedData = localStorage.getItem("quotation_form_data");
+        const savedStep = localStorage.getItem("quotation_form_step");
+        if (savedData) {
+          setFormData(JSON.parse(savedData));
+        }
+        if (savedStep) {
+          setStep(Number(savedStep));
+        }
+      } catch (e) {
+        console.error("Failed to load saved quotation form:", e);
+      } finally {
+        setIsLoaded(true);
+      }
+    }
+  }, []);
+
+  // Save to localStorage when step or formData changes, but only after initial loading
+  useEffect(() => {
+    if (!isLoaded) return;
+    if (typeof window !== "undefined") {
+      try {
+        if (isSubmitted) {
+          localStorage.removeItem("quotation_form_data");
+          localStorage.removeItem("quotation_form_step");
+        } else {
+          localStorage.setItem("quotation_form_data", JSON.stringify(formData));
+          localStorage.setItem("quotation_form_step", String(step));
+        }
+      } catch (e) {
+        console.error("Failed to save quotation form:", e);
+      }
+    }
+  }, [formData, step, isSubmitted, isLoaded]);
+
   const fileInputRef = useRef(null);
 
   const isRtl = language === "ar";
@@ -197,6 +236,11 @@ const QuotationForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateStep()) return;
+
+    if (step < totalSteps) {
+      handleNext();
+      return;
+    }
 
     setIsSubmitting(true);
     setErrors({});
@@ -603,6 +647,7 @@ const QuotationForm = () => {
 
                 {step < totalSteps ? (
                   <button
+                    key="next-btn"
                     type="button"
                     onClick={handleNext}
                     className="flex items-center gap-2 px-8 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition-all shadow-lg shadow-blue-600/20 cursor-pointer border-none"
@@ -612,6 +657,7 @@ const QuotationForm = () => {
                   </button>
                 ) : (
                   <button
+                    key="submit-btn"
                     type="submit"
                     disabled={isSubmitting}
                     className="px-10 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-[#FF8A00] hover:scale-[1.03] text-white font-bold transition-all shadow-xl shadow-blue-600/20 disabled:opacity-50 flex items-center gap-2 cursor-pointer border-none"
@@ -676,8 +722,8 @@ const InputField = ({
   isRtl,
 }) => {
   return (
-    <div className="flex flex-col gap-2 w-full text-left">
-      <label className={`text-gray-400 text-sm font-medium px-2 flex items-center gap-1 ${isRtl ? "self-end flex-row-reverse" : "self-start"}`}>
+    <div className="flex flex-col gap-2 w-full text-start">
+      <label className="text-gray-400 text-sm font-medium px-2 flex items-center gap-1 w-full justify-start">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
       <div className="relative flex items-center w-full">
@@ -722,8 +768,8 @@ const SelectField = ({
   const selectedOption = options.find((opt) => opt.value === value);
 
   return (
-    <div className="flex flex-col gap-2 w-full text-left relative" ref={containerRef}>
-      <label className={`text-gray-400 text-sm font-medium px-2 ${isRtl ? "self-end" : "self-start"}`}>
+    <div className="flex flex-col gap-2 w-full text-start relative" ref={containerRef}>
+      <label className="text-gray-400 text-sm font-medium px-2 w-full">
         {label}
       </label>
       
@@ -786,8 +832,8 @@ const SelectField = ({
 
 const TextareaField = ({ label, name, value, onChange, placeholder }) => {
   return (
-    <div className="flex flex-col gap-2 w-full">
-      <label className="text-gray-400 text-sm font-medium px-2 self-start md:rtl:self-end">
+    <div className="flex flex-col gap-2 w-full text-start">
+      <label className="text-gray-400 text-sm font-medium px-2 w-full">
         {label}
       </label>
       <textarea
