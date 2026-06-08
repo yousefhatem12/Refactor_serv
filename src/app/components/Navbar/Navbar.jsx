@@ -35,6 +35,30 @@ const Navbar = () => {
 
   const pathname = usePathname();
 
+  const getLocalizedHref = (href) => {
+    if (!href || href === "#" || href.startsWith("http") || href.startsWith("tel:") || href.startsWith("mailto:")) return href;
+    const cleanHref = href.startsWith("/") ? href : `/${href}`;
+    const cleanNoLocale = cleanHref.replace(/^\/(ar|en)/, "");
+    if (cleanNoLocale === "" || cleanNoLocale === "/" || cleanNoLocale.toLowerCase() === "/home") {
+      return `/${language}`;
+    }
+    if (cleanNoLocale.startsWith("/#")) {
+      return `/${language}${cleanNoLocale.substring(1)}`;
+    }
+    return `/${language}${cleanNoLocale}`;
+  };
+
+  const localizeLinks = (links) => {
+    return links.map(link => ({
+      ...link,
+      href: getLocalizedHref(link.href),
+      dropdown: link.dropdown ? link.dropdown.map(sub => ({
+        ...sub,
+        href: getLocalizedHref(sub.href)
+      })) : undefined
+    }));
+  };
+
   useEffect(() => {
     setWindowWidth(window.innerWidth);
     const handleResize = () => {
@@ -45,7 +69,7 @@ const Navbar = () => {
   }, []);
 
   const getDefaultLinks = (t) => [
-    { name: t("home") || "Home", href: "/Home" },
+    { name: t("home") || "Home", href: "/" },
     {
       name: t("aboutUs") || "About Us",
       href: "#",
@@ -98,7 +122,7 @@ const Navbar = () => {
   ];
 
   const activeLinks =
-    navLinks && navLinks.length > 0 ? navLinks : getDefaultLinks(t);
+    navLinks && navLinks.length > 0 ? navLinks : localizeLinks(getDefaultLinks(t));
 
   const isUnder1300 = windowWidth < 1300;
   const mainLinks = isUnder1300 ? activeLinks.slice(0, 5) : activeLinks;
@@ -139,7 +163,7 @@ const Navbar = () => {
               ];
 
         const buildLinks = (dropdown) => [
-          { name: t("home"), href: "/Home" },
+          { name: t("home"), href: "/" },
           {
             name: t("aboutUs"),
             href: "#",
@@ -203,9 +227,9 @@ const Navbar = () => {
             }
             return link;
           });
-          setNavLinks(enriched);
+          setNavLinks(localizeLinks(enriched));
         } else {
-          setNavLinks(buildLinks(serviceDropdown));
+          setNavLinks(localizeLinks(buildLinks(serviceDropdown)));
         }
       } catch (error) {
         console.warn("Failed to fetch nav links, using fallback:", error);
@@ -271,7 +295,7 @@ const Navbar = () => {
 
   const isRtl = language === "ar";
   const isHomePageHero =
-    (pathname === "/Home" || pathname === "/") && !isScrolled;
+    (pathname === "/" || pathname === "/ar" || pathname === "/en") && !isScrolled;
 
   if (loading) return null;
 
@@ -288,7 +312,7 @@ const Navbar = () => {
       <div className="max-w-[1400px] mx-auto px-6 md:px-10 flex items-center justify-between">
         {/* Logo */}
         <div className="flex-shrink-0">
-          <Link href="/Home">
+          <Link href={getLocalizedHref("/")}>
             <img
               src={settings?.site_logo || "/logo.svg"}
               alt="Serv5 Logo"

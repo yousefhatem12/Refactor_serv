@@ -45,22 +45,24 @@ export async function generateMetadata() {
   };
 }
 
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { LanguageProvider } from "./context/LanguageContext";
 import { AuthProvider } from "./context/AuthContext";
 import { SettingsProvider } from "./context/SettingsContext";
 
 export default async function RootLayout({ children }) {
+  const headersList = await headers();
+  const xLocale = headersList.get("x-locale");
   const cookieStore = await cookies();
-  const defaultLanguage = cookieStore.get("NEXT_LOCALE")?.value || "en";
+  const defaultLanguage = xLocale || cookieStore.get("NEXT_LOCALE")?.value || "en";
   const settings = await fetchAPI("/settings");
   return (
     <html
       lang={defaultLanguage}
-      className={`${montserrat.variable} ${poppins.variable} ${alexandria.variable} min-h-screen antialiased`}
+      className={`${montserrat.variable} ${poppins.variable} ${alexandria.variable} min-h-screen antialiased relative`}
       suppressHydrationWarning
     >
-      <body className="min-h-screen flex flex-col" suppressHydrationWarning>
+      <body className="min-h-screen flex flex-col relative" suppressHydrationWarning>
         <script
           dangerouslySetInnerHTML={{
             __html: `

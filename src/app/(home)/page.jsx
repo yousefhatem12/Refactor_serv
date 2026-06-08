@@ -204,7 +204,7 @@ export default function HomePage() {
     <main
       className={`flex min-h-screen flex-col relative ${!canScroll || !pageData ? "h-screen overflow-hidden" : "overflow-hidden"}`}
     >
-      <div className="relative" ref={containerRef}>
+      <div className="relative" ref={containerRef} style={{ position: "relative" }}>
         <div className="w-full">
           {!pageData ? (
             <Loading />

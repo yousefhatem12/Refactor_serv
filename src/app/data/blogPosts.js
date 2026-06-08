@@ -1,7 +1,7 @@
 export const blogPosts = [
   {
     id: 1,
-    image: "/our-blog/Link → post-landscape-3.webp.webp",
+    image: "/our-blog/Link → post-landscape-3.jpg.webp",
     date: "11 MAR 2024",
     category: "TECHNOLOGY",
     title: "ADOBE GIVES UP ON $20 BILLION ACQUISITION OF FIGMA",
@@ -10,7 +10,7 @@ export const blogPosts = [
   },
   {
     id: 2,
-    image: "/our-blog/Linfgd post-landscape-6.webp.webp",
+    image: "/our-blog/Linfgd post-landscape-6.jpg.webp",
     date: "12 MAR 2024",
     category: "WEB DEVELOPMENT",
     title: "TOP 10 FRAMEWORKS FOR WEB DEVELOPMENT IN 2024",
@@ -19,7 +19,7 @@ export const blogPosts = [
   },
   {
     id: 3,
-    image: "/our-blog/Link post-landscape-3.webp.webp",
+    image: "/our-blog/Link post-landscape-3.jpg.webp",
     date: "15 MAR 2024",
     category: "STARTUP",
     title: "HOW TO SECURE SEED FUNDING FOR YOUR NEXT BIG IDEA",
@@ -28,7 +28,7 @@ export const blogPosts = [
   },
   {
     id: 4,
-    image: "/our-blog/Link → post-landscape-1.webp.webp",
+    image: "/our-blog/Link → post-landscape-1.jpg.webp",
     date: "18 MAR 2024",
     category: "TECHNOLOGY",
     title: "THE FUTURE OF AI IN EVERYDAY APPLICATIONS",
@@ -37,7 +37,7 @@ export const blogPosts = [
   },
   {
     id: 5,
-    image: "/our-blog/Link → post-landscape-2.webp.webp",
+    image: "/our-blog/Link → post-landscape-2.jpg.webp",
     date: "20 MAR 2024",
     category: "SOFTWARE",
     title: "BEST PRACTICES FOR SECURE SOFTWARE DEVELOPMENT",
@@ -46,7 +46,7 @@ export const blogPosts = [
   },
   {
     id: 6,
-    image: "/our-blog/Link → post-landscape-3.webp.webp",
+    image: "/our-blog/Link → post-landscape-3.jpg.webp",
     date: "22 MAR 2024",
     category: "MARKETING",
     title: "EFFECTIVE SOCIAL MEDIA STRATEGIES FOR 2024",
@@ -55,7 +55,7 @@ export const blogPosts = [
   },
   {
     id: 7,
-    image: "/our-blog/Linfgd post-landscape-6.webp.webp",
+    image: "/our-blog/Linfgd post-landscape-6.jpg.webp",
     date: "25 MAR 2024",
     category: "DROP SHIPPING",
     title: "STARTING A SUCCESSFUL DROPSHIPPING BUSINESS TODAY",
@@ -64,7 +64,7 @@ export const blogPosts = [
   },
   {
     id: 8,
-    image: "/our-blog/Link → post-landscape-1.webp.webp",
+    image: "/our-blog/Link → post-landscape-1.jpg.webp",
     date: "28 MAR 2024",
     category: "HARDWARE",
     title: "LATEST INNOVATIONS IN COMPUTER HARDWARE",
