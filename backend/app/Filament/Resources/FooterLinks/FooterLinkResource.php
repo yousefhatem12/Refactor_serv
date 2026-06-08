@@ -17,19 +17,21 @@ use Filament\Tables\Table;
 class FooterLinkResource extends Resource
 {
     protected static ?string $model = FooterLink::class;
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-link';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-link';
     public static function getNavigationGroup(): ?string { return __('Footer'); }
     protected static ?int $navigationSort = 2;
     public static function getNavigationLabel(): string { return __('Footer Links'); }
 
     public static function getRecordTitle(?\Illuminate\Database\Eloquent\Model $record): ?string
     {
-        /** @var FooterLink|null $record */
-        if (is_array($record?->label)) {
+        if (!$record instanceof FooterLink) {
+            return null;
+        }
+        if (is_array($record->label)) {
             return $record->label['en'] ?? $record->label['ar'] ?? null;
         }
 
-        return $record?->label;
+        return $record->label;
     }
 
     public static function form(Schema $schema): Schema

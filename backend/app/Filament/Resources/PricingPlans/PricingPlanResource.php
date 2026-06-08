@@ -26,8 +26,10 @@ class PricingPlanResource extends Resource
 
     public static function getRecordTitle(?\Illuminate\Database\Eloquent\Model $record): ?string
     {
-        /** @var PricingPlan|null $record */
-        return $record?->name['en'] ?? $record?->name['ar'] ?? null;
+        if (!$record instanceof PricingPlan) {
+            return null;
+        }
+        return $record->name['en'] ?? $record->name['ar'] ?? null;
     }
 
     public static function form(Schema $schema): Schema
