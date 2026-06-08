@@ -13,6 +13,9 @@ use Filament\Pages\Page;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 
+/**
+ * @property \Filament\Schemas\Schema $form
+ */
 class ManageHeader extends Page implements HasForms
 {
     use InteractsWithForms;
@@ -33,7 +36,7 @@ class ManageHeader extends Page implements HasForms
             'custom_header_code',
         ];
 
-        $settings = Setting::whereIn('key', $keys)->get()->pluck('value', 'key')->toArray();
+        $settings = Setting::whereIn('key', $keys)->pluck('value', 'key')->toArray();
 
         $this->form->fill($settings);
     }

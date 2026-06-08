@@ -24,6 +24,7 @@ class FooterLinkResource extends Resource
 
     public static function getRecordTitle(?\Illuminate\Database\Eloquent\Model $record): ?string
     {
+        /** @var FooterLink|null $record */
         if (is_array($record?->label)) {
             return $record->label['en'] ?? $record->label['ar'] ?? null;
         }

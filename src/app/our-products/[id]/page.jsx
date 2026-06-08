@@ -22,10 +22,18 @@ const ProductDetailsPage = () => {
 
 
 
+  const [prevProductId, setPrevProductId] = useState(productId);
+  const [prevLanguage, setPrevLanguage] = useState(language);
+
+  if (productId !== prevProductId || language !== prevLanguage) {
+    setPrevProductId(productId);
+    setPrevLanguage(language);
+    setLoading(true);
+  }
+
   useEffect(() => {
     if (!productId) return;
 
-    setLoading(true);
     fetchAPI(`/products/${productId}`)
       .then((data) => {
         if (data) {
@@ -195,6 +203,7 @@ const ProductDetailsPage = () => {
             {product.demoLink && product.demoLink !== "#" && (
               <Link
                 href={product.demoLink}
+                prefetch={false}
                 className="relative overflow-hidden bg-[#F18805] hover:bg-[#d17604] text-white px-10 py-4 rounded-xl font-bold transition-all duration-300 shadow-[0_0_30px_rgba(241,136,5,0.25)] hover:shadow-[0_0_40px_rgba(241,136,5,0.4)] flex items-center gap-3 hover:-translate-y-0.5 group"
               >
                 <span>{t("productLiveDemo")}</span>
@@ -206,6 +215,7 @@ const ProductDetailsPage = () => {
             {product.orderLink && product.orderLink !== "#" && (
               <Link
                 href={product.orderLink}
+                prefetch={false}
                 className="bg-transparent border-[2px] border-white/10 hover:border-[#F18805] hover:bg-[#F18805]/10 text-white px-10 py-4 rounded-xl font-bold transition-all duration-300 flex items-center gap-2 hover:-translate-y-0.5"
               >
                 <span>{t("productOrderNow")}</span>
@@ -485,7 +495,7 @@ const ProductDetailsPage = () => {
         {/* Related grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
           {otherProducts.map((item, index) => (
-            <Link href={`/our-products/${item.id}`} key={item.id} className="block group">
+            <Link href={`/our-products/${item.id}`} key={item.id} className="block group" prefetch={false}>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -539,6 +549,7 @@ const ProductDetailsPage = () => {
         >
           <Link
             href="/our-products"
+            prefetch={false}
             className="inline-block bg-transparent border border-white/10 hover:border-[#F18805] hover:bg-[#F18805]/10 text-white px-10 py-3.5 rounded-xl font-bold transition-all duration-300"
           >
             {t("exploreAllProducts")}

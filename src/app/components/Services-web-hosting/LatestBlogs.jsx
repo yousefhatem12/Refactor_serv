@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { useLanguage } from "../../context/LanguageContext";
 import { fetchAPI } from "@/lib/api";
 
@@ -64,11 +65,13 @@ const LatestBlogs = () => {
               transition={{ delay: index * 0.2, duration: 0.6 }}
               className="group cursor-pointer rounded-3xl overflow-hidden relative"
             >
-              <Link href={`/blog/${blog.id}`} className="block relative h-[450px] w-full">
+              <Link href={`/blog/${blog.id}`} prefetch={false} className="block relative h-[450px] w-full">
                 {/* Background Image */}
-                <img
+                <Image
                   src={blog.image || "/placeholder.webp"}
                   alt={blog.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
 

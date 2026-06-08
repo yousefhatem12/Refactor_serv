@@ -7,4 +7,32 @@ use Illuminate\Database\Eloquent\Model;
 class Setting extends Model
 {
     protected $fillable = ['key', 'value', 'type', 'value_source'];
+
+    /**
+     * Decrypt the value if it is encrypted, otherwise return the raw value.
+     */
+    public function getValueAttribute($value)
+    {
+        if (is_null($value) || $value === '') {
+            return $value;
+        }
+
+        try {
+            return decrypt($value);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            return $value;
+        }
+    }
+
+    /**
+     * Always encrypt the value when setting it.
+     */
+    public function setValueAttribute($value)
+    {
+        if (is_null($value) || $value === '') {
+            $this->attributes['value'] = $value;
+        } else {
+            $this->attributes['value'] = encrypt($value);
+        }
+    }
 }

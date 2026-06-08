@@ -20,6 +20,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Run migration automatically if project slug column is missing
+        if (!\Illuminate\Support\Facades\Schema::hasColumn('projects', 'slug')) {
+            try {
+                \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::error('Migration failed: ' . $e->getMessage());
+            }
+        }
+
         // Implicitly grant "super_admin" role all permissions
         \Illuminate\Support\Facades\Gate::before(function ($user, $ability) {
             return $user->hasRole('super_admin') ? true : null;

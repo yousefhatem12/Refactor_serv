@@ -312,7 +312,7 @@ const Navbar = () => {
       <div className="max-w-[1400px] mx-auto px-6 md:px-10 flex items-center justify-between">
         {/* Logo */}
         <div className="flex-shrink-0">
-          <Link href={getLocalizedHref("/")}>
+          <Link href={getLocalizedHref("/")} prefetch={false}>
             <img
               src={settings?.site_logo || "/logo.svg"}
               alt="Serv5 Logo"
@@ -348,6 +348,7 @@ const Navbar = () => {
               <div key={link.name} className="relative group">
                 <Link
                   href={link.href}
+                  prefetch={false}
                   className={`flex items-center gap-1 text-xs md:text-sm font-semibold tracking-[0.1em] uppercase transition-all duration-300 ${
                     isActive
                       ? "text-[#FF8A00]"
@@ -389,6 +390,7 @@ const Navbar = () => {
                         <Link
                           key={subLink.name}
                           href={subLink.href}
+                          prefetch={false}
                           className={`block px-4 py-3 text-xs md:text-sm font-medium tracking-wide rounded-lg transition-all duration-200 ${
                             pathname === subLink.href
                               ? "text-[#FF8A00] bg-white/5 font-bold"
@@ -497,6 +499,7 @@ const Navbar = () => {
                       <Link
                         key={link.name}
                         href={link.href}
+                        prefetch={false}
                         className={`block px-4 py-3 text-xs md:text-sm font-medium tracking-wide rounded-lg transition-all duration-200 ${
                           isActive
                             ? "text-[#FF8A00] bg-white/5 font-bold"
@@ -640,6 +643,7 @@ const Navbar = () => {
                       >
                         <Link
                           href={link.dropdown ? "#" : link.href}
+                          prefetch={false}
                           className={`text-xl font-semibold tracking-wide transition-colors ${
                             isActive
                               ? "text-[#D98B50]"
@@ -684,6 +688,7 @@ const Navbar = () => {
                                 <Link
                                   key={subLink.name}
                                   href={subLink.href}
+                                  prefetch={false}
                                   className={`text-lg py-1 transition-colors ${
                                     pathname === subLink.href
                                       ? "text-[#D98B50] font-medium"

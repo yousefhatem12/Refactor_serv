@@ -19,7 +19,7 @@ class CareerApplication extends Model
         'status',
     ];
 
-    public function career()
+    public function career(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Career::class);
     }

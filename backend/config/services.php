@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'whatsapp' => [
+        'url' => env('WHATS_API_URL'),
+        'token' => env('WHATS_API_TOKEN'),
+        'sender' => env('WHATS_API_SENDER', 'default'),
+    ],
+
 ];

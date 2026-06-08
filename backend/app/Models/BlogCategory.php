@@ -16,7 +16,7 @@ class BlogCategory extends Model
         'name' => 'json',
     ];
 
-    public function posts()
+    public function posts(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Post::class, 'blog_category_id');
     }

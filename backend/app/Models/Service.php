@@ -36,7 +36,7 @@ class Service extends Model
         });
     }
 
-    public function pricingPlans()
+    public function pricingPlans(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(PricingPlan::class);
     }

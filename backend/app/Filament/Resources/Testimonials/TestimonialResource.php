@@ -35,6 +35,7 @@ class TestimonialResource extends Resource
 
     public static function getRecordTitle(?\Illuminate\Database\Eloquent\Model $record): ?string
     {
+        /** @var Testimonial|null $record */
         if (is_array($record?->client_name)) {
             return $record->client_name['en'] ?? $record->client_name['ar'] ?? null;
         }

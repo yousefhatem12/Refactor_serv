@@ -25,6 +25,7 @@ class FeatureResource extends Resource
 
     public static function getRecordTitle(?\Illuminate\Database\Eloquent\Model $record): ?string
     {
+        /** @var Feature|null $record */
         if (is_array($record?->title)) {
             return $record->title['en'] ?? $record->title['ar'] ?? null;
         }
