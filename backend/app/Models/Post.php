@@ -33,12 +33,12 @@ class Post extends Model
         'seo_description' => 'json',
     ];
 
-    public function author()
+    public function author(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class, 'author_id');
     }
 
-    public function blogCategory()
+    public function blogCategory(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(BlogCategory::class, 'blog_category_id');
     }

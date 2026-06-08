@@ -43,9 +43,11 @@ const PortfolioCard = ({ item, t, language }) => {
   const [imgSrc, setImgSrc] = useState(item.image || defaultImage);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
-  useEffect(() => {
+  const [prevImage, setPrevImage] = useState(item.image);
+  if (item.image !== prevImage) {
+    setPrevImage(item.image);
     setImgSrc(item.image || defaultImage);
-  }, [item.image]);
+  }
 
   return (
     <motion.div
@@ -80,7 +82,8 @@ const PortfolioCard = ({ item, t, language }) => {
           </p>
         )}
         <Link
-          href={`/portfolio/${item.id}`}
+          href={`/portfolio/${item.slug || item.id}`}
+          prefetch={false}
           className="inline-flex items-center gap-2 text-[#FF8A00] font-medium hover:text-[#ffb800] transition-colors translate-y-4 group-hover:translate-y-0 duration-300 delay-100 w-fit"
         >
           <span>{t("visitProject") || "Visit Project"}</span>
@@ -113,10 +116,27 @@ export default function PortfolioGallery({ data, perPage = 9 }) {
   const [isLoading, setIsLoading] = useState(true);
   const [categoriesLoaded, setCategoriesLoaded] = useState(false);
 
+  // Render-phase state adjustments to avoid useEffect synchronous state updates
+  const [prevLanguage, setPrevLanguage] = useState(language);
+  if (language !== prevLanguage) {
+    setPrevLanguage(language);
+    setCategoriesLoaded(false);
+  }
+
+  const [prevTab, setPrevTab] = useState(activeTab);
+  const [prevPage, setPrevPage] = useState(currentPage);
+  const [prevLang, setPrevLang] = useState(language);
+
+  if (activeTab !== prevTab || currentPage !== prevPage || language !== prevLang) {
+    setPrevTab(activeTab);
+    setPrevPage(currentPage);
+    setPrevLang(language);
+    setIsLoading(true);
+  }
+
   // Fetch categories once on mount or when language changes
   useEffect(() => {
-    setCategoriesLoaded(false);
-    fetchAPI(`/portfolio-categories?lang=${language}`)
+    fetchAPI(`/portfolio/categories?lang=${language}`)
       .then((data) => {
         if (data) setCategories(data || []);
         setCategoriesLoaded(true);
@@ -139,22 +159,23 @@ export default function PortfolioGallery({ data, perPage = 9 }) {
     // Read from client-side cache first to avoid framework bootstrap delay
     if (portfolioCache[cacheKey]) {
       const cached = portfolioCache[cacheKey];
-      if (currentPage === 1) {
-        setPortfolioItems(cached.data);
-      } else {
-        setPortfolioItems((prev) => {
-          const newItems = cached.data.filter(
-            (item) => !prev.some((p) => p.id === item.id),
-          );
-          return [...prev, ...newItems];
-        });
-      }
-      setHasMore(cached.hasMore);
-      setIsLoading(false);
+      Promise.resolve().then(() => {
+        if (!isMounted) return;
+        if (currentPage === 1) {
+          setPortfolioItems(cached.data);
+        } else {
+          setPortfolioItems((prev) => {
+            const newItems = cached.data.filter(
+              (item) => !prev.some((p) => p.id === item.id),
+            );
+            return [...prev, ...newItems];
+          });
+        }
+        setHasMore(cached.hasMore);
+        setIsLoading(false);
+      });
       return;
     }
-
-    setIsLoading(true);
 
     fetchAPI(
       `/portfolio?lang=${language}&category=${categoryQuery}&page=${currentPage}&per_page=${perPage}`,

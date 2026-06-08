@@ -13,6 +13,9 @@ use Filament\Pages\Page;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 
+/**
+ * @property \Filament\Schemas\Schema|\Filament\Forms\Form $form
+ */
 class ManageAboutPage extends Page implements HasForms
 {
     use InteractsWithForms;

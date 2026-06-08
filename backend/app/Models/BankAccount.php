@@ -26,4 +26,14 @@ class BankAccount extends Model
         'owner' => 'json',
         'account' => 'json',
     ];
+
+    protected static function booted()
+    {
+        $clear = function () {
+            // Since cache keys for bank accounts include country/page/per_page, flush cache to be safe
+            \Illuminate\Support\Facades\Cache::flush();
+        };
+        static::saved($clear);
+        static::deleted($clear);
+    }
 }

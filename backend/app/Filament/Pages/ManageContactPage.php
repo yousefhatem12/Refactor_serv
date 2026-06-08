@@ -14,6 +14,9 @@ use Filament\Pages\Page;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 
+/**
+ * @property \Filament\Schemas\Schema $form
+ */
 class ManageContactPage extends Page implements HasForms
 {
     use InteractsWithForms;
@@ -63,7 +66,7 @@ class ManageContactPage extends Page implements HasForms
             'site_branches',
         ];
 
-        $settings = Setting::whereIn('key', $keys)->get()->pluck('value', 'key')->toArray();
+        $settings = Setting::whereIn('key', $keys)->pluck('value', 'key')->toArray();
         
         if (isset($settings['site_address']) && is_string($settings['site_address']) && str_starts_with($settings['site_address'], '{')) {
             $settings['site_address'] = json_decode($settings['site_address'], true);

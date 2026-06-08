@@ -1,11 +1,11 @@
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api";
+  process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api/v1";
 
 export const getMediaUrl = (path) => {
   if (!path) return "";
   if (path.startsWith("http")) return path;
 
-  const baseUrl = API_BASE_URL.replace(/\/api$/, "");
+  const baseUrl = API_BASE_URL.replace(/\/api(\/v\d+)?$/, "");
   return `${baseUrl}/storage/${path.replace(/^\//, "")}`;
 };
 

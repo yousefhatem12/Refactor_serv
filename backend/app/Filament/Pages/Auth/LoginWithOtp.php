@@ -16,12 +16,13 @@ use Filament\Facades\Filament;
 use Filament\Notifications\Notification;
 use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class LoginWithOtp extends BaseLogin
 {
     public $isOtpStep = false;
     public $otp = '';
-    public $userId = null;
+    public ?int $userId = null;
 
     public function form(Schema $schema): Schema
     {
@@ -56,7 +57,7 @@ class LoginWithOtp extends BaseLogin
             // Validate OTP
             $user = User::find($this->userId);
 
-            if (!$user || $user->otp != $data['otp'] || \Carbon\Carbon::parse($user->otp_expires_at)->isPast()) {
+            if (!$user || !Hash::check($data['otp'], $user->otp) || \Carbon\Carbon::parse($user->otp_expires_at)->isPast()) {
                 throw ValidationException::withMessages([
                     'data.otp' => 'Invalid or expired OTP code.',
                 ]);
@@ -86,6 +87,7 @@ class LoginWithOtp extends BaseLogin
             $this->throwFailureValidationException();
         }
 
+        /** @var \App\Models\User $user */
         $user = Filament::auth()->user();
         Filament::auth()->logout(); // Don't log in yet
 
@@ -102,7 +104,7 @@ class LoginWithOtp extends BaseLogin
         // Generate OTP
         $otpCode = rand(100000, 999999);
         $user->update([
-            'otp' => $otpCode,
+            'otp' => Hash::make($otpCode),
             'otp_expires_at' => now()->addMinutes(10),
         ]);
 
@@ -122,32 +124,32 @@ class LoginWithOtp extends BaseLogin
         return null;
     }
 
-    protected function sendWhatsAppOtp($phone, $otp)
+    protected function sendWhatsAppOtp(string $phone, string $otp)
     {
-        $url = env('WHATS_API_URL');
-        $token = env('WHATS_API_TOKEN');
-        $sender = env('WHATS_API_SENDER', 'default');
+        $url = config('services.whatsapp.url');
+        $token = config('services.whatsapp.token');
+        $sender = config('services.whatsapp.sender');
 
         if (!$url || !$token) {
-            \Log::error('WhatsApp API credentials are missing.');
+            Log::error('WhatsApp API credentials are missing.');
             return;
         }
 
         try {
             $response = Http::post($url, [
                 'token' => $token,
-                'session' => env('WHATS_API_SENDER', 'default'),
-                'sender' => env('WHATS_API_SENDER', 'default'),
+                'session' => $sender,
+                'sender' => $sender,
                 'to' => $phone,
                 'text' => "رمز التحقق الخاص بك (OTP) للدخول إلى لوحة التحكم هو: *{$otp}*\n\nالرمز صالح لمدة 10 دقائق.",
                 'messageType' => 'text',
             ]);
 
             if (!$response->successful()) {
-                \Log::error('WhatsApp API Error: ' . $response->body());
+                Log::error('WhatsApp API Error: ' . $response->body());
             }
         } catch (\Exception $e) {
-            \Log::error('WhatsApp API Exception: ' . $e->getMessage());
+            Log::error('WhatsApp API Exception: ' . $e->getMessage());
         }
     }
 }

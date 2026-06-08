@@ -1,0 +1,90 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Models\Project;
+use App\Models\ProjectCategory;
+use App\Http\Resources\ProjectResource;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+
+class PortfolioController extends BaseApiController
+{
+    public function index(Request $request)
+    {
+        $lang = $this->getLang();
+        $limit = $request->query('limit');
+        $category = $request->query('category');
+        $page = $request->query('page');
+        $perPage = $request->query('per_page', 9);
+
+        $cacheKey = "portfolio_{$lang}_cat_" . ($category ?: 'all') . "_limit_" . ($limit ?: 'none') . "_page_" . ($page ?: 'none') . "_per_" . $perPage;
+
+        $response = Cache::remember($cacheKey, 3600, function () use ($lang, $limit, $category, $page, $perPage) {
+            $query = Project::orderBy('id', 'desc');
+
+            if ($category && strtolower($category) !== 'all') {
+                $query->where('category', strtolower($category));
+            }
+
+            if ($limit) {
+                $projects = $query->take((int) $limit)->get();
+                return [
+                    'type' => 'flat',
+                    'data' => ProjectResource::collection($projects)->resolve()
+                ];
+            }
+
+            if ($page) {
+                $projectsPaginated = $query->paginate($perPage);
+                return [
+                    'type' => 'paginated',
+                    'data' => [
+                        'data' => ProjectResource::collection($projectsPaginated->items())->resolve(),
+                        'current_page' => $projectsPaginated->currentPage(),
+                        'last_page' => $projectsPaginated->lastPage(),
+                        'has_more' => $projectsPaginated->hasMorePages(),
+                    ]
+                ];
+            }
+
+            $projects = $query->get();
+            return [
+                'type' => 'flat',
+                'data' => ProjectResource::collection($projects)->resolve()
+            ];
+        });
+
+        return response()->json($response['data']);
+    }
+
+    public function categories()
+    {
+        $lang = $this->getLang();
+        $cacheKey = "project_categories_{$lang}";
+
+        $categories = Cache::remember($cacheKey, 3600, function () use ($lang) {
+            return ProjectCategory::all()->map(function ($cat) use ($lang) {
+                return [
+                    'id' => $cat->slug,
+                    'label' => $this->trans($cat->name, $lang),
+                ];
+            });
+        });
+        return response()->json($categories);
+    }
+
+    public function show(string|int $idOrSlug)
+    {
+        $lang = $this->getLang();
+        $cacheKey = "project_{$idOrSlug}_{$lang}";
+
+        $project = Cache::remember($cacheKey, 3600, function () use ($idOrSlug) {
+            return Project::where('slug', $idOrSlug)
+                ->orWhere('id', $idOrSlug)
+                ->firstOrFail();
+        });
+
+        return new ProjectResource($project);
+    }
+}

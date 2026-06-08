@@ -8,6 +8,7 @@ use Filament\Schemas\Schema;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Filament\Auth\Events\Registered;
 use Filament\Facades\Filament;
 use Illuminate\Auth\Events\Registered as LaravelRegistered;
@@ -112,7 +113,7 @@ class RegisterWithOtp extends BaseRegister
 
         $fullPhone = $this->tempData['country_code'] . ltrim($this->tempData['phone'], '0');
 
-        if (\App\Models\User::where('phone', $fullPhone)->exists()) {
+        if (User::where('phone', $fullPhone)->exists()) {
             throw ValidationException::withMessages([
                 'data.phone' => 'This phone number is already registered.',
             ]);
@@ -139,33 +140,34 @@ class RegisterWithOtp extends BaseRegister
         return null;
     }
 
-    protected function sendWhatsAppOtp($phone, $otp)
+    protected function sendWhatsAppOtp(string $phone, string $otp)
     {
-        $url = env('WHATS_API_URL');
-        $token = env('WHATS_API_TOKEN');
+        $url = config('services.whatsapp.url');
+        $token = config('services.whatsapp.token');
+        $sender = config('services.whatsapp.sender');
 
         if (!$url || !$token) {
-            \Log::error('WhatsApp API credentials are missing.');
+            Log::error('WhatsApp API credentials are missing.');
             return;
         }
 
         try {
             $response = Http::post($url, [
                 'token' => $token,
-                'session' => env('WHATS_API_SENDER', 'default'),
-                'sender' => env('WHATS_API_SENDER', 'default'),
+                'session' => $sender,
+                'sender' => $sender,
                 'to' => $phone,
                 'text' => "رمز التحقق الخاص بك (OTP) للتسجيل في الموقع هو: *{$otp}*\n\nالرمز صالح لمدة 10 دقائق.",
                 'messageType' => 'text',
             ]);
 
-            \Log::info('WhatsApp API Response: ' . $response->status() . ' - ' . $response->body());
+            Log::info('WhatsApp API Response: ' . $response->status() . ' - ' . $response->body());
 
             if (!$response->successful()) {
-                \Log::error('WhatsApp API Error: ' . $response->body());
+                Log::error('WhatsApp API Error: ' . $response->body());
             }
         } catch (\Exception $e) {
-            \Log::error('WhatsApp API Exception: ' . $e->getMessage());
+            Log::error('WhatsApp API Exception: ' . $e->getMessage());
         }
     }
 }

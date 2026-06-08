@@ -46,7 +46,7 @@ const BlogCard = ({ post, t, language, categoryMap }) => {
       layout
       variants={itemVariants}
     >
-      <Link href={`/blog/${post.slug || post.id}`} className="group cursor-pointer flex flex-col h-full">
+      <Link href={`/blog/${post.slug || post.id}`} prefetch={false} className="group cursor-pointer flex flex-col h-full">
         <div className="relative w-full h-[220px] rounded-lg overflow-hidden mb-4 bg-gray-800/50 border border-white/5">
           {!isImageLoaded && (
             <div className="absolute inset-0 bg-white/5 animate-pulse z-0" />
@@ -91,7 +91,7 @@ const BlogGrid = () => {
 
   // Fetch categories dynamically
   useEffect(() => {
-    fetchAPI(`/blog-categories?lang=${language}`)
+    fetchAPI(`/blog/categories?lang=${language}`)
       .then((data) => {
         if (data) {
           const allCat = { id: "ALL", label: language === "ar" ? "الكل" : "All" };
@@ -117,20 +117,25 @@ const BlogGrid = () => {
     // Read from client-side cache first to avoid framework bootstrap delay
     if (blogCache[cacheKey]) {
       const cached = blogCache[cacheKey];
-      if (currentPage === 1) {
-        setPostsList(cached.data);
-      } else {
-        setPostsList((prev) => {
-          const newPosts = cached.data.filter((post) => !prev.some((p) => p.id === post.id));
-          return [...prev, ...newPosts];
-        });
-      }
-      setHasMore(cached.hasMore);
-      setLoading(false);
+      Promise.resolve().then(() => {
+        if (!isMounted) return;
+        if (currentPage === 1) {
+          setPostsList(cached.data);
+        } else {
+          setPostsList((prev) => {
+            const newPosts = cached.data.filter((post) => !prev.some((p) => p.id === post.id));
+            return [...prev, ...newPosts];
+          });
+        }
+        setHasMore(cached.hasMore);
+        setLoading(false);
+      });
       return;
     }
 
-    setLoading(true);
+    Promise.resolve().then(() => {
+      if (isMounted) setLoading(true);
+    });
 
     fetchAPI(`/blog?lang=${language}&category_raw=${categoryQuery}&page=${currentPage}&per_page=9`)
       .then((res) => {

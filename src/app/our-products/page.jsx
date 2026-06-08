@@ -16,9 +16,15 @@ const OurProductsListingPage = () => {
   const [loading, setLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  useEffect(() => {
+  const [prevLanguage, setPrevLanguage] = useState(language);
+
+  if (language !== prevLanguage) {
+    setPrevLanguage(language);
     setLoading(true);
     setCurrentPage(1);
+  }
+
+  useEffect(() => {
     fetchAPI(`/products?lang=${language}&page=1&per_page=9`)
       .then((res) => {
         if (res && Array.isArray(res.data)) {
@@ -108,6 +114,7 @@ const OurProductsListingPage = () => {
                   href={`/our-products/${item.id}`}
                   key={item.id}
                   className="block group"
+                  prefetch={false}
                 >
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}

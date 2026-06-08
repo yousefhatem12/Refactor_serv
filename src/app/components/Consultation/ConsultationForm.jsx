@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../../context/LanguageContext";
+import { fetchAPI } from "../../../lib/api";
 import {
   FaMobileAlt,
   FaLaptopCode,
@@ -27,8 +28,50 @@ const ConsultationForm = () => {
     email: "",
     company: "",
   });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const totalSteps = 7;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.name || !formData.phone || !formData.email) {
+      setErrorMessage(language === "ar" ? "يرجى ملء الاسم ورقم الهاتف والبريد الإلكتروني." : "Please fill in your name, phone, and email.");
+      return;
+    }
+
+    setSubmitting(true);
+    setErrorMessage("");
+
+    try {
+      const response = await fetchAPI("/consultations", {
+        method: "POST",
+        body: JSON.stringify({
+          project_type: formData.projectType,
+          has_docs: formData.hasDocs,
+          budget: formData.budget,
+          timeline: formData.timeline,
+          decision_maker: formData.decisionMaker,
+          references: formData.references,
+          name: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          company: formData.company,
+        }),
+      });
+
+      if (response && response.data) {
+        setSubmitted(true);
+      } else {
+        setErrorMessage(language === "ar" ? "حدث خطأ أثناء إرسال طلبك. يرجى المحاولة مرة أخرى." : "An error occurred while submitting. Please try again.");
+      }
+    } catch (error) {
+      setErrorMessage(language === "ar" ? "فشل الاتصال بالخادم. يرجى التحقق من الاتصال بالإنترنت." : "Failed to connect to server. Please check your internet connection.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const handleNext = () => {
     if (step < totalSteps) setStep(step + 1);
@@ -193,6 +236,47 @@ const ConsultationForm = () => {
     }
   };
 
+  if (submitted) {
+    return (
+      <div className="relative z-20 max-w-2xl mx-auto px-6 pb-20 text-center">
+        <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[40px] p-12 shadow-2xl">
+          <div className="text-6xl text-green-500 flex justify-center mb-6">
+            <FaCheckCircle />
+          </div>
+          <h2 className="text-3xl font-bold text-white mb-4">
+            {language === "ar" ? "تم إرسال طلبك بنجاح!" : "Thank You!"}
+          </h2>
+          <p className="text-gray-400 mb-8 leading-relaxed">
+            {language === "ar" 
+              ? "لقد استلمنا طلب الاستشارة الخاص بك. سيقوم أحد خبرائنا بالتواصل معك في أقرب وقت ممكن لمناقشة تفاصيل مشروعك." 
+              : "We have received your consultation request. One of our experts will contact you as soon as possible to discuss your project details."}
+          </p>
+          <button
+            onClick={() => {
+              setFormData({
+                projectType: "",
+                hasDocs: "",
+                budget: "",
+                timeline: "",
+                decisionMaker: "",
+                references: "",
+                name: "",
+                phone: "",
+                email: "",
+                company: "",
+              });
+              setStep(1);
+              setSubmitted(false);
+            }}
+            className="px-8 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition-all shadow-lg shadow-blue-600/20"
+          >
+            {language === "ar" ? "تقديم طلب آخر" : "Submit Another Request"}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="relative z-20 max-w-4xl mx-auto px-6 pb-20">
       <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[40px] p-8 md:p-12 shadow-2xl relative overflow-hidden">
@@ -229,6 +313,12 @@ const ConsultationForm = () => {
           </AnimatePresence>
         </div>
 
+        {errorMessage && (
+          <div className="mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
+            {errorMessage}
+          </div>
+        )}
+
         <div className="flex items-center justify-between mt-12 border-t border-white/5 pt-8">
           <button
             onClick={handlePrev}
@@ -250,8 +340,12 @@ const ConsultationForm = () => {
               {language === "ar" ? <FaChevronLeft /> : <FaChevronRight />}
             </button>
           ) : (
-            <button className="px-10 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:scale-105 text-white font-bold transition-all shadow-xl shadow-purple-600/20">
-              {t("submitConsultation")}
+            <button
+              onClick={handleSubmit}
+              disabled={submitting}
+              className="px-10 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:scale-105 disabled:opacity-50 text-white font-bold transition-all shadow-xl shadow-purple-600/20"
+            >
+              {submitting ? (language === "ar" ? "جاري الإرسال..." : "Submitting...") : t("submitConsultation")}
             </button>
           )}
         </div>

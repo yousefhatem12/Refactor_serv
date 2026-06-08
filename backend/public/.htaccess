@@ -23,3 +23,20 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+# Security Headers & Hide Server Info
+<IfModule mod_headers.c>
+    Header set Content-Security-Policy "default-src 'self' http: https: data: blob: 'unsafe-inline' 'unsafe-eval'"
+    Header set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-Content-Type-Options "nosniff"
+    Header set Referrer-Policy "origin-when-cross-origin"
+    Header set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    Header set X-XSS-Protection "1; mode=block"
+
+    # Remove signatures
+    Header always unset X-Powered-By
+    Header always unset Server
+    Header unset X-Powered-By
+    Header unset Server
+</IfModule>

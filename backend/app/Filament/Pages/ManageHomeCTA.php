@@ -11,6 +11,9 @@ use Filament\Pages\Page;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 
+/**
+ * @property \Filament\Schemas\Schema|\Filament\Forms\Form $form
+ */
 class ManageHomeCTA extends Page implements HasForms
 {
     use InteractsWithForms;
@@ -51,7 +54,7 @@ class ManageHomeCTA extends Page implements HasForms
             'cta_long_desc',
         ];
         
-        $settingsData = \App\Models\Setting::whereIn('key', $settingsKeys)->get()->pluck('value', 'key')->toArray();
+        $settingsData = \App\Models\Setting::whereIn('key', $settingsKeys)->pluck('value', 'key')->toArray();
 
         $formData = [];
         foreach ($settingsKeys as $key) {
