@@ -59,6 +59,7 @@ export default async function RootLayout({ children }) {
   return (
     <html
       lang={defaultLanguage}
+      dir={defaultLanguage === "ar" ? "rtl" : "ltr"}
       className={`${montserrat.variable} ${poppins.variable} ${alexandria.variable} min-h-screen antialiased relative`}
       suppressHydrationWarning
     >
