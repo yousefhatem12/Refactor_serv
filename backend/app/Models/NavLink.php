@@ -23,12 +23,12 @@ class NavLink extends Model
         'is_active' => 'boolean',
     ];
 
-    public function parent()
+    public function parent(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(NavLink::class, 'parent_id');
     }
 
-    public function children()
+    public function children(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(NavLink::class, 'parent_id')->orderBy('sort_order');
     }

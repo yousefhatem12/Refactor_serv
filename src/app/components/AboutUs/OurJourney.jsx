@@ -5,6 +5,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { useLanguage } from "../../context/LanguageContext";
+import { getMediaUrl } from "@/lib/api";
 
 const OurJourney = ({ data }) => {
   const { t, language } = useLanguage();
@@ -22,7 +23,52 @@ const OurJourney = ({ data }) => {
       users: "10",
       description: t("journeyDummyText"),
     },
-
+    {
+      year: "2011",
+      planet: "planet-2.webp",
+      location: t("locationEgypt"),
+      users: "20",
+      description: t("journeyDummyText"),
+    },
+    {
+      year: "2013",
+      planet: "planet-3.webp",
+      location: t("locationEgyptSaudi"),
+      users: "35",
+      description: t("journeyDummyText"),
+    },
+    {
+      year: "2015",
+      planet: "planet-4.webp",
+      location: t("locationEgyptSaudi"),
+      users: "40",
+      partnership: t("partnershipEtihad") || "Partnership",
+      description: t("journeyDummyText"),
+    },
+    {
+      year: "2017",
+      planet: "planet-5.webp",
+      location: t("locationEgyptSaudi"),
+      users: "35",
+      partnership: t("partnershipEtihad") || "Partnership",
+      description: t("journeyDummyText"),
+    },
+    {
+      year: "2020",
+      planet: "planet-6.webp",
+      location: t("locationEgyptSaudi"),
+      users: "35",
+      partnership: t("partnershipEtihad") || "Partnership",
+      description: t("journeyDummyText"),
+    },
+    {
+      year: "2024",
+      planet: "planet-7.webp",
+      location: t("locationEgyptSaudi"),
+      users: "35",
+      partnership: t("partnershipEtihad") || "Partnership",
+      description: t("journeyDummyText"),
+    },
   ];
 
   const isUsingDefaultData = !(data?.items?.length > 0);
@@ -62,10 +108,11 @@ const OurJourney = ({ data }) => {
 
   const timeline = dbItems.map((item, idx) => {
     const style = timelineStyles[idx % timelineStyles.length];
+    const isCustomPlanet = item.planet && typeof item.planet === 'string' && (item.planet.startsWith('pages/') || item.planet.startsWith('http'));
 
     return {
       year: item.year,
-      planet: `/about-us/planet${((idx % 7) + 1) === 1 ? '1' : `-${(idx % 7) + 1}`}.webp`,
+      planet: isCustomPlanet ? getMediaUrl(item.planet) : `/about-us/planet${((idx % 7) + 1) === 1 ? '1' : `-${(idx % 7) + 1}`}.webp`,
       yOffset: style.yOffset,
       size: style.size,
       mix: style.mix,
@@ -223,7 +270,7 @@ const OurJourney = ({ data }) => {
                     )}
                     <div className="mt-0.5 pt-1 border-t border-white/10">
                       <p className="text-gray-400 text-[10px] italic line-clamp-3">
-                        "{item.card.description}"
+                        &quot;{item.card.description}&quot;
                       </p>
                     </div>
                   </div>
@@ -292,7 +339,7 @@ const OurJourney = ({ data }) => {
                 )}
                 <div className="pt-2 border-t border-white/5">
                   <p className="text-gray-400 text-[10px] leading-relaxed italic">
-                    "{item.card.description}"
+                    &quot;{item.card.description}&quot;
                   </p>
                 </div>
               </div>

@@ -15,8 +15,10 @@ class ViewQuotation extends EditRecord
     {
         $this->record = $this->resolveRecord($record);
 
-        if ($this->record->status === 'unread' || empty($this->record->status)) {
-            $this->record->update([
+        /** @var \App\Models\Quotation $recordModel */
+        $recordModel = $this->record;
+        if ($recordModel->status === 'unread' || empty($recordModel->status)) {
+            $recordModel->update([
                 'status' => 'read',
             ]);
         }

@@ -11,6 +11,7 @@ class Project extends Model
 
     protected $fillable = [
         'type',
+        'slug',
         'name',
         'category',
         'description',
@@ -25,4 +26,21 @@ class Project extends Model
         'description' => 'json',
         'tags' => 'json',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($project) {
+            if (empty($project->slug)) {
+                $name = is_array($project->name) ? ($project->name['en'] ?? '') : $project->name;
+                $project->slug = \Illuminate\Support\Str::slug($name ?: 'project');
+            }
+        });
+        static::updating(function ($project) {
+            if (empty($project->slug)) {
+                $name = is_array($project->name) ? ($project->name['en'] ?? '') : $project->name;
+                $project->slug = \Illuminate\Support\Str::slug($name ?: 'project');
+            }
+        });
+    }
 }

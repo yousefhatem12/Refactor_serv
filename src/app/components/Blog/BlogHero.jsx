@@ -41,7 +41,7 @@ const BlogHero = ({ data, posts = [] }) => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="w-full lg:w-3/5"
           >
-            <Link href={`/blog/${featuredPost.slug || featuredPost.id}`} className="w-full lg:w-full group cursor-pointer block">
+            <Link href={`/blog/${featuredPost.slug || featuredPost.id}`} prefetch={false} className="w-full lg:w-full group cursor-pointer block">
               <div className="relative w-full h-[300px] md:h-[400px] rounded-lg overflow-hidden mb-6 border border-white/5 shadow-2xl group-hover:border-blue-500/30 transition-all duration-300">
                 <Image
                   src={featuredPost.image || "/placeholder.webp"}
@@ -77,6 +77,7 @@ const BlogHero = ({ data, posts = [] }) => {
               >
                 <Link
                   href={`/blog/${post.slug || post.id}`}
+                  prefetch={false}
                   className="flex gap-4 group cursor-pointer items-center"
                 >
                   <div className="relative w-1/3 h-[100px] md:h-[120px] rounded-lg overflow-hidden shrink-0 border border-white/5 group-hover:border-blue-500/30 transition-all duration-300">

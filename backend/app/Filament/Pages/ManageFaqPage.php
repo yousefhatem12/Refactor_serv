@@ -19,6 +19,9 @@ use Filament\Tables\Table;
 use Filament\Tables;
 use App\Models\Faq;
 
+/**
+ * @property \Filament\Schemas\Schema|\Filament\Forms\Form $form
+ */
 class ManageFaqPage extends Page implements HasForms, HasTable
 {
     use InteractsWithForms;

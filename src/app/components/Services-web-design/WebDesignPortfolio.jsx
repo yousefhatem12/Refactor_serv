@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../../context/LanguageContext";
 import { fetchAPI } from "@/lib/api";
 import Link from "next/link";
+import Image from "next/image";
 
 const WebDesignPortfolio = ({ isMobileApp }) => {
   const { language, t } = useLanguage();
@@ -30,9 +31,11 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
       .finally(() => setLoading(false));
   }, [language, targetCategory]);
 
-  useEffect(() => {
+  const [prevActiveTab, setPrevActiveTab] = useState(activeTab);
+  if (activeTab !== prevActiveTab) {
+    setPrevActiveTab(activeTab);
     setVisibleCount(4);
-  }, [activeTab]);
+  }
 
   const items = portfolioItems.filter(
     (item) => item.category === targetCategory,
@@ -183,19 +186,24 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
                   transition={{ duration: 0.4 }}
                   className="relative w-full max-w-[320px] mx-auto"
                 >
-                  <img
+                  <Image
                     src="/template/iphone13.webp"
                     alt="iPhone Frame"
+                    width={320}
+                    height={650}
+                    priority
                     className="relative z-10 w-full h-auto drop-shadow-2xl"
                   />
                   {/* Image inside frame */}
                   {filteredItems[0] && (
                     <div className="absolute top-[3%] left-[5%] right-[5%] bottom-[3%] z-0 rounded-[2.5rem] overflow-hidden">
-                      <img
+                      <Image
                         src={
                           filteredItems[0].image || "/services-page/card-1.webp"
                         }
                         alt={filteredItems[0].name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 320px"
                         className="w-full h-full object-cover"
                       />
                     </div>
@@ -216,9 +224,11 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
                         key={item.id}
                         className="relative group rounded-xl overflow-hidden aspect-[4/3] bg-white/5 border border-white/5"
                       >
-                        <img
+                        <Image
                           src={item.image || "/services-page/card-1.webp"}
                           alt={item.name}
+                          fill
+                          sizes="(max-width: 768px) 50vw, 33vw"
                           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         />
                         <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 text-center">
@@ -226,7 +236,8 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
                             {item.name}
                           </h4>
                           <Link
-                            href={`/portfolio/${item.id}`}
+                            href={`/portfolio/${item.slug || item.id}`}
+                            prefetch={false}
                             className="text-white font-semibold tracking-wider uppercase text-xs border border-white px-4 py-2 rounded-full backdrop-blur-sm hover:bg-white hover:text-black transition-colors"
                           >
                             {t("viewProject") || "View Project"}

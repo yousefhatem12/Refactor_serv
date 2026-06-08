@@ -12,6 +12,9 @@ use Filament\Pages\Page;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 
+/**
+ * @property \Filament\Schemas\Schema|\Filament\Forms\Form $form
+ */
 class ManageHomeFeaturesSettings extends Page implements HasForms
 {
     use InteractsWithForms;
@@ -48,7 +51,7 @@ class ManageHomeFeaturesSettings extends Page implements HasForms
             'features_partners',
         ];
         
-        $settingsData = \App\Models\Setting::whereIn('key', $settingsKeys)->get()->pluck('value', 'key')->toArray();
+        $settingsData = \App\Models\Setting::whereIn('key', $settingsKeys)->pluck('value', 'key')->toArray();
 
         $formData = [];
         foreach (['features_title', 'features_desc'] as $key) {

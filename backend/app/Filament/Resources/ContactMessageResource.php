@@ -86,6 +86,7 @@ class ContactMessageResource extends Resource
                     ->color(fn (string $state): string => match ($state) {
                         'unread' => 'danger',
                         'read' => 'success',
+                        default => 'secondary',
                     }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

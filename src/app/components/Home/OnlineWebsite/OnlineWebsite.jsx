@@ -156,7 +156,7 @@ const OnlineWebsite = () => {
   const [activeTab, setActiveTab] = useState("all");
   const sectionRef = useRef(null);
   const sliderRef = useRef(null);
-  const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] = useState(false);  const [stars, setStars] = useState([]);
 
   // Pagination & Loading States
   const [productsList, setProductsList] = useState([]);
@@ -168,8 +168,23 @@ const OnlineWebsite = () => {
 
   // Fetch categories dynamically on mount
   useEffect(() => {
-    setMounted(true);
-    fetchAPI(`/product-categories?lang=${language}`)
+    // Generate stars client-side only to avoid SSR hydration mismatch
+    const generatedStars = Array.from({ length: 40 }).map((_, i) => ({
+      id: i,
+      width: Math.random() * 3 + 1 + "px",
+      height: Math.random() * 3 + 1 + "px",
+      top: Math.random() * 100 + "%",
+      left: Math.random() * 100 + "%",
+      opacity: Math.random() * 0.5 + 0.1,
+      duration: Math.random() * 5 + 5,
+    }));
+
+    Promise.resolve().then(() => {
+      setMounted(true);
+      setStars(generatedStars);
+    });
+
+    fetchAPI(`/products/categories?lang=${language}`)
       .then((data) => {
         if (data && Array.isArray(data)) {
           setCategories([
@@ -187,11 +202,14 @@ const OnlineWebsite = () => {
   useEffect(() => {
     let isMounted = true;
 
-    if (currentPage === 1) {
-      setIsLoading(true);
-    } else {
-      setIsLoadingMore(true);
-    }
+    Promise.resolve().then(() => {
+      if (!isMounted) return;
+      if (currentPage === 1) {
+        setIsLoading(true);
+      } else {
+        setIsLoadingMore(true);
+      }
+    });
 
     const categoryQuery = activeTab === "all" ? "all" : activeTab;
 
@@ -274,23 +292,23 @@ const OnlineWebsite = () => {
         <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] bg-[#FF8A00]/10 blur-[150px] rounded-full mix-blend-screen" />
 
         {/* Floating Stars */}
-        {Array.from({ length: 40 }).map((_, i) => (
+        {stars.map((star) => (
           <motion.div
-            key={i}
+            key={star.id}
             className="absolute bg-white rounded-full"
             style={{
-              width: Math.random() * 3 + 1 + "px",
-              height: Math.random() * 3 + 1 + "px",
-              top: Math.random() * 100 + "%",
-              left: Math.random() * 100 + "%",
-              opacity: Math.random() * 0.5 + 0.1,
+              width: star.width,
+              height: star.height,
+              top: star.top,
+              left: star.left,
+              opacity: star.opacity,
             }}
             animate={{
               y: [0, -30, 0],
               opacity: [0.1, 0.6, 0.1],
             }}
             transition={{
-              duration: Math.random() * 5 + 5,
+              duration: star.duration,
               repeat: Infinity,
               ease: "easeInOut",
             }}

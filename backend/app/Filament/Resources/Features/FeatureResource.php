@@ -18,18 +18,21 @@ class FeatureResource extends Resource
 {
     protected static ?string $model = Feature::class;
     protected static bool $shouldRegisterNavigation = false;
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-sparkles';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-sparkles';
     public static function getNavigationGroup(): ?string { return __('Home Page'); }
     protected static ?int $navigationSort = 2;
     public static function getNavigationLabel(): string { return __('Features'); }
 
     public static function getRecordTitle(?\Illuminate\Database\Eloquent\Model $record): ?string
     {
-        if (is_array($record?->title)) {
+        if (!$record instanceof Feature) {
+            return null;
+        }
+        if (is_array($record->title)) {
             return $record->title['en'] ?? $record->title['ar'] ?? null;
         }
 
-        return $record?->title;
+        return $record->title;
     }
 
     public static function form(Schema $schema): Schema

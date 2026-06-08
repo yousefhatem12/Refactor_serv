@@ -39,6 +39,8 @@ class User extends Authenticatable implements FilamentUser
     protected $hidden = [
         'password',
         'remember_token',
+        'otp',
+        'otp_expires_at',
     ];
 
     /**
@@ -51,6 +53,8 @@ class User extends Authenticatable implements FilamentUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'otp' => 'encrypted',
+            'otp_expires_at' => 'datetime',
         ];
     }
 
@@ -61,7 +65,7 @@ class User extends Authenticatable implements FilamentUser
         });
     }
 
-    public function posts()
+    public function posts(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Post::class, 'author_id');
     }

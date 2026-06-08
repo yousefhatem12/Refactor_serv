@@ -13,4 +13,14 @@ class Feature extends Model
         'description' => 'json',
         'is_active' => 'boolean',
     ];
+
+    protected static function booted()
+    {
+        $clear = function () {
+            \Illuminate\Support\Facades\Cache::forget('features_en');
+            \Illuminate\Support\Facades\Cache::forget('features_ar');
+        };
+        static::saved($clear);
+        static::deleted($clear);
+    }
 }

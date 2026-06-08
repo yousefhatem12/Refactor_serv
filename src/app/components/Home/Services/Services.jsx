@@ -232,6 +232,7 @@ const Services = () => {
                 </p>
                 <Link
                   href={getServiceHref(activeService)}
+                  prefetch={false}
                   className="text-white border-b border-white/30 pb-1 block mx-auto mt-4 hover:border-white transition-colors uppercase tracking-widest text-sm font-medium pointer-events-auto w-max"
                 >
                   {t("knowMore")}
