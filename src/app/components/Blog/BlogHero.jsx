@@ -24,7 +24,7 @@ const BlogHero = ({ data, posts = [] }) => {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Left Large Post */}
         {featuredPost ? (
-          <Link href={`/blog/${featuredPost.slug || featuredPost.id}`} className="w-full lg:w-3/5 group cursor-pointer">
+          <Link href={`/blog/${featuredPost.slug || featuredPost.id}`} prefetch={false} className="w-full lg:w-3/5 group cursor-pointer">
             <div className="relative w-full h-[300px] md:h-[400px] rounded-lg overflow-hidden mb-6">
               <Image
                 src={featuredPost.image || "/placeholder.webp"}
@@ -40,7 +40,7 @@ const BlogHero = ({ data, posts = [] }) => {
               {featuredPost.title}
             </h3>
             <div className="text-gray-400 line-clamp-3 text-sm md:text-base" dangerouslySetInnerHTML={{ __html: featuredPost.content }}>
-            </div>
+              </div>
           </Link>
         ) : (
           <div className="w-full lg:w-3/5 bg-[#ffffff05] rounded-lg animate-pulse h-[400px]" />
@@ -53,6 +53,7 @@ const BlogHero = ({ data, posts = [] }) => {
               <Link
                 key={post.id}
                 href={`/blog/${post.slug || post.id}`}
+                prefetch={false}
                 className="flex gap-4 group cursor-pointer items-center"
               >
                 <div className="relative w-1/3 h-[100px] md:h-[120px] rounded-lg overflow-hidden shrink-0">

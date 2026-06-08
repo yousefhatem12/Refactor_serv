@@ -30,7 +30,7 @@ class Career extends Model
         'is_active' => 'boolean',
     ];
 
-    public function applications()
+    public function applications(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(CareerApplication::class);
     }

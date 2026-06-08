@@ -13,6 +13,9 @@ use Filament\Pages\Page;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 
+/**
+ * @property \Filament\Schemas\Schema $form
+ */
 class ManageTranslations extends Page implements HasForms
 {
     use InteractsWithForms;
@@ -45,7 +48,7 @@ class ManageTranslations extends Page implements HasForms
             'trans_bankAccounts',
         ];
 
-        $settingsData = Setting::whereIn('key', $keys)->get()->pluck('value', 'key')->toArray();
+        $settingsData = Setting::whereIn('key', $keys)->pluck('value', 'key')->toArray();
 
         $formData = [];
         foreach ($keys as $key) {

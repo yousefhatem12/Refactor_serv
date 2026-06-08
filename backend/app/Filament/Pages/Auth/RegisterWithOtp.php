@@ -141,8 +141,9 @@ class RegisterWithOtp extends BaseRegister
 
     protected function sendWhatsAppOtp($phone, $otp)
     {
-        $url = env('WHATS_API_URL');
-        $token = env('WHATS_API_TOKEN');
+        $url = config('services.whatsapp.url');
+        $token = config('services.whatsapp.token');
+        $sender = config('services.whatsapp.sender');
 
         if (!$url || !$token) {
             \Log::error('WhatsApp API credentials are missing.');
@@ -152,8 +153,8 @@ class RegisterWithOtp extends BaseRegister
         try {
             $response = Http::post($url, [
                 'token' => $token,
-                'session' => env('WHATS_API_SENDER', 'default'),
-                'sender' => env('WHATS_API_SENDER', 'default'),
+                'session' => $sender,
+                'sender' => $sender,
                 'to' => $phone,
                 'text' => "رمز التحقق الخاص بك (OTP) للتسجيل في الموقع هو: *{$otp}*\n\nالرمز صالح لمدة 10 دقائق.",
                 'messageType' => 'text',

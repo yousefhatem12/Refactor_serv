@@ -95,7 +95,7 @@ class PostResource extends Resource
                         Select::make('blog_category_id')
                             ->label($isAr ? 'التصنيف' : 'Category')
                             ->options(fn () => \App\Models\BlogCategory::all()->mapWithKeys(fn ($item) => [
-                                $item->id => is_array($item->name) ? ($item->name[app()->getLocale()] ?? $item->name['en'] ?? '') : $item->name
+                                $item->id => $item->name[app()->getLocale()] ?? $item->name['en'] ?? ''
                             ]))
                             ->searchable()
                             ->required(),
@@ -108,7 +108,7 @@ class PostResource extends Resource
                         Select::make('author_id')
                             ->label($isAr ? 'الكاتب' : 'Author')
                             ->relationship('author', 'name')
-                            ->default(auth()->id())
+                            ->default(\Illuminate\Support\Facades\Auth::id())
                             ->required()
                             ->searchable(),
                     ]),

@@ -18,7 +18,7 @@ class PricingPlanResource extends Resource
 {
     protected static ?string $model = PricingPlan::class;
 
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-credit-card';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-credit-card';
     protected static string|\UnitEnum|null $navigationGroup = null;
     protected static ?int $navigationSort = 10;
     public static function getNavigationLabel(): string { return __('Pricing Plans'); }
@@ -26,6 +26,7 @@ class PricingPlanResource extends Resource
 
     public static function getRecordTitle(?\Illuminate\Database\Eloquent\Model $record): ?string
     {
+        /** @var PricingPlan|null $record */
         return $record?->name['en'] ?? $record?->name['ar'] ?? null;
     }
 

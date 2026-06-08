@@ -31,7 +31,7 @@ class PricingPlan extends Model
         'sort_order' => 'integer',
     ];
 
-    public function service()
+    public function service(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Service::class);
     }

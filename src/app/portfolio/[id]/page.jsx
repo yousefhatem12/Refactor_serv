@@ -11,9 +11,11 @@ const ProjectImage = ({ src, alt }) => {
   const defaultImage = "/our-portfolio/Rectangle 6.webp";
   const [imgSrc, setImgSrc] = useState(src || defaultImage);
 
-  useEffect(() => {
+  const [prevSrc, setPrevSrc] = useState(src);
+  if (src !== prevSrc) {
+    setPrevSrc(src);
     setImgSrc(src || defaultImage);
-  }, [src]);
+  }
 
   return (
     <Image
@@ -68,7 +70,7 @@ export default function ProjectDetails() {
         <h1 className="text-2xl font-bold mb-4">
           {language === "ar" ? "المشروع غير موجود" : "Project not found"}
         </h1>
-        <Link href="/portfolio" className="text-[#FF8A00] hover:underline">
+        <Link href="/portfolio" prefetch={false} className="text-[#FF8A00] hover:underline">
           {language === "ar" ? "العودة للمعرض" : "Back to Portfolio"}
         </Link>
       </div>
@@ -102,6 +104,7 @@ export default function ProjectDetails() {
           {/* Back Button */}
           <Link
             href="/portfolio"
+            prefetch={false}
             className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-10 transition-colors group"
           >
             <svg

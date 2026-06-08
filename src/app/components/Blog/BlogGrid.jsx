@@ -46,7 +46,7 @@ const BlogCard = ({ post, t, language, categoryMap }) => {
       layout
       variants={itemVariants}
     >
-      <Link href={`/blog/${post.slug || post.id}`} className="group cursor-pointer flex flex-col h-full">
+      <Link href={`/blog/${post.slug || post.id}`} prefetch={false} className="group cursor-pointer flex flex-col h-full">
         <div className="relative w-full h-[220px] rounded-lg overflow-hidden mb-4 bg-gray-800/50 border border-white/5">
           {!isImageLoaded && (
             <div className="absolute inset-0 bg-white/5 animate-pulse z-0" />

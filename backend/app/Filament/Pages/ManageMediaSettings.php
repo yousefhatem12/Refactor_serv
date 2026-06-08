@@ -12,6 +12,9 @@ use Filament\Pages\Page;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 
+/**
+ * @property \Filament\Schemas\Schema|\Filament\Forms\Form $form
+ */
 class ManageMediaSettings extends Page implements HasForms
 {
     use InteractsWithForms;
@@ -33,7 +36,7 @@ class ManageMediaSettings extends Page implements HasForms
             'company_video_url',
         ];
 
-        $settings = Setting::whereIn('key', $keys)->get()->pluck('value', 'key')->toArray();
+        $settings = Setting::whereIn('key', $keys)->pluck('value', 'key')->toArray();
 
         $this->form->fill($settings);
     }

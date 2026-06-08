@@ -2,63 +2,84 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ServiceController;
+use App\Http\Controllers\Api\PortfolioController;
+use App\Http\Controllers\Api\BlogController;
+use App\Http\Controllers\Api\FaqController;
+use App\Http\Controllers\Api\SettingController;
+use App\Http\Controllers\Api\PageController;
+use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\CareerController;
+use App\Http\Controllers\Api\ContactController;
 
-Route::get('/user', function (Request $request) {
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
-})->middleware('auth:sanctum');
-
-// Auth endpoints
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-
-// Temporary seeding endpoint
-Route::get('/run-seeders', function () {
-    try {
-        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'FullEnglishSeeder']);
-        return response()->json([
-            'status' => 'success',
-            'output' => \Illuminate\Support\Facades\Artisan::output()
-        ]);
-    } catch (\Throwable $e) {
-        return response()->json([
-            'status' => 'error',
-            'message' => $e->getMessage()
-        ], 500);
-    }
 });
 
-// Public endpoints
-Route::get('/services', [ApiController::class, 'getServices']);
-Route::get('/services/{slug}', [ApiController::class, 'getService']);
-Route::get('/portfolio', [ApiController::class, 'getProjects']);
-Route::get('/portfolio-categories', [ApiController::class, 'getProjectCategories']);
-Route::get('/portfolio/{id}', [ApiController::class, 'getProject']);
-Route::get('/blog', [ApiController::class, 'getPosts']);
-Route::get('/blog-categories', [ApiController::class, 'getBlogCategories']);
-Route::get('/blog/{slug}', [ApiController::class, 'getPost']);
-Route::get('/trending-posts', [ApiController::class, 'getTrendingPosts']);
-Route::get('/faqs', [ApiController::class, 'getFaqs']);
-Route::get('/settings', [ApiController::class, 'getSettings']);
-Route::get('/testimonials', [ApiController::class, 'getTestimonials']);
-Route::get('/team', [ApiController::class, 'getTeamMembers']);
-Route::get('/features', [ApiController::class, 'getFeatures']);
-Route::get('/footer-data', [ApiController::class, 'getFooterData']);
-Route::get('/nav-links', [ApiController::class, 'getNavLinks']);
-Route::get('/pricing-plans', [ApiController::class, 'getPricingPlans']);
-Route::get('/pages/{slug}', [ApiController::class, 'getPageContent']);
-Route::get('/products', [ApiController::class, 'getProducts']);
-Route::get('/product-categories', [ApiController::class, 'getProductCategories']);
-Route::get('/products/{slug}', [ApiController::class, 'getProduct']);
-Route::get('/careers', [ApiController::class, 'getCareers']);
-Route::post('/careers/apply', [ApiController::class, 'submitCareerApplication']);
-Route::get('/bank-accounts', [ApiController::class, 'getBankAccounts']);
-Route::post('/contact', [ApiController::class, 'submitContactMessage']);
-Route::post('/quotations', [ApiController::class, 'submitQuotation']);
+// v1 Versioned API Group
+Route::prefix('v1')->group(function () {
+    
+    // Auth endpoints
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
 
-// Protected endpoints
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/me', [AuthController::class, 'me']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::get('/me', [AuthController::class, 'me']);
+    });
+
+    // Services
+    Route::prefix('services')->group(function () {
+        Route::get('/', [ServiceController::class, 'index'])->name('api.services.index');
+        Route::get('/{slug}', [ServiceController::class, 'show'])->name('api.services.show');
+    });
+
+    // Portfolio
+    Route::prefix('portfolio')->group(function () {
+        Route::get('/', [PortfolioController::class, 'index'])->name('api.portfolio.index');
+        Route::get('/categories', [PortfolioController::class, 'categories'])->name('api.portfolio.categories');
+        Route::get('/{slug}', [PortfolioController::class, 'show'])->name('api.portfolio.show');
+    });
+
+    // Blog
+    Route::prefix('blog')->group(function () {
+        Route::get('/', [BlogController::class, 'index'])->name('api.blog.index');
+        Route::get('/categories', [BlogController::class, 'categories'])->name('api.blog.categories');
+        Route::get('/trending', [BlogController::class, 'trending'])->name('api.blog.trending');
+        Route::get('/{slug}', [BlogController::class, 'show'])->name('api.blog.show');
+    });
+
+    // FAQs
+    Route::get('/faqs', [FaqController::class, 'index'])->name('api.faqs.index');
+
+    // Products
+    Route::prefix('products')->group(function () {
+        Route::get('/', [ProductController::class, 'index'])->name('api.products.index');
+        Route::get('/categories', [ProductController::class, 'categories'])->name('api.products.categories');
+        Route::get('/{slug}', [ProductController::class, 'show'])->name('api.products.show');
+    });
+
+    // Careers
+    Route::prefix('careers')->group(function () {
+        Route::get('/', [CareerController::class, 'index'])->name('api.careers.index');
+        Route::post('/apply', [CareerController::class, 'apply'])->name('api.careers.apply');
+    });
+
+    // Contact & Quotations
+    Route::post('/contact', [ContactController::class, 'submitMessage'])->name('api.contact.submit');
+    Route::post('/quotations', [ContactController::class, 'submitQuotation'])->name('api.quotations.submit');
+
+    // Settings & System Data
+    Route::get('/settings', [SettingController::class, 'settings'])->name('api.settings');
+    Route::get('/testimonials', [SettingController::class, 'testimonials'])->name('api.testimonials');
+    Route::get('/team', [SettingController::class, 'team'])->name('api.team');
+    Route::get('/features', [SettingController::class, 'features'])->name('api.features');
+    Route::get('/footer-data', [SettingController::class, 'footer'])->name('api.footer');
+    Route::get('/nav-links', [SettingController::class, 'navLinks'])->name('api.nav-links');
+    Route::get('/pricing-plans', [SettingController::class, 'pricingPlans'])->name('api.pricing-plans');
+    Route::get('/bank-accounts', [SettingController::class, 'bankAccounts'])->name('api.bank-accounts');
+
+    // Pages
+    Route::get('/pages/{slug}', [PageController::class, 'show'])->name('api.pages.show');
 });
