@@ -91,7 +91,7 @@ const BlogGrid = () => {
 
   // Fetch categories dynamically
   useEffect(() => {
-    fetchAPI(`/blog-categories?lang=${language}`)
+    fetchAPI(`/blog/categories?lang=${language}`)
       .then((data) => {
         if (data) {
           const allCat = { id: "ALL", label: language === "ar" ? "الكل" : "All" };

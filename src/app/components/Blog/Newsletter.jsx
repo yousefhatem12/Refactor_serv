@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { useLanguage } from "../../context/LanguageContext";
 
 const Newsletter = () => {
@@ -18,11 +19,21 @@ const Newsletter = () => {
       </div>
 
       <div className="relative z-10 flex flex-col items-center justify-center text-center w-full">
-        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-10 max-w-2xl leading-snug">
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-2xl md:text-3xl lg:text-4xl font-bold mb-10 max-w-2xl leading-snug"
+        >
           {t("newsletterTitle")}
-        </h2>
+        </motion.h2>
 
-        <form
+        <motion.form
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
           className="flex flex-col sm:flex-row gap-4 w-full max-w-lg px-4 justify-center items-center"
           onSubmit={(e) => e.preventDefault()}
         >
@@ -38,7 +49,7 @@ const Newsletter = () => {
           >
             {t("newsletterSubscribe")}
           </button>
-        </form>
+        </motion.form>
       </div>
     </section>
   );

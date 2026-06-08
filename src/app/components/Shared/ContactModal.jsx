@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { fetchAPI } from "@/lib/api";
@@ -29,6 +30,11 @@ const ContactModal = ({ isOpen, onClose, settings }) => {
   const isRtl = language === "ar";
   
   const [socials, setSocials] = useState([]);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -40,7 +46,9 @@ const ContactModal = ({ isOpen, onClose, settings }) => {
     }
   }, [isOpen]);
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4 sm:p-6 md:p-10">
@@ -50,7 +58,7 @@ const ContactModal = ({ isOpen, onClose, settings }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/95 backdrop-blur-md cursor-pointer"
+            className="absolute inset-0 bg-black/60 backdrop-blur-md cursor-pointer"
           />
 
           {/* Modal Container */}
@@ -185,7 +193,8 @@ const ContactModal = ({ isOpen, onClose, settings }) => {
           </motion.div>
         </div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 };
 

@@ -190,7 +190,7 @@ const OurJourney = ({ data }) => {
   return (
     <section
       ref={containerRef}
-      className="pt-16 md:pt-24 pb-32 md:pb-64 w-full relative min-h-screen bg-transparent overflow-hidden"
+      className="pt-16 md:pt-24 pb-24 w-full relative min-h-screen bg-transparent overflow-hidden"
     >
       <div className="max-w-7xl mx-auto flex flex-col items-center px-6 md:px-16 lg:px-24 z-30 relative text-center mb-8">
         <h2 className="text-4xl md:text-5xl lg:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-[#FF8A00] to-[#FF5C00] mb-8 tracking-tighter uppercase text-cinematic animate-fade-in">
