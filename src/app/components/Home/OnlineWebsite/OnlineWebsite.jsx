@@ -128,9 +128,8 @@ const ProductCard = ({ product, index }) => {
                 <motion.button className="w-full py-2.5 md:py-3 bg-gradient-to-r from-[#FF8A00] to-[#D98B50] text-white font-bold text-[10px] sm:text-xs md:text-sm tracking-widest uppercase flex items-center justify-center gap-2 rounded-xl transition-all duration-300 hover:brightness-110 hover:scale-[1.02] shadow-[0_0_20px_rgba(255,138,0,0.3)]">
                   {t("viewProject")}
                   <svg
-                    className={`w-3.5 h-3.5 md:w-4 md:h-4 transform transition-transform duration-300 ${
-                      language === "ar" ? "rotate-180" : ""
-                    }`}
+                    className={`w-3.5 h-3.5 md:w-4 md:h-4 transform transition-transform duration-300 ${language === "ar" ? "rotate-180" : ""
+                      }`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -266,7 +265,7 @@ const OnlineWebsite = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full min-h-screen mt-20 overflow-hidden flex flex-col lg:flex-row items-center py-20 px-6 md:px-16 lg:px-24 gap-12"
+      className="relative w-full min-h-screen overflow-hidden flex flex-col lg:flex-row items-center lg:py-10 px-6 md:px-16 lg:px-24 gap-12"
     >
       {/* Background Visuals */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden -z-10">
@@ -331,22 +330,20 @@ const OnlineWebsite = () => {
               transition={{ delay: index * 0.05, duration: 0.4 }}
               viewport={{ once: true }}
               onClick={() => handleTabChange(cat.id)}
-              className={`relative px-4 py-3 lg:px-3 lg:py-4 text-center lg:text-left whitespace-nowrap rounded-xl lg:rounded-2xl transition-all duration-300 flex items-center justify-center lg:justify-start group overflow-hidden z-10 ${
-                activeTab === cat.id
-                  ? "text-white font-bold bg-transparent lg:bg-white/10 border border-transparent lg:border-white/20 shadow-none lg:shadow-[0_0_30px_rgba(255,255,255,0.05)] lg:backdrop-blur-md"
-                  : "text-gray-400 lg:text-gray-500 font-medium bg-white/[0.03] lg:bg-transparent border border-white/[0.08] lg:border-transparent hover:text-white hover:bg-white/5"
-              }`}
+              className={`relative px-4 py-3 lg:px-3 lg:py-4 text-center lg:text-left whitespace-nowrap rounded-xl lg:rounded-2xl transition-all duration-300 flex items-center justify-center lg:justify-start group overflow-hidden z-10 ${activeTab === cat.id
+                ? "text-white font-bold bg-transparent lg:bg-white/10 border border-transparent lg:border-white/20 shadow-none lg:shadow-[0_0_30px_rgba(255,255,255,0.05)] lg:backdrop-blur-md"
+                : "text-gray-400 lg:text-gray-500 font-medium bg-white/[0.03] lg:bg-transparent border border-white/[0.08] lg:border-transparent hover:text-white hover:bg-white/5"
+                }`}
             >
               {activeTab === cat.id && (
                 <>
                   {/* Desktop active vertical indicator (with RTL support) */}
                   <motion.div
                     layoutId="activeTabIndicatorVertical"
-                    className={`absolute top-0 bottom-0 w-1.5 bg-gradient-to-b from-[#FF8A00] to-[#D98B50] shadow-[0_0_15px_#FF8A00] hidden lg:block ${
-                      language === "ar"
-                        ? "right-0 rounded-r-2xl"
-                        : "left-0 rounded-l-2xl"
-                    }`}
+                    className={`absolute top-0 bottom-0 w-1.5 bg-gradient-to-b from-[#FF8A00] to-[#D98B50] shadow-[0_0_15px_#FF8A00] hidden lg:block ${language === "ar"
+                      ? "right-0 rounded-r-2xl"
+                      : "left-0 rounded-l-2xl"
+                      }`}
                   />
                   {/* Mobile active background slider */}
                   <motion.div

@@ -42,17 +42,13 @@ export default function Features() {
 
   const scrollLeft = () => {
     if (partnersRef.current) {
-      // In RTL, clicking the left arrow scrolls right (positive value) to show next items
-      const speed = language === "ar" ? 200 : -200;
-      partnersRef.current.scrollBy({ left: speed, behavior: "smooth" });
+      partnersRef.current.scrollBy({ left: -200, behavior: "smooth" });
     }
   };
 
   const scrollRight = () => {
     if (partnersRef.current) {
-      // In RTL, clicking the right arrow scrolls left (negative value) to show previous items
-      const speed = language === "ar" ? -200 : 200;
-      partnersRef.current.scrollBy({ left: speed, behavior: "smooth" });
+      partnersRef.current.scrollBy({ left: 200, behavior: "smooth" });
     }
   };
 
@@ -305,7 +301,7 @@ export default function Features() {
             {t("trustedBy")}
           </p>
 
-          <div className="flex items-center justify-between gap-4 max-w-6xl mx-auto px-2">
+          <div className="flex items-center justify-between gap-4 max-w-6xl mx-auto px-2" dir="ltr">
             <button
               onClick={scrollLeft}
               className="hidden sm:flex w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm items-center justify-center text-gray-400 hover:text-white hover:bg-[#D98B50] hover:border-[#D98B50] hover:shadow-[0_0_20px_rgba(217,139,80,0.4)] transition-all duration-300 shrink-0 group"
@@ -352,7 +348,7 @@ export default function Features() {
                         className="h-6 sm:h-8 md:h-10 lg:h-12 w-auto object-contain opacity-60 group-hover:opacity-100 transition-all duration-300"
                         style={
                           partner.includes("/Features/") ||
-                          partner.includes("/settings/")
+                            partner.includes("/settings/")
                             ? { filter: "brightness(0) invert(1)" }
                             : {}
                         }
