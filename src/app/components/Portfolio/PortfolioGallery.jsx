@@ -136,7 +136,7 @@ export default function PortfolioGallery({ data, perPage = 9 }) {
 
   // Fetch categories once on mount or when language changes
   useEffect(() => {
-    fetchAPI(`/portfolio-categories?lang=${language}`)
+    fetchAPI(`/portfolio/categories?lang=${language}`)
       .then((data) => {
         if (data) setCategories(data || []);
         setCategoriesLoaded(true);

@@ -174,7 +174,7 @@ const Services = () => {
     <section
       id="services"
       ref={sectionRef}
-      className={`relative w-full min-h-screen flex flex-col items-center justify-center md:py-20 px-6 z-10 ${!hasServices ? "hidden" : ""}`}
+      className={`relative w-full min-h-screen flex flex-col items-center justify-center md:py-20 px-6 z-10 -translate-y-[350px]  transition-transform duration-300 ${!hasServices ? "hidden" : ""}`}
     >
       {hasServices && (
         <>
@@ -189,7 +189,7 @@ const Services = () => {
               <motion.img
                 key={index}
                 src="/Services/Outline 6.webp"
-                alt=""
+                alt="planet"
                 className={`absolute top-[100%] left-1/2 -translate-x-1/2 -translate-y-1/2 h-auto max-w-none ${widthClass}`}
                 style={{
                   opacity: orbitOpacity,

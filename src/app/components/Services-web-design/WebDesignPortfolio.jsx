@@ -8,7 +8,12 @@ import Image from "next/image";
 
 const WebDesignPortfolio = ({ isMobileApp }) => {
   const { language, t } = useLanguage();
+  const getTranslation = (key, fallback) => {
+    const val = t(key);
+    return val === key ? fallback : val;
+  };
   const [activeTab, setActiveTab] = useState("all");
+  const [visibleTabsCount, setVisibleTabsCount] = useState(3);
   const [portfolioItems, setPortfolioItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [visibleCount, setVisibleCount] = useState(4);
@@ -93,9 +98,8 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
               className="text-white text-3xl xl:text-5xl font-bold mb-6 leading-tight"
             >
               {isMobileApp
-                ? t("maPortfolioTitle") ||
-                  "Some of our Mobile app development work at Serve5"
-                : t("wdPortfolioTitle")}
+                ? getTranslation("maPortfolioTitle", language === "ar" ? "بعض من أعمالنا في تطوير تطبيقات الهاتف" : "Some of our Mobile app development work at Serv5")
+                : getTranslation("wdPortfolioTitle", language === "ar" ? "بعض من أعمالنا في تصميم المواقع" : "Some of our Web design work at Serv5")}
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -105,34 +109,67 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
               className="text-gray-400 text-lg mb-10 leading-relaxed"
             >
               {isMobileApp
-                ? t("maPortfolioDesc") ||
-                  "The latest of Serv5 works, as you brows our portfolio. Select the market in which you want to see works to find everything you look for."
-                : t("wdPortfolioDesc")}
+                ? getTranslation("maPortfolioDesc", language === "ar" ? "تصفح أحدث تطبيقات الجوال التي قمنا بتطويرها لعملائنا في مختلف المجالات." : "The latest of Serv5 works, as you browse our portfolio. Select the market in which you want to see works to find everything you look for.")
+                : getTranslation("wdPortfolioDesc", language === "ar" ? "تصفح أحدث تصميمات المواقع التي قمنا بتطويرها لعملائنا." : "The latest of Serv5 works, as you browse our portfolio. Select the market in which you want to see works to find everything you look for.")}
             </motion.p>
 
             {tabs.length > 1 && (
-              <div className="flex flex-wrap lg:flex-nowrap lg:flex-col gap-2 lg:max-h-[300px] lg:overflow-y-auto custom-scrollbar pb-3 lg:pb-0">
-                <div className="me-2">
-                  {tabs.map((tab, index) => (
-                    <motion.button
-                      key={tab.id}
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.3 + index * 0.1 }}
-                      onClick={() => setActiveTab(tab.id)}
-                      className={`text-center lg:text-left px-5 py-3 lg:px-6 lg:py-4 rounded-xl text-sm lg:text-lg font-semibold transition-all lg:w-full whitespace-nowrap flex-shrink-0 ${
-                        activeTab === tab.id ||
-                        (isMobileApp &&
-                          filteredItems[0]?.id.toString() === tab.id)
-                          ? "bg-[#0A1128] text-[#D98B50] border-b-2 lg:border-b-0 lg:border-l-4 border-[#D98B50]"
-                          : "text-gray-400 hover:text-white hover:bg-white/5 border-b-2 lg:border-b-0 lg:border-l-4 border-transparent"
-                      }`}
-                    >
-                      {tab.label}
-                    </motion.button>
-                  ))}
+              <div className="w-full flex flex-col gap-3">
+                <div className="flex flex-col gap-3 overflow-y-auto overflow-x-hidden pr-2 lg:max-h-[300px] desktop-scrollbar w-full">
+                  {tabs.map((tab, index) => {
+                    const isActive = isMobileApp
+                      ? (activeTab === tab.id || (activeTab === "all" && index === 0))
+                      : activeTab === tab.id;
+                    const isHiddenOnMobile = index >= visibleTabsCount;
+                    return (
+                      <motion.button
+                        key={tab.id}
+                        initial={{ opacity: 0, y: 10, x: language === 'ar' ? 20 : -20 }}
+                        whileInView={{ opacity: 1, y: 0, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.05 * (index % 5) }}
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`text-center lg:text-left rtl:lg:text-right px-5 py-3 lg:px-6 lg:py-4 rounded-xl text-sm lg:text-base font-semibold transition-all duration-300 w-full whitespace-nowrap flex-shrink-0 ${
+                          isHiddenOnMobile ? "hidden lg:flex" : "flex"
+                        } items-center justify-center lg:justify-start ${
+                          isActive
+                            ? "bg-[#D98B50]/10 text-[#D98B50] border-l-4 rtl:border-l-0 rtl:border-r-4 border-[#D98B50] shadow-[0_4px_20px_rgba(217,139,80,0.15)]"
+                            : "text-white/60 hover:text-white hover:bg-white/[0.03] border-l-4 rtl:border-l-0 rtl:border-r-4 border-transparent"
+                        }`}
+                      >
+                        {tab.label}
+                      </motion.button>
+                    );
+                  })}
                 </div>
+                
+                {tabs.length > 3 && (
+                  <div>
+                    {tabs.length > visibleTabsCount ? (
+                      <button
+                        type="button"
+                        onClick={() => setVisibleTabsCount((prev) => prev + 5)}
+                        className="lg:hidden text-sm font-semibold text-[#D98B50] hover:underline mt-2 flex items-center justify-center gap-1 self-center bg-white/5 px-4 py-2.5 rounded-xl border border-white/10 hover:bg-white/10 transition-all cursor-pointer w-full"
+                      >
+                        {language === "ar" ? "عرض المزيد" : "Show More"}
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setVisibleTabsCount(3)}
+                        className="lg:hidden text-sm font-semibold text-[#D98B50] hover:underline mt-2 flex items-center justify-center gap-1 self-center bg-white/5 px-4 py-2.5 rounded-xl border border-white/10 hover:bg-white/10 transition-all cursor-pointer w-full"
+                      >
+                        {language === "ar" ? "عرض أقل" : "Show Less"}
+                        <svg className="w-4 h-4 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -223,6 +260,27 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
           </div>
         </div>
       </div>
+      {/* Custom styles for desktop scrollbar */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+        .desktop-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .desktop-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 4px;
+        }
+        .desktop-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(217, 139, 80, 0.3);
+            border-radius: 4px;
+        }
+        .desktop-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(217, 139, 80, 0.6);
+        }
+      `,
+        }}
+      />
     </section>
   );
 };
