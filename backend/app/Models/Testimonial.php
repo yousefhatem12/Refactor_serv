@@ -13,4 +13,14 @@ class Testimonial extends Model
         'position' => 'json',
         'review' => 'json',
     ];
+
+    protected static function booted()
+    {
+        $clear = function () {
+            \Illuminate\Support\Facades\Cache::forget('testimonials_en');
+            \Illuminate\Support\Facades\Cache::forget('testimonials_ar');
+        };
+        static::saved($clear);
+        static::deleted($clear);
+    }
 }

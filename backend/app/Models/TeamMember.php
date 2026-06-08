@@ -13,4 +13,14 @@ class TeamMember extends Model
         'role' => 'json',
         'bio' => 'json',
     ];
+
+    protected static function booted()
+    {
+        $clear = function () {
+            \Illuminate\Support\Facades\Cache::forget('team_members_en');
+            \Illuminate\Support\Facades\Cache::forget('team_members_ar');
+        };
+        static::saved($clear);
+        static::deleted($clear);
+    }
 }

@@ -29,4 +29,12 @@ class Page extends Model
         'seo_description' => 'json',
         'sections' => 'array',
     ];
+
+    protected static function booted()
+    {
+        static::saved(function ($page) {
+            \Illuminate\Support\Facades\Cache::forget("page_{$page->slug}_en");
+            \Illuminate\Support\Facades\Cache::forget("page_{$page->slug}_ar");
+        });
+    }
 }

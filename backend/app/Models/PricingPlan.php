@@ -35,4 +35,14 @@ class PricingPlan extends Model
     {
         return $this->belongsTo(Service::class);
     }
+
+    protected static function booted()
+    {
+        $clear = function () {
+            // Since cache keys for pricing plans include dynamic params, flush all caches to be safe
+            \Illuminate\Support\Facades\Cache::flush();
+        };
+        static::saved($clear);
+        static::deleted($clear);
+    }
 }
