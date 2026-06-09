@@ -1,6 +1,14 @@
 import { NextResponse } from "next/server";
 
 export function middleware(request) {
+  // Redirect www to non-www for SEO consistency (e.g. www.serv5.com.eg -> serv5.com.eg)
+  const host = request.headers.get("host") || "";
+  if (host.startsWith("www.")) {
+    const url = request.nextUrl.clone();
+    url.host = host.replace(/^www\./, "");
+    return NextResponse.redirect(url, 301);
+  }
+
   const { pathname } = request.nextUrl;
 
   // Exclude internal files, API routes, and static assets
@@ -25,6 +33,7 @@ export function middleware(request) {
     // Override the request headers to pass the locale to server-side components/layouts
     const requestHeaders = new Headers(request.headers);
     requestHeaders.set("x-locale", locale);
+    requestHeaders.set("x-pathname", pathname);
 
     // Safely inject/sync cookie to request header for standard cookies() utility, preserving other cookies
     let cookieHeader = request.headers.get("cookie") || "";
