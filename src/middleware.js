@@ -1,12 +1,16 @@
 import { NextResponse } from "next/server";
 
 export function middleware(request) {
-  // Redirect www to non-www for SEO consistency (e.g. www.serv5.com.eg -> serv5.com.eg)
   const host = request.headers.get("host") || "";
+  const proto = request.headers.get("x-forwarded-proto") || "https";
+  const cleanHost = host.replace(/^www\./, "");
+
+  // Redirect www to non-www for SEO consistency (e.g. www.serv5.com.eg -> serv5.com.eg)
   if (host.startsWith("www.")) {
-    const url = request.nextUrl.clone();
-    url.host = host.replace(/^www\./, "");
-    return NextResponse.redirect(url, 301);
+    return NextResponse.redirect(
+      `${proto}://${cleanHost}${request.nextUrl.pathname}${request.nextUrl.search}`,
+      301
+    );
   }
 
   const { pathname } = request.nextUrl;
@@ -71,8 +75,10 @@ export function middleware(request) {
 
     // Redirect to the localized path (e.g., "/about-us" -> "/ar/about-us", "/" -> "/ar")
     const redirectPath = `/${locale}${pathname === "/" ? "" : pathname}`;
-    const redirectUrl = new URL(redirectPath, request.url);
-    const response = NextResponse.redirect(redirectUrl, 307);
+    const response = NextResponse.redirect(
+      `${proto}://${cleanHost}${redirectPath}${request.nextUrl.search}`,
+      307
+    );
 
     // Set the cookie on the redirect response
     response.cookies.set("NEXT_LOCALE", locale, { path: "/", maxAge: 31536000 });
