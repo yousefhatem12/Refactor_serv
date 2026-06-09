@@ -1116,7 +1116,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'Create stunning, fully responsive, and conversion-optimized web designs that capture your corporate brand identity.',
                     'ar' => 'أنشئ مواقع ويب مذهلة وسريعة الاستجابة وسهلة الاستخدام تأسر جمهورك وتمثل علامتك التجارية بشكل مثالي.'
                 ],
-                'icon' => '/Services/Yellow Planet.svg',
+                'icon' => '/Services/new/yellow.webp',
                 'template' => 'template-two',
                 'blocks' => $webDesignBlocks,
             ],
@@ -1126,7 +1126,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'High-fidelity wireframes and interactive user interfaces designed with user convenience and modern aesthetics.',
                     'ar' => 'نصمم واجهات وتجارب مستخدم متكاملة ومدروسة تسهل على الزوار الوصول لأهدافهم وتزيد مبيعاتك.'
                 ],
-                'icon' => '/Services/Yellow Planet.svg',
+                'icon' => '/Services/new/yellow.webp',
                 'template' => 'template-two',
                 'blocks' => $webDesignBlocks,
             ],
@@ -1136,7 +1136,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'Complete digital branding solutions including custom logo design, color guidelines, typography, and marketing assets.',
                     'ar' => 'حلول متكاملة لبناء هويتك الرقمية تشمل تصميم الشعارات، الكتيبات الإرشادية للألوان والخطوط.'
                 ],
-                'icon' => '/Services/Yellow Planet.svg',
+                'icon' => '/Services/new/yellow.webp',
                 'template' => 'template-two',
                 'blocks' => $webDesignBlocks,
             ],
@@ -1156,7 +1156,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'Feature-rich online store design with shopping cart, multi-payment options, automated order routing, and inventory sync.',
                     'ar' => 'أطلق متجرك الإلكتروني المجهز لعرض وبيع منتجاتك وقبول المدفوعات والربط مع شركات الشحن المختلفة.'
                 ],
-                'icon' => '/Services/Yellow Planet.svg',
+                'icon' => '/Services/new/yellow.webp',
                 'template' => 'template-two',
                 'blocks' => $ecommerceBlocks,
             ],

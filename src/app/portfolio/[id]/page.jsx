@@ -50,7 +50,8 @@ export default function ProjectDetails() {
     if (id) {
       fetchAPI(`/portfolio/${id}?lang=${language}`)
         .then((data) => {
-          setProject(data);
+          // Unwrap standard Laravel resource wrapper if present
+          setProject(data.data ? data.data : data);
           setIsLoading(false);
         })
         .catch((err) => {

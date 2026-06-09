@@ -21,7 +21,7 @@ const OurBlog = () => {
         setIsLoading(true);
         const [postsData, trendingData] = await Promise.all([
           fetchAPI(`/blog?lang=${language}&limit=5`),
-          fetchAPI(`/trending-posts?lang=${language}`),
+          fetchAPI(`/blog/trending?lang=${language}`),
         ]);
 
         if (postsData && postsData.length > 0) {

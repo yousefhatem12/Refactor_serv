@@ -100,7 +100,7 @@ export default function DynamicPage() {
 
           if (data.sections?.template === "blog") {
             // Fetch blog posts and wait for completion before hiding loader (2 sections)
-            fetchAPI(`/blog?lang=${language}`)
+            fetchAPI(`/blog?lang=${language}&limit=4`)
               .then((blogData) => {
                 if (blogData) setPosts(blogData);
                 setLoading(false);
