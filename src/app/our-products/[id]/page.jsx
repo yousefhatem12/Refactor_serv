@@ -37,7 +37,8 @@ const ProductDetailsPage = () => {
     fetchAPI(`/products/${productId}`)
       .then((data) => {
         if (data) {
-          setProductData(data);
+          // Unwrap standard Laravel resource wrapper if present
+          setProductData(data.data ? data.data : data);
         } else {
           setProductData(null);
         }
@@ -99,7 +100,7 @@ const ProductDetailsPage = () => {
   ];
 
   return (
-    <main className="min-h-screen pt-32 pb-16 flex flex-col items-center overflow-x-hidden text-white">
+    <main className="relative min-h-screen pt-32 pb-16 flex flex-col items-center overflow-x-hidden text-white">
       {/* Background glow graphics */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#F18805]/5 rounded-full filter blur-[120px] pointer-events-none z-0" />
       <div className="absolute top-1/3 right-1/4 w-[600px] h-[600px] bg-blue-500/5 rounded-full filter blur-[150px] pointer-events-none z-0" />
@@ -204,7 +205,7 @@ const ProductDetailsPage = () => {
               <Link
                 href={product.demoLink}
                 prefetch={false}
-                className="relative overflow-hidden bg-[#F18805] hover:bg-[#d17604] text-white px-10 py-4 rounded-xl font-bold transition-all duration-300 shadow-[0_0_30px_rgba(241,136,5,0.25)] hover:shadow-[0_0_40px_rgba(241,136,5,0.4)] flex items-center gap-3 hover:-translate-y-0.5 group"
+                className="relative overflow-hidden bg-[#F18805] hover:bg-[#d17604] text-white px-6 md:px-10 py-3 md:py-4 rounded-xl font-bold transition-all duration-300 shadow-[0_0_30px_rgba(241,136,5,0.25)] hover:shadow-[0_0_40px_rgba(241,136,5,0.4)] flex items-center gap-3 hover:-translate-y-0.5 group"
               >
                 <span>{t("productLiveDemo")}</span>
                 <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
@@ -216,7 +217,7 @@ const ProductDetailsPage = () => {
               <Link
                 href={product.orderLink}
                 prefetch={false}
-                className="bg-transparent border-[2px] border-white/10 hover:border-[#F18805] hover:bg-[#F18805]/10 text-white px-10 py-4 rounded-xl font-bold transition-all duration-300 flex items-center gap-2 hover:-translate-y-0.5"
+                className="bg-transparent border-[2px] border-white/10 hover:border-[#F18805] hover:bg-[#F18805]/10 text-white px-6 md:px-10 py-3 md:py-4 rounded-xl font-bold transition-all duration-300 flex items-center gap-2 hover:-translate-y-0.5"
               >
                 <span>{t("productOrderNow")}</span>
               </Link>
@@ -550,7 +551,7 @@ const ProductDetailsPage = () => {
           <Link
             href="/our-products"
             prefetch={false}
-            className="inline-block bg-transparent border border-white/10 hover:border-[#F18805] hover:bg-[#F18805]/10 text-white px-10 py-3.5 rounded-xl font-bold transition-all duration-300"
+            className="inline-block bg-transparent border border-white/10 hover:border-[#F18805] hover:bg-[#F18805]/10 text-white px-6 md:px-10 py-3 md:py-3.5 rounded-xl font-bold transition-all duration-300"
           >
             {t("exploreAllProducts")}
           </Link>

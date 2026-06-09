@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 import {
   motion,
   AnimatePresence,
@@ -117,12 +118,8 @@ const ProductCard = ({ product, index }) => {
 
             {/* CTA Button */}
             <div className="rounded-xl">
-              <a
-                href={
-                  product.demoLink || product.orderLink || product.url || "#"
-                }
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href={`/our-products/${product.id}`}
                 className="block rounded-xl"
               >
                 <motion.button className="w-full py-2.5 md:py-3 bg-gradient-to-r from-[#FF8A00] to-[#D98B50] text-white font-bold text-[10px] sm:text-xs md:text-sm tracking-widest uppercase flex items-center justify-center gap-2 rounded-xl transition-all duration-300 hover:brightness-110 hover:scale-[1.02] shadow-[0_0_20px_rgba(255,138,0,0.3)]">
@@ -142,7 +139,7 @@ const ProductCard = ({ product, index }) => {
                     />
                   </svg>
                 </motion.button>
-              </a>
+              </Link>
             </div>
           </div>
         </div>
