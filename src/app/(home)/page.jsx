@@ -99,11 +99,14 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    setIsPhaseTwo(true);
-    setCanScroll(true);
+    const timer = setTimeout(() => {
+      setIsPhaseTwo(true);
+      setCanScroll(true);
+    }, 0);
     if (typeof window !== "undefined") {
       sessionStorage.setItem("seenHomeIntro", "true");
     }
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
