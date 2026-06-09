@@ -23,7 +23,7 @@ const LatestBlogs = () => {
   };
 
   useEffect(() => {
-    fetchAPI(`/blog?lang=${language}`)
+    fetchAPI(`/blog?lang=${language}&limit=3`)
       .then((data) => {
         if (data && Array.isArray(data)) {
           setBlogs(data.slice(0, 3));

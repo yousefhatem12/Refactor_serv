@@ -13,7 +13,7 @@ const OnlineWebsiteDetails = () => {
   const isRtl = language === "ar";
 
   useEffect(() => {
-    fetchAPI(`/portfolio-categories?lang=${language}`)
+    fetchAPI(`/portfolio/categories?lang=${language}`)
       .then((data) => {
         if (data) {
           setCategories([

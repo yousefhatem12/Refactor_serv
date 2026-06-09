@@ -64,10 +64,10 @@ export default function HomePage() {
           `/settings`,
           `/features`,
           `/services?lang=${language}`,
-          `/product-categories?lang=${language}`,
-          `/portfolio-categories?lang=${language}`,
+          `/products/categories?lang=${language}`,
+          `/portfolio/categories?lang=${language}`,
           `/blog?lang=${language}&limit=5`,
-          `/trending-posts?lang=${language}`,
+          `/blog/trending?lang=${language}`,
           `/testimonials?lang=${language}`,
         ];
 

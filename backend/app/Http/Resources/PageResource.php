@@ -28,19 +28,39 @@ class PageResource extends JsonResource
             return (string) ($field[$lang] ?? $field['en'] ?? '');
         };
 
+        $resource = $this->resource;
+        $getProp = function ($key) use ($resource) {
+            if (is_array($resource)) {
+                return $resource[$key] ?? null;
+            }
+            if (is_object($resource)) {
+                return $resource->{$key} ?? null;
+            }
+            return null;
+        };
+
+        $slug = $getProp('slug');
+        $title = $getProp('title');
+        $subtitle = $getProp('subtitle');
+        $heroImage = $getProp('hero_image');
+        $content = $getProp('content');
+        $seoTitle = $getProp('seo_title');
+        $seoDescription = $getProp('seo_description');
+        $sections = $getProp('sections');
+
         return [
-            'slug' => $this->slug,
-            'title' => $trans($this->title),
-            'subtitle' => $trans($this->subtitle),
-            'hero_image' => $this->hero_image ? asset('storage/' . $this->hero_image) : null,
-            'content' => $trans($this->content),
+            'slug' => $slug,
+            'title' => $trans($title),
+            'subtitle' => $trans($subtitle),
+            'hero_image' => $heroImage ? asset('storage/' . $heroImage) : null,
+            'content' => $trans($content),
             'seo' => [
-                'title' => $trans($this->seo_title) ?: $trans($this->title),
-                'description' => $trans($this->seo_description) ?: $trans($this->subtitle),
+                'title' => $trans($seoTitle) ?: $trans($title),
+                'description' => $trans($seoDescription) ?: $trans($subtitle),
             ],
             'sections' => [
-                'template' => $this->sections['template'] ?? null,
-                'blocks' => $this->sections[$lang] ?? []
+                'template' => $sections['template'] ?? null,
+                'blocks' => $sections[$lang] ?? []
             ],
         ];
     }
