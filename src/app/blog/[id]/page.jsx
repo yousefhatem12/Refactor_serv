@@ -52,12 +52,47 @@ export default function BlogPostDetails() {
   }
 
   const isRtl = language === "ar";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://serv5.com.eg";
+  const postUrl = `${siteUrl}/${language}/blog/${slug}`;
+  const articleSchema = post
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: post.title,
+        image: post.image ? [post.image] : [],
+        datePublished: post.published_at,
+        dateModified: post.updated_at || post.published_at,
+        author: {
+          "@type": "Person",
+          name: post.author || "Serv5 Team",
+        },
+        publisher: {
+          "@type": "Organization",
+          name: "Serv5",
+          logo: {
+            "@type": "ImageObject",
+            url: `${siteUrl}/logo.png`,
+          },
+        },
+        description: post.description || post.title,
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": postUrl,
+        },
+      }
+    : null;
 
   return (
     <main
       className="flex min-h-screen flex-col relative overflow-x-hidden pt-10 pb-10"
       dir={isRtl ? "rtl" : "ltr"}
     >
+      {articleSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+        />
+      )}
       <div className="fixed inset-0 bg-[#040A37] -z-20 pointer-events-none" />
 
       <div className="w-full relative z-10 flex flex-col items-center pt-24 text-white">
