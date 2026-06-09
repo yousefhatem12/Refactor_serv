@@ -15,9 +15,9 @@ export default function ContactUsPage() {
 
   useEffect(() => {
     fetchAPI(`/pages/contact-us?lang=${language}`)
-      .then((data) => {
-        if (data) {
-          setPageData(data);
+      .then((res) => {
+        if (res) {
+          setPageData(res.data || res);
         } else {
           setError(true);
         }
