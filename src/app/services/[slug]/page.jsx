@@ -1,8 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter, notFound } from "next/navigation";
-import { fetchAPI } from "@/lib/api";
+import { fetchAPI, getMediaUrl } from "@/lib/api";
 import { useLanguage } from "../../context/LanguageContext";
+import { useSettings } from "../../context/SettingsContext";
 
 import Loading from "../../loading";
 import WebDevHero from "../../components/Services-web-dev/WebDevHero";
@@ -40,11 +41,12 @@ import QuotationForm from "../../components/Quotation/QuotationForm";
 // ── Default hero images per template ──
 // Hero images and styles are now fetched dynamically from the API (ServiceTemplate model)
 
-const STORAGE_URL = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://127.0.0.1:8000";
+
 
 export default function DynamicServicePage() {
   const { slug } = useParams();
   const { language, t } = useLanguage();
+  const settings = useSettings();
   const router = useRouter();
   const [serviceData, setServiceData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -73,6 +75,24 @@ export default function DynamicServicePage() {
       });
   }, [apiSlug, language, router]);
 
+  useEffect(() => {
+    if (serviceData) {
+      document.title = serviceData.title;
+      const desc = serviceData.description;
+      if (desc) {
+        let metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) {
+          metaDesc.setAttribute("content", desc);
+        } else {
+          metaDesc = document.createElement("meta");
+          metaDesc.setAttribute("name", "description");
+          metaDesc.setAttribute("content", desc);
+          document.head.appendChild(metaDesc);
+        }
+      }
+    }
+  }, [serviceData]);
+
   if (notFoundError) {
     notFound();
   }
@@ -87,12 +107,52 @@ export default function DynamicServicePage() {
   const defaultHeroImage = serviceData.default_hero_image || "/template/template-one-hero.webp";
   const blocks = serviceData.blocks;
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://serv5.com.eg";
+
+  const getServiceImage = () => {
+    if (blocks && Array.isArray(blocks)) {
+      const heroBlock = blocks.find(b => b.type === "hero");
+      if (heroBlock?.data?.hero_image) {
+        return getMediaUrl(heroBlock.data.hero_image);
+      }
+    }
+    if (serviceData?.template === "mobile-apps" || serviceData?.id === "mobile-apps") {
+      return `${siteUrl}/template/template-two-hero.webp`;
+    }
+    return `${siteUrl}/template/template-one-hero.webp`;
+  };
+
+  const siteLogo = settings?.site_logo
+    ? getMediaUrl(settings.site_logo)
+    : `${siteUrl}/logo.png`;
+
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: serviceData?.title,
+    description: serviceData?.description,
+    url: `${siteUrl}/services/${serviceData?.slug || serviceData?.id}`,
+    provider: {
+      "@type": "Organization",
+      name: settings?.site_title || "Serv5",
+      url: siteUrl,
+      logo: siteLogo,
+    },
+    image: getServiceImage(),
+  };
+
   // ═══════════════════════════════════════════════════
   // NEW FORMAT: blocks array exists → render in order
   // ═══════════════════════════════════════════════════
   if (blocks && Array.isArray(blocks) && blocks.length > 0) {
     return (
       <main className="flex min-h-screen flex-col relative overflow-x-hidden">
+        {serviceSchema && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+          />
+        )}
         <div className="w-full relative z-10 pb-10 pt-20">
           {blocks.map((block, index) => (
             <RenderBlock
@@ -113,7 +173,7 @@ export default function DynamicServicePage() {
   // ═══════════════════════════════════════════════════
   // OLD FORMAT: backward compatibility (flat sections)
   // ═══════════════════════════════════════════════════
-  return <OldFormatRenderer serviceData={serviceData} language={language} t={t} />;
+  return <OldFormatRenderer serviceData={serviceData} language={language} t={t} serviceSchema={serviceSchema} />;
 }
 
 // ─────────────────────────────────────────────────────
@@ -122,7 +182,7 @@ export default function DynamicServicePage() {
 function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, t }) {
   const data = block.data || {};
   const heroImage = data.hero_image
-    ? `${STORAGE_URL}/storage/${data.hero_image}`
+    ? getMediaUrl(data.hero_image)
     : defaultHeroImage;
 
   switch (block.type) {
@@ -250,7 +310,7 @@ function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, 
 
     // ── SPLIT CONTENT ──
     case "split_content": {
-      const imageUrl = data.image ? `${STORAGE_URL}/storage/${data.image}` : null;
+      const imageUrl = data.image ? getMediaUrl(data.image) : null;
       const isRight = data.image_on_right !== false;
       return (
         <section
@@ -303,7 +363,7 @@ function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, 
 // ─────────────────────────────────────────────────────
 // Old Format Renderer — backward compatibility
 // ─────────────────────────────────────────────────────
-function OldFormatRenderer({ serviceData, language, t }) {
+function OldFormatRenderer({ serviceData, language, t, serviceSchema }) {
   const getServiceTemplate = (data) => {
     if (data.template) return data.template;
     const id = data.id || "";
@@ -426,6 +486,12 @@ function OldFormatRenderer({ serviceData, language, t }) {
 
   return (
     <main className="flex min-h-screen flex-col relative overflow-x-hidden">
+      {serviceSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+        />
+      )}
       <div className="w-full relative z-10 pb-10 pt-20">
         {renderOldTemplate()}
       </div>
