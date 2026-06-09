@@ -20,13 +20,24 @@ export default function AboutUsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
+    let isMounted = true;
+    const timer = setTimeout(() => {
+      if (isMounted) setLoading(true);
+    }, 0);
+
     fetchAPI(`/pages/about-us?lang=${language}`)
-      .then((data) => {
-        if (data) setPageData(data);
+      .then((res) => {
+        if (isMounted && res) setPageData(res.data || res);
       })
       .catch(console.error)
-      .finally(() => setLoading(false));
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+      clearTimeout(timer);
+    };
   }, [language]);
 
   if (loading || !pageData) {
