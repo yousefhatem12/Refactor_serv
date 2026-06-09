@@ -80,25 +80,26 @@ export default function DynamicPage() {
         if (slug && slug.startsWith("services-")) {
           setIsServicePage(true);
           const serviceSlug = slug.replace("services-", "");
-          const data = await fetchAPI(
+          const res = await fetchAPI(
             `/services/${serviceSlug}?lang=${language}`,
           );
-          if (!data || data.message === "Service not found") {
+          if (!res || res.message === "Service not found") {
             setNotFoundError(true);
             return;
           }
-          setServiceData(data);
+          setServiceData(res.data || res);
           setLoading(false);
         } else {
           setIsServicePage(false);
-          const data = await fetchAPI(`/pages/${slug}?lang=${language}`);
-          if (!data || data.message === "Page not found") {
+          const res = await fetchAPI(`/pages/${slug}?lang=${language}`);
+          if (!res || res.message === "Page not found") {
             setNotFoundError(true);
             return;
           }
-          setPageData(data);
+          const actualPageData = res.data || res;
+          setPageData(actualPageData);
 
-          if (data.sections?.template === "blog") {
+          if (actualPageData.sections?.template === "blog") {
             // Fetch blog posts and wait for completion before hiding loader (2 sections)
             fetchAPI(`/blog?lang=${language}&limit=4`)
               .then((blogData) => {
@@ -119,6 +120,7 @@ export default function DynamicPage() {
       }
     };
 
+    let timer;
     if (
       slug &&
       !["home", "about", "faq", "blog", "portfolio", "contact-us"].includes(
@@ -127,8 +129,13 @@ export default function DynamicPage() {
     ) {
       loadPage();
     } else if (slug) {
-      setLoading(false); // Should be handled by specific routes
+      timer = setTimeout(() => {
+        setLoading(false); // Should be handled by specific routes
+      }, 0);
     }
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, [slug, language, router]);
 
   if (notFoundError) {
@@ -476,6 +483,7 @@ export default function DynamicPage() {
                                 </ul>
                               </div>
                               <div className="w-full lg:w-1/2 relative">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
                                   src="/template/Mask group.webp"
                                   alt="Analytics Dashboard"
@@ -509,6 +517,7 @@ export default function DynamicPage() {
                                 </div>
                               </div>
                               <div className="w-full lg:w-1/2 relative">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
                                   src="/template/stephen-phillips-hostreviews-co-uk-shr_Xn8S8QU-unsplash 1.webp"
                                   alt="Laptop showing website"
@@ -591,6 +600,7 @@ export default function DynamicPage() {
                       </p>
                       {block.data.image && (
                         <div className="mt-8 rounded-2xl overflow-hidden border border-white/10">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={`${STORAGE_URL}/storage/${block.data.image}`}
                             alt="Hero"
@@ -712,6 +722,7 @@ export default function DynamicPage() {
                       <div className="flex-1 w-full">
                         {block.data.image && (
                           <div className="rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(255,138,0,0.1)] border border-white/10">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                               src={`${STORAGE_URL}/storage/${block.data.image}`}
                               alt="Split Content"
@@ -941,6 +952,7 @@ function RenderBlock({
           </div>
           <div className="w-full lg:w-1/2 relative">
             {imageUrl && (
+              /* eslint-disable-next-line @next/next/no-img-element */
               <img
                 src={imageUrl}
                 alt={data.title?.en || "Content"}
