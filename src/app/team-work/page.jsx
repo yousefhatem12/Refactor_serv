@@ -144,7 +144,7 @@ export default function TeamWorkPage() {
         const teamData = res && res.data ? res.data : res;
         if (teamData && Array.isArray(teamData) && teamData.length > 0) {
           setDbTeam(teamData);
-        }
+        } 
       })
       .catch((err) => console.warn("Failed to fetch database team data:", err))
       .finally(() => setLoading(false));
