@@ -61,7 +61,8 @@ export default function DynamicServicePage() {
           setNotFoundError(true);
           return;
         }
-        setServiceData(data);
+        // Unwrap standard Laravel resource wrapper if present
+        setServiceData(data.data ? data.data : data);
       })
       .catch((error) => {
         console.error("Error fetching service:", error);

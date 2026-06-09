@@ -174,7 +174,7 @@ const Services = () => {
     <section
       id="services"
       ref={sectionRef}
-      className={`relative w-full min-h-screen flex flex-col items-center justify-center md:py-20 px-6 z-10 -translate-y-[350px]  transition-transform duration-300 ${!hasServices ? "hidden" : ""}`}
+      className={`relative w-full min-h-screen flex flex-col items-center justify-center md:py-20 px-6 z-10 -translate-y-[200px]  transition-transform duration-300 ${!hasServices ? "hidden" : ""}`}
     >
       {hasServices && (
         <>
