@@ -41,12 +41,13 @@ export default function HomePage() {
         if (!isMounted) return;
 
         if (homeData) {
-          setPageData(homeData);
+          const actualHomeData = homeData.data || homeData;
+          setPageData(actualHomeData);
           if (typeof window !== "undefined") {
             try {
               localStorage.setItem(
                 `cached_home_data_${language}`,
-                JSON.stringify(homeData),
+                JSON.stringify(actualHomeData),
               );
               localStorage.setItem(
                 `cached_products_data_${language}`,

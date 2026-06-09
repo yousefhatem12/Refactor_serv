@@ -14,9 +14,9 @@ export default function PortfolioPage() {
 
   useEffect(() => {
     fetchAPI(`/pages/portfolio?lang=${language}`)
-      .then((data) => {
-        if (data) {
-          setPageData(data);
+      .then((res) => {
+        if (res) {
+          setPageData(res.data || res);
         } else {
           setError(true);
         }
