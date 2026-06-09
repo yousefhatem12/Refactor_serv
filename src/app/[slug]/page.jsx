@@ -103,7 +103,7 @@ export default function DynamicPage() {
             // Fetch blog posts and wait for completion before hiding loader (2 sections)
             fetchAPI(`/blog?lang=${language}&limit=4`)
               .then((blogData) => {
-                if (blogData) setPosts(blogData);
+                if (blogData) setPosts(blogData.data || blogData);
                 setLoading(false);
               })
               .catch((err) => {

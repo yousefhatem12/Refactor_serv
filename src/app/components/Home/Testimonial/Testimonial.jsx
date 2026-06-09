@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -29,7 +30,8 @@ const Testimonial = () => {
   useEffect(() => {
     fetchAPI(`/testimonials?lang=${language}`)
       .then((res) => {
-        if (res && res.length > 0) setData(res);
+        const testimonialData = res && res.data ? res.data : res;
+        if (testimonialData && testimonialData.length > 0) setData(testimonialData);
       })
       .catch(console.error);
   }, [language]);
@@ -183,7 +185,7 @@ const Testimonial = () => {
                       <div className="p-3 md:p-6 flex flex-col flex-grow">
                         <StarRating rating={item.rating} />
                         <p className="text-gray-300 text-sm leading-relaxed mb-6 flex-grow italic line-clamp-3">
-                          "{item.quote}"
+                          &ldquo;{item.quote}&rdquo;
                         </p>
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20 overflow-hidden shrink-0">
@@ -245,7 +247,7 @@ const Testimonial = () => {
                         )}
                       </div>
                       <p className="text-gray-300 text-sm leading-relaxed mb-6 flex-grow italic">
-                        "{item.quote}"
+                        &ldquo;{item.quote}&rdquo;
                       </p>
                       <StarRating rating={item.rating} />
                       <div className="flex items-center gap-3">
@@ -314,11 +316,10 @@ const Testimonial = () => {
                         {/* Text */}
                         <div className="flex flex-col justify-center flex-grow mb-8 min-h-[140px] relative z-10">
                           <p className="text-gray-100 text-lg md:text-[18px] leading-relaxed font-semibold relative z-10 drop-shadow-md text-center md:text-start">
-                            "{item.quote}"
+                            &ldquo;{item.quote}&rdquo;
                           </p>
                         </div>
 
-                        {/* Author */}
                         <div className="flex items-center gap-4 mt-auto pt-4 border-t border-white/5">
                           <div className="relative shrink-0">
                             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FF8A00] to-orange-600 p-[2px] group-hover/card:shadow-[0_0_15px_rgba(255,138,0,0.4)] transition-all">

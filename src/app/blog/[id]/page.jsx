@@ -28,8 +28,8 @@ export default function BlogPostDetails() {
   useEffect(() => {
     if (slug) {
       fetchAPI(`/blog/${slug}?lang=${language}`)
-        .then((data) => {
-          setPost(data);
+        .then((res) => {
+          if (res) setPost(res.data || res);
           setIsLoading(false);
         })
         .catch((err) => {
