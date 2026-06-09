@@ -80,25 +80,26 @@ export default function DynamicPage() {
         if (slug && slug.startsWith("services-")) {
           setIsServicePage(true);
           const serviceSlug = slug.replace("services-", "");
-          const data = await fetchAPI(
+          const res = await fetchAPI(
             `/services/${serviceSlug}?lang=${language}`,
           );
-          if (!data || data.message === "Service not found") {
+          if (!res || res.message === "Service not found") {
             setNotFoundError(true);
             return;
           }
-          setServiceData(data);
+          setServiceData(res.data || res);
           setLoading(false);
         } else {
           setIsServicePage(false);
-          const data = await fetchAPI(`/pages/${slug}?lang=${language}`);
-          if (!data || data.message === "Page not found") {
+          const res = await fetchAPI(`/pages/${slug}?lang=${language}`);
+          if (!res || res.message === "Page not found") {
             setNotFoundError(true);
             return;
           }
-          setPageData(data);
+          const actualPageData = res.data || res;
+          setPageData(actualPageData);
 
-          if (data.sections?.template === "blog") {
+          if (actualPageData.sections?.template === "blog") {
             // Fetch blog posts and wait for completion before hiding loader (2 sections)
             fetchAPI(`/blog?lang=${language}&limit=4`)
               .then((blogData) => {

@@ -22,8 +22,8 @@ export default function AboutUsPage() {
   useEffect(() => {
     setLoading(true);
     fetchAPI(`/pages/about-us?lang=${language}`)
-      .then((data) => {
-        if (data) setPageData(data);
+      .then((res) => {
+        if (res) setPageData(res.data || res);
       })
       .catch(console.error)
       .finally(() => setLoading(false));
