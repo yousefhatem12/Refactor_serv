@@ -26,21 +26,50 @@ const alexandria = Alexandria({
 });
 
 import { fetchAPI, getMediaUrl } from "@/lib/api";
+import { getSeoAlternates } from "@/lib/seo";
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
   const settings = await fetchAPI("/settings");
   const faviconUrl = settings?.site_favicon
     ? getMediaUrl(settings.site_favicon)
     : "/logo.ico";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://serv5.com.eg";
+  const alternates = await getSeoAlternates();
+
+  const siteTitle = settings?.site_title || "Serv5 | Advanced Agentic Coding";
+  const siteDesc =
+    settings?.site_description ||
+    "Leading company in web development and AI solutions.";
+  const siteLogo = settings?.site_logo ? getMediaUrl(settings.site_logo) : "";
+  const ogImageUrl = settings?.social_share_image
+    ? getMediaUrl(settings.social_share_image)
+    : siteLogo;
+  
   return {
-    title: settings?.site_title || "Serv5 | Advanced Agentic Coding",
-    description:
-      settings?.site_description ||
-      "Leading company in web development and AI solutions.",
+    metadataBase: new URL(siteUrl),
+    title: siteTitle,
+    description: siteDesc,
     icons: {
       icon: faviconUrl,
       shortcut: faviconUrl,
       apple: faviconUrl,
+    },
+    alternates,
+    openGraph: {
+      title: siteTitle,
+      description: siteDesc,
+      url: siteUrl,
+      siteName: "Serv5",
+      images: ogImageUrl ? [{ url: ogImageUrl }] : [],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: siteTitle,
+      description: siteDesc,
+      images: ogImageUrl ? [ogImageUrl] : [],
     },
   };
 }
@@ -56,6 +85,37 @@ export default async function RootLayout({ children }) {
   const cookieStore = await cookies();
   const defaultLanguage = xLocale || cookieStore.get("NEXT_LOCALE")?.value || "en";
   const settings = await fetchAPI("/settings");
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://serv5.com.eg";
+  const siteTitle = settings?.site_title || "Serv5";
+  const siteDesc =
+    settings?.site_description ||
+    "Leading company in web development and AI solutions.";
+  const siteLogo = settings?.site_logo
+    ? getMediaUrl(settings.site_logo)
+    : `${siteUrl}/logo.png`;
+
+  const orgSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: siteTitle,
+    url: siteUrl,
+    logo: siteLogo,
+    description: siteDesc,
+  };
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: siteTitle,
+    url: siteUrl,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${siteUrl}/search?q={search_term_string}`,
+      "query-input": "required name=search_term_string",
+    },
+  };
+
   return (
     <html
       lang={defaultLanguage}
@@ -97,6 +157,16 @@ export default async function RootLayout({ children }) {
               <Navbar />
               {children}
               <Footer />
+
+              {/* Organization & WebSite Schemas */}
+              <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
+              />
+              <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+              />
             </SettingsProvider>
           </AuthProvider>
         </LanguageProvider>
