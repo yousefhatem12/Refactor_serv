@@ -35,53 +35,49 @@ class PricingPlansRelationManager extends RelationManager
     private static function getFormSchema(): array
     {
         return [
-            \Filament\Schemas\Components\Section::make('English')
+            \Filament\Schemas\Components\Section::make('English Details')
                 ->schema([
                     TextInput::make('name.en')
-                        ->label('Name (EN)')
+                        ->label('Title (EN)')
                         ->required(),
+                    Textarea::make('features.en')
+                        ->label('Description (EN)')
+                        ->placeholder("e.g. Price: 39 SAR\nPeriod: /month\nssl free...")
+                        ->rows(4),
+                ])->columns(1),
+
+            \Filament\Schemas\Components\Section::make('Arabic Details')
+                ->schema([
+                    TextInput::make('name.ar')
+                        ->label('Title (AR)')
+                        ->required(),
+                    Textarea::make('features.ar')
+                        ->label('Description (AR)')
+                        ->placeholder("مثال: السعر: 39 ريال\nالمدة: /شهر\nشهادة أمان مجانية...")
+                        ->rows(4),
+                ])->columns(1),
+
+            \Filament\Schemas\Components\Section::make('Advanced Settings (Optional)')
+                ->collapsed()
+                ->schema([
+                    TextInput::make('price')
+                        ->default('0')
+                        ->numeric(),
+                    TextInput::make('currency')
+                        ->default('$'),
                     TextInput::make('period.en')
-                        ->label('Period (EN)')
-                        ->placeholder('e.g., /month'),
-                    Repeater::make('features.en')
-                        ->label('Features (EN)')
-                        ->simple(TextInput::make('feature')->required())
-                        ->columnSpanFull(),
+                        ->label('Period (EN)'),
+                    TextInput::make('period.ar')
+                        ->label('Period (AR)'),
                     TextInput::make('button_text.en')
                         ->label('Button Text (EN)')
                         ->default('Get Started'),
-                ])->columns(2),
-
-            \Filament\Schemas\Components\Section::make('Arabic')
-                ->schema([
-                    TextInput::make('name.ar')
-                        ->label('Name (AR)')
-                        ->required(),
-                    TextInput::make('period.ar')
-                        ->label('Period (AR)')
-                        ->placeholder('e.g., /شهر'),
-                    Repeater::make('features.ar')
-                        ->label('Features (AR)')
-                        ->simple(TextInput::make('feature')->required())
-                        ->columnSpanFull(),
                     TextInput::make('button_text.ar')
                         ->label('Button Text (AR)')
                         ->default('ابدأ الآن'),
-                ])->columns(2),
-
-            \Filament\Schemas\Components\Section::make('Settings')
-                ->schema([
-                    TextInput::make('price')
-                        ->required()
-                        ->numeric(),
-                    TextInput::make('currency')
-                        ->required()
-                        ->default('$'),
                     TextInput::make('button_url')
-                        ->required()
                         ->default('/contact-us'),
                     TextInput::make('sort_order')
-                        ->required()
                         ->numeric()
                         ->default(0),
                     Toggle::make('is_popular')

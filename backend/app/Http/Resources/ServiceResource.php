@@ -43,6 +43,13 @@ class ServiceResource extends JsonResource
                                 'title' => $item['title'] ?? null,
                                 'desc' => $item['desc'] ?? null,
                                 'content' => $item['content'] ?? null,
+                                'price' => $item['price'] ?? null,
+                                'currency' => $item['currency'] ?? null,
+                                'period' => $item['period'] ?? null,
+                                'features' => $item['features'] ?? null,
+                                'button_text' => $item['button_text'] ?? null,
+                                'button_url' => $item['button_url'] ?? null,
+                                'is_popular' => $item['is_popular'] ?? null,
                             ];
                         })->toArray();
                     }
