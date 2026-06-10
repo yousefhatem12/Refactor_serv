@@ -20,6 +20,7 @@ class PricingPlanResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-credit-card';
     protected static string|\UnitEnum|null $navigationGroup = null;
+    public static function getNavigationGroup(): ?string { return __('Pages'); }
     protected static ?int $navigationSort = 10;
     public static function getNavigationLabel(): string { return __('Pricing Plans'); }
     protected static bool $shouldRegisterNavigation = false;
