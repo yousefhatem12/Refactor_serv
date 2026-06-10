@@ -1,0 +1,8 @@
+$kind: collection
+name: Serv5 API Collection
+description: API collection for testing all Laravel backend endpoints of the Serv5 website.
+variables:
+  - key: base_url
+    value: 'http://127.0.0.1:8000/api/v1'
+  - key: auth_token
+    value: ''

@@ -44,5 +44,14 @@ class PricingPlan extends Model
         };
         static::saved($clear);
         static::deleted($clear);
+
+        static::saving(function ($model) {
+            if (empty($model->price)) {
+                $model->price = '0';
+            }
+            if (empty($model->currency)) {
+                $model->currency = '$';
+            }
+        });
     }
 }

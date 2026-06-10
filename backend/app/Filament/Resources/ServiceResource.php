@@ -229,29 +229,15 @@ class ServiceResource extends Resource
                                                             ->default('social_media'),
                                                     ]),
 
-                                                // ────────── HOSTING OFFERS ──────────
-                                                Block::make('hosting_offers')
-                                                    ->label('💰 Hosting / Pricing Offers')
-                                                    ->icon('heroicon-o-server')
-                                                    ->schema([
-                                                        TextInput::make('title.en')->label('Section Title (EN)'),
-                                                        TextInput::make('title.ar')->label('Section Title (AR)'),
-                                                        Repeater::make('items')
-                                                            ->label('Offer Cards')
-                                                            ->schema([
-                                                                TextInput::make('title.en')->label('Offer Title (EN)'),
-                                                                TextInput::make('title.ar')->label('Offer Title (AR)'),
-                                                                Textarea::make('desc.en')->label('Offer Description (EN)'),
-                                                                Textarea::make('desc.ar')->label('Offer Description (AR)'),
-                                                            ])->columns(2)->collapsible(),
-                                                    ]),
-
                                                 Block::make('blogs')
                                                     ->label('📰 Latest Blogs')
                                                     ->icon('heroicon-o-newspaper')
                                                     ->schema([
-                                                        \Filament\Forms\Components\Placeholder::make('info')
-                                                            ->content('⚡ Auto-fetches latest blog posts. No configuration needed.')
+                                                        TextInput::make('info')
+                                                            ->hiddenLabel()
+                                                            ->default('⚡ Auto-fetches latest blog posts. No configuration needed.')
+                                                            ->disabled()
+                                                            ->dehydrated(false)
                                                             ->columnSpanFull(),
                                                     ]),
 
@@ -294,6 +280,23 @@ class ServiceResource extends Resource
                                                                 TextInput::make('title.ar')->label('Point (AR)'),
                                                             ])->columns(2)->collapsible()->columnSpanFull(),
                                                     ])->columns(2),
+
+                                                // ────────── PRICING PLANS ──────────
+                                                Block::make('hosting_offers')
+                                                    ->label('💰 Pricing Plans')
+                                                    ->icon('heroicon-o-credit-card')
+                                                    ->schema([
+                                                        TextInput::make('title.en')->label('Section Title (EN)'),
+                                                        TextInput::make('title.ar')->label('Section Title (AR)'),
+                                                        Repeater::make('items')
+                                                            ->label('Pricing Plans')
+                                                            ->schema([
+                                                                TextInput::make('title.en')->label('Plan Title (EN)'),
+                                                                TextInput::make('title.ar')->label('Plan Title (AR)'),
+                                                                Textarea::make('desc.en')->label('Plan Description (EN)'),
+                                                                Textarea::make('desc.ar')->label('Plan Description (AR)'),
+                                                            ])->columns(2)->collapsible(),
+                                                    ]),
                                             ])
                                             ->collapsible()
                                             ->collapsed(false)
@@ -351,7 +354,7 @@ class ServiceResource extends Resource
     public static function getRelations(): array
     {
         return [
-            \App\Filament\Resources\ServiceResource\RelationManagers\PricingPlansRelationManager::class,
+            //
         ];
     }
 
