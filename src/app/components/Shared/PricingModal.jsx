@@ -14,19 +14,20 @@ const PricingModal = ({ isOpen, onClose, serviceId = null }) => {
   const isRtl = language === "ar";
   const [activeServiceSlug, setActiveServiceSlug] = useState(serviceId || null);
 
-  useEffect(() => {
-    if (serviceId) {
-      setActiveServiceSlug(serviceId);
-    }
-  }, [serviceId]);
+  const [prevServiceId, setPrevServiceId] = useState(serviceId);
+  if (serviceId !== prevServiceId) {
+    setPrevServiceId(serviceId);
+    setActiveServiceSlug(serviceId);
+  }
 
   useEffect(() => {
     if (isOpen) {
       fetchAPI('/services', { cache: "no-store" })
-        .then((data) => {
-          if (data && data.length > 0) {
-             setServices(data);
-             setActiveServiceSlug((prev) => prev || data[0].id);
+        .then((res) => {
+          const serviceData = res && res.data ? res.data : res;
+          if (serviceData && Array.isArray(serviceData) && serviceData.length > 0) {
+             setServices(serviceData);
+             setActiveServiceSlug((prev) => prev || serviceData[0].id);
           }
         })
         .catch(err => console.error("Failed to fetch services", err));
@@ -35,15 +36,18 @@ const PricingModal = ({ isOpen, onClose, serviceId = null }) => {
 
   useEffect(() => {
     if (isOpen && activeServiceSlug) {
-      setLoading(true);
+      Promise.resolve().then(() => {
+        setLoading(true);
+      });
       fetchAPI(`/pricing-plans?service_id=${activeServiceSlug}`, { cache: "no-store" })
-        .then((data) => {
-          if (data) {
-             setPlans(data);
+        .then((res) => {
+          const plansData = res && res.data ? res.data : res;
+          if (plansData && Array.isArray(plansData)) {
+             setPlans(plansData);
           } else {
              setPlans([]);
           }
-          setLoading(false)
+          setLoading(false);
         })
         .catch((err) => {
           console.error("Failed to fetch pricing plans", err);
@@ -54,7 +58,9 @@ const PricingModal = ({ isOpen, onClose, serviceId = null }) => {
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    setMounted(true);
+    Promise.resolve().then(() => {
+      setMounted(true);
+    });
   }, []);
 
   if (!mounted) return null;

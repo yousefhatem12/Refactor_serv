@@ -1,0 +1,32 @@
+$kind: http-request
+name: Submit Consultation Request
+method: POST
+url: '{{base_url}}/consultations'
+order: 3000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Test User",
+      "email": "test@example.com",
+      "phone": "01234567890",
+      "message": "Test consultation request"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200 or 201 or 422", function () {
+          pm.expect(pm.response.code).to.be.oneOf([200, 201, 422]);
+      });
+
+      pm.test("Response is JSON", function () {
+          pm.response.to.be.json;
+      });
+
+      pm.test("Response time is less than 3000ms", function () {
+          pm.expect(pm.response.responseTime).to.be.below(3000);
+      });
