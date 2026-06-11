@@ -112,6 +112,7 @@ class ProjectSeeder extends Seeder
 
             Project::create([
                 'name' => ['en' => $nameEn, 'ar' => $nameAr],
+                'slug' => Str::slug($nameEn),
                 'category' => $catKey,
                 'description' => ['en' => $descEn, 'ar' => $descAr],
                 'client' => $clients[array_rand($clients)],
