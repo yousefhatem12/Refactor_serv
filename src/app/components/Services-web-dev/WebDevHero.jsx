@@ -55,6 +55,7 @@ const WebDevHero = ({ data, serviceId = "web-development" }) => {
         >
           {data?.hero_subtitle ||
             data?.subtitle ||
+            data?.desc ||
             data?.description ||
             t("webDevHeroDesc")}
         </motion.p>
