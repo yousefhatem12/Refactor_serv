@@ -193,6 +193,7 @@ function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, 
           <WebDevHero
             data={{
               title: data.title?.[language] || data.title?.en || "",
+              subtitle: data.subtitle?.[language] || data.subtitle?.en || "",
               desc: data.subtitle?.[language] || data.subtitle?.en || "",
               bg_image: heroImage,
               hidePlanet: true,
