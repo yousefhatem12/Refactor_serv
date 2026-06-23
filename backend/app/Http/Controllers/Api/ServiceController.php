@@ -24,7 +24,12 @@ class ServiceController extends BaseApiController
 
     public function show($slug)
     {
-        $service = Service::where('slug', $slug)->where('is_active', true)->firstOrFail();
+        $service = Service::where('is_active', true)
+            ->where(function ($query) use ($slug) {
+                $query->where('slug', $slug)
+                      ->orWhere('id', $slug);
+            })
+            ->firstOrFail();
         return new ServiceResource($service);
     }
 }

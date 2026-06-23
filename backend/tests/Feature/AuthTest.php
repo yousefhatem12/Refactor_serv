@@ -122,4 +122,15 @@ class AuthTest extends TestCase
                 'message' => 'تم تسجيل الخروج بنجاح'
             ]);
     }
+
+    /** @test */
+    public function an_unauthenticated_user_gets_401_on_protected_endpoints()
+    {
+        $response = $this->get('/api/v1/me');
+
+        $response->assertStatus(401)
+            ->assertJson([
+                'message' => 'Unauthenticated.'
+            ]);
+    }
 }

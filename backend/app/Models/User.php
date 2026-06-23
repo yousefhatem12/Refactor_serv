@@ -61,6 +61,7 @@ class User extends Authenticatable implements FilamentUser
     protected static function booted()
     {
         static::created(function ($user) {
+            \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'read_only', 'guard_name' => 'web']);
             $user->assignRole('read_only');
         });
     }

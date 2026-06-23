@@ -88,4 +88,23 @@ class ProductApiTest extends TestCase
             ->assertJsonPath('data.id', 'single-product')
             ->assertJsonPath('data.name', 'Single Product');
     }
+
+    /** @test */
+    public function it_can_show_a_single_product_by_id()
+    {
+        $product = Product::create([
+            'slug' => 'single-product-id',
+            'name' => ['en' => 'Single Product ID', 'ar' => 'منتج واحد بالمعرف'],
+            'category' => ['en' => 'Software', 'ar' => 'برمجيات'],
+            'title' => ['en' => 'Title', 'ar' => 'عنوان'],
+            'description' => ['en' => 'Description', 'ar' => 'وصف'],
+            'is_active' => true,
+        ]);
+
+        $response = $this->getJson('/api/v1/products/' . $product->id . '?lang=en');
+
+        $response->assertStatus(200)
+            ->assertJsonPath('data.id', 'single-product-id')
+            ->assertJsonPath('data.name', 'Single Product ID');
+    }
 }
