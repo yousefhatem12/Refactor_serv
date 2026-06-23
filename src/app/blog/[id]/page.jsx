@@ -2,12 +2,14 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { fetchAPI } from "@/lib/api";
+import { fetchAPI, getMediaUrl } from "@/lib/api";
 import Loading from "../../loading";
 import { useLanguage } from "../../context/LanguageContext";
+import { useSettings } from "../../context/SettingsContext";
 
 export default function BlogPostDetails() {
   const { language } = useLanguage();
+  const settings = useSettings();
   const params = useParams();
   const slug = params?.id; // The folder is still named [id] but it receives the slug from URL
   const [post, setPost] = useState(null);
@@ -26,8 +28,8 @@ export default function BlogPostDetails() {
   useEffect(() => {
     if (slug) {
       fetchAPI(`/blog/${slug}?lang=${language}`)
-        .then((data) => {
-          setPost(data);
+        .then((res) => {
+          if (res) setPost(res.data || res);
           setIsLoading(false);
         })
         .catch((err) => {
@@ -36,6 +38,22 @@ export default function BlogPostDetails() {
         });
     }
   }, [slug, language]);
+
+  useEffect(() => {
+    if (post) {
+      document.title = post.seo?.title || post.title;
+      const desc = post.seo?.description || post.title;
+      let metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) {
+        metaDesc.setAttribute("content", desc);
+      } else {
+        metaDesc = document.createElement("meta");
+        metaDesc.setAttribute("name", "description");
+        metaDesc.setAttribute("content", desc);
+        document.head.appendChild(metaDesc);
+      }
+    }
+  }, [post]);
 
   if (isLoading) {
     return <Loading />;
@@ -52,12 +70,51 @@ export default function BlogPostDetails() {
   }
 
   const isRtl = language === "ar";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://serv5.com.eg";
+  const postUrl = `${siteUrl}/${language}/blog/${slug}`;
+  const siteLogo = settings?.site_logo
+    ? getMediaUrl(settings.site_logo)
+    : `${siteUrl}/logo.png`;
+
+  const articleSchema = post
+    ? {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        headline: post.title,
+        image: post.image ? [post.image] : [],
+        datePublished: post.created_at_iso || post.published_at,
+        dateModified: post.updated_at_iso || post.created_at_iso || post.published_at,
+        author: {
+          "@type": "Person",
+          name: post.author || "Serv5 Team",
+        },
+        publisher: {
+          "@type": "Organization",
+          name: settings?.site_title || "Serv5",
+          logo: {
+            "@type": "ImageObject",
+            url: siteLogo,
+          },
+        },
+        description: post.seo?.description || post.title,
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": postUrl,
+        },
+      }
+    : null;
 
   return (
     <main
       className="flex min-h-screen flex-col relative overflow-x-hidden pt-10 pb-10"
       dir={isRtl ? "rtl" : "ltr"}
     >
+      {articleSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+        />
+      )}
       <div className="fixed inset-0 bg-[#040A37] -z-20 pointer-events-none" />
 
       <div className="w-full relative z-10 flex flex-col items-center pt-24 text-white">

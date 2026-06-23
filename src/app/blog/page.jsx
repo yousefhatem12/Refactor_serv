@@ -13,9 +13,14 @@ export default function BlogPage() {
   const [pageData, setPageData] = useState(null);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [prevLang, setPrevLang] = useState(language);
+
+  if (language !== prevLang) {
+    setPrevLang(language);
+    setLoading(true);
+  }
 
   useEffect(() => {
-    setLoading(true);
     Promise.all([
       fetchAPI(`/pages/blog?lang=${language}`).catch((err) => {
         console.error("Error fetching blog page data:", err);
@@ -27,8 +32,8 @@ export default function BlogPage() {
       })
     ])
       .then(([page, blogPosts]) => {
-        if (page) setPageData(page);
-        if (blogPosts) setPosts(blogPosts);
+        if (page) setPageData(page.data || page);
+        if (blogPosts) setPosts(blogPosts.data || blogPosts);
       })
       .catch(console.error)
       .finally(() => setLoading(false));

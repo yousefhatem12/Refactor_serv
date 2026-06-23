@@ -15,6 +15,13 @@ class PricingPlansTable
     {
         return $table
             ->columns([
+                TextColumn::make('service.name')
+                    ->label('Service')
+                    ->badge()
+                    ->color('info')
+                    ->getStateUsing(fn ($record) => $record->service ? ($record->service->name['en'] ?? $record->service->name['ar']) : 'None')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('name.en')
                     ->label('Name')
                     ->searchable(),

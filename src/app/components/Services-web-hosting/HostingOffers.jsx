@@ -2,8 +2,10 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "../../context/LanguageContext";
+import { useRouter } from "next/navigation";
 
 const HostingOffers = ({ title, offersList }) => {
+  const router = useRouter();
   const { language, t } = useLanguage();
   const [activeTab, setActiveTab] = useState("Web hosting");
 
@@ -87,6 +89,39 @@ const HostingOffers = ({ title, offersList }) => {
   const offers = (offersList && Array.isArray(offersList) && offersList.length > 0)
     ? offersList.map((item, index) => {
         const name = item.title && typeof item.title === "object" ? (item.title[language] || item.title.en || "") : (item.title || "");
+        
+        // Structured pricing fields check
+        if (item.price !== undefined && item.price !== null) {
+          const price = item.price;
+          const currency = item.currency || "$";
+          const period = item.period && typeof item.period === "object" ? (item.period[language] || item.period.en || "") : (item.period || "");
+          const buttonText = item.button_text && typeof item.button_text === "object" ? (item.button_text[language] || item.button_text.en || "") : (item.button_text || t("bookNow") || "Book Now !");
+          const buttonUrl = item.button_url || "/contact-us";
+          const isPopular = item.is_popular === true || item.is_popular === "true" || item.is_popular === 1 || item.is_popular === "1";
+          
+          let featuresList = [];
+          if (item.features) {
+            const rawFeatures = typeof item.features === "object" ? (item.features[language] || item.features.en || item.features) : item.features;
+            if (typeof rawFeatures === "string") {
+              featuresList = rawFeatures.split(/\r?\n/).map(f => f.trim()).filter(Boolean);
+            } else if (Array.isArray(rawFeatures)) {
+              featuresList = rawFeatures;
+            }
+          }
+          
+          return {
+            id: `offer-${index}`,
+            name: name,
+            price: `${currency}${price}`,
+            period: period,
+            buttonText: buttonText,
+            buttonUrl: buttonUrl,
+            isPopular: isPopular,
+            features: featuresList,
+          };
+        }
+
+        // Legacy format parsing logic
         const desc = item.desc && typeof item.desc === "object" ? (item.desc[language] || item.desc.en || "") : (item.desc || "");
         const lines = desc ? desc.split(/\r?\n/).map(f => f.trim()).filter(Boolean) : [];
         
@@ -118,6 +153,7 @@ const HostingOffers = ({ title, offersList }) => {
           period: period,
           subtitle: subtitle || undefined,
           buttonText: t("bookNow") || "Book Now !",
+          buttonUrl: "/contact-us",
           isPopular: index === 2 || (offersList.length === 1),
           features: filteredFeatures,
         };
@@ -233,6 +269,7 @@ const HostingOffers = ({ title, offersList }) => {
               </div>
 
               <button
+                onClick={() => router.push(offer.buttonUrl || "/contact-us")}
                 className={`w-full py-3.5 md:py-4 rounded-xl font-bold text-sm transition-all mb-8 shadow-md hover:shadow-lg
                   ${
                     offer.isPopular

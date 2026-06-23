@@ -41,12 +41,13 @@ export default function HomePage() {
         if (!isMounted) return;
 
         if (homeData) {
-          setPageData(homeData);
+          const actualHomeData = homeData.data || homeData;
+          setPageData(actualHomeData);
           if (typeof window !== "undefined") {
             try {
               localStorage.setItem(
                 `cached_home_data_${language}`,
-                JSON.stringify(homeData),
+                JSON.stringify(actualHomeData),
               );
               localStorage.setItem(
                 `cached_products_data_${language}`,
@@ -98,11 +99,14 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    setIsPhaseTwo(true);
-    setCanScroll(true);
+    const timer = setTimeout(() => {
+      setIsPhaseTwo(true);
+      setCanScroll(true);
+    }, 0);
     if (typeof window !== "undefined") {
       sessionStorage.setItem("seenHomeIntro", "true");
     }
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {

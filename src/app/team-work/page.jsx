@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../context/LanguageContext";
 import { fetchAPI, getMediaUrl } from "@/lib/api";
@@ -131,16 +132,19 @@ export default function TeamWorkPage() {
   const [loading, setLoading] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  useEffect(() => {
+  const [prevDept, setPrevDept] = useState(selectedDept);
+  if (selectedDept !== prevDept) {
+    setPrevDept(selectedDept);
     setIsExpanded(false);
-  }, [selectedDept]);
+  }
 
   useEffect(() => {
     fetchAPI("/team")
       .then((res) => {
-        if (res && Array.isArray(res) && res.length > 0) {
-          setDbTeam(res);
-        }
+        const teamData = res && res.data ? res.data : res;
+        if (teamData && Array.isArray(teamData) && teamData.length > 0) {
+          setDbTeam(teamData);
+        } 
       })
       .catch((err) => console.warn("Failed to fetch database team data:", err))
       .finally(() => setLoading(false));
@@ -538,18 +542,18 @@ export default function TeamWorkPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-            <a
+            <Link
               href="/careers"
               className="px-8 py-3.5 rounded-full bg-[#FF8A00] text-white font-bold hover:bg-[#e07b00] hover:shadow-[0_0_20px_rgba(255,138,0,0.3)] transition-all duration-300 text-sm"
             >
               {language === "ar" ? "تصفح الوظائف المتاحة" : "View Open Careers"}
-            </a>
-            <a
+            </Link>
+            <Link
               href="/contact-us"
               className="px-8 py-3.5 rounded-full border border-white/20 bg-white/5 text-white font-bold hover:bg-white hover:text-black transition-all duration-300 text-sm"
             >
               {language === "ar" ? "تواصل معنا" : "Contact Us"}
-            </a>
+            </Link>
           </div>
         </motion.div>
       </section>

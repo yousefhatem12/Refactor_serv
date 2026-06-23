@@ -1,0 +1,35 @@
+$kind: http-request
+name: Apply for Career
+method: POST
+url: '{{base_url}}/careers/apply'
+order: 2000
+body:
+  type: formdata
+  content:
+    - key: name
+      type: text
+      value: Test Applicant
+    - key: email
+      type: text
+      value: applicant@example.com
+    - key: phone
+      type: text
+      value: '01234567890'
+    - key: career_id
+      type: text
+      value: '1'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200 or 201 or 422", function () {
+          pm.expect(pm.response.code).to.be.oneOf([200, 201, 422]);
+      });
+
+      pm.test("Response is JSON", function () {
+          pm.response.to.be.json;
+      });
+
+      pm.test("Response time is less than 3000ms", function () {
+          pm.expect(pm.response.responseTime).to.be.below(3000);
+      });
