@@ -1,0 +1,843 @@
+{
+  "info": {
+    "_postman_id": "serv5-api-collection-id",
+    "name": "Serv5 API Collection",
+    "description": "API collection for testing all Laravel backend endpoints of the Serv5 website.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"user@example.com\",\n  \"password\": \"password\",\n  \"password_confirmation\": \"password\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Authenticated User (Me)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Pages & Settings",
+      "item": [
+        {
+          "name": "Get Page by Slug",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/pages/home?lang=ar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pages",
+                "home"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "ar",
+                  "description": "Language (ar or en)"
+                }
+              ]
+            },
+            "description": "Available slugs: home, about-us, faq, blog, portfolio, contact-us, etc."
+          },
+          "response": []
+        },
+        {
+          "name": "Get General Settings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/settings?lang=ar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "settings"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "ar"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Nav Links",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/nav-links?lang=ar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "nav-links"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "ar"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Footer Data",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/footer-data?lang=ar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "footer-data"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "ar"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Team Members",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/team?lang=ar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "team"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "ar"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Testimonials",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/testimonials?lang=ar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "testimonials"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "ar"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Bank Accounts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/bank-accounts?lang=ar&country=egypt",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "bank-accounts"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "ar"
+                },
+                {
+                  "key": "country",
+                  "value": "egypt",
+                  "description": "egypt or ksa"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Features",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/features?lang=ar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "features"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "ar"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Pricing Plans",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/pricing-plans?lang=ar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pricing-plans"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "ar"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Blog",
+      "item": [
+        {
+          "name": "Get Blog Posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/blog?lang=ar&limit=9&page=1&per_page=9",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "blog"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "ar"
+                },
+                {
+                  "key": "limit",
+                  "value": "9"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "9"
+                },
+                {
+                  "key": "category_raw",
+                  "value": "ALL",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Blog Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/blog/categories?lang=ar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "blog",
+                "categories"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "ar"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Trending Blog Posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/blog/trending?lang=ar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "blog",
+                "trending"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "ar"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Blog Post Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/blog/1?lang=ar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "blog",
+                "1"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "ar"
+                }
+              ]
+            },
+            "description": "Receive parameter as slug or ID."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Services",
+      "item": [
+        {
+          "name": "Get All Services",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/services?lang=ar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "services"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "ar"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Service Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/services/web-development?lang=ar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "services",
+                "web-development"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "ar"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Portfolio",
+      "item": [
+        {
+          "name": "Get Portfolio Projects",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/portfolio?lang=ar&page=1&per_page=9",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "portfolio"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "ar"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "9"
+                },
+                {
+                  "key": "category_raw",
+                  "value": "ALL",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Portfolio Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/portfolio/categories?lang=ar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "portfolio",
+                "categories"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "ar"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Project Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/portfolio/1?lang=ar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "portfolio",
+                "1"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "ar"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products?lang=ar&page=1&per_page=9",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "ar"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "9"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/1?lang=ar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products",
+                "1"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "ar"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Careers",
+      "item": [
+        {
+          "name": "Get Careers List",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/careers?lang=ar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "careers"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "ar"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Apply for Career",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "John Doe",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "john@example.com",
+                  "type": "text"
+                },
+                {
+                  "key": "phone",
+                  "value": "0123456789",
+                  "type": "text"
+                },
+                {
+                  "key": "career_id",
+                  "value": "1",
+                  "type": "text"
+                },
+                {
+                  "key": "cv",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/careers/apply",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "careers",
+                "apply"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Contact & Form Submissions",
+      "item": [
+        {
+          "name": "Submit Contact Message",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"subject\": \"General Inquiry\",\n  \"message\": \"Hello, I want to inquire about your services.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/contact",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "contact"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Submit Quotation Request",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane Smith\",\n  \"email\": \"jane@example.com\",\n  \"phone\": \"01099999999\",\n  \"company\": \"Tech Solutions\",\n  \"message\": \"I need a quotation for developing a mobile app.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/quotations",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "quotations"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Submit Consultation Request",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Albert Einstein\",\n  \"email\": \"albert@example.com\",\n  \"phone\": \"0123456789\",\n  \"message\": \"I need consultation for ecommerce strategy.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/consultations",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "consultations"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "auth_token",
+      "value": "your_bearer_token_here",
+      "type": "string"
+    }
+  ]
+}

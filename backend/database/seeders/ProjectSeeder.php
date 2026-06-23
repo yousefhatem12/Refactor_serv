@@ -16,37 +16,32 @@ class ProjectSeeder extends Seeder
         Project::truncate();
         Schema::enableForeignKeyConstraints();
 
-        // --- Unsplash Images per Category ---
+        // --- Local relative paths for storage ---
         $images = [
             'websites' => [
-                'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80',
-                'https://images.unsplash.com/photo-1541462608141-2ff580dd0e4e?auto=format&fit=crop&w=800&q=80',
-                'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80',
-                'https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&w=800&q=80',
+                'projects/image-1.webp',
+                'projects/image-2.webp',
+                'projects/image-3.webp',
             ],
             'mobile' => [
-                'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80',
-                'https://images.unsplash.com/photo-1551650975-87deedd944c3?auto=format&fit=crop&w=800&q=80',
-                'https://images.unsplash.com/photo-1581291518655-9523c932dedf?auto=format&fit=crop&w=800&q=80',
-                'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&w=800&q=80',
+                'projects/image-4.webp',
+                'projects/image-5.webp',
+                'projects/image-6.webp',
             ],
             'motion' => [
-                'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=800&q=80',
-                'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80',
-                'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
-                'https://images.unsplash.com/photo-1536240478700-b869070f9279?auto=format&fit=crop&w=800&q=80',
+                'projects/image-7.webp',
+                'projects/image-8.webp',
+                'projects/image-9.webp',
             ],
             'digital' => [
-                'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=800&q=80',
-                'https://images.unsplash.com/photo-1561070791-26c113006238?auto=format&fit=crop&w=800&q=80',
-                'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=800&q=80',
-                'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&w=800&q=80',
+                'projects/image-1.webp',
+                'projects/image-2.webp',
+                'projects/image-3.webp',
             ],
             'social' => [
-                'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=800&q=80',
-                'https://images.unsplash.com/photo-1611926653458-09294b3142bf?auto=format&fit=crop&w=800&q=80',
-                'https://images.unsplash.com/photo-1432821596592-e2c18b78144f?auto=format&fit=crop&w=800&q=80',
-                'https://images.unsplash.com/photo-1611606063065-ee7946f0787a?auto=format&fit=crop&w=800&q=80',
+                'projects/image-4.webp',
+                'projects/image-5.webp',
+                'projects/image-6.webp',
             ],
         ];
 
@@ -117,6 +112,7 @@ class ProjectSeeder extends Seeder
 
             Project::create([
                 'name' => ['en' => $nameEn, 'ar' => $nameAr],
+                'slug' => Str::slug($nameEn),
                 'category' => $catKey,
                 'description' => ['en' => $descEn, 'ar' => $descAr],
                 'client' => $clients[array_rand($clients)],

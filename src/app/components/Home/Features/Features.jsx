@@ -331,7 +331,7 @@ export default function Features() {
                   Array.from({ length: 5 }).map((_, index) => (
                     <div
                       key={index}
-                      className="h-6 sm:h-8 md:h-10 lg:h-12 w-20 sm:w-24 md:w-28 lg:w-32 rounded-lg bg-white/5 border border-white/10 animate-pulse shrink-0 snap-center"
+                      className="h-12 sm:h-14 md:h-20 lg:h-24 w-28 sm:w-32 md:w-44 lg:w-52 rounded-lg bg-white/5 border border-white/10 animate-pulse shrink-0 snap-center"
                     />
                   ))
                 ) : (
@@ -345,7 +345,7 @@ export default function Features() {
                       <img
                         src={partner}
                         alt={`Partner ${index + 1}`}
-                        className="h-6 sm:h-8 md:h-10 lg:h-12 w-auto object-contain opacity-60 group-hover:opacity-100 transition-all duration-300"
+                        className="h-12 sm:h-14 md:h-20 lg:h-24 w-auto object-contain opacity-60 group-hover:opacity-100 transition-all duration-300"
                         style={
                           partner.includes("/Features/") ||
                             partner.includes("/settings/")

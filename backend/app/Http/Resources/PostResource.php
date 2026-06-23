@@ -103,6 +103,8 @@ class PostResource extends JsonResource
             'category_raw' => $categoryRaw,
             'image' => $this->image ? (str_starts_with($this->image, 'http') || str_starts_with($this->image, '/') ? $this->image : asset('storage/' . $this->image)) : null,
             'published_at' => $formatDate($this->created_at),
+            'created_at_iso' => $this->created_at?->toIso8601String(),
+            'updated_at_iso' => $this->updated_at?->toIso8601String(),
         ];
 
         // Return SEO fields if detail view is requested
