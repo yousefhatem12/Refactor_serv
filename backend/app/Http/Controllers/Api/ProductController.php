@@ -76,7 +76,12 @@ class ProductController extends BaseApiController
 
     public function show(string $slug)
     {
-        $product = Product::where('slug', $slug)->where('is_active', true)->firstOrFail();
+        $product = Product::where('is_active', true)
+            ->where(function ($query) use ($slug) {
+                $query->where('slug', $slug)
+                      ->orWhere('id', $slug);
+            })
+            ->firstOrFail();
         return new ProductResource($product);
     }
 }

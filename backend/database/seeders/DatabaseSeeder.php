@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $role = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
+        \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'read_only', 'guard_name' => 'web']);
 
         $adminEmail = env('ADMIN_EMAIL', 'admin@serv5.com');
         $adminPassword = env('ADMIN_PASSWORD', 'admin123456');
