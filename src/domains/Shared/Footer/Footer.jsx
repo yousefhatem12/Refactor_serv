@@ -1,11 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { useLanguage } from "../../context/LanguageContext";
-import { useSettings } from "../../context/SettingsContext";
+import { useLanguage } from "@/app/context/LanguageContext";
+import { useSettings } from "@/app/context/SettingsContext";
 import { fetchAPI } from "@/lib/api";
 import { motion } from "framer-motion";
-import PlanetAstronaut from "../Home/Shared/PlanetAstronaut";
+import PlanetAstronaut from "@/app/components/Home/Shared/PlanetAstronaut";
 import {
   FaFacebook,
   FaInstagram,

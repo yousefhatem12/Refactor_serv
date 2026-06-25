@@ -2,8 +2,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { FaWhatsapp } from "react-icons/fa";
-import { useLanguage } from "../../context/LanguageContext";
-import { useSettings } from "../../context/SettingsContext";
+import { useLanguage } from "@/app/context/LanguageContext";
+import { useSettings } from "@/app/context/SettingsContext";
 import { getMediaUrl } from "@/lib/api";
 
 const MobileAppsHero = ({ data }) => {

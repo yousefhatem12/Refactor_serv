@@ -74,7 +74,7 @@ export default function BlogPostDetails() {
   const postUrl = `${siteUrl}/${language}/blog/${slug}`;
   const siteLogo = settings?.site_logo
     ? getMediaUrl(settings.site_logo)
-    : `${siteUrl}/logo.png`;
+    : `${siteUrl}/logo.svg`;
 
   const articleSchema = post
     ? {

@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { useLanguage } from "../../context/LanguageContext";
-import { fetchAPI } from "../../../lib/api";
+import { useLanguage } from "@/app/context/LanguageContext";
+import { fetchAPI } from "@/lib/api";
 
 const FAQContent = ({ data }) => {
   const [openId, setOpenId] = useState(null);

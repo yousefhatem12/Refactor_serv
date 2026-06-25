@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { useLanguage } from './LanguageContext';
 import { fetchAPI } from '@/lib/api';
 
@@ -8,15 +8,23 @@ const SettingsContext = createContext({});
 export const SettingsProvider = ({ children, initialSettings }) => {
   const { language } = useLanguage();
   const [settings, setSettings] = useState(initialSettings || {});
+  // Track the language of the initial SSR settings to avoid re-fetch if already correct
+  const initialLang = useRef(null);
 
-  // Fetch new settings if the language changes on the client
   useEffect(() => {
     let mounted = true;
-    fetchAPI(`/settings?lang=${language}`).then(data => {
-      if (mounted && data) {
-        setSettings(data);
-      }
-    });
+
+    // Fetch settings in the current language (client-side, locale-aware)
+    fetchAPI(`/settings?lang=${language}`)
+      .then(data => {
+        if (mounted && data) {
+          setSettings(data);
+        }
+      })
+      .catch(() => {
+        // Keep SSR initialSettings if fetch fails
+      });
+
     return () => { mounted = false; };
   }, [language]);
 

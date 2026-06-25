@@ -2,7 +2,7 @@
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { FaCheckCircle } from "react-icons/fa";
-import { useLanguage } from "../../context/LanguageContext";
+import { useLanguage } from "@/app/context/LanguageContext";
 
 const MobileAppHowWeWork = ({ howWeWorkList }) => {
   const { language } = useLanguage();

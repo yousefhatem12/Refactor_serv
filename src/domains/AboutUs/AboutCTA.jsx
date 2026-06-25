@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import { useLanguage } from "../../context/LanguageContext";
-import { useSettings } from "../../context/SettingsContext";
-import VideoModal from "../Shared/VideoModal";
-import PricingModal from "../Shared/PricingModal";
-import ContactModal from "../Shared/ContactModal";
+import { useLanguage } from "@/app/context/LanguageContext";
+import { useSettings } from "@/app/context/SettingsContext";
+import VideoModal from "@/app/components/Shared/VideoModal";
+import PricingModal from "@/app/components/Shared/PricingModal";
+import ContactModal from "@/app/components/Shared/ContactModal";
 import { useRouter } from "next/navigation";
 
 const AboutCTA = ({ data }) => {

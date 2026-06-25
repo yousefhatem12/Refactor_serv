@@ -333,7 +333,7 @@ const ProductDetailsPage = () => {
                     {/* Content view screen */}
                     <div className="relative w-full h-full overflow-hidden bg-[#1E1E28]">
                       <Image
-                        src={product.image}
+                        src={product.imageMobile || product.image}
                         alt={product.title}
                         fill
                         className="object-cover object-top transition-transform duration-700 group-hover:scale-105"

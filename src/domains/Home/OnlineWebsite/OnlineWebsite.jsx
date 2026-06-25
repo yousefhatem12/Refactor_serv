@@ -9,7 +9,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { fetchAPI } from "@/lib/api";
-import { useLanguage } from "../../../context/LanguageContext";
+import { useLanguage } from "@/app/context/LanguageContext";
 
 // --- Gradients for dynamic data ---
 const gradients = [

@@ -2,7 +2,7 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useLanguage } from "../../../context/LanguageContext";
+import { useLanguage } from "@/app/context/LanguageContext";
 import { fetchAPI } from "@/lib/api";
 
 const StarRating = ({ rating }) => {

@@ -9,7 +9,7 @@ import {
   FiShare2,
   FiTarget,
 } from "react-icons/fi";
-import { useLanguage } from "../../context/LanguageContext";
+import { useLanguage } from "@/app/context/LanguageContext";
 
 const SocialMediaWhyChooseUs = ({ whyTitle, whySubtitle, whyList }) => {
   const { language, t } = useLanguage();

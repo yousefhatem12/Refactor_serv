@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { useLanguage } from "../../../context/LanguageContext";
+import { useLanguage } from "@/app/context/LanguageContext";
 
 export default function Earth({ isPhaseTwo }) {
   const containerRef = useRef(null);
@@ -65,7 +65,8 @@ export default function Earth({ isPhaseTwo }) {
       // Main container smooth scale & move
       gsap.to(containerRef.current, {
         x: isMobile ? "0%" : isRtl ? "-25%" : "25%",
-        scale: isMobile ? 1 : 1.2, // Reduced from 1.6 to make it smaller
+        y: isMobile ? "-20%" : "0%",
+        scale: isMobile ? 0.85 : 1.2,
         duration: 1.5,
         ease: "power3.inOut",
       });
@@ -97,7 +98,8 @@ export default function Earth({ isPhaseTwo }) {
       // Phase One state
       gsap.to(containerRef.current, {
         x: "0%",
-        scale: isMobile ? 0.8 : 0.6, // Reduced from 0.8 to make it smaller
+        y: "0%",
+        scale: isMobile ? 0.8 : 0.6,
         duration: 1.5,
         ease: "power3.inOut",
       });
@@ -141,9 +143,9 @@ export default function Earth({ isPhaseTwo }) {
           ref={logoRef}
           className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
         >
-          <div className="w-[140%] h-[140%] sm:w-[120%] sm:h-[120%] md:w-[40%] md:h-[40%] relative transition-all duration-700">
+          <div className="w-[100%] h-[100%] sm:w-[110%] sm:h-[110%] md:w-[40%] md:h-[40%] relative transition-all duration-700">
             <img
-              src="/Hero/logo.svg"
+              src="/logo.svg"
               alt="Serv5 Logo"
               className="w-full h-full object-contain 
                          mix-blend-luminosity md:mix-blend-normal 

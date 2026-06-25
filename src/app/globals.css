@@ -1,12 +1,6 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: "Ts Damas Sans Free Bold";
-  src: url("/fonts/TsDamasSansFreeBold.woff2") format("woff2");
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
+/* Local font TsDamasSansFreeBold is now optimized and loaded dynamically via next/font in layout.js */
 
 :root {
   --background: #0a0a0a;
@@ -21,6 +15,7 @@
   --font-heading: var(--font-montserrat), sans-serif;
   --font-body: var(--font-poppins), sans-serif;
   --font-arabic: var(--font-alexandria), sans-serif;
+  --font-ts-damas: var(--font-ts-damas), sans-serif;
 
   /* Reset Default Sans to Poppins + Alexandria Fallback */
   --font-sans:
@@ -56,7 +51,7 @@ body {
   [lang="ar"] *,
   [dir="rtl"] * {
     font-family:
-      "Ts Damas Sans Free Bold", var(--font-arabic), sans-serif !important;
+      var(--font-ts-damas), var(--font-arabic), sans-serif !important;
   }
 }
 

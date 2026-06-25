@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { fetchAPI } from "@/lib/api";
-import { useLanguage } from "../../context/LanguageContext";
-import { useAuth } from "../../context/AuthContext";
+import { useLanguage } from "@/app/context/LanguageContext";
+import { useAuth } from "@/app/context/AuthContext";
 
 const ContactForm = () => {
   const { t, language } = useLanguage();

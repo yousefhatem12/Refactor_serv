@@ -8,7 +8,7 @@ import {
 } from "framer-motion";
 import Link from "next/link";
 import { fetchAPI } from "@/lib/api";
-import { useLanguage } from "../../../context/LanguageContext";
+import { useLanguage } from "@/app/context/LanguageContext";
 
 const Services = () => {
   const { t, language } = useLanguage();

@@ -2,12 +2,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useLanguage } from "../../../context/LanguageContext";
+import { useLanguage } from "@/app/context/LanguageContext";
 import { fetchAPI } from "@/lib/api";
-import PricingModal from "../../Shared/PricingModal";
-import ContactModal from "../../Shared/ContactModal";
+import PricingModal from "@/app/components/Shared/PricingModal";
+import ContactModal from "@/app/components/Shared/ContactModal";
 import { useRouter, usePathname } from "next/navigation";
-import PlanetAstronaut from "../Shared/PlanetAstronaut";
+import PlanetAstronaut from "@/app/components/Home/Shared/PlanetAstronaut";
 
 gsap.registerPlugin(ScrollTrigger);
 

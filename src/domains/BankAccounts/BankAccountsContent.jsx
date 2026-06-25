@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useLanguage } from "../../context/LanguageContext";
-import { useSettings } from "../../context/SettingsContext";
-import Loading from "../../loading";
+import { useLanguage } from "@/app/context/LanguageContext";
+import { useSettings } from "@/app/context/SettingsContext";
+import Loading from "@/app/loading";
 import { fetchAPI } from "@/lib/api";
 import {
   FaCopy,
