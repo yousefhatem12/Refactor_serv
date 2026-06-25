@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  cacheComponents: true,
   poweredByHeader: false,
+  experimental: {
+    useCache: true,
+  },
   images: {
     unoptimized: true,
     remotePatterns: [

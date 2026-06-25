@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
+
 use App\Models\BlogCategory;
 use App\Models\Post;
 use App\Models\User;
@@ -12,7 +14,7 @@ class BlogApiTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_can_list_published_posts()
     {
         $author = User::factory()->create();
@@ -34,7 +36,7 @@ class BlogApiTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_list_unpublished_posts()
     {
         $author = User::factory()->create();
@@ -53,7 +55,7 @@ class BlogApiTest extends TestCase
         $this->assertEmpty($response->json());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_list_categories()
     {
         BlogCategory::create([
@@ -70,7 +72,7 @@ class BlogApiTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_list_trending_posts()
     {
         $author = User::factory()->create();
@@ -93,7 +95,7 @@ class BlogApiTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_show_a_single_post()
     {
         $author = User::factory()->create();

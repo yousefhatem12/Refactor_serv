@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
+
 use App\Models\BankAccount;
 use App\Models\Feature;
 use App\Models\FooterLink;
@@ -18,7 +20,7 @@ class SettingsApiTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_can_get_settings()
     {
         Setting::create([
@@ -35,7 +37,7 @@ class SettingsApiTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_testimonials()
     {
         Testimonial::create([
@@ -55,7 +57,7 @@ class SettingsApiTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_team_members()
     {
         TeamMember::create([
@@ -73,7 +75,7 @@ class SettingsApiTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_features()
     {
         Feature::create([
@@ -91,7 +93,7 @@ class SettingsApiTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_footer_data()
     {
         Setting::create(['key' => 'footer_heading_en', 'value' => 'Good design', 'type' => 'text']);
@@ -120,7 +122,7 @@ class SettingsApiTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_nav_links()
     {
         NavLink::create([
@@ -139,7 +141,7 @@ class SettingsApiTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_pricing_plans()
     {
         PricingPlan::create([
@@ -159,7 +161,7 @@ class SettingsApiTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_bank_accounts()
     {
         BankAccount::create([

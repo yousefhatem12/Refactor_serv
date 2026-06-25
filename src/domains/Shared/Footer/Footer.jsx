@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useLanguage } from "../../context/LanguageContext";
+import { useSettings } from "../../context/SettingsContext";
 import { fetchAPI } from "@/lib/api";
 import { motion } from "framer-motion";
 import PlanetAstronaut from "../Home/Shared/PlanetAstronaut";
@@ -24,30 +25,25 @@ const Footer = () => {
   const router = useRouter();
   const isHomePage = pathname === "/" || pathname === "/ar" || pathname === "/en" || pathname === "/ar/" || pathname === "/en/";
 
-  const [settings, setSettings] = useState({});
+  const contextSettings = useSettings();
+  const settings = contextSettings || {};
   const [footerData, setFooterData] = useState({
     texts: {},
     links: { usefulLinks: [], quickLinks: [], offers: [], company: [] },
     socials: [],
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    Promise.all([
-      fetchAPI(`/settings?lang=${language}`)
-        .then((data) => {
-          if (data) setSettings(data);
-        })
-        .catch(console.error),
-      fetchAPI(`/footer-data?lang=${language}`)
-        .then((data) => {
-          if (data) setFooterData(data);
-        })
-        .catch(console.error),
-    ]).finally(() => {
-      setLoading(false);
-    });
+    fetchAPI(`/footer-data?lang=${language}`)
+      .then((data) => {
+        if (data) setFooterData(data);
+      })
+      .catch(console.error)
+      .finally(() => {
+        setLoading(false);
+      });
   }, [language]);
 
   const getSocialIconData = (platform) => {

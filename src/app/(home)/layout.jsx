@@ -1,10 +1,12 @@
-import { fetchAPI } from "@/lib/api";
+import { getCachedHomeData } from "@/lib/cached-api";
 import { getSeoAlternates } from "@/lib/seo";
+import { headers } from "next/headers";
 
 export async function generateMetadata() {
-  // We don't have easy access to the locale here without cookies or middleware
-  // but we can try to fetch the default or use the headers
-  const data = await fetchAPI("/pages/home");
+  const headerList = await headers();
+  const locale = headerList.get("x-locale") || "en";
+
+  const data = await getCachedHomeData(locale);
   const alternates = await getSeoAlternates();
 
   return {

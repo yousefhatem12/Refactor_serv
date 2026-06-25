@@ -27,6 +27,15 @@ export async function getSeoAlternates() {
       },
     };
   } catch (error) {
+    if (error && (
+      error.message?.includes("prerender") || 
+      error.message?.includes("headers()") || 
+      error.message?.includes("cookies()") || 
+      error.digest?.startsWith("NEXT_") || 
+      error.message?.includes("dynamicIO")
+    )) {
+      throw error;
+    }
     console.error("Failed to generate SEO alternates:", error);
     return {};
   }
