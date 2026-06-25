@@ -1,8 +1,15 @@
 import { Montserrat, Poppins, Alexandria } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
 import HomeBackground from "./components/Home/HomeBackground";
+
+const tsDamasSans = localFont({
+  src: "../../public/fonts/TsDamasSansFreeBold.woff2",
+  variable: "--font-ts-damas",
+  display: "swap",
+});
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -93,7 +100,7 @@ async function ProvidersAndContent({ children, settings }) {
     "Leading company in web development and AI solutions.";
   const siteLogo = settings?.site_logo
     ? getMediaUrl(settings.site_logo)
-    : `${siteUrl}/logo.png`;
+    : `${siteUrl}/logo.svg`;
 
   const orgSchema = {
     "@context": "https://schema.org",
@@ -158,7 +165,7 @@ export default async function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${montserrat.variable} ${poppins.variable} ${alexandria.variable} min-h-screen antialiased relative`}
+      className={`${montserrat.variable} ${poppins.variable} ${alexandria.variable} ${tsDamasSans.variable} min-h-screen antialiased relative`}
       suppressHydrationWarning
     >
       <body className="min-h-screen flex flex-col relative" suppressHydrationWarning>

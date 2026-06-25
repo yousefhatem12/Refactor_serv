@@ -53,9 +53,16 @@ class ProductForm
                 Section::make('Media & Links')
                     ->schema([
                         FileUpload::make('image')
+                            ->label('Desktop Image (صورة الديسكتوب)')
                             ->image()
                             ->directory('products')
                             ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'products')),
+                        FileUpload::make('image_mobile')
+                            ->label('Mobile Image (صورة الموبايل)')
+                            ->image()
+                            ->directory('products')
+                            ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'products'))
+                            ->nullable(),
                         TextInput::make('demo_link')
                             ->url()
                             ->nullable(),

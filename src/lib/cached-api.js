@@ -1,10 +1,10 @@
 import { fetchAPI } from "./api";
 import { cacheLife } from "next/cache";
 
-export async function getCachedSettings() {
+export async function getCachedSettings(locale = "en") {
   "use cache";
   cacheLife("days");
-  return fetchAPI("/settings", { lang: "en", skipHeaders: true });
+  return fetchAPI(`/settings?lang=${locale}`, { skipHeaders: true });
 }
 
 export async function getCachedHomeData(locale) {

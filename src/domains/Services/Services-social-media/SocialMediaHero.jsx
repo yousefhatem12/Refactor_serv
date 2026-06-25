@@ -2,10 +2,10 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { FaPlay } from "react-icons/fa";
-import { useLanguage } from "../../context/LanguageContext";
-import { useSettings } from "../../context/SettingsContext";
-import VideoModal from "../Shared/VideoModal";
-import PricingModal from "../Shared/PricingModal";
+import { useLanguage } from "@/app/context/LanguageContext";
+import { useSettings } from "@/app/context/SettingsContext";
+import VideoModal from "@/app/components/Shared/VideoModal";
+import PricingModal from "@/app/components/Shared/PricingModal";
 import { useRouter } from "next/navigation";
 
 const SocialMediaHero = ({

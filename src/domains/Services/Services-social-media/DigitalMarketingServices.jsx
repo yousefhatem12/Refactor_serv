@@ -9,7 +9,7 @@ import {
   FiTool,
   FiCamera,
 } from "react-icons/fi";
-import { useLanguage } from "../../context/LanguageContext";
+import { useLanguage } from "@/app/context/LanguageContext";
 
 const DigitalMarketingServices = ({ marketingTitle, marketingSubtitle, marketingList }) => {
   const { language, t } = useLanguage();

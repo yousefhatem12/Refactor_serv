@@ -4,7 +4,7 @@ import React, { useLayoutEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import { useLanguage } from "../../context/LanguageContext";
+import { useLanguage } from "@/app/context/LanguageContext";
 import { getMediaUrl } from "@/lib/api";
 
 const OurJourney = ({ data }) => {

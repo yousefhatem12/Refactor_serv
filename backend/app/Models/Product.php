@@ -16,6 +16,7 @@ class Product extends Model
         'title',
         'description',
         'image',
+        'image_mobile',
         'demo_link',
         'order_link',
         'features',

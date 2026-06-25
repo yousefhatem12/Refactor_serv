@@ -10,8 +10,8 @@ import Stars from "./Stars";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
 import { fetchAPI } from "@/lib/api";
-import VideoModal from "../../Shared/VideoModal";
-import PricingModal from "../../Shared/PricingModal";
+import VideoModal from "@/app/components/Shared/VideoModal";
+import PricingModal from "@/app/components/Shared/PricingModal";
 import { useRouter } from "next/navigation";
 
 // Staggered animation variants
@@ -47,16 +47,21 @@ export default function Hero({ isPhaseTwo, data }) {
   const heroTitle1 = settings?.hero_title_1 || "";
   const heroTitle2 = settings?.hero_title_2 || "";
 
+  // Priority: 1. settings.hero_title_1 (locale-specific from backend settings)
+  //           2. data.hero_title / data.title (from home page API)
+  //           3. translation fallback (only after settings loaded)
   let title1 = "";
   let title2 = "";
 
-  if (data?.title || data?.subtitle) {
-    title1 = data?.title || "";
-    title2 = data?.subtitle || "";
-  } else if (heroTitle1 || heroTitle2) {
+  if (heroTitle1 || heroTitle2) {
+    // Settings hero titles take highest priority (locale-correct)
     title1 = heroTitle1;
     title2 = heroTitle2;
-  } else {
+  } else if (data?.hero_title || data?.title || data?.subtitle) {
+    title1 = data?.hero_title || data?.title || "";
+    title2 = data?.hero_subtitle || data?.subtitle || "";
+  } else if (!isLoadingSettings) {
+    // Only show translation fallback after settings have loaded (avoids English flash)
     title1 = t("innovativeSolutions") || "";
     title2 = t("tailoredToYourNeeds") || "";
   }
@@ -126,8 +131,8 @@ export default function Hero({ isPhaseTwo, data }) {
                 variants={itemVariants}
                 className="text-3xl md:text-4xl lg:text-[38px] lg:leading-[1.2] font-bold text-white mb-4 leading-tight"
               >
-                {isLoadingSettings ? (
-                  <span className="opacity-0 text-white">Loading...</span>
+                {!title1 ? (
+                  <span className="opacity-0 select-none" aria-hidden="true">&nbsp;</span>
                 ) : (
                   <>
                     {title1}
@@ -145,8 +150,8 @@ export default function Hero({ isPhaseTwo, data }) {
                 variants={itemVariants}
                 className="text-sm sm:text-base md:text-lg lg:text-lg text-gray-400 mb-8 max-w-lg leading-relaxed font-light text-balance opacity-90"
               >
-                {isLoadingSettings ? (
-                  <span className="opacity-0 text-white">Loading...</span>
+                {!subtitle ? (
+                  <span className="opacity-0 select-none" aria-hidden="true">&nbsp;</span>
                 ) : (
                   subtitle
                 )}
@@ -177,7 +182,7 @@ export default function Hero({ isPhaseTwo, data }) {
                     </svg>
                   </span>
                   {isLoadingSettings ? (
-                    <span className="opacity-0">Loading...</span>
+                    <span className="opacity-0 select-none" aria-hidden="true">&nbsp;</span>
                   ) : (
                     settings?.hero_cta_text || t("getAQuote")
                   )}
@@ -203,7 +208,7 @@ export default function Hero({ isPhaseTwo, data }) {
                     className="text-white font-bold text-xs sm:text-sm cursor-pointer hover:text-[#D98B50] transition-colors"
                   >
                     {isLoadingSettings ? (
-                      <span className="opacity-0">Loading...</span>
+                      <span className="opacity-0 select-none" aria-hidden="true">&nbsp;</span>
                     ) : (
                       settings?.hero_video_button_text || t("knowMore")
                     )}

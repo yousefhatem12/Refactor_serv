@@ -139,12 +139,12 @@ const FeaturesSection = ({ data }) => {
   );
 };
 
-import OurJourney from "../AboutUs/OurJourney";
-import Founders from "../AboutUs/Founders";
-import AboutCTA from "../AboutUs/AboutCTA";
-import WhyChooseUs from "../AboutUs/WhyChooseUs";
-import GlobalReach from "../AboutUs/GlobalReach";
-import TeamWork from "../AboutUs/TeamWork";
+import OurJourney from "@/domains/AboutUs/OurJourney";
+import Founders from "@/domains/AboutUs/Founders";
+import AboutCTA from "@/domains/AboutUs/AboutCTA";
+import WhyChooseUs from "@/domains/AboutUs/WhyChooseUs";
+import GlobalReach from "@/domains/AboutUs/GlobalReach";
+import TeamWork from "@/domains/AboutUs/TeamWork";
 
 const PageSections = ({ sections }) => {
   if (!sections || !Array.isArray(sections)) return null;

@@ -35,6 +35,9 @@ class ProductResource extends JsonResource
             'title' => $trans($this->title),
             'description' => $trans($this->description),
             'image' => $this->image ? (str_starts_with($this->image, 'http') || str_starts_with($this->image, '/') ? $this->image : asset('storage/' . $this->image)) : null,
+            'imageMobile' => $this->image_mobile
+                ? (str_starts_with($this->image_mobile, 'http') || str_starts_with($this->image_mobile, '/') ? $this->image_mobile : asset('storage/' . $this->image_mobile))
+                : ($this->image ? (str_starts_with($this->image, 'http') || str_starts_with($this->image, '/') ? $this->image : asset('storage/' . $this->image)) : null),
             'demoLink' => $this->demo_link ?? '#',
             'orderLink' => $this->order_link ?? '#',
             'tags' => $this->tech_specs ?? [],

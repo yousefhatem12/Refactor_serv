@@ -2,11 +2,11 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { FaPlay } from "react-icons/fa";
-import { useLanguage } from "../../context/LanguageContext";
-import { useSettings } from "../../context/SettingsContext";
+import { useLanguage } from "@/app/context/LanguageContext";
+import { useSettings } from "@/app/context/SettingsContext";
 import { getMediaUrl } from "@/lib/api";
-import VideoModal from "../Shared/VideoModal";
-import PricingModal from "../Shared/PricingModal";
+import VideoModal from "@/app/components/Shared/VideoModal";
+import PricingModal from "@/app/components/Shared/PricingModal";
 import { useRouter } from "next/navigation";
 
 const WebDevHero = ({ data, serviceId = "web-development" }) => {

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { fetchAPI } from "@/lib/api";
-import { useLanguage } from "../../../context/LanguageContext";
+import { useLanguage } from "@/app/context/LanguageContext";
 
 const OurPortfolio = ({ activeCategoryId }) => {
   const { t, language } = useLanguage();

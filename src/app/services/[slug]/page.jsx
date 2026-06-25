@@ -124,7 +124,7 @@ export default function DynamicServicePage() {
 
   const siteLogo = settings?.site_logo
     ? getMediaUrl(settings.site_logo)
-    : `${siteUrl}/logo.png`;
+    : `${siteUrl}/logo.svg`;
 
   const serviceSchema = {
     "@context": "https://schema.org",

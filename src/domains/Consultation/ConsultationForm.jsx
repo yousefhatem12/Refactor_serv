@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useLanguage } from "../../context/LanguageContext";
-import { fetchAPI } from "../../../lib/api";
+import { useLanguage } from "@/app/context/LanguageContext";
+import { fetchAPI } from "@/lib/api";
 import {
   FaMobileAlt,
   FaLaptopCode,
