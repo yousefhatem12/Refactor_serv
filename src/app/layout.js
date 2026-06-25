@@ -27,11 +27,10 @@ const alexandria = Alexandria({
 
 import { fetchAPI, getMediaUrl } from "@/lib/api";
 import { getSeoAlternates } from "@/lib/seo";
-
-export const dynamic = "force-dynamic";
+import { getCachedSettings } from "@/lib/cached-api";
 
 export async function generateMetadata() {
-  const settings = await fetchAPI("/settings");
+  const settings = await getCachedSettings();
   const faviconUrl = settings?.site_favicon
     ? getMediaUrl(settings.site_favicon)
     : "/logo.ico";
@@ -76,15 +75,16 @@ export async function generateMetadata() {
 
 import { cookies, headers } from "next/headers";
 import { LanguageProvider } from "./context/LanguageContext";
-import { AuthProvider } from "./context/AuthContext";
 import { SettingsProvider } from "./context/SettingsContext";
+import Loading from "./loading";
+import { Suspense } from "react";
+import { AuthProvider } from "./context/AuthContext";
 
-export default async function RootLayout({ children }) {
+async function ProvidersAndContent({ children, settings }) {
   const headersList = await headers();
   const xLocale = headersList.get("x-locale");
   const cookieStore = await cookies();
   const defaultLanguage = xLocale || cookieStore.get("NEXT_LOCALE")?.value || "en";
-  const settings = await fetchAPI("/settings");
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://serv5.com.eg";
   const siteTitle = settings?.site_title || "Serv5";
@@ -117,9 +117,47 @@ export default async function RootLayout({ children }) {
   };
 
   return (
+    <LanguageProvider defaultLanguage={defaultLanguage}>
+      <AuthProvider>
+        <SettingsProvider initialSettings={settings || {}}>
+          {settings?.custom_header_code && (
+            <div
+              dangerouslySetInnerHTML={{ __html: settings.custom_header_code }}
+              style={{ display: "none" }}
+            />
+          )}
+          <HomeBackground />
+          <Navbar />
+          {children}
+          <Footer />
+
+          {/* Organization & WebSite Schemas */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
+          />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+          />
+          {settings?.custom_footer_code && (
+            <div
+              dangerouslySetInnerHTML={{ __html: settings.custom_footer_code }}
+              style={{ display: "none" }}
+            />
+          )}
+        </SettingsProvider>
+      </AuthProvider>
+    </LanguageProvider>
+  );
+}
+
+export default async function RootLayout({ children }) {
+  const settings = await getCachedSettings();
+
+  return (
     <html
-      lang={defaultLanguage}
-      dir={defaultLanguage === "ar" ? "rtl" : "ltr"}
+      lang="en"
       className={`${montserrat.variable} ${poppins.variable} ${alexandria.variable} min-h-screen antialiased relative`}
       suppressHydrationWarning
     >
@@ -144,38 +182,11 @@ export default async function RootLayout({ children }) {
             `,
           }}
         />
-        {settings?.custom_header_code && (
-          <div
-            dangerouslySetInnerHTML={{ __html: settings.custom_header_code }}
-            style={{ display: "none" }}
-          />
-        )}
-        <LanguageProvider defaultLanguage={defaultLanguage}>
-          <AuthProvider>
-            <SettingsProvider initialSettings={settings || {}}>
-              <HomeBackground />
-              <Navbar />
-              {children}
-              <Footer />
-
-              {/* Organization & WebSite Schemas */}
-              <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
-              />
-              <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
-              />
-            </SettingsProvider>
-          </AuthProvider>
-        </LanguageProvider>
-        {settings?.custom_footer_code && (
-          <div
-            dangerouslySetInnerHTML={{ __html: settings.custom_footer_code }}
-            style={{ display: "none" }}
-          />
-        )}
+        <Suspense fallback={<Loading />}>
+          <ProvidersAndContent settings={settings}>
+            {children}
+          </ProvidersAndContent>
+        </Suspense>
       </body>
     </html>
   );

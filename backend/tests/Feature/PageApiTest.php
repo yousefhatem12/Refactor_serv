@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
+
 use App\Models\Page;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
@@ -11,7 +13,7 @@ class PageApiTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_can_fetch_a_page_by_slug_in_english()
     {
         Page::create([
@@ -45,7 +47,7 @@ class PageApiTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_fetch_a_page_by_slug_in_arabic()
     {
         Page::create([
@@ -79,14 +81,14 @@ class PageApiTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_404_if_page_does_not_exist()
     {
         $response = $this->getJson('/api/v1/pages/non-existent');
         $response->assertStatus(404);
     }
 
-    /** @test */
+    #[Test]
     public function it_clears_cache_automatically_when_page_is_saved()
     {
         $page = Page::create([

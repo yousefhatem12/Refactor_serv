@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
+
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -15,7 +17,7 @@ class ContactApiTest extends TestCase
 
 
 
-    /** @test */
+    #[Test]
     public function a_user_can_submit_a_contact_message()
     {
         $admin = User::factory()->create();
@@ -39,7 +41,7 @@ class ContactApiTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function contact_message_submission_validates_required_fields()
     {
         $response = $this->postJson('/api/v1/contact', [
@@ -52,7 +54,7 @@ class ContactApiTest extends TestCase
             ->assertJsonValidationErrors(['name', 'email', 'message']);
     }
 
-    /** @test */
+    #[Test]
     public function a_user_can_submit_a_quotation_request()
     {
         Storage::fake('public');
@@ -80,7 +82,7 @@ class ContactApiTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function a_user_can_submit_a_project_consultation()
     {
         $admin = User::factory()->create();
@@ -110,7 +112,7 @@ class ContactApiTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function project_consultation_submission_validates_required_fields()
     {
         $response = $this->postJson('/api/v1/consultations', [

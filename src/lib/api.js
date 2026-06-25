@@ -15,20 +15,32 @@ const CACHE_TTL = 300000; // 5 minutes
 
 export const fetchAPI = async (endpoint, options = {}) => {
   let lang = "en";
-  if (typeof window === "undefined") {
-    try {
-      const { cookies, headers } = await import("next/headers");
-      const headersList = await headers();
-      const xLocale = headersList.get("x-locale");
-      if (xLocale) {
-        lang = xLocale;
-      } else {
-        const cookieStore = await cookies();
-        const nextLocale = cookieStore.get("NEXT_LOCALE");
-        if (nextLocale) lang = nextLocale.value;
+  if (options.lang) {
+    lang = options.lang;
+  } else if (typeof window === "undefined") {
+    if (!options.skipHeaders) {
+      try {
+        const { cookies, headers } = await import("next/headers");
+        const headersList = await headers();
+        const xLocale = headersList.get("x-locale");
+        if (xLocale) {
+          lang = xLocale;
+        } else {
+          const cookieStore = await cookies();
+          const nextLocale = cookieStore.get("NEXT_LOCALE");
+          if (nextLocale) lang = nextLocale.value;
+        }
+      } catch (error) {
+        if (error && (
+          error.message?.includes("prerender") || 
+          error.message?.includes("headers()") || 
+          error.message?.includes("cookies()") || 
+          error.digest?.startsWith("NEXT_") || 
+          error.message?.includes("dynamicIO")
+        )) {
+          throw error;
+        }
       }
-    } catch (error) {
-      // Fallback if headers or cookies API is unavailable
     }
   } else {
     const match = document.cookie.match(new RegExp("(^| )NEXT_LOCALE=([^;]+)"));
@@ -45,7 +57,7 @@ export const fetchAPI = async (endpoint, options = {}) => {
 
   // Construct cache key based on URL and auth state
   let cacheKey = null;
-  if (isGet) {
+  if (isGet && typeof window !== "undefined") {
     cacheKey = `${url.pathname}${url.search}:${token || ""}`;
 
     const cached = apiCache.get(cacheKey);
@@ -87,13 +99,22 @@ export const fetchAPI = async (endpoint, options = {}) => {
 
       return await response.json();
     } catch (error) {
+      if (error && (
+        error.message?.includes("prerender") || 
+        error.message?.includes("headers()") || 
+        error.message?.includes("cookies()") || 
+        error.digest?.startsWith("NEXT_") || 
+        error.message?.includes("dynamicIO")
+      )) {
+        throw error;
+      }
       console.warn("API connection failed:", error.message);
       if (isGet && cacheKey) apiCache.delete(cacheKey); // Don't cache failures
       return null; // Return null so the UI doesn't crash
     }
   })();
 
-  if (isGet && cacheKey) {
+  if (isGet && cacheKey && typeof window !== "undefined") {
     apiCache.set(cacheKey, {
       promise: fetchPromise,
       timestamp: Date.now(),

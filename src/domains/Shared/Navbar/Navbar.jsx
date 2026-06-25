@@ -29,7 +29,7 @@ const Navbar = () => {
   const { toggleLanguage, t, language } = useLanguage();
   const settings = useSettings();
   const [navLinks, setNavLinks] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [activeHash, setActiveHash] = useState("");
   const [windowWidth, setWindowWidth] = useState(1400);
 

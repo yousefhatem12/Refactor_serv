@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
+
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -10,7 +12,7 @@ class ProductApiTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_can_list_active_products()
     {
         Product::create([
@@ -31,7 +33,7 @@ class ProductApiTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_list_inactive_products()
     {
         Product::create([
@@ -49,7 +51,7 @@ class ProductApiTest extends TestCase
         $this->assertEmpty($response->json());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_list_categories()
     {
         Product::create([
@@ -70,7 +72,7 @@ class ProductApiTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_show_a_single_product()
     {
         Product::create([
@@ -89,7 +91,7 @@ class ProductApiTest extends TestCase
             ->assertJsonPath('data.name', 'Single Product');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_show_a_single_product_by_id()
     {
         $product = Product::create([

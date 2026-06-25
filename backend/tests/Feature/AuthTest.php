@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
+
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -10,7 +12,7 @@ class AuthTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function a_user_can_register()
     {
         $response = $this->postJson('/api/v1/register', [
@@ -37,7 +39,7 @@ class AuthTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function a_user_cannot_register_with_existing_email()
     {
         User::factory()->create([
@@ -55,7 +57,7 @@ class AuthTest extends TestCase
             ->assertJsonValidationErrors(['email']);
     }
 
-    /** @test */
+    #[Test]
     public function a_user_can_login()
     {
         $user = User::factory()->create([
@@ -76,7 +78,7 @@ class AuthTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function a_user_cannot_login_with_incorrect_password()
     {
         $user = User::factory()->create([
@@ -93,7 +95,7 @@ class AuthTest extends TestCase
             ->assertJsonValidationErrors(['email']);
     }
 
-    /** @test */
+    #[Test]
     public function an_authenticated_user_can_get_their_details()
     {
         $user = User::factory()->create();
@@ -108,7 +110,7 @@ class AuthTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function an_authenticated_user_can_logout()
     {
         $user = User::factory()->create();
@@ -123,7 +125,7 @@ class AuthTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function an_unauthenticated_user_gets_401_on_protected_endpoints()
     {
         $response = $this->get('/api/v1/me');
