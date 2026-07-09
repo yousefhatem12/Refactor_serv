@@ -17,7 +17,7 @@ use Illuminate\Support\Str;
 class ServiceTemplateResource extends Resource
 {
     protected static ?string $model = ServiceTemplate::class;
-    protected static string|\UnitEnum|null $navigationGroup = null;
+    public static function getNavigationGroup(): ?string { return __('Pages'); }
     protected static ?int $navigationSort = 8;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-squares-plus';
     public static function getNavigationLabel(): string { return __('Service Templates'); }
@@ -190,15 +190,15 @@ class ServiceTemplateResource extends Resource
                                 \Filament\Forms\Components\Builder\Block::make('blogs')
                                     ->label('📰 Latest Blogs')->icon('heroicon-o-newspaper')
                                     ->schema([
-                                        \Filament\Forms\Components\Placeholder::make('info')
-                                            ->content('⚡ This section auto-fetches the latest blog posts. No configuration needed.')
+                                        \Filament\Infolists\Components\TextEntry::make('info')
+                                            ->state('⚡ This section auto-fetches the latest blog posts. No configuration needed.')
                                             ->columnSpanFull(),
                                     ]),
                                 \Filament\Forms\Components\Builder\Block::make('ecommerce_features')
                                     ->label('🛒 E-commerce Features')->icon('heroicon-o-shopping-cart')
                                     ->schema([
-                                        \Filament\Forms\Components\Placeholder::make('info')
-                                            ->content('⚡ This section uses the default e-commerce features component. No configuration needed.')
+                                        \Filament\Infolists\Components\TextEntry::make('info')
+                                            ->state('⚡ This section uses the default e-commerce features component. No configuration needed.')
                                             ->columnSpanFull(),
                                     ]),
                                 \Filament\Forms\Components\Builder\Block::make('split_content')

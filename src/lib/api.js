@@ -15,8 +15,18 @@ const CACHE_TTL = 300000; // 5 minutes
 
 export const fetchAPI = async (endpoint, options = {}) => {
   let lang = "en";
+  
+  // 1. Try to extract lang from options or endpoint URL query string
+  let queryLang = null;
+  try {
+    const tempUrl = new URL(endpoint, "http://localhost");
+    queryLang = tempUrl.searchParams.get("lang");
+  } catch (e) {}
+
   if (options.lang) {
     lang = options.lang;
+  } else if (queryLang) {
+    lang = queryLang;
   } else if (typeof window === "undefined") {
     if (!options.skipHeaders) {
       try {

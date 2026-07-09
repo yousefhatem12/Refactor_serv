@@ -53,13 +53,14 @@ export default function Hero({ isPhaseTwo, data }) {
   let title1 = "";
   let title2 = "";
 
-  if (heroTitle1 || heroTitle2) {
-    // Settings hero titles take highest priority (locale-correct)
-    title1 = heroTitle1;
-    title2 = heroTitle2;
-  } else if (data?.hero_title || data?.title || data?.subtitle) {
+  if (data?.hero_title || data?.title || data?.subtitle) {
+    // Page data takes highest priority
     title1 = data?.hero_title || data?.title || "";
     title2 = data?.hero_subtitle || data?.subtitle || "";
+  } else if (heroTitle1 || heroTitle2) {
+    // Settings hero titles take second priority
+    title1 = heroTitle1;
+    title2 = heroTitle2;
   } else if (!isLoadingSettings) {
     // Only show translation fallback after settings have loaded (avoids English flash)
     title1 = t("innovativeSolutions") || "";
