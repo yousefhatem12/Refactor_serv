@@ -1,0 +1,18 @@
+{
+  "pages": {},
+  "app": {
+    "[project]/src/app/our-products/page": [
+      "static/media/TsDamasSansFreeBold-s.p.2ti-zwnfukycs.woff2",
+      "static/media/e8f2fbee2754df70-s.p.1dqa_6e_ad4sj.woff2",
+      "static/media/c875c6f5d3e977ac-s.p.1h18_wedhzk4h.woff2",
+      "static/media/a218039a3287bcfd-s.p.43zbiuwnnoiok.woff2",
+      "static/media/8e6fa89aa22d24ec-s.p.2o7m9ogm38dql.woff2",
+      "static/media/e2334d715941921e-s.p.3o_v2fun1jzxk.woff2",
+      "static/media/47fe1b7cd6e6ed85-s.p.3bh2vc0w-r-ll.woff2",
+      "static/media/57696fb0c8dcfe1f-s.p.29a202atpp3ye.woff2",
+      "static/media/8f2ca9bed5019488-s.p.1rne3a59172go.woff2"
+    ]
+  },
+  "appUsingSizeAdjust": true,
+  "pagesUsingSizeAdjust": false
+}
