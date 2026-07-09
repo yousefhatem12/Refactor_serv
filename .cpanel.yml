@@ -10,7 +10,7 @@ deployment:
   tasks:
     # 1. Define paths
     - export FRONTEND_PATH=/home/serv5eg/serv5-frontend2026
-    - export BACKEND_PATH=/home/serv5eg/api.serv5.com.eg
+    - export BACKEND_PATH=/home/serv5eg/serv5-backend2026
 
     # 2. Deploy Frontend (Next.js)
     # Copies all files except backend, git config, and dev files
