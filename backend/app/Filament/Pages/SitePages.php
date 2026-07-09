@@ -21,7 +21,7 @@ class SitePages extends Page
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-document-duplicate';
     protected static ?int $navigationSort = 20;
     public static function getNavigationLabel(): string { return __('Pages'); }
-    public static function getNavigationGroup(): ?string { return null; }
+    public static function getNavigationGroup(): ?string { return __('Pages'); }
 
     protected string $view = 'filament.pages.site-pages';
 

@@ -13,7 +13,7 @@ use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 
 /**
- * @property \Filament\Schemas\Schema|\Filament\Forms\Form $form
+ * @property Schema $form
  */
 class ManageHomeFeaturesSettings extends Page implements HasForms
 {
@@ -45,16 +45,18 @@ class ManageHomeFeaturesSettings extends Page implements HasForms
     public function mount(): void
     {
         $settingsKeys = [
+            'features_subtitle',
             'features_title',
             'features_desc',
             'features_image',
             'features_partners',
+            'experience_years',
         ];
         
         $settingsData = \App\Models\Setting::whereIn('key', $settingsKeys)->pluck('value', 'key')->toArray();
 
         $formData = [];
-        foreach (['features_title', 'features_desc'] as $key) {
+        foreach (['features_subtitle', 'features_title', 'features_desc'] as $key) {
             $val = $settingsData[$key] ?? null;
             $formData[$key] = is_string($val) ? json_decode($val, true) : ['en' => '', 'ar' => ''];
             if (!is_array($formData[$key])) {
@@ -63,6 +65,7 @@ class ManageHomeFeaturesSettings extends Page implements HasForms
         }
 
         $formData['features_image'] = $settingsData['features_image'] ?? null;
+        $formData['experience_years'] = $settingsData['experience_years'] ?? '15';
         
         $partnersVal = $settingsData['features_partners'] ?? null;
         $formData['features_partners'] = is_string($partnersVal) ? json_decode($partnersVal, true) : [];
@@ -79,6 +82,8 @@ class ManageHomeFeaturesSettings extends Page implements HasForms
             ->components([
                 \Filament\Schemas\Components\Section::make('Features Section Title & Description')
                     ->schema([
+                        TextInput::make('features_subtitle.en')->label('Yellow Subtitle (English)'),
+                        TextInput::make('features_subtitle.ar')->label('Yellow Subtitle (Arabic)'),
                         TextInput::make('features_title.en')->label('Title (English)'),
                         TextInput::make('features_title.ar')->label('Title (Arabic)'),
                         Textarea::make('features_desc.en')->label('Description (English)')->rows(3),
@@ -87,8 +92,13 @@ class ManageHomeFeaturesSettings extends Page implements HasForms
 
                 \Filament\Schemas\Components\Section::make('Features Images & Partners')
                     ->schema([
+                        TextInput::make('experience_years')
+                            ->label('Years of Experience (e.g. 15)')
+                            ->numeric()
+                            ->default(15),
+
                         FileUpload::make('features_image')
-                            ->label('Experience Image (e.g. 15 Years of Experience)')
+                            ->label('Custom Text Background Image (Optional)')
                             ->image()
                             ->directory('settings')
                             ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'settings')),
@@ -118,7 +128,7 @@ class ManageHomeFeaturesSettings extends Page implements HasForms
         try {
             $data = $this->form->getState();
             
-            foreach (['features_title', 'features_desc'] as $key) {
+            foreach (['features_subtitle', 'features_title', 'features_desc'] as $key) {
                 \App\Models\Setting::updateOrCreate(
                     ['key' => $key],
                     [
@@ -135,6 +145,15 @@ class ManageHomeFeaturesSettings extends Page implements HasForms
                     'value' => $data['features_image'] ?? null,
                     'type' => 'image',
                     'value_source' => 'file'
+                ]
+            );
+
+            \App\Models\Setting::updateOrCreate(
+                ['key' => 'experience_years'],
+                [
+                    'value' => $data['experience_years'] ?? '15',
+                    'type' => 'text',
+                    'value_source' => 'db'
                 ]
             );
 

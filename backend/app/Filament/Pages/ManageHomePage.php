@@ -14,7 +14,7 @@ class ManageHomePage extends Page
 {
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-home';
     public static function getNavigationLabel(): string { return __('Home Page'); }
-    public static function getNavigationGroup(): ?string { return null; }
+    public static function getNavigationGroup(): ?string { return __('Home Page'); }
     protected static ?int $navigationSort = 10;
     
     protected string $view = 'filament.pages.site-pages';

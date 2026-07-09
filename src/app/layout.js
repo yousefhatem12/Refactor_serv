@@ -87,11 +87,13 @@ import Loading from "./loading";
 import { Suspense } from "react";
 import { AuthProvider } from "./context/AuthContext";
 
-async function ProvidersAndContent({ children, settings }) {
+async function ProvidersAndContent({ children }) {
   const headersList = await headers();
   const xLocale = headersList.get("x-locale");
   const cookieStore = await cookies();
   const defaultLanguage = xLocale || cookieStore.get("NEXT_LOCALE")?.value || "en";
+
+  const settings = await getCachedSettings(defaultLanguage);
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://serv5.com.eg";
   const siteTitle = settings?.site_title || "Serv5";
@@ -126,7 +128,7 @@ async function ProvidersAndContent({ children, settings }) {
   return (
     <LanguageProvider defaultLanguage={defaultLanguage}>
       <AuthProvider>
-        <SettingsProvider initialSettings={settings || {}}>
+        <SettingsProvider initialSettings={settings || {}} ssrLocale={defaultLanguage}>
           {settings?.custom_header_code && (
             <div
               dangerouslySetInnerHTML={{ __html: settings.custom_header_code }}
@@ -160,14 +162,17 @@ async function ProvidersAndContent({ children, settings }) {
 }
 
 export default async function RootLayout({ children }) {
-  const settings = await getCachedSettings();
-
   return (
     <html
       lang="en"
       className={`${montserrat.variable} ${poppins.variable} ${alexandria.variable} ${tsDamasSans.variable} min-h-screen antialiased relative`}
       suppressHydrationWarning
     >
+      <head>
+        <link rel="preload" href="/Hero/earth.webp" as="image" type="image/webp" fetchPriority="high" />
+        <link rel="preload" href="/Hero/orange-planet.webp" as="image" type="image/webp" fetchPriority="high" />
+        <link rel="preload" href="/logo.svg" as="image" type="image/svg+xml" fetchPriority="high" />
+      </head>
       <body className="min-h-screen flex flex-col relative" suppressHydrationWarning>
         <script
           dangerouslySetInnerHTML={{
@@ -190,7 +195,7 @@ export default async function RootLayout({ children }) {
           }}
         />
         <Suspense fallback={<Loading />}>
-          <ProvidersAndContent settings={settings}>
+          <ProvidersAndContent>
             {children}
           </ProvidersAndContent>
         </Suspense>
@@ -198,3 +203,4 @@ export default async function RootLayout({ children }) {
     </html>
   );
 }
+

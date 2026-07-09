@@ -4,7 +4,6 @@ namespace App\Filament\Pages;
 
 use App\Models\Setting;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -14,7 +13,7 @@ use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 
 /**
- * @property \Filament\Schemas\Schema $form
+ * @property Schema $form
  */
 class ManageTranslations extends Page implements HasForms
 {
@@ -46,6 +45,10 @@ class ManageTranslations extends Page implements HasForms
             'trans_contactUs',
             'trans_ourProducts',
             'trans_bankAccounts',
+            'trans_wdPortfolioTitle',
+            'trans_maPortfolioTitle',
+            'trans_wdPortfolioDesc',
+            'trans_maPortfolioDesc',
         ];
 
         $settingsData = Setting::whereIn('key', $keys)->pluck('value', 'key')->toArray();
@@ -80,8 +83,8 @@ class ManageTranslations extends Page implements HasForms
                     ->schema([
                         TextInput::make('our_products_title.en')->label('Title (English)'),
                         TextInput::make('our_products_title.ar')->label('Title (Arabic)'),
-                        Textarea::make('our_products_description.en')->label('Description (English)')->rows(3),
-                        Textarea::make('our_products_description.ar')->label('Description (Arabic)')->rows(3),
+                        TextInput::make('our_products_description.en')->label('Description (English)'),
+                        TextInput::make('our_products_description.ar')->label('Description (Arabic)'),
                     ])->columns(2),
 
                 Section::make('Website Main Menu / القائمة الرئيسية للموقع')
@@ -113,6 +116,22 @@ class ManageTranslations extends Page implements HasForms
 
                         TextInput::make('trans_bankAccounts.en')->label('Bank Accounts (EN)'),
                         TextInput::make('trans_bankAccounts.ar')->label('الحسابات البنكية (AR)'),
+                    ])->columns(2),
+
+                Section::make('Portfolio Section Titles / عناوين أقسام الأعمال')
+                    ->description('Translate the portfolio section titles for Web and Mobile')
+                    ->schema([
+                        TextInput::make('trans_wdPortfolioTitle.en')->label('Web Design Portfolio Title (EN)'),
+                        TextInput::make('trans_wdPortfolioTitle.ar')->label('عنوان أعمال تصميم المواقع (AR)'),
+                        
+                        TextInput::make('trans_wdPortfolioDesc.en')->label('Web Design Portfolio Description (EN)'),
+                        TextInput::make('trans_wdPortfolioDesc.ar')->label('وصف أعمال تصميم المواقع (AR)'),
+                        
+                        TextInput::make('trans_maPortfolioTitle.en')->label('Mobile App Portfolio Title (EN)'),
+                        TextInput::make('trans_maPortfolioTitle.ar')->label('عنوان أعمال تطبيقات الجوال (AR)'),
+                        
+                        TextInput::make('trans_maPortfolioDesc.en')->label('Mobile App Portfolio Description (EN)'),
+                        TextInput::make('trans_maPortfolioDesc.ar')->label('وصف أعمال تطبيقات الجوال (AR)'),
                     ])->columns(2),
             ])
             ->statePath('data');

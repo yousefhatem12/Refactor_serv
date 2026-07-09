@@ -2,6 +2,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
+import { useSettings } from "@/app/context/SettingsContext";
 import { fetchAPI, getMediaUrl } from "@/lib/api";
 
 const partners = [
@@ -39,6 +40,8 @@ export default function Features() {
   const sectionRef = useRef(null);
   const partnersRef = useRef(null);
   const { language, t } = useLanguage();
+  // Use global settings from SSR context — no re-fetch needed
+  const settings = useSettings();
 
   const scrollLeft = () => {
     if (partnersRef.current) {
@@ -53,31 +56,34 @@ export default function Features() {
   };
 
   const [features, setFeatures] = useState([]);
-  const [settings, setSettings] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [prevLanguage, setPrevLanguage] = useState(language);
+  const fetchedRef = useRef(false);
 
-  if (language !== prevLanguage) {
-    setPrevLanguage(language);
-    setLoading(true);
-  }
+  // Lazy-load /features only when section enters viewport (once per language change)
+  useEffect(() => {
+    fetchedRef.current = false; // reset on language change
+  }, [language]);
 
   useEffect(() => {
-    const fetchFeatures = fetchAPI("/features")
-      .then((data) => {
-        if (data && data.length > 0) setFeatures(data);
-      })
-      .catch(console.error);
+    const el = sectionRef.current;
+    if (!el) return;
 
-    const fetchSettings = fetchAPI("/settings")
-      .then((data) => {
-        if (data) setSettings(data);
-      })
-      .catch(console.error);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !fetchedRef.current) {
+          fetchedRef.current = true;
+          fetchAPI(`/features?lang=${language}`)
+            .then((data) => {
+              if (data && data.length > 0) setFeatures(data);
+            })
+            .catch(console.error);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" }
+    );
 
-    Promise.all([fetchFeatures, fetchSettings]).finally(() => {
-      setLoading(false);
-    });
+    observer.observe(el);
+    return () => observer.disconnect();
   }, [language]);
 
   const displayFeatures =
@@ -163,7 +169,7 @@ export default function Features() {
                 className="h-[2px] bg-[#D98B50]"
               ></motion.span>
               <span className="text-[#D98B50] font-bold tracking-[0.2em] uppercase text-xs md:text-sm lg:text-3xl">
-                {t("whoWeAre")}
+                {settings.features_subtitle || t("whoWeAre")}
               </span>
             </div>
 
@@ -327,14 +333,7 @@ export default function Features() {
                 className="flex items-center justify-start lg:justify-center gap-6 sm:gap-8 md:gap-12 lg:gap-16 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory flex-nowrap"
                 style={{ msOverflowStyle: "none", scrollbarWidth: "none" }}
               >
-                {loading ? (
-                  Array.from({ length: 5 }).map((_, index) => (
-                    <div
-                      key={index}
-                      className="h-12 sm:h-14 md:h-20 lg:h-24 w-28 sm:w-32 md:w-44 lg:w-52 rounded-lg bg-white/5 border border-white/10 animate-pulse shrink-0 snap-center"
-                    />
-                  ))
-                ) : (
+                {
                   displayPartners.map((partner, index) => (
                     <motion.div
                       key={index}
@@ -356,7 +355,7 @@ export default function Features() {
                       <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1/3 h-[2px] bg-[#D98B50] opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-[1px]"></div>
                     </motion.div>
                   ))
-                )}
+                }
               </div>
             </div>
 

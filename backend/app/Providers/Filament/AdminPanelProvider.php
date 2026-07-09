@@ -6,7 +6,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Pages\Dashboard;
+use App\Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\View\PanelsRenderHook;
@@ -31,12 +31,12 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => \Filament\Support\Colors\Color::hex('#FF8A00'),
-                'danger' => \Filament\Support\Colors\Color::Rose,
-                'gray' => \Filament\Support\Colors\Color::Zinc,
-                'info' => \Filament\Support\Colors\Color::Blue,
-                'success' => \Filament\Support\Colors\Color::Emerald,
-                'warning' => \Filament\Support\Colors\Color::Orange,
+                'primary' => Color::hex('#FF8A00'),
+                'danger' => Color::Rose,
+                'gray' => Color::Zinc,
+                'info' => Color::Blue,
+                'success' => Color::Emerald,
+                'warning' => Color::Orange,
             ])
             ->brandName('Serv5')
             ->brandLogo(asset('logo.svg'))
@@ -63,15 +63,22 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 \Filament\Navigation\NavigationGroup::make()
+                    ->label(fn () => __('Home Page')),
+                \Filament\Navigation\NavigationGroup::make()
+                    ->label(fn () => __('Pages')),
+                \Filament\Navigation\NavigationGroup::make()
                     ->label(fn () => __('Header')),
                 \Filament\Navigation\NavigationGroup::make()
                     ->label(fn () => __('Footer')),
+                \Filament\Navigation\NavigationGroup::make()
+                    ->label(fn () => __('Settings')),
                 \Filament\Navigation\NavigationGroup::make()
                     ->label(fn () => __('System Settings')),
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 AccountWidget::class,
+                \App\Filament\Widgets\StatsOverview::class,
             ])
             ->middleware([
                 EncryptCookies::class,
