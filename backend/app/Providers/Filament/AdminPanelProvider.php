@@ -56,6 +56,41 @@ class AdminPanelProvider extends PanelProvider
                 PanelsRenderHook::BODY_END,
                 fn (): string => Blade::render('@include("filament.hooks.notification-sound")')
             )
+            ->renderHook(
+                PanelsRenderHook::HEAD_END,
+                fn (): string => '
+                    <style>
+                        form .fi-form-actions, 
+                        form > .fi-ac,
+                        form > div > .fi-ac {
+                            position: sticky !important;
+                            bottom: 1rem !important;
+                            z-index: 10 !important;
+                            display: flex !important;
+                            justify-content: center !important;
+                            align-items: center !important;
+                            gap: 1rem !important;
+                            background-color: rgba(255, 255, 255, 0.45) !important;
+                            backdrop-filter: blur(16px) !important;
+                            -webkit-backdrop-filter: blur(16px) !important;
+                            padding: 0.75rem 1.25rem !important;
+                            margin-top: 2rem !important;
+                            border: 1px solid rgba(0, 0, 0, 0.05) !important;
+                            border-radius: 0.75rem !important;
+                            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+                            transition: all 0.3s ease-in-out !important;
+                        }
+
+                        .dark form .fi-form-actions, 
+                        .dark form > .fi-ac,
+                        .dark form > div > .fi-ac {
+                            background-color: rgba(24, 24, 27, 0.45) !important;
+                            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+                            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5) !important;
+                        }
+                    </style>
+                '
+            )
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
                     ->navigationGroup(fn () => __('System Settings'))
