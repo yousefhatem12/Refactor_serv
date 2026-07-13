@@ -57,22 +57,6 @@ class ServiceResource extends Resource
                                 Textarea::make('description.en')->label('Description (English)')->nullable(),
                                 Textarea::make('description.ar')->label('Description (Arabic)')->nullable(),
                                 TextInput::make('icon')->nullable()->helperText('Icon name from Heroicons or path to icon'),
-                                Select::make('parent_id')
-                                    ->label('Parent Service')
-                                    ->options(function ($record) {
-                                        $query = Service::query()->where('is_active', true);
-                                        if ($record) {
-                                            $query->where('id', '!=', $record->id);
-                                        }
-                                        return $query->get()->mapWithKeys(function ($service) {
-                                            $nameEn = is_array($service->name) ? ($service->name['en'] ?? '') : (json_decode($service->name, true)['en'] ?? $service->name);
-                                            $nameAr = is_array($service->name) ? ($service->name['ar'] ?? '') : (json_decode($service->name, true)['ar'] ?? $service->name);
-                                            return [$service->id => "{$nameEn} / {$nameAr}"];
-                                        })->toArray();
-                                    })
-                                    ->nullable()
-                                    ->searchable()
-                                    ->placeholder('Select Parent Service (Optional)'),
                                 Toggle::make('is_active')->default(true),
                             ])->columns(2),
 
@@ -336,12 +320,6 @@ class ServiceResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('parent.name')
-                    ->label('Parent Service')
-                    ->formatStateUsing(fn ($state) => is_array($state) ? ($state['en'] ?? '') : (json_decode($state, true)['en'] ?? $state))
-                    ->placeholder('None')
-                    ->searchable()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('sections.template')
                     ->label('Template')
                     ->badge()
