@@ -2,29 +2,22 @@
 # ----------------------------------------------------
 # This file automates copying and deploying files from your Git repo
 # to their respective live paths on cPanel when you trigger a deploy.
-#
-# IMPORTANT: Adjust "serv5eg" to your actual cPanel username if it is different.
-# Also verify the backend and frontend target directories on your server.
 
 deployment:
   tasks:
-    # 1. Define paths
-    - export FRONTEND_PATH=/home2/serv5eg/public_html/serv5-frontend2026
-    - export BACKEND_PATH=/home2/serv5eg/public_html/serv5-backend2026
+    # 1. Deploy Frontend (Next.js)
+    # Copies all files except backend, git config, and dev files to the live folder
+    - /bin/rsync -av --delete --exclude="backend" --exclude=".git" --exclude="node_modules" --exclude="deleted-backend" * /home2/serv5eg/public_html/serv5-frontend2026/
 
-    # 2. Deploy Frontend (Next.js)
-    # Copies all files except backend, git config, and dev files
-    - /bin/rsync -av --delete --exclude="backend" --exclude=".git" --exclude="node_modules" --exclude="deleted-backend" * $FRONTEND_PATH/
+    # 2. Deploy Backend (Laravel)
+    # Copies everything inside backend/ to the live API folder
+    - /bin/rsync -av --delete backend/ /home2/serv5eg/public_html/serv5-backend2026/
 
-    # 3. Deploy Backend (Laravel)
-    # Copies everything inside backend/ to the API directory
-    - /bin/rsync -av --delete backend/ $BACKEND_PATH/
+    # 3. Post-Deployment Backend Tasks (Laravel migrations & cache clearing)
+    - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan migrate --force
+    - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan config:cache
+    - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan route:cache
+    - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan view:cache
 
-    # 4. Post-Deployment Backend Tasks (Laravel migrations & cache clearing)
-    - cd $BACKEND_PATH && php artisan migrate --force
-    - cd $BACKEND_PATH && php artisan config:cache
-    - cd $BACKEND_PATH && php artisan route:cache
-    - cd $BACKEND_PATH && php artisan view:cache
-
-    # 5. Reload Frontend (Passenger Node.js Server restart)
-    - mkdir -p $FRONTEND_PATH/tmp && touch $FRONTEND_PATH/tmp/restart.txt
+    # 4. Reload Frontend (Passenger Node.js Server restart)
+    - mkdir -p /home2/serv5eg/public_html/serv5-frontend2026/tmp && touch /home2/serv5eg/public_html/serv5-frontend2026/tmp/restart.txt
