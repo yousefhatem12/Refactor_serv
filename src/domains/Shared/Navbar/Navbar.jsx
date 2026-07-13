@@ -197,13 +197,8 @@ const Navbar = () => {
           Array.isArray(navLinksData) &&
           navLinksData.length > 0
         ) {
-          // Filter out /careers and /faq from top-level navbar items
-          const filteredLinks = navLinksData.filter(
-            (link) => link.href !== "/careers" && link.href !== "/faq"
-          );
-
           // Inject dynamic services into any dropdown marked as services
-          const enriched = filteredLinks.map((link) => {
+          const enriched = navLinksData.map((link) => {
             if (link.dropdown && link.name === t("services")) {
               return {
                 ...link,
@@ -227,8 +222,7 @@ const Navbar = () => {
                     name: t("bankAccounts") || "Bank Accounts",
                     href: "/bank-accounts",
                   },
-                  { name: t("careers") || "Careers", href: "/careers" },
-                  { name: t("faq") || "FAQ", href: "/faq" },
+                  ...(link.dropdown || []),
                 ],
               };
             }
