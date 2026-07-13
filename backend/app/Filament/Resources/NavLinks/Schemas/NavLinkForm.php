@@ -26,7 +26,15 @@ class NavLinkForm
                     ->required(),
                 \Filament\Forms\Components\Select::make('parent_id')
                     ->label('Parent Link')
-                    ->relationship('parent', 'label->en')
+                    ->options(function () {
+                        return \App\Models\NavLink::whereNull('parent_id')
+                            ->get()
+                            ->mapWithKeys(function ($link) {
+                                $label = $link->label;
+                                $title = is_array($label) ? ($label['en'] ?? '') : $label;
+                                return [$link->id => $title];
+                            });
+                    })
                     ->nullable()
                     ->searchable(),
                 TextInput::make('sort_order')
