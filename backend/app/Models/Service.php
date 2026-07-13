@@ -11,6 +11,7 @@ class Service extends Model
     use HasFactory;
 
     protected $fillable = [
+        'parent_id',
         'name',
         'slug',
         'description',
@@ -34,6 +35,30 @@ class Service extends Model
                 $service->slug = Str::slug($service->name);
             }
         });
+
+        static::saved(function () {
+            \Illuminate\Support\Facades\Cache::forget('services_hierarchy_ar');
+            \Illuminate\Support\Facades\Cache::forget('services_hierarchy_en');
+            \Illuminate\Support\Facades\Cache::forget('services_ar');
+            \Illuminate\Support\Facades\Cache::forget('services_en');
+        });
+
+        static::deleted(function () {
+            \Illuminate\Support\Facades\Cache::forget('services_hierarchy_ar');
+            \Illuminate\Support\Facades\Cache::forget('services_hierarchy_en');
+            \Illuminate\Support\Facades\Cache::forget('services_ar');
+            \Illuminate\Support\Facades\Cache::forget('services_en');
+        });
+    }
+
+    public function parent(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Service::class, 'parent_id');
+    }
+
+    public function children(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Service::class, 'parent_id');
     }
 
     public function pricingPlans(): \Illuminate\Database\Eloquent\Relations\HasMany
