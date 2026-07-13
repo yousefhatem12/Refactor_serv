@@ -60,9 +60,9 @@ class AdminPanelProvider extends PanelProvider
                 PanelsRenderHook::HEAD_END,
                 fn (): string => '
                     <style>
-                        form .fi-form-actions, 
-                        form > .fi-ac,
-                        form > div > .fi-ac {
+                        form:not(.fi-modal-window *):not(.fi-modal *) .fi-form-actions, 
+                        form:not(.fi-modal-window *):not(.fi-modal *) > .fi-ac,
+                        form:not(.fi-modal-window *):not(.fi-modal *) > div > .fi-ac {
                             position: sticky !important;
                             bottom: 1rem !important;
                             z-index: 10 !important;
@@ -81,9 +81,16 @@ class AdminPanelProvider extends PanelProvider
                             transition: all 0.3s ease-in-out !important;
                         }
 
-                        .dark form .fi-form-actions, 
-                        .dark form > .fi-ac,
-                        .dark form > div > .fi-ac {
+                        form:not(.fi-modal-window *):not(.fi-modal *) .fi-form-actions > div,
+                        form:not(.fi-modal-window *):not(.fi-modal *) .fi-ac > div {
+                            justify-content: center !important;
+                            width: auto !important;
+                            flex-grow: 0 !important;
+                        }
+
+                        .dark form:not(.fi-modal-window *):not(.fi-modal *) .fi-form-actions, 
+                        .dark form:not(.fi-modal-window *):not(.fi-modal *) > .fi-ac,
+                        .dark form:not(.fi-modal-window *):not(.fi-modal *) > div > .fi-ac {
                             background-color: rgba(24, 24, 27, 0.45) !important;
                             border: 1px solid rgba(255, 255, 255, 0.1) !important;
                             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5) !important;
