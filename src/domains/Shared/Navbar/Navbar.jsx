@@ -76,6 +76,8 @@ const Navbar = () => {
       dropdown: [
         { name: t("aboutUs") || "About Us", href: "/about-us" },
         { name: t("bankAccounts") || "Bank Accounts", href: "/bank-accounts" },
+        { name: t("careers") || "Careers", href: "/careers" },
+        { name: t("faq") || "FAQ", href: "/faq" },
       ],
     },
     {
@@ -116,8 +118,6 @@ const Navbar = () => {
     { name: t("portfolio") || "Portfolio", href: "/portfolio" },
     { name: t("blog") || "Blog", href: "/blog" },
     { name: t("ourProducts") || "Our Products", href: "/our-products" },
-    { name: t("careers") || "Careers", href: "/careers" },
-    { name: t("faq") || "FAQ", href: "/faq" },
     { name: t("contactUs") || "Contact Us", href: "/contact-us" },
   ];
 
@@ -170,6 +170,8 @@ const Navbar = () => {
             dropdown: [
               { name: t("aboutUs"), href: "/about-us" },
               { name: t("bankAccounts"), href: "/bank-accounts" },
+              { name: t("careers"), href: "/careers" },
+              { name: t("faq"), href: "/faq" },
             ],
           },
           {
@@ -187,8 +189,6 @@ const Navbar = () => {
           { name: t("portfolio"), href: "/portfolio" },
           { name: t("blog"), href: "/blog" },
           { name: t("ourProducts"), href: "/our-products" },
-          { name: t("careers"), href: "/careers" },
-          { name: t("faq"), href: "/faq" },
           { name: t("contactUs"), href: "/contact-us" },
         ];
 
@@ -197,8 +197,13 @@ const Navbar = () => {
           Array.isArray(navLinksData) &&
           navLinksData.length > 0
         ) {
+          // Filter out /careers and /faq from top-level navbar items
+          const filteredLinks = navLinksData.filter(
+            (link) => link.href !== "/careers" && link.href !== "/faq"
+          );
+
           // Inject dynamic services into any dropdown marked as services
-          const enriched = navLinksData.map((link) => {
+          const enriched = filteredLinks.map((link) => {
             if (link.dropdown && link.name === t("services")) {
               return {
                 ...link,
@@ -222,6 +227,8 @@ const Navbar = () => {
                     name: t("bankAccounts") || "Bank Accounts",
                     href: "/bank-accounts",
                   },
+                  { name: t("careers") || "Careers", href: "/careers" },
+                  { name: t("faq") || "FAQ", href: "/faq" },
                 ],
               };
             }
