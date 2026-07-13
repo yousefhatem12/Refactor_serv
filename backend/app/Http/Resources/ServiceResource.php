@@ -32,30 +32,30 @@ class ServiceResource extends JsonResource
         if ($request->routeIs('*.show') || $request->routeIs('*.getService')) {
             $sections = $this->sections ?: [];
             
-            // blocks array from Page Builder
+            // blocks array from Page Builder - translate all text fields
             $blocks = null;
             if (!empty($sections['blocks']) && is_array($sections['blocks'])) {
-                $blocks = collect($sections['blocks'])->map(function ($block) {
-                    $data = $block['data'] ?? [];
-                    if (!empty($data['items']) && is_array($data['items'])) {
-                        $data['items'] = collect($data['items'])->map(function ($item) {
-                            return [
-                                'title' => $item['title'] ?? null,
-                                'desc' => $item['desc'] ?? null,
-                                'content' => $item['content'] ?? null,
-                                'price' => $item['price'] ?? null,
-                                'currency' => $item['currency'] ?? null,
-                                'period' => $item['period'] ?? null,
-                                'features' => $item['features'] ?? null,
-                                'button_text' => $item['button_text'] ?? null,
-                                'button_url' => $item['button_url'] ?? null,
-                                'is_popular' => $item['is_popular'] ?? null,
-                            ];
-                        })->toArray();
+                // Recursively translate any {en, ar} objects to strings
+                $translateDeep = function ($value) use (&$translateDeep, $trans) {
+                    if (is_array($value)) {
+                        // If it looks like a translation object {en:..., ar:...}
+                        // Use array_key_exists (not isset) to handle null values!
+                        if (array_key_exists('en', $value) || array_key_exists('ar', $value)) {
+                            return $trans($value);
+                        }
+                        // Otherwise recurse into array
+                        return array_map($translateDeep, $value);
                     }
+                    return $value;
+                };
+
+                $blocks = collect($sections['blocks'])->map(function ($block) use ($translateDeep) {
+                    $data = $block['data'] ?? [];
+                    // Translate all fields in data recursively
+                    $translatedData = array_map($translateDeep, $data);
                     return [
                         'type' => $block['type'],
-                        'data' => $data,
+                        'data' => $translatedData,
                     ];
                 })->toArray();
             }
