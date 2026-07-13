@@ -56,7 +56,7 @@ class UserPanelProvider extends PanelProvider
 
                         /* Apply sticky/floating styles to all form actions globally */
                         form .fi-form-actions, 
-                        form .fi-sc-actions,
+                        form .fi-sc-actions .fi-ac,
                         form > .fi-ac {
                             position: sticky !important;
                             bottom: 1rem !important;
@@ -78,10 +78,8 @@ class UserPanelProvider extends PanelProvider
 
                         /* Center the buttons inside the sticky container */
                         form .fi-form-actions > div,
-                        form .fi-sc-actions > .fi-ac,
-                        form .fi-sc-actions > div,
-                        form > .fi-ac > div,
-                        form > .fi-ac {
+                        form .fi-sc-actions .fi-ac > div,
+                        form > .fi-ac > div {
                             display: flex !important;
                             justify-content: center !important;
                             align-items: center !important;
@@ -92,7 +90,7 @@ class UserPanelProvider extends PanelProvider
 
                         /* Dark mode overrides */
                         .dark form .fi-form-actions, 
-                        .dark form .fi-sc-actions,
+                        .dark form .fi-sc-actions .fi-ac,
                         .dark form > .fi-ac {
                             background-color: rgba(24, 24, 27, 0.45) !important;
                             border: 1px solid rgba(255, 255, 255, 0.1) !important;
@@ -101,10 +99,10 @@ class UserPanelProvider extends PanelProvider
 
                         /* Reset sticky styling inside modals / slideovers to avoid breaking modal forms */
                         .fi-modal-window form .fi-form-actions,
-                        .fi-modal-window form .fi-sc-actions,
+                        .fi-modal-window form .fi-sc-actions .fi-ac,
                         .fi-modal-window form > .fi-ac,
                         .fi-modal form .fi-form-actions,
-                        .fi-modal form .fi-sc-actions,
+                        .fi-modal form .fi-sc-actions .fi-ac,
                         .fi-modal form > .fi-ac {
                             position: static !important;
                             background-color: transparent !important;
