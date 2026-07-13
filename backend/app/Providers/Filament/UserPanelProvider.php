@@ -42,9 +42,22 @@ class UserPanelProvider extends PanelProvider
                 \Filament\View\PanelsRenderHook::HEAD_END,
                 fn (): string => '
                     <style>
-                        form:not(.fi-modal-window *):not(.fi-modal *) .fi-form-actions, 
-                        form:not(.fi-modal-window *):not(.fi-modal *) > .fi-ac,
-                        form:not(.fi-modal-window *):not(.fi-modal *) > div > .fi-ac {
+                        /* Allow sticky positioning to stick relative to the viewport by resetting intermediate layout container overflows */
+                        .fi-layout,
+                        .fi-main-ctn,
+                        .fi-main,
+                        .fi-page,
+                        .fi-page-header-main-ctn,
+                        .fi-page-main,
+                        .fi-page-content,
+                        form {
+                            overflow: visible !important;
+                        }
+
+                        /* Apply sticky/floating styles to all form actions globally */
+                        form .fi-form-actions, 
+                        form > .fi-ac,
+                        form > div > .fi-ac {
                             position: sticky !important;
                             bottom: 1rem !important;
                             z-index: 10 !important;
@@ -63,19 +76,41 @@ class UserPanelProvider extends PanelProvider
                             transition: all 0.3s ease-in-out !important;
                         }
 
-                        form:not(.fi-modal-window *):not(.fi-modal *) .fi-form-actions > div,
-                        form:not(.fi-modal-window *):not(.fi-modal *) .fi-ac > div {
+                        /* Center the buttons inside the sticky container */
+                        form .fi-form-actions > div,
+                        form .fi-ac > div {
+                            display: flex !important;
                             justify-content: center !important;
+                            align-items: center !important;
                             width: auto !important;
                             flex-grow: 0 !important;
+                            gap: 1rem !important;
                         }
 
-                        .dark form:not(.fi-modal-window *):not(.fi-modal *) .fi-form-actions, 
-                        .dark form:not(.fi-modal-window *):not(.fi-modal *) > .fi-ac,
-                        .dark form:not(.fi-modal-window *):not(.fi-modal *) > div > .fi-ac {
+                        /* Dark mode overrides */
+                        .dark form .fi-form-actions, 
+                        .dark form > .fi-ac,
+                        .dark form > div > .fi-ac {
                             background-color: rgba(24, 24, 27, 0.45) !important;
                             border: 1px solid rgba(255, 255, 255, 0.1) !important;
                             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5) !important;
+                        }
+
+                        /* Reset sticky styling inside modals / slideovers to avoid breaking modal forms */
+                        .fi-modal-window form .fi-form-actions,
+                        .fi-modal-window form > .fi-ac,
+                        .fi-modal-window form > div > .fi-ac,
+                        .fi-modal form .fi-form-actions,
+                        .fi-modal form > .fi-ac,
+                        .fi-modal form > div > .fi-ac {
+                            position: static !important;
+                            background-color: transparent !important;
+                            backdrop-filter: none !important;
+                            -webkit-backdrop-filter: none !important;
+                            box-shadow: none !important;
+                            border: none !important;
+                            padding: 0 !important;
+                            margin: 0 !important;
                         }
                     </style>
                 '
