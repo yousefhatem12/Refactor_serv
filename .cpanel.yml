@@ -9,7 +9,7 @@
 deployment:
   tasks:
     # 1. Define paths
-    - export FRONTEND_PATH=/home2/serv5eg/serv5-frontend2026
+    - export FRONTEND_PATH=/home2/serv5eg/public_html/serv5-frontend2026
     - export BACKEND_PATH=/home2/serv5eg/serv5-backend2026
 
     # 2. Deploy Frontend (Next.js)
