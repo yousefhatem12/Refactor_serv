@@ -28,14 +28,10 @@ Route::get('/fix-nav', function () {
         \App\Models\NavLink::where('url', '/faq')->update(['parent_id' => $aboutUs->id, 'sort_order' => 4]);
     }
     
-    // 3. Run FooterSeeder to refresh footer links
-    $seeder = new \Database\Seeders\FooterSeeder();
-    $seeder->run();
-
-    // 4. Flush application cache to clear any stale API responses
+    // 3. Flush application cache to clear any stale API responses
     \Illuminate\Support\Facades\Cache::flush();
 
-    return 'Navbar, Footer, and Cache cleared successfully!';
+    return 'Navbar and Cache cleared successfully!';
 });
 
 Route::get('/temp-login', function () {
