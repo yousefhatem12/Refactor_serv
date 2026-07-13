@@ -54,11 +54,11 @@ class UserPanelProvider extends PanelProvider
                             overflow: visible !important;
                         }
 
-                        /* Apply sticky/floating styles to all form actions globally */
+                        /* Apply fixed/floating styles to all form actions globally */
                         form .fi-form-actions, 
                         form .fi-sc-actions .fi-ac,
                         form > .fi-ac {
-                            position: sticky !important;
+                            position: fixed !important;
                             bottom: 1rem !important;
                             z-index: 10 !important;
                             display: flex !important;
@@ -69,11 +69,21 @@ class UserPanelProvider extends PanelProvider
                             backdrop-filter: blur(16px) !important;
                             -webkit-backdrop-filter: blur(16px) !important;
                             padding: 0.75rem 1.25rem !important;
-                            margin-top: 2rem !important;
                             border: 1px solid rgba(0, 0, 0, 0.05) !important;
                             border-radius: 0.75rem !important;
                             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
                             transition: all 0.3s ease-in-out !important;
+
+                            /* Center horizontally inside the main content area, offsetting the sidebar */
+                            left: calc(50% + (var(--sidebar-width, 16rem) / 2)) !important;
+                            transform: translateX(-50%) !important;
+                        }
+
+                        /* Override fixed offset for RTL layout */
+                        html[dir="rtl"] form .fi-form-actions, 
+                        html[dir="rtl"] form .fi-sc-actions .fi-ac,
+                        html[dir="rtl"] form > .fi-ac {
+                            left: calc(50% - (var(--sidebar-width, 16rem) / 2)) !important;
                         }
 
                         /* Center the buttons inside the sticky container */
@@ -97,7 +107,7 @@ class UserPanelProvider extends PanelProvider
                             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5) !important;
                         }
 
-                        /* Reset sticky styling inside modals / slideovers to avoid breaking modal forms */
+                        /* Reset fixed styling inside modals / slideovers to avoid breaking modal forms */
                         .fi-modal-window form .fi-form-actions,
                         .fi-modal-window form .fi-sc-actions .fi-ac,
                         .fi-modal-window form > .fi-ac,
@@ -112,6 +122,7 @@ class UserPanelProvider extends PanelProvider
                             border: none !important;
                             padding: 0 !important;
                             margin: 0 !important;
+                            transform: none !important;
                         }
                     </style>
                 '
