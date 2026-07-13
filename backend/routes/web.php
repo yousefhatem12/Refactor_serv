@@ -55,8 +55,8 @@ Route::get('/fix-nav', function () {
             }
         }
         
-        // 2. Run FooterSeeder to refresh footer links only if the class exists
-        if (class_exists(\Database\Seeders\FooterSeeder::class)) {
+        // 2. Run FooterSeeder to refresh footer links only if the file exists on the server
+        if (file_exists(database_path('seeders/FooterSeeder.php'))) {
             $seeder = new \Database\Seeders\FooterSeeder();
             $seeder->run();
         }
