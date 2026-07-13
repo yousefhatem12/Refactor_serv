@@ -55,9 +55,11 @@ Route::get('/fix-nav', function () {
             }
         }
         
-        // 2. Run FooterSeeder to refresh footer links
-        $seeder = new \Database\Seeders\FooterSeeder();
-        $seeder->run();
+        // 2. Run FooterSeeder to refresh footer links only if the class exists
+        if (class_exists(\Database\Seeders\FooterSeeder::class)) {
+            $seeder = new \Database\Seeders\FooterSeeder();
+            $seeder->run();
+        }
 
         return 'Navbar and Footer fixed successfully!';
     } catch (\Exception $e) {
