@@ -12,10 +12,13 @@ class ServiceController extends BaseApiController
     public function index()
     {
         $lang = $this->getLang();
-        $cacheKey = "services_{$lang}";
+        $cacheKey = "services_hierarchy_{$lang}";
 
         $mapped = Cache::remember($cacheKey, 3600, function () {
-            $services = Service::where('is_active', true)->get();
+            $services = Service::with(['parent', 'children'])
+                ->where('is_active', true)
+                ->whereNull('parent_id')
+                ->get();
             return ServiceResource::collection($services);
         });
 
@@ -24,7 +27,8 @@ class ServiceController extends BaseApiController
 
     public function show($slug)
     {
-        $service = Service::where('is_active', true)
+        $service = Service::with(['parent', 'children'])
+            ->where('is_active', true)
             ->where(function ($query) use ($slug) {
                 $query->where('slug', $slug)
                       ->orWhere('id', $slug);

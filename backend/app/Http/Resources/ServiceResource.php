@@ -138,6 +138,9 @@ class ServiceResource extends JsonResource
                 'show_hosting_offers' => $sections['show_hosting_offers'] ?? true,
                 'show_digital_marketing' => $sections['show_digital_marketing'] ?? true,
                 'show_why_choose_us' => $sections['show_why_choose_us'] ?? true,
+                'parent_id' => $this->parent_id,
+                'parent_slug' => $this->parent?->slug,
+                'children' => ServiceResource::collection($this->whenLoaded('children')),
             ];
         }
 
@@ -160,6 +163,9 @@ class ServiceResource extends JsonResource
             'gradient' => "from-[{$style['from']}] to-[{$style['to']}]",
             'dotColor' => "bg-[{$style['dot']}]",
             'shadow' => $style['shadow'],
+            'parent_id' => $this->parent_id,
+            'parent_slug' => $this->parent?->slug,
+            'children' => ServiceResource::collection($this->whenLoaded('children')),
         ];
     }
 }
