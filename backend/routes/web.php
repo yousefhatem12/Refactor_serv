@@ -6,6 +6,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/ar', function () {
+    return view('welcome');
+});
+
+Route::get('/en', function () {
+    return view('welcome');
+});
+
 Route::get('/fix-nav', function () {
     // 1. Update/Create FAQ in Navbar
     \App\Models\NavLink::updateOrCreate(
