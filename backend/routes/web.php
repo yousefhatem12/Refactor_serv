@@ -32,7 +32,10 @@ Route::get('/fix-nav', function () {
     $seeder = new \Database\Seeders\FooterSeeder();
     $seeder->run();
 
-    return 'Navbar and Footer fixed successfully!';
+    // 4. Flush application cache to clear any stale API responses
+    \Illuminate\Support\Facades\Cache::flush();
+
+    return 'Navbar, Footer, and Cache cleared successfully!';
 });
 
 Route::get('/temp-login', function () {
