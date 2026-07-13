@@ -137,9 +137,12 @@ const Navbar = () => {
           fetchAPI(`/nav-links?lang=${language}`).catch(() => null),
         ]);
 
+        const actualServices = Array.isArray(servicesData) ? servicesData : (servicesData?.data || []);
+        const actualNavLinks = Array.isArray(navLinksData) ? navLinksData : (navLinksData?.data || []);
+
         const serviceDropdown =
-          servicesData && Array.isArray(servicesData) && servicesData.length > 0
-            ? servicesData.map((s) => ({
+          actualServices && actualServices.length > 0
+            ? actualServices.map((s) => ({
                 name: s.label || s.title,
                 href: `/services/services-${s.id}`,
               }))
@@ -193,12 +196,11 @@ const Navbar = () => {
         ];
 
         if (
-          navLinksData &&
-          Array.isArray(navLinksData) &&
-          navLinksData.length > 0
+          actualNavLinks &&
+          actualNavLinks.length > 0
         ) {
           // Inject dynamic services into any dropdown marked as services
-          const enriched = navLinksData.map((link) => {
+          const enriched = actualNavLinks.map((link) => {
             if (link.dropdown && link.name === t("services")) {
               return {
                 ...link,
