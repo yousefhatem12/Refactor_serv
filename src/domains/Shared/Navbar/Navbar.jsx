@@ -49,14 +49,30 @@ const Navbar = () => {
   };
 
   const localizeLinks = (links) => {
-    return links.map(link => ({
-      ...link,
-      href: getLocalizedHref(link.href),
-      dropdown: link.dropdown ? link.dropdown.map(sub => ({
-        ...sub,
-        href: getLocalizedHref(sub.href)
-      })) : undefined
-    }));
+    if (!links) return [];
+    return links.map(link => {
+      const rawName = link.name;
+      const cleanName = (typeof rawName === "object" && rawName !== null)
+        ? (rawName[language] || rawName.en || "")
+        : (rawName || "");
+
+      return {
+        ...link,
+        name: cleanName,
+        href: getLocalizedHref(link.href),
+        dropdown: link.dropdown ? link.dropdown.map(sub => {
+          const rawSubName = sub.name;
+          const cleanSubName = (typeof rawSubName === "object" && rawSubName !== null)
+            ? (rawSubName[language] || rawSubName.en || "")
+            : (rawSubName || "");
+          return {
+            ...sub,
+            name: cleanSubName,
+            href: getLocalizedHref(sub.href)
+          };
+        }) : undefined
+      };
+    });
   };
 
   useEffect(() => {
