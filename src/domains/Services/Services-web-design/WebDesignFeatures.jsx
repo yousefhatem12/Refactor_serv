@@ -213,7 +213,7 @@ const WebDesignFeatures = ({ title, description, featuresList }) => {
           : (f.title || "");
         const itemDesc = f.desc && typeof f.desc === "object"
           ? (f.desc[language] || f.desc.en || "")
-          : (f.desc || f.content && typeof f.content === "object" ? (f.content[language] || f.content.en || "") : (f.content || ""));
+          : (f.desc || (f.content && typeof f.content === "object" ? (f.content[language] || f.content.en || "") : (f.content || "")));
         return {
           id: i,
           title: itemTitle,

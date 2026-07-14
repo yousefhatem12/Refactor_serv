@@ -62,7 +62,7 @@ const EcommerceFeatures = ({ title, subtitle, featuresList }) => {
         return {
           id: index + 1,
           title: item.title && typeof item.title === "object" ? (item.title[language] || item.title.en || "") : (item.title || ""),
-          desc: item.desc && typeof item.desc === "object" ? (item.desc[language] || item.desc.en || "") : (item.desc || item.content && typeof item.content === "object" ? (item.content[language] || item.content.en || "") : (item.content || "")),
+          desc: item.desc && typeof item.desc === "object" ? (item.desc[language] || item.desc.en || "") : (item.desc || (item.content && typeof item.content === "object" ? (item.content[language] || item.content.en || "") : (item.content || ""))),
           icon: defaultFeatures[index % defaultFeatures.length]?.icon,
         };
       })
