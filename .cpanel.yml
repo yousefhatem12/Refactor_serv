@@ -7,11 +7,13 @@ deployment:
   tasks:
     # 1. Deploy Frontend (Next.js)
     # Copies all files except backend, git config, and dev files to the live folder
-    - rsync -av --delete --exclude="backend" --exclude=".git" --exclude="node_modules" --exclude="deleted-backend" * /home2/serv5eg/public_html/serv5-frontend2026/
+    - mkdir -p /home2/serv5eg/public_html/serv5-frontend2026
+    - tar --exclude="backend" --exclude=".git" --exclude="node_modules" --exclude="deleted-backend" -cf - . | (cd /home2/serv5eg/public_html/serv5-frontend2026/ && tar -xf -)
 
     # 2. Deploy Backend (Laravel)
     # Copies everything inside backend/ to the live API folder
-    - rsync -av --delete backend/ /home2/serv5eg/public_html/serv5-backend2026/
+    - mkdir -p /home2/serv5eg/public_html/serv5-backend2026
+    - tar -C backend/ -cf - . | (cd /home2/serv5eg/public_html/serv5-backend2026/ && tar -xf -)
 
     # 3. Post-Deployment Backend Tasks (Laravel migrations & cache clearing)
     - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan migrate --force

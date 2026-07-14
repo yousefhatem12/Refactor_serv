@@ -185,6 +185,14 @@ function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, 
     ? getMediaUrl(data.hero_image)
     : defaultHeroImage;
 
+  const resolveText = (field) => {
+    if (!field) return "";
+    if (typeof field === "object") {
+      return field[language] || field.en || "";
+    }
+    return field;
+  };
+
   switch (block.type) {
     // ── HERO ──
     case "hero":
@@ -192,9 +200,9 @@ function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, 
         return (
           <WebDevHero
             data={{
-              title: data.title?.[language] || data.title?.en || "",
-              subtitle: data.subtitle?.[language] || data.subtitle?.en || "",
-              desc: data.subtitle?.[language] || data.subtitle?.en || "",
+              title: resolveText(data.title),
+              subtitle: resolveText(data.subtitle),
+              desc: resolveText(data.subtitle),
               bg_image: heroImage,
               hidePlanet: true,
               bgPosition: "bg-bottom",
@@ -207,8 +215,8 @@ function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, 
       // Default: social_media_hero
       return (
         <SocialMediaHero
-          title={data.title?.[language] || data.title?.en || ""}
-          desc={data.subtitle?.[language] || data.subtitle?.en || ""}
+          title={resolveText(data.title)}
+          desc={resolveText(data.subtitle)}
           bgImage={heroImage}
           planetImage={null}
           serviceId={serviceId}
@@ -220,15 +228,15 @@ function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, 
       if (serviceId === "cloud-hosting") {
         return (
           <ServicesFeatures
-            title={data.title?.[language] || data.title?.en || ""}
+            title={resolveText(data.title)}
             featuresList={data.items}
           />
         );
       }
       return (
         <WebDesignFeatures
-          title={data.title?.[language] || data.title?.en || ""}
-          description={data.subtitle?.[language] || data.subtitle?.en || ""}
+          title={resolveText(data.title)}
+          description={resolveText(data.subtitle)}
           featuresList={data.items}
         />
       );
@@ -249,8 +257,8 @@ function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, 
     case "digital_marketing":
       return (
         <DigitalMarketingServices
-          marketingTitle={data.title?.[language] || data.title?.en || ""}
-          marketingSubtitle={data.subtitle?.[language] || data.subtitle?.en || ""}
+          marketingTitle={resolveText(data.title)}
+          marketingSubtitle={resolveText(data.subtitle)}
           marketingList={data.items}
         />
       );
@@ -259,8 +267,8 @@ function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, 
     case "why_choose_us":
       return (
         <SocialMediaWhyChooseUs
-          whyTitle={data.title?.[language] || data.title?.en || ""}
-          whySubtitle={data.subtitle?.[language] || data.subtitle?.en || ""}
+          whyTitle={resolveText(data.title)}
+          whySubtitle={resolveText(data.subtitle)}
           whyList={data.items}
         />
       );
@@ -269,11 +277,11 @@ function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, 
     case "portfolio":
       return (
         <>
-          {(data.section_title?.en || data.section_title?.ar) && (
+          {(data.section_title) && (
             <div className="py-10">
               <div className="max-w-7xl mx-auto px-6 lg:px-20 text-center mb-10">
                 <h2 className="text-white text-3xl md:text-5xl font-bold leading-tight">
-                  {data.section_title?.[language] || data.section_title?.en || ""}
+                  {resolveText(data.section_title)}
                 </h2>
               </div>
             </div>
@@ -290,7 +298,7 @@ function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, 
     case "hosting_offers":
       return (
         <HostingOffers
-          title={data.title?.[language] || data.title?.en || ""}
+          title={resolveText(data.title)}
           offersList={data.items}
         />
       );
@@ -303,8 +311,8 @@ function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, 
     case "ecommerce_features":
       return (
         <EcommerceFeatures
-          title={data.title?.[language] || data.title?.en || ""}
-          subtitle={data.subtitle?.[language] || data.subtitle?.en || ""}
+          title={resolveText(data.title)}
+          subtitle={resolveText(data.subtitle)}
           featuresList={data.items}
         />
       );
@@ -321,11 +329,11 @@ function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, 
         >
           <div className="w-full lg:w-1/2">
             <h2 className="text-white text-3xl md:text-5xl font-bold mb-8 leading-tight">
-              {data.title?.[language] || data.title?.en || ""}
+              {resolveText(data.title)}
             </h2>
             {data.content && (
               <p className="text-gray-400 mb-8 leading-relaxed text-lg">
-                {data.content?.[language] || data.content?.en || ""}
+                {resolveText(data.content)}
               </p>
             )}
             {data.items && data.items.length > 0 && (
@@ -336,7 +344,7 @@ function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, 
                       <div className="w-2 h-2 bg-[#D98B50] rounded-full"></div>
                     </div>
                     <span className="text-lg">
-                      {item.title?.[language] || item.title?.en || ""}
+                      {resolveText(item.title)}
                     </span>
                   </li>
                 ))}
@@ -347,7 +355,7 @@ function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, 
             {imageUrl && (
               <img
                 src={imageUrl}
-                alt={data.title?.en || "Content"}
+                alt={resolveText(data.title) || "Content"}
                 className="w-full h-auto object-contain drop-shadow-2xl"
               />
             )}
