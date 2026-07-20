@@ -22,6 +22,10 @@ class Post extends Model
         'author_id',
         'seo_title',
         'seo_description',
+        'ai_generated',
+        'ai_status',
+        'ai_metadata',
+        'image_metadata',
     ];
 
     protected $casts = [
@@ -31,6 +35,9 @@ class Post extends Model
         'content' => 'json',
         'seo_title' => 'json',
         'seo_description' => 'json',
+        'ai_generated' => 'boolean',
+        'ai_metadata' => 'json',
+        'image_metadata' => 'json',
     ];
 
     public function author(): \Illuminate\Database\Eloquent\Relations\BelongsTo
