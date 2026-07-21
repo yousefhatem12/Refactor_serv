@@ -17,8 +17,10 @@ class DeepSeekProvider implements AiProviderInterface
         $response = Http::withHeaders([
             'Authorization' => "Bearer {$token}",
         ])
-        ->timeout(120)
-        ->retry(3, 2000)
+        // Queue-level retries handle real failures. Retrying a 120-second AI
+        // request three times here can leave a single job running for minutes.
+        ->timeout(150)
+        ->retry(1, 1000)
         ->post('https://api.deepseek.com/chat/completions', [
             'model' => $model,
             'messages' => [

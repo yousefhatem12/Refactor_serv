@@ -22,7 +22,8 @@ class GenerateArticleJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 3;
-    public int $timeout = 180;
+    // Keep this safely below the worker timeout (300 seconds in production).
+    public int $timeout = 270;
 
     protected int $itemId;
 
@@ -82,17 +83,23 @@ class GenerateArticleJob implements ShouldQueue
             // 3. Resolve Provider and run self-correction loop up to 3 times
             $provider = AiProviderManager::getProvider($request->provider);
             $temperature = $credential->temperature ?? 0.7;
-            // DeepSeek needs room for JSON markup, FAQs and HTML. Bilingual
-            // output is roughly twice the size of a single-language article.
+            // Reasoning needs room for thinking plus JSON, but 32K–65K tokens
+            // made normal requests take several minutes and get reclaimed by
+            // the database queue. These limits cover a full article without
+            // making one job monopolize the worker.
             $isReasoner = str_contains(strtolower($request->model), 'reasoner');
             $maxTokens = $isReasoner
-                ? min(65536, max(32768, (int) ceil(($credential->default_article_length ?? 1200) * ($request->language === 'both' ? 10 : 6))))
+                ? ($request->language === 'both'
+                    ? min(24000, max(16000, (int) ceil(($credential->default_article_length ?? 1200) * 12)))
+                    : min(16000, max(9000, (int) ceil(($credential->default_article_length ?? 1200) * 8))))
                 : ($request->language === 'both'
                     ? min(16384, max(8192, (int) ceil(($credential->default_article_length ?? 1200) * 5.5)))
                     : min(16384, max(6144, (int) ceil(($credential->default_article_length ?? 1200) * 3.5))));
             
             $attempts = 0;
-            $maxAttempts = 3;
+            // Warnings can be repaired on demand. Regenerating a complete
+            // article three times for warnings is expensive and slow.
+            $maxAttempts = 2;
             $bestResponse = null;
             $bestQualityReport = null;
             $lastException = null;
@@ -111,8 +118,9 @@ class GenerateArticleJob implements ShouldQueue
 
                     $qualityReport = ArticleContentService::validateAndGenerateReport($parsedResponse, $item->keyword, $request->language);
 
-                    // If zero errors and zero warnings, it's perfect!
-                    if (count($qualityReport['errors']) === 0 && count($qualityReport['warnings']) === 0) {
+                    // A structurally valid article is saved immediately. The
+                    // user can invoke Fix warnings later for soft quality work.
+                    if (count($qualityReport['errors']) === 0) {
                         $bestResponse = $parsedResponse;
                         $bestQualityReport = $qualityReport;
                         break;
@@ -128,7 +136,7 @@ class GenerateArticleJob implements ShouldQueue
                     if ($attempts < $maxAttempts) {
                         $temperature = max(0.2, $temperature - 0.15); // reduce creativity to boost rule compliance
                         
-                        $issues = array_merge($qualityReport['errors'], $qualityReport['warnings']);
+                        $issues = $qualityReport['errors'];
                         $issuesList = implode("\n- ", $issues);
 
                         $prompt = "You previously generated a response for the topic '{$item->keyword}', but it did not meet the quality guidelines and had these issues:\n" .
