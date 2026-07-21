@@ -20,7 +20,8 @@ class RepairArticleQualityJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 2;
-    public int $timeout = 180;
+    // Keep this safely below the worker timeout (300 seconds in production).
+    public int $timeout = 270;
     public array $backoff = [15, 45];
 
     public function __construct(public int $itemId) {}
@@ -59,7 +60,9 @@ class RepairArticleQualityJob implements ShouldQueue
 
         $isReasoner = str_contains(strtolower($request->model), 'reasoner');
         $maxTokens = $isReasoner
-            ? min(65536, max(32768, (int) ceil(($credential->default_article_length ?? 1200) * ($request->language === 'both' ? 10 : 6))))
+            ? ($request->language === 'both'
+                ? min(24000, max(16000, (int) ceil(($credential->default_article_length ?? 1200) * 12)))
+                : min(16000, max(9000, (int) ceil(($credential->default_article_length ?? 1200) * 8))))
             : ($request->language === 'both'
                 ? min(16384, max(8192, (int) ceil(($credential->default_article_length ?? 1200) * 5.5)))
                 : min(16384, max(6144, (int) ceil(($credential->default_article_length ?? 1200) * 3.5))));
@@ -68,9 +71,12 @@ class RepairArticleQualityJob implements ShouldQueue
         $report = $item->quality_report ?? ArticleContentService::validateAndGenerateReport($article, $item->keyword, $request->language);
         $bestWarningCount = $initialWarningCount;
         $lastError = null;
-        for ($repairAttempt = 1; $repairAttempt <= 3; $repairAttempt++) {
+        // One focused repair is enough per click. Retrying full-article repairs
+        // three times made a single button click run for many minutes.
+        $maxRepairAttempts = 1;
+        for ($repairAttempt = 1; $repairAttempt <= $maxRepairAttempts; $repairAttempt++) {
             try {
-                $attemptPrompt = $prompt . "\nThis is repair attempt {$repairAttempt} of 3. The previous result was not accepted unless it reduces the warning count. Make measurable changes to every listed field.\n";
+                $attemptPrompt = $prompt . "\nThis is repair attempt {$repairAttempt} of {$maxRepairAttempts}. The result is accepted only if it reduces the warning count. Make measurable changes to every listed field.\n";
                 $candidate = $provider->generateStructuredContent(
                     $attemptPrompt,
                     $request->model,

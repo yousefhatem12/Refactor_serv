@@ -40,7 +40,9 @@ return [
             'connection' => env('DB_QUEUE_CONNECTION'),
             'table' => env('DB_QUEUE_TABLE', 'jobs'),
             'queue' => env('DB_QUEUE', 'default'),
-            'retry_after' => (int) env('DB_QUEUE_RETRY_AFTER', 90),
+            // Must exceed the longest worker/job timeout to avoid a database
+            // queue reclaiming an AI job while it is still generating.
+            'retry_after' => (int) env('DB_QUEUE_RETRY_AFTER', 420),
             'after_commit' => false,
         ],
 
