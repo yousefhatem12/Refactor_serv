@@ -235,11 +235,7 @@ class AiGenerationHistory extends Page implements HasTable
 
                         Select::make('model')
                             ->label($isAr ? 'الموديل' : 'Model')
-                            ->options(function ($get) {
-                                $providerName = $get('provider');
-                                if (!$providerName) return [];
-                                return config("ai.models.{$providerName}", []);
-                            })
+                            ->options(fn ($get) => \App\Services\Ai\ModelCatalog::optionsForProvider($get('provider')))
                             ->required(),
 
                         TextInput::make('main_keyword')

@@ -61,29 +61,47 @@ class GeminiProvider implements AiProviderInterface
         return $decoded;
     }
 
-    public function listSupportedModels(): array
+    public function listModels(string $token): array
     {
-        return [
-            'gemini-1.5-flash' => 'Gemini 1.5 Flash (Default)',
-            'gemini-1.5-pro' => 'Gemini 1.5 Pro',
-            'gemini-2.0-flash-exp' => 'Gemini 2.0 Flash (Experimental)',
-        ];
+        $response = Http::timeout(15)->get('https://generativelanguage.googleapis.com/v1beta/models', [
+            'key' => $token,
+            'pageSize' => 200,
+        ]);
+
+        if ($response->failed()) {
+            $excerpt = substr($response->body(), 0, 500);
+            throw new \Exception("Gemini model listing failed: {$response->status()} - {$excerpt}");
+        }
+
+        $models = [];
+        foreach ($response->json('models') ?? [] as $model) {
+            $name = $model['name'] ?? null;
+            if (!$name) {
+                continue;
+            }
+
+            // Only generative chat models can serve generateContent.
+            if (!in_array('generateContent', $model['supportedGenerationMethods'] ?? [], true)) {
+                continue;
+            }
+
+            $id = str_starts_with($name, 'models/') ? substr($name, 7) : $name;
+            $models[$id] = $model['displayName'] ?? $id;
+        }
+
+        krsort($models);
+
+        return $models;
     }
 
     public function testConnection(string $token): bool
     {
         try {
-            $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={$token}";
-            $response = Http::timeout(10)->post($url, [
-                'contents' => [
-                    ['parts' => [['text' => 'Ping']]]
-                ],
-                'generationConfig' => [
-                    'maxOutputTokens' => 5
-                ]
-            ]);
-
-            return $response->successful();
+            // Listing models validates the key without burning generation quota
+            // and without depending on a model name that may have been retired.
+            return Http::timeout(10)
+                ->get('https://generativelanguage.googleapis.com/v1beta/models', ['key' => $token])
+                ->successful();
         } catch (\Throwable $e) {
             Log::warning("Gemini Connection test error: " . $e->getMessage());
             return false;

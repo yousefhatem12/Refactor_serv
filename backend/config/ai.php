@@ -5,26 +5,28 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Centralized AI Model Registry
+    | AI Model Fallback Registry
     |--------------------------------------------------------------------------
     |
-    | Defines the curated list of supported models for each AI provider.
+    | Model lists are normally fetched live from each provider with the stored
+    | API key (see App\Services\Ai\ModelCatalog). This registry is only used
+    | when no key is available yet or the provider listing call fails, so the
+    | forms still render something usable.
     |
     */
     'models' => [
         'gemini' => [
-            'gemini-1.5-flash' => 'Gemini 1.5 Flash (Recommended)',
+            'gemini-2.0-flash' => 'Gemini 2.0 Flash',
+            'gemini-1.5-flash' => 'Gemini 1.5 Flash',
             'gemini-1.5-pro' => 'Gemini 1.5 Pro',
-            'gemini-2.0-flash-exp' => 'Gemini 2.0 Flash (Experimental)',
         ],
         'openai' => [
-            'gpt-4o-mini' => 'GPT-4o Mini (Recommended)',
+            'gpt-4o-mini' => 'GPT-4o Mini',
             'gpt-4o' => 'GPT-4o',
-            'gpt-4' => 'GPT-4',
         ],
         'deepseek' => [
-            'deepseek-chat' => 'DeepSeek V3 (Chat - Recommended)',
-            'deepseek-reasoner' => 'DeepSeek R1 (Reasoner)',
+            'deepseek-v4-flash' => 'DeepSeek V4 Flash',
+            'deepseek-v4-pro' => 'DeepSeek V4 Pro',
         ],
     ]
 ];
