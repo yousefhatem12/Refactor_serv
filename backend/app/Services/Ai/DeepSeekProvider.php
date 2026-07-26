@@ -59,30 +59,43 @@ class DeepSeekProvider implements AiProviderInterface
         return $decoded;
     }
 
-    public function listSupportedModels(): array
+    public function listModels(string $token): array
     {
-        return [
-            'deepseek-chat' => 'DeepSeek V3 (Chat)',
-            'deepseek-reasoner' => 'DeepSeek R1 (Reasoner)',
-        ];
+        $response = Http::withHeaders([
+            'Authorization' => "Bearer {$token}",
+        ])
+        ->timeout(15)
+        ->get('https://api.deepseek.com/models');
+
+        if ($response->failed()) {
+            $excerpt = substr($response->body(), 0, 500);
+            throw new \Exception("DeepSeek model listing failed: {$response->status()} - {$excerpt}");
+        }
+
+        $models = [];
+        foreach ($response->json('data') ?? [] as $model) {
+            $id = $model['id'] ?? null;
+            if ($id) {
+                $models[$id] = $id;
+            }
+        }
+
+        ksort($models);
+
+        return $models;
     }
 
     public function testConnection(string $token): bool
     {
         try {
-            $response = Http::withHeaders([
+            // Listing models validates the key without burning completion tokens
+            // and without depending on a model name that may have been retired.
+            return Http::withHeaders([
                 'Authorization' => "Bearer {$token}",
             ])
             ->timeout(10)
-            ->post('https://api.deepseek.com/chat/completions', [
-                'model' => 'deepseek-chat',
-                'messages' => [
-                    ['role' => 'user', 'content' => 'Ping']
-                ],
-                'max_tokens' => 5,
-            ]);
-
-            return $response->successful();
+            ->get('https://api.deepseek.com/models')
+            ->successful();
         } catch (\Throwable $e) {
             Log::warning("DeepSeek Connection test error: " . $e->getMessage());
             return false;

@@ -199,6 +199,29 @@ class AiFeatureRegressionTest extends TestCase
     }
 
     /** @test */
+    public function generated_post_service_suffixes_a_duplicate_ai_slug()
+    {
+        Post::create([
+            'title' => ['en' => 'Existing SEO Article', 'ar' => 'مقال سيو موجود'],
+            'content' => ['en' => 'Existing content', 'ar' => 'محتوى موجود'],
+            'slug' => 'importance-of-seo-for-ecommerce-stores',
+            'blog_category_id' => $this->category->id,
+            'author_id' => $this->author->id,
+            'is_published' => false,
+        ]);
+
+        $post = GeneratedPostService::createDraft([
+            'title' => ['en' => 'Another SEO Article', 'ar' => 'مقال سيو آخر'],
+            'content' => ['en' => 'New content', 'ar' => 'محتوى جديد'],
+            'slug' => 'importance-of-seo-for-ecommerce-stores',
+            'blog_category_id' => $this->category->id,
+            'author_id' => $this->author->id,
+        ]);
+
+        $this->assertSame('importance-of-seo-for-ecommerce-stores-2', $post->slug);
+    }
+
+    /** @test */
     public function ai_credential_api_token_is_encrypted_in_the_database()
     {
         $credential = new AiCredential();

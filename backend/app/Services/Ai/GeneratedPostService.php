@@ -22,30 +22,31 @@ class GeneratedPostService
             $data['ai_generated'] = true;
             $data['ai_status'] = 'pending_review';
 
-            // Ensure unique slug generation if not provided
-            if (empty($data['slug'])) {
+            // Always normalize and uniquify the slug. The AI may return a
+            // perfectly valid slug that already belongs to another post.
+            $slug = !empty($data['slug']) ? Str::slug((string) $data['slug']) : '';
+            if ($slug === '') {
                 $title = '';
                 if (isset($data['title']) && is_array($data['title'])) {
                     $title = $data['title']['en'] ?? $data['title']['ar'] ?? '';
                 } else {
                     $title = $data['title'] ?? '';
                 }
-                
-                $slug = Str::slug($title);
-                if (empty($slug)) {
-                    // Fallback to random post slug to prevent empty/numeric slugs
-                    $slug = 'post-' . rand(1000, 9999);
-                }
-                
-                $originalSlug = $slug;
-                $count = 1;
-                while (Post::where('slug', $slug)->exists()) {
-                    $slug = $originalSlug . '-' . $count++;
-                }
-                $data['slug'] = $slug;
-            } else {
-                $data['slug'] = Str::slug($data['slug']);
+
+                $slug = Str::slug((string) $title);
             }
+
+            if ($slug === '') {
+                // Fallback to a random post slug to prevent an empty slug.
+                $slug = 'post-' . random_int(1000, 9999);
+            }
+
+            $originalSlug = $slug;
+            $count = 2;
+            while (Post::where('slug', $slug)->exists()) {
+                $slug = $originalSlug . '-' . $count++;
+            }
+            $data['slug'] = $slug;
 
             return Post::create($data);
         });

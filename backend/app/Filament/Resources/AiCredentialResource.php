@@ -48,6 +48,16 @@ class AiCredentialResource extends Resource
         return app()->getLocale() === 'ar' ? 'صلاحيات الـ API' : 'AI Credentials';
     }
 
+    /**
+     * Token to query the provider with: the one being typed, else the stored one.
+     */
+    protected static function resolveFormToken($get, ?AiCredential $record): ?string
+    {
+        $typed = $get('new_api_token');
+
+        return filled($typed) ? $typed : \App\Services\Ai\ModelCatalog::decrypt($record);
+    }
+
     public static function form(Schema $schema): Schema
     {
         $isAr = app()->getLocale() === 'ar';
@@ -69,6 +79,9 @@ class AiCredentialResource extends Resource
                         TextInput::make('new_api_token')
                             ->label($isAr ? 'مفتاح الـ API' : 'API Token')
                             ->password()
+                            // Blur refreshes the model list against the freshly typed key.
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(fn ($set) => $set('default_model', null))
                             ->afterStateHydrated(function (TextInput $component, $state) {
                                 $component->state(null);
                             })
@@ -83,11 +96,45 @@ class AiCredentialResource extends Resource
 
                         Select::make('default_model')
                             ->label($isAr ? 'الموديل الافتراضي' : 'Default Model')
-                            ->options(function ($get) {
+                            ->options(fn ($get, $record) => \App\Services\Ai\ModelCatalog::options(
+                                $get('provider'),
+                                self::resolveFormToken($get, $record)
+                            ))
+                            ->helperText(function ($get, $record) use ($isAr) {
                                 $provider = $get('provider');
-                                if (!$provider) return [];
-                                return config("ai.models.{$provider}", []);
+                                if (!$provider) {
+                                    return null;
+                                }
+
+                                $token = self::resolveFormToken($get, $record);
+                                if (blank($token)) {
+                                    return $isAr
+                                        ? 'أدخل مفتاح الـ API لجلب الموديلات المتاحة فعلياً من المزود.'
+                                        : 'Enter the API token to load the models this key can actually use.';
+                                }
+
+                                $result = \App\Services\Ai\ModelCatalog::fetch($provider, $token);
+                                if ($result['source'] === 'live') {
+                                    return $isAr
+                                        ? 'تم جلب الموديلات مباشرة من المزود.'
+                                        : 'Models fetched live from the provider.';
+                                }
+
+                                return ($isAr ? 'تعذر جلب الموديلات، عرض القائمة الاحتياطية. ' : 'Could not fetch models, showing the fallback list. ')
+                                    . ($result['error'] ?? '');
                             })
+                            ->suffixAction(
+                                \Filament\Actions\Action::make('refreshModels')
+                                    ->label($isAr ? 'تحديث الموديلات' : 'Refresh models')
+                                    ->icon('heroicon-m-arrow-path')
+                                    ->action(function ($get, $set, $record) {
+                                        \App\Services\Ai\ModelCatalog::forget(
+                                            $get('provider'),
+                                            self::resolveFormToken($get, $record)
+                                        );
+                                        $set('default_model', $get('default_model'));
+                                    })
+                            )
                             ->required(),
 
                         Toggle::make('is_active')
@@ -220,6 +267,19 @@ class AiCredentialResource extends Resource
                                     ->title($isAr ? 'نجاح الاتصال' : 'Connection Successful')
                                     ->success()
                                     ->send();
+
+                                // A model that the provider retired keeps returning 400 at
+                                // generation time, so surface it while the key is being tested.
+                                $live = \App\Services\Ai\ModelCatalog::fetch($record->provider, $token, true);
+                                if ($live['source'] === 'live' && $record->default_model && !array_key_exists($record->default_model, $live['models'])) {
+                                    \Filament\Notifications\Notification::make()
+                                        ->title($isAr ? 'الموديل الافتراضي غير مدعوم' : 'Default model no longer supported')
+                                        ->body(($isAr ? 'المزود لا يدعم ' : 'The provider no longer offers ') . $record->default_model
+                                            . ($isAr ? '. المتاح: ' : '. Available: ') . implode(', ', array_slice(array_keys($live['models']), 0, 10)))
+                                        ->warning()
+                                        ->persistent()
+                                        ->send();
+                                }
                             } else {
                                 \Filament\Notifications\Notification::make()
                                     ->title($isAr ? 'فشل الاتصال' : 'Connection Failed')

@@ -23,11 +23,13 @@ interface AiProviderInterface
     ): array;
 
     /**
-     * Lists models supported by this provider.
+     * Fetches the models this API key can actually use, live from the provider.
      *
-     * @return array
+     * @param string $token
+     * @return array<string, string> Model id => human readable label.
+     * @throws \Exception When the provider cannot be reached or rejects the token.
      */
-    public function listSupportedModels(): array;
+    public function listModels(string $token): array;
 
     /**
      * Validates connection with the provider using the token.

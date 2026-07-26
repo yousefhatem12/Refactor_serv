@@ -20,11 +20,20 @@ class ArticleContentService
         int $length
     ): string {
         $secondaryKeywordsStr = implode(', ', $secondaryKeywords);
+        $editorialAngles = [
+            'a practical implementation roadmap with decision points',
+            'a problem-and-solution walkthrough built around a realistic scenario',
+            'a comparison of options, trade-offs, and when each option fits',
+            'a mistake-prevention guide with a diagnostic checklist',
+            'a step-by-step guide that takes a reader from planning to measurement',
+        ];
+        $editorialAngle = $editorialAngles[random_int(0, count($editorialAngles) - 1)];
 
         $prompt = "You are a senior SEO editor and native-level copywriter. Generate a useful, specific, human-sounding blog article in " . strtoupper($language) . ".\n";
         $prompt .= "Target Word Count: approximately {$length} words.\n";
         $prompt .= "Primary Keyword: '{$mainKeyword}'\n";
         $prompt .= "Secondary Keywords: '{$secondaryKeywordsStr}'\n\n";
+        $prompt .= "Private editorial angle for this draft: {$editorialAngle}. Use it to make this version materially different from generic articles; do not mention this instruction or the angle label in the output.\n\n";
 
         $prompt .= "CRITICAL OUTPUT RULES:\n";
         $prompt .= "- Return exactly one JSON object. Do not use Markdown fences, commentary, or text before/after the object.\n";
@@ -73,6 +82,16 @@ class ArticleContentService
         $prompt .= "  \"final_quality_notes\": []\n";
         $prompt .= "}\n\n";
 
+        $prompt .= "ORIGINALITY AND EDITORIAL VALUE — THIS IS MANDATORY:\n";
+        $prompt .= "- Write from an original editorial brief that you create internally before drafting: identify the reader's exact intent, one clear thesis, and a practical outcome. Do not output the brief.\n";
+        $prompt .= "- Do not copy, quote, stitch together, translate, or lightly paraphrase any article, search result, template, or memorized web passage. Do not reproduce familiar opening or conclusion formulas.\n";
+        $prompt .= "- Every article must contain at least three concrete, topic-specific value elements: an original scenario or example, a practical workflow/checklist, and a trade-off, mistake, or decision criterion. Do not invent statistics, customer results, prices, names, or first-hand experiences.\n";
+        $prompt .= "- Explain the topic with your own reasoning and structure. Avoid generic statements that could fit any business or any SEO article. Replace them with details that are useful for this exact keyword and audience.\n";
+        $prompt .= "- Do not begin English content with phrases such as 'In today's digital world', 'SEO is a fundamental aspect', 'In this article, we will', 'In conclusion', or 'cannot be overstated'. Do not begin Arabic content with 'في عالم اليوم', 'لا شك أن', 'مما لا شك فيه', or 'في ظل التطور التكنولوجي'. Start with the reader's problem, a concrete situation, or a specific observation.\n";
+        $prompt .= "- English and Arabic must each be written natively. In BOTH mode, create an independent English adaptation with different natural sentence patterns; do not translate sentence by sentence or preserve the Arabic paragraph order when that makes the English sound formulaic.\n";
+        $prompt .= "- Vary paragraph openings, sentence rhythm, transitions, examples, and heading wording. Do not repeat the same claim in the introduction, body, FAQ, and conclusion.\n";
+        $prompt .= "- The final draft must be useful even if the primary keyword is removed. Keywords support the explanation; they must never control the prose.\n\n";
+
         $prompt .= "CONTENT QUALITY RULES (Based on Professional SEO Writing Guidelines):\n";
         $prompt .= "- **No AI Clichés:** Never use clichés like 'في عالم اليوم', 'لا شك أن', 'مما لا شك فيه', 'في ظل التطور التكنولوجي', 'يجدر بالذكر', 'من المهم أن تعرف'. Start directly into the topic.\n";
         $prompt .= "- Tone: professional, engaging, natural, and specific; never make unsupported claims.\n";
@@ -92,7 +111,8 @@ class ArticleContentService
         $prompt .= "- **FAQ:** Include 4 to 6 questions and answers in the 'faq' section.\n";
         $prompt .= "- **Conclusion:** Summarize key points, include primary keyword, and end with a simple Call to Action (CTA).\n";
         $prompt .= "- Do not copy or repeat the same sentence, paragraph, or idea. Every paragraph must add a new useful point. Do not invent statistics, sources, prices, guarantees, or facts.\n";
-        $prompt .= "- Before returning JSON, run a final self-check: SEO titles 50-60 characters, meta descriptions 140-160 characters, introductions 100-150 words, natural keyword density around 0.8%-1.5%, and no empty required fields. Fix these values in the draft before responding.\n";
+        $prompt .= "- Before returning JSON, perform an originality pass: remove generic filler, stock introductions, repeated claims, and any wording that sounds like a standard online article. Keep only specific, useful, defensible content.\n";
+        $prompt .= "- Then run a final self-check: SEO titles 50-60 characters, meta descriptions 140-160 characters, introductions 100-150 words, natural keyword density around 0.8%-1.5%, and no empty required fields. Fix these values in the draft before responding.\n";
 
         return $prompt;
     }
@@ -183,6 +203,18 @@ class ArticleContentService
                     if (mb_strpos($combinedContent, $cliché) !== false) {
                         $warnings[] = "Arabic content contains forbidden AI cliché: '{$cliché}' (Page 2 of PDF).";
                     }
+                }
+            }
+
+            // Run the same stock-phrase check with correctly encoded text for
+            // both languages. This supplements legacy phrase data and keeps
+            // the quality report useful for existing records.
+            $qualityPhrases = $lang === 'ar'
+                ? ['في عالم اليوم', 'لا شك أن', 'مما لا شك فيه', 'في ظل التطور التكنولوجي', 'يجدر بالذكر', 'من المهم أن تعرف']
+                : ["in today's digital world", 'seo is a fundamental aspect', 'in this article, we will', 'in conclusion', 'cannot be overstated', 'in the ever-evolving digital landscape'];
+            foreach ($qualityPhrases as $phrase) {
+                if (mb_stripos($combinedContent, $phrase) !== false) {
+                    $warnings[] = "({$lang}) Generic stock phrase detected: '{$phrase}'.";
                 }
             }
 
