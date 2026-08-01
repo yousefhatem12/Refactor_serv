@@ -59,6 +59,8 @@ export default function BlogPostDetails() {
     return <Loading />;
   }
 
+
+
   if (!post) {
     return (
       <div className="min-h-screen flex items-center justify-center text-white bg-[#040A37]">
@@ -129,7 +131,7 @@ export default function BlogPostDetails() {
                 {post.title}
               </h1>
               <div
-                className="text-gray-300 text-lg leading-relaxed mb-10 prose prose-invert max-w-none"
+                className="text-gray-300 text-lg leading-relaxed mb-10 article-content"
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
               <div className="flex items-center gap-4 text-sm text-gray-400">
