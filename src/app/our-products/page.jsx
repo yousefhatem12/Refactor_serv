@@ -10,6 +10,7 @@ import { useLanguage } from "../context/LanguageContext";
 
 const OurProductsListingPage = () => {
   const { language, t } = useLanguage();
+  const isAr = language === "ar";
   const [productsList, setProductsList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
@@ -154,6 +155,7 @@ const OurProductsListingPage = () => {
                             viewBox="0 0 24 24"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
+                            className={isAr ? "rotate-180" : ""}
                           >
                             <path
                               d="M5 12H19M19 12L12 5M19 12L12 19"

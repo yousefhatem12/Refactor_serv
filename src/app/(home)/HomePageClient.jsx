@@ -175,7 +175,7 @@ export default function HomePageClient({ initialHomeData }) {
   // PlanetAstronaut movement: CTA to Footer
   const planetOpacity = useTransform(
     smoothProgress,
-    [0.6, 0.92, 1],
+    [0.88, 0.92, 1],
     [0, 0.8, 0.35],
   );
   const planetX = useTransform(

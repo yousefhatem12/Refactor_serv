@@ -1,10 +1,11 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { fetchAPI } from "@/lib/api";
+import { fetchAPI, getMediaUrl } from "@/lib/api";
 import { useLanguage } from "@/app/context/LanguageContext";
+import { useSettings } from "@/app/context/SettingsContext";
 
 // Client-side cache store to make tab/page switching instant
 const portfolioCache = {};
@@ -38,22 +39,25 @@ const itemVariants = {
   },
 };
 
-const PortfolioCard = ({ item, t, language }) => {
-  const defaultImage = "/our-portfolio/Rectangle 6.webp";
-  const [imgSrc, setImgSrc] = useState(item.image || defaultImage);
+const PortfolioCard = ({ item, t, language, siteLogo }) => {
+  const defaultImage = siteLogo || "/our-portfolio/Rectangle 6.webp";
+  const initialImg = item.image ? getMediaUrl(item.image) : defaultImage;
+  const [imgSrc, setImgSrc] = useState(initialImg);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   const [prevImage, setPrevImage] = useState(item.image);
   if (item.image !== prevImage) {
     setPrevImage(item.image);
-    setImgSrc(item.image || defaultImage);
+    setImgSrc(item.image ? getMediaUrl(item.image) : defaultImage);
   }
+
+  const projectUrl = `/portfolio/${item.slug || item.id}`;
 
   return (
     <motion.div
       layout
       variants={itemVariants}
-      className="relative group overflow-hidden rounded-xl aspect-[1.6/1] bg-[#ffffff10] border border-[#ffffff20]"
+      className="relative group overflow-hidden rounded-xl aspect-[1.6/1] bg-[#ffffff10] border border-[#ffffff20] cursor-pointer"
     >
       {/* Shimmer / Skeleton background behind the image */}
       {!isImageLoaded && (
@@ -64,15 +68,19 @@ const PortfolioCard = ({ item, t, language }) => {
         src={imgSrc}
         alt={item.name}
         fill
-        className={`object-cover transition-all duration-700 group-hover:scale-110 ${
+        className={`transition-all duration-700 group-hover:scale-110 ${
           isImageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
-        }`}
+        } ${imgSrc === siteLogo ? "object-contain p-4" : "object-cover"}`}
         onLoad={() => setIsImageLoaded(true)}
         onError={() => setImgSrc(defaultImage)}
       />
 
-      {/* Overlay with Details */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#040A37]/90 via-[#040A37]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 z-10">
+      {/* Overlay with Details - clickable link spanning the whole card */}
+      <Link
+        href={projectUrl}
+        prefetch={false}
+        className="absolute inset-0 bg-gradient-to-t from-[#040A37]/90 via-[#040A37]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 z-10"
+      >
         <h3 className="text-xl md:text-2xl font-bold text-white mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
           {item.name}
         </h3>
@@ -81,9 +89,7 @@ const PortfolioCard = ({ item, t, language }) => {
             {item.description}
           </p>
         )}
-        <Link
-          href={`/portfolio/${item.slug || item.id}`}
-          prefetch={false}
+        <div
           className="inline-flex items-center gap-2 text-[#FF8A00] font-medium hover:text-[#ffb800] transition-colors translate-y-4 group-hover:translate-y-0 duration-300 delay-100 w-fit"
         >
           <span>{t("visitProject") || "Visit Project"}</span>
@@ -100,14 +106,19 @@ const PortfolioCard = ({ item, t, language }) => {
               d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
             />
           </svg>
-        </Link>
-      </div>
+        </div>
+      </Link>
     </motion.div>
   );
 };
 
 export default function PortfolioGallery({ data, perPage = 9 }) {
   const { t, language } = useLanguage();
+  const settings = useSettings();
+  const siteLogo = settings?.site_logo
+    ? getMediaUrl(settings.site_logo)
+    : "/logo.svg";
+
   const [activeTab, setActiveTab] = useState("all");
   const [portfolioItems, setPortfolioItems] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -115,6 +126,28 @@ export default function PortfolioGallery({ data, perPage = 9 }) {
   const [hasMore, setHasMore] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [categoriesLoaded, setCategoriesLoaded] = useState(false);
+
+  const sentinelRef = useRef(null);
+
+  useEffect(() => {
+    if (!hasMore || isLoading) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setCurrentPage((prev) => prev + 1);
+        }
+      },
+      { rootMargin: "200px" }
+    );
+
+    const el = sentinelRef.current;
+    if (el) observer.observe(el);
+
+    return () => {
+      if (el) observer.unobserve(el);
+    };
+  }, [hasMore, isLoading]);
 
   // Render-phase state adjustments to avoid useEffect synchronous state updates
   const [prevLanguage, setPrevLanguage] = useState(language);
@@ -284,6 +317,7 @@ export default function PortfolioGallery({ data, perPage = 9 }) {
                   item={item}
                   t={t}
                   language={language}
+                  siteLogo={siteLogo}
                 />
               ))}
               {isLoading &&
@@ -317,52 +351,10 @@ export default function PortfolioGallery({ data, perPage = 9 }) {
         </AnimatePresence>
       </motion.div>
 
-      {/* Load More Button */}
+      {/* Infinite Scroll Sentinel */}
       {hasMore && (
-        <div className="flex justify-center mt-8">
-          <button
-            onClick={() => setCurrentPage((prev) => prev + 1)}
-            disabled={isLoading}
-            className="flex items-center gap-2 px-8 py-3 text-white bg-transparent border border-white rounded-full hover:bg-white hover:text-[#040A37] transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isLoading ? (
-              <svg
-                className="w-5 h-5 animate-spin"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-            ) : (
-              <svg
-                className="w-5 h-5"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 2V6M12 18V22M4.92896 4.92896L7.75738 7.75738M16.2427 16.2426L19.0711 19.0711M2 12H6M18 12H22M4.92896 19.0711L7.75738 16.2426M16.2427 7.75738L19.0711 4.92896"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              </svg>
-            )}
-            {isLoading ? t("loading") : t("loadMore")}
-          </button>
+        <div ref={sentinelRef} className="w-full h-16 flex items-center justify-center mt-8">
+          <span className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
         </div>
       )}
     </section>

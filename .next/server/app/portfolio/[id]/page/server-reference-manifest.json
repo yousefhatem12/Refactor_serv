@@ -1,6 +1,6 @@
 {
   "node": {
-    "c060f2dcca00a67b39439f23e224c5ebc82b0b07c3": {
+    "c065958d478e449b7c757520ce3dae16c0281ffcec": {
       "workers": {
         "app/portfolio/[id]/page": {
           "moduleId": 46181,
@@ -12,7 +12,7 @@
       "exportedName": "$$RSC_SERVER_CACHE_0",
       "filename": "src/lib/cached-api.js"
     },
-    "c0780c923586954d43647c9d7864fe157ade9dbd99": {
+    "c0d356471478be0311495cd22bf6676ad246a75c12": {
       "workers": {
         "app/portfolio/[id]/page": {
           "moduleId": 46181,

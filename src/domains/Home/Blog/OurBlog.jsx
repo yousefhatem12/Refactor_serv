@@ -1,11 +1,36 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { fetchAPI } from "@/lib/api";
+import { fetchAPI, getMediaUrl } from "@/lib/api";
 import { useLanguage } from "@/app/context/LanguageContext";
+import { useSettings } from "@/app/context/SettingsContext";
+
+const SafeBlogImage = ({ src, fallback, alt, className }) => {
+  const [imgSrc, setImgSrc] = useState(src || fallback);
+  
+  useEffect(() => {
+    setImgSrc(src || fallback);
+  }, [src, fallback]);
+
+  const isFallback = imgSrc === fallback;
+
+  return (
+    <img
+      src={imgSrc}
+      alt={alt}
+      className={`${className} ${isFallback ? "object-contain p-6 bg-gray-800" : "object-cover"}`}
+      onError={() => setImgSrc(fallback)}
+    />
+  );
+};
 
 const OurBlog = () => {
   const { language, t } = useLanguage();
+  const settings = useSettings();
+  const siteLogo = settings?.site_logo
+    ? getMediaUrl(settings.site_logo)
+    : "/logo.svg";
+
   const [showAllPosts, setShowAllPosts] = useState(false);
 
   const [blogPosts, setBlogPosts] = useState({
@@ -70,12 +95,10 @@ const OurBlog = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
               >
-                <div className="relative rounded-xl  overflow-hidden mb-5 bg-white/5 group aspect-[16/10]">
-                  <img
-                    src={
-                      blogPosts.featured.image ||
-                      "/our-blog/Link → post-landscape-1.jpg.webp"
-                    }
+                <div className="relative rounded-xl  overflow-hidden mb-5 bg-white/5 group aspect-[16/10] flex items-center justify-center">
+                  <SafeBlogImage
+                    src={blogPosts.featured.image}
+                    fallback={siteLogo}
                     alt={blogPosts.featured.title}
                     className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />
@@ -120,12 +143,10 @@ const OurBlog = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                  <div className="relative rounded-xl overflow-hidden mb-5 bg-white/5 group aspect-[16/11]">
-                    <img
-                      src={
-                        post.image ||
-                        "/our-blog/Link → post-landscape-2.jpg.webp"
-                      }
+                  <div className="relative rounded-xl overflow-hidden mb-5 bg-white/5 group aspect-[16/11] flex items-center justify-center">
+                    <SafeBlogImage
+                      src={post.image}
+                      fallback={siteLogo}
                       alt={post.title}
                       className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                     />

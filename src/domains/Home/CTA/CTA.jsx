@@ -113,7 +113,7 @@ const CTA = () => {
       resizeObserver.disconnect();
       if (ctx) ctx.revert();
     };
-  }, [language, isHomePage]);
+  }, [language, isHomePage, settings]);
 
   return (
     <section

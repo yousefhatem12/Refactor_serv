@@ -109,7 +109,6 @@ const VideoModal = ({ isOpen, onClose, videoUrl }) => {
                      </svg>
                   </div>
                   <p className="text-lg font-medium tracking-wide">Video Coming Soon...</p>
-                  <p className="text-xs text-red-500">Debug videoUrl: {String(videoUrl)} ({typeof videoUrl})</p>
                 </div>
               )}
             </div>

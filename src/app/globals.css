@@ -45,13 +45,31 @@ body {
     line-height: 1.1;
   }
 
-  /* Support for Ts Damas Sans Free Bold on all Arabic pages */
+  /* Support for Alexandria as default and Ts Damas as heading font on all Arabic pages */
   [lang="ar"],
   [dir="rtl"],
   [lang="ar"] *,
   [dir="rtl"] * {
     font-family:
-      var(--font-ts-damas), var(--font-arabic), sans-serif !important;
+      var(--font-alexandria), sans-serif !important;
+  }
+
+  [lang="ar"] h1,
+  [lang="ar"] h2,
+  [lang="ar"] h3,
+  [lang="ar"] h4,
+  [lang="ar"] h5,
+  [lang="ar"] h6,
+  [dir="rtl"] h1,
+  [dir="rtl"] h2,
+  [dir="rtl"] h3,
+  [dir="rtl"] h4,
+  [dir="rtl"] h5,
+  [dir="rtl"] h6,
+  [lang="ar"] .font-heading,
+  [dir="rtl"] .font-heading {
+    font-family:
+      var(--font-ts-damas), var(--font-alexandria), sans-serif !important;
   }
 }
 
@@ -107,4 +125,118 @@ html[dir="rtl"] {
   100% {
     transform: rotate(360deg);
   }
+}
+
+html[dir="rtl"] .article-content,
+html[dir="rtl"] .article-content *,
+html[lang="ar"] .article-content,
+html[lang="ar"] .article-content *,
+.article-content,
+.article-content * {
+  font-family: var(--font-alexandria), sans-serif !important;
+  font-weight: 400 !important;
+}
+
+html[dir="rtl"] .article-content h2,
+html[dir="rtl"] .article-content h3,
+html[dir="rtl"] .article-content h4,
+html[dir="rtl"] .article-content h5,
+html[dir="rtl"] .article-content h6,
+html[dir="rtl"] .article-content th,
+html[dir="rtl"] .article-content strong,
+html[lang="ar"] .article-content h2,
+html[lang="ar"] .article-content h3,
+html[lang="ar"] .article-content h4,
+html[lang="ar"] .article-content h5,
+html[lang="ar"] .article-content h6,
+html[lang="ar"] .article-content th,
+html[lang="ar"] .article-content strong,
+.article-content h2,
+.article-content h3,
+.article-content h4,
+.article-content h5,
+.article-content h6,
+.article-content th,
+.article-content strong {
+  font-weight: 700 !important;
+}
+
+.article-content h2 {
+  margin: 2rem 0 1rem;
+  font-size: 2rem;
+  line-height: 1.3;
+}
+
+.article-content h3 {
+  margin: 1.5rem 0 0.75rem;
+  font-size: 1.5rem;
+}
+
+.article-content p {
+  margin: 0 0 1rem;
+  line-height: 1.8;
+}
+
+.article-content ul,
+.article-content ol {
+  margin: 1rem 0;
+  padding-inline-start: 1.5rem;
+}
+
+.article-content ul {
+  list-style: disc !important;
+}
+
+.article-content ol {
+  list-style: decimal !important;
+}
+
+.article-content a {
+  color: #ff8a00 !important;
+  text-decoration: underline !important;
+}
+
+.article-content table {
+  width: 100%;
+  margin: 1.5rem 0;
+  border-collapse: collapse;
+}
+
+.article-content th,
+.article-content td {
+  padding: 0.75rem;
+  border: 1px solid rgb(255 255 255 / 20%);
+  text-align: start;
+}
+
+.article-content blockquote {
+  border-inline-start: 4px solid #ff8a00;
+  padding-inline-start: 1rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: #d1d5db;
+}
+
+.article-content pre {
+  background: #0f172a;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.article-content code {
+  font-family: monospace;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.9em;
+  color: #ff8a00;
+}
+
+.article-content pre code {
+  background: transparent;
+  padding: 0;
+  color: #e2e8f0;
 }

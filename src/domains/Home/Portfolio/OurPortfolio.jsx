@@ -2,11 +2,18 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { fetchAPI } from "@/lib/api";
+import { fetchAPI, getMediaUrl } from "@/lib/api";
 import { useLanguage } from "@/app/context/LanguageContext";
+import { useSettings } from "@/app/context/SettingsContext";
 
 const OurPortfolio = ({ activeCategoryId }) => {
   const { t, language } = useLanguage();
+  const settings = useSettings();
+  const siteLogo = settings?.site_logo
+    ? getMediaUrl(settings.site_logo)
+    : "/logo.svg";
+  const defaultImage = siteLogo || "/our-portfolio/Rectangle 6.webp";
+
   const [portfolioItems, setPortfolioItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
@@ -129,8 +136,8 @@ const OurPortfolio = ({ activeCategoryId }) => {
               return (
                 <motion.div
                   key={item.id}
-                  initial={{ opacity: 0, x: isReversed ? 50 : -50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{
                     duration: 0.6,
@@ -143,12 +150,9 @@ const OurPortfolio = ({ activeCategoryId }) => {
                   <div className="w-full lg:w-1/2 flex absolute inset-0 lg:relative lg:inset-auto md lg:h-[400px] z-0">
                     <div className="relative w-full h-full group overflow-hidden lg:rounded-xl lg:bg-white/5 lg:border lg:border-white/10 lg:shadow-2xl">
                       <img
-                        src={item.image || "/our-portfolio/Rectangle 6.webp"}
+                        src={item.image ? getMediaUrl(item.image) : defaultImage}
                         alt={item.name}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        onError={(e) => {
-                          e.target.src = "/our-portfolio/Rectangle 6.webp";
-                        }}
+                        className={`w-full h-full transition-transform duration-500 group-hover:scale-105 ${!(item.image) && siteLogo ? "object-contain p-8 bg-gray-800" : "object-cover"}`}
                       />
                       {/* Dark overlay specifically for hover on desktop */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 hidden lg:block"></div>
@@ -185,8 +189,10 @@ const OurPortfolio = ({ activeCategoryId }) => {
                         </svg>
                       </Link>
 
-                      <Link
-                        href={`/portfolio/${item.id}`}
+                      <a
+                        href={item.url || "#"}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="flex items-center justify-center gap-1 sm:gap-1.5 lg:gap-3 w-fit px-2 py-1.5 sm:px-3 sm:py-1.5 md:px-4 md:py-2 lg:px-8 lg:py-3 bg-[#E1804E] hover:bg-[#c96d3f] text-white rounded-lg lg:rounded-xl transition-all shadow-[0_0_15px_rgba(225,128,78,0.4)] hover:shadow-[0_0_30px_rgba(225,128,78,0.5)] active:scale-95"
                       >
                         <svg
@@ -204,7 +210,7 @@ const OurPortfolio = ({ activeCategoryId }) => {
                         <span className="font-bold text-[10px] sm:text-xs md:text-sm lg:text-base whitespace-nowrap">
                           {t("live")}
                         </span>
-                      </Link>
+                      </a>
                     </div>
                   </div>
                 </motion.div>
