@@ -258,6 +258,7 @@ const OnlineWebsite = () => {
   }, [activeTab, currentPage, language]);
 
   const handleTabChange = (tabId) => {
+    if (activeTab === tabId) return;
     setActiveTab(tabId);
     setCurrentPage(1);
     setProductsList([]); // Clear previous list immediately to trigger skeleton

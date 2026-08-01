@@ -36,7 +36,6 @@ import { headers, cookies } from "next/headers";
 import { fetchAPI, getMediaUrl } from "@/lib/api";
 import { getSeoAlternates } from "@/lib/seo";
 import { getCachedSettings } from "@/lib/cached-api";
-import { extractCustomMeta, renderCustomHeadCode } from "@/lib/custom-head";
 
 export async function generateMetadata() {
   const headersList = await headers();
@@ -59,7 +58,6 @@ export async function generateMetadata() {
   const ogImageUrl = settings?.social_share_image
     ? getMediaUrl(settings.social_share_image)
     : siteLogo;
-  const customMeta = extractCustomMeta(settings?.custom_header_code);
   
   return {
     metadataBase: new URL(siteUrl),
@@ -88,7 +86,6 @@ export async function generateMetadata() {
       description: siteDesc,
       images: ogImageUrl ? [ogImageUrl] : [],
     },
-    other: customMeta,
   };
 }
 
@@ -140,10 +137,12 @@ async function ProvidersAndContent({ children }) {
     <LanguageProvider defaultLanguage={defaultLanguage}>
       <AuthProvider>
         <SettingsProvider initialSettings={settings || {}} ssrLocale={defaultLanguage}>
-          {renderCustomHeadCode(settings?.custom_header_code, {
-            excludeMeta: true,
-            useNextScript: true,
-          })}
+          {settings?.custom_header_code && (
+            <div
+              dangerouslySetInnerHTML={{ __html: settings.custom_header_code }}
+              style={{ display: "none" }}
+            />
+          )}
           <HomeBackground />
           <Navbar />
           {children}

@@ -403,7 +403,7 @@ const Navbar = () => {
                     className={`absolute top-full ${isRtl ? "right-0" : "left-0"} pt-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50`}
                   >
                     <div
-                      className={`bg-[#05050f]/50 backdrop-blur-md border border-white/10 rounded-xl p-4 shadow-2xl ${getDropdownGridClass(link.dropdown)}`}
+                      className={`bg-[#0b0f2c]/95 backdrop-blur-md border border-white/10 rounded-xl p-4 shadow-2xl ${getDropdownGridClass(link.dropdown)}`}
                     >
                       {link.dropdown.map((subLink) => (
                         <Link
@@ -493,7 +493,7 @@ const Navbar = () => {
               <div
                 className={`absolute top-full ${isRtl ? "left-0" : "right-0"} pt-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50`}
               >
-                <div className="bg-[#05050f]/80 backdrop-blur-md border border-white/10 rounded-xl p-4 shadow-2xl min-w-[220px] flex flex-col gap-1">
+                <div className="bg-[#0b0f2c]/95 backdrop-blur-md border border-white/10 rounded-xl p-4 shadow-2xl min-w-[220px] flex flex-col gap-1">
                   {dropdownLinks.map((link) => {
                     const isHashLink = link.href.includes("#");
                     const targetPath = link.href.split("#")[0];

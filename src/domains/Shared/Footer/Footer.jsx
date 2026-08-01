@@ -106,7 +106,13 @@ const Footer = () => {
               {footerData.texts?.description || t("footerDesc")}
             </motion.p>
             <motion.button
-              onClick={() => router.push("/contact-us")}
+              onClick={() => {
+                if (pathname.includes("/contact-us")) {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                } else {
+                  router.push("/contact-us");
+                }
+              }}
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}

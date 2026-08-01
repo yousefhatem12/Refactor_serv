@@ -780,7 +780,6 @@ function RenderBlock({
   const heroImage = data.hero_image
     ? `${STORAGE_URL}/storage/${data.hero_image}`
     : defaultHeroImage;
-
   const resolveText = (field) => {
     if (!field) return "";
     if (typeof field === "object") {

@@ -14,7 +14,6 @@ export default function BlogPostDetails() {
   const slug = params?.id; // The folder is still named [id] but it receives the slug from URL
   const [post, setPost] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [imgError, setImgError] = useState(false);
 
   // Adjust state during render to avoid synchronous setState inside useEffect
   const [prevSlug, setPrevSlug] = useState(slug);
@@ -28,7 +27,6 @@ export default function BlogPostDetails() {
 
   useEffect(() => {
     if (slug) {
-      setImgError(false);
       fetchAPI(`/blog/${slug}?lang=${language}`)
         .then((res) => {
           if (res) setPost(res.data || res);
@@ -60,8 +58,6 @@ export default function BlogPostDetails() {
   if (isLoading) {
     return <Loading />;
   }
-
-
 
   if (!post) {
     return (
@@ -108,10 +104,6 @@ export default function BlogPostDetails() {
       }
     : null;
 
-  const fallbackLogo = settings?.site_logo ? getMediaUrl(settings.site_logo) : "/logo.png";
-  const displayImage = (!post?.image || imgError) ? fallbackLogo : post.image;
-  const isFallback = !post?.image || imgError;
-
   return (
     <main
       className="flex min-h-screen flex-col relative overflow-x-hidden pt-10 pb-10"
@@ -137,7 +129,7 @@ export default function BlogPostDetails() {
                 {post.title}
               </h1>
               <div
-                className="text-gray-300 text-lg leading-relaxed mb-10 article-content"
+                className="text-gray-300 text-lg leading-relaxed mb-10 prose prose-invert max-w-none"
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
               <div className="flex items-center gap-4 text-sm text-gray-400">
@@ -149,18 +141,13 @@ export default function BlogPostDetails() {
               </div>
             </div>
 
-            <div className="w-full lg:w-1/2 relative h-[300px] sm:h-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-2xl border border-white/10 group bg-gray-800 flex items-center justify-center">
-              {displayImage && (
+            <div className="w-full lg:w-1/2 relative h-[300px] sm:h-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-2xl border border-white/10 group bg-gray-800">
+              {post.image && (
                 <Image
-                  src={displayImage}
+                  src={post.image}
                   alt={post.title}
                   fill
-                  className={
-                    isFallback
-                      ? "object-contain p-16 opacity-40 group-hover:scale-105 transition-transform duration-700"
-                      : "object-cover object-center group-hover:scale-105 transition-transform duration-700"
-                  }
-                  onError={() => setImgError(true)}
+                  className="object-cover object-center group-hover:scale-105 transition-transform duration-700"
                   priority
                 />
               )}

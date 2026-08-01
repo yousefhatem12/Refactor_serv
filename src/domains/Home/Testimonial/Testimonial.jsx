@@ -27,11 +27,18 @@ const Testimonial = () => {
   const { language, t } = useLanguage();
 
   const [data, setData] = useState([]);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
   useEffect(() => {
     fetchAPI(`/testimonials?lang=${language}`)
       .then((res) => {
         const testimonialData = res && res.data ? res.data : res;
-        if (testimonialData && testimonialData.length > 0) setData(testimonialData);
+        if (testimonialData && testimonialData.length > 0) {
+          setData(testimonialData);
+          // Check initial scroll state after data loads
+          setTimeout(checkScroll, 100);
+        }
       })
       .catch(console.error);
   }, [language]);
@@ -49,15 +56,25 @@ const Testimonial = () => {
 
   if (displayTestimonials.length === 0) return null;
 
+  const checkScroll = () => {
+    if (sliderRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
+      setCanScrollLeft(scrollLeft > 5); // 5px tolerance
+      setCanScrollRight(Math.ceil(scrollLeft + clientWidth) < scrollWidth - 5);
+    }
+  };
+
   const scrollLeft = () => {
     if (sliderRef.current) {
       sliderRef.current.scrollBy({ left: -320, behavior: "smooth" });
+      setTimeout(checkScroll, 300);
     }
   };
 
   const scrollRight = () => {
     if (sliderRef.current) {
       sliderRef.current.scrollBy({ left: 320, behavior: "smooth" });
+      setTimeout(checkScroll, 300);
     }
   };
 
@@ -95,7 +112,12 @@ const Testimonial = () => {
           {/* Navigation Arrows */}
           <button
             onClick={scrollLeft}
-            className="absolute left-0 lg:-left-6 z-30 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-[#0a0a0f]/80 backdrop-blur-md border border-white/10 text-white opacity-100 transition-all duration-300 hover:bg-[#FF8A00] hover:border-[#FF8A00] hover:scale-110 shadow-[0_0_20px_rgba(0,0,0,0.5)] cursor-pointer"
+            disabled={!canScrollLeft}
+            className={`absolute left-0 lg:-left-6 z-30 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-[#0a0a0f]/80 backdrop-blur-md border border-white/10 text-white transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)] ${
+              canScrollLeft 
+                ? "opacity-100 hover:bg-[#FF8A00] hover:border-[#FF8A00] hover:scale-110 cursor-pointer" 
+                : "opacity-30 cursor-not-allowed"
+            }`}
             aria-label="Scroll Left"
           >
             <svg
@@ -114,7 +136,12 @@ const Testimonial = () => {
           </button>
           <button
             onClick={scrollRight}
-            className="absolute right-0 lg:-right-6 z-30 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-[#0a0a0f]/80 backdrop-blur-md border border-white/10 text-white opacity-100 transition-all duration-300 hover:bg-[#FF8A00] hover:border-[#FF8A00] hover:scale-110 shadow-[0_0_20px_rgba(0,0,0,0.5)] cursor-pointer"
+            disabled={!canScrollRight}
+            className={`absolute right-0 lg:-right-6 z-30 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-[#0a0a0f]/80 backdrop-blur-md border border-white/10 text-white transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)] ${
+              canScrollRight 
+                ? "opacity-100 hover:bg-[#FF8A00] hover:border-[#FF8A00] hover:scale-110 cursor-pointer" 
+                : "opacity-30 cursor-not-allowed"
+            }`}
             aria-label="Scroll Right"
           >
             <svg
@@ -144,6 +171,7 @@ const Testimonial = () => {
           >
             <div
               ref={sliderRef}
+              onScroll={checkScroll}
               className="w-full overflow-x-auto pb-16 pt-4 scrollbar-hide snap-x snap-mandatory flex items-stretch gap-6"
               style={{ msOverflowStyle: "none", scrollbarWidth: "none" }}
             >
