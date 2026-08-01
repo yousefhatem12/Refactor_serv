@@ -8,7 +8,7 @@ use Tests\TestCase;
 
 class DeepSeekProviderTest extends TestCase
 {
-    public function test_structured_generation_keeps_thinking_and_expands_the_output_budget(): void
+    public function test_structured_generation_disables_thinking_and_preserves_the_requested_output_budget(): void
     {
         Http::fake([
             'api.deepseek.com/chat/completions' => Http::response([
@@ -31,13 +31,13 @@ class DeepSeekProviderTest extends TestCase
         $this->assertTrue($result['ok']);
         Http::assertSent(function ($request): bool {
             return $request->url() === 'https://api.deepseek.com/chat/completions'
-                && $request['thinking'] === ['type' => 'enabled']
-                && $request['max_tokens'] === 24576
+                && $request['thinking'] === ['type' => 'disabled']
+                && $request['max_tokens'] === 6144
                 && $request['response_format'] === ['type' => 'json_object'];
         });
     }
 
-    public function test_cluster_planning_gets_a_safe_thinking_budget(): void
+    public function test_cluster_planning_keeps_its_original_compact_output_budget(): void
     {
         Http::fake([
             'api.deepseek.com/chat/completions' => Http::response([
@@ -57,7 +57,7 @@ class DeepSeekProviderTest extends TestCase
             'test-token'
         );
 
-        Http::assertSent(fn ($request): bool => $request['max_tokens'] === 8192);
+        Http::assertSent(fn ($request): bool => $request['max_tokens'] === 1200);
     }
 
     public function test_empty_completion_reports_the_model_and_finish_reason(): void

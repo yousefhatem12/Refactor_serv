@@ -14,13 +14,6 @@ class DeepSeekProvider implements AiProviderInterface
         int $maxLength,
         string $token
     ): array {
-        // In thinking mode DeepSeek counts reasoning and the final JSON against
-        // the same output budget. Keep a compact allowance for cluster plans
-        // and a larger, bounded allowance for complete article documents.
-        $outputBudget = $maxLength <= 4096
-            ? min(16384, max(8192, $maxLength * 4))
-            : min(32768, max(24576, $maxLength * 3));
-
         $response = Http::withHeaders([
             'Authorization' => "Bearer {$token}",
         ])
@@ -35,8 +28,11 @@ class DeepSeekProvider implements AiProviderInterface
                 ['role' => 'user', 'content' => $prompt]
             ],
             'temperature' => $temperature,
-            'max_tokens' => $outputBudget,
-            'thinking' => ['type' => 'enabled'],
+            'max_tokens' => $maxLength,
+            // Structured JSON is already governed by a detailed schema and
+            // validation pass. Disabling CoT keeps the final article fast and
+            // prevents reasoning from consuming the JSON output budget.
+            'thinking' => ['type' => 'disabled'],
             'response_format' => ['type' => 'json_object'],
         ]);
 
