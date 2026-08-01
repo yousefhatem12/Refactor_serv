@@ -1,12 +1,38 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
+import { useSettings } from "@/app/context/SettingsContext";
+import { getMediaUrl } from "@/lib/api";
+
+const SafeImage = ({ src, fallback, alt, className, ...props }) => {
+  const [imgSrc, setImgSrc] = useState(src || fallback);
+  
+  useEffect(() => {
+    setImgSrc(src || fallback);
+  }, [src, fallback]);
+
+  const isFallback = imgSrc === fallback;
+
+  return (
+    <Image
+      src={imgSrc}
+      alt={alt}
+      className={`${className} ${isFallback ? "object-contain p-8 bg-gray-800" : "object-cover"}`}
+      onError={() => setImgSrc(fallback)}
+      {...props}
+    />
+  );
+};
 
 const BlogHero = ({ data, posts = [] }) => {
   const { t } = useLanguage();
+  const settings = useSettings();
+  const siteLogo = settings?.site_logo
+    ? getMediaUrl(settings.site_logo)
+    : "/logo.svg";
   
   const featuredPost = posts[0] || null;
   const sidePosts = posts.slice(1, 4);
@@ -42,12 +68,14 @@ const BlogHero = ({ data, posts = [] }) => {
             className="w-full lg:w-3/5"
           >
             <Link href={`/blog/${featuredPost.slug || featuredPost.id}`} prefetch={false} className="w-full lg:w-full group cursor-pointer block">
-              <div className="relative w-full h-[300px] md:h-[400px] rounded-lg overflow-hidden mb-6 border border-white/5 shadow-2xl group-hover:border-blue-500/30 transition-all duration-300">
-                <Image
-                  src={featuredPost.image || "/placeholder.webp"}
+              <div className="relative w-full h-[300px] md:h-[400px] rounded-lg overflow-hidden mb-6 border border-white/5 shadow-2xl group-hover:border-blue-500/30 transition-all duration-300 flex items-center justify-center">
+                <SafeImage
+                  src={featuredPost.image}
+                  fallback={siteLogo}
                   alt={featuredPost.title}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                  className="transition-transform duration-700 ease-out group-hover:scale-105"
+                  priority
                 />
               </div>
               <div className="text-blue-400 text-sm font-semibold mb-3 tracking-wider uppercase flex items-center gap-2">
@@ -80,12 +108,13 @@ const BlogHero = ({ data, posts = [] }) => {
                   prefetch={false}
                   className="flex gap-4 group cursor-pointer items-center"
                 >
-                  <div className="relative w-1/3 h-[100px] md:h-[120px] rounded-lg overflow-hidden shrink-0 border border-white/5 group-hover:border-blue-500/30 transition-all duration-300">
-                    <Image
-                      src={post.image || "/placeholder.webp"}
+                  <div className="relative w-1/3 h-[100px] md:h-[120px] rounded-lg overflow-hidden shrink-0 border border-white/5 group-hover:border-blue-500/30 transition-all duration-300 flex items-center justify-center">
+                    <SafeImage
+                      src={post.image}
+                      fallback={siteLogo}
                       alt={post.title}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                      className="transition-transform duration-700 ease-out group-hover:scale-105"
                     />
                   </div>
                   <div className="w-2/3">

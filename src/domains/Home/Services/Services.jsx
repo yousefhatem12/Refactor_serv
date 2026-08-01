@@ -223,7 +223,12 @@ const Services = () => {
                 className="space-y-6"
               >
                 <h3
-                  className={`text-3xl sm:text-5xl md:text-7xl font-bold bg-gradient-to-b ${activeService.gradient} bg-clip-text text-transparent`}
+                  className="text-3xl sm:text-5xl md:text-7xl font-bold text-[#FF8A00]"
+                  style={{
+                    backgroundImage: "linear-gradient(to bottom, #ffffff, #FF8A00)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
                 >
                   {activeService.title}
                 </h3>

@@ -7,6 +7,50 @@ import Loading from "../../loading";
 import { useLanguage } from "../../context/LanguageContext";
 import { useSettings } from "../../context/SettingsContext";
 
+function ArticleTable({ table }) {
+  if (!table) return null;
+
+  return (
+    <div className="overflow-x-auto my-8 w-full">
+      <table className="w-full border-collapse border border-white/20 text-white text-sm sm:text-base">
+        <thead>
+          <tr className="bg-white/10">
+            {table.head.map((heading, index) => (
+              <th className="border border-white/20 px-4 py-3 text-start font-bold" key={`${heading}-${index}`}>{heading}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {table.rows.map((row, rowIndex) => (
+            <tr className="hover:bg-white/5 transition-colors" key={rowIndex}>
+              {table.head.map((heading, columnIndex) => (
+                <td className="border border-white/20 px-4 py-3" key={`${heading}-${columnIndex}`}>
+                  {row[heading] ?? ""}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function ArticleLists({ lists }) {
+  if (!lists || lists.length === 0) return null;
+  return lists.map((entry, index) => {
+    const Tag = entry.type === "ordered" ? "ol" : "ul";
+
+    return (
+      <Tag key={index} className={`my-6 pl-6 pr-6 ${entry.type === "ordered" ? "list-decimal" : "list-disc"} text-gray-300 space-y-2`}>
+        {entry.list.map((item, itemIndex) => (
+          <li key={itemIndex} className="leading-relaxed">{item}</li>
+        ))}
+      </Tag>
+    );
+  });
+}
+
 export default function BlogPostDetails() {
   const { language } = useLanguage();
   const settings = useSettings();
@@ -14,6 +58,19 @@ export default function BlogPostDetails() {
   const slug = params?.id; // The folder is still named [id] but it receives the slug from URL
   const [post, setPost] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://serv5.com.eg";
+  const siteLogo = settings?.site_logo
+    ? getMediaUrl(settings.site_logo)
+    : `${siteUrl}/logo.svg`;
+
+  const [imgSrc, setImgSrc] = useState("");
+
+  useEffect(() => {
+    if (post) {
+      setImgSrc(post.image ? getMediaUrl(post.image) : siteLogo);
+    }
+  }, [post, siteLogo]);
 
   // Adjust state during render to avoid synchronous setState inside useEffect
   const [prevSlug, setPrevSlug] = useState(slug);
@@ -70,11 +127,7 @@ export default function BlogPostDetails() {
   }
 
   const isRtl = language === "ar";
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://serv5.com.eg";
   const postUrl = `${siteUrl}/${language}/blog/${slug}`;
-  const siteLogo = settings?.site_logo
-    ? getMediaUrl(settings.site_logo)
-    : `${siteUrl}/logo.svg`;
 
   const articleSchema = post
     ? {
@@ -104,6 +157,15 @@ export default function BlogPostDetails() {
       }
     : null;
 
+  let cleanContent = post.content || "";
+  if (post.table) {
+    cleanContent = cleanContent.replace(/<table[^>]*>[\s\S]*?<\/table>/gi, "");
+  }
+  if (post.list && post.list.length > 0) {
+    cleanContent = cleanContent.replace(/<ul[^>]*>[\s\S]*?<\/ul>/gi, "");
+    cleanContent = cleanContent.replace(/<ol[^>]*>[\s\S]*?<\/ol>/gi, "");
+  }
+
   return (
     <main
       className="flex min-h-screen flex-col relative overflow-x-hidden pt-10 pb-10"
@@ -128,11 +190,15 @@ export default function BlogPostDetails() {
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight uppercase">
                 {post.title}
               </h1>
-              <div
-                className="text-gray-300 text-lg leading-relaxed mb-10 prose prose-invert max-w-none"
-                dangerouslySetInnerHTML={{ __html: post.content }}
-              />
-              <div className="flex items-center gap-4 text-sm text-gray-400">
+              <div className="article-content">
+                <div
+                  className="text-gray-300 text-lg leading-relaxed mb-6 max-w-none font-normal"
+                  dangerouslySetInnerHTML={{ __html: cleanContent }}
+                />
+                <ArticleTable table={post.table} />
+                <ArticleLists lists={post.list} />
+              </div>
+              <div className="flex items-center gap-4 text-sm text-gray-400 mt-6">
                 <span>
                   {language === "ar" ? "بواسطة" : "By"} {post.author}
                 </span>
@@ -141,16 +207,15 @@ export default function BlogPostDetails() {
               </div>
             </div>
 
-            <div className="w-full lg:w-1/2 relative h-[300px] sm:h-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-2xl border border-white/10 group bg-gray-800">
-              {post.image && (
-                <Image
-                  src={post.image}
-                  alt={post.title}
-                  fill
-                  className="object-cover object-center group-hover:scale-105 transition-transform duration-700"
-                  priority
-                />
-              )}
+            <div className="w-full lg:w-1/2 relative h-[300px] sm:h-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-2xl border border-white/10 group bg-gray-800 flex items-center justify-center">
+              <Image
+                src={imgSrc || siteLogo}
+                alt={post.title}
+                fill
+                className={imgSrc === siteLogo ? "w-1/2 h-1/2 object-contain group-hover:scale-105 transition-transform duration-700" : "object-cover object-center group-hover:scale-105 transition-transform duration-700"}
+                priority
+                onError={() => setImgSrc(siteLogo)}
+              />
             </div>
           </div>
         </section>

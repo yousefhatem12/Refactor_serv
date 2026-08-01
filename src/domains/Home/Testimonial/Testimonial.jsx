@@ -30,6 +30,46 @@ const Testimonial = () => {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
 
+  const checkScroll = () => {
+    if (sliderRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
+      const maxScroll = scrollWidth - clientWidth;
+      
+      if (maxScroll <= 0) {
+        setCanScrollLeft(false);
+        setCanScrollRight(false);
+        return;
+      }
+
+      const isRtl = language === "ar";
+      const currentScroll = Math.abs(scrollLeft);
+      const atStart = currentScroll < 10;
+      const atEnd = currentScroll > maxScroll - 10;
+
+      if (isRtl) {
+        setCanScrollLeft(!atEnd);
+        setCanScrollRight(!atStart);
+      } else {
+        setCanScrollLeft(!atStart);
+        setCanScrollRight(!atEnd);
+      }
+    }
+  };
+
+  const scrollLeft = () => {
+    if (sliderRef.current) {
+      sliderRef.current.scrollBy({ left: -320, behavior: "smooth" });
+      setTimeout(checkScroll, 300);
+    }
+  };
+
+  const scrollRight = () => {
+    if (sliderRef.current) {
+      sliderRef.current.scrollBy({ left: 320, behavior: "smooth" });
+      setTimeout(checkScroll, 300);
+    }
+  };
+
   useEffect(() => {
     fetchAPI(`/testimonials?lang=${language}`)
       .then((res) => {
@@ -55,28 +95,6 @@ const Testimonial = () => {
   }));
 
   if (displayTestimonials.length === 0) return null;
-
-  const checkScroll = () => {
-    if (sliderRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
-      setCanScrollLeft(scrollLeft > 5); // 5px tolerance
-      setCanScrollRight(Math.ceil(scrollLeft + clientWidth) < scrollWidth - 5);
-    }
-  };
-
-  const scrollLeft = () => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({ left: -320, behavior: "smooth" });
-      setTimeout(checkScroll, 300);
-    }
-  };
-
-  const scrollRight = () => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({ left: 320, behavior: "smooth" });
-      setTimeout(checkScroll, 300);
-    }
-  };
 
   return (
     <section className="py-20 px-4 md:px-8 relative overflow-hidden">

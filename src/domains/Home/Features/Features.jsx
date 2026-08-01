@@ -92,13 +92,23 @@ export default function Features() {
       : checkFeaturesKeys.map((k) => t(k));
 
   const displayPartners =
-    settings.features_partners && settings.features_partners.length > 0
+    settings?.features_partners && settings.features_partners.length > 0
       ? settings.features_partners.map((p) => getMediaUrl(p))
-      : partners;
+      : [];
 
-  const displayExperienceImage = settings.features_image
-    ? getMediaUrl(settings.features_image)
-    : "/Features/15Y.webp";
+  const siteLogo = settings?.site_logo
+    ? getMediaUrl(settings.site_logo)
+    : "/logo.svg";
+
+  const [experienceImgSrc, setExperienceImgSrc] = useState(
+    settings?.features_image ? getMediaUrl(settings.features_image) : siteLogo
+  );
+
+  useEffect(() => {
+    setExperienceImgSrc(
+      settings?.features_image ? getMediaUrl(settings.features_image) : siteLogo
+    );
+  }, [settings?.features_image, siteLogo]);
 
   return (
     <section
@@ -153,9 +163,10 @@ export default function Features() {
               </motion.div>
 
               <img
-                src={displayExperienceImage}
-                alt="15 Years of Experience"
-                className="w-full h-auto relative z-10 drop-shadow-[0_0_25px_rgba(217,139,80,0.4)]"
+                src={experienceImgSrc}
+                alt="Who We Are"
+                className={`w-full h-auto relative z-10 drop-shadow-[0_0_25px_rgba(217,139,80,0.4)] ${experienceImgSrc === siteLogo ? "object-contain max-h-[200px]" : "object-cover"}`}
+                onError={() => setExperienceImgSrc(siteLogo)}
               />
             </motion.div>
 
@@ -284,22 +295,24 @@ export default function Features() {
               </motion.div>
 
               <img
-                src={displayExperienceImage}
-                alt="15 Years of Experience"
-                className="w-full h-auto relative z-10 drop-shadow-[0_20px_50px_rgba(217,139,80,0.4)] object-contain"
+                src={experienceImgSrc}
+                alt="Who We Are"
+                className={`w-full h-auto relative z-10 drop-shadow-[0_20px_50px_rgba(217,139,80,0.4)] ${experienceImgSrc === siteLogo ? "object-contain max-h-[350px] p-6 mx-auto" : "object-cover"}`}
+                onError={() => setExperienceImgSrc(siteLogo)}
               />
             </motion.div>
           </motion.div>
         </div>
 
         {/* Partners Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          viewport={{ once: true }}
-          className="w-full mt-20 lg:mt-32 pt-8 md:pt-12 border-t border-white/5 relative"
-        >
+        {displayPartners && displayPartners.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            viewport={{ once: true }}
+            className="w-full mt-20 lg:mt-32 pt-8 md:pt-12 border-t border-white/5 relative"
+          >
           {/* Creative Top Border Glow */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 max-w-md h-[1px] bg-gradient-to-r from-transparent via-[#D98B50] to-transparent opacity-50"></div>
 
@@ -308,24 +321,26 @@ export default function Features() {
           </p>
 
           <div className="flex items-center justify-between gap-4 max-w-6xl mx-auto px-2" dir="ltr">
-            <button
-              onClick={scrollLeft}
-              className="hidden sm:flex w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm items-center justify-center text-gray-400 hover:text-white hover:bg-[#D98B50] hover:border-[#D98B50] hover:shadow-[0_0_20px_rgba(217,139,80,0.4)] transition-all duration-300 shrink-0 group"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="group-hover:-translate-x-1 transition-transform duration-300"
+            {displayPartners.length > 5 && (
+              <button
+                onClick={scrollLeft}
+                className="hidden sm:flex w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm items-center justify-center text-gray-400 hover:text-white hover:bg-[#D98B50] hover:border-[#D98B50] hover:shadow-[0_0_20px_rgba(217,139,80,0.4)] transition-all duration-300 shrink-0 group"
               >
-                <polyline points="15 18 9 12 15 6" />
-              </svg>
-            </button>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="group-hover:-translate-x-1 transition-transform duration-300"
+                >
+                  <polyline points="15 18 9 12 15 6" />
+                </svg>
+              </button>
+            )}
 
             <div className="flex-1 overflow-hidden">
               <div
@@ -359,26 +374,29 @@ export default function Features() {
               </div>
             </div>
 
-            <button
-              onClick={scrollRight}
-              className="hidden sm:flex w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm items-center justify-center text-gray-400 hover:text-white hover:bg-[#D98B50] hover:border-[#D98B50] hover:shadow-[0_0_20px_rgba(217,139,80,0.4)] transition-all duration-300 shrink-0 group"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="group-hover:translate-x-1 transition-transform duration-300"
+            {displayPartners.length > 5 && (
+              <button
+                onClick={scrollRight}
+                className="hidden sm:flex w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm items-center justify-center text-gray-400 hover:text-white hover:bg-[#D98B50] hover:border-[#D98B50] hover:shadow-[0_0_20px_rgba(217,139,80,0.4)] transition-all duration-300 shrink-0 group"
               >
-                <polyline points="9 18 15 12 9 6" />
-              </svg>
-            </button>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="group-hover:translate-x-1 transition-transform duration-300"
+                >
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </button>
+            )}
           </div>
-        </motion.div>
+          </motion.div>
+        )}
       </div>
       <style
         dangerouslySetInnerHTML={{
