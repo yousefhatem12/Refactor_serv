@@ -71,6 +71,7 @@ class AiGenerationDashboard extends Page implements HasForms
             'article_length_preset' => 'standard',
             'creativity_preset' => 'balanced',
             'suggest_keywords' => true,
+            'auto_publish' => false,
         ]);
     }
 
@@ -158,6 +159,13 @@ class AiGenerationDashboard extends Page implements HasForms
                             ->default('egyptian')
                             ->visible(fn ($get) => in_array($get('language'), ['ar', 'both'], true))
                             ->required(fn ($get) => in_array($get('language'), ['ar', 'both'], true)),
+
+                        Toggle::make('auto_publish')
+                            ->label($isAr ? 'النشر التلقائي' : 'Auto Publish')
+                            ->helperText($isAr
+                                ? 'ينشر كل مقال تلقائيًا بعد اكتمال التوليد والتحقق بنجاح. عند إيقافه تظل المقالات مسودات حتى تضغط نشر أو نشر الكل.'
+                                : 'Publishes every article automatically after successful generation and validation. When disabled, articles remain drafts until you use Publish or Publish All.')
+                            ->default(false),
                     ]),
 
                 \Filament\Schemas\Components\Section::make($isAr ? 'خيارات متقدمة' : 'Advanced Options')
@@ -313,6 +321,7 @@ class AiGenerationDashboard extends Page implements HasForms
             'temperature' => $targetTemp,
             'suggest_keywords' => (bool) $formData['suggest_keywords'],
             'arabic_dialect' => $formData['arabic_dialect'] ?? 'egyptian',
+            'auto_publish' => (bool) ($formData['auto_publish'] ?? false),
         ];
 
         // 3. Normalize parameters and calculate hash

@@ -64,18 +64,58 @@ class InternalLinkServiceTest extends TestCase
         ], 'ar');
 
         $this->assertStringNotContainsString('<a href="https://serv5.com.eg/ar/services"><a ', $html);
-        $this->assertSame(2, substr_count($html, '<a href='));
+        $this->assertSame(1, substr_count($html, '<a href='));
     }
 
-    public function test_linking_never_exceeds_four_new_links_per_article_field(): void
+    public function test_same_url_is_linked_only_once_and_only_one_link_is_added_per_paragraph(): void
     {
         $input = '<p>خدماتنا</p><p>خدماتنا</p><p>خدماتنا</p><p>خدماتنا</p><p>خدماتنا</p>';
         [$html, $used] = $this->callPrivate('linkText', $input, [
             $this->target('page', ['ar' => ['خدماتنا'], 'en' => ['Our Services']], 'https://serv5.com.eg/ar/services', 'https://serv5.com.eg/en/services'),
         ], 'ar');
 
-        $this->assertSame(4, substr_count($html, '<a href='));
-        $this->assertCount(4, $used);
+        $this->assertSame(1, substr_count($html, '<a href='));
+        $this->assertCount(1, $used);
+        $this->assertSame(1, count(array_unique(array_column($used, 'url'))));
+    }
+
+    public function test_fallback_links_are_distributed_without_a_related_links_block(): void
+    {
+        $html = implode('', array_map(
+            fn (int $number): string => "<p>Paragraph {$number} contains useful explanatory content.</p>",
+            range(1, 8)
+        )) . '<section class="article-faq"><h2>FAQ</h2></section>';
+        $links = array_map(fn (int $number): array => [
+            'label' => "Resource {$number}",
+            'url' => "https://serv5.com.eg/en/blog/resource-{$number}",
+            'type' => $number <= 3 ? 'post' : ($number <= 6 ? 'service' : 'page'),
+        ], range(1, 8));
+
+        $distributed = InternalLinkService::distributeUniqueLinks($html, $links, 'en');
+
+        preg_match_all('/<p\b[^>]*>.*?<\/p>/isu', $distributed, $paragraphs);
+        $linkedParagraphs = array_values(array_filter($paragraphs[0], fn (string $paragraph): bool => str_contains($paragraph, '<a ')));
+        preg_match_all('/href="([^"]+)"/', $distributed, $urls);
+
+        $this->assertCount(8, $linkedParagraphs);
+        $this->assertSame(8, count(array_unique($urls[1])));
+        $this->assertStringNotContainsString('internal-links-', $distributed);
+        $this->assertStringNotContainsString('Related articles', $distributed);
+        $this->assertLessThan(strpos($distributed, 'class="article-faq"'), strpos($distributed, 'resource-8'));
+    }
+
+    public function test_duplicate_anchor_text_is_not_linked_to_two_different_urls(): void
+    {
+        $html = '<p>First paragraph.</p><p>Second paragraph.</p>';
+        $links = [
+            ['label' => 'SEO', 'url' => 'https://serv5.com.eg/en/services/seo-one', 'type' => 'service'],
+            ['label' => 'SEO', 'url' => 'https://serv5.com.eg/en/services/seo-two', 'type' => 'service'],
+        ];
+
+        $distributed = InternalLinkService::distributeUniqueLinks($html, $links, 'en');
+
+        $this->assertSame(1, substr_count($distributed, '>SEO</a>'));
+        $this->assertSame(1, substr_count($distributed, '<a href='));
     }
 
     public function test_relevance_ranking_prefers_related_posts_and_services(): void

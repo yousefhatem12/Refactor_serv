@@ -253,6 +253,8 @@ class GenerateArticleJob implements ShouldQueue
                     'image_metadata' => $parsedResponse['image'] ?? null,
                 ]);
 
+                GeneratedPostService::autoPublishIfEnabled($post, $request);
+
                 // Update item reference
                 $item->update([
                     'status' => 'completed',

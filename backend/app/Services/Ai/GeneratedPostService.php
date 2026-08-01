@@ -2,12 +2,36 @@
 
 namespace App\Services\Ai;
 
+use App\Models\AiGenerationRequest;
 use App\Models\Post;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class GeneratedPostService
 {
+    /**
+     * Publishes a validated generated post only when the originating request
+     * explicitly enabled auto publishing. Topic clusters must wait until all
+     * cross-links have been finalized before any post becomes public.
+     */
+    public static function autoPublishIfEnabled(
+        Post $post,
+        AiGenerationRequest $request,
+        bool $clusterFinalized = false
+    ): bool {
+        $enabled = (bool) data_get($request->settings_snapshot, 'auto_publish', false);
+        if (!$enabled || ($request->generation_mode === 'topic_cluster' && !$clusterFinalized)) {
+            return false;
+        }
+
+        $post->update([
+            'is_published' => true,
+            'ai_status' => 'approved',
+        ]);
+
+        return true;
+    }
+
     /**
      * Creates an AI generated blog post, forcing it to be an unpublished draft.
      *

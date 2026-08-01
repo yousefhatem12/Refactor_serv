@@ -289,7 +289,8 @@ class AiWorkflowTest extends TestCase
             ->assertSet('data.arabic_dialect', 'egyptian')
             ->assertSet('data.article_length_preset', 'standard')
             ->assertSet('data.creativity_preset', 'balanced')
-            ->assertSet('data.suggest_keywords', true);
+            ->assertSet('data.suggest_keywords', true)
+            ->assertSet('data.auto_publish', false);
     }
 
     /** @test */
@@ -394,6 +395,7 @@ class AiWorkflowTest extends TestCase
             ->set('data.author_id', $this->admin->id)
             ->set('data.language', 'ar')
             ->set('data.arabic_dialect', 'egyptian')
+            ->set('data.auto_publish', true)
             ->set('data.provider', 'openai')
             ->set('data.model', 'gpt-4o-mini')
             ->call('generate')
@@ -402,6 +404,7 @@ class AiWorkflowTest extends TestCase
         $request = AiGenerationRequest::latest('id')->firstOrFail();
         $this->assertSame(4, $request->article_count);
         $this->assertSame(4, $request->total_items);
+        $this->assertTrue((bool) ($request->settings_snapshot['auto_publish'] ?? false));
         $this->assertSame(0, $request->items()->count());
         Queue::assertPushed(PlanTopicClusterJob::class, 1);
     }

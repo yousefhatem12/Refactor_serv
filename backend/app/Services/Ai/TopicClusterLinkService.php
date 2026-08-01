@@ -27,24 +27,19 @@ class TopicClusterLinkService
                 continue;
             }
 
-            $links = [];
             $suggestions = [];
             foreach ($others as $item) {
                 $title = is_array($item->post->title) ? trim((string) ($item->post->title[$lang] ?? '')) : '';
                 $label = $title !== '' ? $title : $item->keyword;
                 $url = SiteUrlBuilder::blogPost($lang, $item->post->slug);
-                $links[] = '<li><a href="' . e($url) . '" class="internal-link">' . e($label) . '</a></li>';
                 $suggestions[] = ['label' => $label, 'url' => $url, 'type' => 'cluster_post'];
             }
 
-            $heading = $lang === 'ar' ? 'اقرأ أيضًا ضمن هذا الموضوع' : 'Continue through this topic cluster';
-            $section = '<section class="topic-cluster-links"><h2>' . e($heading) . '</h2><ul>' . implode('', $links) . '</ul></section>';
-            $body = preg_replace(
-                '/<section\b[^>]*class=["\'][^"\']*\btopic-cluster-links\b[^"\']*["\'][^>]*>.*?<\/section>/isu',
-                '',
-                (string) $article["body_{$lang}"]
-            ) ?? (string) $article["body_{$lang}"];
-            $article["body_{$lang}"] = ArticleContentService::insertBeforeFaqOrConclusion($body, $section, $lang);
+            $article["body_{$lang}"] = InternalLinkService::distributeUniqueLinks(
+                (string) $article["body_{$lang}"],
+                $suggestions,
+                $lang
+            );
             $article['internal_link_suggestions'] = array_values(array_unique(array_merge(
                 $article['internal_link_suggestions'] ?? [],
                 $suggestions

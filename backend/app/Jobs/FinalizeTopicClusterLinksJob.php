@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\AiGenerationRequest;
 use App\Services\Ai\ArticleContentService;
 use App\Services\Ai\GeneratedHtmlSanitizer;
+use App\Services\Ai\GeneratedPostService;
 use App\Services\Ai\TopicClusterLinkService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -67,6 +68,7 @@ class FinalizeTopicClusterLinksJob implements ShouldQueue
                 $metadata['quality_report'] = $report;
 
                 $item->post->update(['content' => $content, 'ai_metadata' => $metadata]);
+                GeneratedPostService::autoPublishIfEnabled($item->post, $request, clusterFinalized: true);
                 $item->update([
                     'parsed_response' => $article,
                     'quality_report' => $report,

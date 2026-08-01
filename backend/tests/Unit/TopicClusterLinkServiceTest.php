@@ -35,11 +35,11 @@ class TopicClusterLinkServiceTest extends TestCase
 
         $this->assertStringContainsString('https://serv5.com.eg/ar/blog/hosting-pillar', $linked['body_ar']);
         $this->assertStringContainsString('https://serv5.com.eg/ar/blog/website-security', $linked['body_ar']);
-        $this->assertSame(1, substr_count($linked['body_ar'], 'class="topic-cluster-links"'));
-        $this->assertLessThan(
-            strpos($linked['body_ar'], 'class="article-faq"'),
-            strpos($linked['body_ar'], 'class="topic-cluster-links"')
-        );
+        $this->assertStringNotContainsString('class="topic-cluster-links"', $linked['body_ar']);
+        preg_match_all('/href="([^"]+)"/', $linked['body_ar'], $linkedUrls);
+        $this->assertSame(count($linkedUrls[1]), count(array_unique($linkedUrls[1])));
+        $this->assertLessThan(strpos($linked['body_ar'], 'class="article-faq"'), strpos($linked['body_ar'], 'hosting-pillar'));
+        $this->assertLessThan(strpos($linked['body_ar'], 'class="article-faq"'), strpos($linked['body_ar'], 'website-security'));
 
         $linkedAgain = TopicClusterLinkService::apply(
             $linked,
@@ -48,7 +48,10 @@ class TopicClusterLinkServiceTest extends TestCase
             'ar',
             'دليل الاستضافة'
         );
-        $this->assertSame(1, substr_count($linkedAgain['body_ar'], 'class="topic-cluster-links"'));
+        preg_match_all('/href="([^"]+)"/', $linkedAgain['body_ar'], $linkedAgainUrls);
+        $this->assertSame(count($linkedAgainUrls[1]), count(array_unique($linkedAgainUrls[1])));
+        $this->assertSame(1, substr_count($linkedAgain['body_ar'], 'hosting-pillar'));
+        $this->assertSame(1, substr_count($linkedAgain['body_ar'], 'website-security'));
     }
 
     private function item(int $id, string $title, string $slug): AiGenerationItem

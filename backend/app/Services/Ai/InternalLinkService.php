@@ -26,31 +26,19 @@ class InternalLinkService
             }
 
             $languageSuggestions = [];
+            $usedUrls = [];
+            $usedLabels = [];
             foreach (["introduction_{$lang}", "body_{$lang}"] as $field) {
                 if (empty($article[$field])) {
                     continue;
                 }
 
-                preg_match_all('/<a\s+[^>]*href=["\']([^"\']+)["\'][^>]*>(.*?)<\/a>/isu', (string) $article[$field], $existingLinks, PREG_SET_ORDER);
-                foreach ($existingLinks as $existingLink) {
-                    foreach ($targets as $target) {
-                        if (($target['urls'][$lang] ?? null) !== $existingLink[1]
-                            || !in_array($target['type'] ?? null, ['post', 'service', 'page'], true)) {
-                            continue;
-                        }
+                $content = self::removeGeneratedLinkCollections((string) $article[$field]);
+                [$content, $existing] = self::deduplicateExistingLinks($content, $targets, $lang, $usedUrls, $usedLabels);
+                $languageSuggestions = array_merge($languageSuggestions, $existing);
+                $suggestions = array_merge($suggestions, $existing);
 
-                        $existingSuggestion = [
-                            'label' => trim(strip_tags($existingLink[2])),
-                            'url' => $existingLink[1],
-                            'type' => $target['type'],
-                        ];
-                        $languageSuggestions[] = $existingSuggestion;
-                        $suggestions[] = $existingSuggestion;
-                        break;
-                    }
-                }
-
-                [$content, $used] = self::linkText($article[$field], $targets, $lang);
+                [$content, $used] = self::linkText($content, $targets, $lang, $usedUrls, $usedLabels);
                 $article[$field] = $content;
                 $languageSuggestions = array_merge($languageSuggestions, $used);
                 $suggestions = array_merge($suggestions, $used);
@@ -87,14 +75,14 @@ class InternalLinkService
                 'service' => self::MIN_SERVICE_LINKS_PER_LANGUAGE,
                 'page' => self::MIN_GENERAL_LINKS_PER_LANGUAGE,
             ];
-            $fallbackGroups = ['post' => [], 'service' => [], 'page' => []];
+            $fallbackLinks = [];
 
             // Always include the actual site homepage among the general links.
             $homeUrl = SiteUrlBuilder::home($lang);
             if (!in_array($homeUrl, $usedByType['page'], true)) {
                 $homeTarget = collect($targets)->first(fn (array $target): bool => ($target['type'] ?? null) === 'page' && ($target['urls'][$lang] ?? null) === $homeUrl);
                 if ($homeTarget) {
-                    self::addFallbackLink($homeTarget, $lang, $usedByType, $fallbackGroups, $suggestions);
+                    self::addFallbackLink($homeTarget, $lang, $usedByType, $fallbackLinks, $suggestions, $usedLabels);
                 }
             }
 
@@ -107,25 +95,15 @@ class InternalLinkService
                     array_values(array_filter($targets, fn (array $target): bool => ($target['type'] ?? null) === $type))
                 );
                 foreach ($candidates as $candidate) {
-                    self::addFallbackLink($candidate, $lang, $usedByType, $fallbackGroups, $suggestions);
+                    self::addFallbackLink($candidate, $lang, $usedByType, $fallbackLinks, $suggestions, $usedLabels);
                     if (count($usedByType[$type]) >= $requiredCount) {
                         break;
                     }
                 }
             }
 
-            $headings = $lang === 'ar'
-                ? ['post' => 'مقالات مرتبطة:', 'service' => 'خدمات مرتبطة:', 'page' => 'روابط مفيدة:']
-                : ['post' => 'Related articles:', 'service' => 'Related services:', 'page' => 'Useful links:'];
-            foreach (['post', 'service', 'page'] as $type) {
-                if ($fallbackGroups[$type] !== []) {
-                    $linksHtml = '<p class="internal-links internal-links-' . $type . '"><strong>' . e($headings[$type]) . '</strong> ' . implode(' · ', $fallbackGroups[$type]) . '</p>';
-                    $article[$field] = ArticleContentService::insertBeforeFaqOrConclusion(
-                        (string) $article[$field],
-                        $linksHtml,
-                        $lang
-                    );
-                }
+            if ($fallbackLinks !== []) {
+                $article[$field] = self::distributeFallbackLinks((string) $article[$field], $fallbackLinks, $lang);
             }
 
             if (count($usedByType['service']) < self::MIN_SERVICE_LINKS_PER_LANGUAGE
@@ -139,18 +117,62 @@ class InternalLinkService
         return $article;
     }
 
-    private static function addFallbackLink(array $target, string $lang, array &$usedByType, array &$groups, array &$suggestions): void
+    /**
+     * Distributes a prepared set of real links through separate paragraphs.
+     * Existing duplicate URLs are unwrapped and old generated link sections
+     * are removed before insertion.
+     */
+    public static function distributeUniqueLinks(string $html, array $links, string $lang): string
+    {
+        $html = self::removeGeneratedLinkCollections($html);
+        $seenUrls = [];
+        $seenLabels = [];
+        $html = preg_replace_callback(
+            '/<a\s+[^>]*href=["\']([^"\']+)["\'][^>]*>(.*?)<\/a>/isu',
+            function (array $match) use (&$seenUrls, &$seenLabels): string {
+                $url = html_entity_decode($match[1], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                $normalizedLabel = self::normalizeText(trim(strip_tags($match[2])));
+                if (in_array($url, $seenUrls, true) || isset($seenLabels[$normalizedLabel])) {
+                    return $match[2];
+                }
+                $seenUrls[] = $url;
+                $seenLabels[$normalizedLabel] = true;
+
+                return $match[0];
+            },
+            $html
+        ) ?? $html;
+
+        $missing = [];
+        foreach ($links as $link) {
+            $url = $link['url'] ?? null;
+            $normalizedLabel = self::normalizeText((string) ($link['label'] ?? ''));
+            if (!$url || $normalizedLabel === '' || in_array($url, $seenUrls, true) || isset($seenLabels[$normalizedLabel])) {
+                continue;
+            }
+            $seenUrls[] = $url;
+            $seenLabels[$normalizedLabel] = true;
+            $missing[] = $link;
+        }
+
+        return self::distributeFallbackLinks($html, $missing, $lang);
+    }
+
+    private static function addFallbackLink(array $target, string $lang, array &$usedByType, array &$links, array &$suggestions, array &$usedLabels): void
     {
         $type = $target['type'] ?? null;
         $url = $target['urls'][$lang] ?? null;
         $label = $target['labels'][$lang][0] ?? null;
-        if (!isset($usedByType[$type]) || !$url || !$label || in_array($url, $usedByType[$type], true)) {
+        $normalizedLabel = self::normalizeText((string) $label);
+        if (!isset($usedByType[$type]) || !$url || !$label || in_array($url, $usedByType[$type], true) || isset($usedLabels[$normalizedLabel])) {
             return;
         }
 
         $usedByType[$type][] = $url;
-        $groups[$type][] = '<a href="' . e($url) . '" class="internal-link">' . e($label) . '</a>';
-        $suggestions[] = ['label' => $label, 'url' => $url, 'type' => $type];
+        $usedLabels[$normalizedLabel] = true;
+        $suggestion = ['label' => $label, 'url' => $url, 'type' => $type];
+        $links[] = $suggestion;
+        $suggestions[] = $suggestion;
     }
 
     private static function targets(string $currentKeyword): array
@@ -259,36 +281,183 @@ class InternalLinkService
         return $targets;
     }
 
-    private static function linkText(string $html, array $targets, string $lang): array
+    private static function removeGeneratedLinkCollections(string $html): string
     {
+        $html = preg_replace(
+            '/<p\b[^>]*class=["\'][^"\']*\binternal-links(?:-[a-z]+)?\b[^"\']*["\'][^>]*>.*?<\/p>/isu',
+            '',
+            $html
+        ) ?? $html;
+
+        return preg_replace(
+            '/<section\b[^>]*class=["\'][^"\']*\btopic-cluster-links\b[^"\']*["\'][^>]*>.*?<\/section>/isu',
+            '',
+            $html
+        ) ?? $html;
+    }
+
+    private static function deduplicateExistingLinks(string $html, array $targets, string $lang, array &$usedUrls, array &$usedLabels): array
+    {
+        $suggestions = [];
+        $targetByUrl = [];
+        foreach ($targets as $target) {
+            $url = $target['urls'][$lang] ?? null;
+            if ($url && in_array($target['type'] ?? null, ['post', 'service', 'page'], true)) {
+                $targetByUrl[$url] = $target;
+            }
+        }
+
+        $result = preg_replace_callback(
+            '/<a\s+[^>]*href=["\']([^"\']+)["\'][^>]*>(.*?)<\/a>/isu',
+            function (array $match) use (&$usedUrls, &$usedLabels, &$suggestions, $targetByUrl): string {
+                $url = html_entity_decode($match[1], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                $normalizedLabel = self::normalizeText(trim(strip_tags($match[2])));
+                if (in_array($url, $usedUrls, true) || isset($usedLabels[$normalizedLabel])) {
+                    return $match[2];
+                }
+
+                $usedUrls[] = $url;
+                $usedLabels[$normalizedLabel] = true;
+                if (isset($targetByUrl[$url])) {
+                    $suggestions[] = [
+                        'label' => trim(strip_tags($match[2])),
+                        'url' => $url,
+                        'type' => $targetByUrl[$url]['type'],
+                    ];
+                }
+
+                return $match[0];
+            },
+            $html
+        );
+
+        return [$result ?? $html, $suggestions];
+    }
+
+    private static function distributeFallbackLinks(string $html, array $links, string $lang): string
+    {
+        if ($links === []) {
+            return $html;
+        }
+
+        $boundary = preg_match('/<section\b[^>]*class=["\'][^"\']*\barticle-faq\b[^"\']*["\'][^>]*>/iu', $html, $match, PREG_OFFSET_CAPTURE)
+            ? $match[0][1]
+            : strlen($html);
+        $prefix = substr($html, 0, $boundary);
+        $suffix = substr($html, $boundary);
+
+        preg_match_all('/<(p|li)\b[^>]*>.*?<\/\1>/isu', $prefix, $matches, PREG_OFFSET_CAPTURE);
+        $candidates = array_values(array_filter(
+            $matches[0] ?? [],
+            fn (array $candidate): bool => !preg_match('/<a\b/i', $candidate[0])
+        ));
+
+        $placementCount = min(count($links), count($candidates));
+        $replacements = [];
+        for ($index = 0; $index < $placementCount; $index++) {
+            $candidateIndex = $placementCount === 1
+                ? intdiv(count($candidates), 2)
+                : (int) round($index * (count($candidates) - 1) / ($placementCount - 1));
+            [$block, $offset] = $candidates[$candidateIndex];
+            $addition = self::contextualLinkSentence($links[$index], $lang, $index);
+            $updated = preg_replace('/<\/(p|li)>$/iu', $addition . '$0', $block, 1) ?? $block;
+            $replacements[] = [$offset, strlen($block), $updated];
+        }
+
+        usort($replacements, fn (array $left, array $right): int => $right[0] <=> $left[0]);
+        foreach ($replacements as [$offset, $length, $replacement]) {
+            $prefix = substr_replace($prefix, $replacement, $offset, $length);
+        }
+
+        // Extremely short drafts may not contain enough paragraphs. Keep each
+        // remaining link in its own sentence instead of recreating a link list.
+        foreach (array_slice($links, $placementCount) as $index => $link) {
+            $prefix .= '<p>' . ltrim(self::contextualLinkSentence($link, $lang, $placementCount + $index)) . '</p>';
+        }
+
+        return $prefix . $suffix;
+    }
+
+    private static function contextualLinkSentence(array $link, string $lang, int $index): string
+    {
+        $anchor = '<a href="' . e($link['url']) . '" class="internal-link">' . e($link['label']) . '</a>';
+        $type = $link['type'] ?? 'page';
+        if ($type === 'cluster_post') {
+            $type = 'post';
+        }
+        $phrases = $lang === 'ar'
+            ? [
+                'post' => [' ولمزيد من التفاصيل، راجع %s.', ' وستجد شرحًا أوسع في %s.', ' ويمكنك استكمال الفكرة من خلال %s.'],
+                'service' => [' ومن الحلول المرتبطة بالموضوع %s.', ' ويمكن أن تساعدك %s في مرحلة التنفيذ.', ' ولتنفيذ هذه الخطوة عمليًا، تعرّف على %s.'],
+                'page' => [' وللمزيد عن Serv5، تفضل بزيارة %s.', ' ويمكنك متابعة التفاصيل عبر %s.', ' وللتعرّف على الخيارات المتاحة، انتقل إلى %s.'],
+            ]
+            : [
+                'post' => [' For more detail, read %s.', ' You can explore the idea further in %s.', ' Continue with the practical context in %s.'],
+                'service' => [' A related solution is %s.', ' %s can support this implementation stage.', ' For practical delivery, explore %s.'],
+                'page' => [' Learn more about Serv5 through %s.', ' You can find the relevant details on %s.', ' To review the available options, visit %s.'],
+            ];
+        $variants = $phrases[$type] ?? $phrases['page'];
+
+        return sprintf($variants[$index % count($variants)], $anchor);
+    }
+
+    private static function linkText(string $html, array $targets, string $lang, ?array &$usedUrls = null, ?array &$usedLabels = null): array
+    {
+        $usedUrls ??= [];
+        $usedLabels ??= [];
         $used = [];
         $linksAdded = 0;
+        $insideBlock = false;
+        $blockHasLink = false;
+        $plainTextHasLink = false;
 
         $result = preg_replace_callback(
             '/(<a\b[^>]*>.*?<\/a\s*>|<[^>]+>|[^<]+)/isu',
-            function (array $match) use (&$used, &$linksAdded, $targets, $lang): string {
+            function (array $match) use (&$used, &$usedUrls, &$usedLabels, &$linksAdded, &$insideBlock, &$blockHasLink, &$plainTextHasLink, $targets, $lang): string {
                 $segment = $match[0];
 
-                if ($linksAdded >= 4 || str_starts_with($segment, '<')) {
+                if (preg_match('/^<(p|li)\b/i', $segment)) {
+                    $insideBlock = true;
+                    $blockHasLink = false;
+                    return $segment;
+                }
+                if (preg_match('/^<\/(p|li)>/i', $segment)) {
+                    $insideBlock = false;
+                    $blockHasLink = false;
+                    return $segment;
+                }
+                if (preg_match('/^<a\b/i', $segment)) {
+                    $insideBlock ? $blockHasLink = true : $plainTextHasLink = true;
+                    return $segment;
+                }
+                if ($linksAdded >= 4 || str_starts_with($segment, '<') || ($insideBlock ? $blockHasLink : $plainTextHasLink)) {
                     return $segment;
                 }
 
                 foreach ($targets as $target) {
+                    $url = $target['urls'][$lang] ?? null;
+                    if (!$url || in_array($url, $usedUrls, true)) {
+                        continue;
+                    }
                     foreach (($target['labels'][$lang] ?? []) as $label) {
                         $label = trim((string) $label);
-                        if ($label === '') {
+                        $normalizedLabel = self::normalizeText($label);
+                        if ($label === '' || isset($usedLabels[$normalizedLabel])) {
                             continue;
                         }
 
                         $pattern = '/(?<![\p{L}\p{N}])(' . preg_quote($label, '/') . ')(?![\p{L}\p{N}])/iu';
                         $updated = preg_replace_callback(
                             $pattern,
-                            function (array $labelMatch) use (&$used, &$linksAdded, $target, $lang): string {
+                            function (array $labelMatch) use (&$used, &$usedUrls, &$usedLabels, &$linksAdded, &$blockHasLink, &$plainTextHasLink, $insideBlock, $target, $lang): string {
                                 if ($linksAdded >= 4) {
                                     return $labelMatch[0];
                                 }
 
                                 $linksAdded++;
+                                $usedUrls[] = $target['urls'][$lang];
+                                $usedLabels[self::normalizeText($labelMatch[0])] = true;
+                                $insideBlock ? $blockHasLink = true : $plainTextHasLink = true;
                                 $used[] = [
                                     'label' => $labelMatch[0],
                                     'url' => $target['urls'][$lang],

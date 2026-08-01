@@ -77,6 +77,7 @@ class AiContentGroundingAndClusterTest extends TestCase
             'generation_mode' => 'topic_cluster',
             'idempotency_key' => 'cluster-finalize-key',
             'request_hash' => 'cluster-finalize-hash',
+            'settings_snapshot' => ['auto_publish' => true],
             'main_keyword' => 'دليل استضافة المواقع',
             'language' => 'ar',
             'article_count' => 3,
@@ -120,12 +121,14 @@ class AiContentGroundingAndClusterTest extends TestCase
         $request->refresh();
         $this->assertSame('completed', $request->status);
         $support = $request->items()->where('keyword', 'اختيار خطة الاستضافة المناسبة')->with('post')->firstOrFail();
-        $this->assertStringContainsString('class="topic-cluster-links"', $support->post->content['ar']);
+        $this->assertStringNotContainsString('class="topic-cluster-links"', $support->post->content['ar']);
         $this->assertStringContainsString('https://serv5.com.eg/ar/blog/hosting-pillar', $support->post->content['ar']);
-        $this->assertLessThan(
-            strpos($support->post->content['ar'], 'class="article-faq"'),
-            strpos($support->post->content['ar'], 'class="topic-cluster-links"')
-        );
+        preg_match_all('/href="([^"]+)"/', $support->post->content['ar'], $urls);
+        $this->assertSame(count($urls[1]), count(array_unique($urls[1])));
+        $this->assertLessThan(strpos($support->post->content['ar'], 'class="article-faq"'), strpos($support->post->content['ar'], 'hosting-pillar'));
+        $this->assertTrue((bool) $support->post->is_published);
+        $this->assertSame('approved', $support->post->ai_status);
+        $this->assertSame(3, $request->items()->whereHas('post', fn ($query) => $query->where('is_published', true))->count());
     }
 
     private function article(string $keyword, string $slug): array

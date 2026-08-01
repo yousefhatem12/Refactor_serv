@@ -8,6 +8,7 @@ use App\Services\Ai\AiProviderManager;
 use App\Services\Ai\ArticleContentService;
 use App\Services\Ai\BrandContextService;
 use App\Services\Ai\DeepSeekProvider;
+use App\Services\Ai\GeneratedPostService;
 use App\Services\Ai\InternalLinkService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -153,6 +154,7 @@ class RepairArticleQualityJob implements ShouldQueue
             ],
             'image_metadata' => $repaired['image'] ?? null,
         ]);
+        GeneratedPostService::autoPublishIfEnabled($item->post, $request);
         $item->update(['status' => 'completed', 'parsed_response' => $repaired, 'quality_report' => $report, 'error_message' => null]);
         $this->finishRequest($item);
     }

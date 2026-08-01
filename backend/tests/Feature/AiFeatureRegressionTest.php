@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\BlogCategory;
 use App\Models\User;
 use App\Models\AiCredential;
+use App\Models\AiGenerationRequest;
 use App\Services\Ai\GeneratedPostService;
 use App\Services\Ai\GenerationRequestNormalizer;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -196,6 +197,64 @@ class AiFeatureRegressionTest extends TestCase
 
         $this->assertTrue((bool) $post->ai_generated);
         $this->assertEquals('pending_review', $post->ai_status);
+    }
+
+    /** @test */
+    public function auto_publish_respects_the_request_setting_and_waits_for_cluster_finalization()
+    {
+        $request = AiGenerationRequest::create([
+            'created_by' => $this->author->id,
+            'provider' => 'openai',
+            'model' => 'gpt-4o-mini',
+            'generation_mode' => 'one_per_keyword',
+            'idempotency_key' => 'auto-publish-request',
+            'request_hash' => 'auto-publish-hash',
+            'settings_snapshot' => ['auto_publish' => true],
+            'main_keyword' => 'Auto publish test',
+            'language' => 'en',
+            'article_count' => 1,
+            'category_id' => $this->category->id,
+            'author_id' => $this->author->id,
+            'status' => 'generating',
+            'total_items' => 1,
+        ]);
+        $post = GeneratedPostService::createDraft([
+            'title' => ['en' => 'Auto Published Article'],
+            'content' => ['en' => '<p>Validated content.</p>'],
+            'blog_category_id' => $this->category->id,
+            'author_id' => $this->author->id,
+        ]);
+
+        $this->assertTrue(GeneratedPostService::autoPublishIfEnabled($post, $request));
+        $this->assertTrue((bool) $post->fresh()->is_published);
+        $this->assertSame('approved', $post->fresh()->ai_status);
+
+        $clusterPost = GeneratedPostService::createDraft([
+            'title' => ['en' => 'Cluster Article'],
+            'content' => ['en' => '<p>Validated cluster content.</p>'],
+            'blog_category_id' => $this->category->id,
+            'author_id' => $this->author->id,
+        ]);
+        $request->update(['generation_mode' => 'topic_cluster']);
+        $request->refresh();
+
+        $this->assertFalse(GeneratedPostService::autoPublishIfEnabled($clusterPost, $request));
+        $this->assertFalse((bool) $clusterPost->fresh()->is_published);
+        $this->assertTrue(GeneratedPostService::autoPublishIfEnabled($clusterPost, $request, clusterFinalized: true));
+        $this->assertTrue((bool) $clusterPost->fresh()->is_published);
+
+        $disabledPost = GeneratedPostService::createDraft([
+            'title' => ['en' => 'Manual Review Article'],
+            'content' => ['en' => '<p>Manual review content.</p>'],
+            'blog_category_id' => $this->category->id,
+            'author_id' => $this->author->id,
+        ]);
+        $request->update(['generation_mode' => 'one_per_keyword', 'settings_snapshot' => ['auto_publish' => false]]);
+        $request->refresh();
+
+        $this->assertFalse(GeneratedPostService::autoPublishIfEnabled($disabledPost, $request));
+        $this->assertFalse((bool) $disabledPost->fresh()->is_published);
+        $this->assertSame('pending_review', $disabledPost->fresh()->ai_status);
     }
 
     /** @test */

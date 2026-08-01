@@ -126,8 +126,8 @@ class ArticleContentService
         $prompt .= "- Keyword density: use the primary keyword naturally; never force repetition or awkward phrasing.\n";
         $prompt .= "- **Lists:** Structure details using HTML lists (<ul>, <li>) where appropriate.\n";
         $prompt .= "- **No External Links:** Do not include external links to websites outside allowed local domains.\n";
-        $prompt .= "- **MANDATORY INTERNAL LINK MIX:** Naturally support 3-4 links to relevant published Serv5 articles, about 3 links to relevant Serv5 services, and useful general-site links including the Serv5 homepage. Mention distinct relevant topics and list them in 'internal_link_suggestions'.\n";
-        $prompt .= "- Never invent URLs or external links. The system resolves and injects only real existing Serv5 URLs, guarantees the service/general-site mix, and uses as many relevant published article links as are actually available.\n";
+        $prompt .= "- **MANDATORY INTERNAL LINK MIX:** Mention distinct relevant article, service, and Serv5 site topics naturally throughout the body. Keep 'internal_link_suggestions' empty because the system resolves and injects only real URLs after generation.\n";
+        $prompt .= "- Never create a related-articles, related-services, useful-links, further-reading, or link-summary section. Never group link targets in one paragraph or list. The system distributes each unique internal URL contextually across separate body paragraphs and never repeats a URL.\n";
         $prompt .= "- **No Emojis:** Do not include Emojis anywhere in the content, title, or descriptions.\n";
         $prompt .= "- **FAQ — HARD REQUIREMENT:** Include exactly 5 useful, non-duplicative questions and answers in the 'faq' array. Each enabled language must have all 5 localized questions and answers. Answers must be plain text with no HTML.\n";
         $prompt .= "- **Conclusion:** Summarize key points, include primary keyword, and end with a simple Call to Action (CTA).\n";
