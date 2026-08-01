@@ -43,7 +43,7 @@ export async function generateMetadata({ params }) {
   }
 
   return {
-    title,
+    title: { absolute: title },
     description,
     alternates,
     openGraph: {

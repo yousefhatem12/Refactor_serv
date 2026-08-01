@@ -11,10 +11,9 @@ export async function generateMetadata() {
   const alternates = await getSeoAlternates();
 
   return {
-    title:
-      settings?.site_title ||
-      data?.seo?.title ||
-      "Serv5",
+    title: {
+      absolute: settings?.site_title || data?.seo?.title || "Serv5",
+    },
     description:
       data?.seo?.description ||
       "Leading company in web development and AI solutions.",
