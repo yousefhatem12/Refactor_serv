@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PageBuilderResource\Pages;
 use App\Models\Page;
+use App\Models\AiGenerationRequest;
+use App\Jobs\GenerateAiPageJob;
 use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
@@ -101,6 +103,16 @@ class PageBuilderResource extends Resource
                                     ->default('custom')
                                     ->reactive()
                                     ->helperText('Choose a predefined template or build from scratch.'),
+                                Toggle::make('is_published')
+                                    ->label('Published')
+                                    ->default(true)
+                                    ->disabled(fn (?Page $record): bool => $record?->ai_generated && in_array($record->ai_status, ['queued', 'generating', 'failed'], true))
+                                    ->helperText('AI pages remain private while queued, generating, or failed.'),
+                                TextInput::make('ai_status')
+                                    ->label('AI Status')
+                                    ->disabled()
+                                    ->dehydrated(false)
+                                    ->visible(fn (?Page $record): bool => (bool) $record?->ai_generated),
                             ])->columns(2),
 
                         Section::make('Page Content (Custom Builder)')
@@ -117,6 +129,7 @@ class PageBuilderResource extends Resource
                                                 Textarea::make('subtitle.en')->label('Subtitle (EN)'),
                                                 Textarea::make('subtitle.ar')->label('Subtitle (AR)'),
                                                 FileUpload::make('image')->label('Background Image')->image(),
+                                                Textarea::make('image_prompt')->label('AI Image Direction')->helperText('Use this direction when selecting or generating the background image.')->columnSpanFull(),
                                             ]),
                                         Block::make('text_block')
                                             ->label('Text Content')
@@ -175,6 +188,7 @@ class PageBuilderResource extends Resource
                                             ->schema([
                                                 Toggle::make('image_on_right')->label('Image on Right Side')->default(true),
                                                 FileUpload::make('image')->label('Image')->image(),
+                                                Textarea::make('image_prompt')->label('AI Image Direction')->helperText('Use this direction when selecting or generating the section image.')->columnSpanFull(),
                                                 TextInput::make('title.en')->label('Title (EN)'),
                                                 TextInput::make('title.ar')->label('Title (AR)'),
                                                 \Filament\Forms\Components\RichEditor::make('content.en')->label('Content (EN)')->toolbarButtons(self::getRichEditorToolbarButtons())->columnSpanFull(),
@@ -214,6 +228,10 @@ class PageBuilderResource extends Resource
                                 TextInput::make('seo_title.ar')->label('SEO Title (AR)'),
                                 Textarea::make('seo_description.en')->label('SEO Description (EN)'),
                                 Textarea::make('seo_description.ar')->label('SEO Description (AR)'),
+                                Textarea::make('ai_metadata.visual_direction')
+                                    ->label('AI Visual Direction')
+                                    ->rows(4)
+                                    ->visible(fn (?Page $record): bool => (bool) $record?->ai_generated),
                             ]),
                     ])->columnSpan(['lg' => 1]),
             ])->columns(3);
@@ -232,6 +250,20 @@ class PageBuilderResource extends Resource
                     ->label('Template')
                     ->badge()
                     ->formatStateUsing(fn (string $state): string => ucfirst($state)),
+                Tables\Columns\IconColumn::make('is_published')
+                    ->label('Published')
+                    ->boolean(),
+                Tables\Columns\TextColumn::make('ai_status')
+                    ->label('AI Status')
+                    ->badge()
+                    ->placeholder('Manual')
+                    ->color(fn (?string $state): string => match ($state) {
+                        'approved' => 'success',
+                        'pending_review' => 'warning',
+                        'queued', 'generating' => 'info',
+                        'failed' => 'danger',
+                        default => 'gray',
+                    }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -239,6 +271,31 @@ class PageBuilderResource extends Resource
             ])
             ->filters([])
             ->actions([
+                \Filament\Actions\Action::make('retryAi')
+                    ->label('Retry AI')
+                    ->icon('heroicon-o-arrow-path')
+                    ->color('warning')
+                    ->visible(fn (Page $record): bool => $record->ai_generated && $record->ai_status === 'failed')
+                    ->requiresConfirmation()
+                    ->action(function (Page $record): void {
+                        $metadata = is_array($record->ai_metadata) ? $record->ai_metadata : [];
+                        $record->update([
+                            'ai_status' => 'queued',
+                            'is_published' => false,
+                            'ai_metadata' => array_merge($metadata, ['error' => null, 'queued_at' => now()->toIso8601String()]),
+                        ]);
+                        $requestId = $metadata['generation_request_id'] ?? null;
+                        if ($requestId) {
+                            AiGenerationRequest::whereKey($requestId)->update([
+                                'status' => 'pending',
+                                'completed_items' => 0,
+                                'failed_items' => 0,
+                                'error_message' => null,
+                                'completed_at' => null,
+                            ]);
+                        }
+                        GenerateAiPageJob::dispatch($record->id);
+                    }),
                 \Filament\Actions\EditAction::make(),
                 \Filament\Actions\DeleteAction::make(),
             ])

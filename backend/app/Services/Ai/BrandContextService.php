@@ -3,12 +3,13 @@
 namespace App\Services\Ai;
 
 use App\Models\Page;
+use App\Models\Post;
 use App\Models\Service;
 use App\Models\Setting;
 
 class BrandContextService
 {
-    public static function build(string $keyword, string $languageMode, string $categoryContext = ''): string
+    public static function build(string $keyword, string $languageMode, string $categoryContext = '', bool $websiteWide = false): string
     {
         $languages = $languageMode === 'both' ? ['ar', 'en'] : [$languageMode === 'en' ? 'en' : 'ar'];
         $queryTerms = self::terms($keyword . ' ' . $categoryContext);
@@ -22,6 +23,7 @@ class BrandContextService
                     $localized[$language] = [
                         'name' => self::localized($service->name, $language, 160),
                         'description' => self::localized($service->description, $language, 420),
+                        'details' => self::localized($service->sections, $language, 700),
                     ];
                 }
 
@@ -44,16 +46,20 @@ class BrandContextService
             })
             ->all();
 
-        $pages = Page::query()
-            ->whereIn('slug', ['about-us', 'services', 'project-consultation', 'contact-us'])
-            ->get(['slug', 'title', 'subtitle', 'content', 'seo_description'])
-            ->map(function (Page $page) use ($languages): array {
+        $pageQuery = Page::query()->where('is_published', true);
+        if (!$websiteWide) {
+            $pageQuery->whereIn('slug', ['about-us', 'services', 'project-consultation', 'contact-us']);
+        }
+
+        $pages = $pageQuery
+            ->get(['slug', 'title', 'subtitle', 'content', 'sections', 'seo_description'])
+            ->map(function (Page $page) use ($languages, $queryTerms): array {
                 $localized = [];
                 foreach ($languages as $language) {
                     $localized[$language] = [
                         'title' => self::localized($page->title, $language, 160),
                         'summary' => self::localized(
-                            $page->content ?: $page->seo_description ?: $page->subtitle,
+                            $page->content ?: $page->sections ?: $page->seo_description ?: $page->subtitle,
                             $language,
                             350
                         ),
@@ -65,9 +71,59 @@ class BrandContextService
                     'url_ar' => SiteUrlBuilder::page('ar', $page->slug),
                     'url_en' => SiteUrlBuilder::page('en', $page->slug),
                     'localized' => $localized,
+                    '_score' => self::overlap($queryTerms, self::terms(self::flatten([
+                        $page->title,
+                        $page->subtitle,
+                        $page->content,
+                        $page->sections,
+                        $page->seo_description,
+                    ]))),
                 ];
             })
+            ->sortByDesc('_score')
+            ->take($websiteWide ? 6 : 4)
+            ->values()
+            ->map(function (array $page): array {
+                unset($page['_score']);
+                return $page;
+            })
             ->all();
+
+        $articles = [];
+        if ($websiteWide) {
+            $articles = Post::query()
+                ->where('is_published', true)
+                ->get(['slug', 'title', 'content', 'seo_description'])
+                ->map(function (Post $post) use ($languages, $queryTerms): array {
+                    $localized = [];
+                    foreach ($languages as $language) {
+                        $localized[$language] = [
+                            'title' => self::localized($post->title, $language, 160),
+                            'summary' => self::localized($post->seo_description ?: $post->content, $language, 420),
+                        ];
+                    }
+
+                    return [
+                        'slug' => $post->slug,
+                        'url_ar' => SiteUrlBuilder::blogPost('ar', $post->slug),
+                        'url_en' => SiteUrlBuilder::blogPost('en', $post->slug),
+                        'localized' => $localized,
+                        '_score' => self::overlap($queryTerms, self::terms(self::flatten([
+                            $post->title,
+                            $post->content,
+                            $post->seo_description,
+                        ]))),
+                    ];
+                })
+                ->sortByDesc('_score')
+                ->take(5)
+                ->values()
+                ->map(function (array $article): array {
+                    unset($article['_score']);
+                    return $article;
+                })
+                ->all();
+        }
 
         $settings = Setting::query()
             ->whereIn('key', ['site_title', 'site_email', 'site_phone', 'site_address'])
@@ -90,6 +146,7 @@ class BrandContextService
             ],
             'relevant_services' => $services,
             'official_pages' => $pages,
+            'relevant_articles' => $articles,
         ];
 
         $encode = static fn (array $data): string => (string) json_encode(
@@ -106,6 +163,10 @@ class BrandContextService
             array_pop($context['relevant_services']);
             $json = $encode($context);
         }
+        while (mb_strlen($json) > 12000 && count($context['relevant_articles']) > 1) {
+            array_pop($context['relevant_articles']);
+            $json = $encode($context);
+        }
 
         return $json;
     }
@@ -120,7 +181,8 @@ class BrandContextService
         }
 
         if (is_array($value)) {
-            $value = $value[$language] ?? $value['en'] ?? $value['ar'] ?? self::flatten($value);
+            $selected = $value[$language] ?? $value['en'] ?? $value['ar'] ?? $value;
+            $value = is_array($selected) ? self::flatten($selected) : $selected;
         }
 
         return mb_substr(trim(preg_replace('/\s+/u', ' ', strip_tags((string) $value)) ?? ''), 0, $limit);

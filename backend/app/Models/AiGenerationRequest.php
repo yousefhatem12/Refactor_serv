@@ -21,6 +21,7 @@ class AiGenerationRequest extends Model
         'language',
         'article_count',
         'category_id',
+        'page_id',
         'author_id',
         'status',
         'total_items',
@@ -54,6 +55,11 @@ class AiGenerationRequest extends Model
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'author_id');
+    }
+
+    public function page(): BelongsTo
+    {
+        return $this->belongsTo(Page::class, 'page_id');
     }
 
     public function items(): HasMany

@@ -16,4 +16,15 @@ class EditPage extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        if ($this->record->ai_generated) {
+            $data['ai_status'] = !empty($data['is_published'])
+                ? 'approved'
+                : ($this->record->ai_status === 'approved' ? 'pending_review' : $this->record->ai_status);
+        }
+
+        return $data;
+    }
 }

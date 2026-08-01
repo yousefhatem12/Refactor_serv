@@ -86,5 +86,6 @@ Route::prefix('v1')->group(function () {
     Route::get('/bank-accounts', [SettingController::class, 'bankAccounts'])->name('api.bank-accounts');
 
     // Pages
+    Route::get('/pages', [PageController::class, 'index'])->name('api.pages.index');
     Route::get('/pages/{slug}', [PageController::class, 'show'])->name('api.pages.show');
 });

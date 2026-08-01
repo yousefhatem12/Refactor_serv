@@ -19,6 +19,10 @@ class Page extends Model
         'seo_title',
         'seo_description',
         'sections',
+        'is_published',
+        'ai_generated',
+        'ai_status',
+        'ai_metadata',
     ];
 
     protected $casts = [
@@ -28,6 +32,9 @@ class Page extends Model
         'seo_title' => 'json',
         'seo_description' => 'json',
         'sections' => 'array',
+        'is_published' => 'boolean',
+        'ai_generated' => 'boolean',
+        'ai_metadata' => 'array',
     ];
 
     protected static function booted()

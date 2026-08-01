@@ -8,13 +8,24 @@ use Illuminate\Support\Facades\Cache;
 
 class PageController extends BaseApiController
 {
+    public function index()
+    {
+        $pages = Page::query()
+            ->where('is_published', true)
+            ->whereNotIn('slug', ['home'])
+            ->latest('updated_at')
+            ->get();
+
+        return PageResource::collection($pages);
+    }
+
     public function show($slug)
     {
         $lang = $this->getLang();
         $cacheKey = "page_{$slug}_{$lang}";
 
         $page = Cache::remember($cacheKey, 3600, function () use ($slug) {
-            return Page::where('slug', $slug)->first();
+            return Page::where('slug', $slug)->where('is_published', true)->first();
         });
 
         if (!$page) {

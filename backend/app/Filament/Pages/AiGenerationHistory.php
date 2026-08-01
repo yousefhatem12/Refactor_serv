@@ -32,7 +32,7 @@ class AiGenerationHistory extends Page implements HasTable
         return app()->getLocale() === 'ar' ? 'أدوات الذكاء الاصطناعي' : 'AI Content Tools'; 
     }
     
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 4;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-queue-list';
 
     public static function getNavigationLabel(): string 
@@ -58,6 +58,13 @@ class AiGenerationHistory extends Page implements HasTable
         return $table
             ->query(AiGenerationRequest::query()->latest())
             ->columns([
+                Tables\Columns\TextColumn::make('generation_mode')
+                    ->label('Type')
+                    ->badge()
+                    ->formatStateUsing(fn (string $state): string => $state === 'ai_page'
+                        ? ($isAr ? 'طµظپط­ط©' : 'Page')
+                        : ($isAr ? 'ظ…ظ‚ط§ظ„ط§طھ' : 'Articles'))
+                    ->color(fn (string $state): string => $state === 'ai_page' ? 'info' : 'gray'),
                 Tables\Columns\TextColumn::make('main_keyword')
                     ->label($isAr ? 'الموضوع الرئيسي' : 'Topic')
                     ->searchable(),
@@ -68,7 +75,7 @@ class AiGenerationHistory extends Page implements HasTable
                     ->formatStateUsing(fn ($state) => strtoupper($state)),
 
                 Tables\Columns\TextColumn::make('article_count')
-                    ->label($isAr ? 'عدد المقالات' : 'Articles'),
+                    ->label($isAr ? 'عدد العناصر' : 'Items'),
 
                 Tables\Columns\TextColumn::make('status')
                     ->label($isAr ? 'الحالة' : 'Status')
@@ -103,6 +110,11 @@ class AiGenerationHistory extends Page implements HasTable
                 Tables\Columns\TextColumn::make('progress')
                     ->label($isAr ? 'نسبة التقدم' : 'Progress')
                     ->getStateUsing(function ($record) use ($isAr) {
+                        if ($record->generation_mode === 'ai_page') {
+                            return $record->completed_items
+                                ? ($isAr ? 'طھظ… ط¥ظ†ط´ط§ط، ط§ظ„طµظپط­ط©' : 'Page completed')
+                                : ($isAr ? 'طµظپط­ط© ظ‚ظٹط¯ ط§ظ„طھظˆظ„ظٹط¯' : 'Page in progress');
+                        }
                         return $isAr 
                             ? "تم إنشاء {$record->completed_items} من {$record->total_items} مقال"
                             : "{$record->completed_items} of {$record->total_items} articles";
@@ -117,6 +129,23 @@ class AiGenerationHistory extends Page implements HasTable
                     ->dateTime()
                     ->sortable(),
             ])
+            ->filters([
+                Tables\Filters\SelectFilter::make('content_type')
+                    ->label($isAr ? 'طھطµظ†ظٹظپ ط§ظ„ظ…ط­طھظˆظ‰' : 'Content type')
+                    ->options([
+                        'all' => $isAr ? 'ط§ظ„ظƒظ„' : 'All',
+                        'articles' => $isAr ? 'ط§ظ„ظ…ظ‚ط§ظ„ط§طھ' : 'Articles',
+                        'pages' => $isAr ? 'ط§ظ„طµظپط­ط§طھ' : 'Pages',
+                    ])
+                    ->default('all')
+                    ->query(function (\Illuminate\Database\Eloquent\Builder $query, array $data): \Illuminate\Database\Eloquent\Builder {
+                        return match ($data['value'] ?? 'all') {
+                            'articles' => $query->whereIn('generation_mode', ['one_per_keyword', 'topic_cluster']),
+                            'pages' => $query->where('generation_mode', 'ai_page'),
+                            default => $query,
+                        };
+                    }),
+            ])
             ->actions([
                 \Filament\Actions\Action::make('publishAll')
                     ->label(fn (AiGenerationRequest $record) => $record->total_items === 1
@@ -125,6 +154,7 @@ class AiGenerationHistory extends Page implements HasTable
                     ->icon('heroicon-o-globe-alt')
                     ->color('success')
                     ->visible(fn (AiGenerationRequest $record) => ($record->generation_mode !== 'topic_cluster' || $record->status === 'completed')
+                        && $record->generation_mode !== 'ai_page'
                         && $record->items()
                             ->where('status', 'completed')
                             ->whereHas('post', fn ($query) => $query->where('is_published', false))
@@ -141,6 +171,7 @@ class AiGenerationHistory extends Page implements HasTable
                 \Filament\Actions\Action::make('viewItems')
                     ->label($isAr ? 'عرض المقالات' : 'View Articles')
                     ->icon('heroicon-o-eye')
+                    ->visible(fn (AiGenerationRequest $record): bool => $record->generation_mode !== 'ai_page')
                     ->modalContent(fn (AiGenerationRequest $record) => view('filament.pages.actions.view-items', [
                         'request' => $record,
                         'isAr' => $isAr
@@ -182,11 +213,17 @@ class AiGenerationHistory extends Page implements HasTable
                     ->modalSubmitAction(false)
                     ->modalCancelActionLabel($isAr ? 'إغلاق' : 'Close'),
 
+                \Filament\Actions\Action::make('viewPage')
+                    ->label($isAr ? 'ط¹ط±ط¶ ط§ظ„طµظپط­ط©' : 'View Page')
+                    ->icon('heroicon-o-eye')
+                    ->visible(fn (AiGenerationRequest $record): bool => $record->generation_mode === 'ai_page' && (bool) $record->page_id)
+                    ->url(fn (AiGenerationRequest $record): string => \App\Filament\Resources\PageBuilderResource::getUrl('edit', ['record' => $record->page_id])),
+
                 \Filament\Actions\Action::make('cancel')
                     ->label($isAr ? 'إلغاء الطلب' : 'Cancel')
                     ->color('danger')
                     ->icon('heroicon-o-x-circle')
-                    ->visible(fn ($record) => in_array($record->status, ['pending', 'planning', 'generating', 'finalizing', 'repairing']))
+                    ->visible(fn ($record) => $record->generation_mode !== 'ai_page' && in_array($record->status, ['pending', 'planning', 'generating', 'finalizing', 'repairing']))
                     ->requiresConfirmation()
                     ->action(function (AiGenerationRequest $record) use ($isAr) {
                         $record->update(['status' => 'cancelled']);
@@ -206,7 +243,7 @@ class AiGenerationHistory extends Page implements HasTable
                     ->label($isAr ? 'إعادة محاولة الكل' : 'Retry All')
                     ->color('warning')
                     ->icon('heroicon-o-arrow-path')
-                    ->visible(fn ($record) => in_array($record->status, ['failed', 'partially_completed']))
+                    ->visible(fn ($record) => $record->generation_mode !== 'ai_page' && in_array($record->status, ['failed', 'partially_completed']))
                     ->action(function (AiGenerationRequest $record) use ($isAr) {
                         $failedItems = $record->items()->where('status', 'failed')->get();
                         if ($record->generation_mode === 'topic_cluster' && $record->items()->doesntExist()) {
@@ -265,7 +302,7 @@ class AiGenerationHistory extends Page implements HasTable
                     ->label($isAr ? 'تعديل المعلمات' : 'Edit Parameters')
                     ->icon('heroicon-o-pencil')
                     ->color('gray')
-                    ->visible(fn ($record) => in_array($record->status, ['failed', 'partially_completed', 'pending']))
+                    ->visible(fn ($record) => $record->generation_mode !== 'ai_page' && in_array($record->status, ['failed', 'partially_completed', 'pending']))
                     ->form(fn ($record) => [
                         Select::make('provider')
                             ->label($isAr ? 'مزود الخدمة' : 'Provider')

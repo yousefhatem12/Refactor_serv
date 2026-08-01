@@ -60,7 +60,9 @@ class PageResource extends JsonResource
             ],
             'sections' => [
                 'template' => $sections['template'] ?? null,
-                'blocks' => $sections[$lang] ?? []
+                // Legacy/API pages store localized block arrays while the
+                // Filament custom builder stores one bilingual blocks array.
+                'blocks' => $sections['blocks'] ?? $sections[$lang] ?? []
             ],
         ];
     }
