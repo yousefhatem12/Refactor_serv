@@ -114,4 +114,94 @@ class BlogApiTest extends TestCase
             ->assertJsonPath('data.title', 'Single Post')
             ->assertJsonPath('data.slug', 'single-post');
     }
+
+    #[Test]
+    public function it_returns_rich_content_with_structured_tables_and_lists()
+    {
+        $author = User::factory()->create();
+
+        Post::create([
+            'title' => ['en' => 'Formatted Post', 'ar' => 'مقال منسق'],
+            'content' => [
+                'en' => '<h2>Overview</h2>\\n<p style="text-align: center"><strong>Bold</strong> <u>underlined</u> <s>removed</s> H<sub>2</sub>O <a href="/guide">same tab</a> <a href="https://example.com" target="_blank">new tab</a></p><ol><li>First</li><li>Second</li></ol><ul><li>Alpha</li></ul><table><thead><tr><th>Name</th><th>Price</th></tr></thead><tbody><tr><td>Hosting</td><td>100</td></tr></tbody></table>',
+                'ar' => '<p>محتوى</p>',
+            ],
+            'is_published' => true,
+            'author_id' => $author->id,
+            'slug' => 'formatted-post',
+        ]);
+
+        $response = $this->getJson('/api/v1/blog/formatted-post?lang=en');
+
+        $response->assertOk()
+            ->assertJsonPath('data.table.head', ['Name', 'Price'])
+            ->assertJsonPath('data.table.rows.0.Name', 'Hosting')
+            ->assertJsonPath('data.table.rows.0.Price', '100')
+            ->assertJsonPath('data.list.0.type', 'ordered')
+            ->assertJsonPath('data.list.0.list', ['First', 'Second'])
+            ->assertJsonPath('data.list.1.type', 'unordered')
+            ->assertJsonPath('data.list.1.list', ['Alpha']);
+
+        $content = $response->json('data.content');
+        $this->assertStringContainsString('<h2>Overview</h2>', $content);
+        $this->assertStringContainsString('<strong>Bold</strong>', $content);
+        $this->assertStringContainsString('<u>underlined</u>', $content);
+        $this->assertStringContainsString('<del>removed</del>', $content);
+        $this->assertStringContainsString('<sub>2</sub>', $content);
+        $this->assertStringContainsString('target="_blank"', $content);
+        $this->assertStringNotContainsString('\\n', $content);
+    }
+
+    #[Test]
+    public function it_returns_null_structured_content_when_the_post_has_no_table_or_list()
+    {
+        $author = User::factory()->create();
+
+        Post::create([
+            'title' => ['en' => 'Plain Post', 'ar' => 'مقال بسيط'],
+            'content' => ['en' => '<p>Plain content</p>', 'ar' => '<p>محتوى بسيط</p>'],
+            'is_published' => true,
+            'author_id' => $author->id,
+            'slug' => 'plain-post',
+        ]);
+
+        $this->getJson('/api/v1/blog/plain-post?lang=en')
+            ->assertOk()
+            ->assertJsonPath('data.content', '<p>Plain content</p>')
+            ->assertJsonPath('data.table', null)
+            ->assertJsonPath('data.list', []);
+    }
+
+    #[Test]
+    public function it_renders_filament_rich_editor_documents_as_html()
+    {
+        $author = User::factory()->create();
+
+        Post::create([
+            'title' => ['en' => 'Document Post', 'ar' => 'مقال مستند'],
+            'content' => [
+                'en' => [
+                    'type' => 'doc',
+                    'content' => [[
+                        'type' => 'paragraph',
+                        'attrs' => ['textAlign' => 'center'],
+                        'content' => [[
+                            'type' => 'text',
+                            'text' => 'Centered bold text',
+                            'marks' => [['type' => 'bold']],
+                        ]],
+                    ]],
+                ],
+                'ar' => '<p>محتوى</p>',
+            ],
+            'is_published' => true,
+            'author_id' => $author->id,
+            'slug' => 'document-post',
+        ]);
+
+        $response = $this->getJson('/api/v1/blog/document-post?lang=en');
+
+        $response->assertOk();
+        $this->assertStringContainsString('<p style="text-align: center;"><strong>Centered bold text</strong></p>', $response->json('data.content'));
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Services\PostContentFormatter;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -28,6 +29,18 @@ class PostResource extends JsonResource
             }
             return (string) ($field[$targetLang] ?? $field['en'] ?? '');
         };
+
+        $translatedContent = $this->content;
+        if (is_string($translatedContent)) {
+            $decoded = json_decode($translatedContent, true);
+            if (is_array($decoded)) {
+                $translatedContent = $decoded;
+            }
+        }
+        if (is_array($translatedContent) && ($translatedContent['type'] ?? null) !== 'doc') {
+            $translatedContent = $translatedContent[$lang] ?? $translatedContent['en'] ?? '';
+        }
+        $formattedContent = PostContentFormatter::format($translatedContent);
 
         $translateCategory = function ($category) use ($lang) {
             if (!$category) return '';
@@ -97,7 +110,9 @@ class PostResource extends JsonResource
             'id' => $this->id,
             'title' => $trans($this->title),
             'slug' => $this->slug,
-            'content' => $trans($this->content),
+            'content' => $formattedContent['content'],
+            'table' => $formattedContent['table'],
+            'list' => $formattedContent['list'],
             'author' => $this->author?->name ?? 'Admin',
             'category' => $categoryName,
             'category_raw' => $categoryRaw,
