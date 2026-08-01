@@ -16,6 +16,7 @@
 # next.js
 /.next/cache/
 /out/
+# Note: .next folder is committed for cPanel deployment (no build step on server)
 
 # production
 /build
@@ -39,8 +40,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-.next
 
 # zip files
 *.zip

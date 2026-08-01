@@ -115,7 +115,7 @@ self.__SERVER_FILES_MANIFEST={
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "D:\\intern\\serv5-last\\serv5-last-last",
+    "outputFileTracingRoot": "D:\\projects_2026\\serv5-last-last",
     "enablePrerenderSourceMaps": true,
     "cacheComponents": true,
     "cacheLife": {
@@ -178,7 +178,7 @@ self.__SERVER_FILES_MANIFEST={
       "proxyPrefetch": "flexible",
       "optimisticClientCache": true,
       "manualClientBasePath": false,
-      "cpus": 7,
+      "cpus": 3,
       "memoryBasedWorkersCount": false,
       "imgOptConcurrency": null,
       "imgOptTimeoutInSeconds": 7,
@@ -316,11 +316,11 @@ self.__SERVER_FILES_MANIFEST={
     "bundlePagesRouterDependencies": false,
     "configFileName": "next.config.mjs",
     "turbopack": {
-      "root": "D:\\intern\\serv5-last\\serv5-last-last"
+      "root": "D:\\projects_2026\\serv5-last-last"
     },
     "distDirRoot": ".next"
   },
-  "appDir": "D:\\intern\\serv5-last\\serv5-last-last",
+  "appDir": "D:\\projects_2026\\serv5-last-last",
   "relativeAppDir": "",
   "files": [
     ".next\\package.json",

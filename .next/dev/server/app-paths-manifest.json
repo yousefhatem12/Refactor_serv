@@ -1,10 +1,1 @@
-{
-  "/(home)/page": "app/(home)/page.js",
-  "/blog/[id]/page": "app/blog/[id]/page.js",
-  "/blog/page": "app/blog/page.js",
-  "/contact-us/page": "app/contact-us/page.js",
-  "/our-products/[id]/page": "app/our-products/[id]/page.js",
-  "/our-products/page": "app/our-products/page.js",
-  "/portfolio/[id]/page": "app/portfolio/[id]/page.js",
-  "/portfolio/page": "app/portfolio/page.js"
-}
+{}
