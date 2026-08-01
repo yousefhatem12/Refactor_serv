@@ -17,6 +17,22 @@ class GeneratedPostService
     public static function createDraft(array $data): Post
     {
         return DB::transaction(function () use ($data) {
+            foreach (['title', 'content', 'seo_title', 'seo_description'] as $field) {
+                if (isset($data[$field]) && is_array($data[$field])) {
+                    $data[$field] = ArticleContentService::sanitizeGeneratedArticle($data[$field]);
+                }
+            }
+
+            // AI HTML is untrusted even when the provider returned valid JSON.
+            // Sanitize at the persistence boundary as a final line of defense.
+            if (isset($data['content']) && is_array($data['content'])) {
+                foreach (['ar', 'en'] as $language) {
+                    if (isset($data['content'][$language]) && is_string($data['content'][$language])) {
+                        $data['content'][$language] = GeneratedHtmlSanitizer::sanitize($data['content'][$language]);
+                    }
+                }
+            }
+
             // Force AI tracking and draft state, overriding any incoming values
             $data['is_published'] = false;
             $data['ai_generated'] = true;

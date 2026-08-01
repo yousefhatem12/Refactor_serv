@@ -60,7 +60,7 @@
                             </button>
                         @endif
                         @if($item->post_id)
-                            @if(!$item->post?->is_published)
+                            @if(!$item->post?->is_published && ($request->generation_mode !== 'topic_cluster' || $request->status === 'completed'))
                                 <button type="button" wire:click="publishArticle({{ $item->id }})" wire:confirm="{{ $isAr ? 'هل تريد نشر هذا المقال الآن؟' : 'Publish this article now?' }}" style="border:0; border-radius:9px; padding:9px 13px; background:#16a34a; color:#fff; font-weight:700; cursor:pointer;">
                                     {{ $isAr ? 'نشر المقال' : 'Publish' }}
                                 </button>
@@ -69,9 +69,11 @@
                                     {{ $isAr ? 'منشور' : 'Published' }}
                                 </span>
                             @endif
-                            <a href="{{ url('/admin/posts/' . $item->post_id . '/edit') }}" style="display:inline-flex; align-items:center; border-radius:9px; padding:9px 13px; background:#d97706; color:#fff; font-weight:700; text-decoration:none;">
-                                {{ $isAr ? 'تعديل المقال' : 'Edit draft' }}
-                            </a>
+                            @if($request->generation_mode !== 'topic_cluster' || $request->status === 'completed')
+                                <a href="{{ url('/admin/posts/' . $item->post_id . '/edit') }}" style="display:inline-flex; align-items:center; border-radius:9px; padding:9px 13px; background:#d97706; color:#fff; font-weight:700; text-decoration:none;">
+                                    {{ $isAr ? 'تعديل المقال' : 'Edit draft' }}
+                                </a>
+                            @endif
                         @endif
                     </div>
                 @endif

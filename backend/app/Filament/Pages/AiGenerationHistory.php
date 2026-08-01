@@ -5,7 +5,12 @@ namespace App\Filament\Pages;
 use App\Models\AiGenerationRequest;
 use App\Models\AiGenerationItem;
 use App\Jobs\GenerateArticleJob;
+use App\Jobs\PlanTopicClusterJob;
 use App\Jobs\RepairArticleQualityJob;
+use App\Jobs\FinalizeTopicClusterLinksJob;
+use App\Services\Ai\ArticleContentService;
+use App\Services\Ai\ArabicDialectCatalog;
+use App\Services\Ai\GeneratedHtmlSanitizer;
 use App\Models\AiCredential;
 use App\Models\BlogCategory;
 use Filament\Pages\Page;
@@ -71,7 +76,9 @@ class AiGenerationHistory extends Page implements HasTable
                     ->getStateUsing(function ($record) use ($isAr) {
                         return match ($record->status) {
                             'pending' => $isAr ? 'قيد الانتظار' : 'Queued',
+                            'planning' => $isAr ? 'جاري تخطيط العنقود' : 'Planning Cluster',
                             'generating' => $isAr ? 'جاري التوليد' : 'Generating',
+                            'finalizing' => $isAr ? 'جاري ربط مقالات العنقود' : 'Linking Cluster Articles',
                             'completed' => $isAr ? 'جاهز للمراجعة' : 'Ready for Review',
                             'partially_completed' => $isAr ? 'مكتمل جزئياً' : 'Partially Completed',
                             'failed' => $isAr ? 'فشل' : 'Failed',
@@ -83,7 +90,9 @@ class AiGenerationHistory extends Page implements HasTable
                     ->color(fn ($record) => match ($record->status) {
                         'completed' => 'success',
                         'generating' => 'warning',
+                        'finalizing' => 'info',
                         'pending' => 'gray',
+                        'planning' => 'info',
                         'failed' => 'danger',
                         'partially_completed' => 'info',
                         'cancelled' => 'danger',
@@ -110,16 +119,23 @@ class AiGenerationHistory extends Page implements HasTable
             ])
             ->actions([
                 \Filament\Actions\Action::make('publishAll')
-                    ->label($isAr ? 'نشر الكل' : 'Publish All')
+                    ->label(fn (AiGenerationRequest $record) => $record->total_items === 1
+                        ? ($isAr ? 'نشر' : 'Publish')
+                        : ($isAr ? 'نشر الكل' : 'Publish All'))
                     ->icon('heroicon-o-globe-alt')
                     ->color('success')
-                    ->visible(fn (AiGenerationRequest $record) => $record->items()
-                        ->where('status', 'completed')
-                        ->whereHas('post', fn ($query) => $query->where('is_published', false))
-                        ->exists())
+                    ->visible(fn (AiGenerationRequest $record) => ($record->generation_mode !== 'topic_cluster' || $record->status === 'completed')
+                        && $record->items()
+                            ->where('status', 'completed')
+                            ->whereHas('post', fn ($query) => $query->where('is_published', false))
+                            ->exists())
                     ->requiresConfirmation()
-                    ->modalHeading($isAr ? 'نشر المقالات' : 'Publish articles')
-                    ->modalDescription($isAr ? 'سيتم نشر كل المقالات المكتملة غير المنشورة في هذا الطلب.' : 'This will publish all completed, unpublished articles in this request.')
+                    ->modalHeading(fn (AiGenerationRequest $record) => $record->total_items === 1
+                        ? ($isAr ? 'نشر المقال' : 'Publish article')
+                        : ($isAr ? 'نشر المقالات' : 'Publish articles'))
+                    ->modalDescription(fn (AiGenerationRequest $record) => $record->total_items === 1
+                        ? ($isAr ? 'سيتم نشر المقال المكتمل في هذا الطلب.' : 'This will publish the completed article in this request.')
+                        : ($isAr ? 'سيتم نشر كل المقالات المكتملة غير المنشورة في هذا الطلب.' : 'This will publish all completed, unpublished articles in this request.'))
                     ->action(fn (AiGenerationRequest $record) => $this->publishAll($record->id)),
 
                 \Filament\Actions\Action::make('viewItems')
@@ -170,7 +186,7 @@ class AiGenerationHistory extends Page implements HasTable
                     ->label($isAr ? 'إلغاء الطلب' : 'Cancel')
                     ->color('danger')
                     ->icon('heroicon-o-x-circle')
-                    ->visible(fn ($record) => in_array($record->status, ['pending', 'generating', 'repairing']))
+                    ->visible(fn ($record) => in_array($record->status, ['pending', 'planning', 'generating', 'finalizing', 'repairing']))
                     ->requiresConfirmation()
                     ->action(function (AiGenerationRequest $record) use ($isAr) {
                         $record->update(['status' => 'cancelled']);
@@ -193,6 +209,34 @@ class AiGenerationHistory extends Page implements HasTable
                     ->visible(fn ($record) => in_array($record->status, ['failed', 'partially_completed']))
                     ->action(function (AiGenerationRequest $record) use ($isAr) {
                         $failedItems = $record->items()->where('status', 'failed')->get();
+                        if ($record->generation_mode === 'topic_cluster' && $record->items()->doesntExist()) {
+                            $record->update([
+                                'status' => 'pending',
+                                'failed_items' => 0,
+                                'error_message' => null,
+                                'completed_at' => null,
+                            ]);
+                            dispatch(new PlanTopicClusterJob($record->id));
+
+                            Notification::make()
+                                ->title($isAr ? 'بدأت إعادة التخطيط' : 'Cluster Planning Restarted')
+                                ->body($isAr ? 'تمت إعادة طلب تخطيط العنقود إلى طابور المعالجة.' : 'The topic cluster plan was queued again.')
+                                ->success()
+                                ->send();
+                            return;
+                        }
+                        if ($record->generation_mode === 'topic_cluster'
+                            && $record->items()->exists()
+                            && !$record->items()->where('status', '!=', 'completed')->exists()) {
+                            $record->update(['status' => 'finalizing', 'error_message' => null, 'completed_at' => null]);
+                            dispatch(new FinalizeTopicClusterLinksJob($record->id));
+                            Notification::make()
+                                ->title($isAr ? 'بدأت إعادة ربط العنقود' : 'Cluster Linking Restarted')
+                                ->body($isAr ? 'تمت إعادة مرحلة ربط المقال الرئيسي بالمقالات الفرعية.' : 'The final cluster-linking stage was queued again.')
+                                ->success()
+                                ->send();
+                            return;
+                        }
                         if ($failedItems->isEmpty()) {
                             return;
                         }
@@ -261,7 +305,13 @@ class AiGenerationHistory extends Page implements HasTable
                                 'en' => $isAr ? 'الإنجليزية' : 'English',
                                 'both' => $isAr ? 'العربية والإنجليزية معاً' : 'Both (Arabic & English)',
                             ])
+                            ->reactive()
                             ->required(),
+
+                        Select::make('arabic_dialect')
+                            ->label($isAr ? 'اللهجة العربية' : 'Arabic Dialect')
+                            ->options(ArabicDialectCatalog::options($isAr))
+                            ->visible(fn ($get) => in_array($get('language'), ['ar', 'both'], true)),
                     ])
                     ->fillForm(fn (AiGenerationRequest $record) => [
                         'provider' => $record->provider,
@@ -269,10 +319,14 @@ class AiGenerationHistory extends Page implements HasTable
                         'main_keyword' => $record->main_keyword,
                         'category_id' => $record->category_id,
                         'language' => $record->language,
+                        'arabic_dialect' => $record->settings_snapshot['arabic_dialect'] ?? 'egyptian',
                     ])
                     ->action(function (AiGenerationRequest $record, array $data) use ($isAr) {
                         $secRaw = explode(',', $data['secondary_keywords_input'] ?? '');
                         $secondaryKeywords = array_filter(array_map('trim', $secRaw));
+
+                        $settings = $record->settings_snapshot ?? [];
+                        $settings['arabic_dialect'] = $data['arabic_dialect'] ?? 'egyptian';
 
                         $record->update([
                             'provider' => $data['provider'],
@@ -281,6 +335,7 @@ class AiGenerationHistory extends Page implements HasTable
                             'secondary_keywords' => $secondaryKeywords,
                             'category_id' => $data['category_id'],
                             'language' => $data['language'],
+                            'settings_snapshot' => $settings,
                         ]);
 
                         Notification::make()
@@ -310,7 +365,7 @@ class AiGenerationHistory extends Page implements HasTable
 
     public function publishArticle(int $itemId): void
     {
-        $item = AiGenerationItem::with('post')->findOrFail($itemId);
+        $item = AiGenerationItem::with(['post', 'request'])->findOrFail($itemId);
         $isAr = app()->getLocale() === 'ar';
 
         if ($item->status !== 'completed' || !$item->post) {
@@ -320,8 +375,17 @@ class AiGenerationHistory extends Page implements HasTable
                 ->send();
             return;
         }
+        if ($item->request?->generation_mode === 'topic_cluster' && $item->request->status !== 'completed') {
+            Notification::make()
+                ->title($isAr ? 'ربط العنقود لم يكتمل بعد' : 'Cluster linking is not complete')
+                ->body($isAr ? 'انتظر حتى يتم ربط المقال الرئيسي والمقالات الفرعية قبل النشر.' : 'Wait until the pillar and supporting articles are linked before publishing.')
+                ->warning()
+                ->send();
+            return;
+        }
 
         $item->post->update([
+            'content' => $this->sanitizePostContent($item->post->content ?? []),
             'is_published' => true,
             'ai_status' => 'approved',
         ]);
@@ -336,6 +400,13 @@ class AiGenerationHistory extends Page implements HasTable
     public function publishAll(int $requestId): void
     {
         $request = AiGenerationRequest::findOrFail($requestId);
+        if ($request->generation_mode === 'topic_cluster' && $request->status !== 'completed') {
+            Notification::make()
+                ->title(app()->getLocale() === 'ar' ? 'ربط العنقود لم يكتمل بعد' : 'Cluster linking is not complete')
+                ->warning()
+                ->send();
+            return;
+        }
         $items = $request->items()
             ->where('status', 'completed')
             ->whereHas('post', fn ($query) => $query->where('is_published', false))
@@ -344,6 +415,7 @@ class AiGenerationHistory extends Page implements HasTable
 
         foreach ($items as $item) {
             $item->post?->update([
+                'content' => $this->sanitizePostContent($item->post->content ?? []),
                 'is_published' => true,
                 'ai_status' => 'approved',
             ]);
@@ -379,6 +451,18 @@ class AiGenerationHistory extends Page implements HasTable
             ->body($isAr ? 'تم إرسال هذا المقال فقط إلى طابور الإصلاح.' : 'Only this article was queued for targeted repair.')
             ->success()
             ->send();
+    }
+
+    private function sanitizePostContent(array $content): array
+    {
+        $content = ArticleContentService::sanitizeGeneratedArticle($content);
+        foreach (['ar', 'en'] as $language) {
+            if (isset($content[$language]) && is_string($content[$language])) {
+                $content[$language] = GeneratedHtmlSanitizer::sanitize($content[$language]);
+            }
+        }
+
+        return $content;
     }
 
     public function retryItem(int $itemId)

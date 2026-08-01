@@ -10,10 +10,12 @@ use App\Models\AiCredential;
 use App\Models\AiGenerationRequest;
 use App\Models\AiGenerationItem;
 use App\Jobs\GenerateArticleJob;
+use App\Jobs\PlanTopicClusterJob;
 use App\Services\Ai\AiProviderManager;
 use App\Services\Ai\ArticleContentService;
 use App\Services\Ai\GeneratedPostService;
 use App\Services\Ai\GenerationRequestNormalizer;
+use App\Services\Ai\InternalLinkService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
@@ -93,6 +95,8 @@ class AiWorkflowTest extends TestCase
                 ['question_ar' => 'س1', 'answer_ar' => 'ج1'],
                 ['question_ar' => 'س2', 'answer_ar' => 'ج2'],
                 ['question_ar' => 'س3', 'answer_ar' => 'ج3'],
+                ['question_ar' => 'س4', 'answer_ar' => 'ج4'],
+                ['question_ar' => 'س5', 'answer_ar' => 'ج5'],
             ]
         ];
 
@@ -174,6 +178,8 @@ class AiWorkflowTest extends TestCase
                                     ['question_ar' => 'س1', 'answer_ar' => 'ج1'],
                                     ['question_ar' => 'س2', 'answer_ar' => 'ج2'],
                                     ['question_ar' => 'س3', 'answer_ar' => 'ج3'],
+                                    ['question_ar' => 'س4', 'answer_ar' => 'ج4'],
+                                    ['question_ar' => 'س5', 'answer_ar' => 'ج5'],
                                 ]
                             ])
                         ]
@@ -211,6 +217,10 @@ class AiWorkflowTest extends TestCase
         // Assert introduction and body combined exactly once
         $this->assertStringStartsWith('<p>هذه مقدمة ممتازة عن قواعد البيانات السحابية التي تفيد الشركات الناشئة بشكل كبير.</p>', $post->content['ar']);
         $this->assertStringContainsString('<h2>أهمية قواعد البيانات</h2>', $post->content['ar']);
+        $this->assertStringContainsString('class="article-faq"', $post->content['ar']);
+        $this->assertSame(5, substr_count($post->content['ar'], 'class="article-faq-item"'));
+        $this->assertCount(5, $post->ai_metadata['faq']);
+        $this->assertGreaterThanOrEqual(3, substr_count($post->content['ar'], '<a href='));
         $this->assertNull($post->content['en']);
     }
 
@@ -259,12 +269,14 @@ class AiWorkflowTest extends TestCase
         }
 
         $item->refresh();
-        $this->assertEquals('failed', $item->status);
+        // A direct first attempt remains pending so Laravel can apply the
+        // configured queue retry/backoff policy.
+        $this->assertEquals('pending', $item->status);
         $this->assertStringContainsString('Quota Exceeded', $item->error_message);
 
         $request->refresh();
-        $this->assertEquals('failed', $request->status);
-        $this->assertEquals(1, $request->failed_items);
+        $this->assertEquals('generating', $request->status);
+        $this->assertEquals(0, $request->failed_items);
     }
 
     /** @test */
@@ -274,9 +286,124 @@ class AiWorkflowTest extends TestCase
 
         Livewire::test(\App\Filament\Pages\AiGenerationDashboard::class)
             ->assertSet('data.generation_type', 'one_article')
+            ->assertSet('data.arabic_dialect', 'egyptian')
             ->assertSet('data.article_length_preset', 'standard')
             ->assertSet('data.creativity_preset', 'balanced')
             ->assertSet('data.suggest_keywords', true);
+    }
+
+    /** @test */
+    public function internal_backlink_enforcement_is_idempotent(): void
+    {
+        foreach (range(1, 4) as $index) {
+            Post::create([
+                'title' => ['en' => "Related Article {$index}", 'ar' => "مقال مرتبط {$index}"],
+                'slug' => "related-article-{$index}",
+                'content' => ['en' => 'Useful content', 'ar' => 'محتوى مفيد'],
+                'blog_category_id' => $this->category->id,
+                'author_id' => $this->admin->id,
+                'is_published' => true,
+            ]);
+        }
+
+        $article = [
+            'introduction_ar' => 'مقدمة عملية عن بناء المواقع للشركات.',
+            'body_ar' => '<h2>خطة التنفيذ</h2><p>اختر الحل المناسب حسب احتياجات المشروع والميزانية.</p>',
+        ];
+
+        $first = InternalLinkService::apply($article, 'ar', 'بناء المواقع');
+        $second = InternalLinkService::apply($first, 'ar', 'بناء المواقع');
+
+        preg_match_all('/href="([^"]+)"/', $second['body_ar'], $matches);
+        $this->assertGreaterThanOrEqual(3, count(array_unique($matches[1])));
+        $this->assertSame(count($matches[1]), count(array_unique($matches[1])));
+        $types = array_count_values(array_column($second['internal_link_suggestions'], 'type'));
+        $this->assertGreaterThanOrEqual(3, $types['post'] ?? 0);
+        $this->assertGreaterThanOrEqual(3, $types['service'] ?? 0);
+        $this->assertGreaterThanOrEqual(2, $types['page'] ?? 0);
+        $this->assertContains('https://serv5.com.eg/ar/', array_column($second['internal_link_suggestions'], 'url'));
+    }
+
+    /** @test */
+    public function topic_cluster_planner_creates_a_pillar_and_the_exact_supporting_articles(): void
+    {
+        Queue::fake();
+        $credential = new AiCredential();
+        $credential->provider = 'openai';
+        $credential->setApiToken('valid-openai-key-abcde');
+        $credential->is_active = true;
+        $credential->save();
+
+        $request = AiGenerationRequest::create([
+            'created_by' => $this->admin->id,
+            'provider' => 'openai',
+            'model' => 'gpt-4o-mini',
+            'generation_mode' => 'topic_cluster',
+            'idempotency_key' => 'cluster-plan-uuid',
+            'request_hash' => 'cluster-plan-hash',
+            'settings_snapshot' => ['arabic_dialect' => 'egyptian', 'suggest_keywords' => true, 'temperature' => 0.7],
+            'main_keyword' => 'تصميم متجر إلكتروني احترافي',
+            'secondary_keywords' => ['بوابات الدفع'],
+            'language' => 'ar',
+            'article_count' => 4,
+            'category_id' => $this->category->id,
+            'author_id' => $this->admin->id,
+            'status' => 'pending',
+            'total_items' => 4,
+        ]);
+
+        Http::fake(['api.openai.com/*' => Http::response([
+            'choices' => [['message' => ['content' => json_encode([
+                'subtopics' => [
+                    ['keyword' => 'اختيار بوابة الدفع المناسبة', 'search_intent' => 'commercial', 'angle' => 'مقارنة خيارات الدفع'],
+                    ['keyword' => 'تقليل خطوات إتمام الشراء', 'search_intent' => 'transactional', 'angle' => 'رفع التحويل'],
+                    ['keyword' => 'تهيئة المتجر لمحركات البحث', 'search_intent' => 'informational', 'angle' => 'بناء الظهور العضوي'],
+                ],
+            ], JSON_UNESCAPED_UNICODE)]]],
+            'usage' => ['prompt_tokens' => 50, 'completion_tokens' => 80, 'total_tokens' => 130],
+        ], 200)]);
+
+        (new PlanTopicClusterJob($request->id))->handle();
+
+        $request->refresh();
+        $this->assertSame('generating', $request->status);
+        $this->assertSame(4, $request->items()->count());
+        $this->assertSame('تصميم متجر إلكتروني احترافي', $request->items()->orderBy('id')->first()->keyword);
+        $this->assertCount(4, $request->settings_snapshot['cluster_plan']);
+        Queue::assertPushed(GenerateArticleJob::class, 4);
+    }
+
+    /** @test */
+    public function dashboard_counts_the_pillar_plus_requested_supporting_articles(): void
+    {
+        Queue::fake();
+        $credential = new AiCredential();
+        $credential->provider = 'openai';
+        $credential->default_model = 'gpt-4o-mini';
+        $credential->max_articles_per_request = 10;
+        $credential->setApiToken('valid-openai-key-abcde');
+        $credential->is_active = true;
+        $credential->save();
+
+        $this->actingAs($this->admin);
+        Livewire::test(\App\Filament\Pages\AiGenerationDashboard::class)
+            ->set('data.generation_type', 'topic_cluster')
+            ->set('data.main_keyword', 'تصميم متجر إلكتروني احترافي')
+            ->set('data.article_count', 3)
+            ->set('data.category_id', $this->category->id)
+            ->set('data.author_id', $this->admin->id)
+            ->set('data.language', 'ar')
+            ->set('data.arabic_dialect', 'egyptian')
+            ->set('data.provider', 'openai')
+            ->set('data.model', 'gpt-4o-mini')
+            ->call('generate')
+            ->assertHasNoFormErrors();
+
+        $request = AiGenerationRequest::latest('id')->firstOrFail();
+        $this->assertSame(4, $request->article_count);
+        $this->assertSame(4, $request->total_items);
+        $this->assertSame(0, $request->items()->count());
+        Queue::assertPushed(PlanTopicClusterJob::class, 1);
     }
 
     /** @test */
