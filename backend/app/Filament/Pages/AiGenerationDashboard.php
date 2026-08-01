@@ -8,8 +8,10 @@ use App\Models\AiCredential;
 use App\Models\AiGenerationRequest;
 use App\Models\AiGenerationItem;
 use App\Jobs\GenerateArticleJob;
+use App\Jobs\PlanTopicClusterJob;
 use App\Filament\Resources\AiCredentialResource;
 use App\Services\Ai\GenerationRequestNormalizer;
+use App\Services\Ai\ArabicDialectCatalog;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Select;
@@ -60,6 +62,7 @@ class AiGenerationDashboard extends Page implements HasForms
         $this->form->fill([
             'generation_type' => 'one_article',
             'language' => 'ar',
+            'arabic_dialect' => 'egyptian',
             'article_count' => 1,
             'category_id' => BlogCategory::first()?->id,
             'author_id' => auth()->id(),
@@ -146,7 +149,15 @@ class AiGenerationDashboard extends Page implements HasForms
                                 'both' => $isAr ? 'العربية والإنجليزية معاً' : 'Both (Arabic & English)',
                             ])
                             ->default('ar')
+                            ->reactive()
                             ->required(),
+
+                        Select::make('arabic_dialect')
+                            ->label($isAr ? 'اللهجة العربية' : 'Arabic Dialect')
+                            ->options(ArabicDialectCatalog::options($isAr))
+                            ->default('egyptian')
+                            ->visible(fn ($get) => in_array($get('language'), ['ar', 'both'], true))
+                            ->required(fn ($get) => in_array($get('language'), ['ar', 'both'], true)),
                     ]),
 
                 \Filament\Schemas\Components\Section::make($isAr ? 'خيارات متقدمة' : 'Advanced Options')
@@ -237,12 +248,13 @@ class AiGenerationDashboard extends Page implements HasForms
             $keywords = [trim($formData['main_keyword'])];
             // Topic cluster count validation against max limits configured
             $subCount = (int) ($formData['article_count'] ?? 3);
-            if ($subCount > $credential->max_articles_per_request) {
+            $clusterTotal = $subCount + 1;
+            if ($clusterTotal > $credential->max_articles_per_request) {
                 Notification::make()
                     ->title($isAr ? 'تجاوز الحد الأقصى' : 'Max Limit Exceeded')
                     ->body($isAr 
-                        ? "تجاوزت الحد الأقصى للمقالات لهذا المزود وهو: {$credential->max_articles_per_request}." 
-                        : "Exceeded max sub-articles allowed for this provider: {$credential->max_articles_per_request}.")
+                        ? "المقال الرئيسي مع المقالات الفرعية يتجاوز الحد الأقصى للمزود وهو: {$credential->max_articles_per_request}."
+                        : "The pillar plus supporting articles exceed this provider's limit of {$credential->max_articles_per_request}.")
                     ->danger()
                     ->send();
                 return;
@@ -252,12 +264,23 @@ class AiGenerationDashboard extends Page implements HasForms
             $keywords = array_filter(array_map('trim', $rawKeywords));
         }
 
-        $keywords = array_values(array_filter($keywords));
+        $keywords = array_values(array_unique(array_filter($keywords)));
 
         if (count($keywords) === 0) {
             Notification::make()
                 ->title($isAr ? 'خطأ' : 'Error')
                 ->body($isAr ? 'يرجى إدخال كلمة مفتاحية واحدة على الأقل.' : 'Please enter at least one keyword.')
+                ->danger()
+                ->send();
+            return;
+        }
+
+        if ($type === 'one_per_keyword' && count($keywords) > $credential->max_articles_per_request) {
+            Notification::make()
+                ->title($isAr ? 'تجاوز الحد الأقصى' : 'Max Limit Exceeded')
+                ->body($isAr
+                    ? "الحد الأقصى لهذا المزود هو {$credential->max_articles_per_request} مقال في الطلب الواحد."
+                    : "This provider allows at most {$credential->max_articles_per_request} articles per request.")
                 ->danger()
                 ->send();
             return;
@@ -289,6 +312,7 @@ class AiGenerationDashboard extends Page implements HasForms
             'length' => $targetLength,
             'temperature' => $targetTemp,
             'suggest_keywords' => (bool) $formData['suggest_keywords'],
+            'arabic_dialect' => $formData['arabic_dialect'] ?? 'egyptian',
         ];
 
         // 3. Normalize parameters and calculate hash
@@ -298,8 +322,10 @@ class AiGenerationDashboard extends Page implements HasForms
             'generation_mode' => $type === 'topic_cluster' ? 'topic_cluster' : 'one_per_keyword',
             'language' => $formData['language'],
             'main_keyword' => $keywords[0],
+            'keywords' => $keywords,
             'secondary_keywords' => $secondaryKeywords,
             'settings_snapshot' => $snapshot,
+            'article_count' => $type === 'topic_cluster' ? ((int) $formData['article_count'] + 1) : count($keywords),
         ];
         $requestHash = GenerationRequestNormalizer::calculateHash($hashParams);
 
@@ -329,33 +355,30 @@ class AiGenerationDashboard extends Page implements HasForms
             'main_keyword' => $keywords[0],
             'secondary_keywords' => $secondaryKeywords,
             'language' => $formData['language'],
-            'article_count' => $type === 'topic_cluster' ? (int) $formData['article_count'] : count($keywords),
+            'article_count' => $type === 'topic_cluster' ? ((int) $formData['article_count'] + 1) : count($keywords),
             'category_id' => $formData['category_id'],
             'author_id' => $formData['author_id'],
             'status' => 'pending',
-            'total_items' => $type === 'topic_cluster' ? (int) $formData['article_count'] : count($keywords),
+            'total_items' => $type === 'topic_cluster' ? ((int) $formData['article_count'] + 1) : count($keywords),
             'completed_items' => 0,
             'failed_items' => 0,
             'started_at' => now(),
         ]);
 
-        // 5. Create Generation Items & dispatch jobs
-        // If topic cluster, the jobs will generate based on keyword, but we expand items
-        $totalRuns = $type === 'topic_cluster' ? (int) $formData['article_count'] : count($keywords);
-        for ($i = 0; $i < $totalRuns; $i++) {
-            $keyword = $type === 'topic_cluster' 
-                ? ($i === 0 ? $keywords[0] : $keywords[0] . " - Subtopic " . $i) 
-                : $keywords[$i];
+        // 5. Topic clusters need a dedicated planning pass before article jobs.
+        if ($type === 'topic_cluster') {
+            dispatch(new PlanTopicClusterJob($generationRequest->id));
+        } else {
+            foreach ($keywords as $keyword) {
+                $item = AiGenerationItem::create([
+                    'request_id' => $generationRequest->id,
+                    'keyword' => $keyword,
+                    'status' => 'pending',
+                    'attempts' => 0,
+                ]);
 
-            $item = AiGenerationItem::create([
-                'request_id' => $generationRequest->id,
-                'keyword' => $keyword,
-                'status' => 'pending',
-                'attempts' => 0,
-            ]);
-
-            // Dispatch job to database queue
-            dispatch(new GenerateArticleJob($item->id));
+                dispatch(new GenerateArticleJob($item->id));
+            }
         }
 
         Notification::make()

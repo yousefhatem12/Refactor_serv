@@ -1,4 +1,4 @@
-import { getCachedHomeData } from "@/lib/cached-api";
+import { getCachedHomeData, getCachedSettings } from "@/lib/cached-api";
 import { getSeoAlternates } from "@/lib/seo";
 import { headers } from "next/headers";
 
@@ -7,10 +7,13 @@ export async function generateMetadata() {
   const locale = headerList.get("x-locale") || "en";
 
   const data = await getCachedHomeData(locale);
+  const settings = await getCachedSettings(locale);
   const alternates = await getSeoAlternates();
 
   return {
-    title: data?.seo?.title || "Serv5 | Advanced Agentic Coding",
+    title: {
+      absolute: settings?.site_title || data?.seo?.title || "Serv5",
+    },
     description:
       data?.seo?.description ||
       "Leading company in web development and AI solutions.",

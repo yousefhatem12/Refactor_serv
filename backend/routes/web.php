@@ -23,17 +23,33 @@ Route::get('/fix-nav', function () {
 
     // 1. Copy files from repo to target folders
     if (is_dir($repoPath)) {
-        $rsyncFrontend = "rsync -av --delete --exclude=\"backend\" --exclude=\".git\" --exclude=\"node_modules\" --exclude=\"deleted-backend\" {$repoPath}/ {$frontendPath}/";
-        $rsyncBackend = "rsync -av --delete {$repoPath}/backend/ {$backendPath}/";
-
         if (function_exists('shell_exec')) {
-            $log[] = "Deploying frontend using rsync...";
-            $out1 = shell_exec($rsyncFrontend . ' 2>&1');
-            $log[] = $out1 ?: "Done (no output)";
+            $log[] = "Deploying files using cp command...";
 
-            $log[] = "Deploying backend using rsync...";
-            $out2 = shell_exec($rsyncBackend . ' 2>&1');
-            $log[] = $out2 ?: "Done (no output)";
+            // Ensure destination directories exist
+            shell_exec("mkdir -p {$frontendPath}/src/domains/Shared/Navbar");
+            shell_exec("mkdir -p {$backendPath}/app/Filament/Resources/NavLinks/Schemas");
+            shell_exec("mkdir -p {$backendPath}/app/Http/Resources");
+
+            // Copy Navbar.jsx
+            $out1 = shell_exec("cp -f {$repoPath}/src/domains/Shared/Navbar/Navbar.jsx {$frontendPath}/src/domains/Shared/Navbar/Navbar.jsx 2>&1");
+            $log[] = "Navbar: " . ($out1 ? trim($out1) : "Success");
+
+            // Copy .next folder
+            $out2 = shell_exec("cp -rf {$repoPath}/.next {$frontendPath}/ 2>&1");
+            $log[] = ".next: " . ($out2 ? trim($out2) : "Success");
+
+            // Copy NavLinkForm.php
+            $out3 = shell_exec("cp -f {$repoPath}/backend/app/Filament/Resources/NavLinks/Schemas/NavLinkForm.php {$backendPath}/app/Filament/Resources/NavLinks/Schemas/NavLinkForm.php 2>&1");
+            $log[] = "NavLinkForm: " . ($out3 ? trim($out3) : "Success");
+
+            // Copy NavLinkResource.php
+            $out4 = shell_exec("cp -f {$repoPath}/backend/app/Http/Resources/NavLinkResource.php {$backendPath}/app/Http/Resources/NavLinkResource.php 2>&1");
+            $log[] = "NavLinkResource: " . ($out4 ? trim($out4) : "Success");
+
+            // Copy web.php (so it's updated on the live site)
+            $out5 = shell_exec("cp -f {$repoPath}/backend/routes/web.php {$backendPath}/routes/web.php 2>&1");
+            $log[] = "web.php: " . ($out5 ? trim($out5) : "Success");
         } else {
             $log[] = "shell_exec is disabled. Using PHP copy fallback...";
             

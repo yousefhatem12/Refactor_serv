@@ -7,6 +7,7 @@ use App\Models\AiGenerationItem;
 use App\Models\AiGenerationRequest;
 use App\Services\Ai\AiProviderManager;
 use App\Services\Ai\ArticleContentService;
+use App\Services\Ai\BrandContextService;
 use App\Services\Ai\InternalLinkService;
 use App\Services\Ai\GeneratedPostService;
 use Illuminate\Bus\Queueable;
@@ -45,6 +46,10 @@ class GenerateArticleJob implements ShouldQueue
         $item = AiGenerationItem::findOrFail($this->itemId);
         $request = $item->request;
 
+        if ($request->status === 'cancelled') {
+            return;
+        }
+
         // Skip if already processed successfully
         if ($item->status === 'completed') {
             return;
@@ -73,16 +78,38 @@ class GenerateArticleJob implements ShouldQueue
             }
 
             // 2. Build instructions prompt
+            $settings = $request->settings_snapshot ?? [];
+            $targetLength = (int) ($settings['length'] ?? $credential->default_article_length ?? 1200);
+            $temperature = (float) ($settings['temperature'] ?? $credential->temperature ?? 0.7);
+            $arabicDialect = (string) ($settings['arabic_dialect'] ?? 'egyptian');
+            $suggestKeywords = (bool) ($settings['suggest_keywords'] ?? true);
+            $categoryName = is_array($request->category?->name)
+                ? implode(' ', array_filter($request->category->name))
+                : (string) ($request->category?->name ?? '');
+            $brandContext = BrandContextService::build($item->keyword, $request->language, $categoryName);
+
             $prompt = ArticleContentService::buildPrompt(
                 $item->keyword,
                 $request->secondary_keywords ?? [],
                 $request->language,
-                $credential->default_article_length ?? 1200
+                $targetLength,
+                $arabicDialect,
+                $suggestKeywords,
+                $brandContext
             );
+
+            if ($request->generation_mode === 'topic_cluster' && !empty($settings['cluster_plan'])) {
+                $currentTopic = collect($settings['cluster_plan'])->firstWhere('keyword', $item->keyword) ?? [];
+                $clusterTopics = collect($settings['cluster_plan'])->pluck('keyword')->filter()->implode(' | ');
+                $role = ($currentTopic['search_intent'] ?? null) === 'pillar' ? 'PILLAR' : 'SUPPORTING';
+                $prompt .= "\n\nTOPIC CLUSTER CONTEXT — MANDATORY:\n";
+                $prompt .= "This is the {$role} article in one coordinated cluster. Full cluster topics: {$clusterTopics}.\n";
+                $prompt .= "This article's unique search intent is: " . ($currentTopic['search_intent'] ?? 'informational') . ". Its exclusive angle is: " . ($currentTopic['angle'] ?? 'Cover only this article topic in depth') . ".\n";
+                $prompt .= "Stay inside this article's scope, avoid duplicating the other cluster articles, and mention the pillar/supporting topics naturally where useful so the internal-linking system can connect them later.\n";
+            }
 
             // 3. Resolve Provider and run self-correction loop up to 3 times
             $provider = AiProviderManager::getProvider($request->provider);
-            $temperature = $credential->temperature ?? 0.7;
             // Reasoning needs room for thinking plus JSON, but 32K–65K tokens
             // made normal requests take several minutes and get reclaimed by
             // the database queue. These limits cover a full article without
@@ -90,11 +117,11 @@ class GenerateArticleJob implements ShouldQueue
             $isReasoner = str_contains(strtolower($request->model), 'reasoner');
             $maxTokens = $isReasoner
                 ? ($request->language === 'both'
-                    ? min(24000, max(16000, (int) ceil(($credential->default_article_length ?? 1200) * 12)))
-                    : min(16000, max(9000, (int) ceil(($credential->default_article_length ?? 1200) * 8))))
+                    ? min(24000, max(16000, (int) ceil($targetLength * 12)))
+                    : min(16000, max(9000, (int) ceil($targetLength * 8))))
                 : ($request->language === 'both'
-                    ? min(16384, max(8192, (int) ceil(($credential->default_article_length ?? 1200) * 5.5)))
-                    : min(16384, max(6144, (int) ceil(($credential->default_article_length ?? 1200) * 3.5))));
+                    ? min(16384, max(8192, (int) ceil($targetLength * 5.5)))
+                    : min(16384, max(6144, (int) ceil($targetLength * 3.5))));
             
             $attempts = 0;
             // Warnings can be repaired on demand. Regenerating a complete
@@ -115,6 +142,7 @@ class GenerateArticleJob implements ShouldQueue
                         $maxTokens,
                         $token
                     );
+                    $parsedResponse = ArticleContentService::sanitizeHtmlFields($parsedResponse);
 
                     $qualityReport = ArticleContentService::validateAndGenerateReport($parsedResponse, $item->keyword, $request->language);
 
@@ -146,7 +174,7 @@ class GenerateArticleJob implements ShouldQueue
                                   "2. Sentence lengths average between 15 and 22 words.\n" .
                                   "3. Do NOT use any AI clichés (like 'لا شك أن', 'في عالم اليوم', 'مما لا شك فيه', 'علاوة على ذلك', etc.).\n" .
                                   "4. Follow the original schema requirements. Return valid JSON matching the exact schema:\n" .
-                                  ArticleContentService::buildPrompt($item->keyword, $request->secondary_keywords ?? [], $request->language, $credential->default_article_length ?? 1200);
+                                  ArticleContentService::buildPrompt($item->keyword, $request->secondary_keywords ?? [], $request->language, $targetLength, $arabicDialect, $suggestKeywords, $brandContext);
                     }
 
                 } catch (\Throwable $e) {
@@ -163,9 +191,18 @@ class GenerateArticleJob implements ShouldQueue
                 throw $lastException ?? new \Exception("Failed to generate article after {$maxAttempts} attempts.");
             }
 
+            // The administrator may cancel while the provider request is in
+            // flight. Never create a draft after that cancellation.
+            if ($request->fresh()->status === 'cancelled') {
+                return;
+            }
+
             $parsedResponse = $bestResponse;
+            $parsedResponse = ArticleContentService::sanitizeHtmlFields($parsedResponse);
+            $parsedResponse = ArticleContentService::renderFaqIntoBodies($parsedResponse, $request->language);
             // Convert only real, relevant site content into clickable internal links.
-            $parsedResponse = InternalLinkService::apply($parsedResponse, $request->language, $item->keyword);
+            $parsedResponse = InternalLinkService::apply($parsedResponse, $request->language, $item->keyword, $categoryName);
+            $parsedResponse = ArticleContentService::sanitizeHtmlFields($parsedResponse);
             $qualityReport = $bestQualityReport;
             $qualityReport = ArticleContentService::validateAndGenerateReport($parsedResponse, $item->keyword, $request->language);
 
@@ -199,6 +236,15 @@ class GenerateArticleJob implements ShouldQueue
                         'en' => $parsedResponse['meta_description_en'] ?? null,
                         'ar' => $parsedResponse['meta_description_ar'] ?? null,
                     ],
+                    'ai_metadata' => [
+                        'faq' => $parsedResponse['faq'] ?? [],
+                        'faq_schema' => $parsedResponse['faq_schema'] ?? [],
+                        'schema_type' => $parsedResponse['schema_type'] ?? 'BlogPosting',
+                        'schema_markup' => $parsedResponse['schema_markup'] ?? [],
+                        'internal_link_suggestions' => $parsedResponse['internal_link_suggestions'] ?? [],
+                        'quality_report' => $qualityReport,
+                    ],
+                    'image_metadata' => $parsedResponse['image'] ?? null,
                 ]);
 
                 // Update item reference
@@ -264,10 +310,19 @@ class GenerateArticleJob implements ShouldQueue
                 $status = 'partially_completed';
             }
             
-            $request->update([
-                'status' => $status,
-                'completed_at' => now(),
-            ]);
+            if ($request->generation_mode === 'topic_cluster' && $status === 'completed') {
+                $claimed = AiGenerationRequest::query()
+                    ->whereKey($request->id)
+                    ->whereNotIn('status', ['finalizing', 'completed', 'cancelled'])
+                    ->update(['status' => 'finalizing', 'error_message' => null]);
+
+                if ($claimed === 1) {
+                    dispatch(new FinalizeTopicClusterLinksJob($request->id));
+                }
+                return;
+            }
+
+            $request->update(['status' => $status, 'completed_at' => now()]);
         }
     }
 }

@@ -32,19 +32,25 @@ const alexandria = Alexandria({
   display: "swap",
 });
 
+import { headers, cookies } from "next/headers";
 import { fetchAPI, getMediaUrl } from "@/lib/api";
 import { getSeoAlternates } from "@/lib/seo";
 import { getCachedSettings } from "@/lib/cached-api";
 
 export async function generateMetadata() {
-  const settings = await getCachedSettings();
+  const headersList = await headers();
+  const xLocale = headersList.get("x-locale");
+  const cookieStore = await cookies();
+  const language = xLocale || cookieStore.get("NEXT_LOCALE")?.value || "en";
+
+  const settings = await getCachedSettings(language);
   const faviconUrl = settings?.site_favicon
     ? getMediaUrl(settings.site_favicon)
     : "/logo.ico";
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://serv5.com.eg";
   const alternates = await getSeoAlternates();
 
-  const siteTitle = settings?.site_title || "Serv5 | Advanced Agentic Coding";
+  const siteTitle = settings?.site_title || "Serv5";
   const siteDesc =
     settings?.site_description ||
     "Leading company in web development and AI solutions.";
@@ -55,7 +61,10 @@ export async function generateMetadata() {
   
   return {
     metadataBase: new URL(siteUrl),
-    title: siteTitle,
+    title: {
+      template: `%s | ${siteTitle}`,
+      default: siteTitle,
+    },
     description: siteDesc,
     icons: {
       icon: faviconUrl,
@@ -67,7 +76,7 @@ export async function generateMetadata() {
       title: siteTitle,
       description: siteDesc,
       url: siteUrl,
-      siteName: "Serv5",
+      siteName: siteTitle,
       images: ogImageUrl ? [{ url: ogImageUrl }] : [],
       type: "website",
     },
@@ -80,7 +89,6 @@ export async function generateMetadata() {
   };
 }
 
-import { cookies, headers } from "next/headers";
 import { LanguageProvider } from "./context/LanguageContext";
 import { SettingsProvider } from "./context/SettingsContext";
 import Loading from "./loading";

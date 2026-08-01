@@ -7,11 +7,15 @@ use App\Models\Service;
 
 class InternalLinkService
 {
+    private const MIN_SERVICE_LINKS_PER_LANGUAGE = 3;
+    private const TARGET_POST_LINKS_PER_LANGUAGE = 3;
+    private const MIN_GENERAL_LINKS_PER_LANGUAGE = 2;
+
     /**
      * Adds links only for real, existing internal content.
      * The visible phrase is preserved; only its HTML link wrapper is added.
      */
-    public static function apply(array $article, string $languageMode, string $currentKeyword = ''): array
+    public static function apply(array $article, string $languageMode, string $currentKeyword = '', string $categoryContext = ''): array
     {
         $targets = self::targets($currentKeyword);
         $suggestions = [];
@@ -27,74 +31,126 @@ class InternalLinkService
                     continue;
                 }
 
+                preg_match_all('/<a\s+[^>]*href=["\']([^"\']+)["\'][^>]*>(.*?)<\/a>/isu', (string) $article[$field], $existingLinks, PREG_SET_ORDER);
+                foreach ($existingLinks as $existingLink) {
+                    foreach ($targets as $target) {
+                        if (($target['urls'][$lang] ?? null) !== $existingLink[1]
+                            || !in_array($target['type'] ?? null, ['post', 'service', 'page'], true)) {
+                            continue;
+                        }
+
+                        $existingSuggestion = [
+                            'label' => trim(strip_tags($existingLink[2])),
+                            'url' => $existingLink[1],
+                            'type' => $target['type'],
+                        ];
+                        $languageSuggestions[] = $existingSuggestion;
+                        $suggestions[] = $existingSuggestion;
+                        break;
+                    }
+                }
+
                 [$content, $used] = self::linkText($article[$field], $targets, $lang);
                 $article[$field] = $content;
                 $languageSuggestions = array_merge($languageSuggestions, $used);
                 $suggestions = array_merge($suggestions, $used);
             }
 
-            // If this language contains none of the existing target phrases,
-            // add a small contextual links block instead of silently producing
-            // zero first-party links.
-            if ($languageSuggestions === []) {
-                $field = !empty($article["body_{$lang}"]) ? "body_{$lang}" : "introduction_{$lang}";
-                if (empty($article[$field])) {
+            $field = !empty($article["body_{$lang}"]) ? "body_{$lang}" : "introduction_{$lang}";
+            if (empty($article[$field])) {
+                continue;
+            }
+
+            $rankedTargets = self::rankRelevantTargets(
+                $targets,
+                $lang,
+                trim($currentKeyword . ' ' . $categoryContext),
+                strip_tags((string) ($article["introduction_{$lang}"] ?? '') . ' ' . (string) ($article["body_{$lang}"] ?? ''))
+            );
+            $usedByType = ['post' => [], 'service' => [], 'page' => []];
+            foreach ($languageSuggestions as $suggestion) {
+                $type = $suggestion['type'] ?? null;
+                if (isset($usedByType[$type]) && !empty($suggestion['url'])) {
+                    $usedByType[$type][] = $suggestion['url'];
+                }
+            }
+            foreach ($usedByType as $type => $urls) {
+                $usedByType[$type] = array_values(array_unique($urls));
+            }
+
+            $availablePosts = array_values(array_unique(array_filter(array_map(
+                fn (array $target): ?string => ($target['type'] ?? null) === 'post' ? ($target['urls'][$lang] ?? null) : null,
+                $targets
+            ))));
+            $requirements = [
+                'post' => min(self::TARGET_POST_LINKS_PER_LANGUAGE, count($availablePosts)),
+                'service' => self::MIN_SERVICE_LINKS_PER_LANGUAGE,
+                'page' => self::MIN_GENERAL_LINKS_PER_LANGUAGE,
+            ];
+            $fallbackGroups = ['post' => [], 'service' => [], 'page' => []];
+
+            // Always include the actual site homepage among the general links.
+            $homeUrl = SiteUrlBuilder::home($lang);
+            if (!in_array($homeUrl, $usedByType['page'], true)) {
+                $homeTarget = collect($targets)->first(fn (array $target): bool => ($target['type'] ?? null) === 'page' && ($target['urls'][$lang] ?? null) === $homeUrl);
+                if ($homeTarget) {
+                    self::addFallbackLink($homeTarget, $lang, $usedByType, $fallbackGroups, $suggestions);
+                }
+            }
+
+            foreach ($requirements as $type => $requiredCount) {
+                if (count($usedByType[$type]) >= $requiredCount) {
                     continue;
                 }
-
-                $fallbackTargets = self::rankRelevantTargets(
-                    $targets,
-                    $lang,
-                    $currentKeyword,
-                    strip_tags((string) ($article["introduction_{$lang}"] ?? '') . ' ' . (string) ($article["body_{$lang}"] ?? ''))
+                $candidates = array_merge(
+                    array_values(array_filter($rankedTargets, fn (array $target): bool => ($target['type'] ?? null) === $type)),
+                    array_values(array_filter($targets, fn (array $target): bool => ($target['type'] ?? null) === $type))
                 );
-
-                if ($fallbackTargets === []) {
-                    $fallbackTargets = array_values(array_filter(
-                        $targets,
-                        fn (array $target): bool => in_array(
-                            $target['urls']['ar'] ?? null,
-                            [
-                                'https://serv5.com.eg/ar/services',
-                                'https://serv5.com.eg/ar/blog',
-                            ],
-                            true
-                        )
-                    ));
-                }
-
-                $fallbackTargets = array_slice($fallbackTargets, 0, 2);
-
-                $fallbackLinks = [];
-                foreach ($fallbackTargets as $target) {
-                    $label = $target['labels'][$lang][0] ?? null;
-                    if (!$label) {
-                        continue;
+                foreach ($candidates as $candidate) {
+                    self::addFallbackLink($candidate, $lang, $usedByType, $fallbackGroups, $suggestions);
+                    if (count($usedByType[$type]) >= $requiredCount) {
+                        break;
                     }
-
-                    $targetUrl = $target['urls'][$lang] ?? null;
-                    if (!$targetUrl) {
-                        continue;
-                    }
-
-                    $fallbackLinks[] = '<a href="' . e($targetUrl) . '" class="internal-link">' . e($label) . '</a>';
-                    $suggestions[] = [
-                        'label' => $label,
-                        'url' => $targetUrl,
-                        'type' => $target['type'],
-                    ];
                 }
+            }
 
-                if ($fallbackLinks !== []) {
-                    $heading = $lang === 'ar' ? 'اقرأ أيضًا:' : 'Read also:';
-                    $article[$field] .= "\n\n<p class=\"internal-links\"><strong>{$heading}</strong> " . implode(' · ', $fallbackLinks) . '</p>';
+            $headings = $lang === 'ar'
+                ? ['post' => 'مقالات مرتبطة:', 'service' => 'خدمات مرتبطة:', 'page' => 'روابط مفيدة:']
+                : ['post' => 'Related articles:', 'service' => 'Related services:', 'page' => 'Useful links:'];
+            foreach (['post', 'service', 'page'] as $type) {
+                if ($fallbackGroups[$type] !== []) {
+                    $linksHtml = '<p class="internal-links internal-links-' . $type . '"><strong>' . e($headings[$type]) . '</strong> ' . implode(' · ', $fallbackGroups[$type]) . '</p>';
+                    $article[$field] = ArticleContentService::insertBeforeFaqOrConclusion(
+                        (string) $article[$field],
+                        $linksHtml,
+                        $lang
+                    );
                 }
+            }
+
+            if (count($usedByType['service']) < self::MIN_SERVICE_LINKS_PER_LANGUAGE
+                || count($usedByType['page']) < self::MIN_GENERAL_LINKS_PER_LANGUAGE) {
+                throw new \RuntimeException("Unable to satisfy the required internal-link mix for language '{$lang}'.");
             }
         }
 
         $article['internal_link_suggestions'] = array_values(array_unique($suggestions, SORT_REGULAR));
 
         return $article;
+    }
+
+    private static function addFallbackLink(array $target, string $lang, array &$usedByType, array &$groups, array &$suggestions): void
+    {
+        $type = $target['type'] ?? null;
+        $url = $target['urls'][$lang] ?? null;
+        $label = $target['labels'][$lang][0] ?? null;
+        if (!isset($usedByType[$type]) || !$url || !$label || in_array($url, $usedByType[$type], true)) {
+            return;
+        }
+
+        $usedByType[$type][] = $url;
+        $groups[$type][] = '<a href="' . e($url) . '" class="internal-link">' . e($label) . '</a>';
+        $suggestions[] = ['label' => $label, 'url' => $url, 'type' => $type];
     }
 
     private static function targets(string $currentKeyword): array
@@ -105,8 +161,8 @@ class InternalLinkService
                 'type' => $type,
                 'labels' => $labels,
                 'urls' => [
-                    'ar' => 'https://serv5.com.eg/ar/' . ltrim($path, '/'),
-                    'en' => 'https://serv5.com.eg/en/' . ltrim($path, '/'),
+                    'ar' => SiteUrlBuilder::page('ar', $path),
+                    'en' => SiteUrlBuilder::page('en', $path),
                 ],
             ];
         };
@@ -136,25 +192,39 @@ class InternalLinkService
         ];
 
         foreach ($servicePages as $slug => $labels) {
-            $addPage($targets, 'service', $labels, 'services/services-' . $slug);
+            $targets[] = [
+                'type' => 'service',
+                'labels' => $labels,
+                'urls' => [
+                    'ar' => SiteUrlBuilder::service('ar', $slug),
+                    'en' => SiteUrlBuilder::service('en', $slug),
+                ],
+            ];
         }
 
         Post::query()
+            ->with('blogCategory:id,name')
             ->where('is_published', true)
-            ->where('slug', '!=', $currentKeyword)
-            ->get(['title', 'slug'])
-            ->each(function (Post $post) use (&$targets): void {
+            ->get(['id', 'title', 'slug', 'seo_title', 'seo_description', 'blog_category_id'])
+            ->each(function (Post $post) use (&$targets, $currentKeyword): void {
                 $title = is_array($post->title) ? $post->title : [];
 
                 foreach (['ar', 'en'] as $lang) {
                     $label = trim((string) ($title[$lang] ?? ''));
-                    if ($label !== '') {
+                    if ($label !== '' && self::normalizeText($label) !== self::normalizeText($currentKeyword)) {
+                        $categoryName = is_array($post->blogCategory?->name) ? ($post->blogCategory->name[$lang] ?? '') : '';
                         $targets[] = [
                             'type' => 'post',
                             'labels' => [$lang => [$label]],
+                            'search_text' => [$lang => implode(' ', [
+                                $label,
+                                $categoryName,
+                                self::localizedText($post->seo_title, $lang),
+                                self::localizedText($post->seo_description, $lang),
+                            ])],
                             'urls' => [
-                                'ar' => 'https://serv5.com.eg/ar/blog/' . $post->slug,
-                                'en' => 'https://serv5.com.eg/en/blog/' . $post->slug,
+                                'ar' => SiteUrlBuilder::blogPost('ar', $post->slug),
+                                'en' => SiteUrlBuilder::blogPost('en', $post->slug),
                             ],
                         ];
                     }
@@ -163,7 +233,7 @@ class InternalLinkService
 
         Service::query()
             ->where('is_active', true)
-            ->get(['name', 'slug'])
+            ->get(['name', 'slug', 'description'])
             ->each(function (Service $service) use (&$targets): void {
                 $name = is_array($service->name) ? $service->name : [];
 
@@ -173,9 +243,13 @@ class InternalLinkService
                         $targets[] = [
                             'type' => 'service',
                             'labels' => [$lang => [$label]],
+                            'search_text' => [$lang => implode(' ', [
+                                $label,
+                                self::localizedText($service->description, $lang),
+                            ])],
                             'urls' => [
-                                'ar' => 'https://serv5.com.eg/ar/services/services-' . $service->slug,
-                                'en' => 'https://serv5.com.eg/en/services/services-' . $service->slug,
+                                'ar' => SiteUrlBuilder::service('ar', $service->slug),
+                                'en' => SiteUrlBuilder::service('en', $service->slug),
                             ],
                         ];
                     }
@@ -253,25 +327,28 @@ class InternalLinkService
      */
     private static function rankRelevantTargets(array $targets, string $lang, string $keyword, string $articleText): array
     {
-        $contextTerms = self::meaningfulTerms($keyword . ' ' . $articleText);
-        if ($contextTerms === []) {
+        $keywordTerms = self::meaningfulTerms($keyword);
+        $articleTerms = self::meaningfulTerms($articleText);
+        if ($keywordTerms === [] && $articleTerms === []) {
             return [];
         }
 
         $ranked = [];
         foreach ($targets as $target) {
-            if (!in_array($target['type'], ['post', 'service'], true)) {
+            if (!in_array($target['type'], ['post', 'service', 'page'], true)) {
                 continue;
             }
 
             $labels = $target['labels'][$lang] ?? [];
             $targetTerms = self::meaningfulTerms(implode(' ', $labels));
-            $score = count(array_intersect($contextTerms, $targetTerms));
+            $searchTerms = self::meaningfulTerms((string) ($target['search_text'][$lang] ?? implode(' ', $labels)));
+            $score = (self::overlapScore($keywordTerms, $targetTerms) * 10)
+                + (self::overlapScore($keywordTerms, $searchTerms) * 5)
+                + (self::overlapScore($articleTerms, $targetTerms) * 3)
+                + self::overlapScore($articleTerms, $searchTerms);
 
-            if ($score > 0) {
-                $target['_relevance'] = $score;
-                $ranked[] = $target;
-            }
+            $target['_relevance'] = $score;
+            $ranked[] = $target;
         }
 
         usort($ranked, fn (array $left, array $right): int => $right['_relevance'] <=> $left['_relevance']);
@@ -300,9 +377,57 @@ class InternalLinkService
             'the', 'and', 'for', 'with', 'from', 'that', 'this', 'our', 'your',
         ];
 
+        $terms = array_map(function (string $term): string {
+            if (mb_strlen($term) > 4 && str_starts_with($term, 'ال')) {
+                return mb_substr($term, 2);
+            }
+            return $term;
+        }, $matches[0] ?? []);
+
         return array_values(array_unique(array_filter(
-            $matches[0] ?? [],
+            $terms,
             fn (string $term): bool => !in_array($term, $stopWords, true)
         )));
+    }
+
+    private static function overlapScore(array $sourceTerms, array $targetTerms): int
+    {
+        $score = 0;
+        foreach ($sourceTerms as $source) {
+            foreach ($targetTerms as $target) {
+                $shortest = min(mb_strlen($source), mb_strlen($target));
+                if ($source === $target || ($shortest >= 4 && mb_substr($source, 0, $shortest) === mb_substr($target, 0, $shortest))) {
+                    $score++;
+                    break;
+                }
+            }
+        }
+        return $score;
+    }
+
+    private static function localizedText(mixed $value, string $lang): string
+    {
+        if (is_string($value)) {
+            return $value;
+        }
+        if (!is_array($value)) {
+            return '';
+        }
+        if (isset($value[$lang]) && is_string($value[$lang])) {
+            return $value[$lang];
+        }
+
+        $parts = [];
+        array_walk_recursive($value, function (mixed $part) use (&$parts): void {
+            if (is_string($part)) {
+                $parts[] = $part;
+            }
+        });
+        return implode(' ', $parts);
+    }
+
+    private static function normalizeText(string $value): string
+    {
+        return mb_strtolower(trim(preg_replace('/\s+/u', ' ', $value) ?? $value), 'UTF-8');
     }
 }

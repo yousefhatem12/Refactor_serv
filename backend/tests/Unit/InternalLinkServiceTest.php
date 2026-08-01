@@ -96,10 +96,19 @@ class InternalLinkServiceTest extends TestCase
 
         $this->assertNotEmpty($ranked);
         $this->assertSame('https://serv5.com.eg/ar/blog/seo-ecommerce', $ranked[0]['urls']['ar']);
-        $this->assertNotContains(
-            'https://serv5.com.eg/ar/bank-accounts',
-            array_map(fn (array $target): string => $target['urls']['ar'], $ranked)
-        );
+        $this->assertNotSame('https://serv5.com.eg/ar/bank-accounts', $ranked[0]['urls']['ar']);
+    }
+
+    public function test_relevance_ranking_uses_service_and_post_metadata_not_only_titles(): void
+    {
+        $related = $this->target('service', ['ar' => ['حلول الأعمال'], 'en' => ['Business Solutions']], 'https://serv5.com.eg/ar/services/database', 'https://serv5.com.eg/en/services/database');
+        $related['search_text'] = ['ar' => 'استضافة قواعد بيانات PostgreSQL وإدارة النسخ الاحتياطي', 'en' => 'PostgreSQL database hosting and backups'];
+        $unrelated = $this->target('service', ['ar' => ['تصميم الشعارات'], 'en' => ['Logo Design']], 'https://serv5.com.eg/ar/services/logo', 'https://serv5.com.eg/en/services/logo');
+        $unrelated['search_text'] = ['ar' => 'هوية بصرية وألوان العلامة التجارية', 'en' => 'Brand identity and colors'];
+
+        $ranked = $this->callPrivate('rankRelevantTargets', [$unrelated, $related], 'ar', 'استضافة PostgreSQL', 'اختيار قاعدة بيانات وإدارة النسخ الاحتياطي');
+
+        $this->assertSame('https://serv5.com.eg/ar/services/database', $ranked[0]['urls']['ar']);
     }
 
     public function test_fuzzed_html_does_not_throw_or_create_more_than_four_new_links(): void
