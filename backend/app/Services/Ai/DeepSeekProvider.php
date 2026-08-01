@@ -14,6 +14,13 @@ class DeepSeekProvider implements AiProviderInterface
         int $maxLength,
         string $token
     ): array {
+        // In thinking mode DeepSeek counts reasoning and the final JSON against
+        // the same output budget. Keep a compact allowance for cluster plans
+        // and a larger, bounded allowance for complete article documents.
+        $outputBudget = $maxLength <= 4096
+            ? min(16384, max(8192, $maxLength * 4))
+            : min(32768, max(24576, $maxLength * 3));
+
         $response = Http::withHeaders([
             'Authorization' => "Bearer {$token}",
         ])
@@ -28,7 +35,8 @@ class DeepSeekProvider implements AiProviderInterface
                 ['role' => 'user', 'content' => $prompt]
             ],
             'temperature' => $temperature,
-            'max_tokens' => $maxLength,
+            'max_tokens' => $outputBudget,
+            'thinking' => ['type' => 'enabled'],
             'response_format' => ['type' => 'json_object'],
         ]);
 
@@ -41,7 +49,19 @@ class DeepSeekProvider implements AiProviderInterface
         $content = $data['choices'][0]['message']['content'] ?? null;
 
         if (!$content) {
-            throw new \Exception("DeepSeek API returned empty completions response.");
+            $finishReason = $data['choices'][0]['finish_reason'] ?? 'missing';
+            $usage = $data['usage'] ?? [];
+
+            Log::warning('DeepSeek returned an empty structured completion.', [
+                'model' => $model,
+                'finish_reason' => $finishReason,
+                'usage' => $usage,
+                'has_reasoning_content' => !empty($data['choices'][0]['message']['reasoning_content']),
+            ]);
+
+            throw new \Exception(
+                "DeepSeek API returned empty completions response (model: {$model}, finish_reason: {$finishReason})."
+            );
         }
 
         try {
