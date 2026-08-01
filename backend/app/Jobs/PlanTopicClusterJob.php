@@ -7,6 +7,7 @@ use App\Models\AiGenerationItem;
 use App\Models\AiGenerationRequest;
 use App\Services\Ai\AiProviderManager;
 use App\Services\Ai\BrandContextService;
+use App\Services\Ai\DeepSeekProvider;
 use App\Services\Ai\TopicClusterPlanningService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -61,7 +62,9 @@ class PlanTopicClusterJob implements ShouldQueue
             $prompt,
             $request->model,
             min(0.4, (float) ($settings['temperature'] ?? 0.7)),
-            min(4096, max(1200, $subtopicCount * 350)),
+            $request->provider === 'deepseek'
+                ? DeepSeekProvider::CLUSTER_PLANNING_TOKENS
+                : min(4096, max(1200, $subtopicCount * 350)),
             $token
         );
         $subtopics = TopicClusterPlanningService::validatePlan($response, $request->main_keyword, $subtopicCount);

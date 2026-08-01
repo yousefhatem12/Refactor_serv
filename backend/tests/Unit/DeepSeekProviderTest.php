@@ -8,6 +8,13 @@ use Tests\TestCase;
 
 class DeepSeekProviderTest extends TestCase
 {
+    public function test_deepseek_budgets_cover_cluster_single_and_bilingual_generation(): void
+    {
+        $this->assertSame(4096, DeepSeekProvider::CLUSTER_PLANNING_TOKENS);
+        $this->assertSame(8192, DeepSeekProvider::SINGLE_LANGUAGE_ARTICLE_TOKENS);
+        $this->assertSame(16384, DeepSeekProvider::BILINGUAL_ARTICLE_TOKENS);
+    }
+
     public function test_structured_generation_disables_thinking_and_preserves_the_requested_output_budget(): void
     {
         Http::fake([

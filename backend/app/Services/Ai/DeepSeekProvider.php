@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Log;
 
 class DeepSeekProvider implements AiProviderInterface
 {
+    public const CLUSTER_PLANNING_TOKENS = 4096;
+    public const SINGLE_LANGUAGE_ARTICLE_TOKENS = 8192;
+    public const BILINGUAL_ARTICLE_TOKENS = 16384;
+
     public function generateStructuredContent(
         string $prompt,
         string $model,

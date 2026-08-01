@@ -7,6 +7,7 @@ use App\Models\AiGenerationItem;
 use App\Services\Ai\AiProviderManager;
 use App\Services\Ai\ArticleContentService;
 use App\Services\Ai\BrandContextService;
+use App\Services\Ai\DeepSeekProvider;
 use App\Services\Ai\InternalLinkService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -78,6 +79,11 @@ class RepairArticleQualityJob implements ShouldQueue
             : ($request->language === 'both'
                 ? min(16384, max(8192, (int) ceil($targetLength * 5.5)))
                 : min(16384, max(6144, (int) ceil($targetLength * 3.5))));
+        if ($request->provider === 'deepseek') {
+            $maxTokens = $request->language === 'both'
+                ? DeepSeekProvider::BILINGUAL_ARTICLE_TOKENS
+                : DeepSeekProvider::SINGLE_LANGUAGE_ARTICLE_TOKENS;
+        }
         $provider = AiProviderManager::getProvider($request->provider);
         $repaired = $article;
         $report = $item->quality_report ?? ArticleContentService::validateAndGenerateReport($article, $item->keyword, $request->language);

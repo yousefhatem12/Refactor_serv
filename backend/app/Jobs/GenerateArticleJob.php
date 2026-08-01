@@ -8,6 +8,7 @@ use App\Models\AiGenerationRequest;
 use App\Services\Ai\AiProviderManager;
 use App\Services\Ai\ArticleContentService;
 use App\Services\Ai\BrandContextService;
+use App\Services\Ai\DeepSeekProvider;
 use App\Services\Ai\InternalLinkService;
 use App\Services\Ai\GeneratedPostService;
 use Illuminate\Bus\Queueable;
@@ -122,6 +123,11 @@ class GenerateArticleJob implements ShouldQueue
                 : ($request->language === 'both'
                     ? min(16384, max(8192, (int) ceil($targetLength * 5.5)))
                     : min(16384, max(6144, (int) ceil($targetLength * 3.5))));
+            if ($request->provider === 'deepseek') {
+                $maxTokens = $request->language === 'both'
+                    ? DeepSeekProvider::BILINGUAL_ARTICLE_TOKENS
+                    : DeepSeekProvider::SINGLE_LANGUAGE_ARTICLE_TOKENS;
+            }
             
             $attempts = 0;
             // Warnings can be repaired on demand. Regenerating a complete
