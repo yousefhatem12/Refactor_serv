@@ -164,11 +164,7 @@ class AiGenerationDashboard extends Page implements HasForms
 
                         Select::make('model')
                             ->label($isAr ? 'الموديل (Model)' : 'Model')
-                            ->options(function ($get) {
-                                $providerName = $get('provider');
-                                if (!$providerName) return [];
-                                return config("ai.models.{$providerName}", []);
-                            })
+                            ->options(fn ($get) => \App\Services\Ai\ModelCatalog::optionsForProvider($get('provider')))
                             ->required(),
 
                         Textarea::make('secondary_keywords_input')

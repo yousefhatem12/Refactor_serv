@@ -57,31 +57,68 @@ class OpenAiProvider implements AiProviderInterface
         return $decoded;
     }
 
-    public function listSupportedModels(): array
+    /**
+     * Model ids that answer /v1/models but cannot serve chat completions.
+     */
+    private const NON_CHAT_PATTERNS = [
+        'embedding', 'whisper', 'tts', 'dall-e', 'moderation', 'audio',
+        'image', 'realtime', 'transcribe', 'search', 'similarity', 'edit',
+        'instruct', 'davinci', 'babbage', 'curie', 'ada', 'codex',
+    ];
+
+    public function listModels(string $token): array
     {
-        return [
-            'gpt-4o' => 'GPT-4o (Default)',
-            'gpt-4o-mini' => 'GPT-4o-mini',
-            'gpt-4' => 'GPT-4 (Legacy)',
-        ];
+        $response = Http::withHeaders([
+            'Authorization' => "Bearer {$token}",
+        ])
+        ->timeout(15)
+        ->get('https://api.openai.com/v1/models');
+
+        if ($response->failed()) {
+            $excerpt = substr($response->body(), 0, 500);
+            throw new \Exception("OpenAI model listing failed: {$response->status()} - {$excerpt}");
+        }
+
+        $models = [];
+        foreach ($response->json('data') ?? [] as $model) {
+            $id = $model['id'] ?? null;
+            if (!$id || !self::isChatModel($id)) {
+                continue;
+            }
+            $models[$id] = $id;
+        }
+
+        krsort($models);
+
+        return $models;
+    }
+
+    private static function isChatModel(string $id): bool
+    {
+        if (!preg_match('/^(gpt-|o\d|chatgpt-)/i', $id)) {
+            return false;
+        }
+
+        foreach (self::NON_CHAT_PATTERNS as $pattern) {
+            if (str_contains($id, $pattern)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public function testConnection(string $token): bool
     {
         try {
-            $response = Http::withHeaders([
+            // Listing models validates the key without burning completion tokens
+            // and without depending on a model name that may have been retired.
+            return Http::withHeaders([
                 'Authorization' => "Bearer {$token}",
             ])
             ->timeout(10)
-            ->post('https://api.openai.com/v1/chat/completions', [
-                'model' => 'gpt-4o-mini',
-                'messages' => [
-                    ['role' => 'user', 'content' => 'Ping']
-                ],
-                'max_tokens' => 5,
-            ]);
-
-            return $response->successful();
+            ->get('https://api.openai.com/v1/models')
+            ->successful();
         } catch (\Throwable $e) {
             Log::warning("OpenAI Connection test error: " . $e->getMessage());
             return false;
