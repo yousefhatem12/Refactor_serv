@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Pages\AiGenerationHistory;
 use App\Filament\Resources\PageBuilderResource;
 use App\Jobs\GenerateAiPageJob;
 use App\Models\AiCredential;
@@ -364,7 +365,7 @@ class AiPageBuilder extends Page implements HasForms
             ->success()
             ->send();
 
-        $this->redirect(PageBuilderResource::getUrl('index'));
+        $this->redirect(AiGenerationHistory::getUrl());
     }
 
     protected function getFormActions(): array
