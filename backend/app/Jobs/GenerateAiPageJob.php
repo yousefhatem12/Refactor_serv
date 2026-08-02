@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\AiCredential;
 use App\Models\AiGenerationRequest;
+use App\Models\NavLink;
 use App\Models\Page;
 use App\Models\Service;
 use App\Models\User;
@@ -134,6 +135,11 @@ class GenerateAiPageJob implements ShouldQueue
                 'error_message' => null,
             ]);
 
+            // Auto-add to navigation if a placement was chosen
+            if ($autoPublish && !empty($brief['nav_placement_parent_id'])) {
+                self::createNavLink($page, (int) $brief['nav_placement_parent_id']);
+            }
+
             self::notifyCreator($page, $autoPublish, false);
         } catch (\Throwable $exception) {
             $freshMetadata = is_array($page->fresh()->ai_metadata) ? $page->fresh()->ai_metadata : $metadata;
@@ -192,6 +198,35 @@ class GenerateAiPageJob implements ShouldQueue
             $candidate = $base . '-' . $suffix++;
         }
         return $candidate;
+    }
+
+    private static function createNavLink(Page $page, int $parentId): void
+    {
+        $parent = NavLink::find($parentId);
+        if (!$parent) {
+            return;
+        }
+
+        // Avoid duplicate nav links for the same slug
+        $url = '/' . ltrim($page->slug, '/');
+        $alreadyExists = NavLink::where('url', $url)->where('parent_id', $parentId)->exists();
+        if ($alreadyExists) {
+            return;
+        }
+
+        $title = is_array($page->title) ? $page->title : ['en' => (string) $page->title, 'ar' => (string) $page->title];
+        $maxSort = NavLink::where('parent_id', $parentId)->max('sort_order') ?? 0;
+
+        NavLink::create([
+            'label'      => [
+                'en' => $title['en'] ?? $title['ar'] ?? $page->slug,
+                'ar' => $title['ar'] ?? $title['en'] ?? $page->slug,
+            ],
+            'url'        => $url,
+            'parent_id'  => $parentId,
+            'sort_order' => $maxSort + 1,
+            'is_active'  => true,
+        ]);
     }
 
     private static function localizedText(mixed $value): string

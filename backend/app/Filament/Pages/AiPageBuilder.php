@@ -7,6 +7,7 @@ use App\Filament\Resources\PageBuilderResource;
 use App\Jobs\GenerateAiPageJob;
 use App\Models\AiCredential;
 use App\Models\AiGenerationRequest;
+use App\Models\NavLink;
 use App\Models\Page as DynamicPage;
 use App\Models\Service;
 use App\Services\Ai\ArabicDialectCatalog;
@@ -69,6 +70,7 @@ class AiPageBuilder extends Page implements HasForms
             'model' => $credential?->default_model,
             'creativity' => 'balanced',
             'auto_publish' => false,
+            'nav_placement' => null,
         ]);
     }
 
@@ -244,7 +246,31 @@ class AiPageBuilder extends Page implements HasForms
                     Toggle::make('auto_publish')
                         ->label($isAr ? 'نشر الصفحة تلقائيًا بعد نجاحها' : 'Auto publish after successful generation')
                         ->helperText($isAr ? 'مغلق افتراضيًا. الأفضل مراجعة الصفحة أولًا من Dynamic Pages.' : 'Disabled by default. Reviewing the draft in Dynamic Pages is recommended.')
-                        ->default(false),
+                        ->default(false)
+                        ->live()
+                        ->columnSpanFull(),
+
+                    Select::make('nav_placement')
+                        ->label($isAr ? 'إضافة الصفحة إلى القائمة تحت' : 'Add page to navigation under')
+                        ->helperText($isAr
+                            ? 'اختر العنصر الأب في القائمة الذي ستظهر الصفحة تحته. يُطبَّق فقط عند التفعيل.'
+                            : 'Choose the parent nav item this page should appear under. Only applied when auto-publish is on.')
+                        ->options(function () use ($isAr): array {
+                            $locale = $isAr ? 'ar' : 'en';
+                            $none = [$isAr ? '— لا تضيف للقائمة —' : '— Do not add to nav —'];
+                            $parents = NavLink::whereNull('parent_id')
+                                ->where('is_active', true)
+                                ->orderBy('sort_order')
+                                ->get()
+                                ->mapWithKeys(fn (NavLink $link): array => [
+                                    $link->id => ($link->label[$locale] ?? $link->label['en'] ?? $link->label['ar'] ?? '#' . $link->id),
+                                ])
+                                ->all();
+                            return ['' => ($isAr ? '— لا تضيف للقائمة —' : '— Do not add to nav —')] + $parents;
+                        })
+                        ->placeholder($isAr ? 'اختر موضع الصفحة في القائمة' : 'Select nav placement')
+                        ->visible(fn ($get) => (bool) $get('auto_publish'))
+                        ->columnSpanFull(),
                 ]),
         ])->statePath('data');
     }
@@ -295,6 +321,7 @@ class AiPageBuilder extends Page implements HasForms
             'must_include' => trim((string) ($state['must_include'] ?? '')),
             'verified_facts' => trim((string) ($state['verified_facts'] ?? '')),
             'auto_publish' => (bool) ($state['auto_publish'] ?? false),
+            'nav_placement_parent_id' => !empty($state['nav_placement']) ? (int) $state['nav_placement'] : null,
             'temperature' => $temperature,
         ];
         $baseSlug = Str::slug((string) ($state['slug_hint'] ?? ''))
