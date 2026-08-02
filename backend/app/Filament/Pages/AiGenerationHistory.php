@@ -81,6 +81,22 @@ class AiGenerationHistory extends Page implements HasTable
                     ->label($isAr ? 'الحالة' : 'Status')
                     ->badge()
                     ->getStateUsing(function ($record) use ($isAr) {
+                        if ($record->status === 'completed') {
+                            if ($record->generation_mode === 'ai_page') {
+                                // Check if the linked page is published
+                                if ($record->page_id && \App\Models\Page::where('id', $record->page_id)->where('is_published', true)->exists()) {
+                                    return $isAr ? 'منشور' : 'Published';
+                                }
+                            } else {
+                                $allPublished = $record->items()
+                                    ->where('status', 'completed')
+                                    ->whereHas('post', fn ($q) => $q->where('is_published', false))
+                                    ->doesntExist();
+                                if ($allPublished && $record->items()->where('status', 'completed')->exists()) {
+                                    return $isAr ? 'منشور' : 'Published';
+                                }
+                            }
+                        }
                         return match ($record->status) {
                             'pending' => $isAr ? 'قيد الانتظار' : 'Queued',
                             'planning' => $isAr ? 'جاري تخطيط العنقود' : 'Planning Cluster',
@@ -94,17 +110,34 @@ class AiGenerationHistory extends Page implements HasTable
                             default => $record->status
                         };
                     })
-                    ->color(fn ($record) => match ($record->status) {
-                        'completed' => 'success',
-                        'generating' => 'warning',
-                        'finalizing' => 'info',
-                        'pending' => 'gray',
-                        'planning' => 'info',
-                        'failed' => 'danger',
-                        'partially_completed' => 'info',
-                        'cancelled' => 'danger',
-                        'repairing' => 'warning',
-                        default => 'gray'
+                    ->color(function ($record) {
+                        if ($record->status === 'completed') {
+                            if ($record->generation_mode === 'ai_page') {
+                                if ($record->page_id && \App\Models\Page::where('id', $record->page_id)->where('is_published', true)->exists()) {
+                                    return 'primary';
+                                }
+                            } else {
+                                $allPublished = $record->items()
+                                    ->where('status', 'completed')
+                                    ->whereHas('post', fn ($q) => $q->where('is_published', false))
+                                    ->doesntExist();
+                                if ($allPublished && $record->items()->where('status', 'completed')->exists()) {
+                                    return 'primary';
+                                }
+                            }
+                        }
+                        return match ($record->status) {
+                            'completed' => 'success',
+                            'generating' => 'warning',
+                            'finalizing' => 'info',
+                            'pending' => 'gray',
+                            'planning' => 'info',
+                            'failed' => 'danger',
+                            'partially_completed' => 'info',
+                            'cancelled' => 'danger',
+                            'repairing' => 'warning',
+                            default => 'gray'
+                        };
                     }),
 
                 Tables\Columns\TextColumn::make('progress')
