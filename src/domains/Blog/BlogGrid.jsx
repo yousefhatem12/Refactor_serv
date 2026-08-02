@@ -1,10 +1,11 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { fetchAPI } from "@/lib/api";
+import { fetchAPI, getMediaUrl } from "@/lib/api";
 import { useLanguage } from "@/app/context/LanguageContext";
+import { useSettings } from "@/app/context/SettingsContext";
 
 // Client-side cache store to make tab/page switching instant
 const blogCache = {};
@@ -38,8 +39,14 @@ const itemVariants = {
   }
 };
 
-const BlogCard = ({ post, t, language, categoryMap }) => {
+const BlogCard = ({ post, t, language, categoryMap, siteLogo }) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const initialImg = post.image ? getMediaUrl(post.image) : siteLogo;
+  const [imgSrc, setImgSrc] = useState(initialImg);
+
+  useEffect(() => {
+    setImgSrc(post.image ? getMediaUrl(post.image) : siteLogo);
+  }, [post.image, siteLogo]);
 
   return (
     <motion.div
@@ -47,17 +54,18 @@ const BlogCard = ({ post, t, language, categoryMap }) => {
       variants={itemVariants}
     >
       <Link href={`/blog/${post.slug || post.id}`} prefetch={false} className="group cursor-pointer flex flex-col h-full">
-        <div className="relative w-full h-[220px] rounded-lg overflow-hidden mb-4 bg-gray-800/50 border border-white/5">
+        <div className="relative w-full h-[220px] rounded-lg overflow-hidden mb-4 bg-gray-800/50 border border-white/5 flex items-center justify-center">
           {!isImageLoaded && (
             <div className="absolute inset-0 bg-white/5 animate-pulse z-0" />
           )}
           <Image
-            src={post.image || "/placeholder.webp"}
+            src={imgSrc}
             alt={post.title}
             fill
-            className={`object-cover transition-all duration-700 group-hover:scale-105 ${isImageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
-              }`}
+            className={`transition-all duration-700 group-hover:scale-105 ${isImageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
+              } ${imgSrc === siteLogo ? "object-contain p-4" : "object-cover"}`}
             onLoad={() => setIsImageLoaded(true)}
+            onError={() => setImgSrc(siteLogo)}
           />
         </div>
         <div className="flex items-center gap-2 mb-2">
@@ -81,6 +89,11 @@ const BlogCard = ({ post, t, language, categoryMap }) => {
 
 const BlogGrid = () => {
   const { t, language } = useLanguage();
+  const settings = useSettings();
+  const siteLogo = settings?.site_logo
+    ? getMediaUrl(settings.site_logo)
+    : "/logo.svg";
+
   const [activeTab, setActiveTab] = useState("ALL");
   const [categories, setCategories] = useState([]);
   const [categoryMap, setCategoryMap] = useState({});
@@ -88,6 +101,28 @@ const BlogGrid = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const sentinelRef = useRef(null);
+
+  useEffect(() => {
+    if (!hasMore || loading) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setCurrentPage((prev) => prev + 1);
+        }
+      },
+      { rootMargin: "200px" }
+    );
+
+    const el = sentinelRef.current;
+    if (el) observer.observe(el);
+
+    return () => {
+      if (el) observer.unobserve(el);
+    };
+  }, [hasMore, loading]);
 
   // Fetch categories dynamically
   useEffect(() => {
@@ -217,6 +252,7 @@ const BlogGrid = () => {
                   t={t}
                   language={language}
                   categoryMap={categoryMap}
+                  siteLogo={siteLogo}
                 />
               ))}
               {loading && [1, 2, 3].map((i) => (
@@ -267,29 +303,11 @@ const BlogGrid = () => {
         </AnimatePresence>
       </motion.div>
 
-      {/* Load More Button */}
+      {/* Infinite Scroll Sentinel */}
       {hasMore && (
-        <motion.div layout className="flex justify-center mt-8">
-          <button
-            onClick={() => setCurrentPage((prev) => prev + 1)}
-            disabled={loading}
-            className="px-8 py-3 rounded-full border border-gray-500 text-gray-300 hover:bg-white/10 transition-colors flex items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? (
-              <>
-                <span className="w-4 h-4   border-2 border-gray-300 border-t-transparent rounded-full animate-spin"></span>
-                {t("loading")}
-              </>
-            ) : (
-              <>
-                {t("loadMore")}
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`${language === 'ar' ? 'rotate-180' : ''}`}>
-                  <path d="m9 18 6-6-6-6" />
-                </svg>
-              </>
-            )}
-          </button>
-        </motion.div>
+        <div ref={sentinelRef} className="w-full h-16 flex items-center justify-center mt-8">
+          <span className="w-6 h-6 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></span>
+        </div>
       )}
     </section>
   );

@@ -163,6 +163,41 @@ const OnlineWebsite = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScroll = () => {
+    if (sliderRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
+      const maxScroll = scrollWidth - clientWidth;
+      
+      if (maxScroll <= 0) {
+        setCanScrollLeft(false);
+        setCanScrollRight(false);
+        return;
+      }
+
+      const isRtl = language === "ar";
+      const currentScroll = Math.abs(scrollLeft);
+      const atStart = currentScroll < 10;
+      const atEnd = currentScroll > maxScroll - 10;
+
+      if (isRtl) {
+        setCanScrollLeft(!atEnd);
+        setCanScrollRight(!atStart);
+      } else {
+        setCanScrollLeft(!atStart);
+        setCanScrollRight(!atEnd);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (!isLoading && productsList.length > 0) {
+      setTimeout(checkScroll, 100);
+    }
+  }, [productsList, isLoading, language]);
+
   // Fetch categories dynamically on mount
   useEffect(() => {
     // Generate stars client-side only to avoid SSR hydration mismatch
@@ -267,12 +302,14 @@ const OnlineWebsite = () => {
   const scrollLeft = () => {
     if (sliderRef.current) {
       sliderRef.current.scrollBy({ left: -320, behavior: "smooth" });
+      setTimeout(checkScroll, 300);
     }
   };
 
   const scrollRight = () => {
     if (sliderRef.current) {
       sliderRef.current.scrollBy({ left: 320, behavior: "smooth" });
+      setTimeout(checkScroll, 300);
     }
   };
 
@@ -385,7 +422,12 @@ const OnlineWebsite = () => {
         {/* Navigation Arrows */}
         <button
           onClick={scrollLeft}
-          className="absolute left-2  z-30 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-[#0a0a0f]/80 backdrop-blur-md border border-white/10 text-white opacity-100  transition-all duration-300 hover:bg-[#FF8A00] hover:border-[#FF8A00] hover:scale-110 shadow-[0_0_20px_rgba(0,0,0,0.5)] cursor-pointer"
+          disabled={!canScrollLeft}
+          className={`absolute left-2 z-30 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-[#0a0a0f]/80 backdrop-blur-md border border-white/10 text-white transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)] ${
+            canScrollLeft
+              ? "opacity-100 hover:bg-[#FF8A00] hover:border-[#FF8A00] hover:scale-110 cursor-pointer"
+              : "opacity-30 cursor-not-allowed"
+          }`}
           aria-label="Scroll Left"
         >
           <svg
@@ -405,7 +447,12 @@ const OnlineWebsite = () => {
 
         <button
           onClick={scrollRight}
-          className="absolute right-2 lg:-right-6 z-30 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-[#0a0a0f]/80 backdrop-blur-md border border-white/10 text-white opacity-100  transition-all duration-300 hover:bg-[#FF8A00] hover:border-[#FF8A00] hover:scale-110 shadow-[0_0_20px_rgba(0,0,0,0.5)] cursor-pointer"
+          disabled={!canScrollRight}
+          className={`absolute right-2 lg:-right-6 z-30 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-[#0a0a0f]/80 backdrop-blur-md border border-white/10 text-white transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)] ${
+            canScrollRight
+              ? "opacity-100 hover:bg-[#FF8A00] hover:border-[#FF8A00] hover:scale-110 cursor-pointer"
+              : "opacity-30 cursor-not-allowed"
+          }`}
           aria-label="Scroll Right"
         >
           <svg
@@ -434,6 +481,7 @@ const OnlineWebsite = () => {
         >
           <div
             ref={sliderRef}
+            onScroll={checkScroll}
             className="w-full overflow-x-auto pb-16  scrollbar-hide snap-x snap-mandatory flex gap-8"
             style={{ msOverflowStyle: "none", scrollbarWidth: "none" }}
           >

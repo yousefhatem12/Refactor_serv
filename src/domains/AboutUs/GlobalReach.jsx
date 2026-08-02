@@ -13,8 +13,8 @@ const locations = [
     name: "Egypt",
     city: "Mansoura",
     details: "Suez canal above Dr.Rami pharmacy",
-    x: 59,
-    y: 42,
+    x: 53.5,
+    y: 45,
   },
 
 ];

@@ -557,7 +557,7 @@ const Navbar = () => {
               <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
             </svg>
             <span className="font-medium tracking-wide">
-              {language === "ar" ? "العربية" : "English"}
+              {language === "ar" ? "English" : "العربية"}
             </span>
           </button>
 
