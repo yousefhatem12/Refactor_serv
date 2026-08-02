@@ -1,3 +1,0 @@
-module.exports=[66213,a=>{"use strict";var b=a.i(72152),c=a.i(49378),d=a.i(5246);async function e(){let a=(await (0,d.headers)()).get("x-locale")||"en",e=await (0,b.getCachedHomeData)(a),f=await (0,b.getCachedSettings)(a),g=await (0,c.getSeoAlternates)();return{title:{absolute:f?.site_title||e?.seo?.title||"Serv5"},description:e?.seo?.description||"Leading company in web development and AI solutions.",alternates:g}}a.s(["default",0,function({children:a}){return a},"generateMetadata",0,e])},2084,a=>{a.n(a.i(66213))}];
-
-//# sourceMappingURL=src_app_%28home%29_layout_jsx_1sd602k._.js.map

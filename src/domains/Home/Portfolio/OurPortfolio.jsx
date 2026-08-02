@@ -6,7 +6,7 @@ import { fetchAPI, getMediaUrl } from "@/lib/api";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
 
-const OurPortfolio = ({ activeCategoryId }) => {
+const OurPortfolio = ({ activeCategoryId, isFeaturedOnly = false }) => {
   const { t, language } = useLanguage();
   const settings = useSettings();
   const siteLogo = settings?.site_logo
@@ -35,10 +35,13 @@ const OurPortfolio = ({ activeCategoryId }) => {
     let isMounted = true;
 
     const categoryQuery = activeCategoryId === "all" ? "all" : activeCategoryId;
+    
+    let apiUrl = `/portfolio?lang=${language}&category=${categoryQuery}&page=${currentPage}&per_page=3`;
+    if (isFeaturedOnly) {
+        apiUrl += `&featured=true`;
+    }
 
-    fetchAPI(
-      `/portfolio?lang=${language}&category=${categoryQuery}&page=${currentPage}&per_page=3`,
-    )
+    fetchAPI(apiUrl)
       .then((res) => {
         if (!isMounted) return;
 

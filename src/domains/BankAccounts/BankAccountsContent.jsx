@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
 import Loading from "@/app/loading";
-import { fetchAPI } from "@/lib/api";
+import { fetchAPI, getMediaUrl } from "@/lib/api";
 import {
   FaCopy,
   FaCheck,
@@ -15,6 +15,9 @@ import {
 const BankAccountsContent = () => {
   const { t, language } = useLanguage();
   const settings = useSettings();
+  const siteLogo = settings?.site_logo
+    ? getMediaUrl(settings.site_logo)
+    : "/logo.svg";
   const [activeTab, setActiveTab] = useState("egypt"); // "egypt" or "ksa"
   const [copiedId, setCopiedId] = useState(null);
   const [methods, setMethods] = useState([]);
@@ -190,7 +193,10 @@ const BankAccountsContent = () => {
                       <div className="flex items-center justify-between mb-8">
                         <div className="w-14 h-14 rounded-xl bg-white p-2.5 flex items-center justify-center shadow-md shadow-black/10 group-hover:scale-105 transition-all duration-300">
                           <img
-                            src={imageUrl}
+                            src={method.image ? getMediaUrl(method.image) : siteLogo}
+                            onError={(e) => {
+                              e.target.src = siteLogo;
+                            }}
                             alt={nameText}
                             className="max-w-full max-h-full object-contain"
                           />

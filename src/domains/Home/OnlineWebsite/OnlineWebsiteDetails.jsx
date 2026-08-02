@@ -151,7 +151,7 @@ const OnlineWebsiteDetails = () => {
         </div>
         {/* Right Content Area */}
         <div className="w-full lg:w-[55%] relative z-20">
-          <OurPortfolio activeCategoryId={activeCategoryId} />
+          <OurPortfolio activeCategoryId={activeCategoryId} isFeaturedOnly={true} />
         </div>
       </div>
 

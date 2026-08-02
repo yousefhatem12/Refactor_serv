@@ -107,7 +107,7 @@ const ContactMap = () => {
         className="w-full lg:w-2/3 h-[250px] md:h-[300px] bg-white rounded-lg overflow-hidden border-2 border-white/20 shadow-2xl relative"
       >
         <iframe
-          src={`https://maps.google.com/maps?q=${searchQuery}&t=&z=13&ie=UTF8&iwloc=&output=embed`}
+          src="https://maps.google.com/maps?q=%D8%B3%D9%8A%D8%B1%D9%81+%D9%81%D8%A7%D9%8A%D9%81+%D9%84%D8%AE%D8%AF%D9%85%D8%A7%D8%AA+%D8%A7%D9%84%D9%88%D9%8A%D8%A8&t=&z=16&ie=UTF8&iwloc=&output=embed"
           width="100%"
           height="100%"
           style={{ border: 0, filter: "opacity(0.9)" }}

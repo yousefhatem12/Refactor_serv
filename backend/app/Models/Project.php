@@ -19,6 +19,7 @@ class Project extends Model
         'client',
         'url',
         'tags',
+        'is_featured',
     ];
 
     protected $casts = [

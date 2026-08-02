@@ -15,16 +15,21 @@ class PortfolioController extends BaseApiController
         $lang = $this->getLang();
         $limit = $request->query('limit');
         $category = $request->query('category');
+        $featured = $request->query('featured');
         $page = $request->query('page');
         $perPage = $request->query('per_page', 9);
 
-        $cacheKey = "portfolio_{$lang}_cat_" . ($category ?: 'all') . "_limit_" . ($limit ?: 'none') . "_page_" . ($page ?: 'none') . "_per_" . $perPage;
+        $cacheKey = "portfolio_{$lang}_cat_" . ($category ?: 'all') . "_feat_" . ($featured ?: 'false') . "_limit_" . ($limit ?: 'none') . "_page_" . ($page ?: 'none') . "_per_" . $perPage;
 
-        $response = Cache::remember($cacheKey, 3600, function () use ($lang, $limit, $category, $page, $perPage) {
+        $response = Cache::remember($cacheKey, 3600, function () use ($lang, $limit, $category, $featured, $page, $perPage) {
             $query = Project::orderBy('id', 'desc');
 
             if ($category && strtolower($category) !== 'all') {
                 $query->where('category', strtolower($category));
+            }
+
+            if ($featured === 'true' || $featured === '1') {
+                $query->where('is_featured', true);
             }
 
             if ($limit) {

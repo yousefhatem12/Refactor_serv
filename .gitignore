@@ -14,7 +14,7 @@
 /coverage
 
 # next.js
-/.next/cache/
+/.next/
 /out/
 
 # production
@@ -39,8 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-.next
 
 # zip files
 *.zip

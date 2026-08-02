@@ -1,8 +1,0 @@
-{
-  "/contact-us/page": "app/contact-us/page.js",
-  "/our-products/page": "app/our-products/page.js",
-  "/our-products/[id]/page": "app/our-products/[id]/page.js",
-  "/services/[slug]/page": "app/services/[slug]/page.js",
-  "/_not-found/page": "app/_not-found/page.js",
-  "/(home)/page": "app/(home)/page.js"
-}

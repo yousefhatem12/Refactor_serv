@@ -2,12 +2,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import Image from "next/image";
 import { useLanguage } from "@/app/context/LanguageContext";
-import { fetchAPI } from "@/lib/api";
+import { useSettings } from "@/app/context/SettingsContext";
+import { fetchAPI, getMediaUrl } from "@/lib/api";
 
 const LatestBlogs = () => {
   const { language, t } = useLanguage();
+  const settings = useSettings();
+  const siteLogo = settings?.site_logo
+    ? getMediaUrl(settings.site_logo)
+    : "/logo.svg";
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -84,12 +88,15 @@ const LatestBlogs = () => {
             >
               <Link href={`/blog/${blog.id}`} prefetch={false} className="block relative h-[450px] w-full">
                 {/* Background Image */}
-                <Image
-                  src={blog.image || "/placeholder.webp"}
+                <img
+                  src={blog.image ? getMediaUrl(blog.image) : siteLogo}
+                  onError={(e) => {
+                    e.target.src = siteLogo;
+                    e.target.classList.remove("object-cover");
+                    e.target.classList.add("object-contain", "p-12", "bg-gray-800");
+                  }}
                   alt={blog.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className={`absolute inset-0 w-full h-full transition-transform duration-700 group-hover:scale-110 ${!blog.image ? "object-contain p-12 bg-gray-800" : "object-cover"}`}
                 />
 
                 {/* Overlay gradient so text is readable */}

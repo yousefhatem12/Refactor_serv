@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import {
   extractCustomMeta,
   renderCustomHeadCode,
-} from "../src/lib/custom-head";
+} from "../src000/lib/custom-head";
 
 describe("custom header code", () => {
   it("renders verification and analytics tags without a body wrapper", () => {

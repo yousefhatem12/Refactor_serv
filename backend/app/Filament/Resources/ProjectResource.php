@@ -64,6 +64,9 @@ class ProjectResource extends Resource
                         TextInput::make('url')
                             ->url()
                             ->nullable(),
+                        \Filament\Forms\Components\Toggle::make('is_featured')
+                            ->label('Feature on Homepage')
+                            ->default(false),
                         \Filament\Forms\Components\TagsInput::make('tags')
                             ->label('Technologies/Tags')
                             ->placeholder('Add a tag...')
@@ -87,6 +90,10 @@ class ProjectResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('client')
                     ->searchable()
+                    ->sortable(),
+                Tables\Columns\IconColumn::make('is_featured')
+                    ->boolean()
+                    ->label('Featured')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

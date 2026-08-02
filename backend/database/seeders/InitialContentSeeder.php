@@ -507,5 +507,13 @@ class InitialContentSeeder extends Seeder
                 'value_source' => 'link'
             ]
         );
+        \App\Models\Setting::updateOrCreate(
+            ['key' => 'company_video_url'],
+            [
+                'value' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+                'type' => 'video',
+                'value_source' => 'link'
+            ]
+        );
     }
 }
