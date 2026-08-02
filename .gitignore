@@ -14,9 +14,8 @@
 /coverage
 
 # next.js
-/.next/cache/
+/.next/
 /out/
-# Note: .next folder is committed for cPanel deployment (no build step on server)
 
 # production
 /build
