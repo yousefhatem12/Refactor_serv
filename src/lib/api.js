@@ -77,6 +77,9 @@ export const fetchAPI = async (endpoint, options = {}) => {
   }
 
   const fetchPromise = (async () => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000); // 3-second timeout
+
     try {
       const isFormData =
         typeof FormData !== "undefined" && options.body instanceof FormData;
@@ -96,7 +99,9 @@ export const fetchAPI = async (endpoint, options = {}) => {
         ...options,
         cache: options.cache || "no-store",
         headers,
+        signal: controller.signal,
       });
+      clearTimeout(timeoutId);
       // console.log(
       //   `[fetchAPI] Received response for: ${url.toString()} - Status: ${response.status}`,
       // );
@@ -109,6 +114,7 @@ export const fetchAPI = async (endpoint, options = {}) => {
 
       return await response.json();
     } catch (error) {
+      clearTimeout(timeoutId);
       if (error && (
         error.message?.includes("prerender") || 
         error.message?.includes("headers()") || 
@@ -118,7 +124,7 @@ export const fetchAPI = async (endpoint, options = {}) => {
       )) {
         throw error;
       }
-      console.warn("API connection failed:", error.message);
+      console.warn("API connection failed:", error.name === "AbortError" ? "Timeout" : error.message);
       if (isGet && cacheKey) apiCache.delete(cacheKey); // Don't cache failures
       return null; // Return null so the UI doesn't crash
     }

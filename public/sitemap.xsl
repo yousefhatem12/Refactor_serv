@@ -113,12 +113,14 @@
             border-bottom: 1px solid rgba(255, 138, 0, 0.15);
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            text-align: left;
           }
           td {
             padding: 12px 16px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
             font-size: 13.5px;
             word-break: break-all;
+            text-align: left;
           }
           tr:hover td {
             background: rgba(255, 255, 255, 0.015);
@@ -184,284 +186,328 @@
             Below, the sitemap is organized into clean, scannable categories for human visitors.
           </p>
 
-          <!-- Categorized Counts Summary Card -->
-          <div class="stats-grid">
-            <div class="stat-card">
-              <h3>Total URLs</h3>
-              <p><xsl:value-of select="count(sitemap:urlset/sitemap:url)"/></p>
-            </div>
-            <div class="stat-card">
-              <h3>Static Pages</h3>
-              <p><xsl:value-of select="count(sitemap:urlset/sitemap:url[not(contains(sitemap:loc, '/services/')) and not(contains(sitemap:loc, '/blog/')) and not(contains(sitemap:loc, '/our-products/')) and not(contains(sitemap:loc, '/portfolio/'))])"/></p>
-            </div>
-            <div class="stat-card">
-              <h3>Services</h3>
-              <p><xsl:value-of select="count(sitemap:urlset/sitemap:url[contains(sitemap:loc, '/services/')])"/></p>
-            </div>
-            <div class="stat-card">
-              <h3>Products</h3>
-              <p><xsl:value-of select="count(sitemap:urlset/sitemap:url[contains(sitemap:loc, '/our-products/')])"/></p>
-            </div>
-            <div class="stat-card">
-              <h3>Blogs</h3>
-              <p><xsl:value-of select="count(sitemap:urlset/sitemap:url[contains(sitemap:loc, '/blog/')])"/></p>
-            </div>
-            <div class="stat-card">
-              <h3>Portfolio</h3>
-              <p><xsl:value-of select="count(sitemap:urlset/sitemap:url[contains(sitemap:loc, '/portfolio/')])"/></p>
-            </div>
-          </div>
+          <xsl:choose>
+            <!-- ==================== SITEMAP INDEX ==================== -->
+            <xsl:when test="sitemap:sitemapindex">
+              <p class="description-count" style="font-size: 16px; margin-bottom: 30px; color: #ff8a00; font-weight: 600;">
+                This XML Sitemap contains <strong><xsl:value-of select="count(sitemap:sitemapindex/sitemap:sitemap)"/></strong> sub-sitemaps.
+              </p>
 
-          <!-- SECTION 1: Static Pages -->
-          <xsl:variable name="staticCount" select="count(sitemap:urlset/sitemap:url[not(contains(sitemap:loc, '/services/')) and not(contains(sitemap:loc, '/blog/')) and not(contains(sitemap:loc, '/our-products/')) and not(contains(sitemap:loc, '/portfolio/'))])" />
-          <xsl:if test="$staticCount &gt; 0">
-            <div class="section-title">
-              Main Static Pages
-              <span class="section-count"><xsl:value-of select="$staticCount"/> Pages</span>
-            </div>
-            <table>
-              <thead>
-                <tr>
-                  <th width="50%">URL</th>
-                  <th width="10%">Priority</th>
-                  <th width="15%">Change Freq.</th>
-                  <th width="15%">Last Modified</th>
-                  <th width="10%">Languages</th>
-                </tr>
-              </thead>
-              <tbody>
-                <xsl:for-each select="sitemap:urlset/sitemap:url[not(contains(sitemap:loc, '/services/')) and not(contains(sitemap:loc, '/blog/')) and not(contains(sitemap:loc, '/our-products/')) and not(contains(sitemap:loc, '/portfolio/'))]">
-                  <xsl:sort select="sitemap:priority" order="descending"/>
+              <div class="section-title">
+                Sitemap Files
+                <span class="section-count"><xsl:value-of select="count(sitemap:sitemapindex/sitemap:sitemap)"/> Files</span>
+              </div>
+              <table>
+                <thead>
                   <tr>
-                    <td>
-                      <a href="{sitemap:loc}"><xsl:value-of select="sitemap:loc"/></a>
-                    </td>
-                    <td>
-                      <xsl:variable name="p" select="sitemap:priority"/>
-                      <span>
-                        <xsl:attribute name="class">
-                          <xsl:choose>
-                            <xsl:when test="$p &gt;= 0.8">priority-badge priority-high</xsl:when>
-                            <xsl:when test="$p &gt;= 0.5">priority-badge priority-med</xsl:when>
-                            <xsl:otherwise>priority-badge priority-low</xsl:otherwise>
-                          </xsl:choose>
-                        </xsl:attribute>
-                        <xsl:value-of select="$p"/>
-                      </span>
-                    </td>
-                    <td><xsl:value-of select="sitemap:changefreq"/></td>
-                    <td><xsl:value-of select="substring(sitemap:lastmod, 1, 10)"/></td>
-                    <td>
-                      <xsl:for-each select="xhtml:link[@rel='alternate']">
-                        <span class="badge-lang"><xsl:value-of select="@hreflang"/></span>
-                      </xsl:for-each>
-                    </td>
+                    <th width="70%">Sitemap URL</th>
+                    <th width="30%">Last Modified</th>
                   </tr>
-                </xsl:for-each>
-              </tbody>
-            </table>
-          </xsl:if>
+                </thead>
+                <tbody>
+                  <xsl:for-each select="sitemap:sitemapindex/sitemap:sitemap">
+                    <tr>
+                      <td>
+                        <a href="{sitemap:loc}"><xsl:value-of select="sitemap:loc"/></a>
+                      </td>
+                      <td>
+                        <xsl:value-of select="sitemap:lastmod"/>
+                      </td>
+                    </tr>
+                  </xsl:for-each>
+                </tbody>
+              </table>
+            </xsl:when>
 
-          <!-- SECTION 2: Services -->
-          <xsl:variable name="servicesCount" select="count(sitemap:urlset/sitemap:url[contains(sitemap:loc, '/services/')])" />
-          <xsl:if test="$servicesCount &gt; 0">
-            <div class="section-title">
-              Dynamic Services
-              <span class="section-count"><xsl:value-of select="$servicesCount"/> Services</span>
-            </div>
-            <table>
-              <thead>
-                <tr>
-                  <th width="50%">URL</th>
-                  <th width="10%">Priority</th>
-                  <th width="15%">Change Freq.</th>
-                  <th width="15%">Last Modified</th>
-                  <th width="10%">Languages</th>
-                </tr>
-              </thead>
-              <tbody>
-                <xsl:for-each select="sitemap:urlset/sitemap:url[contains(sitemap:loc, '/services/')]">
-                  <xsl:sort select="sitemap:priority" order="descending"/>
-                  <tr>
-                    <td>
-                      <a href="{sitemap:loc}"><xsl:value-of select="sitemap:loc"/></a>
-                    </td>
-                    <td>
-                      <xsl:variable name="p" select="sitemap:priority"/>
-                      <span>
-                        <xsl:attribute name="class">
-                          <xsl:choose>
-                            <xsl:when test="$p &gt;= 0.8">priority-badge priority-high</xsl:when>
-                            <xsl:when test="$p &gt;= 0.5">priority-badge priority-med</xsl:when>
-                            <xsl:otherwise>priority-badge priority-low</xsl:otherwise>
-                          </xsl:choose>
-                        </xsl:attribute>
-                        <xsl:value-of select="$p"/>
-                      </span>
-                    </td>
-                    <td><xsl:value-of select="sitemap:changefreq"/></td>
-                    <td><xsl:value-of select="substring(sitemap:lastmod, 1, 10)"/></td>
-                    <td>
-                      <xsl:for-each select="xhtml:link[@rel='alternate']">
-                        <span class="badge-lang"><xsl:value-of select="@hreflang"/></span>
-                      </xsl:for-each>
-                    </td>
-                  </tr>
-                </xsl:for-each>
-              </tbody>
-            </table>
-          </xsl:if>
+            <!-- ==================== INDIVIDUAL URLSET ==================== -->
+            <xsl:otherwise>
+              <div style="margin-bottom: 25px;">
+                <a href="/sitemap.xml" style="color: #ff8a00; font-size: 14px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;">← Return to Sitemap Index</a>
+              </div>
+              <p class="description-count" style="font-size: 16px; margin-bottom: 30px; color: #ff8a00; font-weight: 600;">
+                This XML Sitemap contains <strong><xsl:value-of select="count(sitemap:urlset/sitemap:url)"/></strong> URLs.
+              </p>
 
-          <!-- SECTION 3: Products -->
-          <xsl:variable name="productsCount" select="count(sitemap:urlset/sitemap:url[contains(sitemap:loc, '/our-products/')])" />
-          <xsl:if test="$productsCount &gt; 0">
-            <div class="section-title">
-              Dynamic Products
-              <span class="section-count"><xsl:value-of select="$productsCount"/> Products</span>
-            </div>
-            <table>
-              <thead>
-                <tr>
-                  <th width="50%">URL</th>
-                  <th width="10%">Priority</th>
-                  <th width="15%">Change Freq.</th>
-                  <th width="15%">Last Modified</th>
-                  <th width="10%">Languages</th>
-                </tr>
-              </thead>
-              <tbody>
-                <xsl:for-each select="sitemap:urlset/sitemap:url[contains(sitemap:loc, '/our-products/')]">
-                  <xsl:sort select="sitemap:priority" order="descending"/>
-                  <tr>
-                    <td>
-                      <a href="{sitemap:loc}"><xsl:value-of select="sitemap:loc"/></a>
-                    </td>
-                    <td>
-                      <xsl:variable name="p" select="sitemap:priority"/>
-                      <span>
-                        <xsl:attribute name="class">
-                          <xsl:choose>
-                            <xsl:when test="$p &gt;= 0.8">priority-badge priority-high</xsl:when>
-                            <xsl:when test="$p &gt;= 0.5">priority-badge priority-med</xsl:when>
-                            <xsl:otherwise>priority-badge priority-low</xsl:otherwise>
-                          </xsl:choose>
-                        </xsl:attribute>
-                        <xsl:value-of select="$p"/>
-                      </span>
-                    </td>
-                    <td><xsl:value-of select="sitemap:changefreq"/></td>
-                    <td><xsl:value-of select="substring(sitemap:lastmod, 1, 10)"/></td>
-                    <td>
-                      <xsl:for-each select="xhtml:link[@rel='alternate']">
-                        <span class="badge-lang"><xsl:value-of select="@hreflang"/></span>
-                      </xsl:for-each>
-                    </td>
-                  </tr>
-                </xsl:for-each>
-              </tbody>
-            </table>
-          </xsl:if>
+              <!-- Categorized Counts Summary Card -->
+              <div class="stats-grid">
+                <div class="stat-card">
+                  <h3>Total URLs</h3>
+                  <p><xsl:value-of select="count(sitemap:urlset/sitemap:url)"/></p>
+                </div>
+                <div class="stat-card">
+                  <h3>Static Pages</h3>
+                  <p><xsl:value-of select="count(sitemap:urlset/sitemap:url[not(contains(sitemap:loc, '/services/')) and not(contains(sitemap:loc, '/blog/')) and not(contains(sitemap:loc, '/our-products/')) and not(contains(sitemap:loc, '/portfolio/'))])"/></p>
+                </div>
+                <div class="stat-card">
+                  <h3>Services</h3>
+                  <p><xsl:value-of select="count(sitemap:urlset/sitemap:url[contains(sitemap:loc, '/services/')])"/></p>
+                </div>
+                <div class="stat-card">
+                  <h3>Products</h3>
+                  <p><xsl:value-of select="count(sitemap:urlset/sitemap:url[contains(sitemap:loc, '/our-products/')])"/></p>
+                </div>
+                <div class="stat-card">
+                  <h3>Blogs</h3>
+                  <p><xsl:value-of select="count(sitemap:urlset/sitemap:url[contains(sitemap:loc, '/blog/')])"/></p>
+                </div>
+                <div class="stat-card">
+                  <h3>Portfolio</h3>
+                  <p><xsl:value-of select="count(sitemap:urlset/sitemap:url[contains(sitemap:loc, '/portfolio/')])"/></p>
+                </div>
+              </div>
 
-          <!-- SECTION 4: Portfolio -->
-          <xsl:variable name="portfolioCount" select="count(sitemap:urlset/sitemap:url[contains(sitemap:loc, '/portfolio/')])" />
-          <xsl:if test="$portfolioCount &gt; 0">
-            <div class="section-title">
-              Dynamic Projects &amp; Portfolio
-              <span class="section-count"><xsl:value-of select="$portfolioCount"/> Projects</span>
-            </div>
-            <table>
-              <thead>
-                <tr>
-                  <th width="50%">URL</th>
-                  <th width="10%">Priority</th>
-                  <th width="15%">Change Freq.</th>
-                  <th width="15%">Last Modified</th>
-                  <th width="10%">Languages</th>
-                </tr>
-              </thead>
-              <tbody>
-                <xsl:for-each select="sitemap:urlset/sitemap:url[contains(sitemap:loc, '/portfolio/')]">
-                  <xsl:sort select="sitemap:priority" order="descending"/>
-                  <tr>
-                    <td>
-                      <a href="{sitemap:loc}"><xsl:value-of select="sitemap:loc"/></a>
-                    </td>
-                    <td>
-                      <xsl:variable name="p" select="sitemap:priority"/>
-                      <span>
-                        <xsl:attribute name="class">
-                          <xsl:choose>
-                            <xsl:when test="$p &gt;= 0.8">priority-badge priority-high</xsl:when>
-                            <xsl:when test="$p &gt;= 0.5">priority-badge priority-med</xsl:when>
-                            <xsl:otherwise>priority-badge priority-low</xsl:otherwise>
-                          </xsl:choose>
-                        </xsl:attribute>
-                        <xsl:value-of select="$p"/>
-                      </span>
-                    </td>
-                    <td><xsl:value-of select="sitemap:changefreq"/></td>
-                    <td><xsl:value-of select="substring(sitemap:lastmod, 1, 10)"/></td>
-                    <td>
-                      <xsl:for-each select="xhtml:link[@rel='alternate']">
-                        <span class="badge-lang"><xsl:value-of select="@hreflang"/></span>
-                      </xsl:for-each>
-                    </td>
-                  </tr>
-                </xsl:for-each>
-              </tbody>
-            </table>
-          </xsl:if>
+              <!-- SECTION 1: Static Pages -->
+              <xsl:variable name="staticCount" select="count(sitemap:urlset/sitemap:url[not(contains(sitemap:loc, '/services/')) and not(contains(sitemap:loc, '/blog/')) and not(contains(sitemap:loc, '/our-products/')) and not(contains(sitemap:loc, '/portfolio/'))])" />
+              <xsl:if test="$staticCount &gt; 0">
+                <div class="section-title">
+                  Main Static Pages
+                  <span class="section-count"><xsl:value-of select="$staticCount"/> Pages</span>
+                </div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th width="50%">URL</th>
+                      <th width="10%">Priority</th>
+                      <th width="15%">Change Freq.</th>
+                      <th width="15%">Last Modified</th>
+                      <th width="10%">Languages</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <xsl:for-each select="sitemap:urlset/sitemap:url[not(contains(sitemap:loc, '/services/')) and not(contains(sitemap:loc, '/blog/')) and not(contains(sitemap:loc, '/our-products/')) and not(contains(sitemap:loc, '/portfolio/'))]">
+                      <xsl:sort select="sitemap:priority" order="descending"/>
+                      <tr>
+                        <td>
+                          <a href="{sitemap:loc}"><xsl:value-of select="sitemap:loc"/></a>
+                        </td>
+                        <td>
+                          <xsl:variable name="p" select="sitemap:priority"/>
+                          <span>
+                            <xsl:attribute name="class">
+                              <xsl:choose>
+                                <xsl:when test="$p &gt;= 0.8">priority-badge priority-high</xsl:when>
+                                <xsl:when test="$p &gt;= 0.5">priority-badge priority-med</xsl:when>
+                                <xsl:otherwise>priority-badge priority-low</xsl:otherwise>
+                              </xsl:choose>
+                            </xsl:attribute>
+                            <xsl:value-of select="$p"/>
+                          </span>
+                        </td>
+                        <td><xsl:value-of select="sitemap:changefreq"/></td>
+                        <td><xsl:value-of select="substring(sitemap:lastmod, 1, 10)"/></td>
+                        <td>
+                          <xsl:for-each select="xhtml:link[@rel='alternate']">
+                            <span class="badge-lang"><xsl:value-of select="@hreflang"/></span>
+                          </xsl:for-each>
+                        </td>
+                      </tr>
+                    </xsl:for-each>
+                  </tbody>
+                </table>
+              </xsl:if>
 
-          <!-- SECTION 5: Blogs -->
-          <xsl:variable name="blogCount" select="count(sitemap:urlset/sitemap:url[contains(sitemap:loc, '/blog/')])" />
-          <xsl:if test="$blogCount &gt; 0">
-            <div class="section-title">
-              Dynamic Blog Posts
-              <span class="section-count"><xsl:value-of select="$blogCount"/> Articles</span>
-            </div>
-            <table>
-              <thead>
-                <tr>
-                  <th width="50%">URL</th>
-                  <th width="10%">Priority</th>
-                  <th width="15%">Change Freq.</th>
-                  <th width="15%">Last Modified</th>
-                  <th width="10%">Languages</th>
-                </tr>
-              </thead>
-              <tbody>
-                <xsl:for-each select="sitemap:urlset/sitemap:url[contains(sitemap:loc, '/blog/')]">
-                  <xsl:sort select="sitemap:priority" order="descending"/>
-                  <tr>
-                    <td>
-                      <a href="{sitemap:loc}"><xsl:value-of select="sitemap:loc"/></a>
-                    </td>
-                    <td>
-                      <xsl:variable name="p" select="sitemap:priority"/>
-                      <span>
-                        <xsl:attribute name="class">
-                          <xsl:choose>
-                            <xsl:when test="$p &gt;= 0.8">priority-badge priority-high</xsl:when>
-                            <xsl:when test="$p &gt;= 0.5">priority-badge priority-med</xsl:when>
-                            <xsl:otherwise>priority-badge priority-low</xsl:otherwise>
-                          </xsl:choose>
-                        </xsl:attribute>
-                        <xsl:value-of select="$p"/>
-                      </span>
-                    </td>
-                    <td><xsl:value-of select="sitemap:changefreq"/></td>
-                    <td><xsl:value-of select="substring(sitemap:lastmod, 1, 10)"/></td>
-                    <td>
-                      <xsl:for-each select="xhtml:link[@rel='alternate']">
-                        <span class="badge-lang"><xsl:value-of select="@hreflang"/></span>
-                      </xsl:for-each>
-                    </td>
-                  </tr>
-                </xsl:for-each>
-              </tbody>
-            </table>
-          </xsl:if>
-          
+              <!-- SECTION 2: Services -->
+              <xsl:variable name="servicesCount" select="count(sitemap:urlset/sitemap:url[contains(sitemap:loc, '/services/')])" />
+              <xsl:if test="$servicesCount &gt; 0">
+                <div class="section-title">
+                  Dynamic Services
+                  <span class="section-count"><xsl:value-of select="$servicesCount"/> Services</span>
+                </div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th width="50%">URL</th>
+                      <th width="10%">Priority</th>
+                      <th width="15%">Change Freq.</th>
+                      <th width="15%">Last Modified</th>
+                      <th width="10%">Languages</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <xsl:for-each select="sitemap:urlset/sitemap:url[contains(sitemap:loc, '/services/')]">
+                      <xsl:sort select="sitemap:priority" order="descending"/>
+                      <tr>
+                        <td>
+                          <a href="{sitemap:loc}"><xsl:value-of select="sitemap:loc"/></a>
+                        </td>
+                        <td>
+                          <xsl:variable name="p" select="sitemap:priority"/>
+                          <span>
+                            <xsl:attribute name="class">
+                              <xsl:choose>
+                                <xsl:when test="$p &gt;= 0.8">priority-badge priority-high</xsl:when>
+                                <xsl:when test="$p &gt;= 0.5">priority-badge priority-med</xsl:when>
+                                <xsl:otherwise>priority-badge priority-low</xsl:otherwise>
+                              </xsl:choose>
+                            </xsl:attribute>
+                            <xsl:value-of select="$p"/>
+                          </span>
+                        </td>
+                        <td><xsl:value-of select="sitemap:changefreq"/></td>
+                        <td><xsl:value-of select="substring(sitemap:lastmod, 1, 10)"/></td>
+                        <td>
+                          <xsl:for-each select="xhtml:link[@rel='alternate']">
+                            <span class="badge-lang"><xsl:value-of select="@hreflang"/></span>
+                          </xsl:for-each>
+                        </td>
+                      </tr>
+                    </xsl:for-each>
+                  </tbody>
+                </table>
+              </xsl:if>
+
+              <!-- SECTION 3: Products -->
+              <xsl:variable name="productsCount" select="count(sitemap:urlset/sitemap:url[contains(sitemap:loc, '/our-products/')])" />
+              <xsl:if test="$productsCount &gt; 0">
+                <div class="section-title">
+                  Dynamic Products
+                  <span class="section-count"><xsl:value-of select="$productsCount"/> Products</span>
+                </div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th width="50%">URL</th>
+                      <th width="10%">Priority</th>
+                      <th width="15%">Change Freq.</th>
+                      <th width="15%">Last Modified</th>
+                      <th width="10%">Languages</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <xsl:for-each select="sitemap:urlset/sitemap:url[contains(sitemap:loc, '/our-products/')]">
+                      <xsl:sort select="sitemap:priority" order="descending"/>
+                      <tr>
+                        <td>
+                          <a href="{sitemap:loc}"><xsl:value-of select="sitemap:loc"/></a>
+                        </td>
+                        <td>
+                          <xsl:variable name="p" select="sitemap:priority"/>
+                          <span>
+                            <xsl:attribute name="class">
+                              <xsl:choose>
+                                <xsl:when test="$p &gt;= 0.8">priority-badge priority-high</xsl:when>
+                                <xsl:when test="$p &gt;= 0.5">priority-badge priority-med</xsl:when>
+                                <xsl:otherwise>priority-badge priority-low</xsl:otherwise>
+                              </xsl:choose>
+                            </xsl:attribute>
+                            <xsl:value-of select="$p"/>
+                          </span>
+                        </td>
+                        <td><xsl:value-of select="sitemap:changefreq"/></td>
+                        <td><xsl:value-of select="substring(sitemap:lastmod, 1, 10)"/></td>
+                        <td>
+                          <xsl:for-each select="xhtml:link[@rel='alternate']">
+                            <span class="badge-lang"><xsl:value-of select="@hreflang"/></span>
+                          </xsl:for-each>
+                        </td>
+                      </tr>
+                    </xsl:for-each>
+                  </tbody>
+                </table>
+              </xsl:if>
+
+              <!-- SECTION 4: Portfolio -->
+              <xsl:variable name="portfolioCount" select="count(sitemap:urlset/sitemap:url[contains(sitemap:loc, '/portfolio/')])" />
+              <xsl:if test="$portfolioCount &gt; 0">
+                <div class="section-title">
+                  Dynamic Projects &amp; Portfolio
+                  <span class="section-count"><xsl:value-of select="$portfolioCount"/> Projects</span>
+                </div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th width="50%">URL</th>
+                      <th width="10%">Priority</th>
+                      <th width="15%">Change Freq.</th>
+                      <th width="15%">Last Modified</th>
+                      <th width="10%">Languages</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <xsl:for-each select="sitemap:urlset/sitemap:url[contains(sitemap:loc, '/portfolio/')]">
+                      <xsl:sort select="sitemap:priority" order="descending"/>
+                      <tr>
+                        <td>
+                          <a href="{sitemap:loc}"><xsl:value-of select="sitemap:loc"/></a>
+                        </td>
+                        <td>
+                          <xsl:variable name="p" select="sitemap:priority"/>
+                          <span>
+                            <xsl:attribute name="class">
+                              <xsl:choose>
+                                <xsl:when test="$p &gt;= 0.8">priority-badge priority-high</xsl:when>
+                                <xsl:when test="$p &gt;= 0.5">priority-badge priority-med</xsl:when>
+                                <xsl:otherwise>priority-badge priority-low</xsl:otherwise>
+                              </xsl:choose>
+                            </xsl:attribute>
+                            <xsl:value-of select="$p"/>
+                          </span>
+                        </td>
+                        <td><xsl:value-of select="sitemap:changefreq"/></td>
+                        <td><xsl:value-of select="substring(sitemap:lastmod, 1, 10)"/></td>
+                        <td>
+                          <xsl:for-each select="xhtml:link[@rel='alternate']">
+                            <span class="badge-lang"><xsl:value-of select="@hreflang"/></span>
+                          </xsl:for-each>
+                        </td>
+                      </tr>
+                    </xsl:for-each>
+                  </tbody>
+                </table>
+              </xsl:if>
+
+              <!-- SECTION 5: Blogs -->
+              <xsl:variable name="blogCount" select="count(sitemap:urlset/sitemap:url[contains(sitemap:loc, '/blog/')])" />
+              <xsl:if test="$blogCount &gt; 0">
+                <div class="section-title">
+                  Dynamic Blog Posts
+                  <span class="section-count"><xsl:value-of select="$blogCount"/> Articles</span>
+                </div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th width="50%">URL</th>
+                      <th width="10%">Priority</th>
+                      <th width="15%">Change Freq.</th>
+                      <th width="15%">Last Modified</th>
+                      <th width="10%">Languages</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <xsl:for-each select="sitemap:urlset/sitemap:url[contains(sitemap:loc, '/blog/')]">
+                      <xsl:sort select="sitemap:priority" order="descending"/>
+                      <tr>
+                        <td>
+                          <a href="{sitemap:loc}"><xsl:value-of select="sitemap:loc"/></a>
+                        </td>
+                        <td>
+                          <xsl:variable name="p" select="sitemap:priority"/>
+                          <span>
+                            <xsl:attribute name="class">
+                              <xsl:choose>
+                                <xsl:when test="$p &gt;= 0.8">priority-badge priority-high</xsl:when>
+                                <xsl:when test="$p &gt;= 0.5">priority-badge priority-med</xsl:when>
+                                <xsl:otherwise>priority-badge priority-low</xsl:otherwise>
+                              </xsl:choose>
+                            </xsl:attribute>
+                            <xsl:value-of select="$p"/>
+                          </span>
+                        </td>
+                        <td><xsl:value-of select="sitemap:changefreq"/></td>
+                        <td><xsl:value-of select="substring(sitemap:lastmod, 1, 10)"/></td>
+                        <td>
+                          <xsl:for-each select="xhtml:link[@rel='alternate']">
+                            <span class="badge-lang"><xsl:value-of select="@hreflang"/></span>
+                          </xsl:for-each>
+                        </td>
+                      </tr>
+                    </xsl:for-each>
+                  </tbody>
+                </table>
+              </xsl:if>
+            </xsl:otherwise>
+          </xsl:choose>
+
           <div class="footer">
             Generated by Serv5 Dynamic XML Sitemap System.
           </div>
