@@ -126,6 +126,7 @@ export default function PortfolioGallery({ data, perPage = 9 }) {
   const [hasMore, setHasMore] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [categoriesLoaded, setCategoriesLoaded] = useState(false);
+  const [fetchTrigger, setFetchTrigger] = useState(0); // forces re-fetch even when page stays 1
 
   const sentinelRef = useRef(null);
 
@@ -149,22 +150,11 @@ export default function PortfolioGallery({ data, perPage = 9 }) {
     };
   }, [hasMore, isLoading]);
 
-  // Render-phase state adjustments to avoid useEffect synchronous state updates
+  // Reset categories cache when language changes
   const [prevLanguage, setPrevLanguage] = useState(language);
   if (language !== prevLanguage) {
     setPrevLanguage(language);
     setCategoriesLoaded(false);
-  }
-
-  const [prevTab, setPrevTab] = useState(activeTab);
-  const [prevPage, setPrevPage] = useState(currentPage);
-  const [prevLang, setPrevLang] = useState(language);
-
-  if (activeTab !== prevTab || currentPage !== prevPage || language !== prevLang) {
-    setPrevTab(activeTab);
-    setPrevPage(currentPage);
-    setPrevLang(language);
-    setIsLoading(true);
   }
 
   // Fetch categories once on mount or when language changes
@@ -180,11 +170,12 @@ export default function PortfolioGallery({ data, perPage = 9 }) {
       });
   }, [language]);
 
-  // Fetch projects dynamically when tab, page, language, or categoriesLoaded changes
+  // Fetch projects dynamically when tab, page, language, categoriesLoaded, or fetchTrigger changes
   useEffect(() => {
     if (!categoriesLoaded) return;
 
     let isMounted = true;
+    setIsLoading(true);
 
     const categoryQuery = activeTab === "all" ? "all" : activeTab;
     const cacheKey = `${language}-${categoryQuery}-${currentPage}-${perPage}`;
@@ -234,6 +225,10 @@ export default function PortfolioGallery({ data, perPage = 9 }) {
             });
           }
           setHasMore(res.has_more);
+        } else {
+          // API returned nothing — clear the list
+          if (currentPage === 1) setPortfolioItems([]);
+          setHasMore(false);
         }
       })
       .catch((err) => console.error("Failed to fetch portfolio projects:", err))
@@ -244,12 +239,19 @@ export default function PortfolioGallery({ data, perPage = 9 }) {
     return () => {
       isMounted = false;
     };
-  }, [activeTab, currentPage, language, categoriesLoaded, perPage]);
+  }, [activeTab, currentPage, language, categoriesLoaded, perPage, fetchTrigger]);
 
   const handleTabChange = (tabId) => {
-    setActiveTab(tabId);
+    if (tabId === activeTab) {
+      // Same tab clicked — force re-fetch by bumping the trigger
+      setFetchTrigger((n) => n + 1);
+      return;
+    }
+    setPortfolioItems([]);
     setCurrentPage(1);
-    setPortfolioItems([]); // Clear previous items immediately to trigger skeleton load loader
+    setHasMore(false);
+    setActiveTab(tabId);
+    setFetchTrigger((n) => n + 1);
   };
 
   const tabs = [
@@ -308,7 +310,7 @@ export default function PortfolioGallery({ data, perPage = 9 }) {
         animate="show"
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 min-h-[300px] content-start"
       >
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence mode="wait">
           {portfolioItems.length > 0 ? (
             <>
               {portfolioItems.map((item) => (

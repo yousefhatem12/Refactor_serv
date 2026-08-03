@@ -46,7 +46,7 @@ export async function generateMetadata() {
   const settings = await getCachedSettings(language);
   const faviconUrl = settings?.site_favicon
     ? getMediaUrl(settings.site_favicon)
-    : "/logo.ico";
+    : "/logo.svg";
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://serv5.com.eg";
   const alternates = await getSeoAlternates();
 

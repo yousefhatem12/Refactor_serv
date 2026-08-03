@@ -168,15 +168,12 @@ const CTA = () => {
       {/* Slide 2: Unlock Innovation (Screenshot Design - Desktop Only) */}
       <div
         ref={slide2Ref}
-        className="hidden md:flex relative md:absolute z-20 md:inset-0 opacity-100 md:opacity-0 flex-col lg:flex-row items-center justify-center gap-12 px-6 md:px-16 lg:px-24"
+        className="hidden md:flex relative md:absolute z-20 md:inset-0 opacity-100 md:opacity-0 flex-col lg:flex-row items-center justify-center gap-0 px-6 md:px-16 lg:px-24"
       >
         {/* Left Side: Content */}
         <div
-          className={`w-full lg:w-1/2 flex flex-col items-center ${
-            language === "ar"
-              ? "lg:items-end lg:text-right"
-              : "lg:items-start lg:text-left"
-          } text-center z-20`}
+          dir={language === "ar" ? "rtl" : "ltr"}
+          className="w-full lg:w-1/2 flex flex-col z-20"
         >
           <h2 className="w-full text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-6 md:mb-8 leading-tight">
             {settings.cta_unlock_power || t("unlockPower")}{" "}
@@ -189,7 +186,7 @@ const CTA = () => {
           <p className="w-full max-w-2xl text-gray-300 text-sm md:text-base lg:text-lg font-medium mb-10">
             {settings.cta_long_desc || t("ctaLongDesc")}
           </p>
-          <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
+          <div className="flex flex-row gap-4 sm:gap-6">
             <button
               onClick={() => router.push("/contact-us")}
               className="bg-[#FF8A00] hover:bg-[#e67e00] text-white px-6 md:px-8 py-2 md:py-3 rounded-lg font-bold text-sm md:text-base transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,138,0,0.3)] cursor-pointer"

@@ -101,12 +101,12 @@ export default function Features() {
     : "/logo.svg";
 
   const [experienceImgSrc, setExperienceImgSrc] = useState(
-    settings?.features_image ? getMediaUrl(settings.features_image) : siteLogo
+    settings?.features_image ? getMediaUrl(settings.features_image) : "/Features/15Y.webp"
   );
 
   useEffect(() => {
     setExperienceImgSrc(
-      settings?.features_image ? getMediaUrl(settings.features_image) : siteLogo
+      settings?.features_image ? getMediaUrl(settings.features_image) : "/Features/15Y.webp"
     );
   }, [settings?.features_image, siteLogo]);
 
@@ -165,8 +165,8 @@ export default function Features() {
               <img
                 src={experienceImgSrc}
                 alt="Who We Are"
-                className={`w-full h-auto relative z-10 drop-shadow-[0_0_25px_rgba(217,139,80,0.4)] ${experienceImgSrc === siteLogo ? "object-contain max-h-[200px]" : "object-cover"}`}
-                onError={() => setExperienceImgSrc(siteLogo)}
+                className={`w-full h-auto relative z-10 drop-shadow-[0_0_25px_rgba(217,139,80,0.4)] ${experienceImgSrc === siteLogo ? "object-contain max-h-[200px]" : "object-contain max-h-[220px] mx-auto"}`}
+                onError={() => setExperienceImgSrc("/Features/15Y.webp")}
               />
             </motion.div>
 
@@ -297,8 +297,8 @@ export default function Features() {
               <img
                 src={experienceImgSrc}
                 alt="Who We Are"
-                className={`w-full h-auto relative z-10 drop-shadow-[0_20px_50px_rgba(217,139,80,0.4)] ${experienceImgSrc === siteLogo ? "object-contain max-h-[350px] p-6 mx-auto" : "object-cover"}`}
-                onError={() => setExperienceImgSrc(siteLogo)}
+                className={`w-full h-auto relative z-10 drop-shadow-[0_20px_50px_rgba(217,139,80,0.4)] ${experienceImgSrc === siteLogo ? "object-contain max-h-[350px] p-6 mx-auto" : "object-contain max-h-[420px] mx-auto"}`}
+                onError={() => setExperienceImgSrc("/Features/15Y.webp")}
               />
             </motion.div>
           </motion.div>

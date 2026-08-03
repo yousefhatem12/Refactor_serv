@@ -199,7 +199,7 @@ const ContactUs = () => {
                     name="name"
                     value={authData.name}
                     onChange={handleAuthChange}
-                    placeholder="Name"
+                    placeholder={isAr ? "الاسم" : "Name"}
                     required
                     className="bg-black/20 border border-white/10 rounded-md p-3 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF8A00] transition-colors"
                   />
@@ -210,7 +210,7 @@ const ContactUs = () => {
                   name="email"
                   value={authData.email}
                   onChange={handleAuthChange}
-                  placeholder="Email"
+                  placeholder={isAr ? "البريد الإلكتروني" : "Email"}
                   required
                   className="bg-black/20 border border-white/10 rounded-md p-3 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF8A00] transition-colors"
                 />
@@ -221,7 +221,7 @@ const ContactUs = () => {
                     name="password"
                     value={authData.password}
                     onChange={handleAuthChange}
-                    placeholder="Password"
+                    placeholder={isAr ? "كلمة المرور" : "Password"}
                     required
                     className="w-full bg-black/20 border border-white/10 rounded-md p-3 pl-3 pr-12 rtl:pr-3 rtl:pl-12 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF8A00] transition-colors"
                   />
@@ -250,7 +250,7 @@ const ContactUs = () => {
                       name="password_confirmation"
                       value={authData.password_confirmation}
                       onChange={handleAuthChange}
-                      placeholder="Confirm Password"
+                      placeholder={isAr ? "تأكيد كلمة المرور" : "Confirm Password"}
                       required
                       className="w-full bg-black/20 border border-white/10 rounded-md p-3 pl-3 pr-12 rtl:pr-3 rtl:pl-12 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF8A00] transition-colors"
                     />
@@ -293,7 +293,7 @@ const ContactUs = () => {
             >
               <div className="flex justify-between items-center bg-black/20 p-3 rounded-md border border-white/5 mb-2">
                 <p className="text-gray-400 text-sm">
-                  Welcome,{" "}
+                  {isAr ? "مرحباً،" : "Welcome,"}{" "}
                   <span className="text-white font-bold">{user.name}</span>
                 </p>
                 <button
@@ -301,7 +301,7 @@ const ContactUs = () => {
                   onClick={() => window.location.reload()}
                   className="text-xs text-[#FF8A00] hover:underline"
                 >
-                  Logout
+                  {isAr ? "تسجيل الخروج" : "Logout"}
                 </button>
               </div>
 

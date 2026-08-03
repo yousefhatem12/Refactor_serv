@@ -102,12 +102,44 @@ const ContactInfo = ({ data }) => {
         {/* Flags Section */}
         {(() => {
           const branches = settings.site_branches || [
-            { flag: "🇪🇬", name_en: "Egypt", name_ar: "مصر", is_active: true },
-            { flag: "🇸🇦", name_en: "Saudi Arabia", name_ar: "المملكة العربية السعودية", is_active: false },
-            { flag: "🇰🇼", name_en: "Kuwait", name_ar: "الكويت", is_active: false }
+            { flag: "eg", name_en: "Egypt", name_ar: "مصر", is_active: true },
+            { flag: "sa", name_en: "Saudi Arabia", name_ar: "السعودية", is_active: false },
+            { flag: "kw", name_en: "Kuwait", name_ar: "الكويت", is_active: false }
           ];
           const getBranchName = (branch) => {
-            return language === 'ar' ? (branch.name_ar || branch.flag) : (branch.name_en || branch.flag);
+            return language === 'ar'
+              ? (branch.name_ar || branch.name || branch.flag)
+              : (branch.name_en || branch.name || branch.flag);
+          };
+          // Convert flag emoji (🇪🇬) → ISO code (eg) using Regional Indicator Symbols
+          const emojiToCode = (str) => {
+            if (!str) return null;
+            const chars = [...str]; // spread handles multi-codepoint emoji correctly
+            if (chars.length === 2) {
+              const c0 = chars[0].codePointAt(0);
+              const c1 = chars[1].codePointAt(0);
+              if (c0 >= 0x1F1E6 && c0 <= 0x1F1FF && c1 >= 0x1F1E6 && c1 <= 0x1F1FF) {
+                return (
+                  String.fromCharCode(c0 - 0x1F1E6 + 65) +
+                  String.fromCharCode(c1 - 0x1F1E6 + 65)
+                ).toLowerCase();
+              }
+            }
+            return null;
+          };
+          const getFlagSrc = (branch) => {
+            const raw = branch.flag || "";
+            // Support: 2-letter ISO code ("eg"), emoji flag ("🇪🇬"), or full URL
+            const code = raw.length === 2
+              ? raw.toLowerCase()
+              : emojiToCode(raw);
+            return code
+              ? `https://flagcdn.com/w80/${code}.png`
+              : raw; // fallback: use as-is (URL or emoji)
+          };
+          const isImageFlag = (branch) => {
+            const raw = branch.flag || "";
+            return raw.length === 2 || emojiToCode(raw) !== null;
           };
           return (
             <div className="flex items-center gap-4 py-2 border-y border-white/5 my-2">
@@ -116,15 +148,23 @@ const ContactInfo = ({ data }) => {
               </span>
               <div className="flex items-center gap-4">
                 {branches.map((branch, index) => (
-                  <div 
-                    key={index} 
+                  <div
+                    key={index}
                     className={`relative cursor-pointer group ${
                       branch.is_active ? '' : 'opacity-60 hover:opacity-100'
                     }`}
                     title={getBranchName(branch)}
                   >
-                    <div className="w-9 h-9 rounded-full overflow-hidden border border-white/10 relative flex items-center justify-center bg-white shadow-xl group-hover:scale-110 group-hover:border-white/30 transition-all duration-300">
-                      <span className="text-2xl leading-none">{branch.flag}</span>
+                    <div className={`w-10 h-10 rounded-full overflow-hidden border-2 relative flex items-center justify-center bg-white shadow-xl group-hover:scale-110 transition-all duration-300 ${branch.is_active ? 'border-[#FF8A00] shadow-[0_0_12px_rgba(255,138,0,0.5)]' : 'border-white/10 group-hover:border-white/30'}`}>
+                      {isImageFlag(branch) ? (
+                        <img
+                          src={getFlagSrc(branch)}
+                          alt={getBranchName(branch)}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span className="text-xl leading-none">{branch.flag}</span>
+                      )}
                     </div>
                     {/* Active Pin */}
                     {branch.is_active && (
@@ -141,6 +181,10 @@ const ContactInfo = ({ data }) => {
                         </svg>
                       </div>
                     )}
+                    {/* Tooltip */}
+                    <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[10px] px-2 py-0.5 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                      {getBranchName(branch)}
+                    </div>
                   </div>
                 ))}
               </div>

@@ -85,7 +85,11 @@ const OurBlog = () => {
         </motion.div>
 
         <div className="relative">
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-[1.6fr_2.4fr_1fr] gap-[40px] items-start">
+          <div className={`grid gap-[40px] items-start ${
+            trendingItems.length > 0
+              ? "grid-cols-1 lg:grid-cols-2 xl:grid-cols-[1.6fr_2.4fr_1fr]"
+              : "grid-cols-1 lg:grid-cols-2 max-w-5xl mx-auto w-full"
+          }`}>
             {/* Featured Post */}
             {blogPosts.featured && (
               <motion.div
@@ -183,89 +187,91 @@ const OurBlog = () => {
             </div>
 
             {/* Trending Sidebar */}
-            <motion.aside
-              className={`border border-white/10 p-[30px] rounded h-full flex flex-col lg:col-span-2 xl:col-span-1 ${!showAllPosts ? "max-md:hidden" : ""}`}
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <div className="flex justify-between items-center mb-[30px] pb-[15px] border-b border-white/10">
-                <h3 className="text-[1.5rem] font-bold">{t("trending")}</h3>
-                <div className="flex gap-3 text-[#a0a0a0] text-[0.9rem]">
-                  <svg
-                    className="cursor-pointer transition-colors duration-300 hover:text-[#ff8a00]"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-                  </svg>
-                  <svg
-                    className="cursor-pointer transition-colors duration-300 hover:text-[#ff8a00]"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                  </svg>
-                  <svg
-                    className="cursor-pointer transition-colors duration-300 hover:text-[#ff8a00]"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
-                  </svg>
-                  <svg
-                    className="cursor-pointer transition-colors duration-300 hover:text-[#ff8a00]"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                    <rect x="2" y="9" width="4" height="12" />
-                    <circle cx="4" cy="4" r="2" />
-                  </svg>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-[25px] flex-grow">
-                {trendingItems.map((item) => (
-                  <div
-                    key={item.id}
-                    className="pb-[20px] border-b border-white/5 last:border-b-0"
-                  >
-                    <a href={`/blog/${item.id}`}>
-                      <h4 className="text-[1rem] font-semibold leading-[1.4] mb-2 text-[#e0e0e0] cursor-pointer transition-colors duration-300 hover:text-[#ff8a00]">
-                        {item.title}
-                      </h4>
-                    </a>
-                    <p className="text-[0.85rem] text-[#666]">{item.author}</p>
-                  </div>
-                ))}
-              </div>
-
-              <a
-                href="/blog"
-                className="mt-[30px] flex items-center gap-[10px] text-[#e0e0e0] text-[0.9rem] font-semibold underline underline-offset-4 group/viewall"
+            {trendingItems.length > 0 && (
+              <motion.aside
+                className={`border border-white/10 p-[30px] rounded h-full flex flex-col lg:col-span-2 xl:col-span-1 ${!showAllPosts ? "max-md:hidden" : ""}`}
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
               >
-                {t("viewAllArticles")}{" "}
-                <span className="transition-transform duration-300 group-hover/viewall:translate-x-[5px]">
-                  &rarr;
-                </span>
-              </a>
-            </motion.aside>
+                <div className="flex justify-between items-center mb-[30px] pb-[15px] border-b border-white/10">
+                  <h3 className="text-[1.5rem] font-bold">{t("trending")}</h3>
+                  <div className="flex gap-3 text-[#a0a0a0] text-[0.9rem]">
+                    <svg
+                      className="cursor-pointer transition-colors duration-300 hover:text-[#ff8a00]"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                    </svg>
+                    <svg
+                      className="cursor-pointer transition-colors duration-300 hover:text-[#ff8a00]"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                    </svg>
+                    <svg
+                      className="cursor-pointer transition-colors duration-300 hover:text-[#ff8a00]"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
+                    </svg>
+                    <svg
+                      className="cursor-pointer transition-colors duration-300 hover:text-[#ff8a00]"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                      <rect x="2" y="9" width="4" height="12" />
+                      <circle cx="4" cy="4" r="2" />
+                    </svg>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-[25px] flex-grow">
+                  {trendingItems.map((item) => (
+                    <div
+                      key={item.id}
+                      className="pb-[20px] border-b border-white/5 last:border-b-0"
+                    >
+                      <a href={`/blog/${item.id}`}>
+                        <h4 className="text-[1rem] font-semibold leading-[1.4] mb-2 text-[#e0e0e0] cursor-pointer transition-colors duration-300 hover:text-[#ff8a00]">
+                          {item.title}
+                        </h4>
+                      </a>
+                      <p className="text-[0.85rem] text-[#666]">{item.author}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <a
+                  href="/blog"
+                  className="mt-[30px] flex items-center gap-[10px] text-[#e0e0e0] text-[0.9rem] font-semibold underline underline-offset-4 group/viewall"
+                >
+                  {t("viewAllArticles")}{" "}
+                  <span className="transition-transform duration-300 group-hover/viewall:translate-x-[5px]">
+                    &rarr;
+                  </span>
+                </a>
+              </motion.aside>
+            )}
           </div>
         </div>
       </div>

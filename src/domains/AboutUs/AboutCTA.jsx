@@ -34,13 +34,7 @@ const AboutCTA = ({ data }) => {
             onClick={() => router.push("/contact-us")}
             className="bg-white text-black px-5 py-2 md:px-10 md:py-4 rounded-md font-bold text-lg hover:bg-gray-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.2)]"
           >
-            {data?.button_text || t("getAQuote")}
-          </button>
-          <button
-            onClick={() => setIsContactModalOpen(true)}
-            className="border border-white/30 text-white px-5 py-2 md:px-10 md:py-4 rounded-md font-bold text-lg hover:bg-white/10 backdrop-blur-sm transition-colors"
-          >
-            {t("callUs")}
+            {data?.button_text || t("callUs")}
           </button>
         </div>
       </div>

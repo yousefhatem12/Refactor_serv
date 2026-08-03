@@ -180,44 +180,48 @@ export default function BlogPostDetails() {
       <div className="fixed inset-0 bg-[#040A37] -z-20 pointer-events-none" />
 
       <div className="w-full relative z-10 flex flex-col items-center pt-24 text-white">
-        <section className="w-full max-w-7xl mx-auto px-6 lg:px-8 mb-32 relative z-10">
-          <div className="flex flex-col lg:flex-row items-start gap-12 lg:gap-20">
-            <div className="w-full lg:w-1/2">
-              <span className="text-[#FF8A00] font-bold mb-4 block uppercase tracking-widest">
-                {post.category ||
-                  (language === "ar" ? "تكنولوجيا" : "Technology")}
-              </span>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight uppercase">
-                {post.title}
-              </h1>
-              <div className="article-content">
-                <div
-                  className="text-gray-300 text-lg leading-relaxed mb-6 max-w-none font-normal"
-                  dangerouslySetInnerHTML={{ __html: cleanContent }}
-                />
-                <ArticleTable table={post.table} />
-                <ArticleLists lists={post.list} />
-              </div>
-              <div className="flex items-center gap-4 text-sm text-gray-400 mt-6">
-                <span>
-                  {language === "ar" ? "بواسطة" : "By"} {post.author}
-                </span>
-                <span>•</span>
-                <span>{post.published_at}</span>
-              </div>
-            </div>
+        <section className="w-full max-w-5xl mx-auto px-6 lg:px-8 mb-32 relative z-10">
 
-            <div className="w-full lg:w-1/2 relative h-[300px] sm:h-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-2xl border border-white/10 group bg-gray-800 flex items-center justify-center">
-              <Image
-                src={imgSrc || siteLogo}
-                alt={post.title}
-                fill
-                className={imgSrc === siteLogo ? "w-1/2 h-1/2 object-contain group-hover:scale-105 transition-transform duration-700" : "object-cover object-center group-hover:scale-105 transition-transform duration-700"}
-                priority
-                onError={() => setImgSrc(siteLogo)}
-              />
+          {/* Header: category + title + meta */}
+          <div className="mb-8 text-center">
+            <span className="text-[#FF8A00] font-bold mb-3 block uppercase tracking-widest text-sm">
+              {post.category || (language === "ar" ? "تكنولوجيا" : "Technology")}
+            </span>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
+              {post.title}
+            </h1>
+            <div className="flex items-center justify-center gap-4 text-sm text-gray-400">
+              <span>{language === "ar" ? "بواسطة" : "By"} {post.author}</span>
+              <span>•</span>
+              <span>{post.published_at}</span>
             </div>
           </div>
+
+          {/* Image — full width */}
+          <div className="w-full relative h-[280px] sm:h-[380px] md:h-[480px] lg:h-[540px] rounded-2xl overflow-hidden shadow-2xl border border-white/10 group bg-gray-800 flex items-center justify-center mb-12">
+            <Image
+              src={imgSrc || siteLogo}
+              alt={post.title}
+              fill
+              className={imgSrc === siteLogo
+                ? "w-1/2 h-1/2 object-contain group-hover:scale-105 transition-transform duration-700"
+                : "object-cover object-center group-hover:scale-105 transition-transform duration-700"
+              }
+              priority
+              onError={() => setImgSrc(siteLogo)}
+            />
+          </div>
+
+          {/* Content — below the image, full width */}
+          <div className="article-content max-w-none">
+            <div
+              className="text-gray-300 text-lg leading-relaxed mb-6 font-normal prose prose-invert max-w-none"
+              dangerouslySetInnerHTML={{ __html: cleanContent }}
+            />
+            <ArticleTable table={post.table} />
+            <ArticleLists lists={post.list} />
+          </div>
+
         </section>
       </div>
     </main>
