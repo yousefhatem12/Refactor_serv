@@ -1,4 +1,4 @@
-export default async function sitemap() {
+export async function GET() {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://serv5.com.eg";
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.serv5.com.eg/api/v1";
 
@@ -164,6 +164,45 @@ export default async function sitemap() {
     console.error("Error generating sitemap for portfolio:", error);
   }
 
-  return routes;
-}
+  // Generate XML string with stylesheet reference
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+  xml += `<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>\n`;
+  xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n`;
 
+  for (const route of routes) {
+    xml += `  <url>\n`;
+    xml += `    <loc>${route.url}</loc>\n`;
+    
+    if (route.lastModified) {
+      const dateStr = route.lastModified instanceof Date 
+        ? route.lastModified.toISOString() 
+        : new Date(route.lastModified).toISOString();
+      xml += `    <lastmod>${dateStr}</lastmod>\n`;
+    }
+    
+    if (route.changeFrequency) {
+      xml += `    <changefreq>${route.changeFrequency}</changefreq>\n`;
+    }
+    
+    if (route.priority !== undefined) {
+      xml += `    <priority>${route.priority.toFixed(1)}</priority>\n`;
+    }
+    
+    if (route.alternates && route.alternates.languages) {
+      for (const [lang, url] of Object.entries(route.alternates.languages)) {
+        xml += `    <xhtml:link rel="alternate" hreflang="${lang}" href="${url}"/>\n`;
+      }
+    }
+    
+    xml += `  </url>\n`;
+  }
+  
+  xml += `</urlset>`;
+
+  return new Response(xml, {
+    headers: {
+      "Content-Type": "application/xml; charset=utf-8",
+      "Cache-Control": "public, max-age=3600, s-maxage=18000, stale-while-revalidate=86400",
+    },
+  });
+}
