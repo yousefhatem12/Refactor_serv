@@ -4,9 +4,9 @@ export async function GET(request) {
 
   const routes = [];
 
-  // Fetch dynamic blog posts with 3-second timeout
+  // Fetch dynamic blog posts with 10-second timeout
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 3000);
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
 
   try {
     const res = await fetch(`${apiUrl}/blog?lang=en`, { 
