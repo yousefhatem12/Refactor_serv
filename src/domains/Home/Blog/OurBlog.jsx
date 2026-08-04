@@ -81,7 +81,7 @@ const OurBlog = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-[2.2rem] md:text-[2.8rem] lg:text-[3.5rem] font-black text-white relative inline-block after:content-[''] after:absolute after:-bottom-2.5 after:left-0 after:w-[40%] after:h-[6px] after:bg-[#ff8a00] after:rounded-[10px] after:shadow-[0_0_15px_rgba(255,138,0,0.5)]">
-            <span className="text-[#ff8a00]">{settings?.trans_home_blog_first ? (typeof settings.trans_home_blog_first === 'string' ? JSON.parse(settings.trans_home_blog_first)[language] : settings.trans_home_blog_first[language]) : t("our")}</span> {settings?.trans_home_blog_second ? (typeof settings.trans_home_blog_second === 'string' ? JSON.parse(settings.trans_home_blog_second)[language] : settings.trans_home_blog_second[language]) : t("blog")}
+            <span className="text-[#ff8a00]">{settings?.trans_home_blog_first || t("our")}</span> {settings?.trans_home_blog_second || t("blog")}
           </h2>
         </motion.div>
 
