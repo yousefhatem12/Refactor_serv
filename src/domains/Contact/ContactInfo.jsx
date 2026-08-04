@@ -134,7 +134,7 @@ const ContactInfo = ({ data }) => {
               ? raw.toLowerCase()
               : emojiToCode(raw);
             return code
-              ? `https://flagcdn.com/w80/${code}.png`
+              ? `https://flagcdn.com/w160/${code}.png`
               : raw; // fallback: use as-is (URL or emoji)
           };
           const isImageFlag = (branch) => {
@@ -155,7 +155,7 @@ const ContactInfo = ({ data }) => {
                     }`}
                     title={getBranchName(branch)}
                   >
-                    <div className={`w-10 h-10 rounded-full overflow-hidden border-2 relative flex items-center justify-center bg-white shadow-xl group-hover:scale-110 transition-all duration-300 ${branch.is_active ? 'border-[#FF8A00] shadow-[0_0_12px_rgba(255,138,0,0.5)]' : 'border-white/10 group-hover:border-white/30'}`}>
+                    <div className={`w-14 h-10 rounded-xl overflow-hidden border-2 relative flex items-center justify-center bg-white/10 backdrop-blur-sm shadow-xl group-hover:scale-110 transition-all duration-300 ${branch.is_active ? 'border-[#FF8A00] shadow-[0_0_15px_rgba(255,138,0,0.5)]' : 'border-white/10 group-hover:border-white/30'}`}>
                       {isImageFlag(branch) ? (
                         <img
                           src={getFlagSrc(branch)}
@@ -163,12 +163,12 @@ const ContactInfo = ({ data }) => {
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <span className="text-xl leading-none">{branch.flag}</span>
+                        <span className="text-2xl leading-none">{branch.flag}</span>
                       )}
                     </div>
                     {/* Active Pin */}
                     {branch.is_active && (
-                      <div className="absolute -bottom-1 -right-1 bg-[#FF8A00] rounded-full p-1 border border-black shadow-[0_0_10px_rgba(255,138,0,0.8)]">
+                      <div className="absolute -top-1.5 -right-1.5 bg-[#FF8A00] rounded-full p-1 border border-black shadow-[0_0_10px_rgba(255,138,0,0.8)] z-10">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="8"
@@ -177,12 +177,12 @@ const ContactInfo = ({ data }) => {
                           fill="white"
                           stroke="none"
                         >
-                          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5z" />
                         </svg>
                       </div>
                     )}
                     {/* Tooltip */}
-                    <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[10px] px-2 py-0.5 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                    <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[10px] px-2 py-0.5 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-20">
                       {getBranchName(branch)}
                     </div>
                   </div>
