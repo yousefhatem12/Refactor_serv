@@ -181,74 +181,60 @@ const BankAccountsContent = () => {
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.9, y: 30 }}
                     transition={{ duration: 0.4, delay: index * 0.05 }}
-                    whileHover={{ y: -8 }}
-                    style={{ "--shadow-glow": method.shadow }}
-                    className="group relative bg-[#05050f]/80 border border-white/5 hover:border-white/10 rounded-2xl p-6 md:p-8 backdrop-blur-md transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-2xl hover:shadow-[0_15px_35px_var(--shadow-glow)]"
+                    whileHover={{ y: -6 }}
+                    className="group relative bg-white/[0.04] border border-white/10 hover:border-[#FF8A00]/30 rounded-2xl overflow-hidden transition-all duration-300 shadow-xl hover:shadow-[0_10px_30px_rgba(255,138,0,0.1)] flex flex-col"
                   >
-                    {/* Glowing border line */}
-                    <div className={`absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r ${method.brandColor}`} />
+                    {/* Top accent line */}
+                    <div className={`h-[2px] w-full bg-gradient-to-r ${method.brandColor || "from-[#FF8A00] to-[#D98B50]"}`} />
 
-                    <div>
-                      {/* Card Header */}
-                      <div className="flex items-center justify-between mb-8">
-                        <div className="w-14 h-14 rounded-xl bg-white p-2.5 flex items-center justify-center shadow-md shadow-black/10 group-hover:scale-105 transition-all duration-300">
-                          <img
-                            src={method.image ? getMediaUrl(method.image) : siteLogo}
-                            onError={(e) => {
-                              e.target.src = siteLogo;
-                            }}
-                            alt={nameText}
-                            className="max-w-full max-h-full object-contain"
-                          />
+                    {/* Card Body - RTL: Logo on LEFT, info on RIGHT */}
+                    <div className="flex items-center gap-4 p-5" dir="rtl">
+                      {/* Right (start in RTL): Bank info */}
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-base font-bold text-white mb-3 group-hover:text-[#FF8A00] transition-colors duration-300 truncate">
+                          {nameText}
+                        </h3>
+                        <div className="space-y-2">
+                          <div className="flex items-start gap-1.5">
+                            <span className="text-xs text-white/40 font-medium shrink-0 mt-0.5">{t("accName")} :</span>
+                            <span className="text-xs font-semibold text-white/80 break-words">{ownerText}</span>
+                          </div>
+                          <div className="flex items-start gap-1.5">
+                            <span className="text-xs text-white/40 font-medium shrink-0 mt-0.5">{t("accNumber")} :</span>
+                            <span className={`text-xs font-bold break-all ${isContactAcc ? "text-[#FF8A00]/80 italic" : "text-white"}`}>
+                              {accountText}
+                            </span>
+                          </div>
                         </div>
-                        <span className="text-[10px] uppercase tracking-[0.15em] font-semibold bg-white/5 border border-white/10 px-3 py-1 rounded-full text-white/50">
-                          {method.type}
-                        </span>
                       </div>
 
-                      {/* Bank/Method Title */}
-                      <h3 className="text-xl font-bold text-white mb-6 group-hover:text-[#FF8A00] transition-colors duration-300">
-                        {nameText}
-                      </h3>
-
-                      {/* Card Fields */}
-                      <div className="space-y-4 mb-8">
-                        <div className="flex flex-col gap-1 border-b border-white/5 pb-3">
-                          <span className="text-xs text-white/40 font-medium tracking-wide">
-                            {t("accName")}
-                          </span>
-                          <span className="text-sm font-semibold text-white/90">
-                            {ownerText}
-                          </span>
-                        </div>
-
-                        <div className="flex flex-col gap-1">
-                          <span className="text-xs text-white/40 font-medium tracking-wide">
-                            {t("accNumber")}
-                          </span>
-                          <span className={`text-sm font-bold ${isContactAcc ? "text-[#FF8A00]/80 italic" : "text-white"}`}>
-                            {accountText}
-                          </span>
-                        </div>
+                      {/* Left (end in RTL): Bank Logo - bigger */}
+                      <div className="shrink-0 w-20 h-20 rounded-xl bg-white flex items-center justify-center shadow-md shadow-black/20 p-2">
+                        <img
+                          src={method.image ? getMediaUrl(method.image) : siteLogo}
+                          onError={(e) => { e.target.src = siteLogo; }}
+                          alt={nameText}
+                          className="max-w-full max-h-full object-contain"
+                        />
                       </div>
                     </div>
 
-                    {/* Action Copy Button */}
+                    {/* Copy Button - Full width at bottom */}
                     <button
                       onClick={() => handleCopy(method.id, clipboardString)}
-                      className={`w-full py-3.5 px-4 rounded-xl border font-semibold text-xs md:text-sm tracking-wider flex items-center justify-center gap-2 transition-all duration-300 cursor-pointer ${isCopied
-                          ? "bg-green-500/10 border-green-500/30 text-green-400"
-                          : "bg-white/5 border-white/10 text-white hover:bg-white/10 hover:border-white/20"
+                      className={`w-full py-3 px-4 font-semibold text-xs tracking-wider flex items-center justify-center gap-2 transition-all duration-300 cursor-pointer border-t mt-auto ${isCopied
+                          ? "bg-green-500/10 border-green-500/20 text-green-400"
+                          : "bg-white/[0.03] border-white/5 text-white/60 hover:bg-[#FF8A00]/10 hover:text-[#FF8A00] hover:border-[#FF8A00]/20"
                         }`}
                     >
                       {isCopied ? (
                         <>
-                          <FaCheck className="w-4 h-4" />
+                          <FaCheck className="w-3.5 h-3.5" />
                           <span>{t("detailsCopied")}</span>
                         </>
                       ) : (
                         <>
-                          <FaCopy className="w-3.5 h-3.5" />
+                          <FaCopy className="w-3 h-3" />
                           <span>{t("copyDetails")}</span>
                         </>
                       )}

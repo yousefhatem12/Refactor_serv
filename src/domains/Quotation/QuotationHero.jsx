@@ -17,7 +17,7 @@ const QuotationHero = () => {
 
       <div className="relative z-20 max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center" dir={isRtl ? "rtl" : "ltr"}>
         {/* Text Column */}
-        <div className={`flex flex-col ${isRtl ? "items-end text-right" : "items-start text-left"}`}>
+        <div className={`flex flex-col items-start text-start`}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -31,9 +31,7 @@ const QuotationHero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className={`text-white text-4xl md:text-5xl lg:text-5xl font-black mb-6 leading-[1.15] tracking-tight ${
-              isRtl ? "font-arabic text-right" : "text-left"
-            }`}
+            className={`text-white text-4xl md:text-5xl lg:text-5xl font-black mb-6 leading-[1.15] tracking-tight text-start`}
           >
             {isRtl ? (
               <>
@@ -50,12 +48,10 @@ const QuotationHero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className={`text-gray-400 text-base md:text-lg leading-relaxed max-w-xl font-light ${
-              isRtl ? "text-right" : "text-left"
-            }`}
+            className={`text-gray-400 text-base md:text-lg leading-relaxed max-w-xl font-light text-start`}
           >
             {t("quoteHeroDesc") || (isRtl 
-              ? "املأ هذا النموذج لنتمكن من دراسة متطلبات مشروعك وتقديم عرض سعر دقيق ومخصص لأهدافك."
+              ? "احصل على عرض سعر مخصص لموقعك، متجرك، أو تطبيق الجوال الخاص بك اليوم. فقط املأ التفاصيل أدناه."
               : "Fill out this form so we can study your project requirements and provide an accurate quote tailored to your goals.")}
           </motion.p>
         </div>

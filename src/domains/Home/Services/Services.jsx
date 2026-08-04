@@ -17,6 +17,36 @@ const Services = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Extract color from Tailwind dotColor field (e.g. "bg-[#22C55E]" -> "#22C55E")
+  const getPlanetColor = (dotColor) => {
+    if (!dotColor) return "#FF8A00";
+    // Handle arbitrary Tailwind format: bg-[#HEXCODE]
+    const arbitraryMatch = dotColor.match(/bg-\[([^\]]+)\]/);
+    if (arbitraryMatch) return arbitraryMatch[1];
+    // Fallback map for named Tailwind classes
+    const map = {
+      "bg-purple-500": "#A855F7",
+      "bg-violet-500": "#8B5CF6",
+      "bg-yellow-400": "#FACC15",
+      "bg-yellow-500": "#EAB308",
+      "bg-orange-400": "#FB923C",
+      "bg-orange-500": "#F97316",
+      "bg-blue-400": "#60A5FA",
+      "bg-blue-500": "#3B82F6",
+      "bg-red-400": "#F87171",
+      "bg-red-500": "#EF4444",
+      "bg-green-400": "#4ADE80",
+      "bg-green-500": "#22C55E",
+      "bg-cyan-400": "#22D3EE",
+      "bg-pink-400": "#F472B6",
+      "bg-rose-400": "#FB7185",
+      "bg-indigo-500": "#6366F1",
+      "bg-teal-400": "#2DD4BF",
+      "bg-amber-400": "#FBBF24",
+    };
+    return map[dotColor] || "#FF8A00";
+  };
+
   const getServiceHref = (service) => {
     if (!service) return "#";
     if (service.id === "hosting") return "/services/services-cloud-hosting";
@@ -202,49 +232,56 @@ const Services = () => {
           {/* Content */}
           <motion.div
             style={{ y: contentY, opacity: contentOpacity }}
-            className="relative z-[60] text-center max-w-4xl px-4 sm:px-0 pointer-events-none"
+            className="relative z-[60] text-center max-w-2xl px-4 sm:px-0 pointer-events-none"
           >
-            <div className="mb-8 md:mb-12">
-              <h4 className="text-[#D98B50] font-bold tracking-[0.3em] uppercase text-xs md:text-sm mb-2 md:mb-4">
+            {/* Section Label + Title */}
+            <div className="mb-10 md:mb-14">
+              <p className="text-white font-bold tracking-[0.25em] uppercase text-[11px] md:text-xs mb-3">
                 {t("whatWeDo")}
-              </h4>
-              <h2 className="text-white text-2xl md:text-4xl lg:text-5xl font-bold">
+              </p>
+              <h2 className="text-white text-3xl md:text-4xl lg:text-5xl font-light tracking-wide">
                 {t("ourServices")}
               </h2>
             </div>
 
+            {/* Active Service Content */}
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeService.id}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5 }}
-                className="space-y-6"
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.4 }}
+                className="flex flex-col items-center gap-4"
               >
+                {/* Service Name - colored by planet */}
                 <h3
-                  className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl font-bold text-[#FF8A00]"
+                  className="text-xl sm:text-2xl md:text-3xl font-semibold"
                   style={{
-                    backgroundImage: "linear-gradient(to bottom, #ffffff, #FF8A00)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
+                    color: getPlanetColor(activeService?.dotColor),
+                    textShadow: `0 0 20px ${getPlanetColor(activeService?.dotColor)}44`,
                   }}
                 >
                   {activeService.title}
                 </h3>
-                <p className="text-white text-sm sm:text-base md:text-xl max-w-2xl mx-auto leading-relaxed bg-gray-900/50 inline p-1 md:leading-[2]">
+
+                {/* Description */}
+                <p className="text-white/60 text-xs sm:text-sm max-w-sm mx-auto leading-relaxed text-center">
                   {activeService.description}
                 </p>
+
+                {/* Know More Link */}
                 <Link
                   href={getServiceHref(activeService)}
                   prefetch={false}
-                  className="text-white border-b border-white/30 pb-1 block mx-auto mt-4 hover:border-white transition-colors uppercase tracking-widest text-sm font-medium pointer-events-auto w-max"
+                  className="text-white/70 border-b border-white/30 pb-0.5 hover:text-white hover:border-white transition-colors text-xs tracking-[0.15em] font-medium pointer-events-auto uppercase"
                 >
                   {t("knowMore")}
                 </Link>
               </motion.div>
             </AnimatePresence>
           </motion.div>
+
 
           {/* Planets Container */}
           <div className="absolute inset-0 z-30 pointer-events-none">
