@@ -95,8 +95,8 @@ const Newsletter = () => {
               </svg>
               <span className="text-green-300 font-medium text-sm">
                 {isRtl
-                  ? "تم التسجيل بنجاح! ستصلك مقالاتنا قريباً 🎉"
-                  : "Successfully subscribed! You'll receive our articles soon 🎉"}
+                  ? "تم التسجيل بنجاح! ستصلك مقالاتنا قريباً"
+                  : "Successfully subscribed! You'll receive our articles soon"}
               </span>
             </motion.div>
           )}

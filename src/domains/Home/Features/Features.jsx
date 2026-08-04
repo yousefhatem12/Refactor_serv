@@ -43,6 +43,14 @@ export default function Features() {
   // Use global settings from SSR context — no re-fetch needed
   const settings = useSettings();
 
+  const displayPartners =
+    settings?.features_partners && settings.features_partners.length > 0
+      ? settings.features_partners.map((p) => getMediaUrl(p))
+      : [];
+
+  const infinitePartners =
+    displayPartners.length > 0 ? [...displayPartners, ...displayPartners, ...displayPartners] : [];
+
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
 
@@ -55,18 +63,16 @@ export default function Features() {
     }
   };
 
+  const scrollSpeedRef = useRef(1);
+  const maxSpeed = 8;
+  const baseSpeed = 1;
+
   const scrollLeft = () => {
-    if (partnersRef.current) {
-      partnersRef.current.scrollBy({ left: -200, behavior: "smooth" });
-      setTimeout(checkScroll, 300);
-    }
+    scrollSpeedRef.current = Math.max(scrollSpeedRef.current - 3.5, -maxSpeed);
   };
 
   const scrollRight = () => {
-    if (partnersRef.current) {
-      partnersRef.current.scrollBy({ left: 200, behavior: "smooth" });
-      setTimeout(checkScroll, 300);
-    }
+    scrollSpeedRef.current = Math.min(scrollSpeedRef.current + 3.5, maxSpeed);
   };
 
   useEffect(() => {
@@ -74,6 +80,56 @@ export default function Features() {
     window.addEventListener("resize", checkScroll);
     return () => window.removeEventListener("resize", checkScroll);
   }, [language, settings]);
+
+  const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    let intervalId;
+    if (partnersRef.current && !isHovered && displayPartners.length > 0) {
+      const el = partnersRef.current;
+      const N = displayPartners.length;
+
+      const getSetWidth = () => {
+        if (el.children && el.children.length > N) {
+          return el.children[N].offsetLeft - el.children[0].offsetLeft;
+        }
+        return el.scrollWidth / 3;
+      };
+
+      const oneSetWidth = getSetWidth();
+      if (oneSetWidth > 0 && el.scrollLeft === 0) {
+        el.scrollLeft = oneSetWidth;
+      }
+
+      intervalId = setInterval(() => {
+        const el = partnersRef.current;
+        if (!el) return;
+        const { scrollLeft, scrollWidth, clientWidth } = el;
+        const oneSetWidth = getSetWidth();
+        const maxScroll = scrollWidth - clientWidth;
+
+        if (scrollSpeedRef.current > baseSpeed) {
+          scrollSpeedRef.current = Math.max(baseSpeed, scrollSpeedRef.current - 0.15);
+        } else if (scrollSpeedRef.current < baseSpeed) {
+          scrollSpeedRef.current = Math.min(baseSpeed, scrollSpeedRef.current + 0.15);
+        }
+
+        const currentSpeed = Math.round(scrollSpeedRef.current * 10) / 10;
+        let newScroll = scrollLeft + currentSpeed;
+
+        if (currentSpeed > 0 && newScroll >= maxScroll - 5) {
+          newScroll -= oneSetWidth;
+        } else if (currentSpeed < 0 && newScroll <= 5) {
+          newScroll += oneSetWidth;
+        }
+
+        el.scrollLeft = newScroll;
+      }, 30);
+    }
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [isHovered, displayPartners]);
 
   const [features, setFeatures] = useState([]);
   const fetchedRef = useRef(false);
@@ -110,12 +166,6 @@ export default function Features() {
     features.length > 0
       ? features.map((f) => f.title)
       : checkFeaturesKeys.map((k) => t(k));
-
-  const displayPartners =
-    settings?.features_partners && settings.features_partners.length > 0
-      ? settings.features_partners.map((p) => getMediaUrl(p))
-      : [];
-
 
   const siteLogo = settings?.site_logo
     ? getMediaUrl(settings.site_logo)
@@ -186,7 +236,7 @@ export default function Features() {
               <img
                 src={experienceImgSrc}
                 alt="Who We Are"
-                className={`w-full h-auto relative z-10 drop-shadow-[0_0_25px_rgba(217,139,80,0.4)] ${experienceImgSrc === siteLogo ? "object-contain max-h-[200px]" : "object-contain max-h-[220px] mx-auto"}`}
+                className={`w-full h-auto relative z-10 drop-shadow-[0_0_25px_rgba(217,139,80,0.4)] ${experienceImgSrc === siteLogo ? "object-contain max-h-[170px]" : "object-contain max-h-[190px] mx-auto"}`}
                 onError={() => setExperienceImgSrc("/Features/15Y.webp")}
               />
             </motion.div>
@@ -318,7 +368,7 @@ export default function Features() {
               <img
                 src={experienceImgSrc}
                 alt="Who We Are"
-                className={`w-full h-auto relative z-10 drop-shadow-[0_20px_50px_rgba(217,139,80,0.4)] ${experienceImgSrc === siteLogo ? "object-contain max-h-[350px] p-6 mx-auto" : "object-contain max-h-[420px] mx-auto"}`}
+                className={`w-full h-auto relative z-10 drop-shadow-[0_20px_50px_rgba(217,139,80,0.4)] ${experienceImgSrc === siteLogo ? "object-contain max-h-[290px] p-6 mx-auto" : "object-contain max-h-[360px] mx-auto"}`}
                 onError={() => setExperienceImgSrc("/Features/15Y.webp")}
               />
             </motion.div>
@@ -370,11 +420,13 @@ export default function Features() {
               <div
                 ref={partnersRef}
                 onScroll={checkScroll}
-                className="flex items-center justify-start lg:justify-center gap-6 sm:gap-8 md:gap-12 lg:gap-16 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory flex-nowrap"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className="flex items-center justify-start gap-6 sm:gap-8 md:gap-12 lg:gap-16 overflow-x-auto scrollbar-hide flex-nowrap"
                 style={{ msOverflowStyle: "none", scrollbarWidth: "none" }}
               >
                 {
-                  displayPartners.map((partner, index) => (
+                  infinitePartners.map((partner, index) => (
                     <motion.div
                       key={index}
                       whileHover={{ scale: 1.1, y: -5 }}
@@ -384,7 +436,7 @@ export default function Features() {
                       <img
                         src={partner}
                         alt={`Partner ${index + 1}`}
-                        className="h-12 sm:h-14 md:h-20 lg:h-24 w-auto object-contain opacity-60 group-hover:opacity-100 transition-all duration-300"
+                        className="h-9 sm:h-11 md:h-15 lg:h-18 w-auto object-contain opacity-60 group-hover:opacity-100 transition-all duration-300"
                         style={
                           partner.includes("/Features/")
                             ? { filter: "brightness(0) invert(1)" }
