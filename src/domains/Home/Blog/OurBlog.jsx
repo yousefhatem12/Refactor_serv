@@ -73,6 +73,7 @@ const OurBlog = () => {
     <section className="py-10 md:py-20 bg-transparent text-white relative z-0">
       <div className="max-w-[1400px] mx-auto px-5">
         <motion.div
+
           className="text-center mb-[60px]"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -80,7 +81,7 @@ const OurBlog = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-[2.2rem] md:text-[2.8rem] lg:text-[3.5rem] font-black text-white relative inline-block after:content-[''] after:absolute after:-bottom-2.5 after:left-0 after:w-[40%] after:h-[6px] after:bg-[#ff8a00] after:rounded-[10px] after:shadow-[0_0_15px_rgba(255,138,0,0.5)]">
-            <span className="text-[#ff8a00]">{t("our")}</span> {t("blog")}
+            <span className="text-[#ff8a00]">{settings?.trans_home_blog_first ? (typeof settings.trans_home_blog_first === 'string' ? JSON.parse(settings.trans_home_blog_first)[language] : settings.trans_home_blog_first[language]) : t("our")}</span> {settings?.trans_home_blog_second ? (typeof settings.trans_home_blog_second === 'string' ? JSON.parse(settings.trans_home_blog_second)[language] : settings.trans_home_blog_second[language]) : t("blog")}
           </h2>
         </motion.div>
 

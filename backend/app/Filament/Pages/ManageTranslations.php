@@ -49,6 +49,8 @@ class ManageTranslations extends Page implements HasForms
             'trans_maPortfolioTitle',
             'trans_wdPortfolioDesc',
             'trans_maPortfolioDesc',
+            'trans_home_blog_first',
+            'trans_home_blog_second',
         ];
 
         $settingsData = Setting::whereIn('key', $keys)->pluck('value', 'key')->toArray();
@@ -132,6 +134,16 @@ class ManageTranslations extends Page implements HasForms
                         
                         TextInput::make('trans_maPortfolioDesc.en')->label('Mobile App Portfolio Description (EN)'),
                         TextInput::make('trans_maPortfolioDesc.ar')->label('وصف أعمال تطبيقات الجوال (AR)'),
+                    ])->columns(2),
+
+                Section::make('Home Blog Section Title / عنوان قسم المدونة بالرئيسية')
+                    ->description('Translate the title of the Blog section on the Homepage')
+                    ->schema([
+                        TextInput::make('trans_home_blog_first.en')->label('First Word (EN) e.g. "Our"'),
+                        TextInput::make('trans_home_blog_first.ar')->label('الكلمة الأولى (AR) مثل "أحدث"'),
+                        
+                        TextInput::make('trans_home_blog_second.en')->label('Second Word (EN) e.g. "Blog"'),
+                        TextInput::make('trans_home_blog_second.ar')->label('الكلمة الثانية (AR) مثل "المقالات"'),
                     ])->columns(2),
             ])
             ->statePath('data');
