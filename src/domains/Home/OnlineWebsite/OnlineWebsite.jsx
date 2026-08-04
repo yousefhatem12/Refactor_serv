@@ -243,7 +243,7 @@ const OnlineWebsite = () => {
       }
     });
 
-    const categoryQuery = activeTab === "all" ? "all" : activeTab;
+    const categoryQuery = activeTab === "all" ? "" : activeTab;
 
     fetchAPI(
       `/products?lang=${language}&category=${categoryQuery}&page=${currentPage}&per_page=3`,
@@ -374,7 +374,7 @@ const OnlineWebsite = () => {
         </motion.div>
 
         {/* Categories / Tabs */}
-        <div className="grid grid-cols-3 sm:grid-cols-3 lg:flex lg:flex-col gap-3 w-full">
+        <div className="grid grid-cols-3 sm:grid-cols-3 lg:flex lg:flex-col gap-3 lg:gap-1.5 w-full">
           {categories.map((cat, index) => (
             <motion.button
               key={cat.id}
@@ -383,7 +383,7 @@ const OnlineWebsite = () => {
               transition={{ delay: index * 0.05, duration: 0.4 }}
               viewport={{ once: true }}
               onClick={() => handleTabChange(cat.id)}
-              className={`relative px-4 py-3 lg:px-3 lg:py-4 text-center lg:text-left whitespace-nowrap rounded-xl lg:rounded-2xl transition-all duration-300 flex items-center justify-center lg:justify-start group overflow-hidden z-10 ${activeTab === cat.id
+              className={`relative px-4 py-3 lg:px-3 lg:py-2.5 text-center lg:text-left whitespace-nowrap rounded-xl lg:rounded-2xl transition-all duration-300 flex items-center justify-center lg:justify-start group overflow-hidden z-10 ${activeTab === cat.id
                 ? "text-white font-bold bg-transparent lg:bg-white/10 border border-transparent lg:border-white/20 shadow-none lg:shadow-[0_0_30px_rgba(255,255,255,0.05)] lg:backdrop-blur-md"
                 : "text-gray-400 lg:text-gray-500 font-medium bg-white/[0.03] lg:bg-transparent border border-white/[0.08] lg:border-transparent hover:text-white hover:bg-white/5"
                 }`}

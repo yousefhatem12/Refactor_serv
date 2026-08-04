@@ -43,17 +43,37 @@ export default function Features() {
   // Use global settings from SSR context — no re-fetch needed
   const settings = useSettings();
 
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScroll = () => {
+    if (partnersRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = partnersRef.current;
+      const maxScroll = scrollWidth - clientWidth;
+      setCanScrollLeft(scrollLeft > 10);
+      setCanScrollRight(scrollLeft < maxScroll - 10);
+    }
+  };
+
   const scrollLeft = () => {
     if (partnersRef.current) {
       partnersRef.current.scrollBy({ left: -200, behavior: "smooth" });
+      setTimeout(checkScroll, 300);
     }
   };
 
   const scrollRight = () => {
     if (partnersRef.current) {
       partnersRef.current.scrollBy({ left: 200, behavior: "smooth" });
+      setTimeout(checkScroll, 300);
     }
   };
+
+  useEffect(() => {
+    setTimeout(checkScroll, 300);
+    window.addEventListener("resize", checkScroll);
+    return () => window.removeEventListener("resize", checkScroll);
+  }, [language, settings]);
 
   const [features, setFeatures] = useState([]);
   const fetchedRef = useRef(false);
@@ -322,30 +342,34 @@ export default function Features() {
           </p>
 
           <div className="flex items-center justify-between gap-4 max-w-6xl mx-auto px-2" dir="ltr">
-            {displayPartners.length > 5 && (
-              <button
-                onClick={scrollLeft}
-                className="hidden sm:flex w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm items-center justify-center text-gray-400 hover:text-white hover:bg-[#D98B50] hover:border-[#D98B50] hover:shadow-[0_0_20px_rgba(217,139,80,0.4)] transition-all duration-300 shrink-0 group"
+            <button
+              onClick={scrollLeft}
+              disabled={!canScrollLeft}
+              className={`hidden sm:flex w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm items-center justify-center text-gray-400 transition-all duration-300 shrink-0 group ${
+                canScrollLeft
+                  ? "hover:text-white hover:bg-[#D98B50] hover:border-[#D98B50] hover:shadow-[0_0_20px_rgba(217,139,80,0.4)] cursor-pointer"
+                  : "opacity-30 cursor-not-allowed"
+              }`}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className={canScrollLeft ? "group-hover:-translate-x-1 transition-transform duration-300" : ""}
               >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="group-hover:-translate-x-1 transition-transform duration-300"
-                >
-                  <polyline points="15 18 9 12 15 6" />
-                </svg>
-              </button>
-            )}
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
 
             <div className="flex-1 overflow-hidden">
               <div
                 ref={partnersRef}
+                onScroll={checkScroll}
                 className="flex items-center justify-start lg:justify-center gap-6 sm:gap-8 md:gap-12 lg:gap-16 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory flex-nowrap"
                 style={{ msOverflowStyle: "none", scrollbarWidth: "none" }}
               >
@@ -374,26 +398,29 @@ export default function Features() {
               </div>
             </div>
 
-            {displayPartners.length > 5 && (
-              <button
-                onClick={scrollRight}
-                className="hidden sm:flex w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm items-center justify-center text-gray-400 hover:text-white hover:bg-[#D98B50] hover:border-[#D98B50] hover:shadow-[0_0_20px_rgba(217,139,80,0.4)] transition-all duration-300 shrink-0 group"
+            <button
+              onClick={scrollRight}
+              disabled={!canScrollRight}
+              className={`hidden sm:flex w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm items-center justify-center text-gray-400 transition-all duration-300 shrink-0 group ${
+                canScrollRight
+                  ? "hover:text-white hover:bg-[#D98B50] hover:border-[#D98B50] hover:shadow-[0_0_20px_rgba(217,139,80,0.4)] cursor-pointer"
+                  : "opacity-30 cursor-not-allowed"
+              }`}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className={canScrollRight ? "group-hover:translate-x-1 transition-transform duration-300" : ""}
               >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="group-hover:translate-x-1 transition-transform duration-300"
-                >
-                  <polyline points="9 18 15 12 9 6" />
-                </svg>
-              </button>
-            )}
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
           </div>
           </motion.div>
         )}
