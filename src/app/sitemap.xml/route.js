@@ -1,5 +1,9 @@
-export async function GET(request) {
-  const { origin: baseUrl } = new URL(request.url);
+import { connection } from "next/server";
+import { getSiteUrl } from "../../lib/site-url";
+
+export async function GET() {
+  await connection();
+  const baseUrl = getSiteUrl();
   const lastModDate = new Date().toISOString();
 
   // Define sub-sitemaps in the index dynamically

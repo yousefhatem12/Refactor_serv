@@ -1,5 +1,9 @@
-export async function GET(request) {
-  const { origin: baseUrl } = new URL(request.url);
+import { connection } from "next/server";
+import { getSiteUrl } from "../../lib/site-url";
+
+export async function GET() {
+  await connection();
+  const baseUrl = getSiteUrl();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.serv5.com.eg/api/v1";
 
   const routes = [];
