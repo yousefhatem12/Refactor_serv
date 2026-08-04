@@ -96,6 +96,7 @@ export default function Features() {
       ? settings.features_partners.map((p) => getMediaUrl(p))
       : [];
 
+
   const siteLogo = settings?.site_logo
     ? getMediaUrl(settings.site_logo)
     : "/logo.svg";

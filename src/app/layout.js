@@ -14,21 +14,21 @@ const tsDamasSans = localFont({
 const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "700"],
   display: "swap",
 });
 
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "700"],
   display: "swap",
 });
 
 const alexandria = Alexandria({
   variable: "--font-alexandria",
   subsets: ["latin", "arabic"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "700"],
   display: "swap",
 });
 
@@ -177,8 +177,6 @@ export default async function RootLayout({ children }) {
       suppressHydrationWarning
     >
       <head>
-        <link rel="preload" href="/Hero/earth.webp" as="image" type="image/webp" fetchPriority="high" />
-        <link rel="preload" href="/Hero/orange-planet.webp" as="image" type="image/webp" fetchPriority="high" />
         <link rel="preload" href="/logo.svg" as="image" type="image/svg+xml" fetchPriority="high" />
       </head>
       <body className="min-h-screen flex flex-col relative" suppressHydrationWarning>
