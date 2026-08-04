@@ -142,13 +142,21 @@ class ServiceResource extends JsonResource
         }
 
         // List representation
-        $gradients = [
-            ['from' => '#A855F7', 'to' => '#6366F1', 'dot' => '#A855F7', 'shadow' => 'shadow-[0_0_20px_#A855F7]'],
-            ['from' => '#3B82F6', 'to' => '#22C55E', 'dot' => '#22C55E', 'shadow' => 'shadow-[0_0_20px_#22C55E]'],
-            ['from' => '#F97316', 'to' => '#EAB308', 'dot' => '#F97316', 'shadow' => 'shadow-[0_0_20px_#F97316]'],
-            ['from' => '#10B981', 'to' => '#059669', 'dot' => '#10B981', 'shadow' => 'shadow-[0_0_20px_#10B981]'],
-        ];
-        $style = $gradients[$this->id % count($gradients)];
+        $img = $this->icon ?: '/Services/Purple Planet.webp';
+        
+        $style = ['from' => '#A855F7', 'to' => '#6366F1', 'dot' => '#A855F7', 'shadow' => 'shadow-[0_0_20px_#A855F7]']; // Default
+        
+        $imgLower = strtolower($img);
+        if (str_contains($imgLower, 'yellow')) {
+            $style = ['from' => '#F97316', 'to' => '#EAB308', 'dot' => '#EAB308', 'shadow' => 'shadow-[0_0_20px_#EAB308]'];
+        } elseif (str_contains($imgLower, 'green')) {
+            $style = ['from' => '#10B981', 'to' => '#059669', 'dot' => '#10B981', 'shadow' => 'shadow-[0_0_20px_#10B981]'];
+        } elseif (str_contains($imgLower, 'blue')) {
+            $style = ['from' => '#3B82F6', 'to' => '#2563EB', 'dot' => '#3B82F6', 'shadow' => 'shadow-[0_0_20px_#3B82F6]'];
+        } elseif (str_contains($imgLower, 'purple')) {
+            $style = ['from' => '#A855F7', 'to' => '#6366F1', 'dot' => '#A855F7', 'shadow' => 'shadow-[0_0_20px_#A855F7]'];
+        }
+
         $name = $trans($this->name);
 
         return [
@@ -156,7 +164,7 @@ class ServiceResource extends JsonResource
             'title' => $lang === 'en' ? strtolower($name) : $name,
             'label' => $name,
             'description' => $trans($this->description),
-            'img' => $this->icon ?: '/Services/Purple Planet.webp',
+            'img' => $img,
             'gradient' => "from-[{$style['from']}] to-[{$style['to']}]",
             'dotColor' => "bg-[{$style['dot']}]",
             'shadow' => $style['shadow'],
