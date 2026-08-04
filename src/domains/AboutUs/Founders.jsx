@@ -128,13 +128,13 @@ const Founders = ({ data }) => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 w-full max-w-6xl"
+          className="flex flex-wrap justify-center gap-6 md:gap-8 w-full max-w-6xl"
         >
           {displayTeam.map((founder, index) => (
             <motion.div
               key={index}
               variants={itemVariants}
-              className="group relative flex flex-col"
+              className="group relative flex flex-col w-[calc(50%-0.75rem)] md:w-[calc(33.333%-1.333rem)]"
             >
               {/* Main Card Container */}
               <div className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-[#0d2a57]/20 border border-white/10 backdrop-blur-sm transition-all duration-500 group-hover:border-blue-500/50 group-hover:shadow-[0_0_40px_-10px_rgba(59,130,246,0.3)]">
