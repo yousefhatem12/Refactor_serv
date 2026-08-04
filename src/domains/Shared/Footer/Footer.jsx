@@ -303,11 +303,11 @@ const Footer = () => {
 
         {/* Bottom Section: Socials & Copyright */}
         <div className="pt-6 border-t-[3px] border-blue-500 flex flex-col md:flex-row items-center justify-between gap-8">
-          <div className="flex items-center gap-6">
-            <span className="text-gray-300 font-bold text-lg">
+          <div className="flex items-center gap-4">
+            <span className="text-gray-300 font-bold text-sm">
               {t("followUs")}
             </span>
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="flex flex-wrap justify-center gap-2">
               {footerData.socials.map((social) => {
                 const iconData = getSocialIconData(social.platform);
                 return (
@@ -316,8 +316,8 @@ const Footer = () => {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    whileHover={{ y: -5, scale: 1.1 }}
-                    className={`${iconData.color} w-10 h-10 rounded-full flex items-center justify-center text-white shadow-[0_5px_15px_rgba(0,0,0,0.3)] transition-all`}
+                    whileHover={{ y: -4, scale: 1.1 }}
+                    className={`${iconData.color} w-7 h-7 rounded-full flex items-center justify-center text-white shadow-[0_4px_10px_rgba(0,0,0,0.3)] transition-all`}
                   >
                     {iconData.svg}
                   </motion.a>
