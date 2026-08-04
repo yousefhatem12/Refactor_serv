@@ -6,8 +6,12 @@ const nextConfig = {
     useCache: true,
   },
   images: {
-    unoptimized: true,
+    unoptimized: false,
     remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "api.serv5.com.eg",
+      },
       {
         protocol: "http",
         hostname: "localhost",
