@@ -360,7 +360,7 @@ const OnlineWebsite = () => {
           viewport={{ once: true }}
           className="mb-12"
         >
-          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-4 leading-[1.1] tracking-tight flex gap-2">
+          <h2 className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-black mb-4 leading-[1.1] tracking-tight flex gap-2">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">
               {t("ourProductsTitlePart1")}
             </span>

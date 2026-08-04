@@ -21,7 +21,7 @@ const AboutCTA = ({ data }) => {
         {/* Glow Effect */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-blue-600/20 blur-[120px] rounded-full -z-10"></div>
 
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-8 leading-tight">
+        <h2 className="text-4xl md:text-5xl lg:text-5xl font-bold text-white mb-8 leading-tight">
           {data?.title || t("aboutCTATitle")}
         </h2>
 

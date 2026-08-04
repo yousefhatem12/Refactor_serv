@@ -84,7 +84,7 @@ const ContactInfo = ({ data }) => {
         className="flex flex-col gap-6"
       >
         <div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-4 leading-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-5xl font-black mb-4 leading-tight">
             {data?.title ? (
               data.title
             ) : (

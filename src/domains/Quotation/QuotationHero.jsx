@@ -31,7 +31,7 @@ const QuotationHero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className={`text-white text-4xl md:text-5xl lg:text-6xl font-black mb-6 leading-[1.15] tracking-tight ${
+            className={`text-white text-4xl md:text-5xl lg:text-5xl font-black mb-6 leading-[1.15] tracking-tight ${
               isRtl ? "font-arabic text-right" : "text-left"
             }`}
           >

@@ -105,7 +105,7 @@ const FAQContent = ({ data }) => {
             animate={{ opacity: 1, y: 0 }}
             className="mb-10"
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-widest leading-[1.2] text-white mb-4">
+            <h1 className="text-4xl md:text-5xl lg:text-5xl font-bold tracking-widest leading-[1.2] text-white mb-4">
               {title}
             </h1>
             {description && (

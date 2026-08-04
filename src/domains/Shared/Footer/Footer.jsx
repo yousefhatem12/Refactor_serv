@@ -86,7 +86,7 @@ const Footer = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-3xl md:text-5xl font-bold mb-4 md:mb-6 leading-[1.1] tracking-tight"
+              className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-[1.1] tracking-tight"
             >
               <span
                 dangerouslySetInnerHTML={{

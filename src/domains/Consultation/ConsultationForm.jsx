@@ -240,7 +240,7 @@ const ConsultationForm = () => {
     return (
       <div className="relative z-20 max-w-2xl mx-auto px-6 pb-20 text-center">
         <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[40px] p-12 shadow-2xl">
-          <div className="text-6xl text-green-500 flex justify-center mb-6">
+          <div className="text-5xl text-green-500 flex justify-center mb-6">
             <FaCheckCircle />
           </div>
           <h2 className="text-3xl font-bold text-white mb-4">

@@ -36,7 +36,7 @@ const SocialMediaHero = ({
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 tracking-tight leading-tight"
+          className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold mb-4 md:mb-6 tracking-tight leading-tight"
         >
           {title || t("socialMediaHeroTitle")}
         </motion.h1>

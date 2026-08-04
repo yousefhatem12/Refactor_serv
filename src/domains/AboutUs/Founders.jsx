@@ -111,7 +111,7 @@ const Founders = ({ data }) => {
           <span className="text-blue-500 font-black tracking-[0.4em] uppercase text-[10px] md:text-xs mb-6 block opacity-80">
             {t("ourLeadership") || "Our Leadership"}
           </span>
-          <h2 className="text-4xl md:text-6xl font-black text-white mb-10 tracking-tighter leading-none text-cinematic">
+          <h2 className="text-4xl md:text-5xl font-black text-white mb-10 tracking-tighter leading-none text-cinematic">
             {data?.title || settings.founders_title || t("aboutFoundersTag")}
           </h2>
           <p className="text-gray-400 text-base md:text-xl max-w-3xl mx-auto leading-relaxed whitespace-pre-line font-light text-balance">

@@ -141,11 +141,10 @@ const CTA = () => {
         {/* Text Side */}
         <div
           ref={text1Ref}
-          className={`text-center flex flex-col items-center w-full md:w-auto ${
-            language === "ar"
+          className={`text-center flex flex-col items-center w-full md:w-auto ${language === "ar"
               ? "md:items-end md:text-right"
               : "md:items-start md:text-left"
-          }`}
+            }`}
         >
           <h2 className="w-full text-2xl md:text-3xl lg:text-4xl xl:text-4xl font-black text-white mb-4 md:mb-6 leading-[1.1] tracking-tighter">
             {settings.cta_ready_for || t("readyFor")} <br />

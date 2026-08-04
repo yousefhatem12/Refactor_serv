@@ -97,7 +97,7 @@ const OurPortfolio = ({ activeCategoryId, isFeaturedOnly = false }) => {
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="text-center mb-16"
       >
-        <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-black inline-block relative pb-4">
+        <h2 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-black inline-block relative pb-4">
           <span className="text-[#FF8A00]">{t("our")}</span>{" "}
           <span className="text-white">{t("portfolio")}</span>
           <div

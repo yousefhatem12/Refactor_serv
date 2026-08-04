@@ -44,7 +44,7 @@ const AboutHero = ({ data }) => {
  
       <div className="relative z-20 max-w-7xl mx-auto w-full">
         <div className="max-w-3xl mb-16">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-5xl font-bold text-white mb-6 leading-tight">
             {data?.title || t("aboutHeroTitle")}
           </h1>
           <p className="text-gray-300 text-lg md:text-xl font-medium mb-4">

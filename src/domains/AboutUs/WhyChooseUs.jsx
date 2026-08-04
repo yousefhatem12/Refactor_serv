@@ -39,7 +39,7 @@ const WhyChooseUs = ({ data }) => {
 
       <div className="relative z-20 max-w-7xl mx-auto">
         <div className="mb-16">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+          <h2 className="text-4xl md:text-5xl lg:text-5xl font-bold text-white mb-6">
             {sectionTitle}
           </h2>
         </div>

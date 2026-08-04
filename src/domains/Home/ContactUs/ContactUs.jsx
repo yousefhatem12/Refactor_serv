@@ -127,7 +127,7 @@ const ContactUs = () => {
           className="flex flex-col"
         >
           <div className="flex items-center gap-4 mb-4">
-            <h2 className="text-4xl md:text-5xl font-black text-white">
+            <h2 className="text-3xl md:text-4xl font-black text-white">
               {t("getInTouch1")}{" "}
               <span className="text-[#FF8A00]">{t("getInTouch2")}</span>
             </h2>

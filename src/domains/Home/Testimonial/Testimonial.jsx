@@ -29,6 +29,10 @@ const Testimonial = () => {
   const [data, setData] = useState([]);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+  
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeftState, setScrollLeftState] = useState(0);
 
   const checkScroll = () => {
     if (sliderRef.current) {
@@ -106,7 +110,7 @@ const Testimonial = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-black text-[#FF8A00] mb-4">
+          <h2 className="text-3xl md:text-4xl font-black text-[#FF8A00] mb-4">
             {t("testimonial")}
           </h2>
           <div className="flex flex-col items-center gap-2">
@@ -190,7 +194,21 @@ const Testimonial = () => {
             <div
               ref={sliderRef}
               onScroll={checkScroll}
-              className="w-full overflow-x-auto pb-16 pt-4 scrollbar-hide snap-x snap-mandatory flex items-stretch gap-6"
+              onMouseDown={(e) => {
+                setIsDragging(true);
+                setStartX(e.pageX - sliderRef.current.offsetLeft);
+                setScrollLeftState(sliderRef.current.scrollLeft);
+              }}
+              onMouseLeave={() => setIsDragging(false)}
+              onMouseUp={() => setIsDragging(false)}
+              onMouseMove={(e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                const x = e.pageX - sliderRef.current.offsetLeft;
+                const walk = (x - startX) * 1.5;
+                sliderRef.current.scrollLeft = scrollLeftState - walk;
+              }}
+              className={`w-full overflow-x-auto pb-16 pt-4 scrollbar-hide snap-x snap-mandatory flex items-stretch gap-6 select-none ${isDragging ? "cursor-grabbing" : "cursor-grab"}`}
               style={{ msOverflowStyle: "none", scrollbarWidth: "none" }}
             >
               {/* Spacer */}

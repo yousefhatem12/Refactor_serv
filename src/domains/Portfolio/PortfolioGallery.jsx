@@ -264,7 +264,7 @@ export default function PortfolioGallery({ data, perPage = 9 }) {
       {/* Dynamic Hero Section */}
       {data?.title && (
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 uppercase">
+          <h1 className="text-4xl md:text-5xl lg:text-5xl font-bold text-white mb-6 uppercase">
             {data.title}
           </h1>
           {data.subtitle && (

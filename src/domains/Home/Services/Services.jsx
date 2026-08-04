@@ -208,7 +208,7 @@ const Services = () => {
               <h4 className="text-[#D98B50] font-bold tracking-[0.3em] uppercase text-xs md:text-sm mb-2 md:mb-4">
                 {t("whatWeDo")}
               </h4>
-              <h2 className="text-white text-3xl md:text-6xl font-bold">
+              <h2 className="text-white text-2xl md:text-4xl lg:text-5xl font-bold">
                 {t("ourServices")}
               </h2>
             </div>
@@ -223,7 +223,7 @@ const Services = () => {
                 className="space-y-6"
               >
                 <h3
-                  className="text-3xl sm:text-5xl md:text-7xl font-bold text-[#FF8A00]"
+                  className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl font-bold text-[#FF8A00]"
                   style={{
                     backgroundImage: "linear-gradient(to bottom, #ffffff, #FF8A00)",
                     WebkitBackgroundClip: "text",
@@ -328,7 +328,7 @@ const Services = () => {
             <motion.div
               layout
               transition={springTransition}
-              className="absolute bottom-[-10%] sm:bottom-[-20%] md:bottom-[-40%] lg:bottom-[-40%] left-1/2 -translate-x-1/2 w-[260px] sm:w-[340px] md:w-[450px] lg:w-[600px] aspect-square origin-bottom pointer-events-none"
+              className="absolute bottom-[-10%] sm:bottom-[-20%] md:bottom-[-40%] lg:bottom-[-40%] left-1/2 -translate-x-1/2 w-[200px] sm:w-[280px] md:w-[380px] lg:w-[480px] aspect-square origin-bottom pointer-events-none"
               style={{
                 y: mainY,
                 scale: mainScale,
