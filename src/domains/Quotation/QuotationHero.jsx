@@ -22,7 +22,7 @@ const QuotationHero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-block px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-blue-400 text-xs md:text-sm font-semibold mb-6 backdrop-blur-sm tracking-wide"
+            className="inline-block px-4 py-1.5 rounded-full border border-[#FF8A00]/20 bg-[#FF8A00]/5 text-[#FF8A00] text-xs md:text-sm font-semibold mb-6 backdrop-blur-sm tracking-wide"
           >
             {t("services")} • {t("requestQuote")}
           </motion.div>
