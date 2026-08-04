@@ -22,14 +22,19 @@ describe("sitemap URLs", () => {
   it("uses the configured public origin instead of an internal proxy origin", async () => {
     process.env.SITE_URL = "https://serv5.com.eg/";
 
-    const indexXml = await (await getSitemapIndex()).text();
-    const pageXml = await (await getPageSitemap()).text();
+    const indexResponse = await getSitemapIndex();
+    const pageResponse = await getPageSitemap();
+    const indexXml = await indexResponse.text();
+    const pageXml = await pageResponse.text();
 
     expect(indexXml).toContain(
       "<loc>https://serv5.com.eg/page-sitemap.xml</loc>",
     );
     expect(pageXml).toContain("<loc>https://serv5.com.eg/en</loc>");
     expect(`${indexXml}${pageXml}`).not.toContain("localhost");
+    expect(indexResponse.headers.get("Cache-Control")).toBe(
+      "public, max-age=0, s-maxage=300, must-revalidate",
+    );
   });
 
   it("falls back to the production domain when no URL is configured", async () => {

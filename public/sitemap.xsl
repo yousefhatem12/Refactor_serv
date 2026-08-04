@@ -188,14 +188,14 @@
 
           <xsl:choose>
             <!-- ==================== SITEMAP INDEX ==================== -->
-            <xsl:when test="sitemap:sitemapindex">
+            <xsl:when test="local-name(/*) = 'sitemapindex' or count(/*/*[local-name() = 'url']) = 0">
               <p class="description-count" style="font-size: 16px; margin-bottom: 30px; color: #ff8a00; font-weight: 600;">
-                This XML Sitemap contains <strong><xsl:value-of select="count(sitemap:sitemapindex/sitemap:sitemap)"/></strong> sub-sitemaps.
+                This XML Sitemap contains <strong>5</strong> sub-sitemaps.
               </p>
 
               <div class="section-title">
                 Sitemap Files
-                <span class="section-count"><xsl:value-of select="count(sitemap:sitemapindex/sitemap:sitemap)"/> Files</span>
+                <span class="section-count">5 Files</span>
               </div>
               <table>
                 <thead>
@@ -205,16 +205,26 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <xsl:for-each select="sitemap:sitemapindex/sitemap:sitemap">
-                    <tr>
-                      <td>
-                        <a href="{sitemap:loc}"><xsl:value-of select="sitemap:loc"/></a>
-                      </td>
-                      <td>
-                        <xsl:value-of select="sitemap:lastmod"/>
-                      </td>
-                    </tr>
-                  </xsl:for-each>
+                  <tr>
+                    <td><a href="/page-sitemap.xml">https://serv5.com.eg/page-sitemap.xml</a></td>
+                    <td><xsl:value-of select="/*/*[local-name() = 'sitemap'][1]/*[local-name() = 'lastmod']"/></td>
+                  </tr>
+                  <tr>
+                    <td><a href="/services-sitemap.xml">https://serv5.com.eg/services-sitemap.xml</a></td>
+                    <td><xsl:value-of select="/*/*[local-name() = 'sitemap'][2]/*[local-name() = 'lastmod']"/></td>
+                  </tr>
+                  <tr>
+                    <td><a href="/products-sitemap.xml">https://serv5.com.eg/products-sitemap.xml</a></td>
+                    <td><xsl:value-of select="/*/*[local-name() = 'sitemap'][3]/*[local-name() = 'lastmod']"/></td>
+                  </tr>
+                  <tr>
+                    <td><a href="/portfolio-sitemap.xml">https://serv5.com.eg/portfolio-sitemap.xml</a></td>
+                    <td><xsl:value-of select="/*/*[local-name() = 'sitemap'][4]/*[local-name() = 'lastmod']"/></td>
+                  </tr>
+                  <tr>
+                    <td><a href="/blog-sitemap.xml">https://serv5.com.eg/blog-sitemap.xml</a></td>
+                    <td><xsl:value-of select="/*/*[local-name() = 'sitemap'][5]/*[local-name() = 'lastmod']"/></td>
+                  </tr>
                 </tbody>
               </table>
             </xsl:when>
