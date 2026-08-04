@@ -138,8 +138,10 @@ const OnlineWebsiteDetails = () => {
                       <div>{cat.name}</div>
                       {isActive && (
                         <motion.div
-                          layoutId="activeUnderline"
                           className="absolute -bottom-1.5 left-0 w-full h-[2px] bg-[#ffb800] shadow-[0_0_10px_#ffb800] rounded-full"
+                          initial={{ scaleX: 0, x: -40, originX: 0 }}
+                          animate={{ scaleX: 1, x: 0 }}
+                          transition={{ type: "spring", stiffness: 350, damping: 22 }}
                         />
                       )}
                     </span>

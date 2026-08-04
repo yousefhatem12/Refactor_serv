@@ -1,11 +1,33 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
 
 const Newsletter = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const [email, setEmail] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const isRtl = language === "ar";
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!email || isSubmitting) return;
+
+    setIsSubmitting(true);
+
+    // Simulate a short delay for UX feel
+    await new Promise((resolve) => setTimeout(resolve, 800));
+
+    setIsSubmitted(true);
+    setIsSubmitting(false);
+    setEmail("");
+
+    // Reset success message after 5 seconds
+    setTimeout(() => setIsSubmitted(false), 5000);
+  };
+
   return (
     <section className="w-full py-24 text-white relative z-10 flex flex-col items-center justify-center text-center overflow-hidden">
       <div className="absolute inset-0 w-full h-full -z-10 pointer-events-none mix-blend-screen opacity-80">
@@ -35,24 +57,54 @@ const Newsletter = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="flex flex-col sm:flex-row gap-4 w-full max-w-lg px-4 justify-center items-center"
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={handleSubmit}
         >
           <input
             type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder={t("newsletterPlaceholder") || "Your Email"}
             className="w-full sm:flex-1 px-6 py-4 rounded-full bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-lg text-sm sm:text-base"
             required
+            disabled={isSubmitting}
           />
-          <button
+          <motion.button
             type="submit"
-            className="w-full sm:w-auto px-8 py-4 rounded-full border border-blue-500 bg-blue-600 text-white hover:bg-blue-700 transition-colors font-medium shadow-lg whitespace-nowrap text-sm sm:text-base"
+            disabled={isSubmitting}
+            whileTap={{ scale: 0.93 }}
+            className="w-full sm:w-auto px-8 py-4 rounded-full border border-blue-500 bg-blue-600 text-white hover:bg-blue-700 transition-colors font-medium shadow-lg whitespace-nowrap text-sm sm:text-base cursor-pointer disabled:opacity-70 disabled:cursor-wait"
           >
-            {t("newsletterSubscribe")}
-          </button>
+            {isSubmitting
+              ? (isRtl ? "جاري الإرسال..." : "Sending...")
+              : t("newsletterSubscribe")}
+          </motion.button>
         </motion.form>
+
+        {/* Success Message */}
+        <AnimatePresence>
+          {isSubmitted && (
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="mt-6 flex items-center gap-3 px-6 py-3 rounded-full bg-green-500/20 border border-green-500/30 backdrop-blur-md shadow-[0_0_20px_rgba(34,197,94,0.2)]"
+            >
+              <svg className="w-5 h-5 text-green-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+              </svg>
+              <span className="text-green-300 font-medium text-sm">
+                {isRtl
+                  ? "تم التسجيل بنجاح! ستصلك مقالاتنا قريباً"
+                  : "Successfully subscribed! You'll receive our articles soon"}
+              </span>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );
 };
 
 export default Newsletter;
+

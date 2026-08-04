@@ -43,17 +43,93 @@ export default function Features() {
   // Use global settings from SSR context — no re-fetch needed
   const settings = useSettings();
 
-  const scrollLeft = () => {
+  const displayPartners =
+    settings?.features_partners && settings.features_partners.length > 0
+      ? settings.features_partners.map((p) => getMediaUrl(p))
+      : [];
+
+  const infinitePartners =
+    displayPartners.length > 0 ? [...displayPartners, ...displayPartners, ...displayPartners] : [];
+
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScroll = () => {
     if (partnersRef.current) {
-      partnersRef.current.scrollBy({ left: -200, behavior: "smooth" });
+      const { scrollLeft, scrollWidth, clientWidth } = partnersRef.current;
+      const maxScroll = scrollWidth - clientWidth;
+      setCanScrollLeft(scrollLeft > 10);
+      setCanScrollRight(scrollLeft < maxScroll - 10);
     }
   };
 
-  const scrollRight = () => {
-    if (partnersRef.current) {
-      partnersRef.current.scrollBy({ left: 200, behavior: "smooth" });
-    }
+  const scrollSpeedRef = useRef(1);
+  const maxSpeed = 8;
+  const baseSpeed = 1;
+
+  const scrollLeft = () => {
+    scrollSpeedRef.current = Math.max(scrollSpeedRef.current - 3.5, -maxSpeed);
   };
+
+  const scrollRight = () => {
+    scrollSpeedRef.current = Math.min(scrollSpeedRef.current + 3.5, maxSpeed);
+  };
+
+  useEffect(() => {
+    setTimeout(checkScroll, 300);
+    window.addEventListener("resize", checkScroll);
+    return () => window.removeEventListener("resize", checkScroll);
+  }, [language, settings]);
+
+  const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    let intervalId;
+    if (partnersRef.current && !isHovered && displayPartners.length > 0) {
+      const el = partnersRef.current;
+      const N = displayPartners.length;
+
+      const getSetWidth = () => {
+        if (el.children && el.children.length > N) {
+          return el.children[N].offsetLeft - el.children[0].offsetLeft;
+        }
+        return el.scrollWidth / 3;
+      };
+
+      const oneSetWidth = getSetWidth();
+      if (oneSetWidth > 0 && el.scrollLeft === 0) {
+        el.scrollLeft = oneSetWidth;
+      }
+
+      intervalId = setInterval(() => {
+        const el = partnersRef.current;
+        if (!el) return;
+        const { scrollLeft, scrollWidth, clientWidth } = el;
+        const oneSetWidth = getSetWidth();
+        const maxScroll = scrollWidth - clientWidth;
+
+        if (scrollSpeedRef.current > baseSpeed) {
+          scrollSpeedRef.current = Math.max(baseSpeed, scrollSpeedRef.current - 0.15);
+        } else if (scrollSpeedRef.current < baseSpeed) {
+          scrollSpeedRef.current = Math.min(baseSpeed, scrollSpeedRef.current + 0.15);
+        }
+
+        const currentSpeed = Math.round(scrollSpeedRef.current * 10) / 10;
+        let newScroll = scrollLeft + currentSpeed;
+
+        if (currentSpeed > 0 && newScroll >= maxScroll - 5) {
+          newScroll -= oneSetWidth;
+        } else if (currentSpeed < 0 && newScroll <= 5) {
+          newScroll += oneSetWidth;
+        }
+
+        el.scrollLeft = newScroll;
+      }, 30);
+    }
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [isHovered, displayPartners]);
 
   const [features, setFeatures] = useState([]);
   const fetchedRef = useRef(false);
@@ -90,12 +166,6 @@ export default function Features() {
     features.length > 0
       ? features.map((f) => f.title)
       : checkFeaturesKeys.map((k) => t(k));
-
-  const displayPartners =
-    settings?.features_partners && settings.features_partners.length > 0
-      ? settings.features_partners.map((p) => getMediaUrl(p))
-      : [];
-
 
   const siteLogo = settings?.site_logo
     ? getMediaUrl(settings.site_logo)
@@ -166,7 +236,7 @@ export default function Features() {
               <img
                 src={experienceImgSrc}
                 alt="Who We Are"
-                className={`w-full h-auto relative z-10 drop-shadow-[0_0_25px_rgba(217,139,80,0.4)] ${experienceImgSrc === siteLogo ? "object-contain max-h-[200px]" : "object-contain max-h-[220px] mx-auto"}`}
+                className={`w-full h-auto relative z-10 drop-shadow-[0_0_25px_rgba(217,139,80,0.4)] ${experienceImgSrc === siteLogo ? "object-contain max-h-[170px]" : "object-contain max-h-[190px] mx-auto"}`}
                 onError={() => setExperienceImgSrc("/Features/15Y.webp")}
               />
             </motion.div>
@@ -298,7 +368,7 @@ export default function Features() {
               <img
                 src={experienceImgSrc}
                 alt="Who We Are"
-                className={`w-full h-auto relative z-10 drop-shadow-[0_20px_50px_rgba(217,139,80,0.4)] ${experienceImgSrc === siteLogo ? "object-contain max-h-[350px] p-6 mx-auto" : "object-contain max-h-[420px] mx-auto"}`}
+                className={`w-full h-auto relative z-10 drop-shadow-[0_20px_50px_rgba(217,139,80,0.4)] ${experienceImgSrc === siteLogo ? "object-contain max-h-[290px] p-6 mx-auto" : "object-contain max-h-[360px] mx-auto"}`}
                 onError={() => setExperienceImgSrc("/Features/15Y.webp")}
               />
             </motion.div>
@@ -322,35 +392,41 @@ export default function Features() {
           </p>
 
           <div className="flex items-center justify-between gap-4 max-w-6xl mx-auto px-2" dir="ltr">
-            {displayPartners.length > 5 && (
-              <button
-                onClick={scrollLeft}
-                className="hidden sm:flex w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm items-center justify-center text-gray-400 hover:text-white hover:bg-[#D98B50] hover:border-[#D98B50] hover:shadow-[0_0_20px_rgba(217,139,80,0.4)] transition-all duration-300 shrink-0 group"
+            <button
+              onClick={scrollLeft}
+              disabled={!canScrollLeft}
+              className={`hidden sm:flex w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm items-center justify-center text-gray-400 transition-all duration-300 shrink-0 group ${
+                canScrollLeft
+                  ? "hover:text-white hover:bg-[#D98B50] hover:border-[#D98B50] hover:shadow-[0_0_20px_rgba(217,139,80,0.4)] cursor-pointer"
+                  : "opacity-30 cursor-not-allowed"
+              }`}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className={canScrollLeft ? "group-hover:-translate-x-1 transition-transform duration-300" : ""}
               >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="group-hover:-translate-x-1 transition-transform duration-300"
-                >
-                  <polyline points="15 18 9 12 15 6" />
-                </svg>
-              </button>
-            )}
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
 
             <div className="flex-1 overflow-hidden">
               <div
                 ref={partnersRef}
-                className="flex items-center justify-start lg:justify-center gap-6 sm:gap-8 md:gap-12 lg:gap-16 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory flex-nowrap"
+                onScroll={checkScroll}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className="flex items-center justify-start gap-6 sm:gap-8 md:gap-12 lg:gap-16 overflow-x-auto scrollbar-hide flex-nowrap"
                 style={{ msOverflowStyle: "none", scrollbarWidth: "none" }}
               >
                 {
-                  displayPartners.map((partner, index) => (
+                  infinitePartners.map((partner, index) => (
                     <motion.div
                       key={index}
                       whileHover={{ scale: 1.1, y: -5 }}
@@ -360,7 +436,7 @@ export default function Features() {
                       <img
                         src={partner}
                         alt={`Partner ${index + 1}`}
-                        className="h-12 sm:h-14 md:h-20 lg:h-24 w-auto object-contain opacity-60 group-hover:opacity-100 transition-all duration-300"
+                        className="h-9 sm:h-11 md:h-15 lg:h-18 w-auto object-contain opacity-60 group-hover:opacity-100 transition-all duration-300"
                         style={
                           partner.includes("/Features/")
                             ? { filter: "brightness(0) invert(1)" }
@@ -374,26 +450,29 @@ export default function Features() {
               </div>
             </div>
 
-            {displayPartners.length > 5 && (
-              <button
-                onClick={scrollRight}
-                className="hidden sm:flex w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm items-center justify-center text-gray-400 hover:text-white hover:bg-[#D98B50] hover:border-[#D98B50] hover:shadow-[0_0_20px_rgba(217,139,80,0.4)] transition-all duration-300 shrink-0 group"
+            <button
+              onClick={scrollRight}
+              disabled={!canScrollRight}
+              className={`hidden sm:flex w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm items-center justify-center text-gray-400 transition-all duration-300 shrink-0 group ${
+                canScrollRight
+                  ? "hover:text-white hover:bg-[#D98B50] hover:border-[#D98B50] hover:shadow-[0_0_20px_rgba(217,139,80,0.4)] cursor-pointer"
+                  : "opacity-30 cursor-not-allowed"
+              }`}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className={canScrollRight ? "group-hover:translate-x-1 transition-transform duration-300" : ""}
               >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="group-hover:translate-x-1 transition-transform duration-300"
-                >
-                  <polyline points="9 18 15 12 9 6" />
-                </svg>
-              </button>
-            )}
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
           </div>
           </motion.div>
         )}

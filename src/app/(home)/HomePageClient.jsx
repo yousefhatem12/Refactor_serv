@@ -128,7 +128,9 @@ export default function HomePageClient({ initialHomeData }) {
   useEffect(() => {
     window.history.scrollRestoration = "manual";
     window.scrollTo(0, 0);
+  }, []);
 
+  useEffect(() => {
     // Fix anchor links (like #services) since the page locks scroll initially
     if (window.location.hash) {
       const id = window.location.hash.substring(1);

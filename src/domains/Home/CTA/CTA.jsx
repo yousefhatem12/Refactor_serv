@@ -147,7 +147,7 @@ const CTA = () => {
               : "md:items-start md:text-left"
           }`}
         >
-          <h2 className="w-full text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-white mb-4 md:mb-6 leading-[1.1] tracking-tighter">
+          <h2 className="w-full text-2xl md:text-3xl lg:text-4xl xl:text-4xl font-black text-white mb-4 md:mb-6 leading-[1.1] tracking-tighter">
             {settings.cta_ready_for || t("readyFor")} <br />
             <span className="inline-block relative">
               {settings.cta_liftoff || t("liftoff")}
@@ -175,7 +175,7 @@ const CTA = () => {
           dir={language === "ar" ? "rtl" : "ltr"}
           className="w-full lg:w-1/2 flex flex-col z-20"
         >
-          <h2 className="w-full text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-6 md:mb-8 leading-tight">
+          <h2 className="w-full text-2xl md:text-lg lg:text-3xl! xl:text-3xl! font-bold text-white mb-6 md:mb-8 leading-tight">
             {settings.cta_unlock_power || t("unlockPower")}{" "}
             <span className="text-[#FF8A00]">
               {settings.cta_innovation || t("innovation")}
