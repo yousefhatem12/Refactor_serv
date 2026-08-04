@@ -361,8 +361,7 @@ export default function Features() {
                         alt={`Partner ${index + 1}`}
                         className="h-12 sm:h-14 md:h-20 lg:h-24 w-auto object-contain opacity-60 group-hover:opacity-100 transition-all duration-300"
                         style={
-                          partner.includes("/Features/") ||
-                            partner.includes("/settings/")
+                          partner.includes("/Features/")
                             ? { filter: "brightness(0) invert(1)" }
                             : {}
                         }
