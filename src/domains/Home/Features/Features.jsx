@@ -391,7 +391,7 @@ export default function Features() {
           {/* Creative Top Border Glow */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 max-w-md h-[1px] bg-gradient-to-r from-transparent via-[#D98B50] to-transparent opacity-50"></div>
 
-          <p className="text-center text-gray-500 mb-8 md:mb-12 font-medium tracking-widest uppercase text-[10px] md:text-xs">
+          <p className="text-center text-gray-300 mb-8 md:mb-12 font-semibold tracking-widest uppercase text-[11px] md:text-xs">
             {t("trustedBy")}
           </p>
 
