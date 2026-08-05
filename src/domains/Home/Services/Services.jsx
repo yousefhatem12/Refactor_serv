@@ -259,8 +259,10 @@ const Services = () => {
                 <h3
                   className="text-xl sm:text-2xl md:text-3xl font-semibold"
                   style={{
-                    color: getPlanetColor(activeService?.dotColor),
-                    textShadow: `0 0 20px ${getPlanetColor(activeService?.dotColor)}44`,
+                    background: (activeService?.gradient || getPlanetColor(activeService?.dotColor))?.replace(/\b\d+deg|to right|to left\b/g, 'to bottom'),
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    filter: `brightness(1.2) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 10px ${getPlanetColor(activeService?.dotColor)}66)`,
                   }}
                 >
                   {activeService.title}
@@ -370,7 +372,7 @@ const Services = () => {
             <motion.div
               layout
               transition={springTransition}
-              className="absolute bottom-[-10%] sm:bottom-[-20%] md:bottom-[-40%] lg:bottom-[-40%] left-1/2 -translate-x-1/2 w-[200px] sm:w-[280px] md:w-[380px] lg:w-[480px] aspect-square origin-bottom pointer-events-none"
+              className="absolute bottom-[-10%] sm:bottom-[-20%] md:bottom-[-40%] lg:bottom-[-40%] left-1/2 -translate-x-1/2 w-[300px] sm:w-[400px] md:w-[550px] lg:w-[700px] aspect-square origin-bottom pointer-events-none"
               style={{
                 y: mainY,
                 scale: mainScale,
