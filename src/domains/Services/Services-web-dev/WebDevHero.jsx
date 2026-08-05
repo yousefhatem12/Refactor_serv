@@ -100,7 +100,7 @@ const WebDevHero = ({ data, serviceId = "web-development" }) => {
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           >
             <img
-              src="/Services/new/green.webp"
+              src="/Services/green.webp"
               alt="Green Planet"
               className={`w-full h-auto object-contain drop-shadow-[0_0_50px_rgba(34,197,94,0.3)] scale-110 ${isRtl ? "-translate-x-[10%]" : "translate-x-[10%]"}`}
             />

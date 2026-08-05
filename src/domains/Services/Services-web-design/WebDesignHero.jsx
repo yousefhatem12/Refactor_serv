@@ -86,7 +86,7 @@ const WebDesignHero = ({ data, serviceId = "ui-ux-design" }) => {
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
         >
           <img
-            src="/Services/new/yellow.webp"
+            src="/Services/yellow.webp"
             alt="Yellow Planet"
             className={`w-full h-auto object-contain drop-shadow-[0_0_50px_rgba(217,139,80,0.3)] scale-75 ${isRtl ? "-translate-x-[10%]" : "translate-x-[10%]"}`}
           />
