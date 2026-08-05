@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Models\Page as PageModel;
+use App\Support\AboutPagePeople;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -56,7 +57,10 @@ class ManageAboutPage extends Page implements HasForms
             ]
         );
 
-        $this->form->fill($this->record->toArray());
+        $data = $this->record->toArray();
+        $data['people'] = AboutPagePeople::extract($data['sections'] ?? []);
+
+        $this->form->fill($data);
     }
 
     public function form(Schema $schema): Schema
@@ -65,6 +69,54 @@ class ManageAboutPage extends Page implements HasForms
             ->components([
                 \Filament\Schemas\Components\Tabs::make('Translations')
                     ->tabs([
+                        \Filament\Schemas\Components\Tabs\Tab::make('Founders & Team')
+                            ->schema([
+                                \Filament\Forms\Components\Repeater::make('people.founders')
+                                    ->label('Founders')
+                                    ->helperText('Add each founder once. Only the name and position are translated; the image is shared between Arabic and English.')
+                                    ->schema([
+                                        TextInput::make('name_en')->label('Name (English)')->required(),
+                                        TextInput::make('name_ar')->label('Name (Arabic)')->required()->extraInputAttributes(['dir' => 'rtl']),
+                                        TextInput::make('role_en')->label('Position / Department (English)')->required(),
+                                        TextInput::make('role_ar')->label('Position / Department (Arabic)')->required()->extraInputAttributes(['dir' => 'rtl']),
+                                        FileUpload::make('image')
+                                            ->label('Shared Image')
+                                            ->image()
+                                            ->directory('pages')
+                                            ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'pages')),
+                                    ])
+                                    ->columns(2)
+                                    ->collapsible()
+                                    ->defaultItems(0),
+                                \Filament\Forms\Components\Repeater::make('people.team')
+                                    ->label('Team Members')
+                                    ->helperText('Add each member once. The image, department filter, and social accounts are shared between Arabic and English.')
+                                    ->schema([
+                                        TextInput::make('name_en')->label('Name (English)')->required(),
+                                        TextInput::make('name_ar')->label('Name (Arabic)')->required()->extraInputAttributes(['dir' => 'rtl']),
+                                        TextInput::make('role_en')->label('Position / Department (English)')->required(),
+                                        TextInput::make('role_ar')->label('Position / Department (Arabic)')->required()->extraInputAttributes(['dir' => 'rtl']),
+                                        \Filament\Forms\Components\Select::make('dept')
+                                            ->label('Department Filter')
+                                            ->options([
+                                                'management' => 'Management',
+                                                'development' => 'Development',
+                                                'design' => 'Design',
+                                                'marketing' => 'Marketing',
+                                            ])->required(),
+                                        FileUpload::make('image')
+                                            ->label('Shared Image')
+                                            ->image()
+                                            ->directory('pages')
+                                            ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'pages')),
+                                        TextInput::make('linkedin')->label('LinkedIn URL'),
+                                        TextInput::make('github')->label('GitHub URL'),
+                                        TextInput::make('twitter')->label('Twitter / X URL'),
+                                    ])
+                                    ->columns(2)
+                                    ->collapsible()
+                                    ->defaultItems(0),
+                            ]),
                         \Filament\Schemas\Components\Tabs\Tab::make('English')
                             ->schema([
                                 TextInput::make('title.en')->label('Hero Title'),
@@ -160,14 +212,6 @@ class ManageAboutPage extends Page implements HasForms
                                             ->schema([
                                                 TextInput::make('title'),
                                                 Textarea::make('description'),
-                                                \Filament\Forms\Components\Repeater::make('items')
-                                                    ->schema([
-                                                        TextInput::make('name')->required(),
-                                                        TextInput::make('role')->required(),
-                                                        \Filament\Forms\Components\FileUpload::make('image')->image()
-                                                            ->directory('pages')
-                                                            ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'pages')),
-                                                    ])->columns(2),
                                             ]),
                                         \Filament\Forms\Components\Builder\Block::make('team_work')
                                             ->label('Team Work Section')
@@ -180,25 +224,6 @@ class ManageAboutPage extends Page implements HasForms
                                                         Textarea::make('description')->required(),
                                                         TextInput::make('icon')->label('Icon Name (e.g., FaUsers, FaCode)')->required(),
                                                     ])->columns(3),
-                                                \Filament\Forms\Components\Repeater::make('members')
-                                                    ->schema([
-                                                        TextInput::make('name')->required(),
-                                                        TextInput::make('role')->required(),
-                                                        \Filament\Forms\Components\Select::make('dept')
-                                                            ->label('Department')
-                                                            ->options([
-                                                                'management' => 'Management',
-                                                                'development' => 'Development',
-                                                                'design' => 'Design',
-                                                                'marketing' => 'Marketing',
-                                                            ])->required(),
-                                                        \Filament\Forms\Components\FileUpload::make('image')->image()
-                                                            ->directory('pages')
-                                                            ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'pages')),
-                                                        TextInput::make('linkedin')->label('LinkedIn URL'),
-                                                        TextInput::make('github')->label('GitHub URL'),
-                                                        TextInput::make('twitter')->label('Twitter / X URL'),
-                                                    ])->columns(2),
                                             ]),
                                         \Filament\Forms\Components\Builder\Block::make('cta')
                                             ->label('Call To Action Section')
@@ -300,14 +325,6 @@ class ManageAboutPage extends Page implements HasForms
                                             ->schema([
                                                 TextInput::make('title'),
                                                 Textarea::make('description'),
-                                                \Filament\Forms\Components\Repeater::make('items')
-                                                    ->schema([
-                                                        TextInput::make('name')->required(),
-                                                        TextInput::make('role')->required(),
-                                                        \Filament\Forms\Components\FileUpload::make('image')->image()
-                                                            ->directory('pages')
-                                                            ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'pages')),
-                                                    ])->columns(2),
                                             ]),
                                         \Filament\Forms\Components\Builder\Block::make('team_work')
                                             ->label('Team Work Section')
@@ -320,25 +337,6 @@ class ManageAboutPage extends Page implements HasForms
                                                         Textarea::make('description')->required(),
                                                         TextInput::make('icon')->label('Icon Name (e.g., FaUsers, FaCode)')->required(),
                                                     ])->columns(3),
-                                                \Filament\Forms\Components\Repeater::make('members')
-                                                    ->schema([
-                                                        TextInput::make('name')->required(),
-                                                        TextInput::make('role')->required(),
-                                                        \Filament\Forms\Components\Select::make('dept')
-                                                            ->label('Department')
-                                                            ->options([
-                                                                'management' => 'Management',
-                                                                'development' => 'Development',
-                                                                'design' => 'Design',
-                                                                'marketing' => 'Marketing',
-                                                            ])->required(),
-                                                        \Filament\Forms\Components\FileUpload::make('image')->image()
-                                                            ->directory('pages')
-                                                            ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'pages')),
-                                                        TextInput::make('linkedin')->label('LinkedIn URL'),
-                                                        TextInput::make('github')->label('GitHub URL'),
-                                                        TextInput::make('twitter')->label('Twitter / X URL'),
-                                                    ])->columns(2),
                                             ]),
                                         \Filament\Forms\Components\Builder\Block::make('cta')
                                             ->label('Call To Action Section')
@@ -368,6 +366,12 @@ class ManageAboutPage extends Page implements HasForms
     {
         try {
             $data = $this->form->getState();
+            $data['sections'] = AboutPagePeople::sync(
+                $data['sections'] ?? [],
+                $data['people'] ?? [],
+            );
+            unset($data['people']);
+
             $this->record->update($data);
 
             Notification::make()
