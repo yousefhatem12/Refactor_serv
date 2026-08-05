@@ -153,7 +153,7 @@ export default function DynamicServicePage() {
             dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
           />
         )}
-        <div className="w-full relative z-10 pb-10 pt-20">
+        <div className="w-full relative z-10 pb-10">
           {blocks.map((block, index) => (
             <RenderBlock
               key={index}
@@ -161,6 +161,9 @@ export default function DynamicServicePage() {
               heroStyle={heroStyle}
               defaultHeroImage={defaultHeroImage}
               serviceId={serviceData.id}
+              planetImage={serviceData.icon || serviceData.img || null}
+              gradient={serviceData.gradient || null}
+              dotColor={serviceData.dotColor || null}
               language={language}
               t={t}
             />
@@ -179,7 +182,7 @@ export default function DynamicServicePage() {
 // ─────────────────────────────────────────────────────
 // Block Renderer — renders each block by type
 // ─────────────────────────────────────────────────────
-function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, t }) {
+function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, planetImage, gradient, dotColor, language, t }) {
   const data = block.data || {};
   const heroImage = data.hero_image
     ? getMediaUrl(data.hero_image)
@@ -204,22 +207,27 @@ function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, 
               subtitle: resolveText(data.subtitle),
               desc: resolveText(data.subtitle),
               bg_image: heroImage,
-              hidePlanet: true,
+              hidePlanet: false,
               bgPosition: "bg-bottom",
               overlay: "bg-black/20",
             }}
             serviceId={serviceId}
+            planetImage={planetImage}
+            gradient={gradient}
+            dotColor={dotColor}
           />
         );
       }
       // Default: social_media_hero
       return (
         <SocialMediaHero
-          title={resolveText(data.title)}
-          desc={resolveText(data.subtitle)}
+          title={resolveText(data.title) || resolveText(data.hero_title)}
+          desc={resolveText(data.subtitle) || resolveText(data.description)}
           bgImage={heroImage}
-          planetImage={null}
+          planetImage={planetImage || "/Services/Purple Planet.webp"}
           serviceId={serviceId}
+          gradient={gradient}
+          dotColor={dotColor}
         />
       );
 
@@ -393,7 +401,15 @@ function OldFormatRenderer({ serviceData, language, t, serviceSchema }) {
       case "web-development":
         return (
           <>
-            {serviceData.show_hero !== false && <WebDevHero data={serviceData} serviceId={serviceData.id} />}
+            {serviceData.show_hero !== false && (
+              <WebDevHero
+                data={serviceData}
+                serviceId={serviceData.id}
+                gradient={serviceData.gradient || null}
+                dotColor={serviceData.dotColor || null}
+                planetImage={serviceData.icon || serviceData.img || null}
+              />
+            )}
             {serviceData.show_features !== false && (
               <WebDesignFeatures title={serviceData.features_title || t("webDevFeaturesTitle")} description={serviceData.features_subtitle} featuresList={serviceData.features_list} />
             )}
@@ -404,7 +420,15 @@ function OldFormatRenderer({ serviceData, language, t, serviceSchema }) {
       case "ui-ux-design":
         return (
           <>
-            {serviceData.show_hero !== false && <WebDesignHero data={serviceData} serviceId={serviceData.id} />}
+            {serviceData.show_hero !== false && (
+              <WebDesignHero
+                data={serviceData}
+                serviceId={serviceData.id}
+                gradient={serviceData.gradient || null}
+                dotColor={serviceData.dotColor || null}
+                planetImage={serviceData.icon || serviceData.img || null}
+              />
+            )}
             {serviceData.show_features !== false && (
               <WebDesignFeatures title={serviceData.features_title} description={serviceData.features_subtitle} featuresList={serviceData.features_list} />
             )}
@@ -421,8 +445,10 @@ function OldFormatRenderer({ serviceData, language, t, serviceSchema }) {
                 title={serviceData.hero_title || serviceData.title}
                 desc={serviceData.hero_subtitle || serviceData.description}
                 bgImage={serviceData.id === "seo-optimization" || serviceData.id === "network-marketing" ? "/template/template-one-hero.webp" : undefined}
-                planetImage={null}
+                planetImage={serviceData.icon || serviceData.img || null}
                 serviceId={serviceData.id}
+                gradient={serviceData.gradient || null}
+                dotColor={serviceData.dotColor || null}
               />
             )}
             {serviceData.show_digital_marketing !== false && (
@@ -440,7 +466,14 @@ function OldFormatRenderer({ serviceData, language, t, serviceSchema }) {
         return (
           <>
             {serviceData.show_hero !== false && (
-              <ServicesHero title={serviceData.hero_title || serviceData.title} desc={serviceData.hero_subtitle || serviceData.description} serviceId={serviceData.id} />
+              <ServicesHero
+                title={serviceData.hero_title || serviceData.title}
+                desc={serviceData.hero_subtitle || serviceData.description}
+                serviceId={serviceData.id}
+                gradient={serviceData.gradient || null}
+                dotColor={serviceData.dotColor || null}
+                planetImage={serviceData.icon || serviceData.img || null}
+              />
             )}
             {serviceData.show_features !== false && (
               <ServicesFeatures featuresTitle={serviceData.features_title} featuresSubtitle={serviceData.features_subtitle} featuresList={serviceData.features_list} />
@@ -452,7 +485,15 @@ function OldFormatRenderer({ serviceData, language, t, serviceSchema }) {
       case "ecommerce":
         return (
           <>
-            {serviceData.show_hero !== false && <EcommerceHero data={serviceData} serviceId={serviceData.id} />}
+            {serviceData.show_hero !== false && (
+              <EcommerceHero
+                data={serviceData}
+                serviceId={serviceData.id}
+                gradient={serviceData.gradient || null}
+                dotColor={serviceData.dotColor || null}
+                planetImage={serviceData.icon || serviceData.img || null}
+              />
+            )}
             {serviceData.show_features !== false && (
               <EcommerceFeatures
                 title={serviceData.features_title}
@@ -467,7 +508,15 @@ function OldFormatRenderer({ serviceData, language, t, serviceSchema }) {
         return (
           <>
             {serviceData.show_hero !== false && (
-              <SocialMediaHero title={serviceData.hero_title || serviceData.title || t("mobileAppDev")} desc={serviceData.hero_subtitle || serviceData.description} bgImage="/template/template-two-hero.webp" planetImage={null} serviceId={serviceData.id} />
+              <SocialMediaHero
+                title={serviceData.hero_title || serviceData.title || t("mobileAppDev")}
+                desc={serviceData.hero_subtitle || serviceData.description}
+                bgImage="/template/template-two-hero.webp"
+                planetImage={serviceData.icon || serviceData.img || null}
+                serviceId={serviceData.id}
+                gradient={serviceData.gradient || null}
+                dotColor={serviceData.dotColor || null}
+              />
             )}
             {serviceData.show_features !== false && (
               <WebDesignFeatures title={serviceData.features_title || t("mobileAppFeaturesTitle")} description={serviceData.features_subtitle || ""} featuresList={serviceData.features_list} />
@@ -482,7 +531,14 @@ function OldFormatRenderer({ serviceData, language, t, serviceSchema }) {
         return (
           <>
             {serviceData.show_hero !== false && (
-              <ServicesHero title={serviceData.hero_title || serviceData.title} desc={serviceData.hero_subtitle || serviceData.description} serviceId={serviceData.id} />
+              <ServicesHero
+                title={serviceData.hero_title || serviceData.title}
+                desc={serviceData.hero_subtitle || serviceData.description}
+                serviceId={serviceData.id}
+                gradient={serviceData.gradient || null}
+                dotColor={serviceData.dotColor || null}
+                planetImage={serviceData.icon || serviceData.img || null}
+              />
             )}
             {serviceData.show_features !== false && (
               <ServicesFeatures featuresTitle={serviceData.features_title} featuresSubtitle={serviceData.features_subtitle} featuresList={serviceData.features_list} />
@@ -501,7 +557,7 @@ function OldFormatRenderer({ serviceData, language, t, serviceSchema }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
         />
       )}
-      <div className="w-full relative z-10 pb-10 pt-20">
+      <div className="w-full relative z-10 pb-10">
         {renderOldTemplate()}
       </div>
     </main>

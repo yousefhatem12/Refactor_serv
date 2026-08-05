@@ -17,9 +17,10 @@ const Services = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Extract color from Tailwind dotColor field (e.g. "bg-[#22C55E]" -> "#22C55E")
+  // Supports the current raw hex API value and the legacy Tailwind value.
   const getPlanetColor = (dotColor) => {
     if (!dotColor) return "#FF8A00";
+    if (/^#[0-9a-f]{3,8}$/i.test(dotColor)) return dotColor;
     // Handle arbitrary Tailwind format: bg-[#HEXCODE]
     const arbitraryMatch = dotColor.match(/bg-\[([^\]]+)\]/);
     if (arbitraryMatch) return arbitraryMatch[1];
@@ -258,8 +259,10 @@ const Services = () => {
                 <h3
                   className="text-xl sm:text-2xl md:text-3xl font-semibold"
                   style={{
-                    color: getPlanetColor(activeService?.dotColor),
-                    textShadow: `0 0 20px ${getPlanetColor(activeService?.dotColor)}44`,
+                    background: (activeService?.gradient || getPlanetColor(activeService?.dotColor))?.replace(/\b\d+deg|to right|to left\b/g, 'to bottom'),
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    filter: `brightness(1.2) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 10px ${getPlanetColor(activeService?.dotColor)}66)`,
                   }}
                 >
                   {activeService.title}
@@ -323,7 +326,7 @@ const Services = () => {
                 onClick={handlePrev}
                 transition={springTransition}
                 style={{ x: leftX, y: leftY, opacity: leftOpacity }}
-                className="absolute bottom-[15%] left-[6%] sm:left-[10%] md:bottom-[0%] md:left-[5%] flex items-center gap-4 md:gap-6 cursor-pointer pointer-events-auto group z-50"
+                className="absolute bottom-[15%] left-[2%] sm:left-[5%] md:bottom-[0%] md:left-[2%] flex items-center gap-4 md:gap-6 cursor-pointer pointer-events-auto group z-50"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -348,14 +351,18 @@ const Services = () => {
                 </motion.div>
                 <motion.div
                   initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: -50 }}
+                  animate={{ opacity: 1, x: 0 }}
                   className="hidden md:flex items-center gap-2"
                 >
                   <span className="text-white/80 font-semibold text-lg lg:text-xl whitespace-nowrap">
                     {leftService.label}
                   </span>
                   <div
-                    className={`w-2 h-2 rounded-full ${leftService.dotColor} ${leftService.shadow}`}
+                    className="w-2 h-2 rounded-full"
+                    style={{
+                      backgroundColor: getPlanetColor(leftService.dotColor),
+                      boxShadow: `0 0 20px ${getPlanetColor(leftService.dotColor)}`,
+                    }}
                   />
                 </motion.div>
               </motion.div>
@@ -365,7 +372,7 @@ const Services = () => {
             <motion.div
               layout
               transition={springTransition}
-              className="absolute bottom-[-10%] sm:bottom-[-20%] md:bottom-[-40%] lg:bottom-[-40%] left-1/2 -translate-x-1/2 w-[200px] sm:w-[280px] md:w-[380px] lg:w-[480px] aspect-square origin-bottom pointer-events-none"
+              className="absolute bottom-[-25%] sm:bottom-[-35%] md:bottom-[-55%] lg:bottom-[-55%] left-1/2 -translate-x-1/2 w-[300px] sm:w-[400px] md:w-[550px] lg:w-[700px] aspect-square origin-bottom pointer-events-none"
               style={{
                 y: mainY,
                 scale: mainScale,
@@ -401,7 +408,7 @@ const Services = () => {
                 onClick={handleNext}
                 transition={springTransition}
                 style={{ x: rightX, y: rightY, opacity: rightOpacity }}
-                className="absolute bottom-[15%] right-[6%] sm:right-[10%] md:bottom-[-2%] md:right-[5%] flex flex-row-reverse items-center gap-4 md:gap-6 cursor-pointer pointer-events-auto group z-50"
+                className="absolute bottom-[15%] right-[2%] sm:right-[5%] md:bottom-[-2%] md:right-[2%] flex flex-row-reverse items-center gap-4 md:gap-6 cursor-pointer pointer-events-auto group z-50"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -426,14 +433,18 @@ const Services = () => {
                 </motion.div>
                 <motion.div
                   initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 40 }}
+                  animate={{ opacity: 1, x: 0 }}
                   className="hidden md:flex flex-row-reverse items-center gap-2"
                 >
                   <span className="text-white/80 font-semibold text-lg lg:text-xl whitespace-nowrap">
                     {rightService.label}
                   </span>
                   <div
-                    className={`w-2 h-2 rounded-full ${rightService.dotColor} ${rightService.shadow}`}
+                    className="w-2 h-2 rounded-full"
+                    style={{
+                      backgroundColor: getPlanetColor(rightService.dotColor),
+                      boxShadow: `0 0 20px ${getPlanetColor(rightService.dotColor)}`,
+                    }}
                   />
                 </motion.div>
               </motion.div>

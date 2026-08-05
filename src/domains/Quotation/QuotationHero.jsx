@@ -103,7 +103,7 @@ const QuotationHero = () => {
 
             {/* Orbiting Blue Planet */}
             <motion.img
-              src="/Services/new/blue.webp"
+              src="/Services/blue.webp"
               alt="Blue Planet"
               className="absolute -bottom-4 -right-4 w-[20%] h-auto object-contain z-20 opacity-80"
               animate={{ 
