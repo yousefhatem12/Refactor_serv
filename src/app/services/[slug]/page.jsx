@@ -161,6 +161,7 @@ export default function DynamicServicePage() {
               heroStyle={heroStyle}
               defaultHeroImage={defaultHeroImage}
               serviceId={serviceData.id}
+              planetImage={serviceData.hero_image || null}
               language={language}
               t={t}
             />
@@ -179,7 +180,7 @@ export default function DynamicServicePage() {
 // ─────────────────────────────────────────────────────
 // Block Renderer — renders each block by type
 // ─────────────────────────────────────────────────────
-function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, t }) {
+function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, planetImage, language, t }) {
   const data = block.data || {};
   const heroImage = data.hero_image
     ? getMediaUrl(data.hero_image)
@@ -218,7 +219,7 @@ function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, language, 
           title={resolveText(data.title)}
           desc={resolveText(data.subtitle)}
           bgImage={heroImage}
-          planetImage={null}
+          planetImage={planetImage || "/Services/Purple Planet.webp"}
           serviceId={serviceId}
         />
       );
