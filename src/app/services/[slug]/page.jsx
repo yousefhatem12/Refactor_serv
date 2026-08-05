@@ -161,7 +161,7 @@ export default function DynamicServicePage() {
               heroStyle={heroStyle}
               defaultHeroImage={defaultHeroImage}
               serviceId={serviceData.id}
-              planetImage={serviceData.hero_image || null}
+              planetImage={serviceData.icon || null}
               language={language}
               t={t}
             />
