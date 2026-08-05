@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Models\ServiceTemplate;
+use App\Services\ServicePlanetStyle;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -9,11 +11,11 @@ class ServiceResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
-        $lang = request('lang', request()->header('Accept-Language', 'en'));
+        $lang = $request->query('lang', $request->header('Accept-Language', 'en'));
         if (is_array($lang)) {
             $lang = reset($lang);
         }
-        $lang = str_starts_with(strtolower((string)$lang), 'ar') ? 'ar' : 'en';
+        $lang = str_starts_with(strtolower((string) $lang), 'ar') ? 'ar' : 'en';
 
         $trans = function ($field) use ($lang) {
             if (is_string($field)) {
@@ -22,19 +24,23 @@ class ServiceResource extends JsonResource
                     $field = $decoded;
                 }
             }
-            if (!is_array($field)) {
+            if (! is_array($field)) {
                 return (string) $field;
             }
+
             return (string) ($field[$lang] ?? $field['en'] ?? '');
         };
+
+        $img = $this->icon ?: '/Services/planet4.webp';
+        $style = ServicePlanetStyle::forImage($img);
 
         // If it's a detail request (show/getService endpoint)
         if ($request->routeIs('*.show') || $request->routeIs('*.getService')) {
             $sections = $this->sections ?: [];
-            
+
             // blocks array from Page Builder - translate all text fields
             $blocks = null;
-            if (!empty($sections['blocks']) && is_array($sections['blocks'])) {
+            if (! empty($sections['blocks']) && is_array($sections['blocks'])) {
                 // Recursively translate any {en, ar} objects to strings
                 $translateDeep = function ($value) use (&$translateDeep, $trans) {
                     if (is_array($value)) {
@@ -43,9 +49,11 @@ class ServiceResource extends JsonResource
                         if (array_key_exists('en', $value) || array_key_exists('ar', $value)) {
                             return $trans($value);
                         }
+
                         // Otherwise recurse into array
                         return array_map($translateDeep, $value);
                     }
+
                     return $value;
                 };
 
@@ -53,6 +61,7 @@ class ServiceResource extends JsonResource
                     $data = $block['data'] ?? [];
                     // Translate all fields in data recursively
                     $translatedData = array_map($translateDeep, $data);
+
                     return [
                         'type' => $block['type'],
                         'data' => $translatedData,
@@ -61,35 +70,35 @@ class ServiceResource extends JsonResource
             }
 
             // flat keys for backward compat
-            $featuresList = collect($sections['features_list'] ?? [])->map(function($item) use ($trans) {
+            $featuresList = collect($sections['features_list'] ?? [])->map(function ($item) use ($trans) {
                 return [
                     'title' => $trans($item['title'] ?? null),
                     'desc' => $trans($item['desc'] ?? null),
                 ];
             })->toArray();
 
-            $howWeWorkList = collect($sections['how_we_work_list'] ?? [])->map(function($item) use ($trans) {
+            $howWeWorkList = collect($sections['how_we_work_list'] ?? [])->map(function ($item) use ($trans) {
                 return [
                     'title' => $trans($item['title'] ?? null),
                     'desc' => $trans($item['desc'] ?? null),
                 ];
             })->toArray();
 
-            $hostingOffersList = collect($sections['hosting_offers_list'] ?? [])->map(function($item) use ($trans) {
+            $hostingOffersList = collect($sections['hosting_offers_list'] ?? [])->map(function ($item) use ($trans) {
                 return [
                     'title' => $trans($item['title'] ?? null),
                     'desc' => $trans($item['desc'] ?? null),
                 ];
             })->toArray();
 
-            $digitalMarketingList = collect($sections['digital_marketing_list'] ?? [])->map(function($item) use ($trans) {
+            $digitalMarketingList = collect($sections['digital_marketing_list'] ?? [])->map(function ($item) use ($trans) {
                 return [
                     'title' => $trans($item['title'] ?? null),
                     'desc' => $trans($item['desc'] ?? null),
                 ];
             })->toArray();
 
-            $whyChooseUsList = collect($sections['why_choose_us_list'] ?? [])->map(function($item) use ($trans) {
+            $whyChooseUsList = collect($sections['why_choose_us_list'] ?? [])->map(function ($item) use ($trans) {
                 return [
                     'title' => $trans($item['title'] ?? null),
                     'desc' => $trans($item['desc'] ?? null),
@@ -100,7 +109,7 @@ class ServiceResource extends JsonResource
             $heroStyle = 'social_media_hero';
             $defaultHeroImage = null;
             if ($templateSlug) {
-                $tmpl = \App\Models\ServiceTemplate::where('slug', $templateSlug)->first();
+                $tmpl = ServiceTemplate::where('slug', $templateSlug)->first();
                 if ($tmpl) {
                     $heroStyle = $tmpl->hero_style;
                     $defaultHeroImage = $tmpl->default_hero_image;
@@ -112,6 +121,10 @@ class ServiceResource extends JsonResource
                 'title' => $trans($this->name),
                 'description' => $trans($this->description),
                 'icon' => $this->icon,
+                'img' => $img,
+                'gradient' => $style['gradient'],
+                'dotColor' => $style['dotColor'],
+                'shadow' => $style['shadow'],
                 'template' => $templateSlug,
                 'hero_style' => $heroStyle,
                 'default_hero_image' => $defaultHeroImage,
@@ -142,21 +155,6 @@ class ServiceResource extends JsonResource
         }
 
         // List representation
-        $img = $this->icon ?: '/Services/Purple Planet.webp';
-        
-        $style = ['from' => '#A855F7', 'to' => '#6366F1', 'dot' => '#A855F7', 'shadow' => 'shadow-[0_0_20px_#A855F7]']; // Default
-        
-        $imgLower = strtolower($img);
-        if (str_contains($imgLower, 'yellow')) {
-            $style = ['from' => '#F97316', 'to' => '#EAB308', 'dot' => '#EAB308', 'shadow' => 'shadow-[0_0_20px_#EAB308]'];
-        } elseif (str_contains($imgLower, 'green')) {
-            $style = ['from' => '#10B981', 'to' => '#059669', 'dot' => '#10B981', 'shadow' => 'shadow-[0_0_20px_#10B981]'];
-        } elseif (str_contains($imgLower, 'blue')) {
-            $style = ['from' => '#3B82F6', 'to' => '#2563EB', 'dot' => '#3B82F6', 'shadow' => 'shadow-[0_0_20px_#3B82F6]'];
-        } elseif (str_contains($imgLower, 'purple')) {
-            $style = ['from' => '#A855F7', 'to' => '#6366F1', 'dot' => '#A855F7', 'shadow' => 'shadow-[0_0_20px_#A855F7]'];
-        }
-
         $name = $trans($this->name);
 
         return [
@@ -165,8 +163,8 @@ class ServiceResource extends JsonResource
             'label' => $name,
             'description' => $trans($this->description),
             'img' => $img,
-            'gradient' => "from-[{$style['from']}] to-[{$style['to']}]",
-            'dotColor' => "bg-[{$style['dot']}]",
+            'gradient' => $style['gradient'],
+            'dotColor' => $style['dotColor'],
             'shadow' => $style['shadow'],
         ];
     }

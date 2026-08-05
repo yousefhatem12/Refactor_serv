@@ -17,9 +17,10 @@ const Services = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Extract color from Tailwind dotColor field (e.g. "bg-[#22C55E]" -> "#22C55E")
+  // Supports the current raw hex API value and the legacy Tailwind value.
   const getPlanetColor = (dotColor) => {
     if (!dotColor) return "#FF8A00";
+    if (/^#[0-9a-f]{3,8}$/i.test(dotColor)) return dotColor;
     // Handle arbitrary Tailwind format: bg-[#HEXCODE]
     const arbitraryMatch = dotColor.match(/bg-\[([^\]]+)\]/);
     if (arbitraryMatch) return arbitraryMatch[1];
@@ -355,7 +356,11 @@ const Services = () => {
                     {leftService.label}
                   </span>
                   <div
-                    className={`w-2 h-2 rounded-full ${leftService.dotColor} ${leftService.shadow}`}
+                    className="w-2 h-2 rounded-full"
+                    style={{
+                      backgroundColor: getPlanetColor(leftService.dotColor),
+                      boxShadow: `0 0 20px ${getPlanetColor(leftService.dotColor)}`,
+                    }}
                   />
                 </motion.div>
               </motion.div>
@@ -433,7 +438,11 @@ const Services = () => {
                     {rightService.label}
                   </span>
                   <div
-                    className={`w-2 h-2 rounded-full ${rightService.dotColor} ${rightService.shadow}`}
+                    className="w-2 h-2 rounded-full"
+                    style={{
+                      backgroundColor: getPlanetColor(rightService.dotColor),
+                      boxShadow: `0 0 20px ${getPlanetColor(rightService.dotColor)}`,
+                    }}
                   />
                 </motion.div>
               </motion.div>
