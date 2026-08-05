@@ -153,7 +153,7 @@ export default function DynamicServicePage() {
             dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
           />
         )}
-        <div className="w-full relative z-10 pb-10 pt-20">
+        <div className="w-full relative z-10 pb-10">
           {blocks.map((block, index) => (
             <RenderBlock
               key={index}
@@ -221,8 +221,8 @@ function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, planetImag
       // Default: social_media_hero
       return (
         <SocialMediaHero
-          title={resolveText(data.title)}
-          desc={resolveText(data.subtitle)}
+          title={resolveText(data.title) || resolveText(data.hero_title)}
+          desc={resolveText(data.subtitle) || resolveText(data.description)}
           bgImage={heroImage}
           planetImage={planetImage || "/Services/Purple Planet.webp"}
           serviceId={serviceId}
@@ -557,7 +557,7 @@ function OldFormatRenderer({ serviceData, language, t, serviceSchema }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
         />
       )}
-      <div className="w-full relative z-10 pb-10 pt-20">
+      <div className="w-full relative z-10 pb-10">
         {renderOldTemplate()}
       </div>
     </main>

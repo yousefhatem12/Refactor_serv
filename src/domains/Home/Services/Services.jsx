@@ -326,7 +326,7 @@ const Services = () => {
                 onClick={handlePrev}
                 transition={springTransition}
                 style={{ x: leftX, y: leftY, opacity: leftOpacity }}
-                className="absolute bottom-[15%] left-[6%] sm:left-[10%] md:bottom-[0%] md:left-[5%] flex items-center gap-4 md:gap-6 cursor-pointer pointer-events-auto group z-50"
+                className="absolute bottom-[15%] left-[2%] sm:left-[5%] md:bottom-[0%] md:left-[2%] flex items-center gap-4 md:gap-6 cursor-pointer pointer-events-auto group z-50"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -351,7 +351,7 @@ const Services = () => {
                 </motion.div>
                 <motion.div
                   initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: -50 }}
+                  animate={{ opacity: 1, x: 0 }}
                   className="hidden md:flex items-center gap-2"
                 >
                   <span className="text-white/80 font-semibold text-lg lg:text-xl whitespace-nowrap">
@@ -372,7 +372,7 @@ const Services = () => {
             <motion.div
               layout
               transition={springTransition}
-              className="absolute bottom-[-10%] sm:bottom-[-20%] md:bottom-[-40%] lg:bottom-[-40%] left-1/2 -translate-x-1/2 w-[300px] sm:w-[400px] md:w-[550px] lg:w-[700px] aspect-square origin-bottom pointer-events-none"
+              className="absolute bottom-[-25%] sm:bottom-[-35%] md:bottom-[-55%] lg:bottom-[-55%] left-1/2 -translate-x-1/2 w-[300px] sm:w-[400px] md:w-[550px] lg:w-[700px] aspect-square origin-bottom pointer-events-none"
               style={{
                 y: mainY,
                 scale: mainScale,
@@ -408,7 +408,7 @@ const Services = () => {
                 onClick={handleNext}
                 transition={springTransition}
                 style={{ x: rightX, y: rightY, opacity: rightOpacity }}
-                className="absolute bottom-[15%] right-[6%] sm:right-[10%] md:bottom-[-2%] md:right-[5%] flex flex-row-reverse items-center gap-4 md:gap-6 cursor-pointer pointer-events-auto group z-50"
+                className="absolute bottom-[15%] right-[2%] sm:right-[5%] md:bottom-[-2%] md:right-[2%] flex flex-row-reverse items-center gap-4 md:gap-6 cursor-pointer pointer-events-auto group z-50"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -433,7 +433,7 @@ const Services = () => {
                 </motion.div>
                 <motion.div
                   initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 40 }}
+                  animate={{ opacity: 1, x: 0 }}
                   className="hidden md:flex flex-row-reverse items-center gap-2"
                 >
                   <span className="text-white/80 font-semibold text-lg lg:text-xl whitespace-nowrap">
