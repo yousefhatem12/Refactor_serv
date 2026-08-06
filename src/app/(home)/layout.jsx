@@ -6,7 +6,8 @@ export async function generateMetadata() {
   const headerList = await headers();
   const locale = headerList.get("x-locale") || "en";
 
-  const data = await getCachedHomeData(locale);
+  const response = await getCachedHomeData(locale);
+  const data = response?.data || response;
   const settings = await getCachedSettings(locale);
   const alternates = await getSeoAlternates();
 
