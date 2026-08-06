@@ -35,11 +35,12 @@ const alexandria = Alexandria({
 import { headers, cookies } from "next/headers";
 import { fetchAPI, getMediaUrl } from "@/lib/api";
 import { getSeoAlternates } from "@/lib/seo";
-import { getCachedSettings } from "@/lib/cached-api";
 import {
-  extractCustomMeta,
-  renderCustomHeadCode,
-} from "@/lib/custom-head";
+  getCachedHomeData,
+  getCachedHeadSettings,
+  getCachedSettings,
+} from "@/lib/cached-api";
+import { renderCustomHeadCode } from "@/lib/custom-head";
 
 export async function generateMetadata() {
   const headersList = await headers();
@@ -47,27 +48,24 @@ export async function generateMetadata() {
   const cookieStore = await cookies();
   const language = xLocale || cookieStore.get("NEXT_LOCALE")?.value || "en";
 
-  const settings = await getCachedSettings(language);
+  const [settings, homeData] = await Promise.all([
+    getCachedSettings(language),
+    getCachedHomeData(language),
+  ]);
   const faviconUrl = settings?.site_favicon
     ? getMediaUrl(settings.site_favicon)
     : "/logo.svg";
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://serv5.com.eg";
   const alternates = await getSeoAlternates();
 
-  const siteTitle = settings?.site_title || "Serv5";
-  
+  const siteTitle = homeData?.seo?.title || settings?.site_title || "Serv5";
   const siteDesc =
-    settings?.site_description ||
+    homeData?.seo?.description || settings?.site_description ||
     "Leading company in web development and AI solutions.";
   const siteLogo = settings?.site_logo ? getMediaUrl(settings.site_logo) : "";
   const ogImageUrl = settings?.social_share_image
     ? getMediaUrl(settings.social_share_image)
     : siteLogo;
-  const customMeta = extractCustomMeta(settings?.custom_header_code);
-  
-  console.log({
-    settings
-  })
   return {
     metadataBase: new URL(siteUrl),
     title: {
@@ -95,7 +93,6 @@ export async function generateMetadata() {
       description: siteDesc,
       images: ogImageUrl ? [ogImageUrl] : [],
     },
-    other: customMeta,
   };
 }
 
@@ -130,6 +127,7 @@ async function ProvidersAndContent({ children }) {
     logo: siteLogo,
     description: siteDesc,
   };
+
 
   const websiteSchema = {
     "@context": "https://schema.org",
@@ -173,21 +171,12 @@ async function ProvidersAndContent({ children }) {
   );
 }
 
-async function CustomHead() {
-  const headersList = await headers();
-  const xLocale = headersList.get("x-locale");
-  const cookieStore = await cookies();
-  const defaultLanguage =
-    xLocale || cookieStore.get("NEXT_LOCALE")?.value || "en";
-  const settings = await getCachedSettings(defaultLanguage);
-
-  return renderCustomHeadCode(settings?.custom_header_code, {
-    excludeMeta: true,
+export default async function RootLayout({ children }) {
+  const settings = await getCachedHeadSettings("en");
+  const customHead = renderCustomHeadCode(settings?.custom_header_code, {
     useNextScript: true,
   });
-}
 
-export default async function RootLayout({ children }) {
   return (
     <html
       lang="en"
@@ -196,9 +185,7 @@ export default async function RootLayout({ children }) {
     >
       <head>
         <link rel="preload" href="/logo.svg" as="image" type="image/svg+xml" fetchPriority="high" />
-        <Suspense fallback={null}>
-          <CustomHead />
-        </Suspense>
+        {customHead}
       </head>
       <body className="min-h-screen flex flex-col relative" suppressHydrationWarning>
         <script
