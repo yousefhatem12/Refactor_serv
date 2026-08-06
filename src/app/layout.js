@@ -55,6 +55,7 @@ export async function generateMetadata() {
   const alternates = await getSeoAlternates();
 
   const siteTitle = settings?.site_title || "Serv5";
+  
   const siteDesc =
     settings?.site_description ||
     "Leading company in web development and AI solutions.";
@@ -64,6 +65,9 @@ export async function generateMetadata() {
     : siteLogo;
   const customMeta = extractCustomMeta(settings?.custom_header_code);
   
+  console.log({
+    settings
+  })
   return {
     metadataBase: new URL(siteUrl),
     title: {
