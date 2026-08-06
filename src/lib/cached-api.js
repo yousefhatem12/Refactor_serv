@@ -20,5 +20,3 @@ export async function getCachedHomeData(locale) {
   cacheLife("seconds");
   return fetchAPI(`/pages/home?lang=${locale}`, { skipHeaders: true });
 }
-
-
