@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   cacheComponents: true,
+  // Keep all generated metadata in the document <head> for every user agent.
+  htmlLimitedBots: /.*/,
   poweredByHeader: false,
   experimental: {
     useCache: true,
