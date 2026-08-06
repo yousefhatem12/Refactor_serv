@@ -41,6 +41,8 @@ class Setting extends Model
         $clear = function () {
             \Illuminate\Support\Facades\Cache::forget('settings_en');
             \Illuminate\Support\Facades\Cache::forget('settings_ar');
+            \Illuminate\Support\Facades\Cache::forget('settings_v2_en');
+            \Illuminate\Support\Facades\Cache::forget('settings_v2_ar');
         };
         static::saved($clear);
         static::deleted($clear);

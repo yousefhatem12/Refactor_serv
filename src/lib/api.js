@@ -6,7 +6,10 @@ export const getMediaUrl = (path) => {
   if (path.startsWith("http")) return path;
 
   const baseUrl = API_BASE_URL.replace(/\/api(\/v\d+)?$/, "");
-  return `${baseUrl}/storage/${path.replace(/^\//, "")}`;
+  const normalizedPath = path
+    .replace(/^\//, "")
+    .replace(/^storage\//, "");
+  return `${baseUrl}/storage/${normalizedPath}`;
 };
 
 // In-memory cache to store GET promises and their timestamp

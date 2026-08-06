@@ -3,26 +3,36 @@
 namespace App\Filament\Pages;
 
 use App\Models\Setting;
+use App\Services\ImageService;
+use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Schemas\Schema;
-use Filament\Pages\Page;
-use Filament\Actions\Action;
-use Filament\Notifications\Notification;
 
-/**
- * @property \Filament\Schemas\Schema|\Filament\Forms\Form $form
- */
+use Filament\Notifications\Notification;
+use Filament\Pages\Page;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
+
 class ManageMediaSettings extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    public static function getNavigationGroup(): ?string { return __('System Settings'); }
+    public static function getNavigationGroup(): ?string
+    {
+        return __('System Settings');
+    }
+
     protected static ?int $navigationSort = 70;
+
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-photo';
-    public static function getNavigationLabel(): string { return __('Images & Media'); }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Images & Media');
+    }
+
     protected string $view = 'filament.pages.manage-media-settings';
 
     public ?array $data = [];
@@ -45,32 +55,32 @@ class ManageMediaSettings extends Page implements HasForms
     {
         return $schema
             ->schema([
-                \Filament\Schemas\Components\Section::make('Branding Media')
+                Section::make('Branding Media')
                     ->description('Manage global logos and icons')
                     ->schema([
                         FileUpload::make('site_logo')
                             ->label('Website Logo')
                             ->image()
                             ->directory('settings')
-                            ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'settings')),
+                            ->saveUploadedFileUsing(fn ($file) => ImageService::convertToWebp($file, 'settings')),
                         FileUpload::make('site_favicon')
                             ->label('Favicon (Tab Icon)')
                             ->image()
                             ->directory('settings')
-                            ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'settings')),
+                            ->saveUploadedFileUsing(fn ($file) => ImageService::convertToWebp($file, 'settings')),
                     ])->columns(2),
 
-                \Filament\Schemas\Components\Section::make('SEO & Sharing Media')
+                Section::make('SEO & Sharing Media')
                     ->description('Manage images used when sharing links on social media')
                     ->schema([
                         FileUpload::make('social_share_image')
                             ->label('Social Share Image (OG Image)')
                             ->image()
                             ->directory('settings')
-                            ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'settings')),
+                            ->saveUploadedFileUsing(fn ($file) => ImageService::convertToWebp($file, 'settings')),
                     ]),
 
-                \Filament\Schemas\Components\Section::make('Interactive Media')
+                Section::make('Interactive Media')
                     ->description('Global interactive media links')
                     ->schema([
                         TextInput::make('company_video_url')
@@ -95,9 +105,16 @@ class ManageMediaSettings extends Page implements HasForms
     {
         try {
             $data = $this->form->getState();
+            $imageKeys = ['site_logo', 'site_favicon', 'social_share_image'];
 
             foreach ($data as $key => $value) {
-                Setting::updateOrCreate(['key' => $key], ['value' => $value]);
+                $attributes = ['value' => $value];
+                if (in_array($key, $imageKeys, true)) {
+                    $attributes['type'] = 'image';
+                    $attributes['value_source'] = 'file';
+                }
+
+                Setting::updateOrCreate(['key' => $key], $attributes);
             }
 
             Notification::make()
