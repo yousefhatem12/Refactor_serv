@@ -72,10 +72,10 @@ class AdminPanelProvider extends PanelProvider
                             overflow: visible !important;
                         }
 
-                        /* Apply fixed/floating styles to all form actions globally */
-                        form .fi-form-actions, 
-                        form .fi-sc-actions .fi-ac,
-                        form > .fi-ac {
+                        /* Keep floating actions scoped to authenticated panel pages. */
+                        .fi-layout form .fi-form-actions,
+                        .fi-layout form .fi-sc-actions .fi-ac,
+                        .fi-layout form > .fi-ac {
                             position: fixed !important;
                             bottom: 1rem !important;
                             z-index: 10 !important;
@@ -98,16 +98,16 @@ class AdminPanelProvider extends PanelProvider
                         }
 
                         /* Override fixed offset for RTL layout */
-                        html[dir="rtl"] form .fi-form-actions, 
-                        html[dir="rtl"] form .fi-sc-actions .fi-ac,
-                        html[dir="rtl"] form > .fi-ac {
+                        html[dir="rtl"] .fi-layout form .fi-form-actions,
+                        html[dir="rtl"] .fi-layout form .fi-sc-actions .fi-ac,
+                        html[dir="rtl"] .fi-layout form > .fi-ac {
                             left: calc(50% - (var(--sidebar-width, 16rem) / 2)) !important;
                         }
 
                         /* Center the buttons inside the sticky container */
-                        form .fi-form-actions > div,
-                        form .fi-sc-actions .fi-ac > div,
-                        form > .fi-ac > div {
+                        .fi-layout form .fi-form-actions > div,
+                        .fi-layout form .fi-sc-actions .fi-ac > div,
+                        .fi-layout form > .fi-ac > div {
                             display: flex !important;
                             justify-content: center !important;
                             align-items: center !important;
@@ -117,9 +117,9 @@ class AdminPanelProvider extends PanelProvider
                         }
 
                         /* Dark mode overrides */
-                        .dark form .fi-form-actions, 
-                        .dark form .fi-sc-actions .fi-ac,
-                        .dark form > .fi-ac {
+                        .dark .fi-layout form .fi-form-actions,
+                        .dark .fi-layout form .fi-sc-actions .fi-ac,
+                        .dark .fi-layout form > .fi-ac {
                             background-color: rgba(24, 24, 27, 0.45) !important;
                             border: 1px solid rgba(255, 255, 255, 0.1) !important;
                             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5) !important;
