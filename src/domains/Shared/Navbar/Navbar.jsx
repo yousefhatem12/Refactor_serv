@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
-import { fetchAPI } from "@/lib/api";
+import { fetchAPI, getMediaUrl } from "@/lib/api";
 
 const getDropdownGridClass = (dropdown) => {
   if (!dropdown) return "min-w-[220px] flex flex-col gap-1";
@@ -76,12 +76,15 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    setWindowWidth(window.innerWidth);
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
+    const initialResizeFrame = window.requestAnimationFrame(handleResize);
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {
+      window.cancelAnimationFrame(initialResizeFrame);
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   const getDefaultLinks = (t) => [
@@ -333,7 +336,7 @@ const Navbar = () => {
         <div className="flex-shrink-0">
           <Link href={getLocalizedHref("/")} prefetch={false}>
             <img
-              src={settings?.site_logo || "/logo.svg"}
+              src={settings?.site_logo ? getMediaUrl(settings.site_logo) : "/logo.svg"}
               alt="Serv5 Logo"
               className="h-12 md:h-16 w-auto object-contain transition-transform duration-300 hover:scale-105 cursor-pointer"
             />

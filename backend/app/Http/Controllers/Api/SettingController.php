@@ -2,35 +2,43 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Setting;
-use App\Models\Testimonial;
-use App\Models\TeamMember;
-use App\Models\Feature;
-use App\Models\FooterLink;
-use App\Models\SocialLink;
-use App\Models\NavLink;
-use App\Models\BankAccount;
-use App\Models\PricingPlan;
-use App\Models\Service;
-use App\Http\Resources\TestimonialResource;
-use App\Http\Resources\TeamMemberResource;
+use App\Http\Resources\BankAccountResource;
 use App\Http\Resources\FeatureResource;
 use App\Http\Resources\NavLinkResource;
-use App\Http\Resources\BankAccountResource;
 use App\Http\Resources\PricingPlanResource;
+use App\Http\Resources\TeamMemberResource;
+use App\Http\Resources\TestimonialResource;
+use App\Models\BankAccount;
+use App\Models\Feature;
+use App\Models\FooterLink;
+use App\Models\NavLink;
+use App\Models\PricingPlan;
+use App\Models\Service;
+use App\Models\Setting;
+use App\Models\SocialLink;
+use App\Models\TeamMember;
+use App\Models\Testimonial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 class SettingController extends BaseApiController
 {
+    private const UPLOADED_MEDIA_KEYS = [
+        'site_logo',
+        'site_favicon',
+        'social_share_image',
+    ];
+
     public function settings()
     {
         $lang = $this->getLang();
-        $cacheKey = "settings_{$lang}";
+        $cacheKey = "settings_v2_{$lang}";
 
         $settings = Cache::remember($cacheKey, 3600, function () use ($lang) {
             return Setting::all()->mapWithKeys(function ($setting) use ($lang) {
                 $value = $setting->value;
+                $isUploadedMedia = in_array($setting->key, self::UPLOADED_MEDIA_KEYS, true)
+                    || ($setting->type === 'image' && $setting->value_source === 'file');
 
                 // Handle multilingual JSON settings
                 if (is_string($value) && str_starts_with($value, '{')) {
@@ -52,25 +60,38 @@ class SettingController extends BaseApiController
                 if (is_string($value) && str_starts_with($value, '[')) {
                     $decoded = json_decode($value, true);
                     if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-                        if ($setting->type === 'image' && $setting->value_source === 'file') {
+                        if ($isUploadedMedia) {
                             $value = array_map(function ($img) {
-                                return $img ? asset('storage/' . $img) : null;
+                                return $img ? self::uploadedMediaUrl($img) : null;
                             }, $decoded);
                         } else {
                             $value = $decoded;
                         }
+
                         return [$setting->key => $value];
                     }
                 }
 
-                if ($setting->type === 'image' && $setting->value_source === 'file' && $value) {
-                    $value = asset('storage/' . $value);
+                if ($isUploadedMedia && $value) {
+                    $value = self::uploadedMediaUrl($value);
                 }
+
                 return [$setting->key => $value];
             });
         });
-        
+
         return response()->json($settings);
+    }
+
+    private static function uploadedMediaUrl(string $value): string
+    {
+        if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://')) {
+            return $value;
+        }
+
+        $path = preg_replace('#^/?storage/#', '', $value);
+
+        return asset('storage/'.ltrim($path, '/'));
     }
 
     public function testimonials()
@@ -80,9 +101,10 @@ class SettingController extends BaseApiController
 
         $testimonials = Cache::remember($cacheKey, 3600, function () {
             $records = Testimonial::where('is_active', true)->get();
+
             return TestimonialResource::collection($records);
         });
-        
+
         return response()->json($testimonials);
     }
 
@@ -93,9 +115,10 @@ class SettingController extends BaseApiController
 
         $team = Cache::remember($cacheKey, 3600, function () {
             $records = TeamMember::where('is_active', true)->get();
+
             return TeamMemberResource::collection($records);
         });
-        
+
         return response()->json($team);
     }
 
@@ -106,9 +129,10 @@ class SettingController extends BaseApiController
 
         $features = Cache::remember($cacheKey, 3600, function () {
             $records = Feature::where('is_active', true)->get();
+
             return FeatureResource::collection($records);
         });
-        
+
         return response()->json($features);
     }
 
@@ -116,18 +140,18 @@ class SettingController extends BaseApiController
     {
         $lang = $this->getLang();
         $texts = [
-            'heading' => Setting::where('key', 'footer_heading_' . $lang)->value('value') 
-                ?: Setting::where('key', 'footer_heading_en')->value('value') 
+            'heading' => Setting::where('key', 'footer_heading_'.$lang)->value('value')
+                ?: Setting::where('key', 'footer_heading_en')->value('value')
                 ?: 'Have a Good Web Design<br/>With Serv5.',
-            'description' => Setting::where('key', 'footer_description_' . $lang)->value('value') 
-                ?: Setting::where('key', 'footer_description_en')->value('value') 
+            'description' => Setting::where('key', 'footer_description_'.$lang)->value('value')
+                ?: Setting::where('key', 'footer_description_en')->value('value')
                 ?: 'Serv5 specializes in modern web solutions...',
-            'button_text' => Setting::where('key', 'footer_button_text_' . $lang)->value('value') 
-                ?: Setting::where('key', 'footer_button_text_en')->value('value') 
+            'button_text' => Setting::where('key', 'footer_button_text_'.$lang)->value('value')
+                ?: Setting::where('key', 'footer_button_text_en')->value('value')
                 ?: 'Get Started',
-            'copyright' => Setting::where('key', 'footer_copyright_' . $lang)->value('value') 
-                ?: Setting::where('key', 'footer_copyright_en')->value('value') 
-                ?: '2026 © Serv5. All Rights Reserved.'
+            'copyright' => Setting::where('key', 'footer_copyright_'.$lang)->value('value')
+                ?: Setting::where('key', 'footer_copyright_en')->value('value')
+                ?: '2026 © Serv5. All Rights Reserved.',
         ];
 
         $links = FooterLink::orderBy('sort_order')->get()->groupBy('column_name')->map(function ($group) use ($lang) {
@@ -156,7 +180,7 @@ class SettingController extends BaseApiController
                 'offers' => $links['offers'] ?? [],
                 'company' => $links['company'] ?? [],
             ],
-            'socials' => $socials
+            'socials' => $socials,
         ]);
     }
 
@@ -177,13 +201,13 @@ class SettingController extends BaseApiController
     {
         $lang = $this->getLang();
         $serviceId = request('service_id');
-        $cacheKey = "pricing_plans_{$lang}_service_" . ($serviceId ?: 'all');
+        $cacheKey = "pricing_plans_{$lang}_service_".($serviceId ?: 'all');
 
         $plans = Cache::remember($cacheKey, 3600, function () use ($serviceId) {
             $query = PricingPlan::where('is_active', true);
 
             if ($serviceId) {
-                if (!is_numeric($serviceId)) {
+                if (! is_numeric($serviceId)) {
                     $service = Service::where('slug', $serviceId)->first();
                     $serviceId = $service ? $service->id : 999999;
                 }
@@ -191,6 +215,7 @@ class SettingController extends BaseApiController
             }
 
             $records = $query->orderBy('sort_order')->get();
+
             return PricingPlanResource::collection($records);
         });
 
@@ -204,7 +229,7 @@ class SettingController extends BaseApiController
         $page = $request->query('page');
         $perPage = $request->query('per_page', 9);
 
-        $cacheKey = "bank_accounts_{$lang}_country_" . ($country ?: 'all') . "_page_" . ($page ?: 'none') . "_per_" . $perPage;
+        $cacheKey = "bank_accounts_{$lang}_country_".($country ?: 'all').'_page_'.($page ?: 'none').'_per_'.$perPage;
 
         $response = Cache::remember($cacheKey, 3600, function () use ($country, $page, $perPage) {
             $query = BankAccount::orderBy('sort_order', 'asc');
@@ -215,6 +240,7 @@ class SettingController extends BaseApiController
 
             if ($page) {
                 $accountsPaginated = $query->paginate($perPage);
+
                 return [
                     'type' => 'paginated',
                     'data' => [
@@ -222,14 +248,15 @@ class SettingController extends BaseApiController
                         'current_page' => $accountsPaginated->currentPage(),
                         'last_page' => $accountsPaginated->lastPage(),
                         'has_more' => $accountsPaginated->hasMorePages(),
-                    ]
+                    ],
                 ];
             }
 
             $accounts = $query->get();
+
             return [
                 'type' => 'flat',
-                'data' => BankAccountResource::collection($accounts)
+                'data' => BankAccountResource::collection($accounts),
             ];
         });
 

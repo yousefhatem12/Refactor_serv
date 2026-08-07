@@ -3,27 +3,39 @@
 namespace App\Filament\Pages;
 
 use App\Models\Setting;
+use App\Services\ImageService;
+use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Schemas\Components\Section;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Schemas\Schema;
-use Filament\Pages\Page;
-use Filament\Actions\Action;
 use Filament\Notifications\Notification;
+use Filament\Pages\Page;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 
 /**
- * @property \Filament\Schemas\Schema $form
+ * @property Schema $form
  */
 class ManageHeader extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    public static function getNavigationGroup(): ?string { return __('Header'); }
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Header');
+    }
+
     protected static ?int $navigationSort = 1;
+
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-bars-3';
-    public static function getNavigationLabel(): string { return __('Header'); }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Header');
+    }
+
     protected string $view = 'filament.pages.manage-header';
 
     public ?array $data = [];
@@ -55,12 +67,12 @@ class ManageHeader extends Page implements HasForms
                             ->label('Website Logo')
                             ->image()
                             ->directory('settings')
-                            ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'settings')),
+                            ->saveUploadedFileUsing(fn ($file) => ImageService::convertToWebp($file, 'settings')),
                     ])->columns(2),
                 Section::make('Custom Code')
                     ->description('Inject custom HTML/JS code into the <head> of the website')
                     ->schema([
-                        \Filament\Forms\Components\Textarea::make('custom_header_code')
+                        Textarea::make('custom_header_code')
                             ->label('Header Code (e.g. Meta tags, Google Analytics)')
                             ->rows(5)
                             ->columnSpanFull(),
@@ -84,7 +96,13 @@ class ManageHeader extends Page implements HasForms
             $data = $this->form->getState();
 
             foreach ($data as $key => $value) {
-                Setting::updateOrCreate(['key' => $key], ['value' => $value]);
+                $attributes = ['value' => $value];
+                if ($key === 'site_logo') {
+                    $attributes['type'] = 'image';
+                    $attributes['value_source'] = 'file';
+                }
+
+                Setting::updateOrCreate(['key' => $key], $attributes);
             }
 
             Notification::make()
