@@ -134,7 +134,7 @@ const Founders = ({ data }) => {
             <motion.div
               key={index}
               variants={itemVariants}
-              className="group relative flex flex-col w-[calc(50%-0.75rem)] md:w-[calc(33.333%-1.333rem)]"
+              className="group relative flex flex-col w-[85vw] sm:w-[calc(50%-0.75rem)] md:w-[calc(33.333%-1.333rem)] max-w-xs sm:max-w-none mx-auto"
             >
               {/* Main Card Container */}
               <div className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-[#0d2a57]/20 border border-white/10 backdrop-blur-sm transition-all duration-500 group-hover:border-blue-500/50 group-hover:shadow-[0_0_40px_-10px_rgba(59,130,246,0.3)]">

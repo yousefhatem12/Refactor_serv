@@ -62,7 +62,7 @@ const ProductCard = ({ product, index }) => {
       viewport={{ amount: 0.6, margin: "0px" }}
       exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.2 } }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="shrink-0 snap-center w-[250px] md:w-[280px] perspective-[1000px] py-10"
+      className="shrink-0 snap-center w-[85vw] sm:w-[250px] md:w-[280px] perspective-[1000px] py-10"
     >
       <motion.div
         onMouseMove={handleMouseMove}
@@ -171,7 +171,7 @@ const OnlineWebsite = () => {
       const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
       const maxScroll = scrollWidth - clientWidth;
       
-      if (maxScroll <= 0) {
+      if (maxScroll <= 10) {
         setCanScrollLeft(false);
         setCanScrollRight(false);
         return;
@@ -179,8 +179,8 @@ const OnlineWebsite = () => {
 
       const isRtl = language === "ar";
       const currentScroll = Math.abs(scrollLeft);
-      const atStart = currentScroll < 10;
-      const atEnd = currentScroll > maxScroll - 10;
+      const atStart = currentScroll <= 10;
+      const atEnd = currentScroll >= maxScroll - 10;
 
       if (isRtl) {
         setCanScrollLeft(!atEnd);
@@ -423,7 +423,7 @@ const OnlineWebsite = () => {
         <button
           onClick={scrollLeft}
           disabled={!canScrollLeft}
-          className={`absolute left-2 z-30 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-[#0a0a0f]/80 backdrop-blur-md border border-white/10 text-white transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)] ${
+          className={`absolute left-2 z-30 w-10 h-10 md:w-12 md:h-12 hidden md:flex items-center justify-center rounded-full bg-[#0a0a0f]/80 backdrop-blur-md border border-white/10 text-white transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)] ${
             canScrollLeft
               ? "opacity-100 hover:bg-[#FF8A00] hover:border-[#FF8A00] hover:scale-110 cursor-pointer"
               : "opacity-30 cursor-not-allowed"
@@ -448,7 +448,7 @@ const OnlineWebsite = () => {
         <button
           onClick={scrollRight}
           disabled={!canScrollRight}
-          className={`absolute right-2 lg:-right-6 z-30 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-[#0a0a0f]/80 backdrop-blur-md border border-white/10 text-white transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)] ${
+          className={`absolute right-2 lg:-right-6 z-30 w-10 h-10 md:w-12 md:h-12 hidden md:flex items-center justify-center rounded-full bg-[#0a0a0f]/80 backdrop-blur-md border border-white/10 text-white transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)] ${
             canScrollRight
               ? "opacity-100 hover:bg-[#FF8A00] hover:border-[#FF8A00] hover:scale-110 cursor-pointer"
               : "opacity-30 cursor-not-allowed"
@@ -494,7 +494,7 @@ const OnlineWebsite = () => {
                 [1, 2, 3].map((i) => (
                   <div
                     key={`skeleton-init-${i}`}
-                    className="shrink-0 snap-center w-[250px] md:w-[280px] py-10"
+                    className="shrink-0 snap-center w-[85vw] sm:w-[250px] md:w-[280px] py-10"
                   >
                     <div className="relative w-full h-[350px] md:h-[400px] lg:h-[420px] rounded-3xl bg-white/5 border border-white/10 animate-pulse" />
                   </div>

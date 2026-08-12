@@ -279,7 +279,7 @@ const ConsultationForm = () => {
 
   return (
     <div className="relative z-20 max-w-4xl mx-auto px-6 pb-20">
-      <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[40px] p-8 md:p-12 shadow-2xl relative overflow-hidden">
+      <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[40px] p-5 md:p-12 shadow-2xl relative overflow-hidden">
         {/* Progress bar */}
         <div className="absolute top-0 left-0 w-full h-1 bg-white/5">
           <motion.div
@@ -290,11 +290,11 @@ const ConsultationForm = () => {
           />
         </div>
 
-        <div className="flex justify-between items-center mb-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-white">
+        <div className="flex justify-between items-start md:items-center mb-6 md:mb-10 gap-4">
+          <h2 className="text-xl md:text-3xl font-bold text-white leading-tight">
             {t(`consultationStep${step}Title`)}
           </h2>
-          <span className="text-gray-500 font-medium">
+          <span className="text-gray-500 font-medium flex-shrink-0" dir="ltr">
             {step} / {totalSteps}
           </span>
         </div>
@@ -319,12 +319,12 @@ const ConsultationForm = () => {
           </div>
         )}
 
-        <div className="flex items-center justify-between mt-12 border-t border-white/5 pt-8">
+        <div className="flex flex-col-reverse md:flex-row items-stretch md:items-center justify-between mt-8 md:mt-12 border-t border-white/5 pt-6 md:pt-8 gap-3 md:gap-0">
           <button
             onClick={handlePrev}
             disabled={step === 1}
-            className={`flex items-center gap-2 px-6 py-3 rounded-xl border border-white/10 text-white font-medium transition-all ${
-              step === 1 ? "opacity-0 pointer-events-none" : "hover:bg-white/5"
+            className={`flex items-center justify-center gap-2 px-4 py-2.5 md:px-6 md:py-3 rounded-xl border border-white/10 text-white font-medium transition-all whitespace-nowrap text-sm md:text-base cursor-pointer w-full md:w-auto ${
+              step === 1 ? "opacity-0 pointer-events-none hidden md:block md:invisible" : "hover:bg-white/5"
             }`}
           >
             {language === "ar" ? <FaChevronRight /> : <FaChevronLeft />}
@@ -334,7 +334,7 @@ const ConsultationForm = () => {
           {step < totalSteps ? (
             <button
               onClick={handleNext}
-              className="flex items-center gap-2 px-8 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition-all shadow-lg shadow-blue-600/20"
+              className="flex items-center justify-center gap-2 px-6 py-2.5 md:px-8 md:py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition-all shadow-lg shadow-blue-600/20 whitespace-nowrap text-sm md:text-base cursor-pointer border-none w-full md:w-auto"
             >
               {t("nextStep")}
               {language === "ar" ? <FaChevronLeft /> : <FaChevronRight />}
@@ -343,7 +343,7 @@ const ConsultationForm = () => {
             <button
               onClick={handleSubmit}
               disabled={submitting}
-              className="px-10 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:scale-105 disabled:opacity-50 text-white font-bold transition-all shadow-xl shadow-purple-600/20"
+              className="px-6 py-2.5 md:px-10 md:py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:scale-105 disabled:opacity-50 text-white font-bold transition-all shadow-xl shadow-purple-600/20 whitespace-nowrap text-sm md:text-base flex items-center justify-center cursor-pointer border-none w-full md:w-auto"
             >
               {submitting ? (language === "ar" ? "جاري الإرسال..." : "Submitting...") : t("submitConsultation")}
             </button>

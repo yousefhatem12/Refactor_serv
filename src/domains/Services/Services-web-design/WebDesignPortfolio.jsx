@@ -88,14 +88,14 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
   return (
     <section className="relative w-full py-24 px-6 lg:px-20 z-20">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col lg:flex-row gap-12">
-          {/* Left Column - Text & Tabs */}
-          <div className="lg:w-1/3">
+        <div className="flex flex-col gap-12 items-center w-full">
+          {/* Top Section - Text & Tabs */}
+          <div className="w-full flex flex-col items-center text-center">
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-white text-3xl xl:text-5xl font-bold mb-6 leading-tight"
+              className="text-white text-3xl xl:text-5xl font-bold mb-6 leading-tight text-center"
             >
               {isMobileApp
                 ? getTranslation("maPortfolioTitle", language === "ar" ? "بعض من أعمالنا في تطوير تطبيقات الهاتف" : "Some of our Mobile app development work at Serv5")
@@ -106,7 +106,7 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="text-gray-400 text-lg mb-10 leading-relaxed"
+              className="text-gray-400 text-lg mb-10 max-w-3xl leading-relaxed text-center mx-auto"
             >
               {isMobileApp
                 ? getTranslation("maPortfolioDesc", language === "ar" ? "تصفح أحدث تطبيقات الجوال التي قمنا بتطويرها لعملائنا في مختلف المجالات." : "The latest of Serv5 works, as you browse our portfolio. Select the market in which you want to see works to find everything you look for.")
@@ -114,8 +114,8 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
             </motion.p>
 
             {tabs.length > 1 && (
-              <div className="w-full flex flex-col gap-3">
-                <div className="flex flex-col gap-3 overflow-y-auto overflow-x-hidden pr-2 lg:max-h-[300px] desktop-scrollbar w-full">
+              <div className="w-full flex flex-col items-center gap-4">
+                <div className="flex flex-row flex-wrap justify-center gap-3 w-full max-w-4xl">
                   {tabs.map((tab, index) => {
                     const isActive = isMobileApp
                       ? (activeTab === tab.id || (activeTab === "all" && index === 0))
@@ -124,17 +124,17 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
                     return (
                       <motion.button
                         key={tab.id}
-                        initial={{ opacity: 0, y: 10, x: language === 'ar' ? 20 : -20 }}
-                        whileInView={{ opacity: 1, y: 0, x: 0 }}
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.05 * (index % 5) }}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`text-center lg:text-left rtl:lg:text-right px-5 py-3 lg:px-6 lg:py-4 rounded-xl text-sm lg:text-base font-semibold transition-all duration-300 w-full whitespace-nowrap flex-shrink-0 ${
+                        className={`px-5 py-2.5 lg:px-6 lg:py-3 rounded-full text-sm lg:text-base font-semibold transition-all duration-300 whitespace-nowrap flex-shrink-0 ${
                           isHiddenOnMobile ? "hidden lg:flex" : "flex"
-                        } items-center justify-center lg:justify-start ${
+                        } items-center justify-center ${
                           isActive
-                            ? "bg-[#D98B50]/10 text-[#D98B50] border-l-4 rtl:border-l-0 rtl:border-r-4 border-[#D98B50] shadow-[0_4px_20px_rgba(217,139,80,0.15)]"
-                            : "text-white/60 hover:text-white hover:bg-white/[0.03] border-l-4 rtl:border-l-0 rtl:border-r-4 border-transparent"
+                            ? "bg-[#D98B50] text-white shadow-[0_4px_20px_rgba(217,139,80,0.3)]"
+                            : "bg-white/5 border border-white/10 text-white/60 hover:text-white hover:bg-white/10"
                         }`}
                       >
                         {tab.label}
@@ -174,8 +174,8 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
             )}
           </div>
 
-          {/* Right Column - Images Grid */}
-          <div className="lg:w-2/3 flex justify-center items-center w-full">
+          {/* Bottom Section - Images Grid */}
+          <div className="w-full flex justify-center items-center">
             <AnimatePresence mode="wait">
               {isMobileApp ? (
                 <motion.div
@@ -218,7 +218,7 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
                   transition={{ duration: 0.4 }}
                   className="flex flex-col items-center gap-8 w-full"
                 >
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-6 w-full">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
                     {displayedItems.map((item, index) => (
                       <div
                         key={item.id}
@@ -231,8 +231,8 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
                           sizes="(max-width: 768px) 50vw, 33vw"
                           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         />
-                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 text-center">
-                          <h4 className="text-white text-lg font-bold mb-2">
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent lg:bg-black/50 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 group-hover:opacity-100 transition-all duration-300 flex flex-col items-center justify-end lg:justify-center p-6 text-center">
+                          <h4 className="text-white text-xl lg:text-lg font-bold mb-3 lg:mb-2 translate-y-0 lg:translate-y-4 lg:group-hover:translate-y-0 transition-transform duration-300">
                             {item.name}
                           </h4>
                           <Link
@@ -260,27 +260,6 @@ const WebDesignPortfolio = ({ isMobileApp }) => {
           </div>
         </div>
       </div>
-      {/* Custom styles for desktop scrollbar */}
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-        .desktop-scrollbar::-webkit-scrollbar {
-            width: 4px;
-        }
-        .desktop-scrollbar::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 4px;
-        }
-        .desktop-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(217, 139, 80, 0.3);
-            border-radius: 4px;
-        }
-        .desktop-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: rgba(217, 139, 80, 0.6);
-        }
-      `,
-        }}
-      />
     </section>
   );
 };

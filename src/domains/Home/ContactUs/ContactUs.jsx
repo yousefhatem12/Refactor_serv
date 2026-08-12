@@ -117,7 +117,7 @@ const ContactUs = () => {
 
   return (
     <section className="py-20 px-4 md:px-8 relative z-10">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
         {/* Left Side: Form & Info */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
@@ -127,7 +127,7 @@ const ContactUs = () => {
           className="flex flex-col"
         >
           <div className="flex items-center gap-4 mb-4">
-            <h2 className="text-3xl md:text-4xl font-black text-white">
+            <h2 className="text-2xl md:text-4xl font-black text-white">
               {t("getInTouch1")}{" "}
               <span className="text-[#FF8A00]">{t("getInTouch2")}</span>
             </h2>
@@ -319,7 +319,7 @@ const ContactUs = () => {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder={t("namePlaceholder")}
-                className="bg-[#0F172A]/40 border border-white/10 rounded-md p-4 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF8A00] transition-colors"
+                className="bg-[#0F172A]/40 border border-white/10 rounded-md p-3 md:p-4 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF8A00] transition-colors"
                 required
               />
               <input
@@ -328,7 +328,7 @@ const ContactUs = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder={t("emailPlaceholder")}
-                className="bg-[#0F172A]/40 border border-white/10 rounded-md p-4 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF8A00] transition-colors"
+                className="bg-[#0F172A]/40 border border-white/10 rounded-md p-3 md:p-4 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF8A00] transition-colors"
                 required
               />
               <input
@@ -337,14 +337,14 @@ const ContactUs = () => {
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder={t("phonePlaceholder")}
-                className="bg-[#0F172A]/40 border border-white/10 rounded-md p-4 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF8A00] transition-colors"
+                className="bg-[#0F172A]/40 border border-white/10 rounded-md p-3 md:p-4 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF8A00] transition-colors"
                 required
               />
               <select
                 name="type"
                 value={formData.type}
                 onChange={handleChange}
-                className="bg-[#0F172A]/40 border border-white/10 rounded-md p-4 text-white focus:outline-none focus:border-[#FF8A00] transition-colors appearance-none cursor-pointer"
+                className="bg-[#0F172A]/40 border border-white/10 rounded-md p-3 md:p-4 text-white focus:outline-none focus:border-[#FF8A00] transition-colors appearance-none cursor-pointer"
                 required
               >
                 <option value="inquiry">
@@ -369,13 +369,13 @@ const ContactUs = () => {
                 onChange={handleChange}
                 placeholder={t("messagePlaceholder")}
                 rows="4"
-                className="bg-[#0F172A]/40 border border-white/10 rounded-md p-4 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF8A00] transition-colors resize-none"
+                className="bg-[#0F172A]/40 border border-white/10 rounded-md p-3 md:p-4 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF8A00] transition-colors resize-none"
                 required
               />
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="bg-[#E1804E] hover:bg-[#c96d3f] text-white font-bold py-4 rounded-md transition-all shadow-[0_0_20px_rgba(225,128,78,0.2)] active:scale-95 tracking-widest text-sm disabled:opacity-50"
+                className="bg-[#E1804E] hover:bg-[#c96d3f] text-white font-bold py-3 md:py-4 rounded-md transition-all shadow-[0_0_20px_rgba(225,128,78,0.2)] active:scale-95 tracking-widest text-sm disabled:opacity-50"
               >
                 {isSubmitting ? "..." : t("send")}
               </button>
@@ -383,7 +383,7 @@ const ContactUs = () => {
           )}
 
           {/* Contact Info Footer */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mt-6">
             <div className="flex items-start gap-3">
               <div className="text-[#FF8A00] mt-1">
                 <svg

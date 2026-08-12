@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import HomePageClient from "./HomePageClient";
 import { getCachedHomeData } from "@/lib/cached-api";
 import { headers } from "next/headers";
@@ -27,7 +27,7 @@ export const unstable_instant = {
   ]
 };
 
-export default async function HomePage() {
+async function HomeContent() {
   const headerList = await headers();
   const locale = headerList.get("x-locale") || "en";
 
@@ -40,4 +40,12 @@ export default async function HomePage() {
   }
 
   return <HomePageClient initialHomeData={initialHomeData} />;
+}
+
+export default function HomePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#0a0a0f]"></div>}>
+      <HomeContent />
+    </Suspense>
+  );
 }

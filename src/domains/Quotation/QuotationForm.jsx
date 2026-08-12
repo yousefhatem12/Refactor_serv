@@ -578,7 +578,7 @@ const QuotationForm = () => {
         </div>
       )}
 
-      <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[40px] p-8 md:p-12 shadow-2xl relative overflow-hidden">
+      <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[40px] p-5 md:p-12 shadow-2xl relative overflow-hidden">
         
         {/* Progress bar */}
         <div className="absolute top-0 left-0 w-full h-1 bg-white/5">
@@ -601,7 +601,7 @@ const QuotationForm = () => {
               className="flex flex-col h-full"
             >
               {/* Header */}
-              <div className="flex justify-between items-center mb-10">
+              <div className="flex justify-between items-center mb-6 md:mb-10">
                 <h2 className="text-2xl md:text-3xl font-bold text-white">
                   {stepTitles[step]}
                 </h2>
@@ -632,13 +632,13 @@ const QuotationForm = () => {
               )}
 
               {/* Navigation Controls */}
-              <div className="flex items-center justify-between mt-12 border-t border-white/5 pt-8">
+              <div className="flex items-center justify-between mt-8 md:mt-12 border-t border-white/5 pt-6 md:pt-8">
                 <button
                   type="button"
                   onClick={handlePrev}
                   disabled={step === 1}
-                  className={`flex items-center gap-2 px-6 py-3 rounded-xl border border-white/10 text-white font-medium transition-all ${
-                    step === 1 ? "opacity-0 pointer-events-none" : "hover:bg-white/5"
+                  className={`flex items-center justify-center gap-2 px-4 py-2.5 md:px-6 md:py-3 rounded-xl border border-white/10 text-white font-medium transition-all whitespace-nowrap text-sm md:text-base ${
+                    step === 1 ? "opacity-0 pointer-events-none absolute" : "hover:bg-white/5"
                   }`}
                 >
                   {isRtl ? <FaChevronRight /> : <FaChevronLeft />}
@@ -650,7 +650,7 @@ const QuotationForm = () => {
                     key="next-btn"
                     type="button"
                     onClick={handleNext}
-                    className="flex items-center gap-2 px-8 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition-all shadow-lg shadow-blue-600/20 cursor-pointer border-none"
+                    className="flex items-center justify-center gap-2 px-6 py-2.5 md:px-8 md:py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition-all shadow-lg shadow-blue-600/20 cursor-pointer border-none whitespace-nowrap text-sm md:text-base"
                   >
                     {t("nextStep")}
                     {isRtl ? <FaChevronLeft /> : <FaChevronRight />}
@@ -660,7 +660,7 @@ const QuotationForm = () => {
                     key="submit-btn"
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-10 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-[#FF8A00] hover:scale-[1.03] text-white font-bold transition-all shadow-xl shadow-blue-600/20 disabled:opacity-50 flex items-center gap-2 cursor-pointer border-none"
+                    className="px-6 py-2.5 md:px-10 md:py-3 rounded-xl bg-gradient-to-r from-blue-600 to-[#FF8A00] hover:scale-[1.03] text-white font-bold transition-all shadow-xl shadow-blue-600/20 disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer border-none whitespace-nowrap text-sm md:text-base"
                   >
                     {isSubmitting ? t("quoteSending") : t("quoteSubmit")}
                   </button>
@@ -738,7 +738,7 @@ const InputField = ({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className={`w-full p-4 rounded-xl bg-white/5 border text-white transition-all duration-300 outline-none backdrop-blur-md text-sm ${
+          className={`w-full p-3 md:p-4 rounded-xl bg-white/5 border text-white transition-all duration-300 outline-none backdrop-blur-md text-sm ${
             error ? "border-red-500/50 focus:border-red-500" : "border-white/10 focus:border-blue-500"
           } ${icon ? (isRtl ? "pr-12 pl-4 text-right" : "pl-12 pr-4 text-left") : "px-4"}`}
           style={{ direction: isRtl ? "rtl" : "ltr" }}
@@ -777,7 +777,7 @@ const SelectField = ({
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className={`w-full p-4 rounded-xl bg-white/5 border border-white/10 text-white transition-all duration-300 outline-none backdrop-blur-md text-sm flex items-center justify-between cursor-pointer ${
+          className={`w-full p-3 md:p-4 rounded-xl bg-white/5 border border-white/10 text-white transition-all duration-300 outline-none backdrop-blur-md text-sm flex items-center justify-between cursor-pointer ${
             isRtl ? "text-right flex-row-reverse" : "text-left"
           }`}
         >
@@ -842,7 +842,7 @@ const TextareaField = ({ label, name, value, onChange, placeholder }) => {
         onChange={onChange}
         placeholder={placeholder}
         rows={4}
-        className="w-full p-4 rounded-xl bg-white/5 border border-white/10 text-white focus:border-blue-500 transition-colors outline-none resize-none backdrop-blur-md text-sm min-h-[100px]"
+        className="w-full p-3 md:p-4 rounded-xl bg-white/5 border border-white/10 text-white focus:border-blue-500 transition-colors outline-none resize-none backdrop-blur-md text-sm min-h-[100px]"
       />
     </div>
   );

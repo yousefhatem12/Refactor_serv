@@ -41,22 +41,7 @@ const OnlineWebsiteDetails = () => {
       {/* Background/Atmosphere - Removed solid gradients to prevent sharp lines */}
 
       <div className="w-full h-full relative flex flex-col lg:flex-row p-0  lg:pt-0">
-        {/* Mobile Categories Menu */}
-        <div className="w-full flex flex-wrap justify-center lg:hidden gap-3 px-4 py-4 z-20">
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setActiveCategoryId(cat.id)}
-              className={`whitespace-nowrap px-4 py-2 rounded-full border text-sm font-medium transition-all ${
-                activeCategoryId === cat.id
-                  ? "bg-[#ffb800] text-black border-[#ffb800]"
-                  : "text-white/70 border-white/20 hover:text-white"
-              }`}
-            >
-              {cat.name}
-            </button>
-          ))}
-        </div>{" "}
+        {/* Mobile Categories Menu removed from here, passed as prop */}
         {/* Left/Right Planet Section */}
         <div className="relative hidden lg:flex w-[45%] h-screen items-center z-10">
           <motion.div
@@ -153,7 +138,27 @@ const OnlineWebsiteDetails = () => {
         </div>
         {/* Right Content Area */}
         <div className="w-full lg:w-[55%] relative z-20">
-          <OurPortfolio activeCategoryId={activeCategoryId} isFeaturedOnly={true} />
+          <OurPortfolio 
+            activeCategoryId={activeCategoryId} 
+            isFeaturedOnly={true} 
+            mobileCategories={
+              <div className="w-full flex flex-wrap justify-center lg:hidden gap-3 px-2 py-2 mb-8 z-20">
+                {categories.map((cat) => (
+                  <button
+                    key={cat.id}
+                    onClick={() => setActiveCategoryId(cat.id)}
+                    className={`whitespace-nowrap px-4 py-2 rounded-full border text-sm font-medium transition-all ${
+                      activeCategoryId === cat.id
+                        ? "bg-[#ffb800] text-black border-[#ffb800]"
+                        : "text-white/70 border-white/20 hover:text-white"
+                    }`}
+                  >
+                    {cat.name}
+                  </button>
+                ))}
+              </div>
+            }
+          />
         </div>
       </div>
 

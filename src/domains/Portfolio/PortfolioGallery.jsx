@@ -79,22 +79,22 @@ const PortfolioCard = ({ item, t, language, siteLogo }) => {
       <Link
         href={projectUrl}
         prefetch={false}
-        className="absolute inset-0 bg-gradient-to-t from-[#040A37]/90 via-[#040A37]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 z-10"
+        className="absolute inset-0 bg-gradient-to-t from-[#040A37]/90 via-[#040A37]/50 to-transparent opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 lg:p-6 z-10"
       >
-        <h3 className="text-xl md:text-2xl font-bold text-white mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+        <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-white mb-1 lg:mb-2 translate-y-0 lg:translate-y-4 lg:group-hover:translate-y-0 transition-transform duration-300">
           {item.name}
         </h3>
         {item.description && (
-          <p className="text-gray-300 text-sm md:text-base line-clamp-2 mb-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">
+          <p className="text-gray-300 text-xs md:text-sm lg:text-base line-clamp-2 mb-3 lg:mb-4 translate-y-0 lg:translate-y-4 lg:group-hover:translate-y-0 transition-transform duration-300 lg:delay-75">
             {item.description}
           </p>
         )}
         <div
-          className="inline-flex items-center gap-2 text-[#FF8A00] font-medium hover:text-[#ffb800] transition-colors translate-y-4 group-hover:translate-y-0 duration-300 delay-100 w-fit"
+          className="inline-flex items-center gap-2 text-[#FF8A00] text-xs md:text-sm lg:text-base font-medium hover:text-[#ffb800] transition-colors translate-y-0 lg:translate-y-4 lg:group-hover:translate-y-0 duration-300 lg:delay-100 w-fit"
         >
           <span>{t("visitProject") || "Visit Project"}</span>
           <svg
-            className={`w-4 h-4 ${language === "ar" ? "rotate-180" : ""}`}
+            className={`w-3.5 h-3.5 lg:w-4 lg:h-4 ${language === "ar" ? "rotate-180" : ""}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

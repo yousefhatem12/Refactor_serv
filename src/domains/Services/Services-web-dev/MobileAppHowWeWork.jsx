@@ -429,9 +429,9 @@ const MobileAppHowWeWork = ({ howWeWorkList }) => {
         </div>
 
         {/* Mobile/Tablet Vertical Custom Road Timeline */}
-        <div className="block lg:hidden relative mt-12 pl-8 lg:pl-16">
+        <div className="block lg:hidden relative mt-12">
           {/* Vertical Road Track */}
-          <div className="absolute left-6 top-0 bottom-0 w-[40px] flex justify-center pointer-events-none">
+          <div className={`absolute top-0 bottom-0 w-[40px] flex justify-center pointer-events-none ${isRtl ? "right-3" : "left-3"}`}>
             <svg className="w-full h-full" preserveAspectRatio="none">
               {/* Outer Glow */}
               <line
@@ -466,7 +466,7 @@ const MobileAppHowWeWork = ({ howWeWorkList }) => {
             </svg>
           </div>
 
-          <div className="space-y-10 relative z-10 pl-6">
+          <div className={`space-y-8 relative z-10 ${isRtl ? "pr-14 pl-4" : "pl-14 pr-4"}`}>
             {activeTrans.steps.map((step, idx) => (
               <motion.div
                 key={step.id}

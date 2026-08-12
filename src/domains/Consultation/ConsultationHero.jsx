@@ -21,7 +21,7 @@ const ConsultationHero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="inline-block px-4 py-1 rounded-full border border-white/10 bg-white/5 text-blue-400 text-sm font-medium mb-6 backdrop-blur-sm"
+          className="inline-flex flex-wrap items-center justify-center text-center px-4 py-1.5 md:py-1 rounded-[2rem] border border-white/10 bg-white/5 text-blue-400 text-sm font-medium mb-6 backdrop-blur-sm leading-tight gap-1"
         >
           {t("services")} • {t("consultationHeroTitle")}
         </motion.div>

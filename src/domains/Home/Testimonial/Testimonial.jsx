@@ -39,7 +39,7 @@ const Testimonial = () => {
       const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
       const maxScroll = scrollWidth - clientWidth;
       
-      if (maxScroll <= 0) {
+      if (maxScroll <= 10) {
         setCanScrollLeft(false);
         setCanScrollRight(false);
         return;
@@ -47,8 +47,8 @@ const Testimonial = () => {
 
       const isRtl = language === "ar";
       const currentScroll = Math.abs(scrollLeft);
-      const atStart = currentScroll < 10;
-      const atEnd = currentScroll > maxScroll - 10;
+      const atStart = currentScroll <= 10;
+      const atEnd = currentScroll >= maxScroll - 10;
 
       if (isRtl) {
         setCanScrollLeft(!atEnd);
@@ -135,7 +135,7 @@ const Testimonial = () => {
           <button
             onClick={scrollLeft}
             disabled={!canScrollLeft}
-            className={`absolute left-0 lg:-left-6 z-30 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-[#0a0a0f]/80 backdrop-blur-md border border-white/10 text-white transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)] ${
+            className={`absolute left-2 lg:-left-6 z-30 w-10 h-10 md:w-12 md:h-12 hidden md:flex items-center justify-center rounded-full bg-[#0a0a0f]/80 backdrop-blur-md border border-white/10 text-white transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)] ${
               canScrollLeft 
                 ? "opacity-100 hover:bg-[#FF8A00] hover:border-[#FF8A00] hover:scale-110 cursor-pointer" 
                 : "opacity-30 cursor-not-allowed"
@@ -159,7 +159,7 @@ const Testimonial = () => {
           <button
             onClick={scrollRight}
             disabled={!canScrollRight}
-            className={`absolute right-0 lg:-right-6 z-30 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-[#0a0a0f]/80 backdrop-blur-md border border-white/10 text-white transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)] ${
+            className={`absolute right-2 lg:-right-6 z-30 w-10 h-10 md:w-12 md:h-12 hidden md:flex items-center justify-center rounded-full bg-[#0a0a0f]/80 backdrop-blur-md border border-white/10 text-white transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)] ${
               canScrollRight 
                 ? "opacity-100 hover:bg-[#FF8A00] hover:border-[#FF8A00] hover:scale-110 cursor-pointer" 
                 : "opacity-30 cursor-not-allowed"
@@ -221,7 +221,7 @@ const Testimonial = () => {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="shrink-0 snap-center w-[280px] md:w-[320px] lg:w-[360px] h-auto flex flex-col"
+                  className="shrink-0 snap-center w-[85vw] sm:w-[320px] lg:w-[360px] h-auto flex flex-col"
                 >
                   {item.videoUrl ? (
                     // Video Card Design

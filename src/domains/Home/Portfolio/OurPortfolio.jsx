@@ -6,7 +6,7 @@ import { fetchAPI, getMediaUrl } from "@/lib/api";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
 
-const OurPortfolio = ({ activeCategoryId, isFeaturedOnly = false }) => {
+const OurPortfolio = ({ activeCategoryId, isFeaturedOnly = false, mobileCategories = null }) => {
   const { t, language } = useLanguage();
   const settings = useSettings();
   const siteLogo = settings?.site_logo
@@ -90,7 +90,7 @@ const OurPortfolio = ({ activeCategoryId, isFeaturedOnly = false }) => {
   const isRtl = language === "ar";
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 md:px-8 py-12 rtl:pr-0 overflow-x-hidden">
+    <div className="w-full max-w-7xl mx-auto px-4 md:px-8 py-12 overflow-x-hidden">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -105,8 +105,9 @@ const OurPortfolio = ({ activeCategoryId, isFeaturedOnly = false }) => {
           ></div>
         </h2>
       </motion.div>
+      {mobileCategories}
       <div className="flex-1 h-auto lg:h-[700px] overflow-y-visible lg:overflow-y-auto overflow-x-hidden custom-scrollbar">
-        <div className="grid grid-cols-2 gap-4 md:gap-8 lg:flex lg:flex-col lg:gap-20">
+        <div className="flex flex-col gap-6 md:gap-10 lg:gap-20">
           {isLoading ? (
             Array.from({ length: 3 }).map((_, index) => {
               const isReversed = index % 2 !== 0;
@@ -147,10 +148,10 @@ const OurPortfolio = ({ activeCategoryId, isFeaturedOnly = false }) => {
                     ease: "easeOut",
                     delay: index * 0.15,
                   }}
-                  className={`relative flex flex-col ${isReversed ? "lg:flex-row-reverse" : "lg:flex-row"} items-stretch gap-0 lg:gap-8 group rounded-2xl lg:rounded-none overflow-hidden lg:overflow-visible min-h-[250px] md:min-h-[350px] lg:min-h-[380px]`}
+                  className={`relative flex flex-col ${isReversed ? "lg:flex-row-reverse" : "lg:flex-row"} items-stretch gap-0 lg:gap-8 group rounded-2xl lg:rounded-none border border-white/10 lg:border-none overflow-hidden lg:overflow-visible min-h-[300px] md:min-h-[350px] lg:min-h-[380px]`}
                 >
                   {/* Image Side */}
-                  <div className="w-full lg:w-1/2 flex absolute inset-0 lg:relative lg:inset-auto md lg:h-[400px] z-0">
+                  <div className="w-full lg:w-1/2 flex absolute inset-0 lg:relative lg:inset-auto lg:h-[400px] z-0">
                     <div className="relative w-full h-full group overflow-hidden lg:rounded-xl lg:bg-white/5 lg:border lg:border-white/10 lg:shadow-2xl">
                       <img
                         src={item.image ? getMediaUrl(item.image) : siteLogo}
@@ -225,7 +226,7 @@ const OurPortfolio = ({ activeCategoryId, isFeaturedOnly = false }) => {
               );
             })
           ) : (
-            <div className="col-span-2 text-center py-20 text-gray-400 w-full">
+            <div className="text-center py-20 text-gray-400 w-full">
               {language === "ar"
                 ? "لا توجد أعمال في هذا القسم"
                 : "No projects found in this category"}
@@ -233,7 +234,7 @@ const OurPortfolio = ({ activeCategoryId, isFeaturedOnly = false }) => {
           )}
 
           {hasMore && (
-            <div className="flex hidden justify-center mt-12 w-full col-span-2">
+            <div className="flex hidden justify-center mt-12 w-full">
               <button
                 onClick={() => setCurrentPage((prev) => prev + 1)}
                 disabled={isLoadingMore}
