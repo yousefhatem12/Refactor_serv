@@ -62,7 +62,7 @@ const ProductCard = ({ product, index }) => {
       viewport={{ amount: 0.6, margin: "0px" }}
       exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.2 } }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="shrink-0 snap-center w-[85vw] sm:w-[250px] md:w-[280px] perspective-[1000px] py-10"
+      className="shrink-0 snap-center w-[75vw] sm:w-[250px] md:w-[280px] perspective-[1000px] py-10"
     >
       <motion.div
         onMouseMove={handleMouseMove}
@@ -72,7 +72,7 @@ const ProductCard = ({ product, index }) => {
           rotateY,
           transformStyle: "preserve-3d",
         }}
-        className={`relative w-full h-[350px] md:h-[400px] lg:h-[420px] rounded-3xl bg-gradient-to-br ${cardGradient} p-[1px] group cursor-pointer`}
+        className={`relative w-full h-[280px] sm:h-[350px] md:h-[400px] lg:h-[420px] rounded-3xl bg-gradient-to-br ${cardGradient} p-[1px] group cursor-pointer`}
       >
         {/* Glow border on hover */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl blur-md" />
@@ -374,7 +374,7 @@ const OnlineWebsite = () => {
         </motion.div>
 
         {/* Categories / Tabs */}
-        <div className="grid grid-cols-3 sm:grid-cols-3 lg:flex lg:flex-col gap-3 lg:gap-1.5 w-full">
+        <div className="flex flex-wrap justify-center sm:grid sm:grid-cols-3 lg:flex lg:flex-col gap-2 sm:gap-3 lg:gap-1.5 w-full px-2 lg:px-0">
           {categories.map((cat, index) => (
             <motion.button
               key={cat.id}
@@ -383,7 +383,7 @@ const OnlineWebsite = () => {
               transition={{ delay: index * 0.05, duration: 0.4 }}
               viewport={{ once: true }}
               onClick={() => handleTabChange(cat.id)}
-              className={`relative px-4 py-3 lg:px-3 lg:py-2.5 text-center lg:text-left whitespace-nowrap rounded-xl lg:rounded-2xl transition-all duration-300 flex items-center justify-center lg:justify-start group overflow-hidden z-10 ${activeTab === cat.id
+              className={`relative px-3 py-2 sm:px-4 sm:py-3 lg:px-3 lg:py-2.5 text-center lg:text-left whitespace-nowrap rounded-xl lg:rounded-2xl transition-all duration-300 flex items-center justify-center lg:justify-start group overflow-hidden z-10 ${activeTab === cat.id
                 ? "text-white font-bold bg-transparent lg:bg-white/10 border border-transparent lg:border-white/20 shadow-none lg:shadow-[0_0_30px_rgba(255,255,255,0.05)] lg:backdrop-blur-md"
                 : "text-gray-400 lg:text-gray-500 font-medium bg-white/[0.03] lg:bg-transparent border border-white/[0.08] lg:border-transparent hover:text-white hover:bg-white/5"
                 }`}
@@ -406,7 +406,7 @@ const OnlineWebsite = () => {
                   />
                 </>
               )}
-              <span className="relative z-10 text-xs sm:text-sm md:text-base lg:text-lg mr-0 lg:mr-5">
+              <span className="relative z-10 text-[11px] sm:text-sm md:text-base lg:text-lg mr-0 lg:mr-5">
                 {cat.label}
               </span>
 
@@ -494,9 +494,9 @@ const OnlineWebsite = () => {
                 [1, 2, 3].map((i) => (
                   <div
                     key={`skeleton-init-${i}`}
-                    className="shrink-0 snap-center w-[85vw] sm:w-[250px] md:w-[280px] py-10"
+                    className="shrink-0 snap-center w-[75vw] sm:w-[250px] md:w-[280px] py-10"
                   >
-                    <div className="relative w-full h-[350px] md:h-[400px] lg:h-[420px] rounded-3xl bg-white/5 border border-white/10 animate-pulse" />
+                    <div className="relative w-full h-[280px] sm:h-[350px] md:h-[400px] lg:h-[420px] rounded-3xl bg-white/5 border border-white/10 animate-pulse" />
                   </div>
                 ))
               ) : productsList.length > 0 ? (
@@ -514,9 +514,9 @@ const OnlineWebsite = () => {
                     [1, 2].map((i) => (
                       <div
                         key={`skeleton-more-${i}`}
-                        className="shrink-0 snap-center w-[250px] md:w-[280px] py-10"
+                        className="shrink-0 snap-center w-[75vw] sm:w-[250px] md:w-[280px] py-10"
                       >
-                        <div className="relative w-full h-[350px] md:h-[400px] lg:h-[420px] rounded-3xl bg-white/5 border border-white/10 animate-pulse" />
+                        <div className="relative w-full h-[280px] sm:h-[350px] md:h-[400px] lg:h-[420px] rounded-3xl bg-white/5 border border-white/10 animate-pulse" />
                       </div>
                     ))}
 
@@ -531,7 +531,7 @@ const OnlineWebsite = () => {
                     >
                       <div
                         onClick={() => setCurrentPage((prev) => prev + 1)}
-                        className="relative w-full h-[350px] md:h-[400px] lg:h-[420px] rounded-3xl bg-gradient-to-br from-orange-600/20 to-red-900/20 p-[1px] group cursor-pointer"
+                        className="relative w-full h-[280px] sm:h-[350px] md:h-[400px] lg:h-[420px] rounded-3xl bg-gradient-to-br from-orange-600/20 to-red-900/20 p-[1px] group cursor-pointer"
                       >
                         <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl blur-md" />
                         <div className="relative w-full h-full bg-[#0a0a0f]/80 backdrop-blur-2xl rounded-3xl p-6 flex flex-col items-center justify-center border border-white/5 group-hover:border-[#FF8A00]/30 transition-all duration-500 text-center">

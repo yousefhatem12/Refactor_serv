@@ -114,14 +114,14 @@ const OurPortfolio = ({ activeCategoryId, isFeaturedOnly = false, mobileCategori
               return (
                 <div
                   key={`skeleton-${index}`}
-                  className={`relative flex flex-col ${isReversed ? "lg:flex-row-reverse" : "lg:flex-row"} items-stretch gap-0 lg:gap-8 rounded-2xl lg:rounded-none overflow-hidden lg:overflow-visible min-h-[250px] md:min-h-[350px] lg:min-h-[380px] animate-pulse`}
+                  className={`relative flex flex-col ${isReversed ? "lg:flex-row-reverse" : "lg:flex-row"} items-stretch gap-0 lg:gap-8 rounded-2xl lg:rounded-none overflow-hidden lg:overflow-visible min-h-[250px] sm:min-h-[300px] md:min-h-[350px] lg:min-h-[380px] animate-pulse`}
                 >
                   {/* Image Side Skeleton */}
                   <div className="w-full lg:w-1/2 flex absolute inset-0 lg:relative lg:inset-auto lg:h-[400px] z-0">
                     <div className="w-full h-full bg-white/5 rounded-xl border border-white/10" />
                   </div>
                   {/* Text Side Skeleton */}
-                  <div className="relative z-10 w-full lg:w-1/2 flex flex-col justify-end lg:justify-center p-4 md:p-6 lg:p-0 lg:py-4 flex-1 pt-24 lg:pt-4 bg-gradient-to-t from-black via-black/80 to-transparent lg:bg-none">
+                  <div className="relative z-10 w-full lg:w-1/2 flex flex-col justify-end lg:justify-center p-4 md:p-6 lg:p-0 lg:py-4 flex-1 pt-16 sm:pt-20 lg:pt-4 bg-gradient-to-t from-black via-black/80 to-transparent lg:bg-none">
                     <div className="h-6 bg-white/10 rounded w-[60%] mb-3 animate-pulse" />
                     <div className="h-4 bg-white/10 rounded w-[90%] mb-2 animate-pulse" />
                     <div className="h-4 bg-white/10 rounded w-[80%] mb-4 animate-pulse" />
@@ -148,7 +148,7 @@ const OurPortfolio = ({ activeCategoryId, isFeaturedOnly = false, mobileCategori
                     ease: "easeOut",
                     delay: index * 0.15,
                   }}
-                  className={`relative flex flex-col ${isReversed ? "lg:flex-row-reverse" : "lg:flex-row"} items-stretch gap-0 lg:gap-8 group rounded-2xl lg:rounded-none border border-white/10 lg:border-none overflow-hidden lg:overflow-visible min-h-[300px] md:min-h-[350px] lg:min-h-[380px]`}
+                  className={`relative flex flex-col ${isReversed ? "lg:flex-row-reverse" : "lg:flex-row"} items-stretch gap-0 lg:gap-8 group rounded-2xl lg:rounded-none border border-white/10 lg:border-none overflow-hidden lg:overflow-visible min-h-[250px] sm:min-h-[300px] md:min-h-[350px] lg:min-h-[380px]`}
                 >
                   {/* Image Side */}
                   <div className="w-full lg:w-1/2 flex absolute inset-0 lg:relative lg:inset-auto lg:h-[400px] z-0">
@@ -169,8 +169,8 @@ const OurPortfolio = ({ activeCategoryId, isFeaturedOnly = false, mobileCategori
                   </div>
 
                   {/* Text Side */}
-                  <div className="relative z-10 w-full lg:w-1/2 flex flex-col justify-end lg:justify-center p-4 md:p-6 lg:p-0 lg:py-4 flex-1 pt-24 lg:pt-4 bg-gradient-to-t from-black via-black/80 to-transparent lg:bg-none">
-                    <h3 className="text-sm sm:text-base md:text-3xl lg:text-3xl font-bold text-white mb-2 tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] lg:drop-shadow-none mt-auto lg:mt-0">
+                  <div className="relative z-10 w-full lg:w-1/2 flex flex-col justify-end lg:justify-center p-4 md:p-6 lg:p-0 lg:py-4 flex-1 pt-16 sm:pt-20 lg:pt-4 bg-gradient-to-t from-black via-black/80 to-transparent lg:bg-none">
+                    <h3 className="text-base sm:text-lg md:text-2xl lg:text-3xl font-bold text-white mb-2 tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] lg:drop-shadow-none mt-auto lg:mt-0">
                       {item.name}
                     </h3>
                     <p className="text-gray-200 text-[10px] sm:text-xs md:text-sm lg:text-md leading-relaxed mb-4 lg:mb-2 max-w-xl line-clamp-2 lg:line-clamp-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] lg:drop-shadow-none">
