@@ -108,7 +108,14 @@ async function ProvidersAndContent({ children }) {
   const cookieStore = await cookies();
   const defaultLanguage = xLocale || cookieStore.get("NEXT_LOCALE")?.value || "en";
 
-  const settings = await getCachedSettings(defaultLanguage);
+  const [settings, servicesRes, navLinksRes] = await Promise.all([
+    getCachedSettings(defaultLanguage),
+    fetchAPI(`/services?lang=${defaultLanguage}`).catch(() => null),
+    fetchAPI(`/nav-links?lang=${defaultLanguage}`).catch(() => null),
+  ]);
+
+  const initialServices = Array.isArray(servicesRes) ? servicesRes : (servicesRes?.data || []);
+  const initialNavLinks = Array.isArray(navLinksRes) ? navLinksRes : (navLinksRes?.data || []);
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://serv5.com.eg";
   const siteTitle = settings?.site_title || "Serv5";
@@ -146,7 +153,7 @@ async function ProvidersAndContent({ children }) {
       <AuthProvider>
         <SettingsProvider initialSettings={settings || {}} ssrLocale={defaultLanguage}>
           <HomeBackground />
-          <Navbar />
+          <Navbar initialServices={initialServices} initialNavLinks={initialNavLinks} />
           {children}
           <Footer />
 

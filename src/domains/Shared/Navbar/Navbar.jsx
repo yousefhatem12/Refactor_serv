@@ -20,7 +20,7 @@ const getDropdownGridClass = (dropdown) => {
   return "min-w-[1200px] grid grid-cols-5 gap-2";
 };
 
-const Navbar = () => {
+const Navbar = ({ initialServices = [], initialNavLinks = [] }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -28,8 +28,6 @@ const Navbar = () => {
 
   const { toggleLanguage, t, language } = useLanguage();
   const settings = useSettings();
-  const [navLinks, setNavLinks] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [activeHash, setActiveHash] = useState("");
   const [windowWidth, setWindowWidth] = useState(1400);
 
@@ -140,128 +138,103 @@ const Navbar = () => {
     { name: t("contactUs") || "Contact Us", href: "/contact-us" },
   ];
 
-  const activeLinks =
-    navLinks && navLinks.length > 0 ? navLinks : localizeLinks(getDefaultLinks(t));
+  const buildLinks = (dropdown) => [
+    { name: t("home"), href: "/" },
+    {
+      name: t("aboutUs"),
+      href: "#",
+      dropdown: [
+        { name: t("aboutUs"), href: "/about-us" },
+        { name: t("bankAccounts"), href: "/bank-accounts" },
+        { name: t("careers"), href: "/careers" },
+        { name: t("faq"), href: "/faq" },
+      ],
+    },
+    {
+      name: t("services"),
+      href: "#",
+      dropdown: [
+        ...dropdown,
+        {
+          name: t("consultationHeroTitle"),
+          href: "/project-consultation",
+        },
+        { name: t("requestQuote"), href: "/request-quote" },
+      ],
+    },
+    { name: t("portfolio"), href: "/portfolio" },
+    { name: t("blog"), href: "/blog" },
+    { name: t("ourProducts"), href: "/our-products" },
+    { name: t("contactUs"), href: "/contact-us" },
+  ];
+
+  const serviceDropdown =
+    initialServices && initialServices.length > 0
+      ? initialServices.map((s) => ({
+          name: s.label || s.title,
+          href: `/services/services-${s.id}`,
+        }))
+      : [
+          {
+            name: t("webDevelopment") || "Web Development",
+            href: "/services/services-web-development",
+          },
+          {
+            name: t("webDesign") || "Web Design",
+            href: "/services/services-ui-ux-design",
+          },
+          {
+            name: t("socialMedia") || "Social Media",
+            href: "/services/services-social-media",
+          },
+          {
+            name: t("webHosting") || "Web Hosting",
+            href: "/services/services-cloud-hosting",
+          },
+        ];
+
+  let computedNavLinks = [];
+  if (initialNavLinks && initialNavLinks.length > 0) {
+    const enriched = initialNavLinks.map((link) => {
+      if (link.dropdown && link.name === t("services")) {
+        return {
+          ...link,
+          dropdown: [
+            ...serviceDropdown,
+            {
+              name: t("consultationHeroTitle"),
+              href: "/project-consultation",
+            },
+            { name: t("requestQuote"), href: "/request-quote" },
+          ],
+        };
+      }
+      if (link.href === "/about-us" || link.name === t("aboutUs")) {
+        return {
+          name: t("aboutUs"),
+          href: "#",
+          dropdown: [
+            { name: t("aboutUs") || "About Us", href: "/about-us" },
+            {
+              name: t("bankAccounts") || "Bank Accounts",
+              href: "/bank-accounts",
+            },
+            ...(link.dropdown || []),
+          ],
+        };
+      }
+      return link;
+    });
+    computedNavLinks = localizeLinks(enriched);
+  } else {
+    computedNavLinks = localizeLinks(buildLinks(serviceDropdown));
+  }
+
+  const activeLinks = computedNavLinks;
 
   const isUnder1300 = windowWidth < 1300;
   const mainLinks = isUnder1300 ? activeLinks.slice(0, 5) : activeLinks;
   const dropdownLinks = isUnder1300 ? activeLinks.slice(5) : [];
-
-  useEffect(() => {
-    const fetchLinks = async () => {
-      try {
-        // Fetch services and nav links in parallel to minimize waiting time
-        const [servicesData, navLinksData] = await Promise.all([
-          fetchAPI(`/services?lang=${language}`).catch(() => null),
-          fetchAPI(`/nav-links?lang=${language}`).catch(() => null),
-        ]);
-
-        const actualServices = Array.isArray(servicesData) ? servicesData : (servicesData?.data || []);
-        const actualNavLinks = Array.isArray(navLinksData) ? navLinksData : (navLinksData?.data || []);
-
-        const serviceDropdown =
-          actualServices && actualServices.length > 0
-            ? actualServices.map((s) => ({
-                name: s.label || s.title,
-                href: `/services/services-${s.id}`,
-              }))
-            : [
-                {
-                  name: t("webDevelopment"),
-                  href: "/services/services-web-development",
-                },
-                {
-                  name: t("webDesign"),
-                  href: "/services/services-ui-ux-design",
-                },
-                {
-                  name: t("socialMedia"),
-                  href: "/services/services-social-media",
-                },
-                {
-                  name: t("webHosting"),
-                  href: "/services/services-cloud-hosting",
-                },
-              ];
-
-        const buildLinks = (dropdown) => [
-          { name: t("home"), href: "/" },
-          {
-            name: t("aboutUs"),
-            href: "#",
-            dropdown: [
-              { name: t("aboutUs"), href: "/about-us" },
-              { name: t("bankAccounts"), href: "/bank-accounts" },
-              { name: t("careers"), href: "/careers" },
-              { name: t("faq"), href: "/faq" },
-            ],
-          },
-          {
-            name: t("services"),
-            href: "#",
-            dropdown: [
-              ...dropdown,
-              {
-                name: t("consultationHeroTitle"),
-                href: "/project-consultation",
-              },
-              { name: t("requestQuote"), href: "/request-quote" },
-            ],
-          },
-          { name: t("portfolio"), href: "/portfolio" },
-          { name: t("blog"), href: "/blog" },
-          { name: t("ourProducts"), href: "/our-products" },
-          { name: t("contactUs"), href: "/contact-us" },
-        ];
-
-        if (
-          actualNavLinks &&
-          actualNavLinks.length > 0
-        ) {
-          // Inject dynamic services into any dropdown marked as services
-          const enriched = actualNavLinks.map((link) => {
-            if (link.dropdown && link.name === t("services")) {
-              return {
-                ...link,
-                dropdown: [
-                  ...serviceDropdown,
-                  {
-                    name: t("consultationHeroTitle"),
-                    href: "/project-consultation",
-                  },
-                  { name: t("requestQuote"), href: "/request-quote" },
-                ],
-              };
-            }
-            if (link.href === "/about-us" || link.name === t("aboutUs")) {
-              return {
-                name: t("aboutUs"),
-                href: "#",
-                dropdown: [
-                  { name: t("aboutUs") || "About Us", href: "/about-us" },
-                  {
-                    name: t("bankAccounts") || "Bank Accounts",
-                    href: "/bank-accounts",
-                  },
-                  ...(link.dropdown || []),
-                ],
-              };
-            }
-            return link;
-          });
-          setNavLinks(localizeLinks(enriched));
-        } else {
-          setNavLinks(localizeLinks(buildLinks(serviceDropdown)));
-        }
-      } catch (error) {
-        console.warn("Failed to fetch nav links, using fallback:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchLinks();
-  }, [t, language]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -313,13 +286,11 @@ const Navbar = () => {
     handleScroll();
 
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [pathname, navLinks]);
+  }, [pathname, activeLinks]);
 
   const isRtl = language === "ar";
   const isHomePageHero =
     (pathname === "/" || pathname === "/ar" || pathname === "/en") && !isScrolled;
-
-  if (loading) return null;
 
   return (
     <nav

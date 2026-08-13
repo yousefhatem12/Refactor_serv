@@ -43,7 +43,9 @@ export default function HomePageClient({ initialHomeData }) {
 
         if (homeData) {
           const actualHomeData = homeData.data || homeData;
-          setPageData(actualHomeData);
+          if (JSON.stringify(pageData) !== JSON.stringify(actualHomeData)) {
+            setPageData(actualHomeData);
+          }
           if (typeof window !== "undefined") {
             try {
               localStorage.setItem(
