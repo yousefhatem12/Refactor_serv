@@ -343,8 +343,9 @@ export default function PortfolioGallery({ data, perPage = 9 }) {
           ) : (
             <div className="col-span-full text-center py-20 text-gray-400">
               <p className="text-lg">
-                {t("noProjectsFound") ||
-                  (language === "ar"
+                {t("noProjectsFound") !== "noProjectsFound"
+                  ? t("noProjectsFound")
+                  : (language === "ar"
                     ? "لا توجد أعمال في هذا القسم"
                     : "No projects found in this category")}
               </p>

@@ -738,7 +738,7 @@ const InputField = ({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className={`w-full p-3 md:p-4 rounded-xl bg-white/5 border text-white transition-all duration-300 outline-none backdrop-blur-md text-sm ${
+          className={`w-full py-3 md:py-4 rounded-xl bg-white/5 border text-white transition-all duration-300 outline-none backdrop-blur-md text-sm ${
             error ? "border-red-500/50 focus:border-red-500" : "border-white/10 focus:border-blue-500"
           } ${icon ? (isRtl ? "pr-12 pl-4 text-right" : "pl-12 pr-4 text-left") : "px-4"}`}
           style={{ direction: isRtl ? "rtl" : "ltr" }}
