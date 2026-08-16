@@ -14,6 +14,7 @@ import {
   FaTiktok,
 } from "react-icons/fa";
 import { RiTwitterXFill } from "react-icons/ri";
+import Link from "next/link";
 // Inline SVGs are used instead of lucide-react to avoid dependency issues.
 
 // Note: Since lucide-react is not in package.json, I will use inline SVGs
@@ -152,7 +153,7 @@ const Footer = () => {
         </div>
 
         {/* Middle Section: Links Grid */}
-        <div className="relative grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10 mb-10 pt-6">
+        <div className="relative grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-10 mb-10 pt-6">
           {/* Useful Links */}
           <div>
             <h4 className="text-xl font-bold mb-5 text-white">
@@ -161,12 +162,12 @@ const Footer = () => {
             <ul className="space-y-2">
               {footerData.links.usefulLinks.map((link) => (
                 <li key={link.id}>
-                  <a
+                  <Link
                     href={link.url}
                     className="text-gray-400 hover:text-orange-500 transition-colors text-base font-medium"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -180,12 +181,12 @@ const Footer = () => {
             <ul className="space-y-2">
               {footerData.links.quickLinks.map((link) => (
                 <li key={link.id}>
-                  <a
+                  <Link
                     href={link.url}
                     className="text-gray-400 hover:text-orange-500 transition-colors text-base font-medium"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -197,12 +198,12 @@ const Footer = () => {
             <ul className="space-y-2">
               {footerData.links.offers.map((link) => (
                 <li key={link.id}>
-                  <a
+                  <Link
                     href={link.url}
                     className="text-gray-400 hover:text-orange-500 transition-colors text-base font-medium"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -216,12 +217,12 @@ const Footer = () => {
             <ul className="space-y-2">
               {footerData.links.company.map((link) => (
                 <li key={link.id}>
-                  <a
+                  <Link
                     href={link.url}
                     className="text-gray-400 hover:text-orange-500 transition-colors text-base font-medium"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
