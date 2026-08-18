@@ -193,6 +193,20 @@ class SettingController extends BaseApiController
                 ?: '2026 © Serv5. All Rights Reserved.',
         ];
 
+        // A missing Arabic override must not silently fall back to English.
+        if ($lang === 'ar') {
+            $texts = [
+                'heading' => Setting::where('key', 'footer_heading_ar')->value('value')
+                    ?: "احصل على تصميم ويب\nرائع اليوم",
+                'description' => Setting::where('key', 'footer_description_ar')->value('value')
+                    ?: 'خبرة عالية المستوى في تصميم وتطوير الويب وإنتاج أعمال عالية الجودة.',
+                'button_text' => Setting::where('key', 'footer_button_text_ar')->value('value')
+                    ?: 'ابدأ الآن',
+                'copyright' => Setting::where('key', 'footer_copyright_ar')->value('value')
+                    ?: '© 2026 جميع الحقوق محفوظة - Serv5',
+            ];
+        }
+
         $links = FooterLink::orderBy('sort_order')->get()->groupBy('column_name')->map(function ($group) use ($lang) {
             return $group->map(function ($link) use ($lang) {
                 return [
