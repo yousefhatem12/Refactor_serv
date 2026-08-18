@@ -91,11 +91,25 @@ class PostResource extends Resource
                             ->label($isAr ? 'المحتوى (إنجليزي)' : 'Content (English)')
                             ->required()
                             ->toolbarButtons(self::getRichEditorToolbarButtons())
+                            ->fileAttachmentsDisk('public')
+                            ->fileAttachmentsDirectory('blog/content')
+                            ->fileAttachmentsVisibility('public')
+                            ->preventFileAttachmentPathTampering(
+                                allowFilePathUsing: fn (string $file): bool => str_starts_with($file, 'blog/content/'),
+                            )
+                            ->resizableImages()
                             ->columnSpanFull(),
                         RichEditor::make('content.ar')
                             ->label($isAr ? 'المحتوى (عربي)' : 'Content (Arabic)')
                             ->required()
                             ->toolbarButtons(self::getRichEditorToolbarButtons())
+                            ->fileAttachmentsDisk('public')
+                            ->fileAttachmentsDirectory('blog/content')
+                            ->fileAttachmentsVisibility('public')
+                            ->preventFileAttachmentPathTampering(
+                                allowFilePathUsing: fn (string $file): bool => str_starts_with($file, 'blog/content/'),
+                            )
+                            ->resizableImages()
                             ->columnSpanFull(),
                         FileUpload::make('image')
                             ->label($isAr ? 'الصورة' : 'Image')

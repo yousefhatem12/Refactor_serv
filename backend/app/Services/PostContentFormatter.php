@@ -34,7 +34,7 @@ class PostContentFormatter
     private static function toHtml(mixed $content): string
     {
         if (is_array($content)) {
-            return RichContentRenderer::make($content)->toHtml();
+            return self::renderer($content)->toHtml();
         }
 
         if (! is_string($content)) {
@@ -44,10 +44,17 @@ class PostContentFormatter
         $decoded = json_decode($content, true);
 
         if (is_array($decoded) && ($decoded['type'] ?? null) === 'doc') {
-            return RichContentRenderer::make($decoded)->toHtml();
+            return self::renderer($decoded)->toHtml();
         }
 
         return $content;
+    }
+
+    private static function renderer(string|array $content): RichContentRenderer
+    {
+        return RichContentRenderer::make($content)
+            ->fileAttachmentsDisk('public')
+            ->fileAttachmentsVisibility('public');
     }
 
     private static function normalizeHtml(string $html): string

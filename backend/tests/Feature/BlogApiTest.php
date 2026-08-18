@@ -8,6 +8,7 @@ use App\Models\BlogCategory;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class BlogApiTest extends TestCase
@@ -203,5 +204,59 @@ class BlogApiTest extends TestCase
 
         $response->assertOk();
         $this->assertStringContainsString('<p style="text-align: center;"><strong>Centered bold text</strong></p>', $response->json('data.content'));
+    }
+
+    #[Test]
+    public function it_renders_inline_images_with_the_saved_size()
+    {
+        Storage::fake('public');
+
+        $author = User::factory()->create();
+        $imagePath = 'blog/content/article-image.webp';
+        Storage::disk('public')->put($imagePath, 'fake image');
+
+        Post::create([
+            'title' => ['en' => 'Image Post', 'ar' => 'Ù…Ù‚Ø§Ù„ Ø¨ØµÙˆØ±Ø©'],
+            'content' => [
+                'en' => [
+                    'type' => 'doc',
+                    'content' => [
+                        [
+                            'type' => 'paragraph',
+                            'content' => [[
+                                'type' => 'text',
+                                'text' => 'Before the image',
+                            ]],
+                        ],
+                        [
+                            'type' => 'image',
+                            'attrs' => [
+                                'id' => $imagePath,
+                                'src' => null,
+                                'alt' => 'Article image',
+                                'width' => '420px',
+                                'height' => '280px',
+                            ],
+                        ],
+                    ],
+                ],
+                'ar' => '<p>Ù…Ø­ØªÙˆÙ‰</p>',
+            ],
+            'is_published' => true,
+            'author_id' => $author->id,
+            'slug' => 'image-post',
+        ]);
+
+        $response = $this->getJson('/api/v1/blog/image-post?lang=en');
+
+        $response->assertOk();
+        $content = $response->json('data.content');
+        $imageUrl = Storage::disk('public')->url($imagePath);
+
+        $this->assertStringContainsString('<img', $content);
+        $this->assertStringContainsString('src="' . $imageUrl . '"', $content);
+        $this->assertStringContainsString('data-id="' . $imagePath . '"', $content);
+        $this->assertStringContainsString('width="420px"', $content);
+        $this->assertStringContainsString('height="280px"', $content);
     }
 }
