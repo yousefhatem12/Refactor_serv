@@ -16,12 +16,22 @@ class SecurityHeaders
         $response = $next($request);
 
         // Standard Security Headers
-        $contentSecurityPolicy = $request->is('api/*')
-            ? "default-src 'none'; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; form-action 'none'; script-src 'none'; style-src 'none'; img-src 'none'; connect-src 'none'"
-            : "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'; " .
-              "script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; " .
-              "img-src 'self' data: blob: https:; font-src 'self' data: https:; " .
-              "connect-src 'self' https:; frame-src 'self' https:; media-src 'self' https:; upgrade-insecure-requests";
+        if ($request->is('api/*')) {
+            $contentSecurityPolicy = "default-src 'none'; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; form-action 'none'; script-src 'none'; style-src 'none'; img-src 'none'; connect-src 'none'";
+        } else {
+            // Filament/Livewire evaluates wire-* expressions in the admin panel.
+            // Keep this exception limited to the authenticated admin surface and
+            // Livewire transport; public/backend pages remain eval-free.
+            $isAdminSurface = $request->is('admin', 'admin/*', 'livewire/*');
+            $scriptSources = $isAdminSurface
+                ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
+                : "script-src 'self' 'unsafe-inline'";
+
+            $contentSecurityPolicy = "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'; " .
+                $scriptSources . "; style-src 'self' 'unsafe-inline'; " .
+                "img-src 'self' data: blob: https:; font-src 'self' data: https:; " .
+                "connect-src 'self' https:; frame-src 'self' https:; media-src 'self' https:; upgrade-insecure-requests";
+        }
 
         $response->headers->set(
             'Content-Security-Policy',
