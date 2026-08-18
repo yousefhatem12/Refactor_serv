@@ -40,6 +40,12 @@ class SettingController extends BaseApiController
                 $isUploadedMedia = in_array($setting->key, self::UPLOADED_MEDIA_KEYS, true)
                     || ($setting->type === 'image' && $setting->value_source === 'file');
 
+                // FileUpload::multiple historically stored this setting in a few
+                // different JSON shapes. Always expose it as a list to clients.
+                if ($setting->key === 'features_partners') {
+                    return [$setting->key => self::uploadedMediaList($value)];
+                }
+
                 // Handle multilingual JSON settings
                 if (is_string($value) && str_starts_with($value, '{')) {
                     $decoded = json_decode($value, true);
@@ -92,6 +98,39 @@ class SettingController extends BaseApiController
         $path = preg_replace('#^/?storage/#', '', $value);
 
         return asset('storage/'.ltrim($path, '/'));
+    }
+
+    /**
+     * Normalize a multi-file setting to a list of public media URLs.
+     *
+     * @return list<string>
+     */
+    private static function uploadedMediaList(mixed $value): array
+    {
+        if (is_string($value)) {
+            $trimmed = trim($value);
+            $decoded = json_decode($trimmed, true);
+
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                $value = $decoded;
+            } elseif ($trimmed === '') {
+                return [];
+            } else {
+                $value = [$trimmed];
+            }
+        }
+
+        if (! is_array($value)) {
+            return [];
+        }
+
+        return array_values(array_filter(array_map(function ($item) {
+            if (! is_string($item) || trim($item) === '') {
+                return null;
+            }
+
+            return self::uploadedMediaUrl(trim($item));
+        }, array_values($value))));
     }
 
     public function testimonials()

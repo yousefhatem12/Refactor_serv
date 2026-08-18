@@ -22,6 +22,28 @@ const checkFeaturesKeys = [
   // "productDesign",
 ];
 
+const normalizePartnerValues = (value) => {
+  if (Array.isArray(value)) return value;
+
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (!trimmed) return [];
+
+    try {
+      const parsed = JSON.parse(trimmed);
+      return normalizePartnerValues(parsed);
+    } catch {
+      return [trimmed];
+    }
+  }
+
+  if (value && typeof value === "object") {
+    return Object.values(value);
+  }
+
+  return [];
+};
+
 const Star = ({ className }) => (
   <svg viewBox="0 0 24 24" className={className}>
     <defs>
@@ -44,10 +66,10 @@ export default function Features() {
   // Use global settings from SSR context — no re-fetch needed
   const settings = useSettings();
 
-  const displayPartners =
-    settings?.features_partners && settings.features_partners.length > 0
-      ? settings.features_partners.map((p) => getMediaUrl(p))
-      : [];
+  const partnerValues = normalizePartnerValues(settings?.features_partners).filter(
+    (partner) => typeof partner === "string" && partner.trim().length > 0
+  );
+  const displayPartners = partnerValues.map((partner) => getMediaUrl(partner));
 
   const infinitePartners =
     displayPartners.length > 0 ? [...displayPartners, ...displayPartners, ...displayPartners] : [];
@@ -176,15 +198,15 @@ export default function Features() {
     ? getMediaUrl(settings.site_logo)
     : "/logo.svg";
 
-  const [experienceImgSrc, setExperienceImgSrc] = useState(
-    settings?.features_image ? getMediaUrl(settings.features_image) : "/Features/15Y.webp"
-  );
-
-  useEffect(() => {
-    setExperienceImgSrc(
-      settings?.features_image ? getMediaUrl(settings.features_image) : "/Features/15Y.webp"
-    );
-  }, [settings?.features_image, siteLogo]);
+  const experienceFallback = "/Features/15Y.webp";
+  const requestedExperienceImgSrc = settings?.features_image
+    ? getMediaUrl(settings.features_image)
+    : experienceFallback;
+  const [failedExperienceImgSrc, setFailedExperienceImgSrc] = useState(null);
+  const experienceImgSrc =
+    failedExperienceImgSrc === requestedExperienceImgSrc && requestedExperienceImgSrc !== experienceFallback
+      ? experienceFallback
+      : requestedExperienceImgSrc;
 
   return (
     <section
@@ -242,7 +264,7 @@ export default function Features() {
                 src={experienceImgSrc}
                 alt="Who We Are"
                 className={`w-full h-auto relative z-10 drop-shadow-[0_0_25px_rgba(217,139,80,0.4)] ${experienceImgSrc === siteLogo ? "object-contain max-h-[170px]" : "object-contain max-h-[190px] mx-auto"}`}
-                onError={() => setExperienceImgSrc("/Features/15Y.webp")}
+                onError={() => setFailedExperienceImgSrc(requestedExperienceImgSrc)}
               />
             </motion.div>
 
@@ -374,7 +396,7 @@ export default function Features() {
                 src={experienceImgSrc}
                 alt="Who We Are"
                 className={`w-full h-auto relative z-10 drop-shadow-[0_20px_50px_rgba(217,139,80,0.4)] ${experienceImgSrc === siteLogo ? "object-contain max-h-[290px] p-6 mx-auto" : "object-contain max-h-[360px] mx-auto"}`}
-                onError={() => setExperienceImgSrc("/Features/15Y.webp")}
+                onError={() => setFailedExperienceImgSrc(requestedExperienceImgSrc)}
               />
             </motion.div>
           </motion.div>
