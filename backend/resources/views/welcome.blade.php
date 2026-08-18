@@ -4,90 +4,230 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Serv5 - Select Portal</title>
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800,900&display=swap" rel="stylesheet" />
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .bg-pattern {
-            background-color: #0f172a;
-            background-image: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+        :root {
+            color-scheme: dark;
+            --bg: #0f172a;
+            --panel: rgba(30, 41, 59, .68);
+            --border: rgba(148, 163, 184, .24);
+            --muted: #94a3b8;
+            --orange: #f97316;
+            --blue: #60a5fa;
         }
-        .glow {
-            box-shadow: 0 0 40px -10px rgba(245, 158, 11, 0.4);
+
+        * { box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 16px;
+            color: #fff;
+            background:
+                radial-gradient(circle at 15% 10%, rgba(37, 99, 235, .24), transparent 34%),
+                radial-gradient(circle at 85% 90%, rgba(249, 115, 22, .2), transparent 34%),
+                radial-gradient(circle at center, #1e293b 0%, var(--bg) 72%);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .portal-container {
+            width: min(100%, 960px);
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .brand { margin-bottom: 46px; }
+
+        .logo {
+            width: 112px;
+            height: 112px;
+            margin: 0 auto 22px;
+            object-fit: contain;
+            filter: drop-shadow(0 18px 24px rgba(0, 0, 0, .35));
+            transition: transform .2s ease;
+        }
+
+        .logo:hover { transform: scale(1.05); }
+
+        h1 {
+            margin: 0 0 12px;
+            color: #f8fafc;
+            font-size: clamp(2.1rem, 5vw, 3.25rem);
+            line-height: 1.1;
+            letter-spacing: -.04em;
+            font-weight: 800;
+        }
+
+        .brand-name {
+            color: var(--orange);
+            background: linear-gradient(90deg, #fb923c, #ea580c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            max-width: 560px;
+            margin: 0 auto;
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
+
+        .portal-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 24px;
+            text-align: start;
+        }
+
+        .portal-card {
+            position: relative;
+            display: block;
+            overflow: hidden;
+            padding: 30px;
+            color: inherit;
+            text-decoration: none;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            backdrop-filter: blur(14px);
+            box-shadow: 0 18px 50px rgba(0, 0, 0, .18);
+            transition: transform .2s ease, background .2s ease, border-color .2s ease;
+        }
+
+        .portal-card:hover,
+        .portal-card:focus-visible {
+            transform: translateY(-4px);
+            background: rgba(30, 41, 59, .9);
+            border-color: rgba(249, 115, 22, .55);
+            outline: none;
+        }
+
+        .portal-card.user:hover,
+        .portal-card.user:focus-visible { border-color: rgba(96, 165, 250, .55); }
+
+        .icon {
+            width: 56px;
+            height: 56px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 22px;
+            border-radius: 16px;
+        }
+
+        .icon.admin {
+            color: var(--orange);
+            background: rgba(249, 115, 22, .16);
+            border: 1px solid rgba(249, 115, 22, .3);
+        }
+
+        .icon.user {
+            color: var(--blue);
+            background: rgba(59, 130, 246, .16);
+            border: 1px solid rgba(96, 165, 250, .3);
+        }
+
+        .icon svg { width: 28px; height: 28px; }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 0 10px;
+            color: #f8fafc;
+            font-size: 1.45rem;
+            line-height: 1.25;
+        }
+
+        .card-title svg { width: 19px; height: 19px; color: #64748b; }
+
+        .card-text {
+            margin: 0;
+            color: var(--muted);
+            font-size: .95rem;
+            line-height: 1.65;
+        }
+
+        .website-link {
+            width: min(100%, 430px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: 42px auto 0;
+            padding: 15px 22px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.05rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #f97316, #ea580c);
+            border-radius: 16px;
+            box-shadow: 0 0 24px rgba(249, 115, 22, .28);
+            transition: transform .2s ease, filter .2s ease;
+        }
+
+        .website-link:hover,
+        .website-link:focus-visible { transform: translateY(-3px); filter: brightness(1.08); outline: none; }
+        .website-link svg { width: 24px; height: 24px; }
+
+        @media (max-width: 700px) {
+            .portal-grid { grid-template-columns: 1fr; }
+            .brand { margin-bottom: 34px; }
+            .portal-card { padding: 24px; }
         }
     </style>
 </head>
-<body class="bg-pattern min-h-screen flex items-center justify-center p-4 text-white antialiased relative overflow-x-hidden">
-    
-    <!-- Background decorations -->
-    <div class="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none"></div>
-    <div class="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-orange-500/20 rounded-full blur-[120px] pointer-events-none"></div>
+<body>
+    <main class="portal-container">
+        <header class="brand">
+            <img class="logo" src="{{ asset('logo.svg') }}" alt="Serv5 Logo">
+            <h1>Welcome to <span class="brand-name">Serv5</span></h1>
+            <p class="subtitle">Please select your destination portal to continue.</p>
+        </header>
 
-    <div class="max-w-4xl w-full relative z-10 flex flex-col items-center">
-        <!-- Logo Area -->
-        <div class="mb-12 text-center flex flex-col items-center">
-            <div class="w-28 h-28 flex items-center justify-center mb-6 transform transition hover:scale-105">
-                <img src="{{ asset('logo.svg') }}" alt="Serv5 Logo" class="w-full h-full object-contain drop-shadow-2xl" />
-            </div>
-            <h1 class="text-4xl md:text-5xl font-black mb-4 tracking-tight">Welcome to <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">Serv5</span></h1>
-            <p class="text-slate-400 text-lg max-w-lg mx-auto">Please select your destination portal to continue.</p>
-        </div>
-
-        <!-- Portals Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 w-full px-4">
-            
-            <!-- Admin Portal Card -->
-            <a href="/admin" class="group relative bg-slate-800/50 backdrop-blur-xl border border-slate-700/50 p-8 rounded-3xl hover:bg-slate-800 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/10 overflow-hidden transform hover:-translate-y-1">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-orange-500/20 to-transparent rounded-full blur-2xl -mr-16 -mt-16 transition-opacity group-hover:opacity-100 opacity-50"></div>
-                
-                <div class="w-14 h-14 bg-orange-500/20 border border-orange-500/30 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <section class="portal-grid" aria-label="Available portals">
+            <a class="portal-card" href="/admin">
+                <div class="icon admin" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                     </svg>
                 </div>
-                
-                <h2 class="text-2xl font-bold text-white mb-3 flex items-center gap-2">
+                <h2 class="card-title">
                     Admin Portal
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500 group-hover:text-orange-400 group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                     </svg>
                 </h2>
-                <p class="text-slate-400 text-sm leading-relaxed">Access the Filament admin dashboard to manage website content, system settings, and overview all operations.</p>
+                <p class="card-text">Access the Filament admin dashboard to manage website content, system settings, and operations.</p>
             </a>
 
-            <!-- User Portal Card -->
-            <a href="/user" class="group relative bg-slate-800/50 backdrop-blur-xl border border-slate-700/50 p-8 rounded-3xl hover:bg-slate-800 transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/10 overflow-hidden transform hover:-translate-y-1">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/20 to-transparent rounded-full blur-2xl -mr-16 -mt-16 transition-opacity group-hover:opacity-100 opacity-50"></div>
-                
-                <div class="w-14 h-14 bg-blue-500/20 border border-blue-500/30 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <a class="portal-card user" href="https://serv5.com.eg">
+                <div class="icon user" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                 </div>
-                
-                <h2 class="text-2xl font-bold text-white mb-3 flex items-center gap-2">
+                <h2 class="card-title">
                     User Portal
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500 group-hover:text-blue-400 group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                     </svg>
                 </h2>
-                <p class="text-slate-400 text-sm leading-relaxed">Log in to your personal user account to access your services, track orders, and view support tickets.</p>
+                <p class="card-text">Open the Serv5 website and access the public user experience.</p>
             </a>
+        </section>
 
-        </div>
-
-        <!-- Link to Main Website -->
-        <div class="mt-12 w-full max-w-md px-4">
-            <a href="http://localhost:3000" class="group relative w-full flex items-center justify-center gap-3 bg-gradient-to-r from-orange-500 to-orange-600 p-4 rounded-2xl hover:from-orange-400 hover:to-orange-500 transition-all duration-300 shadow-[0_0_20px_rgba(249,115,22,0.3)] hover:shadow-[0_0_30px_rgba(249,115,22,0.5)] transform hover:-translate-y-1">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                <span class="text-white font-bold text-lg">GO TO OUR WEBSITE</span>
-            </a>
-        </div>
-    </div>
+        <a class="website-link" href="https://serv5.com.eg">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            <span>GO TO OUR WEBSITE</span>
+        </a>
+    </main>
 </body>
 </html>
