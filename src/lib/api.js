@@ -131,7 +131,11 @@ export const fetchAPI = async (endpoint, options = {}) => {
       // );
 
       if (!response.ok) {
-        console.warn(`API warning: ${response.statusText}`);
+        const expectedAnonymousAuthFailure =
+          isCurrentUserRequest && (response.status === 401 || response.status === 419);
+        if (!expectedAnonymousAuthFailure) {
+          console.warn(`API warning: ${response.statusText}`);
+        }
         if (isGet && cacheKey) apiCache.delete(cacheKey); // Don't cache bad responses
         return null;
       }

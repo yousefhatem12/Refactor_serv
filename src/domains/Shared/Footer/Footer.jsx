@@ -34,18 +34,13 @@ const Footer = () => {
     links: { usefulLinks: [], quickLinks: [], offers: [], company: [] },
     socials: [],
   });
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
     fetchAPI(`/footer-data?lang=${language}`)
       .then((data) => {
         if (data) setFooterData(data);
       })
-      .catch(console.error)
-      .finally(() => {
-        setLoading(false);
-      });
+      .catch(console.error);
   }, [language]);
 
   const getSocialIconData = (platform) => {
@@ -62,8 +57,6 @@ const Footer = () => {
     };
     return map[platform] || map["facebook"];
   };
-
-  if (loading) return null;
 
   const footerHeading = footerData.texts?.heading || t("haveAGoodWebDesign");
 
@@ -93,7 +86,7 @@ const Footer = () => {
               className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-[1.1] tracking-tight"
             >
               <span>
-                {footerHeading.split(/\r?\n/).map((line, index) => (
+                {footerHeading.replace(/<br\s*\/?>/gi, "\n").split(/\r?\n/).map((line, index) => (
                   <Fragment key={`${line}-${index}`}>
                     {index > 0 && <br className="hidden md:block" />}
                     {line}

@@ -20,7 +20,11 @@ class Setting extends Model
         try {
             return decrypt($value);
         } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
-            return $value;
+            // Never expose encrypted database contents to API consumers if the
+            // application key is wrong or the value was written with a retired key.
+            report($e);
+
+            return null;
         }
     }
 

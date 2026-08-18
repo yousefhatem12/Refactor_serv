@@ -66,17 +66,10 @@ export default function Features() {
   // Use global settings from SSR context — no re-fetch needed
   const settings = useSettings();
 
-<<<<<<< HEAD
   const partnerValues = normalizePartnerValues(settings?.features_partners).filter(
     (partner) => typeof partner === "string" && partner.trim().length > 0
   );
   const displayPartners = partnerValues.map((partner) => getMediaUrl(partner));
-=======
-  const displayPartners =
-    Array.isArray(settings?.features_partners) && settings.features_partners.length > 0
-      ? settings.features_partners.map((p) => getMediaUrl(p))
-      : [];
->>>>>>> 71509c73853015edb4d0b8ceca6b800117ba5b59
 
   const infinitePartners =
     displayPartners.length > 0 ? [...displayPartners, ...displayPartners, ...displayPartners] : [];
