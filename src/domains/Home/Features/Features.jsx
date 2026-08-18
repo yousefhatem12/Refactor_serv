@@ -45,7 +45,7 @@ export default function Features() {
   const settings = useSettings();
 
   const displayPartners =
-    settings?.features_partners && settings.features_partners.length > 0
+    Array.isArray(settings?.features_partners) && settings.features_partners.length > 0
       ? settings.features_partners.map((p) => getMediaUrl(p))
       : [];
 

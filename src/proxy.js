@@ -1,3 +1,4 @@
+
 import { NextResponse } from "next/server";
 
 const DEFAULT_API_URL = "https://api.serv5.com.eg/api/v1";
@@ -17,21 +18,26 @@ function createContentSecurityPolicy(nonce) {
     ? " http://localhost:8000 http://127.0.0.1:8000"
     : "";
 
-  return [
+  const cspDirectives = [
     "default-src 'self'",
-    `script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http:`,
+    `script-src 'self' 'nonce-${nonce}' 'unsafe-inline' 'unsafe-eval' https: http:`,
     "style-src 'self' 'unsafe-inline' https: http:",
-    `img-src 'self' data: blob: ${apiOrigin} https://flagcdn.com https: http:${localApiOrigins}`,
+    `img-src 'self' data: blob: ${apiOrigin} https: http:${localApiOrigins}`,
     "font-src 'self' data: https: http:",
     `connect-src 'self' ${apiOrigin} https: http:${localApiOrigins}`,
-    "frame-src 'self' https://maps.google.com https://www.google.com https://www.youtube.com https://youtube.com",
+    "frame-src 'self' https://maps.google.com https://www.google.com https://www.youtube.com https://youtube.com https: http:",
     `media-src 'self' ${apiOrigin} https: http:${localApiOrigins}`,
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
     "frame-ancestors 'self'",
-    "upgrade-insecure-requests",
-  ].join("; ");
+  ];
+
+  if (!isDevelopment) {
+    cspDirectives.push("upgrade-insecure-requests");
+  }
+
+  return cspDirectives.join("; ");
 }
 
 function withSecurityHeaders(response, nonce) {
@@ -47,10 +53,10 @@ export function proxy(request) {
 
   // Redirect www to non-www for SEO consistency.
   if (host.startsWith("www.")) {
-    const canonicalOrigin = process.env.NEXT_PUBLIC_SITE_URL || "https://serv5.com.eg";
-    const canonicalUrl = new URL(request.nextUrl.pathname + request.nextUrl.search, canonicalOrigin);
-
-    return NextResponse.redirect(canonicalUrl, 301);
+    const cleanHost = host.replace(/^www\./, "");
+    const proto = request.headers.get("x-forwarded-proto") || request.nextUrl.protocol.replace(":", "");
+    const redirectUrl = `${proto}://${cleanHost}${request.nextUrl.pathname}${request.nextUrl.search}`;
+    return NextResponse.redirect(redirectUrl, 301);
   }
 
   const { pathname } = request.nextUrl;
@@ -104,8 +110,7 @@ export function proxy(request) {
   }
 
   const redirectPath = `/${locale}${pathname === "/" ? "" : pathname}`;
-  const canonicalOrigin = process.env.NEXT_PUBLIC_SITE_URL || "https://serv5.com.eg";
-  const redirectUrl = new URL(redirectPath, canonicalOrigin);
+  const redirectUrl = new URL(redirectPath, request.url);
   redirectUrl.search = request.nextUrl.search;
   const response = NextResponse.redirect(redirectUrl, 307);
 

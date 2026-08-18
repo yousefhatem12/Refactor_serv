@@ -44,30 +44,34 @@ export default function Hero({ isPhaseTwo, data }) {
   // Settings are always populated instantly from layout.js
   const isLoadingSettings = !settings || Object.keys(settings).length === 0;
 
-  const heroTitle1 = settings?.hero_title_1 || "";
-  const heroTitle2 = settings?.hero_title_2 || "";
+  const isValidText = (str) => {
+    if (typeof str !== "string" || !str.trim()) return false;
+    const trimmed = str.trim();
+    return !trimmed.startsWith("eyJpdiI6") && !(trimmed.startsWith('{"iv":') && trimmed.includes('"value":'));
+  };
 
-  // Priority: 1. settings.hero_title_1 (locale-specific from backend settings)
-  //           2. data.hero_title / data.title (from home page API)
-  //           3. translation fallback (only after settings loaded)
+  const heroTitle1 = isValidText(settings?.hero_title_1) ? settings.hero_title_1 : "";
+  const heroTitle2 = isValidText(settings?.hero_title_2) ? settings.hero_title_2 : "";
+
   let title1 = "";
   let title2 = "";
 
-  if (data?.hero_title || data?.title || data?.subtitle) {
-    // Page data takes highest priority
-    title1 = data?.hero_title || data?.title || "";
-    title2 = data?.hero_subtitle || data?.subtitle || "";
+  const pageHeroTitle = isValidText(data?.hero_title) ? data.hero_title : (isValidText(data?.title) ? data.title : "");
+  const pageHeroSub = isValidText(data?.hero_subtitle) ? data.hero_subtitle : (isValidText(data?.subtitle) ? data.subtitle : "");
+
+  if (pageHeroTitle || pageHeroSub) {
+    title1 = pageHeroTitle;
+    title2 = pageHeroSub;
   } else if (heroTitle1 || heroTitle2) {
-    // Settings hero titles take second priority
     title1 = heroTitle1;
     title2 = heroTitle2;
   } else if (!isLoadingSettings) {
-    // Only show translation fallback after settings have loaded (avoids English flash)
     title1 = t("innovativeSolutions") || "";
     title2 = t("tailoredToYourNeeds") || "";
   }
 
-  const subtitle = data?.content || settings?.hero_desc || t("heroDesc");
+  const rawSubtitle = data?.content || settings?.hero_desc;
+  const subtitle = isValidText(rawSubtitle) ? rawSubtitle : t("heroDesc");
 
   // Phase 1 (Hero) disappearance on scroll
   // Changed from horizontal scroll (x) to vertical fade/parallax (y)

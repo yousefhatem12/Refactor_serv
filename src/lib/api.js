@@ -16,6 +16,28 @@ export const getMediaUrl = (path) => {
 const apiCache = new Map();
 const CACHE_TTL = 300000; // 5 minutes
 
+const sanitizeEncryptedPayloads = (data) => {
+  if (!data) return data;
+  if (typeof data === "string") {
+    const trimmed = data.trim();
+    if (trimmed.startsWith("eyJpdiI6") || (trimmed.startsWith('{"iv":') && trimmed.includes('"value":'))) {
+      return "";
+    }
+    return data;
+  }
+  if (Array.isArray(data)) {
+    return data.map(sanitizeEncryptedPayloads);
+  }
+  if (typeof data === "object") {
+    const cleaned = {};
+    for (const [key, val] of Object.entries(data)) {
+      cleaned[key] = sanitizeEncryptedPayloads(val);
+    }
+    return cleaned;
+  }
+  return data;
+};
+
 export const fetchAPI = async (endpoint, options = {}) => {
   let lang = "en";
   
@@ -114,7 +136,8 @@ export const fetchAPI = async (endpoint, options = {}) => {
         return null;
       }
 
-      return await response.json();
+      const json = await response.json();
+      return sanitizeEncryptedPayloads(json);
     } catch (error) {
       clearTimeout(timeoutId);
       if (error && (
