@@ -43,11 +43,15 @@ import {
 import { renderCustomHeadCode } from "@/lib/custom-head";
 import { sanitizeHtml } from "@/lib/sanitize-html";
 import { safeJsonForScript } from "@/lib/safe-json";
+import { LanguageProvider } from "./context/LanguageContext";
+import { SettingsProvider } from "./context/SettingsContext";
+import Loading from "./loading";
+import { Suspense } from "react";
+import { AuthProvider } from "./context/AuthContext";
 
 export async function generateMetadata() {
   const headersList = await headers();
   const xLocale = headersList.get("x-locale");
-  const nonce = headersList.get("x-nonce");
   const cookieStore = await cookies();
   const language = xLocale || cookieStore.get("NEXT_LOCALE")?.value || "en";
 
@@ -99,12 +103,6 @@ export async function generateMetadata() {
   };
 }
 
-import { LanguageProvider } from "./context/LanguageContext";
-import { SettingsProvider } from "./context/SettingsContext";
-import Loading from "./loading";
-import { Suspense } from "react";
-import { AuthProvider } from "./context/AuthContext";
-
 async function ProvidersAndContent({ children }) {
   const headersList = await headers();
   const xLocale = headersList.get("x-locale");
@@ -138,7 +136,6 @@ async function ProvidersAndContent({ children }) {
     description: siteDesc,
   };
 
-
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -162,12 +159,10 @@ async function ProvidersAndContent({ children }) {
 
           {/* Organization & WebSite Schemas */}
           <script
-            nonce={nonce || undefined}
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: safeJsonForScript(orgSchema) }}
           />
           <script
-            nonce={nonce || undefined}
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: safeJsonForScript(websiteSchema) }}
           />
@@ -185,10 +180,8 @@ async function ProvidersAndContent({ children }) {
 
 export default async function RootLayout({ children }) {
   const settings = await getCachedHeadSettings("en");
-  const nonce = (await headers()).get("x-nonce");
   const customHead = renderCustomHeadCode(settings?.custom_header_code, {
     useNextScript: true,
-    nonce,
   });
 
   return (
@@ -211,4 +204,3 @@ export default async function RootLayout({ children }) {
     </html>
   );
 }
-
