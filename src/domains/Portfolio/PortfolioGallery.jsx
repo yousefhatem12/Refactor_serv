@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { fetchAPI, getMediaUrl } from "@/lib/api";
+import { fetchAPI, getApiItems, getApiPage, getMediaUrl } from "@/lib/api";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
 
@@ -161,7 +161,7 @@ export default function PortfolioGallery({ data, perPage = 9 }) {
   useEffect(() => {
     fetchAPI(`/portfolio/categories?lang=${language}`)
       .then((data) => {
-        if (data) setCategories(data || []);
+        if (data) setCategories(getApiItems(data));
         setCategoriesLoaded(true);
       })
       .catch((err) => {
@@ -175,7 +175,9 @@ export default function PortfolioGallery({ data, perPage = 9 }) {
     if (!categoriesLoaded) return;
 
     let isMounted = true;
-    setIsLoading(true);
+    Promise.resolve().then(() => {
+      if (isMounted) setIsLoading(true);
+    });
 
     const categoryQuery = activeTab === "all" ? "all" : activeTab;
     const cacheKey = `${language}-${categoryQuery}-${currentPage}-${perPage}`;
@@ -207,24 +209,25 @@ export default function PortfolioGallery({ data, perPage = 9 }) {
       .then((res) => {
         if (!isMounted) return;
 
-        if (res && Array.isArray(res.data)) {
+        const page = getApiPage(res);
+        if (res) {
           // Store in client-side cache
           portfolioCache[cacheKey] = {
-            data: res.data,
-            hasMore: res.has_more,
+            data: page.items,
+            hasMore: page.hasMore,
           };
 
           if (currentPage === 1) {
-            setPortfolioItems(res.data);
+            setPortfolioItems(page.items);
           } else {
             setPortfolioItems((prev) => {
-              const newItems = res.data.filter(
+              const newItems = page.items.filter(
                 (item) => !prev.some((p) => p.id === item.id),
               );
               return [...prev, ...newItems];
             });
           }
-          setHasMore(res.has_more);
+          setHasMore(page.hasMore);
         } else {
           // API returned nothing — clear the list
           if (currentPage === 1) setPortfolioItems([]);

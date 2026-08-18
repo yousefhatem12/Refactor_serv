@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { fetchAPI, getMediaUrl } from "@/lib/api";
+import { fetchAPI, getApiItems, getApiPage, getMediaUrl } from "@/lib/api";
 import { htmlToText } from "@/lib/sanitize-html";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
@@ -43,11 +43,8 @@ const itemVariants = {
 const BlogCard = ({ post, t, language, categoryMap, siteLogo }) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const initialImg = post.image ? getMediaUrl(post.image) : siteLogo;
-  const [imgSrc, setImgSrc] = useState(initialImg);
-
-  useEffect(() => {
-    setImgSrc(post.image ? getMediaUrl(post.image) : siteLogo);
-  }, [post.image, siteLogo]);
+  const [failedImage, setFailedImage] = useState(null);
+  const imgSrc = failedImage === initialImg ? siteLogo : initialImg;
 
   return (
     <motion.div
@@ -66,7 +63,7 @@ const BlogCard = ({ post, t, language, categoryMap, siteLogo }) => {
             className={`transition-all duration-700 group-hover:scale-105 ${isImageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
               } ${imgSrc === siteLogo ? "object-contain p-4" : "object-cover"}`}
             onLoad={() => setIsImageLoaded(true)}
-            onError={() => setImgSrc(siteLogo)}
+            onError={() => setFailedImage(initialImg)}
           />
         </div>
         <div className="flex items-center gap-2 mb-2">
@@ -132,10 +129,10 @@ const BlogGrid = () => {
       .then((data) => {
         if (data) {
           const allCat = { id: "ALL", label: language === "ar" ? "الكل" : "All" };
-          setCategories([allCat, ...data]);
+          setCategories([allCat, ...getApiItems(data)]);
 
           const map = { ALL: language === "ar" ? "الكل" : "All" };
-          data.forEach((cat) => {
+          getApiItems(data).forEach((cat) => {
             map[cat.id] = cat.label;
           });
           setCategoryMap(map);
@@ -178,22 +175,26 @@ const BlogGrid = () => {
       .then((res) => {
         if (!isMounted) return;
 
-        if (res && Array.isArray(res.data)) {
+        const page = getApiPage(res);
+        if (res) {
           // Store in client-side cache
           blogCache[cacheKey] = {
-            data: res.data,
-            hasMore: res.has_more
+            data: page.items,
+            hasMore: page.hasMore,
           };
 
           if (currentPage === 1) {
-            setPostsList(res.data);
+            setPostsList(page.items);
           } else {
             setPostsList((prev) => {
-              const newPosts = res.data.filter((post) => !prev.some((p) => p.id === post.id));
+              const newPosts = page.items.filter((post) => !prev.some((p) => p.id === post.id));
               return [...prev, ...newPosts];
             });
           }
-          setHasMore(res.has_more);
+          setHasMore(page.hasMore);
+        } else if (currentPage === 1) {
+          setPostsList([]);
+          setHasMore(false);
         }
       })
       .catch(console.error)

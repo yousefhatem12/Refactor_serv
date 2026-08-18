@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { fetchAPI } from "../../lib/api";
+import { fetchAPI, getApiPage } from "../../lib/api";
 import Loading from "../loading";
 
 import { useLanguage } from "../context/LanguageContext";
@@ -28,9 +28,11 @@ const OurProductsListingPage = () => {
   useEffect(() => {
     fetchAPI(`/products?lang=${language}&page=1&per_page=9`)
       .then((res) => {
-        if (res && Array.isArray(res.data)) {
-          setProductsList(res.data);
-          setHasMore(res.has_more);
+        const page = getApiPage(res);
+        if (res) {
+          setProductsList(page.items);
+          setHasMore(page.hasMore);
+          setCurrentPage(page.currentPage);
         } else {
           setProductsList([]);
           setHasMore(false);
@@ -52,13 +54,14 @@ const OurProductsListingPage = () => {
     const nextPage = currentPage + 1;
     fetchAPI(`/products?lang=${language}&page=${nextPage}&per_page=9`)
       .then((res) => {
-        if (res && Array.isArray(res.data)) {
+        const page = getApiPage(res);
+        if (res) {
           setProductsList((prev) => {
-            const newProducts = res.data.filter((item) => !prev.some((p) => p.id === item.id));
+            const newProducts = page.items.filter((item) => !prev.some((p) => p.id === item.id));
             return [...prev, ...newProducts];
           });
-          setHasMore(res.has_more);
-          setCurrentPage(nextPage);
+          setHasMore(page.hasMore);
+          setCurrentPage(page.currentPage || nextPage);
         }
       })
       .catch((err) => {

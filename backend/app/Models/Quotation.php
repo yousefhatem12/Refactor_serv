@@ -29,6 +29,7 @@ class Quotation extends Model
         'reference_sites',
         'additional_notes',
         'files',
+        'status',
     ];
 
     protected $casts = [

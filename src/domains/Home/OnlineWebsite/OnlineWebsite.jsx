@@ -8,7 +8,7 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { fetchAPI } from "@/lib/api";
+import { fetchAPI, getApiItems, getApiPage } from "@/lib/api";
 import { useLanguage } from "@/app/context/LanguageContext";
 
 // --- Gradients for dynamic data ---
@@ -218,10 +218,10 @@ const OnlineWebsite = () => {
 
     fetchAPI(`/products/categories?lang=${language}`)
       .then((data) => {
-        if (data && Array.isArray(data)) {
+        if (data) {
           setCategories([
             { id: "all", label: language === "ar" ? "الكل" : "All" },
-            ...data,
+            ...getApiItems(data),
           ]);
         }
       })
@@ -251,21 +251,19 @@ const OnlineWebsite = () => {
       .then((res) => {
         if (!isMounted) return;
 
-        if (res && Array.isArray(res.data)) {
+        const page = getApiPage(res);
+        if (res) {
           if (currentPage === 1) {
-            setProductsList(res.data);
+            setProductsList(page.items);
           } else {
             setProductsList((prev) => {
-              const newProducts = res.data.filter(
+              const newProducts = page.items.filter(
                 (item) => !prev.some((p) => p.id === item.id),
               );
               return [...prev, ...newProducts];
             });
           }
-          setHasMore(res.has_more);
-        } else if (res && Array.isArray(res)) {
-          setProductsList(res);
-          setHasMore(false);
+          setHasMore(page.hasMore);
         } else {
           if (currentPage === 1) {
             setProductsList([]);

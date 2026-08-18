@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
 import Loading from "@/app/loading";
-import { fetchAPI, getMediaUrl } from "@/lib/api";
+import { fetchAPI, getApiPage, getMediaUrl } from "@/lib/api";
 import {
   FaCopy,
   FaCheck,
@@ -39,9 +39,11 @@ const BankAccountsContent = () => {
   useEffect(() => {
     fetchAPI(`/bank-accounts?lang=${language}&country=${activeTab}&page=1&per_page=6`)
       .then((res) => {
-        if (res && Array.isArray(res.data)) {
-          setMethods(res.data);
-          setHasMore(res.has_more);
+        const page = getApiPage(res);
+        if (page.items.length > 0 || res) {
+          setMethods(page.items);
+          setHasMore(page.hasMore);
+          setCurrentPage(page.currentPage);
         } else {
           setMethods([]);
           setHasMore(false);
@@ -61,13 +63,14 @@ const BankAccountsContent = () => {
     const nextPage = currentPage + 1;
     fetchAPI(`/bank-accounts?lang=${language}&country=${activeTab}&page=${nextPage}&per_page=6`)
       .then((res) => {
-        if (res && Array.isArray(res.data)) {
+        const page = getApiPage(res);
+        if (page.items.length > 0 || res) {
           setMethods((prev) => {
-            const newMethods = res.data.filter((item) => !prev.some((p) => p.id === item.id));
+            const newMethods = page.items.filter((item) => !prev.some((p) => p.id === item.id));
             return [...prev, ...newMethods];
           });
-          setHasMore(res.has_more);
-          setCurrentPage(nextPage);
+          setHasMore(page.hasMore);
+          setCurrentPage(page.currentPage || nextPage);
         }
       })
       .catch((err) => {

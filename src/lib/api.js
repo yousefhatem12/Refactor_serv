@@ -38,6 +38,46 @@ const sanitizeEncryptedPayloads = (data) => {
   return data;
 };
 
+/**
+ * Laravel resources are returned in more than one valid shape in this API:
+ * a plain array, { data: [] }, or a paginated object. Keep that compatibility
+ * in one place so UI components do not each implement a different parser.
+ */
+export const getApiItems = (payload) => {
+  if (Array.isArray(payload)) return payload;
+  if (Array.isArray(payload?.data)) return payload.data;
+  if (Array.isArray(payload?.data?.data)) return payload.data.data;
+  return [];
+};
+
+export const getApiResource = (payload) => {
+  if (payload && payload.data !== undefined && !Array.isArray(payload.data)) {
+    return payload.data;
+  }
+
+  return payload;
+};
+
+export const getApiPage = (payload) => {
+  const envelope =
+    payload?.data && !Array.isArray(payload.data) && Array.isArray(payload.data.data)
+      ? payload.data
+      : payload;
+  const currentPage = Number(envelope?.current_page ?? envelope?.currentPage ?? 1);
+  const lastPage = Number(envelope?.last_page ?? envelope?.lastPage ?? currentPage);
+  const explicitHasMore = envelope?.has_more ?? envelope?.hasMore;
+
+  return {
+    items: getApiItems(payload),
+    currentPage: Number.isFinite(currentPage) && currentPage > 0 ? currentPage : 1,
+    lastPage: Number.isFinite(lastPage) && lastPage > 0 ? lastPage : 1,
+    hasMore:
+      explicitHasMore !== undefined
+        ? Boolean(explicitHasMore)
+        : currentPage < lastPage,
+  };
+};
+
 export const fetchAPI = async (endpoint, options = {}) => {
   let lang = "en";
   
@@ -88,10 +128,16 @@ export const fetchAPI = async (endpoint, options = {}) => {
   const method = (options.method || "GET").toUpperCase();
   const isGet = method === "GET";
   const isCurrentUserRequest = url.pathname.endsWith("/me");
+  const canUseBrowserCache =
+    isGet &&
+    !isCurrentUserRequest &&
+    typeof window !== "undefined" &&
+    options.cache !== "no-store" &&
+    options.cache !== "reload";
 
   // Auth is stored in an HttpOnly cookie, so never cache the current user response.
   let cacheKey = null;
-  if (isGet && !isCurrentUserRequest && typeof window !== "undefined") {
+  if (canUseBrowserCache) {
     cacheKey = `${url.pathname}${url.search}`;
 
     const cached = apiCache.get(cacheKey);
@@ -159,7 +205,7 @@ export const fetchAPI = async (endpoint, options = {}) => {
     }
   })();
 
-  if (isGet && cacheKey && typeof window !== "undefined") {
+  if (canUseBrowserCache && cacheKey) {
     apiCache.set(cacheKey, {
       promise: fetchPromise,
       timestamp: Date.now(),

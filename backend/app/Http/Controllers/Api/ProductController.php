@@ -13,8 +13,8 @@ class ProductController extends BaseApiController
     {
         $lang = $this->getLang();
         $category = $request->query('category');
-        $page = $request->query('page');
-        $perPage = $request->query('per_page', 9);
+        $page = $this->pageNumber($request);
+        $perPage = $this->perPage($request, 9);
 
         $cacheKey = "products_{$lang}_cat_" . ($category ?: 'all') . "_page_" . ($page ?: 'none') . "_per_" . $perPage;
 

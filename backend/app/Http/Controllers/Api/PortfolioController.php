@@ -13,11 +13,11 @@ class PortfolioController extends BaseApiController
     public function index(Request $request)
     {
         $lang = $this->getLang();
-        $limit = $request->query('limit');
+        $limit = $this->limit($request->query('limit'));
         $category = $request->query('category');
         $featured = $request->query('featured');
-        $page = $request->query('page');
-        $perPage = $request->query('per_page', 9);
+        $page = $this->pageNumber($request);
+        $perPage = $this->perPage($request, 9);
 
         $cacheKey = "portfolio_{$lang}_cat_" . ($category ?: 'all') . "_feat_" . ($featured ?: 'false') . "_limit_" . ($limit ?: 'none') . "_page_" . ($page ?: 'none') . "_per_" . $perPage;
 

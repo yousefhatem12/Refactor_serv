@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../context/LanguageContext";
-import { fetchAPI } from "../../lib/api";
+import { fetchAPI, getApiPage } from "../../lib/api";
 import Loading from "../loading";
 
 export default function CareersPage() {
@@ -44,9 +44,11 @@ export default function CareersPage() {
 
       fetchAPI(`/careers?lang=${language}&page=1&per_page=9&department=${deptQuery}&search=${searchQueryParam}`)
         .then((res) => {
-          if (res && Array.isArray(res.data)) {
-            setJobsList(res.data);
-            setHasMore(res.has_more);
+          const page = getApiPage(res);
+          if (res) {
+            setJobsList(page.items);
+            setHasMore(page.hasMore);
+            setCurrentPage(page.currentPage);
             if (res.departments) {
               setServerDepts(res.departments);
             }
@@ -83,13 +85,14 @@ export default function CareersPage() {
 
     fetchAPI(`/careers?lang=${language}&page=${nextPage}&per_page=9&department=${deptQuery}&search=${searchQueryParam}`)
       .then((res) => {
-        if (res && Array.isArray(res.data)) {
+        const page = getApiPage(res);
+        if (res) {
           setJobsList((prev) => {
-            const newJobs = res.data.filter((item) => !prev.some((j) => j.id === item.id));
+            const newJobs = page.items.filter((item) => !prev.some((j) => j.id === item.id));
             return [...prev, ...newJobs];
           });
-          setHasMore(res.has_more);
-          setCurrentPage(nextPage);
+          setHasMore(page.hasMore);
+          setCurrentPage(page.currentPage || nextPage);
         }
       })
       .catch((err) => {

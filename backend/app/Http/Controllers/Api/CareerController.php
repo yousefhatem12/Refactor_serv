@@ -17,8 +17,8 @@ class CareerController extends BaseApiController
         $lang = $this->getLang();
         $department = $request->query('department');
         $search = $request->query('search');
-        $page = $request->query('page');
-        $perPage = $request->query('per_page', 9);
+        $page = $this->pageNumber($request);
+        $perPage = $this->perPage($request, 9);
 
         $query = Career::where('is_active', true)->orderBy('id', 'desc');
 

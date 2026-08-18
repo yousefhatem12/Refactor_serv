@@ -3,9 +3,48 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class BaseApiController extends Controller
 {
+    /**
+     * Return a valid page number, or null when the endpoint should return the
+     * unpaginated collection. Keeping this bounded prevents abusive query
+     * strings from creating very large offsets or cache keys.
+     */
+    protected function pageNumber(Request $request): ?int
+    {
+        $value = $request->query('page');
+
+        if ($value === null || $value === '' || ! is_numeric($value)) {
+            return null;
+        }
+
+        $page = (int) $value;
+
+        return $page > 0 ? $page : null;
+    }
+
+    protected function perPage(Request $request, int $default = 9, int $max = 50): int
+    {
+        $value = $request->query('per_page', $default);
+
+        if (! is_numeric($value)) {
+            return $default;
+        }
+
+        return max(1, min((int) $value, $max));
+    }
+
+    protected function limit(mixed $value, int $max = 50): ?int
+    {
+        if ($value === null || $value === '' || ! is_numeric($value)) {
+            return null;
+        }
+
+        return max(1, min((int) $value, $max));
+    }
+
     protected function getLang(): string
     {
         $lang = request('lang', request()->header('Accept-Language', 'en'));

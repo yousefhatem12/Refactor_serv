@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { fetchAPI, getMediaUrl } from "@/lib/api";
+import { fetchAPI, getApiPage, getMediaUrl } from "@/lib/api";
 import { safeUrl } from "@/lib/safe-url";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
@@ -46,21 +46,19 @@ const OurPortfolio = ({ activeCategoryId, isFeaturedOnly = false, mobileCategori
       .then((res) => {
         if (!isMounted) return;
 
-        if (res && Array.isArray(res.data)) {
+        const page = getApiPage(res);
+        if (res) {
           if (currentPage === 1) {
-            setPortfolioItems(res.data);
+            setPortfolioItems(page.items);
           } else {
             setPortfolioItems((prev) => {
-              const newItems = res.data.filter(
+              const newItems = page.items.filter(
                 (item) => !prev.some((p) => p.id === item.id),
               );
               return [...prev, ...newItems];
             });
           }
-          setHasMore(res.has_more);
-        } else if (res && Array.isArray(res)) {
-          setPortfolioItems(res);
-          setHasMore(false);
+          setHasMore(page.hasMore);
         } else {
           if (currentPage === 1) {
             setPortfolioItems([]);

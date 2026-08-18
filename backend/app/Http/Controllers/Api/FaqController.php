@@ -12,8 +12,8 @@ class FaqController extends BaseApiController
     {
         $lang = $this->getLang();
         $search = $request->query('search');
-        $page = $request->query('page');
-        $perPage = $request->query('per_page', 6);
+        $page = $this->pageNumber($request);
+        $perPage = $this->perPage($request, 6);
 
         $query = Faq::where('is_active', true)->orderBy('id', 'asc');
 

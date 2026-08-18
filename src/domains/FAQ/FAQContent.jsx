@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useLanguage } from "@/app/context/LanguageContext";
-import { fetchAPI } from "@/lib/api";
+import { fetchAPI, getApiPage } from "@/lib/api";
 
 const FAQContent = ({ data }) => {
   const [openId, setOpenId] = useState(null);
@@ -30,13 +30,14 @@ const FAQContent = ({ data }) => {
           const encodedSearch = searchQuery ? encodeURIComponent(searchQuery) : "";
           const res = await fetchAPI(`/faqs?lang=${language}&page=1&per_page=6&search=${encodedSearch}`);
 
-          if (res && Array.isArray(res.data)) {
-            const formattedData = res.data.map((item, index) => ({
+          const page = getApiPage(res);
+          if (page.items.length > 0 || res) {
+            const formattedData = page.items.map((item, index) => ({
               ...item,
               displayId: (index + 1).toString().padStart(2, "0"),
             }));
             setFaqs(formattedData);
-            setHasMore(res.has_more);
+            setHasMore(page.hasMore);
             if (formattedData.length > 0) {
               setOpenId(formattedData[0].id);
             } else {
@@ -71,18 +72,19 @@ const FAQContent = ({ data }) => {
       const encodedSearch = searchQuery ? encodeURIComponent(searchQuery) : "";
       const res = await fetchAPI(`/faqs?lang=${language}&page=${nextPage}&per_page=6&search=${encodedSearch}`);
 
-      if (res && Array.isArray(res.data)) {
+      const page = getApiPage(res);
+      if (page.items.length > 0 || res) {
         setFaqs((prev) => {
           const startIdx = prev.length;
-          const formatted = res.data.map((item, index) => ({
+          const formatted = page.items.map((item, index) => ({
             ...item,
             displayId: (startIdx + index + 1).toString().padStart(2, "0"),
           }));
           const newFaqs = formatted.filter((item) => !prev.some((p) => p.id === item.id));
           return [...prev, ...newFaqs];
         });
-        setHasMore(res.has_more);
-        setCurrentPage(nextPage);
+        setHasMore(page.hasMore);
+        setCurrentPage(page.currentPage || nextPage);
       }
     } catch (error) {
       console.error("Failed to load more FAQs:", error);

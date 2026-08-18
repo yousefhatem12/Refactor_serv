@@ -23,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Keep the AI migrations in the normal migration lifecycle. They live
+        // in a subdirectory, so Laravel does not discover them automatically.
+        $this->loadMigrationsFrom(database_path('migrations/ai'));
+
         RateLimiter::for('auth', function (Request $request) {
             $email = strtolower(trim((string) $request->input('email')));
 

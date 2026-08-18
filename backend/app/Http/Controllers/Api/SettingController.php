@@ -239,15 +239,20 @@ class SettingController extends BaseApiController
 
     public function navLinks()
     {
-        $links = NavLink::where('is_active', true)
-            ->whereNull('parent_id')
-            ->with(['children' => function ($query) {
-                $query->where('is_active', true)->orderBy('sort_order');
-            }])
-            ->orderBy('sort_order')
-            ->get();
+        $lang = $this->getLang();
+        $links = Cache::remember("nav_links_{$lang}", 3600, function () {
+            $records = NavLink::where('is_active', true)
+                ->whereNull('parent_id')
+                ->with(['children' => function ($query) {
+                    $query->where('is_active', true)->orderBy('sort_order');
+                }])
+                ->orderBy('sort_order')
+                ->get();
 
-        return response()->json(NavLinkResource::collection($links));
+            return NavLinkResource::collection($records)->resolve();
+        });
+
+        return response()->json($links);
     }
 
     public function pricingPlans()
@@ -280,7 +285,7 @@ class SettingController extends BaseApiController
         $lang = $this->getLang();
         $country = $request->query('country');
         $page = $request->query('page');
-        $perPage = $request->query('per_page', 9);
+        $perPage = $this->perPage($request, 9);
 
         $cacheKey = "bank_accounts_{$lang}_country_".($country ?: 'all').'_page_'.($page ?: 'none').'_per_'.$perPage;
 

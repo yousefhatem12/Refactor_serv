@@ -13,10 +13,10 @@ class BlogController extends BaseApiController
     public function index(Request $request)
     {
         $lang = $this->getLang();
-        $limit = $request->query('limit');
+        $limit = $this->limit($request->query('limit'));
         $categoryRaw = $request->query('category_raw');
-        $page = $request->query('page');
-        $perPage = $request->query('per_page', 9);
+        $page = $this->pageNumber($request);
+        $perPage = $this->perPage($request, 9);
 
         $cacheKey = "posts_{$lang}_cat_" . ($categoryRaw ?: 'all') . "_limit_" . ($limit ?: 'none') . "_page_" . ($page ?: 'none') . "_per_" . $perPage;
 
