@@ -185,12 +185,9 @@ async function ProvidersAndContent({ children }) {
 }
 
 export default async function RootLayout({ children }) {
-  const headersList = await headers();
-  const nonce = headersList.get("x-nonce") || "";
   const settings = await getCachedHeadSettings("en");
   const customHead = renderCustomHeadCode(settings?.custom_header_code, {
     useNextScript: true,
-    nonce,
   });
 
   return (

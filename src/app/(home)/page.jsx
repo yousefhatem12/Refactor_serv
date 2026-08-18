@@ -10,6 +10,7 @@ export const unstable_instant = {
       headers: [
         ["x-locale", "en"],
         ["x-pathname", "/"],
+        ["x-nonce", null],
       ],
       cookies: [
         { name: "NEXT_LOCALE", value: "en" }
@@ -19,6 +20,7 @@ export const unstable_instant = {
       headers: [
         ["x-locale", "ar"],
         ["x-pathname", "/ar"],
+        ["x-nonce", null],
       ],
       cookies: [
         { name: "NEXT_LOCALE", value: "ar" }
