@@ -5,6 +5,7 @@ import { fetchAPI, getMediaUrl } from "@/lib/api";
 import { safeJsonForScript } from "@/lib/safe-json";
 import { useLanguage } from "../../context/LanguageContext";
 import { useSettings } from "../../context/SettingsContext";
+import { useNonce } from "../../context/NonceContext";
 
 import Loading from "../../loading";
 import WebDevHero from "../../components/Services-web-dev/WebDevHero";
@@ -48,6 +49,7 @@ export default function DynamicServicePage() {
   const { slug } = useParams();
   const { language, t } = useLanguage();
   const settings = useSettings();
+  const nonce = useNonce();
   const router = useRouter();
   const [serviceData, setServiceData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -150,6 +152,7 @@ export default function DynamicServicePage() {
       <main className="flex min-h-screen flex-col relative overflow-x-hidden">
         {serviceSchema && (
           <script
+            nonce={nonce || undefined}
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: safeJsonForScript(serviceSchema) }}
           />
@@ -554,6 +557,7 @@ function OldFormatRenderer({ serviceData, language, t, serviceSchema }) {
     <main className="flex min-h-screen flex-col relative overflow-x-hidden">
       {serviceSchema && (
         <script
+          nonce={nonce || undefined}
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: safeJsonForScript(serviceSchema) }}
         />

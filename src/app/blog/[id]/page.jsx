@@ -8,6 +8,7 @@ import { safeJsonForScript } from "@/lib/safe-json";
 import Loading from "../../loading";
 import { useLanguage } from "../../context/LanguageContext";
 import { useSettings } from "../../context/SettingsContext";
+import { useNonce } from "../../context/NonceContext";
 
 function ArticleTable({ table }) {
   if (!table) return null;
@@ -56,6 +57,7 @@ function ArticleLists({ lists }) {
 export default function BlogPostDetails() {
   const { language } = useLanguage();
   const settings = useSettings();
+  const nonce = useNonce();
   const params = useParams();
   const slug = params?.id; // The folder is still named [id] but it receives the slug from URL
   const [post, setPost] = useState(null);
@@ -172,6 +174,7 @@ export default function BlogPostDetails() {
     >
       {articleSchema && (
         <script
+          nonce={nonce || undefined}
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: safeJsonForScript(articleSchema) }}
         />

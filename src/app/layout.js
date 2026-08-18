@@ -48,6 +48,7 @@ import { SettingsProvider } from "./context/SettingsContext";
 import Loading from "./loading";
 import { Suspense } from "react";
 import { AuthProvider } from "./context/AuthContext";
+import { NonceProvider } from "./context/NonceContext";
 
 export async function generateMetadata() {
   const headersList = await headers();
@@ -106,6 +107,7 @@ export async function generateMetadata() {
 async function ProvidersAndContent({ children }) {
   const headersList = await headers();
   const xLocale = headersList.get("x-locale");
+  const nonce = headersList.get("x-nonce") || "";
   const cookieStore = await cookies();
   const defaultLanguage = xLocale || cookieStore.get("NEXT_LOCALE")?.value || "en";
 
@@ -149,39 +151,46 @@ async function ProvidersAndContent({ children }) {
   };
 
   return (
-    <LanguageProvider defaultLanguage={defaultLanguage}>
-      <AuthProvider>
-        <SettingsProvider initialSettings={settings || {}} ssrLocale={defaultLanguage}>
-          <HomeBackground />
-          <Navbar initialServices={initialServices} initialNavLinks={initialNavLinks} />
-          {children}
-          <Footer />
+    <NonceProvider nonce={nonce}>
+      <LanguageProvider defaultLanguage={defaultLanguage}>
+        <AuthProvider>
+          <SettingsProvider initialSettings={settings || {}} ssrLocale={defaultLanguage}>
+            <HomeBackground />
+            <Navbar initialServices={initialServices} initialNavLinks={initialNavLinks} />
+            {children}
+            <Footer />
 
-          {/* Organization & WebSite Schemas */}
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: safeJsonForScript(orgSchema) }}
-          />
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: safeJsonForScript(websiteSchema) }}
-          />
-          {settings?.custom_footer_code && (
-            <div
-              dangerouslySetInnerHTML={{ __html: sanitizeHtml(settings.custom_footer_code) }}
-              style={{ display: "none" }}
+            {/* Organization & WebSite Schemas */}
+            <script
+              nonce={nonce || undefined}
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{ __html: safeJsonForScript(orgSchema) }}
             />
-          )}
-        </SettingsProvider>
-      </AuthProvider>
-    </LanguageProvider>
+            <script
+              nonce={nonce || undefined}
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{ __html: safeJsonForScript(websiteSchema) }}
+            />
+            {settings?.custom_footer_code && (
+              <div
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(settings.custom_footer_code) }}
+                style={{ display: "none" }}
+              />
+            )}
+          </SettingsProvider>
+        </AuthProvider>
+      </LanguageProvider>
+    </NonceProvider>
   );
 }
 
 export default async function RootLayout({ children }) {
+  const headersList = await headers();
+  const nonce = headersList.get("x-nonce") || "";
   const settings = await getCachedHeadSettings("en");
   const customHead = renderCustomHeadCode(settings?.custom_header_code, {
     useNextScript: true,
+    nonce,
   });
 
   return (
