@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { fetchAPI } from "@/lib/api";
+import { safeUrl } from "@/lib/safe-url";
 import Loading from "../../loading";
 import { useLanguage } from "../../context/LanguageContext";
 
@@ -194,7 +195,7 @@ export default function ProjectDetails() {
                 {project.url && (
                   <div className="mt-8">
                     <a
-                      href={project.url}
+                      href={safeUrl(project.url)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex w-full items-center justify-center gap-2 px-6 py-4 bg-[#FF8A00] hover:bg-[#ff9c24] text-white font-extrabold rounded-xl transition-all shadow-[0_4px_15px_rgba(255,138,0,0.3)] hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(255,138,0,0.5)] cursor-pointer text-center"

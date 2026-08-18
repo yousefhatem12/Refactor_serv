@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { fetchAPI } from "@/lib/api";
+import { safeUrl } from "@/lib/safe-url";
 import {
   FaFacebook,
   FaInstagram,
@@ -176,7 +177,7 @@ const ContactModal = ({ isOpen, onClose, settings }) => {
                       return (
                         <motion.a
                           key={social.id}
-                          href={social.url}
+                          href={safeUrl(social.url)}
                           target="_blank"
                           rel="noopener noreferrer"
                           whileHover={{ y: -5, scale: 1.1 }}

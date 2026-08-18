@@ -10,6 +10,44 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    private function withAuthCookie($response, string $token)
+    {
+        $domain = env('AUTH_COOKIE_DOMAIN');
+        if (!$domain && app()->environment('production')) {
+            $domain = '.serv5.com.eg';
+        }
+
+        $secureSetting = env('AUTH_COOKIE_SECURE');
+        $secure = $secureSetting === null || $secureSetting === ''
+            ? app()->environment('production')
+            : filter_var($secureSetting, FILTER_VALIDATE_BOOL);
+
+        return $response->withCookie(cookie(
+            'auth_token',
+            $token,
+            (int) env('AUTH_COOKIE_MINUTES', 60 * 24 * 30),
+            '/',
+            $domain,
+            $secure,
+            true,
+            false,
+            env('AUTH_COOKIE_SAME_SITE', 'lax')
+        ));
+    }
+
+    private function authResponse(User $user, string $token)
+    {
+        $payload = ['user' => $user];
+
+        // Keep bearer-token responses opt-in for legacy API clients. The website uses the HttpOnly cookie.
+        if (filter_var(env('AUTH_EXPOSE_TOKENS', false), FILTER_VALIDATE_BOOL)) {
+            $payload['access_token'] = $token;
+            $payload['token_type'] = 'Bearer';
+        }
+
+        return $this->withAuthCookie(response()->json($payload), $token);
+    }
+
     public function register(Request $request)
     {
         $request->validate([
@@ -26,11 +64,7 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'user' => $user,
-        ]);
+        return $this->authResponse($user, $token);
     }
 
     public function login(Request $request)
@@ -50,11 +84,7 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'user' => $user,
-        ]);
+        return $this->authResponse($user, $token);
     }
 
     public function logout(Request $request)

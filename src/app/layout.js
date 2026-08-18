@@ -41,10 +41,13 @@ import {
   getCachedSettings,
 } from "@/lib/cached-api";
 import { renderCustomHeadCode } from "@/lib/custom-head";
+import { sanitizeHtml } from "@/lib/sanitize-html";
+import { safeJsonForScript } from "@/lib/safe-json";
 
 export async function generateMetadata() {
   const headersList = await headers();
   const xLocale = headersList.get("x-locale");
+  const nonce = headersList.get("x-nonce");
   const cookieStore = await cookies();
   const language = xLocale || cookieStore.get("NEXT_LOCALE")?.value || "en";
 
@@ -159,16 +162,18 @@ async function ProvidersAndContent({ children }) {
 
           {/* Organization & WebSite Schemas */}
           <script
+            nonce={nonce || undefined}
             type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
+            dangerouslySetInnerHTML={{ __html: safeJsonForScript(orgSchema) }}
           />
           <script
+            nonce={nonce || undefined}
             type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+            dangerouslySetInnerHTML={{ __html: safeJsonForScript(websiteSchema) }}
           />
           {settings?.custom_footer_code && (
             <div
-              dangerouslySetInnerHTML={{ __html: settings.custom_footer_code }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(settings.custom_footer_code) }}
               style={{ display: "none" }}
             />
           )}
@@ -180,8 +185,10 @@ async function ProvidersAndContent({ children }) {
 
 export default async function RootLayout({ children }) {
   const settings = await getCachedHeadSettings("en");
+  const nonce = (await headers()).get("x-nonce");
   const customHead = renderCustomHeadCode(settings?.custom_header_code, {
     useNextScript: true,
+    nonce,
   });
 
   return (
@@ -195,26 +202,6 @@ export default async function RootLayout({ children }) {
         {customHead}
       </head>
       <body className="min-h-screen flex flex-col relative" suppressHydrationWarning>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  const orgSet = Element.prototype.setAttribute;
-                  Element.prototype.setAttribute = function(name, value) {
-                    if (name === 'bis_skin_checked') return;
-                    orgSet.apply(this, arguments);
-                  };
-                  const orgSetNS = Element.prototype.setAttributeNS;
-                  Element.prototype.setAttributeNS = function(ns, name, value) {
-                    if (name === 'bis_skin_checked') return;
-                    orgSetNS.apply(this, arguments);
-                  };
-                } catch (e) {}
-              })();
-            `,
-          }}
-        />
         <Suspense fallback={<Loading />}>
           <ProvidersAndContent>
             {children}

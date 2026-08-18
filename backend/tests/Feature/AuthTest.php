@@ -24,14 +24,14 @@ class AuthTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'access_token',
-                'token_type',
                 'user' => [
                     'id',
                     'name',
                     'email',
                 ]
-            ]);
+            ])
+            ->assertCookie('auth_token')
+            ->assertJsonMissing(['access_token']);
 
         $this->assertDatabaseHas('users', [
             'email' => 'test@example.com',
@@ -72,10 +72,10 @@ class AuthTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'access_token',
-                'token_type',
                 'user'
-            ]);
+            ])
+            ->assertCookie('auth_token')
+            ->assertJsonMissing(['access_token']);
     }
 
     #[Test]

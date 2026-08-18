@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
 import { fetchAPI, getMediaUrl } from "@/lib/api";
+import { safeUrl } from "@/lib/safe-url";
 
 const getDropdownGridClass = (dropdown) => {
   if (!dropdown) return "min-w-[220px] flex flex-col gap-1";
@@ -34,8 +35,9 @@ const Navbar = ({ initialServices = [], initialNavLinks = [] }) => {
   const pathname = usePathname();
 
   const getLocalizedHref = (href) => {
-    if (!href || href === "#" || href.startsWith("http") || href.startsWith("tel:") || href.startsWith("mailto:")) return href;
-    const cleanHref = href.startsWith("/") ? href : `/${href}`;
+    const safeHref = safeUrl(href);
+    if (safeHref === "#" || safeHref.startsWith("http") || safeHref.startsWith("tel:") || safeHref.startsWith("mailto:")) return safeHref;
+    const cleanHref = safeHref.startsWith("/") ? safeHref : `/${safeHref}`;
     const cleanNoLocale = cleanHref.replace(/^\/(ar|en)/, "");
     if (cleanNoLocale === "" || cleanNoLocale === "/" || cleanNoLocale.toLowerCase() === "/home") {
       return `/${language}`;

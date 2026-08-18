@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
 import { fetchAPI, getMediaUrl } from "@/lib/api";
+import { htmlToText } from "@/lib/sanitize-html";
 
 const LatestBlogs = () => {
   const { language, t } = useLanguage();
@@ -110,10 +111,9 @@ const LatestBlogs = () => {
                   <h3 className="text-white text-2xl font-bold mb-3">
                     {blog.title}
                   </h3>
-                  <div 
-                    className="text-gray-300 text-sm leading-relaxed mb-4 line-clamp-3"
-                    dangerouslySetInnerHTML={{ __html: blog.content }}
-                  />
+                  <div className="text-gray-300 text-sm leading-relaxed mb-4 line-clamp-3">
+                    {htmlToText(blog.content)}
+                  </div>
                   <span
                     className="inline-block text-[#D98B50] font-semibold text-sm hover:text-orange-400 transition-colors"
                   >

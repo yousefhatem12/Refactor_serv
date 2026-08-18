@@ -23,7 +23,7 @@ import {
 
 const QuotationForm = () => {
   const { t, language } = useLanguage();
-  const { user, login, register } = useAuth();
+  const { user, login, register, logout } = useAuth();
   const [authMode, setAuthMode] = useState("login"); // 'login' or 'register'
   const [authData, setAuthData] = useState({
     name: "",
@@ -83,7 +83,12 @@ const QuotationForm = () => {
 
   // Load initial data from localStorage on mount
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window === "undefined") return undefined;
+
+    let cancelled = false;
+    const frameId = window.requestAnimationFrame(() => {
+      if (cancelled) return;
+
       try {
         const savedData = localStorage.getItem("quotation_form_data");
         const savedStep = localStorage.getItem("quotation_form_step");
@@ -98,7 +103,12 @@ const QuotationForm = () => {
       } finally {
         setIsLoaded(true);
       }
-    }
+    });
+
+    return () => {
+      cancelled = true;
+      window.cancelAnimationFrame(frameId);
+    };
   }, []);
 
   // Save to localStorage when step or formData changes, but only after initial loading
@@ -566,11 +576,8 @@ const QuotationForm = () => {
           <p className="text-gray-400 text-sm">
             {isRtl ? "مرحباً، " : "Welcome, "}<span className="text-white font-bold">{user.name}</span>
           </p>
-          <button 
-            onClick={() => {
-              localStorage.removeItem('auth_token');
-              window.location.reload();
-            }} 
+          <button
+            onClick={logout}
             className="text-xs text-[#FF8A00] hover:underline bg-transparent border-none cursor-pointer font-semibold"
           >
             {isRtl ? "تسجيل الخروج" : "Logout"}

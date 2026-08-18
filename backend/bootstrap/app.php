@@ -12,6 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->alias([
+            'token.cookie' => \App\Http\Middleware\AuthenticateTokenFromCookie::class,
+            'clear.auth.cookie' => \App\Http\Middleware\ClearAuthCookie::class,
+        ]);
         $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

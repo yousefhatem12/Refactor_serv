@@ -1,9 +1,10 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
 import { fetchAPI } from "@/lib/api";
+import { safeUrl } from "@/lib/safe-url";
 import { motion } from "framer-motion";
 import PlanetAstronaut from "@/app/components/Home/Shared/PlanetAstronaut";
 import {
@@ -64,6 +65,8 @@ const Footer = () => {
 
   if (loading) return null;
 
+  const footerHeading = footerData.texts?.heading || t("haveAGoodWebDesign");
+
   return (
     <footer className="bg-transparent text-white pt-10 pb-6 relative overflow-hidden">
       {/* Background Glows */}
@@ -89,13 +92,14 @@ const Footer = () => {
               viewport={{ once: true }}
               className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-[1.1] tracking-tight"
             >
-              <span
-                dangerouslySetInnerHTML={{
-                  __html: (
-                    footerData.texts?.heading || t("haveAGoodWebDesign")
-                  ).replace("\n", '<br className="hidden md:block" />'),
-                }}
-              />
+              <span>
+                {footerHeading.split(/\r?\n/).map((line, index) => (
+                  <Fragment key={`${line}-${index}`}>
+                    {index > 0 && <br className="hidden md:block" />}
+                    {line}
+                  </Fragment>
+                ))}
+              </span>
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -163,7 +167,7 @@ const Footer = () => {
               {footerData.links.usefulLinks.map((link) => (
                 <li key={link.id}>
                   <Link
-                    href={link.url}
+                    href={safeUrl(link.url)}
                     className="text-gray-400 hover:text-orange-500 transition-colors text-base font-medium"
                   >
                     {link.label}
@@ -182,7 +186,7 @@ const Footer = () => {
               {footerData.links.quickLinks.map((link) => (
                 <li key={link.id}>
                   <Link
-                    href={link.url}
+                    href={safeUrl(link.url)}
                     className="text-gray-400 hover:text-orange-500 transition-colors text-base font-medium"
                   >
                     {link.label}
@@ -199,7 +203,7 @@ const Footer = () => {
               {footerData.links.offers.map((link) => (
                 <li key={link.id}>
                   <Link
-                    href={link.url}
+                    href={safeUrl(link.url)}
                     className="text-gray-400 hover:text-orange-500 transition-colors text-base font-medium"
                   >
                     {link.label}
@@ -218,7 +222,7 @@ const Footer = () => {
               {footerData.links.company.map((link) => (
                 <li key={link.id}>
                   <Link
-                    href={link.url}
+                    href={safeUrl(link.url)}
                     className="text-gray-400 hover:text-orange-500 transition-colors text-base font-medium"
                   >
                     {link.label}
@@ -314,7 +318,7 @@ const Footer = () => {
                 return (
                   <motion.a
                     key={social.id}
-                    href={social.url}
+                    href={safeUrl(social.url)}
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={{ y: -4, scale: 1.1 }}

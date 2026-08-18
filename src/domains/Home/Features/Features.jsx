@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
 import { fetchAPI, getMediaUrl } from "@/lib/api";
+import { sanitizeHtml } from "@/lib/sanitize-html";
 
 const partners = [
   // "/Features/2-300x300-1.png.svg",
@@ -263,7 +264,7 @@ export default function Features() {
             <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-4xl font-extrabold mb-6 leading-[1.2] md:leading-[1.1] text-white">
               {settings.features_title ? (
                 <span
-                  dangerouslySetInnerHTML={{ __html: settings.features_title }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(settings.features_title) }}
                 />
               ) : (
                 <>

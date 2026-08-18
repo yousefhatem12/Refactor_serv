@@ -13,7 +13,7 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\CareerController;
 use App\Http\Controllers\Api\ContactController;
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware(['token.cookie', 'auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
@@ -25,11 +25,14 @@ Route::get('/login', function () {
 Route::prefix('v1')->group(function () {
     
     // Auth endpoints
-    Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register'])
+        ->middleware('throttle:auth');
+    Route::post('/login', [AuthController::class, 'login'])
+        ->middleware('throttle:auth');
 
-    Route::middleware('auth:sanctum')->group(function () {
-        Route::post('/logout', [AuthController::class, 'logout']);
+    Route::middleware(['token.cookie', 'auth:sanctum'])->group(function () {
+        Route::post('/logout', [AuthController::class, 'logout'])
+            ->middleware('clear.auth.cookie');
         Route::get('/me', [AuthController::class, 'me']);
     });
 
@@ -67,13 +70,21 @@ Route::prefix('v1')->group(function () {
     // Careers
     Route::prefix('careers')->group(function () {
         Route::get('/', [CareerController::class, 'index'])->name('api.careers.index');
-        Route::post('/apply', [CareerController::class, 'apply'])->name('api.careers.apply');
+        Route::post('/apply', [CareerController::class, 'apply'])
+            ->middleware('throttle:public-forms')
+            ->name('api.careers.apply');
     });
 
     // Contact & Quotations
-    Route::post('/contact', [ContactController::class, 'submitMessage'])->name('api.contact.submit');
-    Route::post('/quotations', [ContactController::class, 'submitQuotation'])->name('api.quotations.submit');
-    Route::post('/consultations', [ContactController::class, 'submitConsultation'])->name('api.consultations.submit');
+    Route::post('/contact', [ContactController::class, 'submitMessage'])
+        ->middleware('throttle:public-forms')
+        ->name('api.contact.submit');
+    Route::post('/quotations', [ContactController::class, 'submitQuotation'])
+        ->middleware('throttle:public-uploads')
+        ->name('api.quotations.submit');
+    Route::post('/consultations', [ContactController::class, 'submitConsultation'])
+        ->middleware('throttle:public-forms')
+        ->name('api.consultations.submit');
 
     // Settings & System Data
     Route::get('/settings', [SettingController::class, 'settings'])->name('api.settings');

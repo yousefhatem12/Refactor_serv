@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { fetchAPI, getMediaUrl } from "@/lib/api";
+import { htmlToText } from "@/lib/sanitize-html";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
 
@@ -80,7 +81,8 @@ const BlogCard = ({ post, t, language, categoryMap, siteLogo }) => {
         <h3 className="text-lg font-bold mb-3 leading-snug group-hover:text-blue-400 transition-colors uppercase">
           {post.title}
         </h3>
-        <div className="text-gray-400 text-sm line-clamp-3" dangerouslySetInnerHTML={{ __html: post.content }}>
+        <div className="text-gray-400 text-sm line-clamp-3">
+          {htmlToText(post.content)}
         </div>
       </Link>
     </motion.div>

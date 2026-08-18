@@ -1,2 +1,0 @@
-<?php
-// Temp file deleted

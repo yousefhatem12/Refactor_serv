@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { fetchAPI, getMediaUrl } from "@/lib/api";
+import { safeUrl } from "@/lib/safe-url";
 import {
   FaLinkedin,
   FaGithub,
@@ -417,7 +418,7 @@ export default function TeamWork({ data }) {
                     {member.socials.linkedin &&
                       member.socials.linkedin !== "#" && (
                         <a
-                          href={member.socials.linkedin}
+                          href={safeUrl(member.socials.linkedin)}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="w-8 h-8 rounded-full bg-black/60 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:bg-blue-600 hover:border-blue-500 transition-all duration-300"
@@ -427,7 +428,7 @@ export default function TeamWork({ data }) {
                       )}
                     {member.socials.github && member.socials.github !== "#" && (
                       <a
-                        href={member.socials.github}
+                        href={safeUrl(member.socials.github)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="w-8 h-8 rounded-full bg-black/60 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:bg-neutral-800 hover:border-neutral-700 transition-all duration-300"
@@ -438,7 +439,7 @@ export default function TeamWork({ data }) {
                     {member.socials.twitter &&
                       member.socials.twitter !== "#" && (
                         <a
-                          href={member.socials.twitter}
+                        href={safeUrl(member.socials.twitter)}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="w-8 h-8 rounded-full bg-black/60 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:bg-sky-500 hover:border-sky-400 transition-all duration-300"

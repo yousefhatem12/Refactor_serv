@@ -31,7 +31,22 @@ const REACT_ATTRIBUTE_NAMES = {
 function attributesToProps(attrs = []) {
   return Object.fromEntries(
     attrs
-      .filter(({ name }) => !name.toLowerCase().startsWith("on"))
+      .filter(({ name, value }) => {
+        const normalizedName = name.toLowerCase();
+        if (normalizedName.startsWith("on") || normalizedName === "srcdoc") {
+          return false;
+        }
+
+        if (!["src", "href"].includes(normalizedName)) return true;
+        if (String(value || "").trim().startsWith("//")) return false;
+
+        try {
+          const url = new URL(value, "https://serv5.com.eg");
+          return ["http:", "https:"].includes(url.protocol) || value.startsWith("/");
+        } catch {
+          return false;
+        }
+      })
       .map(({ name, value }) => {
         const normalizedName = REACT_ATTRIBUTE_NAMES[name] || name;
         return [
@@ -72,7 +87,7 @@ export function extractCustomMeta(code) {
 
 export function renderCustomHeadCode(
   code,
-  { excludeMeta = false, useNextScript = false } = {},
+  { excludeMeta = false, useNextScript = false, nonce = null } = {},
 ) {
   const elements = parseCustomHead(code).flatMap((node, index) => {
     const tagName = node.tagName;
@@ -89,6 +104,7 @@ export function renderCustomHeadCode(
         ...props,
         key,
         strategy: useNextScript ? "beforeInteractive" : undefined,
+        nonce: nonce || undefined,
       };
 
       if (scriptBody) {

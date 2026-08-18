@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { fetchAPI } from "@/lib/api";
+import { safeUrl } from "@/lib/safe-url";
 import { useLanguage } from "@/app/context/LanguageContext";
 
 const PricingModal = ({ isOpen, onClose, serviceId = null }) => {
@@ -213,7 +214,7 @@ const PricingModal = ({ isOpen, onClose, serviceId = null }) => {
                           </div>
 
                           <a
-                            href={plan.button_url || "/contact-us"}
+                            href={safeUrl(plan.button_url, "/contact-us")}
                             className={`w-full py-4 rounded-xl font-bold text-center transition-all duration-300 block ${
                               plan.is_popular
                                 ? "bg-[#D98B50] text-white hover:bg-[#c47a45] shadow-lg hover:shadow-[#D98B50]/50"

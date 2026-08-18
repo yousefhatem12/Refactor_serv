@@ -10,32 +10,28 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const savedToken = localStorage.getItem("auth_token");
-    if (savedToken) {
-      setToken(savedToken);
-      fetchAPI("/me", { 
-        headers: { Authorization: `Bearer ${savedToken}` } 
-      }).then(userData => {
-        if (userData) setUser(userData);
-        else logout();
-      }).catch(() => logout())
+    fetchAPI("/me", { credentials: "include" })
+      .then((userData) => {
+        if (userData) {
+          setUser(userData);
+          setToken(true);
+        }
+      })
+      .catch(() => {})
       .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
   }, []);
 
   const login = async (email, password) => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.serv5.com.eg/api/v1'}/login`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
       if (response.ok) {
-        localStorage.setItem("auth_token", data.access_token);
-        setToken(data.access_token);
+        setToken(true);
         setUser(data.user);
         return { success: true };
       }
@@ -49,13 +45,13 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.serv5.com.eg/api/v1'}/register`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify({ name, email, password, password_confirmation }),
       });
       const data = await response.json();
       if (response.ok) {
-        localStorage.setItem("auth_token", data.access_token);
-        setToken(data.access_token);
+        setToken(true);
         setUser(data.user);
         return { success: true };
       }
@@ -65,10 +61,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem("auth_token");
-    setToken(null);
-    setUser(null);
+  const logout = async () => {
+    try {
+      await fetchAPI("/logout", { method: "POST", credentials: "include" });
+    } finally {
+      setToken(null);
+      setUser(null);
+    }
   };
 
   return (

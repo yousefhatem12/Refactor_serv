@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use BezhanSalleh\LanguageSwitch\LanguageSwitch;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,14 +23,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Run migration automatically if project slug column is missing
-        if (!\Illuminate\Support\Facades\Schema::hasColumn('projects', 'slug')) {
-            try {
-                \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-            } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::error('Migration failed: ' . $e->getMessage());
-            }
-        }
+        RateLimiter::for('auth', function (Request $request) {
+            $email = strtolower(trim((string) $request->input('email')));
+
+            return Limit::perMinute(5)->by($request->ip() . '|' . $email);
+        });
+
+        RateLimiter::for('public-forms', function (Request $request) {
+            return Limit::perMinute(10)->by($request->ip());
+        });
+
+        RateLimiter::for('public-uploads', function (Request $request) {
+            return Limit::perMinute(3)->by($request->ip());
+        });
 
         // Implicitly grant "super_admin" role all permissions
         \Illuminate\Support\Facades\Gate::before(function ($user, $ability) {

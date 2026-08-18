@@ -11,6 +11,7 @@ import {
 import { RiTwitterXFill } from "react-icons/ri";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { fetchAPI } from "@/lib/api";
+import { safeUrl } from "@/lib/safe-url";
 
 const ContactInfo = ({ data }) => {
   const { t, language } = useLanguage();
@@ -294,7 +295,7 @@ const ContactInfo = ({ data }) => {
             {socials.map((social) => (
               <a
                 key={social.id}
-                href={social.url}
+                href={safeUrl(social.url)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`${getColor(social.platform)} w-9 h-9 rounded-xl flex items-center justify-center text-white shadow-lg hover:-translate-y-1 hover:scale-105 transition-all duration-300`}

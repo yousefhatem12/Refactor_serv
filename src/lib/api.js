@@ -63,15 +63,14 @@ export const fetchAPI = async (endpoint, options = {}) => {
   const url = new URL(`${API_BASE_URL}${endpoint}`);
   url.searchParams.set("lang", lang);
 
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
   const method = (options.method || "GET").toUpperCase();
   const isGet = method === "GET";
+  const isCurrentUserRequest = url.pathname.endsWith("/me");
 
-  // Construct cache key based on URL and auth state
+  // Auth is stored in an HttpOnly cookie, so never cache the current user response.
   let cacheKey = null;
-  if (isGet && typeof window !== "undefined") {
-    cacheKey = `${url.pathname}${url.search}:${token || ""}`;
+  if (isGet && !isCurrentUserRequest && typeof window !== "undefined") {
+    cacheKey = `${url.pathname}${url.search}`;
 
     const cached = apiCache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
@@ -89,7 +88,6 @@ export const fetchAPI = async (endpoint, options = {}) => {
       const headers = {
         Accept: "application/json",
         "Accept-Language": lang,
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...options.headers,
       };
 
@@ -101,6 +99,7 @@ export const fetchAPI = async (endpoint, options = {}) => {
       const response = await fetch(url.toString(), {
         ...options,
         cache: options.cache || "no-store",
+        credentials: options.credentials || "include",
         headers,
         signal: controller.signal,
       });

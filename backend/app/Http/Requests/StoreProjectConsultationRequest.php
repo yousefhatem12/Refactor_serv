@@ -19,7 +19,7 @@ class StoreProjectConsultationRequest extends FormRequest
             'budget' => 'nullable|string|max:255',
             'timeline' => 'nullable|string|max:255',
             'decision_maker' => 'nullable|string|max:255',
-            'references' => 'nullable|string',
+            'references' => 'nullable|string|max:5000',
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:50',
             'email' => 'required|email|max:255',

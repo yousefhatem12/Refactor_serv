@@ -17,7 +17,7 @@ class StoreContactMessageRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'nullable|string|max:20',
-            'message' => 'required|string',
+            'message' => 'required|string|max:5000',
             'type' => 'nullable|string|max:50',
         ];
     }

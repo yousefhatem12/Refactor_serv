@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { fetchAPI, getMediaUrl } from "@/lib/api";
+import { safeUrl } from "@/lib/safe-url";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
 
@@ -199,7 +200,7 @@ const OurPortfolio = ({ activeCategoryId, isFeaturedOnly = false, mobileCategori
                       </Link>
 
                       <a
-                        href={item.url || "#"}
+                        href={safeUrl(item.url)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center justify-center gap-1 sm:gap-1.5 lg:gap-3 w-fit px-2 py-1.5 sm:px-3 sm:py-1.5 md:px-4 md:py-2 lg:px-8 lg:py-3 bg-[#E1804E] hover:bg-[#c96d3f] text-white rounded-lg lg:rounded-xl transition-all shadow-[0_0_15px_rgba(225,128,78,0.4)] hover:shadow-[0_0_30px_rgba(225,128,78,0.5)] active:scale-95"

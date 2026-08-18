@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { fetchAPI, getMediaUrl } from "@/lib/api";
+import { sanitizeHtml } from "@/lib/sanitize-html";
+import { safeJsonForScript } from "@/lib/safe-json";
 import Loading from "../../loading";
 import { useLanguage } from "../../context/LanguageContext";
 import { useSettings } from "../../context/SettingsContext";
@@ -64,13 +66,9 @@ export default function BlogPostDetails() {
     ? getMediaUrl(settings.site_logo)
     : `${siteUrl}/logo.svg`;
 
-  const [imgSrc, setImgSrc] = useState("");
-
-  useEffect(() => {
-    if (post) {
-      setImgSrc(post.image ? getMediaUrl(post.image) : siteLogo);
-    }
-  }, [post, siteLogo]);
+  const imageUrl = post?.image ? getMediaUrl(post.image) : siteLogo;
+  const [failedImage, setFailedImage] = useState(null);
+  const imgSrc = failedImage === imageUrl ? siteLogo : imageUrl;
 
   // Adjust state during render to avoid synchronous setState inside useEffect
   const [prevSlug, setPrevSlug] = useState(slug);
@@ -157,7 +155,7 @@ export default function BlogPostDetails() {
       }
     : null;
 
-  let cleanContent = post.content || "";
+  let cleanContent = typeof post.content === "string" ? post.content : "";
   if (post.table) {
     cleanContent = cleanContent.replace(/<table[^>]*>[\s\S]*?<\/table>/gi, "");
   }
@@ -165,6 +163,7 @@ export default function BlogPostDetails() {
     cleanContent = cleanContent.replace(/<ul[^>]*>[\s\S]*?<\/ul>/gi, "");
     cleanContent = cleanContent.replace(/<ol[^>]*>[\s\S]*?<\/ol>/gi, "");
   }
+  cleanContent = sanitizeHtml(cleanContent);
 
   return (
     <main
@@ -174,7 +173,7 @@ export default function BlogPostDetails() {
       {articleSchema && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+          dangerouslySetInnerHTML={{ __html: safeJsonForScript(articleSchema) }}
         />
       )}
       <div className="fixed inset-0 bg-[#040A37] -z-20 pointer-events-none" />
@@ -208,7 +207,7 @@ export default function BlogPostDetails() {
                 : "object-cover object-center group-hover:scale-105 transition-transform duration-700"
               }
               priority
-              onError={() => setImgSrc(siteLogo)}
+              onError={() => setFailedImage(imageUrl)}
             />
           </div>
 

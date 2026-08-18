@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
 import { getMediaUrl } from "@/lib/api";
+import { htmlToText } from "@/lib/sanitize-html";
 
 const SafeImage = ({ src, fallback, alt, className, ...props }) => {
   const [imgSrc, setImgSrc] = useState(src || fallback);
@@ -85,7 +86,8 @@ const BlogHero = ({ data, posts = [] }) => {
               <h3 className="text-2xl md:text-3xl font-bold mb-4 leading-tight group-hover:text-blue-400 transition-colors uppercase">
                 {featuredPost.title}
               </h3>
-              <div className="text-gray-400 line-clamp-3 text-sm md:text-base font-light" dangerouslySetInnerHTML={{ __html: featuredPost.content }}>
+              <div className="text-gray-400 line-clamp-3 text-sm md:text-base font-light">
+                {htmlToText(featuredPost.content)}
               </div>
             </Link>
           </motion.div>
@@ -124,7 +126,8 @@ const BlogHero = ({ data, posts = [] }) => {
                     <h4 className="text-sm md:text-base font-bold mb-2 leading-tight group-hover:text-blue-400 transition-colors line-clamp-2 uppercase">
                       {post.title}
                     </h4>
-                    <div className="text-gray-400 text-xs line-clamp-2 font-light" dangerouslySetInnerHTML={{ __html: post.content }}>
+                    <div className="text-gray-400 text-xs line-clamp-2 font-light">
+                      {htmlToText(post.content)}
                     </div>
                   </div>
                 </Link>

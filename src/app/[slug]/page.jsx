@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter, notFound } from "next/navigation";
 import { fetchAPI } from "../../lib/api";
+import { sanitizeHtml } from "../../lib/sanitize-html";
+import { safeUrl } from "../../lib/safe-url";
 import Loading from "../loading";
 import { useLanguage } from "../context/LanguageContext";
 import Navbar from "../components/Navbar/Navbar";
@@ -622,7 +624,7 @@ export default function DynamicPage() {
                       <div
                         className="prose prose-invert max-w-none"
                         dangerouslySetInnerHTML={{
-                          __html: block.data.content?.[language],
+                          __html: sanitizeHtml(block.data.content?.[language]),
                         }}
                       ></div>
                     </div>
@@ -666,7 +668,7 @@ export default function DynamicPage() {
                         </p>
                         {block.data.button_text?.[language] && (
                           <a
-                            href={block.data.button_link || "#"}
+                            href={safeUrl(block.data.button_link)}
                             className="inline-block bg-[#FF8A00] text-white px-8 py-4 rounded-full font-bold hover:scale-105 transition-transform shadow-[0_0_20px_rgba(255,138,0,0.3)]"
                           >
                             {block.data.button_text?.[language]}
@@ -693,7 +695,7 @@ export default function DynamicPage() {
                             <div
                               className="p-5 text-gray-300 prose prose-invert max-w-none"
                               dangerouslySetInnerHTML={{
-                                __html: faq.answer?.[language],
+                                __html: sanitizeHtml(faq.answer?.[language]),
                               }}
                             ></div>
                           </div>
@@ -715,7 +717,7 @@ export default function DynamicPage() {
                         <div
                           className="prose prose-invert max-w-none text-gray-300 text-lg leading-relaxed"
                           dangerouslySetInnerHTML={{
-                            __html: block.data.content?.[language],
+                            __html: sanitizeHtml(block.data.content?.[language]),
                           }}
                         ></div>
                       </div>

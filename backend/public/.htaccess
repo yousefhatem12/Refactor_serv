@@ -24,9 +24,13 @@
     RewriteRule ^ index.php [L]
 </IfModule>
 
+# Only Laravel's front controller may execute PHP from the public directory.
+<FilesMatch "^(?!index\.php$).*\.php$">
+    Require all denied
+</FilesMatch>
+
 # Security Headers & Hide Server Info
 <IfModule mod_headers.c>
-    Header set Content-Security-Policy "default-src 'self' http: https: data: blob: 'unsafe-inline' 'unsafe-eval'"
     Header set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
     Header set X-Frame-Options "SAMEORIGIN"
     Header set X-Content-Type-Options "nosniff"

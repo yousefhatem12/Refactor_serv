@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter, notFound } from "next/navigation";
 import { fetchAPI, getMediaUrl } from "@/lib/api";
+import { safeJsonForScript } from "@/lib/safe-json";
 import { useLanguage } from "../../context/LanguageContext";
 import { useSettings } from "../../context/SettingsContext";
 
@@ -150,7 +151,7 @@ export default function DynamicServicePage() {
         {serviceSchema && (
           <script
             type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+            dangerouslySetInnerHTML={{ __html: safeJsonForScript(serviceSchema) }}
           />
         )}
         <div className="w-full relative z-10 pb-10">
@@ -554,7 +555,7 @@ function OldFormatRenderer({ serviceData, language, t, serviceSchema }) {
       {serviceSchema && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+          dangerouslySetInnerHTML={{ __html: safeJsonForScript(serviceSchema) }}
         />
       )}
       <div className="w-full relative z-10 pb-10">

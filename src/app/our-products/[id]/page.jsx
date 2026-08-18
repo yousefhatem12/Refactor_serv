@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useParams, notFound } from "next/navigation";
 import { useLanguage } from "../../context/LanguageContext";
 import { fetchAPI } from "../../../lib/api";
+import { safeUrl } from "../../../lib/safe-url";
 import Loading from "../../loading";
 
 const ProductDetailsPage = () => {
@@ -203,7 +204,7 @@ const ProductDetailsPage = () => {
           >
             {product.demoLink && product.demoLink !== "#" && (
               <Link
-                href={product.demoLink}
+                href={safeUrl(product.demoLink)}
                 prefetch={false}
                 className="relative overflow-hidden bg-[#F18805] hover:bg-[#d17604] text-white px-6 md:px-10 py-3 md:py-4 rounded-xl font-bold transition-all duration-300 shadow-[0_0_30px_rgba(241,136,5,0.25)] hover:shadow-[0_0_40px_rgba(241,136,5,0.4)] flex items-center gap-3 hover:-translate-y-0.5 group"
               >
@@ -215,7 +216,7 @@ const ProductDetailsPage = () => {
             )}
             {product.orderLink && product.orderLink !== "#" && (
               <Link
-                href={product.orderLink}
+                href={safeUrl(product.orderLink)}
                 prefetch={false}
                 className="bg-transparent border-[2px] border-white/10 hover:border-[#F18805] hover:bg-[#F18805]/10 text-white px-6 md:px-10 py-3 md:py-4 rounded-xl font-bold transition-all duration-300 flex items-center gap-2 hover:-translate-y-0.5"
               >
