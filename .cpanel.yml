@@ -15,12 +15,16 @@ deployment:
     - cd /home2/serv5eg/public_html/serv5-frontend2026 && npm run build
 
     # 3. Deploy Backend (Laravel)
-    # Copies everything inside backend/ to the live API folder
+    # Copies everything inside backend/ to the live API folder.
+    # NOTE: .env is excluded — the production .env must already exist on the server
+    # and is never overwritten by deployments.
     - mkdir -p /home2/serv5eg/public_html/serv5-backend2026
-    - tar -C backend/ -cf - . | (cd /home2/serv5eg/public_html/serv5-backend2026/ && tar -xf -)
+    - tar -C backend/ --exclude='./.env' -cf - . | (cd /home2/serv5eg/public_html/serv5-backend2026/ && tar -xf -)
 
-    # 4. Post-Deployment Backend Tasks (Laravel migrations & cache clearing)
+    # 4. Post-Deployment Backend Tasks
     - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan migrate --force
+    - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan optimize:clear
+    - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan storage:link --force
     - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan config:cache
     - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan route:cache
     - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan view:cache
