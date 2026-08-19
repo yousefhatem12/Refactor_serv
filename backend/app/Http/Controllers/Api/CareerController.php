@@ -60,14 +60,17 @@ class CareerController extends BaseApiController
         $app = CareerApplication::create($validated);
 
         $admins = User::role('super_admin')->get();
-        
-        Notification::make()
-            ->title('New Career Application')
-            ->body("You have received a new application from {$validated['name']} for the position: " . ($app->career?->title['en'] ?? 'Job'))
-            ->icon('heroicon-o-briefcase')
-            ->success()
-            ->sendToDatabase($admins);
 
-        return response()->json(['message' => 'Application submitted successfully', 'data' => $app], 201);
+        // Notify admins after the response is sent — decouples notification from form success.
+        app()->terminating(static function () use ($app, $admins, $validated): void {
+            Notification::make()
+                ->title('New Career Application')
+                ->body("You have received a new application from {$validated['name']} for the position: " . ($app->career?->title['en'] ?? 'Job'))
+                ->icon('heroicon-o-briefcase')
+                ->success()
+                ->sendToDatabase($admins);
+        });
+
+        return response()->json(['message' => 'Application submitted successfully', 'reference_id' => $app->id], 201);
     }
 }

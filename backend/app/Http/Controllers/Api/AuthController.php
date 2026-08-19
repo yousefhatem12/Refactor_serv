@@ -99,4 +99,27 @@ class AuthController extends Controller
     {
         return response()->json($request->user());
     }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required|string',
+            'password'         => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = $request->user();
+
+        if (! Hash::check($request->current_password, $user->password)) {
+            throw ValidationException::withMessages([
+                'current_password' => ['كلمة المرور الحالية غير صحيحة.'],
+            ]);
+        }
+
+        $user->update(['password' => Hash::make($request->password)]);
+
+        // Revoke ALL tokens except the current one — force re-login on other devices.
+        $user->tokens()->where('id', '!=', $request->user()->currentAccessToken()->id)->delete();
+
+        return response()->json(['message' => 'تم تغيير كلمة المرور بنجاح.']);
+    }
 }
