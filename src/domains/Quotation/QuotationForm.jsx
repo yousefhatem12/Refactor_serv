@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useAuth } from "@/app/context/AuthContext";
 import { fetchAPI } from "@/lib/api";
+import { getCaptchaRequiredMessage } from "@/lib/captcha";
+import TurnstileWidget from "@/app/components/Shared/TurnstileWidget";
 import {
   FaChevronRight,
   FaChevronLeft,
@@ -80,6 +82,7 @@ const QuotationForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [quotationCaptchaToken, setQuotationCaptchaToken] = useState("");
 
   // Load initial data from localStorage on mount
   useEffect(() => {
@@ -252,6 +255,11 @@ const QuotationForm = () => {
       return;
     }
 
+    if (!quotationCaptchaToken) {
+      setErrors({ submit: getCaptchaRequiredMessage(language) });
+      return;
+    }
+
     setIsSubmitting(true);
     setErrors({});
 
@@ -275,6 +283,7 @@ const QuotationForm = () => {
       data.append("color_preferences", formData.colorPreferences || "");
       data.append("reference_sites", formData.referenceSites || "");
       data.append("additional_notes", formData.additionalNotes || "");
+      data.append("turnstile_token", quotationCaptchaToken);
 
       files.forEach((file) => {
         data.append("files[]", file);
@@ -320,6 +329,7 @@ const QuotationForm = () => {
     });
     setFiles([]);
     setStep(1);
+    setQuotationCaptchaToken("");
     setIsSubmitted(false);
   };
 
@@ -631,6 +641,14 @@ const QuotationForm = () => {
                   </motion.div>
                 </AnimatePresence>
               </div>
+
+              {step === totalSteps && (
+                <TurnstileWidget
+                  action="quotation"
+                  language={language}
+                  onTokenChange={setQuotationCaptchaToken}
+                />
+              )}
 
               {errors.submit && (
                 <div className="mt-6 p-4 rounded-xl text-sm bg-red-500/20 text-red-400 text-center">

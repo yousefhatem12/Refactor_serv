@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../context/LanguageContext";
 import { fetchAPI, getApiPage } from "../../lib/api";
+import { getCaptchaRequiredMessage } from "../../lib/captcha";
+import TurnstileWidget from "../components/Shared/TurnstileWidget";
 import Loading from "../loading";
 
 export default function CareersPage() {
@@ -32,6 +34,7 @@ export default function CareersPage() {
     message: ""
   });
   const [formErrors, setFormErrors] = useState({});
+  const [captchaToken, setCaptchaToken] = useState("");
 
   // Debounced search and filter effect
   useEffect(() => {
@@ -143,6 +146,11 @@ export default function CareersPage() {
       return;
     }
 
+    if (!captchaToken) {
+      setFormErrors({ captcha: getCaptchaRequiredMessage(language) });
+      return;
+    }
+
     setIsSubmitting(true);
 
     fetchAPI('/careers/apply', {
@@ -154,6 +162,7 @@ export default function CareersPage() {
         phone: formData.phone,
         portfolio: formData.portfolio,
         message: formData.message,
+        turnstile_token: captchaToken,
       }),
     })
       .then((res) => {
@@ -168,6 +177,7 @@ export default function CareersPage() {
             message: ""
           });
           setFormErrors({});
+          setCaptchaToken("");
         } else {
           setFormErrors({ submit: t("submitError") });
         }
@@ -590,6 +600,13 @@ export default function CareersPage() {
                     </div>
 
                     {formErrors.submit && <span className="text-red-400 text-xs font-bold text-center">{formErrors.submit}</span>}
+
+                    <TurnstileWidget
+                      action="career"
+                      language={language}
+                      onTokenChange={setCaptchaToken}
+                    />
+                    {formErrors.captcha && <span className="text-red-400 text-xs font-bold text-center">{formErrors.captcha}</span>}
 
                     {/* Submit button */}
                     <button

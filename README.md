@@ -16,6 +16,22 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## CAPTCHA setup
+
+The public account and submission forms use Cloudflare Turnstile. Create a Turnstile widget for the site, then configure the public site key in the Next.js environment and the secret key in the Laravel environment:
+
+```env
+# Frontend: .env.production (or the environment used for the Next.js build)
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=your-turnstile-site-key
+
+# Backend: backend/.env
+TURNSTILE_SITE_KEY=your-turnstile-site-key
+TURNSTILE_SECRET_KEY=your-turnstile-secret-key
+TURNSTILE_HOSTNAME=serv5.com.eg,www.serv5.com.eg
+```
+
+After changing the backend values, clear and rebuild the Laravel configuration (`php artisan config:clear` or `php artisan config:cache`). The API rejects public form submissions when the CAPTCHA token is missing or cannot be verified.
+
 You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

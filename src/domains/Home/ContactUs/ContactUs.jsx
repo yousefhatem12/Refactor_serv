@@ -5,6 +5,8 @@ import { useLanguage } from "@/app/context/LanguageContext";
 
 import { useAuth } from "@/app/context/AuthContext";
 import { fetchAPI } from "@/lib/api";
+import { getCaptchaRequiredMessage } from "@/lib/captcha";
+import TurnstileWidget from "@/app/components/Shared/TurnstileWidget";
 import GlobalReach from "../../AboutUs/GlobalReach";
 
 const ContactUs = () => {
@@ -31,6 +33,9 @@ const ContactUs = () => {
   });
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [status, setStatus] = React.useState(null);
+  const [authCaptchaToken, setAuthCaptchaToken] = React.useState("");
+  const [contactCaptchaToken, setContactCaptchaToken] = React.useState("");
+  const [contactCaptchaVersion, setContactCaptchaVersion] = React.useState(0);
 
   const [settings, setSettings] = React.useState({});
 
@@ -49,17 +54,23 @@ const ContactUs = () => {
 
   const handleAuthSubmit = async (e) => {
     e.preventDefault();
+    if (!authCaptchaToken) {
+      setStatus({ type: "error", message: getCaptchaRequiredMessage(language) });
+      return;
+    }
+
     setIsSubmitting(true);
     setStatus(null);
     let res;
     if (authMode === "login") {
-      res = await login(authData.email, authData.password);
+      res = await login(authData.email, authData.password, authCaptchaToken);
     } else {
       res = await register(
         authData.name,
         authData.email,
         authData.password,
         authData.password_confirmation,
+        authCaptchaToken,
       );
     }
 
@@ -73,11 +84,16 @@ const ContactUs = () => {
 
   const handleContactSubmit = async (e) => {
     e.preventDefault();
+    if (!contactCaptchaToken) {
+      setStatus({ type: "error", message: getCaptchaRequiredMessage(language) });
+      return;
+    }
+
     setIsSubmitting(true);
     setStatus(null);
 
     try {
-      await fetchAPI("/contact", {
+      const response = await fetchAPI("/contact", {
         method: "POST",
         body: JSON.stringify({
           name: formData.name,
@@ -85,8 +101,13 @@ const ContactUs = () => {
           phone: formData.phone,
           message: formData.message,
           type: formData.type,
+          turnstile_token: contactCaptchaToken,
         }),
       });
+      if (!response) throw new Error("Contact request failed");
+
+      setContactCaptchaToken("");
+      setContactCaptchaVersion((version) => version + 1);
       setStatus({
         type: "success",
         message: t("contactSuccess") || "Message sent successfully!",
@@ -273,6 +294,12 @@ const ContactUs = () => {
                   </div>
                 )}
 
+                <TurnstileWidget
+                  action={`auth-${authMode}`}
+                  language={language}
+                  onTokenChange={setAuthCaptchaToken}
+                />
+
                 <button
                   type="submit"
                   disabled={isSubmitting}
@@ -371,6 +398,12 @@ const ContactUs = () => {
                 rows="4"
                 className="bg-[#0F172A]/40 border border-white/10 rounded-md p-3 md:p-4 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF8A00] transition-colors resize-none"
                 required
+              />
+              <TurnstileWidget
+                key={contactCaptchaVersion}
+                action="contact"
+                language={language}
+                onTokenChange={setContactCaptchaToken}
               />
               <button
                 type="submit"

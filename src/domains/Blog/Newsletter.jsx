@@ -3,19 +3,29 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
+import { getCaptchaRequiredMessage } from "@/lib/captcha";
+import TurnstileWidget from "@/app/components/Shared/TurnstileWidget";
 
 const Newsletter = () => {
   const { t, language } = useLanguage();
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState("");
+  const [captchaError, setCaptchaError] = useState("");
+  const [captchaVersion, setCaptchaVersion] = useState(0);
   const isRtl = language === "ar";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || isSubmitting) return;
+    if (!captchaToken) {
+      setCaptchaError(getCaptchaRequiredMessage(language));
+      return;
+    }
 
     setIsSubmitting(true);
+    setCaptchaError("");
 
     // Simulate a short delay for UX feel
     await new Promise((resolve) => setTimeout(resolve, 800));
@@ -23,6 +33,8 @@ const Newsletter = () => {
     setIsSubmitted(true);
     setIsSubmitting(false);
     setEmail("");
+    setCaptchaToken("");
+    setCaptchaVersion((version) => version + 1);
 
     // Reset success message after 5 seconds
     setTimeout(() => setIsSubmitted(false), 5000);
@@ -68,6 +80,21 @@ const Newsletter = () => {
             required
             disabled={isSubmitting}
           />
+          <TurnstileWidget
+            key={captchaVersion}
+            action="newsletter"
+            language={language}
+            onTokenChange={(token) => {
+              setCaptchaToken(token);
+              if (token) setCaptchaError("");
+            }}
+            className="sm:col-span-2"
+          />
+          {captchaError && (
+            <p className="sm:col-span-2 text-xs text-red-400" role="alert">
+              {captchaError}
+            </p>
+          )}
           <motion.button
             type="submit"
             disabled={isSubmitting}

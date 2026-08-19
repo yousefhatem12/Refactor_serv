@@ -2,8 +2,10 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { fetchAPI } from "@/lib/api";
+import { getCaptchaRequiredMessage } from "@/lib/captcha";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useAuth } from "@/app/context/AuthContext";
+import TurnstileWidget from "@/app/components/Shared/TurnstileWidget";
 
 const ContactForm = () => {
   const { t, language } = useLanguage();
@@ -27,6 +29,9 @@ const ContactForm = () => {
   const [status, setStatus] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [authCaptchaToken, setAuthCaptchaToken] = useState("");
+  const [contactCaptchaToken, setContactCaptchaToken] = useState("");
+  const [contactCaptchaVersion, setContactCaptchaVersion] = useState(0);
 
   const handleAuthChange = (e) => {
     const { name, value } = e.target;
@@ -35,13 +40,24 @@ const ContactForm = () => {
 
   const handleAuthSubmit = async (e) => {
     e.preventDefault();
+    if (!authCaptchaToken) {
+      setStatus({ type: "error", message: getCaptchaRequiredMessage(language) });
+      return;
+    }
+
     setIsSubmitting(true);
     setStatus(null);
     let res;
     if (authMode === "login") {
-      res = await login(authData.email, authData.password);
+      res = await login(authData.email, authData.password, authCaptchaToken);
     } else {
-      res = await register(authData.name, authData.email, authData.password, authData.password_confirmation);
+      res = await register(
+        authData.name,
+        authData.email,
+        authData.password,
+        authData.password_confirmation,
+        authCaptchaToken,
+      );
     }
     
     if (res.success) {
@@ -54,11 +70,16 @@ const ContactForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!contactCaptchaToken) {
+      setStatus({ type: "error", message: getCaptchaRequiredMessage(language) });
+      return;
+    }
+
     setIsSubmitting(true);
     setStatus(null);
 
     try {
-      await fetchAPI('/contact', {
+      const response = await fetchAPI('/contact', {
         method: 'POST',
         body: JSON.stringify({
           name: `${formData.firstName} ${formData.lastName}`,
@@ -66,8 +87,13 @@ const ContactForm = () => {
           phone: formData.phone,
           message: formData.message,
           type: formData.subject,
+          turnstile_token: contactCaptchaToken,
         }),
       });
+      if (!response) throw new Error("Contact request failed");
+
+      setContactCaptchaToken("");
+      setContactCaptchaVersion((version) => version + 1);
       setStatus({ type: 'success', message: t("contactSuccess") || (language === 'ar' ? 'تم إرسال رسالتك بنجاح!' : 'Message sent successfully!') });
       setFormData({
         firstName: "",
@@ -225,6 +251,12 @@ const ContactForm = () => {
               </div>
             )}
 
+            <TurnstileWidget
+              action={`auth-${authMode}`}
+              language={language}
+              onTokenChange={setAuthCaptchaToken}
+            />
+
             <motion.button
               whileHover={{ scale: 1.02, boxShadow: "0 0 20px rgba(255, 138, 0, 0.4)" }}
               whileTap={{ scale: 0.98 }}
@@ -381,6 +413,13 @@ const ContactForm = () => {
               placeholder={language === 'ar' ? 'اكتب رسالتك هنا..' : 'Write your message..'}
             ></textarea>
           </div>
+
+          <TurnstileWidget
+            key={contactCaptchaVersion}
+            action="contact"
+            language={language}
+            onTokenChange={setContactCaptchaToken}
+          />
 
           {/* Submit Button */}
           <div className="flex justify-end mt-4">

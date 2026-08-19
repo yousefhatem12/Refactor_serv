@@ -26,9 +26,9 @@ Route::prefix('v1')->group(function () {
     
     // Auth endpoints
     Route::post('/register', [AuthController::class, 'register'])
-        ->middleware('throttle:auth');
+        ->middleware(['throttle:auth', 'verify.turnstile']);
     Route::post('/login', [AuthController::class, 'login'])
-        ->middleware('throttle:auth');
+        ->middleware(['throttle:auth', 'verify.turnstile']);
 
     Route::middleware(['token.cookie', 'auth:sanctum'])->group(function () {
         Route::post('/logout', [AuthController::class, 'logout'])
@@ -71,19 +71,19 @@ Route::prefix('v1')->group(function () {
     Route::prefix('careers')->group(function () {
         Route::get('/', [CareerController::class, 'index'])->name('api.careers.index');
         Route::post('/apply', [CareerController::class, 'apply'])
-            ->middleware('throttle:public-forms')
+            ->middleware(['throttle:public-forms', 'verify.turnstile'])
             ->name('api.careers.apply');
     });
 
     // Contact & Quotations
     Route::post('/contact', [ContactController::class, 'submitMessage'])
-        ->middleware('throttle:public-forms')
+        ->middleware(['throttle:public-forms', 'verify.turnstile'])
         ->name('api.contact.submit');
     Route::post('/quotations', [ContactController::class, 'submitQuotation'])
-        ->middleware('throttle:public-uploads')
+        ->middleware(['throttle:public-uploads', 'verify.turnstile'])
         ->name('api.quotations.submit');
     Route::post('/consultations', [ContactController::class, 'submitConsultation'])
-        ->middleware('throttle:public-forms')
+        ->middleware(['throttle:public-forms', 'verify.turnstile'])
         ->name('api.consultations.submit');
 
     // Settings & System Data

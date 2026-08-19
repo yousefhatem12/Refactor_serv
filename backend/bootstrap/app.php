@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'token.cookie' => \App\Http\Middleware\AuthenticateTokenFromCookie::class,
             'clear.auth.cookie' => \App\Http\Middleware\ClearAuthCookie::class,
+            'verify.turnstile' => \App\Http\Middleware\VerifyTurnstile::class,
         ]);
         $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
     })

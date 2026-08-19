@@ -21,13 +21,13 @@ export const AuthProvider = ({ children }) => {
       .finally(() => setLoading(false));
   }, []);
 
-  const login = async (email, password) => {
+  const login = async (email, password, turnstileToken) => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.serv5.com.eg/api/v1'}/login`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, turnstile_token: turnstileToken }),
       });
       const data = await response.json();
       if (response.ok) {
@@ -41,13 +41,19 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (name, email, password, password_confirmation) => {
+  const register = async (name, email, password, password_confirmation, turnstileToken) => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.serv5.com.eg/api/v1'}/register`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify({ name, email, password, password_confirmation }),
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          password_confirmation,
+          turnstile_token: turnstileToken,
+        }),
       });
       const data = await response.json();
       if (response.ok) {

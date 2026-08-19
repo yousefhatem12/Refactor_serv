@@ -41,4 +41,10 @@ return [
         'sender' => env('WHATS_API_SENDER', 'default'),
     ],
 
+    'turnstile' => [
+        'site_key' => env('TURNSTILE_SITE_KEY'),
+        'secret_key' => env('TURNSTILE_SECRET_KEY'),
+        'hostname' => env('TURNSTILE_HOSTNAME'),
+    ],
+
 ];

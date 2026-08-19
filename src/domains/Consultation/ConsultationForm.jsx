@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { fetchAPI } from "@/lib/api";
+import { getCaptchaRequiredMessage } from "@/lib/captcha";
+import TurnstileWidget from "@/app/components/Shared/TurnstileWidget";
 import {
   FaMobileAlt,
   FaLaptopCode,
@@ -31,6 +33,7 @@ const ConsultationForm = () => {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [captchaToken, setCaptchaToken] = useState("");
 
   const totalSteps = 7;
 
@@ -38,6 +41,11 @@ const ConsultationForm = () => {
     e.preventDefault();
     if (!formData.name || !formData.phone || !formData.email) {
       setErrorMessage(language === "ar" ? "يرجى ملء الاسم ورقم الهاتف والبريد الإلكتروني." : "Please fill in your name, phone, and email.");
+      return;
+    }
+
+    if (!captchaToken) {
+      setErrorMessage(getCaptchaRequiredMessage(language));
       return;
     }
 
@@ -58,6 +66,7 @@ const ConsultationForm = () => {
           phone: formData.phone,
           email: formData.email,
           company: formData.company,
+          turnstile_token: captchaToken,
         }),
       });
 
@@ -315,8 +324,16 @@ const ConsultationForm = () => {
 
         {errorMessage && (
           <div className="mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
-            {errorMessage}
-          </div>
+          {errorMessage}
+        </div>
+        )}
+
+        {step === totalSteps && (
+          <TurnstileWidget
+            action="consultation"
+            language={language}
+            onTokenChange={setCaptchaToken}
+          />
         )}
 
         <div className="flex flex-col-reverse md:flex-row items-stretch md:items-center justify-between mt-8 md:mt-12 border-t border-white/5 pt-6 md:pt-8 gap-3 md:gap-0">
