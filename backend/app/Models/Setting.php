@@ -47,6 +47,8 @@ class Setting extends Model
             \Illuminate\Support\Facades\Cache::forget('settings_ar');
             \Illuminate\Support\Facades\Cache::forget('settings_v2_en');
             \Illuminate\Support\Facades\Cache::forget('settings_v2_ar');
+            \Illuminate\Support\Facades\Cache::forget('footer_data_en');
+            \Illuminate\Support\Facades\Cache::forget('footer_data_ar');
         };
         static::saved($clear);
         static::deleted($clear);

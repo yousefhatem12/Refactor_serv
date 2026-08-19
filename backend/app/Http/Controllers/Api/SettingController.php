@@ -178,63 +178,69 @@ class SettingController extends BaseApiController
     public function footer()
     {
         $lang = $this->getLang();
-        $texts = [
-            'heading' => Setting::where('key', 'footer_heading_'.$lang)->value('value')
-                ?: Setting::where('key', 'footer_heading_en')->value('value')
-                ?: 'Have a Good Web Design<br/>With Serv5.',
-            'description' => Setting::where('key', 'footer_description_'.$lang)->value('value')
-                ?: Setting::where('key', 'footer_description_en')->value('value')
-                ?: 'Serv5 specializes in modern web solutions...',
-            'button_text' => Setting::where('key', 'footer_button_text_'.$lang)->value('value')
-                ?: Setting::where('key', 'footer_button_text_en')->value('value')
-                ?: 'Get Started',
-            'copyright' => Setting::where('key', 'footer_copyright_'.$lang)->value('value')
-                ?: Setting::where('key', 'footer_copyright_en')->value('value')
-                ?: '2026 © Serv5. All Rights Reserved.',
-        ];
+        $cacheKey = "footer_data_{$lang}";
 
-        // A missing Arabic override must not silently fall back to English.
-        if ($lang === 'ar') {
+        $data = Cache::remember($cacheKey, 3600, function () use ($lang) {
             $texts = [
-                'heading' => Setting::where('key', 'footer_heading_ar')->value('value')
-                    ?: "احصل على تصميم ويب\nرائع اليوم",
-                'description' => Setting::where('key', 'footer_description_ar')->value('value')
-                    ?: 'خبرة عالية المستوى في تصميم وتطوير الويب وإنتاج أعمال عالية الجودة.',
-                'button_text' => Setting::where('key', 'footer_button_text_ar')->value('value')
-                    ?: 'ابدأ الآن',
-                'copyright' => Setting::where('key', 'footer_copyright_ar')->value('value')
-                    ?: '© 2026 جميع الحقوق محفوظة - Serv5',
+                'heading' => Setting::where('key', 'footer_heading_'.$lang)->value('value')
+                    ?: Setting::where('key', 'footer_heading_en')->value('value')
+                    ?: 'Have a Good Web Design<br/>With Serv5.',
+                'description' => Setting::where('key', 'footer_description_'.$lang)->value('value')
+                    ?: Setting::where('key', 'footer_description_en')->value('value')
+                    ?: 'Serv5 specializes in modern web solutions...',
+                'button_text' => Setting::where('key', 'footer_button_text_'.$lang)->value('value')
+                    ?: Setting::where('key', 'footer_button_text_en')->value('value')
+                    ?: 'Get Started',
+                'copyright' => Setting::where('key', 'footer_copyright_'.$lang)->value('value')
+                    ?: Setting::where('key', 'footer_copyright_en')->value('value')
+                    ?: '2026 © Serv5. All Rights Reserved.',
             ];
-        }
 
-        $links = FooterLink::orderBy('sort_order')->get()->groupBy('column_name')->map(function ($group) use ($lang) {
-            return $group->map(function ($link) use ($lang) {
+            // A missing Arabic override must not silently fall back to English.
+            if ($lang === 'ar') {
+                $texts = [
+                    'heading' => Setting::where('key', 'footer_heading_ar')->value('value')
+                        ?: "احصل على تصميم ويب\nرائع اليوم",
+                    'description' => Setting::where('key', 'footer_description_ar')->value('value')
+                        ?: 'خبرة عالية المستوى في تصميم وتطوير الويب وإنتاج أعمال عالية الجودة.',
+                    'button_text' => Setting::where('key', 'footer_button_text_ar')->value('value')
+                        ?: 'ابدأ الآن',
+                    'copyright' => Setting::where('key', 'footer_copyright_ar')->value('value')
+                        ?: '© 2026 جميع الحقوق محفوظة - Serv5',
+                ];
+            }
+
+            $links = FooterLink::orderBy('sort_order')->get()->groupBy('column_name')->map(function ($group) use ($lang) {
+                return $group->map(function ($link) use ($lang) {
+                    return [
+                        'id' => $link->id,
+                        'label' => $this->trans($link->label, $lang),
+                        'url' => $link->url,
+                    ];
+                });
+            });
+
+            $socials = SocialLink::where('is_active', true)->get()->map(function ($social) {
                 return [
-                    'id' => $link->id,
-                    'label' => $this->trans($link->label, $lang),
-                    'url' => $link->url,
+                    'id' => $social->id,
+                    'platform' => $social->platform,
+                    'url' => $social->url,
                 ];
             });
-        });
 
-        $socials = SocialLink::where('is_active', true)->get()->map(function ($social) {
             return [
-                'id' => $social->id,
-                'platform' => $social->platform,
-                'url' => $social->url,
+                'texts' => $texts,
+                'links' => [
+                    'usefulLinks' => $links['useful_links'] ?? [],
+                    'quickLinks' => $links['quick_links'] ?? [],
+                    'offers' => $links['offers'] ?? [],
+                    'company' => $links['company'] ?? [],
+                ],
+                'socials' => $socials,
             ];
         });
 
-        return response()->json([
-            'texts' => $texts,
-            'links' => [
-                'usefulLinks' => $links['useful_links'] ?? [],
-                'quickLinks' => $links['quick_links'] ?? [],
-                'offers' => $links['offers'] ?? [],
-                'company' => $links['company'] ?? [],
-            ],
-            'socials' => $socials,
-        ]);
+        return response()->json($data);
     }
 
     public function navLinks()

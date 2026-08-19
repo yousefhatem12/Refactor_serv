@@ -39,9 +39,11 @@ class Page extends Model
 
     protected static function booted()
     {
-        static::saved(function ($page) {
+        $clear = static function (self $page): void {
             \Illuminate\Support\Facades\Cache::forget("page_{$page->slug}_en");
             \Illuminate\Support\Facades\Cache::forget("page_{$page->slug}_ar");
-        });
+        };
+        static::saved($clear);
+        static::deleted($clear);
     }
 }

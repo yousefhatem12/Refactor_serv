@@ -52,7 +52,34 @@ function createContentSecurityPolicy(nonce) {
 }
 
 function withSecurityHeaders(response, nonce) {
+  const isProd = process.env.NODE_ENV === "production";
+
   response.headers.set("Content-Security-Policy", createContentSecurityPolicy(nonce));
+
+  // Prevent browsers from MIME-sniffing a response away from the declared Content-Type.
+  response.headers.set("X-Content-Type-Options", "nosniff");
+
+  // Disallow embedding the site in an <iframe> on foreign origins (clickjacking defence).
+  // frame-ancestors in CSP above already covers modern browsers; this covers IE11/legacy.
+  response.headers.set("X-Frame-Options", "SAMEORIGIN");
+
+  // Control how much referrer information is included with requests.
+  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+
+  // Restrict access to sensitive browser APIs that this site does not use.
+  response.headers.set(
+    "Permissions-Policy",
+    "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()"
+  );
+
+  // Enable HSTS in production — tell browsers to only connect over HTTPS for 1 year.
+  if (isProd) {
+    response.headers.set(
+      "Strict-Transport-Security",
+      "max-age=31536000; includeSubDomains; preload"
+    );
+  }
+
   return response;
 }
 
