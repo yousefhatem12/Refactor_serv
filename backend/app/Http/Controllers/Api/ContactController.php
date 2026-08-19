@@ -44,7 +44,7 @@ class ContactController extends BaseApiController
             ])
             ->sendToDatabase($admins);
 
-        return response()->json(['message' => 'Message sent successfully', 'data' => $message], 201);
+        return response()->json(['message' => 'Message sent successfully', 'reference_id' => $message->id], 201);
     }
 
     public function submitQuotation(StoreQuotationRequest $request)
@@ -86,7 +86,7 @@ class ContactController extends BaseApiController
             ])
             ->sendToDatabase($admins);
 
-        return response()->json(['message' => 'Quotation request submitted successfully', 'data' => $quotation], 201);
+        return response()->json(['message' => 'Quotation request submitted successfully', 'reference_id' => $quotation->id], 201);
     }
 
     public function submitConsultation(StoreProjectConsultationRequest $request)
@@ -115,6 +115,6 @@ class ContactController extends BaseApiController
             ])
             ->sendToDatabase($admins);
 
-        return response()->json(['message' => 'Consultation request submitted successfully', 'data' => $consultation], 201);
+        return response()->json(['message' => 'Consultation request submitted successfully', 'reference_id' => $consultation->id], 201);
     }
 }

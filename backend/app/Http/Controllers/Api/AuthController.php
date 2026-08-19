@@ -40,7 +40,8 @@ class AuthController extends Controller
         $payload = ['user' => $user];
 
         // Keep bearer-token responses opt-in for legacy API clients. The website uses the HttpOnly cookie.
-        if (filter_var(env('AUTH_EXPOSE_TOKENS', false), FILTER_VALIDATE_BOOL)) {
+        // In production, token exposure is always disabled regardless of AUTH_EXPOSE_TOKENS.
+        if (! app()->environment('production') && filter_var(env('AUTH_EXPOSE_TOKENS', false), FILTER_VALIDATE_BOOL)) {
             $payload['access_token'] = $token;
             $payload['token_type'] = 'Bearer';
         }
