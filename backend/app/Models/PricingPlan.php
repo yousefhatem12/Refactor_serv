@@ -38,9 +38,15 @@ class PricingPlan extends Model
 
     protected static function booted()
     {
-        $clear = function () {
-            // Since cache keys for pricing plans include dynamic params, flush all caches to be safe
-            \Illuminate\Support\Facades\Cache::flush();
+        // IMPORTANT: Do NOT use Cache::flush() here — it would wipe ALL application cache
+        // (sessions, settings, services, etc.) whenever any pricing plan is edited.
+        // Instead, clear only the relevant pricing plan cache keys.
+        $clear = function (self $plan): void {
+            $serviceId = $plan->service_id;
+            foreach (['en', 'ar'] as $lang) {
+                \Illuminate\Support\Facades\Cache::forget("pricing_plans_{$lang}_service_all");
+                \Illuminate\Support\Facades\Cache::forget("pricing_plans_{$lang}_service_{$serviceId}");
+            }
         };
         static::saved($clear);
         static::deleted($clear);

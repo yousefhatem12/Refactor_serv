@@ -37,4 +37,16 @@ class Product extends Model
         'samples' => 'json',
         'is_active' => 'boolean',
     ];
+
+    protected static function booted(): void
+    {
+        // Paginated product caches (products_{lang}_cat_*) expire naturally in 1 hour.
+        // Clear the category listing cache which is simpler and static.
+        $clear = static function (): void {
+            \Illuminate\Support\Facades\Cache::forget('product_categories_en');
+            \Illuminate\Support\Facades\Cache::forget('product_categories_ar');
+        };
+        static::saved($clear);
+        static::deleted($clear);
+    }
 }

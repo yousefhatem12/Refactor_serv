@@ -43,5 +43,14 @@ class Project extends Model
                 $project->slug = \Illuminate\Support\Str::slug($name ?: 'project');
             }
         });
+        // Clear project detail and category listing caches.
+        $clear = static function (self $project): void {
+            foreach (['en', 'ar'] as $lang) {
+                \Illuminate\Support\Facades\Cache::forget("project_{$project->slug}_{$lang}");
+                \Illuminate\Support\Facades\Cache::forget("project_categories_{$lang}");
+            }
+        };
+        static::saved($clear);
+        static::deleted($clear);
     }
 }
