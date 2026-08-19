@@ -51,21 +51,8 @@ class AppServiceProvider extends ServiceProvider
                 ->locales(['ar', 'en']); // Arabic and English
         });
 
-        // Automatically clear cache when any frontend-related model is updated
-        $cachedModels = [
-            \App\Models\Service::class, \App\Models\Project::class, \App\Models\Setting::class,
-            \App\Models\Post::class, \App\Models\Faq::class, \App\Models\Testimonial::class,
-            \App\Models\TeamMember::class, \App\Models\Feature::class, \App\Models\Statistic::class,
-            \App\Models\FooterLink::class, \App\Models\SocialLink::class, \App\Models\NavLink::class,
-            \App\Models\Page::class, \App\Models\PricingPlan::class,
-            \App\Models\Product::class, \App\Models\BankAccount::class,
-        ];
-
-        foreach ($cachedModels as $model) {
-            if (class_exists($model)) {
-                $model::saved(fn () => \Illuminate\Support\Facades\Cache::flush());
-                $model::deleted(fn () => \Illuminate\Support\Facades\Cache::flush());
-            }
-        }
+        // NOTE: Per-model cache invalidation is handled in each model's booted() method.
+        // A global Cache::flush() loop was removed from here because it wiped ALL cache
+        // on every single Filament save/delete, causing thundering-herd on the database.
     }
 }

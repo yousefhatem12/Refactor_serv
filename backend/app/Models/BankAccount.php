@@ -29,9 +29,19 @@ class BankAccount extends Model
 
     protected static function booted()
     {
-        $clear = function () {
-            // Since cache keys for bank accounts include country/page/per_page, flush cache to be safe
-            \Illuminate\Support\Facades\Cache::flush();
+        // IMPORTANT: Do NOT use Cache::flush() — it wipes ALL application cache.
+        // Since bank_accounts cache keys include dynamic country/page params, we clear
+        // them with a prefix match on the cache table (safe for database cache driver).
+        // If using file/redis cache, keys expire naturally after 1 hour (TTL=3600).
+        $clear = static function (): void {
+            $prefix = config('cache.prefix') . 'bank_accounts_';
+            try {
+                \Illuminate\Support\Facades\DB::table('cache')
+                    ->where('key', 'like', $prefix . '%')
+                    ->delete();
+            } catch (\Throwable) {
+                // Non-database cache driver: keys will expire naturally via TTL.
+            }
         };
         static::saved($clear);
         static::deleted($clear);
