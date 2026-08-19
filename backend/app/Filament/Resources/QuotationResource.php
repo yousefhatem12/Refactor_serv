@@ -9,7 +9,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\FileUpload;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -84,11 +84,24 @@ class QuotationResource extends Resource
 
                 Section::make('Attached Files')
                     ->schema([
-                        FileUpload::make('files')
-                            ->multiple()
-                            ->disabled()
-                            ->disk('local')
-                            ->directory('quotations'),
+                        TextEntry::make('files')
+                            ->label('Download Attachments')
+                            ->html()
+                            ->state(function ($record): string {
+                                $files = $record->files ?? [];
+                                if (empty($files)) {
+                                    return '<em class="text-gray-400">No files attached.</em>';
+                                }
+                                $links = array_map(function ($path) use ($record) {
+                                    $filename = basename($path);
+                                    $url = route('admin.quotation.file.download', [
+                                        'quotation' => $record->id,
+                                        'filename'  => $filename,
+                                    ]);
+                                    return "<a href=\"{$url}\" target=\"_blank\" class=\"text-primary-500 underline hover:no-underline\">{$filename}</a>";
+                                }, $files);
+                                return implode('<br>', $links);
+                            }),
                     ])->columns(1),
 
                 Section::make('Quotation Status')
