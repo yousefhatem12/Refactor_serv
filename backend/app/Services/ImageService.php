@@ -23,8 +23,8 @@ class ImageService
                 imagealphablending($image, true);
                 imagesavealpha($image, true);
             } elseif ($extension === 'webp') {
-                // Already webp, just save
-                return $file->store($directory, 'public');
+                // Already webp, save to private disk.
+                return $file->store($directory, 'local');
             }
 
             if ($image) {
@@ -35,7 +35,7 @@ class ImageService
                 imagewebp($image, null, 80);
                 $webpContent = ob_get_clean();
                 
-                Storage::disk('public')->put($path, $webpContent);
+                Storage::disk('local')->put($path, $webpContent);
                 imagedestroy($image);
                 
                 return $path;
@@ -44,6 +44,6 @@ class ImageService
             // Fallback to default storage if conversion fails
         }
 
-        return $file->store($directory, 'public');
+        return $file->store($directory, 'local');
     }
 }

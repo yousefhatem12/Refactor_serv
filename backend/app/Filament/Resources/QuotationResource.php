@@ -86,8 +86,8 @@ class QuotationResource extends Resource
                     ->schema([
                         FileUpload::make('files')
                             ->multiple()
-                            ->image()
                             ->disabled()
+                            ->disk('local')
                             ->directory('quotations'),
                     ])->columns(1),
 

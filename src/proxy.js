@@ -18,15 +18,26 @@ function createContentSecurityPolicy(nonce) {
     ? " http://localhost:8000 http://127.0.0.1:8000"
     : "";
 
+  // In production: remove unsafe-eval and restrict to known script hosts only.
+  // In development: keep permissive settings to avoid blocking local tooling.
+  const scriptSrc = isDevelopment
+    ? `script-src 'self' 'nonce-${nonce}' 'unsafe-inline' 'unsafe-eval' https: http:`
+    : `script-src 'self' 'nonce-${nonce}' 'unsafe-inline' https://challenges.cloudflare.com`;
+
+  // In production: restrict frames to known embed hosts only.
+  const frameSrc = isDevelopment
+    ? "frame-src 'self' https://challenges.cloudflare.com https://maps.google.com https://www.google.com https://www.youtube.com https://youtube.com https: http:"
+    : "frame-src 'self' https://challenges.cloudflare.com https://maps.google.com https://www.google.com https://www.youtube.com https://youtube.com";
+
   const cspDirectives = [
     "default-src 'self'",
-    `script-src 'self' 'nonce-${nonce}' 'unsafe-inline' 'unsafe-eval' https: http:`,
-    "style-src 'self' 'unsafe-inline' https: http:",
-    `img-src 'self' data: blob: ${apiOrigin} https: http:${localApiOrigins}`,
-    "font-src 'self' data: https: http:",
-    `connect-src 'self' ${apiOrigin} https: http:${localApiOrigins}`,
-    "frame-src 'self' https://maps.google.com https://www.google.com https://www.youtube.com https://youtube.com https: http:",
-    `media-src 'self' ${apiOrigin} https: http:${localApiOrigins}`,
+    scriptSrc,
+    "style-src 'self' 'unsafe-inline' https:",
+    `img-src 'self' data: blob: ${apiOrigin} https:${localApiOrigins}`,
+    "font-src 'self' data: https:",
+    `connect-src 'self' ${apiOrigin} https:${localApiOrigins}`,
+    frameSrc,
+    `media-src 'self' ${apiOrigin} https:${localApiOrigins}`,
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",

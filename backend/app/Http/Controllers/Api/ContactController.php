@@ -58,7 +58,7 @@ class ContactController extends BaseApiController
                 try {
                     $path = \App\Services\ImageService::convertToWebp($file, 'quotations');
                 } catch (\Exception $e) {
-                    $path = $file->store('quotations', 'public');
+                    $path = $file->store('quotations', 'local');
                 }
                 $filePaths[] = $path;
             }
