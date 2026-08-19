@@ -239,7 +239,7 @@ export default function CareersPage() {
           </div>
 
           {/* Department filter buttons */}
-          <div className="flex flex-wrap gap-2 justify-center md:justify-end w-full md:w-auto mt-2 md:mt-0">
+          <div className="flex flex-wrap gap-2 justify-center md:justify-start w-full md:w-auto mt-2 md:mt-0">
             {departments.map((dept) => (
               <button
                 key={dept.id}
