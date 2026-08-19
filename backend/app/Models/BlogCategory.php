@@ -36,5 +36,12 @@ class BlogCategory extends Model
                 $category->slug = Str::slug($name ?: 'category');
             }
         });
+        // Clear blog categories API cache on any change.
+        $clear = static function (): void {
+            \Illuminate\Support\Facades\Cache::forget('blog_categories_en');
+            \Illuminate\Support\Facades\Cache::forget('blog_categories_ar');
+        };
+        static::saved($clear);
+        static::deleted($clear);
     }
 }

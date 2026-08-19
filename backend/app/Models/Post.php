@@ -59,5 +59,13 @@ class Post extends Model
                 $post->slug = Str::slug($title);
             }
         });
+        // Clear known blog API cache keys on any change.
+        // Paginated blog caches (posts_{lang}_cat_...) expire naturally after 1 hour.
+        $clear = static function (): void {
+            \Illuminate\Support\Facades\Cache::forget('trending_posts_en');
+            \Illuminate\Support\Facades\Cache::forget('trending_posts_ar');
+        };
+        static::saved($clear);
+        static::deleted($clear);
     }
 }

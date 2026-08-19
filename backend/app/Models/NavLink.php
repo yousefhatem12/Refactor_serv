@@ -32,4 +32,14 @@ class NavLink extends Model
     {
         return $this->hasMany(NavLink::class, 'parent_id')->orderBy('sort_order');
     }
+
+    protected static function booted(): void
+    {
+        $clear = static function (): void {
+            \Illuminate\Support\Facades\Cache::forget('nav_links_en');
+            \Illuminate\Support\Facades\Cache::forget('nav_links_ar');
+        };
+        static::saved($clear);
+        static::deleted($clear);
+    }
 }

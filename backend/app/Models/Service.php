@@ -34,6 +34,13 @@ class Service extends Model
                 $service->slug = Str::slug($service->name);
             }
         });
+        // Clear services API cache on any change.
+        $clear = static function (): void {
+            \Illuminate\Support\Facades\Cache::forget('services_v2_en');
+            \Illuminate\Support\Facades\Cache::forget('services_v2_ar');
+        };
+        static::saved($clear);
+        static::deleted($clear);
     }
 
     public function pricingPlans(): \Illuminate\Database\Eloquent\Relations\HasMany

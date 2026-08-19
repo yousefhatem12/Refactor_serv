@@ -2,12 +2,15 @@ import React from "react";
 import Script from "next/script";
 import { parseFragment } from "parse5";
 
+// NOTE: 'script' is intentionally excluded from ALLOWED_HEAD_TAGS.
+// Arbitrary script execution from CMS-stored content is a high-risk XSS vector.
+// To add third-party integrations (analytics, pixels), use dedicated typed fields
+// in the CMS admin panel instead of raw <script> tags.
 const ALLOWED_HEAD_TAGS = new Set([
   "base",
   "link",
   "meta",
   "noscript",
-  "script",
   "style",
   "title",
 ]);
