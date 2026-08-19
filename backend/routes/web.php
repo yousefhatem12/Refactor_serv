@@ -35,6 +35,6 @@ Route::middleware(['web', 'auth'])->group(function () {
             abort(404);
         }
 
-        return Storage::disk('local')->download($path);
+        return response()->download(Storage::disk('local')->path($path), $filename);
     })->name('admin.quotation.file.download');
 });
