@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Cache;
  *
  * Usage: Add `use ClearsApiCache;` to any Model, then override `apiCacheKeys()`
  * to return the list of cache keys this model's data appears in.
+ *
+ * @phpstan-require-extends \Illuminate\Database\Eloquent\Model
+ * @mixin \Illuminate\Database\Eloquent\Model
  */
 trait ClearsApiCache
 {
@@ -25,7 +28,9 @@ trait ClearsApiCache
             }
         };
 
+        /** @phpstan-ignore-next-line */
         static::saved($flush);
+        /** @phpstan-ignore-next-line */
         static::deleted($flush);
     }
 }

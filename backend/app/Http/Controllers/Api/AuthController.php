@@ -10,7 +10,7 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    private function withAuthCookie($response, string $token)
+    private function withAuthCookie(\Illuminate\Http\JsonResponse $response, string $token): \Illuminate\Http\JsonResponse
     {
         $domain = env('AUTH_COOKIE_DOMAIN');
         if (!$domain && app()->environment('production')) {

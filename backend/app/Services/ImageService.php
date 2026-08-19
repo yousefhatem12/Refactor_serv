@@ -36,7 +36,7 @@ class ImageService
                 $webpContent = ob_get_clean();
                 
                 Storage::disk('local')->put($path, $webpContent);
-                imagedestroy($image);
+                unset($image); // imagedestroy() is deprecated since PHP 8.5; GdImage freed by GC.
                 
                 return $path;
             }
