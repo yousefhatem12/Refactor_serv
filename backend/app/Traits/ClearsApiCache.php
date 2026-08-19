@@ -27,7 +27,7 @@ trait ClearsApiCache
      */
     protected static function bootClearsApiCache(): void
     {
-        /** @var class-string<Model> $self */
+        /** @var class-string<static> $self */
         $self = static::class;
 
         $flush = static function (): void {
