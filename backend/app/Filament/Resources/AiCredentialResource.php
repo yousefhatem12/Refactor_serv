@@ -11,7 +11,6 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Placeholder;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Schemas\Components\Utilities\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -53,7 +52,7 @@ class AiCredentialResource extends Resource
     /**
      * Token to query the provider with: the one being typed, else the stored one.
      */
-    protected static function resolveFormToken(Get $get, ?AiCredential $record): ?string
+    protected static function resolveFormToken(callable $get, ?AiCredential $record): ?string
     {
         $typed = $get('new_api_token');
 
