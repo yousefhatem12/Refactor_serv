@@ -30,7 +30,7 @@ class AiGenerationDashboard extends Page implements HasForms
 
     public static function getNavigationGroup(): ?string 
     { 
-        return app()->getLocale() === 'ar' ? 'أدوات الذكاء الاصطناعي' : 'AI Content Tools'; 
+        return __('AI Content Tools'); 
     }
     
     protected static ?int $navigationSort = 2;
@@ -411,3 +411,4 @@ class AiGenerationDashboard extends Page implements HasForms
         ];
     }
 }
+

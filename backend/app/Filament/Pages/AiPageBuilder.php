@@ -43,7 +43,7 @@ class AiPageBuilder extends Page implements HasForms
 
     public static function getNavigationGroup(): ?string
     {
-        return app()->getLocale() === 'ar' ? 'أدوات الذكاء الاصطناعي' : 'AI Content Tools';
+        return __('AI Content Tools');
     }
 
     public static function getNavigationLabel(): string
@@ -429,3 +429,4 @@ class AiPageBuilder extends Page implements HasForms
         return mb_substr($plain, 0, 120);
     }
 }
+

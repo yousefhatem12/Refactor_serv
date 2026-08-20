@@ -170,7 +170,7 @@ class AdminPanelProvider extends PanelProvider
                 \Filament\Navigation\NavigationGroup::make()
                     ->label(fn () => __('Settings')),
                 \Filament\Navigation\NavigationGroup::make()
-                    ->label('AI Content Tools')
+                    ->label(fn () => __('AI Content Tools'))
                     ->icon('heroicon-o-cpu-chip')
                     ->collapsed(),
                 \Filament\Navigation\NavigationGroup::make()

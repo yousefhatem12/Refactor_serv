@@ -29,7 +29,7 @@ class AiGenerationHistory extends Page implements HasTable
 
     public static function getNavigationGroup(): ?string 
     { 
-        return app()->getLocale() === 'ar' ? 'أدوات الذكاء الاصطناعي' : 'AI Content Tools'; 
+        return __('AI Content Tools'); 
     }
     
     protected static ?int $navigationSort = 4;
@@ -570,3 +570,4 @@ class AiGenerationHistory extends Page implements HasTable
         return redirect(request()->header('Referer') ?? '/admin/ai-generation-history');
     }
 }
+
