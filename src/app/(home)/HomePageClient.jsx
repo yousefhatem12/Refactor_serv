@@ -5,15 +5,20 @@ import Hero from "../components/Home/Hero/Hero";
 import PageSections from "../components/Shared/PageSections";
 import dynamic from "next/dynamic";
 
-const Features = dynamic(() => import("../components/Home/Features/Features"), { ssr: true });
-const Services = dynamic(() => import("../components/Home/Services/Services"), { ssr: true });
-const OnlineWebsite = dynamic(() => import("../components/Home/OnlineWebsite/OnlineWebsite"), { ssr: true });
-const OnlineWebsiteDetails = dynamic(() => import("../components/Home/OnlineWebsite/OnlineWebsiteDetails"), { ssr: true });
+// All dynamic imports use { ssr: false } because:
+// 1. HomePageClient is a "use client" component
+// 2. These components use browser APIs (window, IntersectionObserver, etc.)
+// 3. { ssr: true } inside a client component causes hydration mismatch (React error #418)
+//    because the server renders HTML for them but the client receives mismatched bundles
+const Features = dynamic(() => import("../components/Home/Features/Features"), { ssr: false });
+const Services = dynamic(() => import("../components/Home/Services/Services"), { ssr: false });
+const OnlineWebsite = dynamic(() => import("../components/Home/OnlineWebsite/OnlineWebsite"), { ssr: false });
+const OnlineWebsiteDetails = dynamic(() => import("../components/Home/OnlineWebsite/OnlineWebsiteDetails"), { ssr: false });
 const Earth = dynamic(() => import("../components/Home/Hero/Earth"), { ssr: false });
-const OurBlog = dynamic(() => import("../components/Home/Blog/OurBlog"), { ssr: true });
-const Testimonial = dynamic(() => import("../components/Home/Testimonial/Testimonial"), { ssr: true });
-const ContactUs = dynamic(() => import("../components/Home/ContactUs/ContactUs"), { ssr: true });
-const CTA = dynamic(() => import("../components/Home/CTA/CTA"), { ssr: true });
+const OurBlog = dynamic(() => import("../components/Home/Blog/OurBlog"), { ssr: false });
+const Testimonial = dynamic(() => import("../components/Home/Testimonial/Testimonial"), { ssr: false });
+const ContactUs = dynamic(() => import("../components/Home/ContactUs/ContactUs"), { ssr: false });
+const CTA = dynamic(() => import("../components/Home/CTA/CTA"), { ssr: false });
 const PlanetAstronaut = dynamic(() => import("../components/Home/Shared/PlanetAstronaut"), { ssr: false });
 import { useLanguage } from "../context/LanguageContext";
 import { fetchAPI } from "@/lib/api";
@@ -24,7 +29,9 @@ export default function HomePageClient({ initialHomeData }) {
   const [pageData, setPageData] = useState(initialHomeData);
   const [isPhaseTwo, setIsPhaseTwo] = useState(true);
   const [canScroll, setCanScroll] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
+  // null initial value prevents server/client mismatch (React error #418).
+  // A null check in JSX renders the same on server and client until useEffect fires.
+  const [isMobile, setIsMobile] = useState(null);
   const containerRef = useRef(null);
   const isRtl = language === "ar";
 
