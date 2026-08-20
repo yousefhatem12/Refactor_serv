@@ -17,7 +17,7 @@ class ProjectCategoryResource extends Resource
     protected static bool $shouldRegisterNavigation = false;
     public static function getNavigationGroup(): ?string { return __('Content'); }
     protected static ?int $navigationSort = 4;
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-tag';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-squares-2x2';
 
     public static function getModelLabel(): string
     {

@@ -23,7 +23,7 @@ class ManageHomeHero extends Page implements HasForms
     protected static bool $shouldRegisterNavigation = false;
     public static function getNavigationGroup(): ?string { return __('Home Page'); }
     protected static ?int $navigationSort = 1;
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-sparkles';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-photo';
     public static function getNavigationLabel(): string { return __('Hero Section'); }
     protected string $view = 'filament.pages.manage-home-page';
 

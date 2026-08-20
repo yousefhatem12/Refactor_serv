@@ -17,7 +17,7 @@ use Filament\Tables\Table;
 class NavLinkResource extends Resource
 {
     protected static ?string $model = NavLink::class;
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-bars-3';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-list-bullet';
     public static function getNavigationGroup(): ?string { return __('Header'); }
     protected static ?int $navigationSort = 2;
     public static function getNavigationLabel(): string { return __('Nav Links'); }
