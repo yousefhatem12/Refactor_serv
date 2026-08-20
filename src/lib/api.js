@@ -12,9 +12,61 @@ export const getMediaUrl = (path) => {
   return `${baseUrl}/storage/${normalizedPath}`;
 };
 
-// In-memory cache to store GET promises and their timestamp
+// In-memory cache to store GET promises and their timestamp.
+// WARNING: This cache is shared across ALL requests in Next.js Server-Side Rendering (SSR).
+// It is perfectly safe for public data (services, portfolio, etc.), but MUST NOT be used 
+// for personal/private endpoints. Private endpoints must bypass this cache.
 const apiCache = new Map();
 const CACHE_TTL = 300000; // 5 minutes
+
+/**
+ * Helper to determine the language from options, URL, headers, or cookies.
+ */
+const getCurrentLang = async (endpoint, options) => {
+  let lang = "en";
+  
+  if (options.lang) {
+    return options.lang;
+  }
+
+  try {
+    const tempUrl = new URL(endpoint, "http://localhost");
+    const queryLang = tempUrl.searchParams.get("lang");
+    if (queryLang) return queryLang;
+  } catch (e) {}
+
+  if (typeof window === "undefined") {
+    if (!options.skipHeaders) {
+      try {
+        const { cookies, headers } = await import("next/headers");
+        const headersList = await headers();
+        const xLocale = headersList.get("x-locale");
+        if (xLocale) {
+          return xLocale;
+        }
+        const cookieStore = await cookies();
+        const nextLocale = cookieStore.get("NEXT_LOCALE");
+        if (nextLocale) return nextLocale.value;
+      } catch (error) {
+        // If Next.js PPR or static generation throws a digest error due to accessing dynamic APIs, re-throw it.
+        if (error && (
+          error.message?.includes("prerender") || 
+          error.message?.includes("headers()") || 
+          error.message?.includes("cookies()") || 
+          error.digest?.startsWith("NEXT_") || 
+          error.message?.includes("dynamicIO")
+        )) {
+          throw error;
+        }
+      }
+    }
+  } else {
+    const match = document.cookie.match(new RegExp("(^| )NEXT_LOCALE=([^;]+)"));
+    if (match) return match[2];
+  }
+
+  return lang;
+};
 
 const sanitizeEncryptedPayloads = (data) => {
   if (!data) return data;
@@ -79,48 +131,7 @@ export const getApiPage = (payload) => {
 };
 
 export const fetchAPI = async (endpoint, options = {}) => {
-  let lang = "en";
-  
-  // 1. Try to extract lang from options or endpoint URL query string
-  let queryLang = null;
-  try {
-    const tempUrl = new URL(endpoint, "http://localhost");
-    queryLang = tempUrl.searchParams.get("lang");
-  } catch (e) {}
-
-  if (options.lang) {
-    lang = options.lang;
-  } else if (queryLang) {
-    lang = queryLang;
-  } else if (typeof window === "undefined") {
-    if (!options.skipHeaders) {
-      try {
-        const { cookies, headers } = await import("next/headers");
-        const headersList = await headers();
-        const xLocale = headersList.get("x-locale");
-        if (xLocale) {
-          lang = xLocale;
-        } else {
-          const cookieStore = await cookies();
-          const nextLocale = cookieStore.get("NEXT_LOCALE");
-          if (nextLocale) lang = nextLocale.value;
-        }
-      } catch (error) {
-        if (error && (
-          error.message?.includes("prerender") || 
-          error.message?.includes("headers()") || 
-          error.message?.includes("cookies()") || 
-          error.digest?.startsWith("NEXT_") || 
-          error.message?.includes("dynamicIO")
-        )) {
-          throw error;
-        }
-      }
-    }
-  } else {
-    const match = document.cookie.match(new RegExp("(^| )NEXT_LOCALE=([^;]+)"));
-    if (match) lang = match[2];
-  }
+  const lang = await getCurrentLang(endpoint, options);
 
   const url = new URL(`${API_BASE_URL}${endpoint}`);
   url.searchParams.set("lang", lang);
@@ -148,7 +159,7 @@ export const fetchAPI = async (endpoint, options = {}) => {
 
   const fetchPromise = (async () => {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10-second timeout
+    const timeoutId = setTimeout(() => controller.abort(), 3000); // 3-second timeout (reduced to avoid hanging the static shell)
 
     try {
       const isFormData =

@@ -409,7 +409,7 @@ export default function Features() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
             viewport={{ once: true }}
-            className="w-full mt-20 lg:mt-32 pt-8 md:pt-12 border-t border-white/5 relative"
+            className="w-full mt-20 mb-10 lg:mt-32 pt-8 md:pt-12 border-t border-white/5 relative"
           >
           {/* Creative Top Border Glow */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 max-w-md h-[1px] bg-gradient-to-r from-transparent via-[#D98B50] to-transparent opacity-50"></div>

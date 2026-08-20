@@ -51,10 +51,9 @@ import { AuthProvider } from "./context/AuthContext";
 import { NonceProvider } from "./context/NonceContext";
 
 export async function generateMetadata() {
-  const headersList = await headers();
-  const xLocale = headersList.get("x-locale");
-  const cookieStore = await cookies();
-  const language = xLocale || cookieStore.get("NEXT_LOCALE")?.value || "en";
+  // Use a default language for the static shell to allow PPR to work.
+  // Dynamic pages can still override this metadata.
+  const language = "en";
 
   const [settings, homeData] = await Promise.all([
     getCachedSettings(language),
@@ -162,12 +161,10 @@ async function ProvidersAndContent({ children }) {
 
             {/* Organization & WebSite Schemas */}
             <script
-              nonce={nonce || undefined}
               type="application/ld+json"
               dangerouslySetInnerHTML={{ __html: safeJsonForScript(orgSchema) }}
             />
             <script
-              nonce={nonce || undefined}
               type="application/ld+json"
               dangerouslySetInnerHTML={{ __html: safeJsonForScript(websiteSchema) }}
             />
@@ -202,11 +199,13 @@ export default async function RootLayout({ children }) {
         {customHead}
       </head>
       <body className="min-h-screen flex flex-col relative" suppressHydrationWarning>
-        <Suspense fallback={<Loading />}>
-          <ProvidersAndContent>
-            {children}
-          </ProvidersAndContent>
-        </Suspense>
+        <div id="app-shell">
+          <Suspense fallback={<Loading />}>
+            <ProvidersAndContent>
+              {children}
+            </ProvidersAndContent>
+          </Suspense>
+        </div>
       </body>
     </html>
   );
