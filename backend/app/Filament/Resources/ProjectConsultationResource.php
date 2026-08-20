@@ -25,7 +25,7 @@ class ProjectConsultationResource extends Resource
     public static function getNavigationBadge(): ?string
     {
         return Cache::remember('badge_consultations', 60, fn () =>
-            ProjectConsultation::where('status', 'new')->count() ?: null
+            ProjectConsultation::where('status', 'unread')->count() ?: null
         );
     }
 

@@ -25,7 +25,7 @@ class ContactMessageResource extends Resource
     public static function getNavigationBadge(): ?string
     {
         return Cache::remember('badge_contact_messages', 60, fn () =>
-            ContactMessage::where('status', 'new')->count() ?: null
+            ContactMessage::where('status', 'unread')->count() ?: null
         );
     }
 
