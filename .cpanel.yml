@@ -8,10 +8,12 @@ deployment:
     # 1. Deploy Frontend (Next.js)
     # Copies all files except backend, git config, and dev files to the live folder
     - mkdir -p /home2/serv5eg/public_html/serv5-frontend2026
-    - tar --exclude="backend" --exclude=".git" --exclude="node_modules" --exclude="deleted-backend" -cf - . | (cd /home2/serv5eg/public_html/serv5-frontend2026/ && tar -xf -)
+    - tar --exclude="backend" --exclude=".git" --exclude="node_modules" --exclude="deleted-backend" --exclude=".env.local" --exclude=".env.development" --exclude=".env.development.local" --exclude=".env.test.local" --exclude=".env.production.local" -cf - . | (cd /home2/serv5eg/public_html/serv5-frontend2026/ && tar -xf -)
 
     # 2. Install Frontend Dependencies & Build
     - cd /home2/serv5eg/public_html/serv5-frontend2026 && npm install --production=false
+    # Remove any local dev env file that may have been deployed accidentally
+    - rm -f /home2/serv5eg/public_html/serv5-frontend2026/.env.local
     - cd /home2/serv5eg/public_html/serv5-frontend2026 && npm run build
 
     # 3. Deploy Backend (Laravel)
