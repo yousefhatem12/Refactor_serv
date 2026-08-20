@@ -1,4 +1,4 @@
-// File: D:\intern\serv5-last\test\testsss\serv5-last-last\src\app\blog-sitemap.xml\route.js
+// File: C:\xampp\htdocs\serv5-last-last\src\app\blog-sitemap.xml\route.js
 import * as entry from '../../../../src/app/blog-sitemap.xml/route.js'
 import type { NextRequest } from 'next/server.js'
 

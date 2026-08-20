@@ -119,7 +119,7 @@ self.__SERVER_FILES_MANIFEST={
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "D:\\intern\\serv5-last\\test\\testsss\\serv5-last-last",
+    "outputFileTracingRoot": "C:\\xampp\\htdocs\\serv5-last-last",
     "cacheComponents": false,
     "cacheLife": {
       "default": {
@@ -181,7 +181,7 @@ self.__SERVER_FILES_MANIFEST={
       "proxyPrefetch": "flexible",
       "optimisticClientCache": true,
       "manualClientBasePath": false,
-      "cpus": 7,
+      "cpus": 3,
       "memoryBasedWorkersCount": false,
       "imgOptConcurrency": null,
       "imgOptTimeoutInSeconds": 7,
@@ -319,11 +319,11 @@ self.__SERVER_FILES_MANIFEST={
     "bundlePagesRouterDependencies": false,
     "configFileName": "next.config.mjs",
     "turbopack": {
-      "root": "D:\\intern\\serv5-last\\test\\testsss\\serv5-last-last"
+      "root": "C:\\xampp\\htdocs\\serv5-last-last"
     },
     "distDirRoot": ".next"
   },
-  "appDir": "D:\\intern\\serv5-last\\test\\testsss\\serv5-last-last",
+  "appDir": "C:\\xampp\\htdocs\\serv5-last-last",
   "relativeAppDir": "",
   "files": [
     ".next\\package.json",
