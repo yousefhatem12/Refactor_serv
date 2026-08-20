@@ -22,7 +22,7 @@ class AiCredentialResource extends Resource
     
     public static function getNavigationGroup(): ?string 
     { 
-        return app()->getLocale() === 'ar' ? 'أدوات الذكاء الاصطناعي' : 'AI Content Tools'; 
+        return __('AI Content Tools'); 
     }
     
     protected static ?int $navigationSort = 1;
@@ -30,7 +30,7 @@ class AiCredentialResource extends Resource
 
     public static function getNavigationLabel(): string 
     { 
-        return app()->getLocale() === 'ar' ? 'صلاحيات ومفاتيح الـ API' : 'AI API Credentials'; 
+        return __('AI API Credentials'); 
     }
 
     public static function shouldRegisterNavigation(): bool
@@ -40,7 +40,7 @@ class AiCredentialResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return app()->getLocale() === 'ar' ? 'صلاحية API' : 'AI Credential';
+        return __('AI Credential');
     }
 
     public static function getPluralModelLabel(): string
