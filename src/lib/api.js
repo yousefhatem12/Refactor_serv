@@ -159,7 +159,7 @@ export const fetchAPI = async (endpoint, options = {}) => {
 
   const fetchPromise = (async () => {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3000); // 3-second timeout (reduced to avoid hanging the static shell)
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15-second timeout
 
     try {
       const isFormData =
