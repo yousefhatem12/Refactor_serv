@@ -11,6 +11,7 @@ use App\Http\Requests\StoreQuotationRequest;
 use App\Http\Requests\StoreProjectConsultationRequest;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class ContactController extends BaseApiController
 {
@@ -24,7 +25,7 @@ class ContactController extends BaseApiController
         }
         
         $message = ContactMessage::create($validated);
-        $admins = User::role('super_admin')->get();
+        $admins = Cache::remember('super_admins_notify', 300, fn () => User::role('super_admin')->get());
         
         // Notify admins after the response is sent — decouples notification delivery from form success.
         app()->terminating(static function () use ($message, $admins, $validated): void {
@@ -69,7 +70,7 @@ class ContactController extends BaseApiController
         $validated['files'] = $filePaths;
 
         $quotation = Quotation::create($validated);
-        $admins = User::role('super_admin')->get();
+        $admins = Cache::remember('super_admins_notify', 300, fn () => User::role('super_admin')->get());
         
         // Notify admins after the response is sent.
         app()->terminating(static function () use ($quotation, $admins, $validated): void {
@@ -101,7 +102,7 @@ class ContactController extends BaseApiController
         $validated['user_id'] = Auth::id();
 
         $consultation = ProjectConsultation::create($validated);
-        $admins = User::role('super_admin')->get();
+        $admins = Cache::remember('super_admins_notify', 300, fn () => User::role('super_admin')->get());
         
         // Notify admins after the response is sent.
         app()->terminating(static function () use ($consultation, $admins, $validated): void {

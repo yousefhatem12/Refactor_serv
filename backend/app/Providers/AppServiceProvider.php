@@ -41,6 +41,14 @@ class AppServiceProvider extends ServiceProvider
             return Limit::perMinute(3)->by($request->ip());
         });
 
+        // General rate limit for all public GET endpoints.
+        // Allows normal browsing (120 req/min) while blocking scrapers and
+        // DDoS bursts that bypass Cloudflare. The stricter POST limits above
+        // are applied in addition to this for form/upload endpoints.
+        RateLimiter::for('public-read', function (Request $request) {
+            return Limit::perMinute(120)->by($request->ip());
+        });
+
         // Implicitly grant "super_admin" role all permissions
         \Illuminate\Support\Facades\Gate::before(function ($user, $ability) {
             return $user->hasRole('super_admin') ? true : null;

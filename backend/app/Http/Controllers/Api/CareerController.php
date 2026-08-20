@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Http\Resources\CareerResource;
 use App\Http\Requests\StoreCareerApplicationRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Filament\Notifications\Notification;
 
 class CareerController extends BaseApiController
@@ -59,7 +60,7 @@ class CareerController extends BaseApiController
         $validated = $request->validated();
         $app = CareerApplication::create($validated);
 
-        $admins = User::role('super_admin')->get();
+        $admins = Cache::remember('super_admins_notify', 300, fn () => User::role('super_admin')->get());
 
         // Notify admins after the response is sent — decouples notification from form success.
         app()->terminating(static function () use ($app, $admins, $validated): void {
