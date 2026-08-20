@@ -22,7 +22,7 @@ class ManageContactPage extends Page implements HasForms
     use InteractsWithForms;
 
     protected static bool $shouldRegisterNavigation = false;
-    public static function getNavigationGroup(): ?string { return __('Pages'); }
+    public static function getNavigationGroup(): ?string { return __('Content'); }
     protected static ?int $navigationSort = 6;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-phone-arrow-up-right';
     public static function getNavigationLabel(): string { return __('Contact Us'); }

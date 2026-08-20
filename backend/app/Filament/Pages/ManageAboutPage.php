@@ -22,7 +22,7 @@ class ManageAboutPage extends Page implements HasForms
     use InteractsWithForms;
 
     protected static bool $shouldRegisterNavigation = false;
-    public static function getNavigationGroup(): ?string { return __('Pages'); }
+    public static function getNavigationGroup(): ?string { return __('Content'); }
     protected static ?int $navigationSort = 1;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-information-circle';
     public static function getNavigationLabel(): string { return __('About Us'); }
