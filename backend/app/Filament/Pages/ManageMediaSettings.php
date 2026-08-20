@@ -21,7 +21,7 @@ class ManageMediaSettings extends Page implements HasForms
 
     public static function getNavigationGroup(): ?string
     {
-        return __('System Settings');
+        return __('Settings');
     }
 
     protected static ?int $navigationSort = 70;

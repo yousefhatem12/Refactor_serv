@@ -28,7 +28,7 @@ class ManageFaqPage extends Page implements HasForms, HasTable
     use InteractsWithTable;
 
     protected static bool $shouldRegisterNavigation = false;
-    public static function getNavigationGroup(): ?string { return __('Pages'); }
+    public static function getNavigationGroup(): ?string { return __('Content'); }
     protected static ?int $navigationSort = 5;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-question-mark-circle';
     public static function getNavigationLabel(): string { return __('FAQ Page'); }

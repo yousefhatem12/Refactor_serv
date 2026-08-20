@@ -20,14 +20,14 @@ class SitePages extends Page
 {
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-document-duplicate';
     protected static ?int $navigationSort = 20;
-    public static function getNavigationLabel(): string { return __('Pages'); }
-    public static function getNavigationGroup(): ?string { return __('Pages'); }
+    public static function getNavigationLabel(): string { return __('Content'); }
+    public static function getNavigationGroup(): ?string { return __('Content'); }
 
     protected string $view = 'filament.pages.site-pages';
 
     public function getTitle(): string
     {
-        return __('Pages');
+        return __('Content');
     }
 
     public function getHeading(): string|\Illuminate\Contracts\Support\Htmlable
