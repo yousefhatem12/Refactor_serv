@@ -1,26 +1,21 @@
 # cPanel Deployment Configuration File
-# ----------------------------------------------------
-# Strategy: pre-built .next is committed to git locally,
-# so cPanel only copies files + installs production deps.
-# No build step on server (it was failing silently).
+# Strategy: pre-built .next is committed to git locally.
+# No npm install or build step — node_modules already exists on server.
 
 deployment:
   tasks:
-    # 1. Deploy Frontend (Next.js)
+    # 1. Deploy Frontend (Next.js) — copy everything except heavy/sensitive folders
     - mkdir -p /home2/serv5eg/public_html/serv5-frontend2026
     - tar --exclude="backend" --exclude=".git" --exclude="node_modules" --exclude="deleted-backend" --exclude=".env.local" --exclude=".env.development" --exclude=".env.development.local" --exclude=".env.test.local" --exclude=".env.production.local" -cf - . | (cd /home2/serv5eg/public_html/serv5-frontend2026/ && tar -xf -)
 
-    # 2. Install Production Dependencies Only (no build — .next is pre-built)
-    - export PATH=/home2/serv5eg/nodevenv/public_html/serv5-frontend2026/20/bin:$PATH && cd /home2/serv5eg/public_html/serv5-frontend2026 && npm install --omit=dev
-
-    # 3. Remove any local dev env file that may have been deployed accidentally
+    # 2. Remove any local dev env file that may have been deployed accidentally
     - rm -f /home2/serv5eg/public_html/serv5-frontend2026/.env.local
 
-    # 4. Deploy Backend (Laravel)
+    # 3. Deploy Backend (Laravel)
     - mkdir -p /home2/serv5eg/public_html/serv5-backend2026
     - tar -C backend/ --exclude='./.env' -cf - . | (cd /home2/serv5eg/public_html/serv5-backend2026/ && tar -xf -)
 
-    # 5. Post-Deployment Backend Tasks
+    # 4. Post-Deployment Backend Tasks
     - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan migrate --force
     - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan optimize:clear
     - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan storage:link --force
@@ -28,5 +23,5 @@ deployment:
     - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan route:cache
     - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan view:cache
 
-    # 6. Reload Frontend (Passenger restart)
+    # 5. Reload Frontend (Passenger restart)
     - mkdir -p /home2/serv5eg/public_html/serv5-frontend2026/tmp && touch /home2/serv5eg/public_html/serv5-frontend2026/tmp/restart.txt
