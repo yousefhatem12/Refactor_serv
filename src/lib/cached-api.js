@@ -20,3 +20,21 @@ export async function getCachedHomeData(locale) {
   cacheLife("seconds");
   return fetchAPI(`/pages/home?lang=${locale}`, { skipHeaders: true });
 }
+
+export async function getCachedPage(slug, locale = "en") {
+  "use cache";
+  cacheLife("seconds");
+  return fetchAPI(`/pages/${slug}?lang=${locale}`, { skipHeaders: true });
+}
+
+export async function getCachedService(slug, locale = "en") {
+  "use cache";
+  cacheLife("seconds");
+  return fetchAPI(`/services/${slug}?lang=${locale}`, { skipHeaders: true });
+}
+
+export async function getCachedBlogPost(id, locale = "en") {
+  "use cache";
+  cacheLife("seconds");
+  return fetchAPI(`/blog/${id}?lang=${locale}`, { skipHeaders: true });
+}

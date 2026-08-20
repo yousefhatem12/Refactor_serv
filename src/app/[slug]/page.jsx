@@ -2,35 +2,36 @@ import React, { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { headers } from "next/headers";
 import { fetchAPI } from "../../lib/api";
+import { getCachedPage, getCachedService } from "../../lib/cached-api";
 import DynamicPageClient from "./DynamicPageClient";
 import Loading from "../loading";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  
-  // Note: generateMetadata allows async headers() usage. 
-  // It may suspend PPR but it is the proper way in Next 15+ to get metadata based on cookies/headers.
+
+  // Read headers() outside the cached scope and pass locale as argument.
+  // This follows the cacheComponents pattern for dynamic + cached data.
   const headersList = await headers();
   const lang = headersList.get("x-locale") || "en";
-  
+
   let data;
   try {
     if (slug.startsWith("services-")) {
       const serviceSlug = slug.replace("services-", "");
-      data = await fetchAPI(`/services/${serviceSlug}?lang=${lang}`);
+      data = await getCachedService(serviceSlug, lang);
     } else {
-      data = await fetchAPI(`/pages/${slug}?lang=${lang}`);
+      data = await getCachedPage(slug, lang);
     }
   } catch (err) {
     return {};
   }
-  
+
   const pageData = data?.data || data;
   if (!pageData) return {};
-  
+
   const title = pageData.title?.[lang] || pageData.name || "Serv5";
   const description = pageData.description?.[lang] || pageData.brief || "";
-  
+
   return {
     title,
     description,
