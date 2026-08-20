@@ -1,8 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   cacheComponents: true,
-  // Keep all generated metadata in the document <head> for every user agent.
-  htmlLimitedBots: /.*/,
+  // NOTE: htmlLimitedBots: /.*/ was removed because it conflicts with PPR (cacheComponents).
+  // With PPR, the static shell is built with __next_metadata_boundary__ placeholders for
+  // streaming metadata. Setting htmlLimitedBots: /.*/ forces blocking metadata for ALL
+  // requests, which mismatches the pre-built static shell → React error #419.
+  // Next.js default bot list already covers Google, Bing, Twitter, Slack crawlers.
   poweredByHeader: false,
   images: {
     unoptimized: false,

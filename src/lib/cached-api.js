@@ -3,7 +3,7 @@ import { cacheLife } from "next/cache";
 
 export async function getCachedSettings(locale = "en") {
   "use cache";
-  cacheLife("seconds");
+  cacheLife("minutes");
   return fetchAPI(`/settings?lang=${locale}`, { skipHeaders: true });
 }
 
@@ -17,24 +17,24 @@ export async function getCachedHeadSettings(locale = "en") {
 
 export async function getCachedHomeData(locale) {
   "use cache";
-  cacheLife("seconds");
+  cacheLife("minutes");
   return fetchAPI(`/pages/home?lang=${locale}`, { skipHeaders: true });
 }
 
 export async function getCachedPage(slug, locale = "en") {
   "use cache";
-  cacheLife("seconds");
+  cacheLife("minutes");
   return fetchAPI(`/pages/${slug}?lang=${locale}`, { skipHeaders: true });
 }
 
 export async function getCachedService(slug, locale = "en") {
   "use cache";
-  cacheLife("seconds");
+  cacheLife("minutes");
   return fetchAPI(`/services/${slug}?lang=${locale}`, { skipHeaders: true });
 }
 
 export async function getCachedBlogPost(id, locale = "en") {
   "use cache";
-  cacheLife("seconds");
+  cacheLife("minutes");
   return fetchAPI(`/blog/${id}?lang=${locale}`, { skipHeaders: true });
 }

@@ -34,7 +34,6 @@ const alexandria = Alexandria({
 
 import { headers, cookies } from "next/headers";
 import { fetchAPI, getMediaUrl } from "@/lib/api";
-import { getSeoAlternates } from "@/lib/seo";
 import {
   getCachedHomeData,
   getCachedHeadSettings,
@@ -51,19 +50,30 @@ import { AuthProvider } from "./context/AuthContext";
 import { NonceProvider } from "./context/NonceContext";
 
 export async function generateMetadata() {
-  // Use a default language for the static shell to allow PPR to work.
-  // Dynamic pages can still override this metadata.
+  // IMPORTANT: Do NOT call headers(), cookies(), or getSeoAlternates() here.
+  // This is the ROOT layout generateMetadata — it runs OUTSIDE any Suspense boundary.
+  // Any dynamic API call here (headers, cookies, getSeoAlternates) will pollute the
+  // PPR static shell and cause React error #419 (hydration mismatch) in production.
+  //
+  // Rule: only "use cache" functions with static inputs are allowed here.
+  // Per-route alternates (hreflang) are set in each page's own generateMetadata.
   const language = "en";
 
-  const [settings, homeData] = await Promise.all([
-    getCachedSettings(language),
-    getCachedHomeData(language),
-  ]);
+  let settings = null;
+  let homeData = null;
+  try {
+    [settings, homeData] = await Promise.all([
+      getCachedSettings(language),
+      getCachedHomeData(language),
+    ]);
+  } catch (e) {
+    // API unavailable — use static fallbacks below
+  }
+
   const faviconUrl = settings?.site_favicon
     ? getMediaUrl(settings.site_favicon)
     : "/logo.svg";
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://serv5.com.eg";
-  const alternates = await getSeoAlternates();
 
   const siteTitle = homeData?.seo?.title || settings?.site_title || "Serv5";
   const siteDesc =
@@ -85,7 +95,6 @@ export async function generateMetadata() {
       shortcut: faviconUrl,
       apple: faviconUrl,
     },
-    alternates,
     openGraph: {
       title: siteTitle,
       description: siteDesc,
