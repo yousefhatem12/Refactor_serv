@@ -154,7 +154,15 @@ class AdminPanelProvider extends PanelProvider
                 \Filament\Navigation\NavigationGroup::make()
                     ->label(fn () => __('Home Page')),
                 \Filament\Navigation\NavigationGroup::make()
-                    ->label(fn () => __('Pages')),
+                    ->label(fn () => __('Content'))
+                    ->icon('heroicon-o-document-text'),
+                \Filament\Navigation\NavigationGroup::make()
+                    ->label(fn () => __('Leads'))
+                    ->icon('heroicon-o-inbox-arrow-down')
+                    ->collapsible(false),
+                \Filament\Navigation\NavigationGroup::make()
+                    ->label(fn () => __('Careers'))
+                    ->icon('heroicon-o-briefcase'),
                 \Filament\Navigation\NavigationGroup::make()
                     ->label(fn () => __('Header')),
                 \Filament\Navigation\NavigationGroup::make()

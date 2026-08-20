@@ -21,7 +21,7 @@ class CareerResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __('Pages');
+        return __('Careers');
     }
 
     public static function getNavigationLabel(): string

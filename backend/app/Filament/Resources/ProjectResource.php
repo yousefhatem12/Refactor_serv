@@ -18,7 +18,7 @@ class ProjectResource extends Resource
 {
     protected static ?string $model = Project::class;
     protected static bool $shouldRegisterNavigation = false;
-    public static function getNavigationGroup(): ?string { return __('Pages'); }
+    public static function getNavigationGroup(): ?string { return __('Content'); }
     protected static ?int $navigationSort = 3;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-folder-open';
     public static function getNavigationLabel(): string { return __('Our Work'); }
