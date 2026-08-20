@@ -47,49 +47,45 @@ const ContactMap = () => {
         </div>
 
         <div className="relative z-10 flex flex-col items-center lg:items-start text-center lg:text-left">
-          <div className="flex items-center gap-3">
-            <h2 className="text-5xl md:text-[70px] font-bold leading-tight flex items-center">
+          <div className="flex items-center gap-2 md:gap-3">
+            <h2 className="text-4xl sm:text-5xl md:text-[70px] font-bold leading-tight flex items-center gap-2.5 sm:gap-3 md:gap-4">
               <span className="text-[#FF8A00]">{t("contactFindUs")}</span>
-              <span className="text-white ml-2 md:ml-4">
+              <span className="text-white">
                 {t("contactUsMap")}
               </span>
             </h2>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="45"
-              height="45"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
               strokeWidth="1.5"
-              className="text-white/40 mt-2"
+              className="w-8 h-8 sm:w-9 sm:h-9 md:w-11 md:h-11 text-white/40 mt-1 md:mt-2 shrink-0"
             >
               <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
             </svg>
           </div>
 
-          <div className="flex items-center gap-2 mt-2 md:mt-4">
+          <div className="flex items-center gap-2 md:gap-3 mt-2 md:mt-4">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="35"
-              height="35"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="text-white/40"
+              className="w-6 h-6 sm:w-7 sm:h-7 md:w-9 md:h-9 text-white/40 shrink-0"
             >
               <polyline points="9 18 15 12 9 6"></polyline>
             </svg>
-            <h2 className="text-5xl md:text-[70px] font-bold leading-tight flex items-center">
+            <h2 className="text-4xl sm:text-5xl md:text-[70px] font-bold leading-tight flex items-center gap-2.5 sm:gap-3 md:gap-4">
               {t("contactOnMap")
                 .split(" ")
                 .map((word, index) => (
                   <span
                     key={index}
-                    className={`${index === 1 ? "text-[#FF8A00]" : "text-white"} ${index > 0 ? "ml-2 md:ml-4" : ""}`}
+                    className={index === 0 ? "text-[#FF8A00]" : "text-white"}
                   >
                     {word}
                   </span>
