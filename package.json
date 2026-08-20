@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node -e \"const fs=require('fs'),{execSync}=require('child_process');try{const s=fs.lstatSync('./node_modules');if(s.isSymbolicLink()){const t=fs.readlinkSync('./node_modules');console.log('[prebuild] Detected node_modules symlink → '+t+'. Converting to hard links...');fs.rmSync('./node_modules');execSync('cp -ral '+t+' ./node_modules',{stdio:\\\"inherit\\\"});console.log('[prebuild] Done. node_modules is now a real directory.');}}catch(e){console.log('[prebuild] node_modules is already a real directory.');}\"",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
