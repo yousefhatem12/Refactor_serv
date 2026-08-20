@@ -24,6 +24,7 @@ use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class AiPageBuilder extends Page implements HasForms
@@ -126,7 +127,7 @@ class AiPageBuilder extends Page implements HasForms
                     Select::make('service_id')
                         ->label($isAr ? 'خدمة Serv5 المرتبطة' : 'Related Serv5 service')
                         ->options(fn (): array => Service::query()->where('is_active', true)->get()->mapWithKeys(fn (Service $service): array => [
-                            $service->id => self::localized($service->name, $isAr ? 'ar' : 'en'),
+                            $service->getKey() => self::localized($service->name, $isAr ? 'ar' : 'en'),
                         ])->filter()->all())
                         ->searchable()
                         ->placeholder($isAr ? 'اختياري — لتحسين دقة الحقائق' : 'Optional — improves factual grounding'),
@@ -263,7 +264,7 @@ class AiPageBuilder extends Page implements HasForms
                                 ->orderBy('sort_order')
                                 ->get()
                                 ->mapWithKeys(fn (NavLink $link): array => [
-                                    $link->id => ($link->label[$locale] ?? $link->label['en'] ?? $link->label['ar'] ?? '#' . $link->id),
+                                    $link->getKey() => ($link->label[$locale] ?? $link->label['en'] ?? $link->label['ar'] ?? '#' . $link->getKey()),
                                 ])
                                 ->all();
                             return ['' => ($isAr ? '— لا تضيف للقائمة —' : '— Do not add to nav —')] + $parents;
@@ -345,13 +346,13 @@ class AiPageBuilder extends Page implements HasForms
                 'provider' => $state['provider'],
                 'model' => $state['model'],
                 'brief' => $brief,
-                'created_by' => auth()->id(),
+                'created_by' => Auth::id(),
                 'queued_at' => now()->toIso8601String(),
             ],
         ]);
 
         $generationRequest = AiGenerationRequest::create([
-            'created_by' => auth()->id(),
+            'created_by' => Auth::id(),
             'provider' => $state['provider'],
             'model' => $state['model'],
             'generation_mode' => 'ai_page',
