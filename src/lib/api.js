@@ -163,7 +163,6 @@ export const fetchAPI = async (endpoint, options = {}) => {
         headers["Content-Type"] = "application/json";
       }
 
-      // console.log(`[fetchAPI] Fetching: ${url.toString()}`);
       const response = await fetch(url.toString(), {
         ...options,
         cache: options.cache || "no-store",
@@ -172,9 +171,6 @@ export const fetchAPI = async (endpoint, options = {}) => {
         signal: controller.signal,
       });
       clearTimeout(timeoutId);
-      // console.log(
-      //   `[fetchAPI] Received response for: ${url.toString()} - Status: ${response.status}`,
-      // );
 
       if (!response.ok) {
         const expectedAnonymousAuthFailure =

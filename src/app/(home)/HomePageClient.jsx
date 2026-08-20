@@ -79,7 +79,7 @@ export default function HomePageClient({ initialHomeData }) {
           remainingEndpoints.map((endpoint) => fetchAPI(endpoint)),
         ).then(() => {
           if (isMounted) {
-            console.log("Parallel preloading completed successfully");
+            // Preloading completed
           }
         });
       } catch (error) {

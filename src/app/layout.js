@@ -193,6 +193,7 @@ export default async function RootLayout({ children }) {
   return (
     <html
       lang="en"
+      dir="ltr"
       className={`${montserrat.variable} ${poppins.variable} ${alexandria.variable} ${tsDamasSans.variable} min-h-screen antialiased relative`}
       suppressHydrationWarning
     >
