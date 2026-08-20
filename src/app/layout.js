@@ -33,6 +33,12 @@ const alexandria = Alexandria({
 });
 
 import { headers, cookies } from "next/headers";
+
+// The root layout reads `headers()` to set lang/dir on <html>.
+// This is a dynamic operation that cannot be prerendered — mark it force-dynamic.
+// Actual data fetching below still uses unstable_cache, so performance is preserved.
+export const dynamic = "force-dynamic";
+
 import { fetchAPI, getMediaUrl } from "@/lib/api";
 import { getSeoAlternates } from "@/lib/seo";
 import {
