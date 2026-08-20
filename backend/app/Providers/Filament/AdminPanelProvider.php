@@ -180,6 +180,7 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 AccountWidget::class,
                 \App\Filament\Widgets\StatsOverview::class,
+                \App\Filament\Widgets\RecentLeadsWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
