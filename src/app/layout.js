@@ -182,15 +182,21 @@ async function ProvidersAndContent({ children }) {
 }
 
 export default async function RootLayout({ children }) {
-  const settings = await getCachedHeadSettings("en");
+  // Read locale on the server so lang/dir match the SSR output.
+  // suppressHydrationWarning is kept for browser-extension mismatches only.
+  const headersList = await headers();
+  const locale = headersList.get("x-locale") || "en";
+  const dir = locale === "ar" ? "rtl" : "ltr";
+
+  const settings = await getCachedHeadSettings(locale);
   const customHead = renderCustomHeadCode(settings?.custom_header_code, {
     useNextScript: true,
   });
 
   return (
     <html
-      lang="en"
-      dir="ltr"
+      lang={locale}
+      dir={dir}
       className={`${montserrat.variable} ${poppins.variable} ${alexandria.variable} ${tsDamasSans.variable} min-h-screen antialiased relative`}
       suppressHydrationWarning
     >
