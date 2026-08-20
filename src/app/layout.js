@@ -182,25 +182,35 @@ async function ProvidersAndContent({ children }) {
 }
 
 export default async function RootLayout({ children }) {
-  // Read locale on the server so lang/dir match the SSR output.
-  // suppressHydrationWarning is kept for browser-extension mismatches only.
-  const headersList = await headers();
-  const locale = headersList.get("x-locale") || "en";
-  const dir = locale === "ar" ? "rtl" : "ltr";
+  // IMPORTANT: Do NOT call headers() here in cacheComponents mode.
+  // headers() is a dynamic API that must be inside a Suspense boundary.
+  // The actual locale handling is done in ProvidersAndContent (inside Suspense).
+  //
+  // For lang/dir on <html>: use static defaults + inline script that fires
+  // before React hydrates to set correct values from the URL path.
 
-  const settings = await getCachedHeadSettings(locale);
+  // getCachedHeadSettings uses "use cache" — safe outside Suspense.
+  // Custom head code is site-wide, so "en" locale is fine here.
+  const settings = await getCachedHeadSettings("en");
   const customHead = renderCustomHeadCode(settings?.custom_header_code, {
     useNextScript: true,
   });
 
   return (
     <html
-      lang={locale}
-      dir={dir}
+      lang="en"
+      dir="ltr"
       className={`${montserrat.variable} ${poppins.variable} ${alexandria.variable} ${tsDamasSans.variable} min-h-screen antialiased relative`}
       suppressHydrationWarning
     >
       <head>
+        {/* Fix lang/dir immediately from URL before React hydrates (avoids RTL flash) */}
+        <script
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var p=location.pathname,ar=p.startsWith('/ar')||p==='/ar';if(ar){var h=document.documentElement;h.setAttribute('lang','ar');h.setAttribute('dir','rtl');}}catch(e){}})();`,
+          }}
+        />
         <link rel="preload" href="/logo.svg" as="image" type="image/svg+xml" fetchPriority="high" />
         {customHead}
       </head>
