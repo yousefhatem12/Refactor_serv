@@ -25,7 +25,7 @@ class QuotationResource extends Resource
     public static function getNavigationBadge(): ?string
     {
         return \Illuminate\Support\Facades\Cache::remember('badge_quotations', 60, fn () =>
-            Quotation::where('status', 'pending')->count() ?: null
+            Quotation::where('status', 'unread')->count() ?: null
         );
     }
 

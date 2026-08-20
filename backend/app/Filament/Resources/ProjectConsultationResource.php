@@ -20,12 +20,12 @@ class ProjectConsultationResource extends Resource
     protected static bool $shouldRegisterNavigation = true;
     public static function getNavigationGroup(): ?string { return __('Leads'); }
     protected static ?int $navigationSort = 3;
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-chat-bubble-left-right';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-clipboard-document-list';
 
     public static function getNavigationBadge(): ?string
     {
         return Cache::remember('badge_consultations', 60, fn () =>
-            ProjectConsultation::where('status', 'new')->count() ?: null
+            ProjectConsultation::where('status', 'unread')->count() ?: null
         );
     }
 

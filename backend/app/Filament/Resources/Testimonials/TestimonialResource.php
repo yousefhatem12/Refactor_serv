@@ -20,7 +20,7 @@ class TestimonialResource extends Resource
     protected static bool $shouldRegisterNavigation = false;
     public static function getNavigationGroup(): ?string { return __('Home Page'); }
     protected static ?int $navigationSort = 3;
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-chat-bubble-left-right';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-star';
     public static function getNavigationLabel(): string { return __('Testimonials'); }
 
     public static function getModelLabel(): string

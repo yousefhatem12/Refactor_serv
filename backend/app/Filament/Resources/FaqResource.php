@@ -19,7 +19,7 @@ class FaqResource extends Resource
     protected static bool $shouldRegisterNavigation = false;
     public static function getNavigationGroup(): ?string { return __('Content'); }
     protected static ?int $navigationSort = 6;
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-chat-bubble-left-right';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-question-mark-circle';
 
 
 

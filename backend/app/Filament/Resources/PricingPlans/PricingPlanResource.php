@@ -18,7 +18,7 @@ class PricingPlanResource extends Resource
 {
     protected static ?string $model = PricingPlan::class;
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-credit-card';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-banknotes';
     protected static string|\UnitEnum|null $navigationGroup = null;
     public static function getNavigationGroup(): ?string { return __('Content'); }
     protected static ?int $navigationSort = 10;

@@ -25,7 +25,7 @@ class ServiceResource extends Resource
     protected static bool $shouldRegisterNavigation = true;
     public static function getNavigationGroup(): ?string { return __('Content'); }
     protected static ?int $navigationSort = 2;
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-briefcase';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-cog-6-tooth';
     public static function getNavigationLabel(): string { return __('Services'); }
 
 
