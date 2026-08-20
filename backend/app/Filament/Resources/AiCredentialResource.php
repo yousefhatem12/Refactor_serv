@@ -10,6 +10,8 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Placeholder;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -51,7 +53,7 @@ class AiCredentialResource extends Resource
     /**
      * Token to query the provider with: the one being typed, else the stored one.
      */
-    protected static function resolveFormToken($get, ?AiCredential $record): ?string
+    protected static function resolveFormToken(Get $get, ?AiCredential $record): ?string
     {
         $typed = $get('new_api_token');
 
@@ -142,14 +144,13 @@ class AiCredentialResource extends Resource
                             ->default(false)
                             ->reactive(),
 
-                        Placeholder::make('connection_status')
+                        TextEntry::make('connection_status')
                             ->label($isAr ? 'حالة الاتصال' : 'Connection Status')
-                            ->content(function ($record, \Filament\Schemas\Components\Utilities\Get $get) use ($isAr) {
+                            ->state(function ($record) use ($isAr) {
                                 if (!$record) {
                                     return $isAr ? 'لم ينشأ بعد' : 'Not Created Yet';
                                 }
-                                $active = $get('is_active') ?? $record->is_active;
-                                if (!$active) {
+                                if (!$record->is_active) {
                                     return $isAr ? 'غير نشط' : 'Inactive';
                                 }
                                 if ($record->last_test_status === 'success') {
@@ -162,7 +163,7 @@ class AiCredentialResource extends Resource
                             }),
                     ]),
 
-                \Filament\Schemas\Components\Section::make($isAr ? 'إعدادات متقدمة' : 'Advanced Settings')
+                Section::make($isAr ? 'إعدادات متقدمة' : 'Advanced Settings')
                     ->collapsed()
                     ->schema([
                         TextInput::make('default_language')
@@ -253,7 +254,7 @@ class AiCredentialResource extends Resource
                                 throw new \Exception("No API token set to test connection.");
                             }
 
-                            $provider = \App\Services\Ai\AiProviderManager::getProvider($record->provider);
+                            $provider = \App\Services\Ai\AiProviderManager::getProvider($record->getAttribute('provider'));
                             $success = $provider->testConnection($token);
 
                             $record->update([
@@ -270,11 +271,11 @@ class AiCredentialResource extends Resource
 
                                 // A model that the provider retired keeps returning 400 at
                                 // generation time, so surface it while the key is being tested.
-                                $live = \App\Services\Ai\ModelCatalog::fetch($record->provider, $token, true);
-                                if ($live['source'] === 'live' && $record->default_model && !array_key_exists($record->default_model, $live['models'])) {
+                                $live = \App\Services\Ai\ModelCatalog::fetch($record->getAttribute('provider'), $token, true);
+                                if ($live['source'] === 'live' && $record->getAttribute('default_model') && !array_key_exists($record->getAttribute('default_model'), $live['models'])) {
                                     \Filament\Notifications\Notification::make()
                                         ->title($isAr ? 'الموديل الافتراضي غير مدعوم' : 'Default model no longer supported')
-                                        ->body(($isAr ? 'المزود لا يدعم ' : 'The provider no longer offers ') . $record->default_model
+                                        ->body(($isAr ? 'المزود لا يدعم ' : 'The provider no longer offers ') . $record->getAttribute('default_model')
                                             . ($isAr ? '. المتاح: ' : '. Available: ') . implode(', ', array_slice(array_keys($live['models']), 0, 10)))
                                         ->warning()
                                         ->persistent()
