@@ -12,16 +12,24 @@ use Filament\Forms\Components\Select;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Cache;
 
 class ContactMessageResource extends Resource
 {
     protected static ?string $model = ContactMessage::class;
-    protected static bool $shouldRegisterNavigation = false;
-    public static function getNavigationGroup(): ?string { return __('Pages'); }
-    protected static ?int $navigationSort = 7;
+    protected static bool $shouldRegisterNavigation = true;
+    public static function getNavigationGroup(): ?string { return __('Leads'); }
+    protected static ?int $navigationSort = 1;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-envelope';
 
+    public static function getNavigationBadge(): ?string
+    {
+        return Cache::remember('badge_contact_messages', 60, fn () =>
+            ContactMessage::where('status', 'new')->count() ?: null
+        );
+    }
 
+    public static function getNavigationBadgeColor(): ?string { return 'danger'; }
 
     public static function getModelLabel(): string
     {

@@ -12,14 +12,24 @@ use Filament\Forms\Components\Select;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Cache;
 
 class ProjectConsultationResource extends Resource
 {
     protected static ?string $model = ProjectConsultation::class;
-    protected static bool $shouldRegisterNavigation = false;
-    public static function getNavigationGroup(): ?string { return __('Pages'); }
-    protected static ?int $navigationSort = 9;
+    protected static bool $shouldRegisterNavigation = true;
+    public static function getNavigationGroup(): ?string { return __('Leads'); }
+    protected static ?int $navigationSort = 3;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-chat-bubble-left-right';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return Cache::remember('badge_consultations', 60, fn () =>
+            ProjectConsultation::where('status', 'new')->count() ?: null
+        );
+    }
+
+    public static function getNavigationBadgeColor(): ?string { return 'info'; }
 
     public static function getModelLabel(): string
     {
