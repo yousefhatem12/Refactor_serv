@@ -11,10 +11,13 @@ deployment:
     - tar --exclude="backend" --exclude=".git" --exclude="node_modules" --exclude="deleted-backend" --exclude=".env.local" --exclude=".env.development" --exclude=".env.development.local" --exclude=".env.test.local" --exclude=".env.production.local" -cf - . | (cd /home2/serv5eg/public_html/serv5-frontend2026/ && tar -xf -)
 
     # 2. Install Frontend Dependencies & Build
-    - cd /home2/serv5eg/public_html/serv5-frontend2026 && npm install --production=false
+    # Each task runs in its own subshell — set nodevenv PATH inline.
+    # The nodevenv for this app is at: /home2/serv5eg/nodevenv/public_html/serv5-frontend2026/20/
+    - export PATH=/home2/serv5eg/nodevenv/public_html/serv5-frontend2026/20/bin:$PATH && cd /home2/serv5eg/public_html/serv5-frontend2026 && npm install --production=false
     # Remove any local dev env file that may have been deployed accidentally
     - rm -f /home2/serv5eg/public_html/serv5-frontend2026/.env.local
-    - cd /home2/serv5eg/public_html/serv5-frontend2026 && npm run build
+    # prebuild script in package.json converts node_modules symlink → hard links (fixes Turbopack)
+    - export PATH=/home2/serv5eg/nodevenv/public_html/serv5-frontend2026/20/bin:$PATH && cd /home2/serv5eg/public_html/serv5-frontend2026 && npm run build
 
     # 3. Deploy Backend (Laravel)
     # Copies everything inside backend/ to the live API folder.
