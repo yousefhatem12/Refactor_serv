@@ -21,8 +21,8 @@ function createContentSecurityPolicy(nonce) {
   // In production: remove unsafe-eval and restrict to known script hosts only.
   // In development: keep permissive settings to avoid blocking local tooling.
   const scriptSrc = isDevelopment
-    ? `script-src 'self' 'nonce-${nonce}' 'unsafe-inline' 'unsafe-eval' https: http:`
-    : `script-src 'self' 'nonce-${nonce}' 'unsafe-inline' https://challenges.cloudflare.com`;
+    ? `script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http:`
+    : `script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com`;
 
   // In production: restrict frames to known embed hosts only.
   const frameSrc = isDevelopment
