@@ -1,32 +1,26 @@
 # cPanel Deployment Configuration File
 # ----------------------------------------------------
-# This file automates copying and deploying files from your Git repo
-# to their respective live paths on cPanel when you trigger a deploy.
+# Strategy: pre-built .next is committed to git locally,
+# so cPanel only copies files + installs production deps.
+# No build step on server (it was failing silently).
 
 deployment:
   tasks:
     # 1. Deploy Frontend (Next.js)
-    # Copies all files except backend, git config, and dev files to the live folder
     - mkdir -p /home2/serv5eg/public_html/serv5-frontend2026
     - tar --exclude="backend" --exclude=".git" --exclude="node_modules" --exclude="deleted-backend" --exclude=".env.local" --exclude=".env.development" --exclude=".env.development.local" --exclude=".env.test.local" --exclude=".env.production.local" -cf - . | (cd /home2/serv5eg/public_html/serv5-frontend2026/ && tar -xf -)
 
-    # 2. Install Frontend Dependencies & Build
-    # Each task runs in its own subshell — set nodevenv PATH inline.
-    # The nodevenv for this app is at: /home2/serv5eg/nodevenv/public_html/serv5-frontend2026/20/
-    - export PATH=/home2/serv5eg/nodevenv/public_html/serv5-frontend2026/20/bin:$PATH && cd /home2/serv5eg/public_html/serv5-frontend2026 && npm install --production=false
-    # Remove any local dev env file that may have been deployed accidentally
-    - rm -f /home2/serv5eg/public_html/serv5-frontend2026/.env.local
-    # prebuild script in package.json converts node_modules symlink → hard links (fixes Turbopack)
-    - export PATH=/home2/serv5eg/nodevenv/public_html/serv5-frontend2026/20/bin:$PATH && cd /home2/serv5eg/public_html/serv5-frontend2026 && npm run build
+    # 2. Install Production Dependencies Only (no build — .next is pre-built)
+    - export PATH=/home2/serv5eg/nodevenv/public_html/serv5-frontend2026/20/bin:$PATH && cd /home2/serv5eg/public_html/serv5-frontend2026 && npm install --omit=dev
 
-    # 3. Deploy Backend (Laravel)
-    # Copies everything inside backend/ to the live API folder.
-    # NOTE: .env is excluded — the production .env must already exist on the server
-    # and is never overwritten by deployments.
+    # 3. Remove any local dev env file that may have been deployed accidentally
+    - rm -f /home2/serv5eg/public_html/serv5-frontend2026/.env.local
+
+    # 4. Deploy Backend (Laravel)
     - mkdir -p /home2/serv5eg/public_html/serv5-backend2026
     - tar -C backend/ --exclude='./.env' -cf - . | (cd /home2/serv5eg/public_html/serv5-backend2026/ && tar -xf -)
 
-    # 4. Post-Deployment Backend Tasks
+    # 5. Post-Deployment Backend Tasks
     - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan migrate --force
     - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan optimize:clear
     - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan storage:link --force
@@ -34,5 +28,5 @@ deployment:
     - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan route:cache
     - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan view:cache
 
-    # 5. Reload Frontend (Passenger Node.js Server restart)
+    # 6. Reload Frontend (Passenger restart)
     - mkdir -p /home2/serv5eg/public_html/serv5-frontend2026/tmp && touch /home2/serv5eg/public_html/serv5-frontend2026/tmp/restart.txt

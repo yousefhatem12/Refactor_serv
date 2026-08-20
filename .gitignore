@@ -14,7 +14,10 @@
 /coverage
 
 # next.js
-/.next/
+# /.next/ is intentionally NOT ignored — we commit the pre-built output
+# so cPanel deploys it directly without needing to build on the server.
+# But exclude the webpack cache — those files exceed GitHub's 100MB limit.
+.next/cache/
 /out/
 
 # production
@@ -30,7 +33,7 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files
 .env*
 
 # vercel
@@ -39,9 +42,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# zip files
-*.zip
 
 # Local backup archives
 *.zip

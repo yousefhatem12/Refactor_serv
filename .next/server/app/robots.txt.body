@@ -1,0 +1,47 @@
+User-Agent: *
+Allow: /
+Disallow: /_next/
+Disallow: /_next/static/
+Disallow: /_next/image/
+Disallow: /api/
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /login
+Disallow: /register
+Disallow: /logout
+Disallow: /auth/
+Disallow: /search
+Disallow: /search?*
+Disallow: /bank-accounts
+
+User-Agent: GPTBot
+Disallow: /
+
+User-Agent: ChatGPT-User
+Disallow: /
+
+User-Agent: CCBot
+Disallow: /
+
+User-Agent: Google-Extended
+Disallow: /
+
+User-Agent: anthropic-ai
+Disallow: /
+
+User-Agent: Googlebot
+Allow: /
+Disallow: /_next/
+Disallow: /api/
+Disallow: /admin/
+Disallow: /dashboard/
+
+User-Agent: Bingbot
+Allow: /
+Disallow: /_next/
+Disallow: /api/
+Disallow: /admin/
+Disallow: /dashboard/
+
+Host: http://localhost:3000
+Sitemap: http://localhost:3000/sitemap.xml

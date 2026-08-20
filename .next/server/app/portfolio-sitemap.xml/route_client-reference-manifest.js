@@ -1,0 +1,1 @@
+globalThis.__RSC_MANIFEST=(globalThis.__RSC_MANIFEST||{});globalThis.__RSC_MANIFEST["/portfolio-sitemap.xml/route"]={"moduleLoading":{"prefix":"/_next/"},"ssrModuleMapping":{},"edgeSSRModuleMapping":{},"clientModules":{},"entryCSSFiles":{"C:\\xampp\\htdocs\\serv5-last-last\\src\\app\\portfolio-sitemap.xml\\route":[]},"rscModuleMapping":{},"edgeRscModuleMapping":{}};
