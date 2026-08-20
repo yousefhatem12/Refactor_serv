@@ -42,3 +42,8 @@ next-env.d.ts
 
 # zip files
 *.zip
+
+# Local backup archives
+*.zip
+*.rar
+*.tar.gz
