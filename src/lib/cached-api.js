@@ -1,40 +1,47 @@
 import { fetchAPI } from "./api";
-import { cacheLife } from "next/cache";
+import { unstable_cache } from "next/cache";
 
-export async function getCachedSettings(locale = "en") {
-  "use cache";
-  cacheLife("minutes");
-  return fetchAPI(`/settings?lang=${locale}`, { skipHeaders: true });
-}
+// Revalidate every 60 seconds (equivalent to cacheLife("minutes"))
+const REVALIDATE = 60;
 
-export async function getCachedHeadSettings(locale = "en") {
-  "use cache";
-  // Short-lived caches are excluded from prerendering in Next 16. Keeping the
-  // head cache for minutes lets custom tags be emitted in the initial <head>.
-  cacheLife("minutes");
-  return fetchAPI(`/settings?lang=${locale}`, { skipHeaders: true });
-}
+export const getCachedSettings = unstable_cache(
+  async (locale = "en") =>
+    fetchAPI(`/settings?lang=${locale}`, { skipHeaders: true }),
+  ["settings"],
+  { revalidate: REVALIDATE }
+);
 
-export async function getCachedHomeData(locale) {
-  "use cache";
-  cacheLife("minutes");
-  return fetchAPI(`/pages/home?lang=${locale}`, { skipHeaders: true });
-}
+export const getCachedHeadSettings = unstable_cache(
+  async (locale = "en") =>
+    fetchAPI(`/settings?lang=${locale}`, { skipHeaders: true }),
+  ["head-settings"],
+  { revalidate: REVALIDATE }
+);
 
-export async function getCachedPage(slug, locale = "en") {
-  "use cache";
-  cacheLife("minutes");
-  return fetchAPI(`/pages/${slug}?lang=${locale}`, { skipHeaders: true });
-}
+export const getCachedHomeData = unstable_cache(
+  async (locale = "en") =>
+    fetchAPI(`/pages/home?lang=${locale}`, { skipHeaders: true }),
+  ["home-data"],
+  { revalidate: REVALIDATE }
+);
 
-export async function getCachedService(slug, locale = "en") {
-  "use cache";
-  cacheLife("minutes");
-  return fetchAPI(`/services/${slug}?lang=${locale}`, { skipHeaders: true });
-}
+export const getCachedPage = unstable_cache(
+  async (slug, locale = "en") =>
+    fetchAPI(`/pages/${slug}?lang=${locale}`, { skipHeaders: true }),
+  ["page"],
+  { revalidate: REVALIDATE }
+);
 
-export async function getCachedBlogPost(id, locale = "en") {
-  "use cache";
-  cacheLife("minutes");
-  return fetchAPI(`/blog/${id}?lang=${locale}`, { skipHeaders: true });
-}
+export const getCachedService = unstable_cache(
+  async (slug, locale = "en") =>
+    fetchAPI(`/services/${slug}?lang=${locale}`, { skipHeaders: true }),
+  ["service"],
+  { revalidate: REVALIDATE }
+);
+
+export const getCachedBlogPost = unstable_cache(
+  async (id, locale = "en") =>
+    fetchAPI(`/blog/${id}?lang=${locale}`, { skipHeaders: true }),
+  ["blog-post"],
+  { revalidate: REVALIDATE }
+);
