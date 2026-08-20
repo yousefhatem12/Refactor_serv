@@ -43,6 +43,11 @@ export const LanguageProvider = ({ children, defaultLanguage = "en" }) => {
         const data = await fetchAPI(`/settings?lang=${language}`);
         if (mounted && data) {
           setSettings(data);
+          const path = window.location.pathname;
+          if (path === "/" || path === "/ar" || path === "/en" || path === "/ar/" || path === "/en/") {
+            const fallbackTitle = language === "ar" ? "سيرف فايف | Serv5" : "Serv5";
+            document.title = data.site_title || fallbackTitle;
+          }
         }
       } catch (err) {
         console.error("Error loading settings in LanguageContext:", err);

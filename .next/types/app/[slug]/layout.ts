@@ -1,4 +1,4 @@
-// File: C:\xampp\htdocs\serv5-last-last\src\app\[slug]\layout.jsx
+// File: D:\intern\serv5-last\test\testsss\serv5-last-last\src\app\[slug]\layout.jsx
 import * as entry from '../../../../src/app/[slug]/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

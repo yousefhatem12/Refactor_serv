@@ -53,6 +53,9 @@ export default function HomePageClient({ initialHomeData }) {
           if (JSON.stringify(pageData) !== JSON.stringify(actualHomeData)) {
             setPageData(actualHomeData);
           }
+          if (actualHomeData?.seo?.title || actualHomeData?.title) {
+            document.title = actualHomeData.seo?.title || actualHomeData.title;
+          }
           if (typeof window !== "undefined") {
             try {
               localStorage.setItem(

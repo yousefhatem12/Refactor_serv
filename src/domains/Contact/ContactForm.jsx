@@ -127,11 +127,11 @@ const ContactForm = () => {
         >
           <h2 className="text-2xl font-bold text-white mb-6 text-center">{t("mustLogin")}</h2>
           
-          <div className="inline-flex p-1 rounded-full bg-white/[0.03] border border-white/10 mb-8 self-center">
+          <div className="flex flex-col sm:inline-flex sm:flex-row p-1.5 sm:p-1 rounded-2xl sm:rounded-full bg-white/[0.03] border border-white/10 mb-8 w-full sm:w-auto self-center gap-2 sm:gap-0">
             <button 
               type="button"
               onClick={() => { setAuthMode("login"); setStatus(null); }}
-              className={`px-6 py-2 rounded-full text-xs md:text-sm font-semibold transition-all duration-300 ${
+              className={`w-full sm:w-auto px-6 py-2.5 sm:py-2 rounded-xl sm:rounded-full text-xs md:text-sm font-semibold transition-all duration-300 ${
                 authMode === 'login' 
                   ? 'bg-gradient-to-r from-[#FF8A00] to-[#FF6A00] text-white shadow-[0_4px_15px_rgba(255,138,0,0.3)]' 
                   : 'text-white/60 hover:text-white hover:bg-white/5'
@@ -142,7 +142,7 @@ const ContactForm = () => {
             <button 
               type="button"
               onClick={() => { setAuthMode("register"); setStatus(null); }}
-              className={`px-6 py-2 rounded-full text-xs md:text-sm font-semibold transition-all duration-300 ${
+              className={`w-full sm:w-auto px-6 py-2.5 sm:py-2 rounded-xl sm:rounded-full text-xs md:text-sm font-semibold transition-all duration-300 ${
                 authMode === 'register' 
                   ? 'bg-gradient-to-r from-[#FF8A00] to-[#FF6A00] text-white shadow-[0_4px_15px_rgba(255,138,0,0.3)]' 
                   : 'text-white/60 hover:text-white hover:bg-white/5'

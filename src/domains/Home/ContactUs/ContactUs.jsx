@@ -184,22 +184,24 @@ const ContactUs = () => {
               <h2 className="text-base md:text-xl font-bold text-white mb-4 text-center">
                 {t("mustLogin")}
               </h2>
-              <div className="flex justify-center gap-4 mb-6 lg:flex-row flex-col">
+              <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mb-6">
                 <button
+                  type="button"
                   onClick={() => {
                     setAuthMode("login");
                     setStatus(null);
                   }}
-                  className={`px-4 py-2 rounded-full transition-all text-sm ${authMode === "login" ? "bg-[#FF8A00] text-white" : "bg-white/10 text-gray-400"}`}
+                  className={`w-full sm:w-auto px-6 py-2.5 sm:py-2 rounded-xl sm:rounded-full transition-all text-sm font-semibold ${authMode === "login" ? "bg-[#FF8A00] text-white shadow-[0_0_15px_rgba(255,138,0,0.3)]" : "bg-white/10 text-gray-400 hover:text-white"}`}
                 >
                   {t("loginNow")}
                 </button>
                 <button
+                  type="button"
                   onClick={() => {
                     setAuthMode("register");
                     setStatus(null);
                   }}
-                  className={`px-4 py-2 rounded-full transition-all text-sm ${authMode === "register" ? "bg-[#FF8A00] text-white" : "bg-white/10 text-gray-400"}`}
+                  className={`w-full sm:w-auto px-6 py-2.5 sm:py-2 rounded-xl sm:rounded-full transition-all text-sm font-semibold ${authMode === "register" ? "bg-[#FF8A00] text-white shadow-[0_0_15px_rgba(255,138,0,0.3)]" : "bg-white/10 text-gray-400 hover:text-white"}`}
                 >
                   {t("registerNow")}
                 </button>

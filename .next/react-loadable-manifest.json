@@ -27,7 +27,7 @@
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/ContactUs/ContactUs": {
     "id": 1672,
     "files": [
-      "static/chunks/1672.c7220fd3b59b27c7.js"
+      "static/chunks/1672.f8611250afe2c9d0.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/Features/Features": {
@@ -79,7 +79,7 @@
   "app\\context\\LanguageContext.jsx -> @/lib/api": {
     "id": 8863,
     "files": [
-      "static/chunks/8863.3404b11590cd7a5a.js"
+      "static/chunks/8863.ed3e5944038a0604.js"
     ]
   }
 }
