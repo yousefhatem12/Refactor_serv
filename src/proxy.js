@@ -18,11 +18,11 @@ function createContentSecurityPolicy(nonce) {
     ? " http://localhost:8000 http://127.0.0.1:8000"
     : "";
 
-  // In production: remove unsafe-eval and restrict to known script hosts only.
-  // In development: keep permissive settings to avoid blocking local tooling.
+  // In production: Cloudflare Turnstile requires 'unsafe-eval' to run its
+  // challenge logic. Allow it alongside the known Cloudflare script host.
   const scriptSrc = isDevelopment
     ? `script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http:`
-    : `script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com`;
+    : `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com`;
 
   // In production: restrict frames to known embed hosts only.
   const frameSrc = isDevelopment
