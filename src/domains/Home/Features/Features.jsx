@@ -465,7 +465,7 @@ export default function Features() {
                   partnersRef.current.scrollLeft = scrollLeftState - walk;
                 }}
                 onMouseEnter={() => setIsHovered(true)}
-                className={`flex items-center justify-start gap-6 sm:gap-8 md:gap-12 lg:gap-16 overflow-x-auto scrollbar-hide flex-nowrap select-none ${isDragging ? "cursor-grabbing" : "cursor-grab"}`}
+                className={`flex items-center justify-start gap-8 sm:gap-8 md:gap-12 lg:gap-16 overflow-x-auto scrollbar-hide flex-nowrap select-none ${isDragging ? "cursor-grabbing" : "cursor-grab"}`}
                 style={{ msOverflowStyle: "none", scrollbarWidth: "none" }}
               >
                 {
@@ -480,7 +480,7 @@ export default function Features() {
                         src={partner}
                         alt={`Partner ${index + 1}`}
                         draggable="false"
-                        className="h-9 sm:h-11 md:h-15 lg:h-18 w-auto object-contain opacity-60 group-hover:opacity-100 transition-all duration-300 pointer-events-none"
+                        className="h-14 sm:h-14 md:h-16 lg:h-18 w-auto object-contain opacity-60 group-hover:opacity-100 transition-all duration-300 pointer-events-none"
                         style={
                           partner.includes("/Features/")
                             ? { filter: "brightness(0) invert(1)" }

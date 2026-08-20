@@ -148,7 +148,7 @@ const ContactUs = () => {
           className="flex flex-col"
         >
           <div className="flex items-center gap-4 mb-4">
-            <h2 className="text-2xl md:text-4xl font-black text-white">
+            <h2 className="text-lg md:text-3xl lg:text-4xl font-black text-white leading-tight">
               {t("getInTouch1")}{" "}
               <span className="text-[#FF8A00]">{t("getInTouch2")}</span>
             </h2>
@@ -175,16 +175,16 @@ const ContactUs = () => {
             </motion.svg>
           </div>
 
-          <p className="text-gray-400 mb-8 max-w-lg leading-relaxed">
+          <p className="text-sm md:text-base text-gray-400 mb-8 max-w-lg leading-relaxed">
             {t("contactDesc")}
           </p>
 
           {!user ? (
             <div className="mb-12 border border-white/10 rounded-md p-6 bg-[#0F172A]/40">
-              <h2 className="text-xl font-bold text-white mb-4 text-center">
+              <h2 className="text-base md:text-xl font-bold text-white mb-4 text-center">
                 {t("mustLogin")}
               </h2>
-              <div className="flex justify-center gap-4 mb-6">
+              <div className="flex justify-center gap-4 mb-6 lg:flex-row flex-col">
                 <button
                   onClick={() => {
                     setAuthMode("login");
