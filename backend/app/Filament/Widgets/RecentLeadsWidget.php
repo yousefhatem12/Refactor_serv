@@ -17,7 +17,7 @@ class RecentLeadsWidget extends BaseWidget
     public function table(Table $table): Table
     {
         return $table
-            ->heading(__('Recent Submissions / آخر الطلبات الواردة'))
+            ->heading(__('Recent Submissions'))
             ->description(__('Last 10 messages, quotations and consultations — sorted by newest'))
             ->query(
                 ContactMessage::query()
@@ -34,7 +34,7 @@ class RecentLeadsWidget extends BaseWidget
             )
             ->columns([
                 Tables\Columns\TextColumn::make('type')
-                    ->label(__('Type / النوع'))
+                    ->label(__('Type'))
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'contact'      => 'info',
@@ -52,17 +52,17 @@ class RecentLeadsWidget extends BaseWidget
                     }),
 
                 Tables\Columns\TextColumn::make('name')
-                    ->label(__('Name / الاسم'))
+                    ->label(__('Name'))
                     ->searchable()
                     ->weight(\Filament\Support\Enums\FontWeight::Medium),
 
                 Tables\Columns\TextColumn::make('email')
-                    ->label(__('Email / البريد'))
+                    ->label(__('Email'))
                     ->copyable()
                     ->color('gray'),
 
                 Tables\Columns\TextColumn::make('status')
-                    ->label(__('Status / الحالة'))
+                    ->label(__('Status'))
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'unread', 'pending' => 'danger',
@@ -73,7 +73,7 @@ class RecentLeadsWidget extends BaseWidget
                     }),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label(__('Received / وصل'))
+                    ->label(__('Received'))
                     ->since()
                     ->sortable(),
             ])
