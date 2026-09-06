@@ -94,9 +94,6 @@ class PostResource extends Resource
                             ->fileAttachmentsDisk('public')
                             ->fileAttachmentsDirectory('blog/content')
                             ->fileAttachmentsVisibility('public')
-                            ->preventFileAttachmentPathTampering(
-                                allowFilePathUsing: fn (string $file): bool => str_starts_with($file, 'blog/content/'),
-                            )
                             ->resizableImages()
                             ->columnSpanFull(),
                         RichEditor::make('content.ar')
@@ -106,9 +103,6 @@ class PostResource extends Resource
                             ->fileAttachmentsDisk('public')
                             ->fileAttachmentsDirectory('blog/content')
                             ->fileAttachmentsVisibility('public')
-                            ->preventFileAttachmentPathTampering(
-                                allowFilePathUsing: fn (string $file): bool => str_starts_with($file, 'blog/content/'),
-                            )
                             ->resizableImages()
                             ->columnSpanFull(),
                         FileUpload::make('image')
@@ -119,7 +113,7 @@ class PostResource extends Resource
                         Select::make('blog_category_id')
                             ->label($isAr ? 'التصنيف' : 'Category')
                             ->options(fn () => \App\Models\BlogCategory::all()->mapWithKeys(fn ($item) => [
-                                $item->id => $item->name[app()->getLocale()] ?? $item->name['en'] ?? ''
+                                $item->id => is_array($item->name) ? ($item->name[app()->getLocale()] ?? $item->name['en'] ?? '') : $item->name
                             ]))
                             ->searchable()
                             ->required(),

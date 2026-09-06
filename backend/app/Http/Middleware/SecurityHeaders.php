@@ -22,14 +22,15 @@ class SecurityHeaders
             // Filament/Livewire evaluates wire-* expressions in the admin panel.
             // Keep this exception limited to the authenticated admin surface and
             // Livewire transport; public/backend pages remain eval-free.
-            $isAdminSurface = $request->is('admin', 'admin/*', 'livewire/*');
+            $isAdminSurface = $request->is('admin', 'admin/*', 'livewire/*', 'livewire-*/*');
             $scriptSources = $isAdminSurface
                 ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
                 : "script-src 'self' 'unsafe-inline'";
 
             $contentSecurityPolicy = "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'; " .
-                $scriptSources . "; style-src 'self' 'unsafe-inline'; " .
-                "img-src 'self' data: blob: https:; font-src 'self' data: https:; " .
+                $scriptSources . "; style-src 'self' 'unsafe-inline' https://fonts.bunny.net; " .
+                "worker-src 'self' blob:; " .
+                "img-src 'self' data: blob: https:; font-src 'self' data: https: https://fonts.bunny.net; " .
                 "connect-src 'self' https:; frame-src 'self' https:; media-src 'self' https:; upgrade-insecure-requests";
         }
 
