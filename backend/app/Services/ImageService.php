@@ -8,11 +8,10 @@ use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class ImageService
 {
-    public static function convertToWebp(TemporaryUploadedFile|UploadedFile $file, string $directory): string
+    public static function convertToWebp(TemporaryUploadedFile|UploadedFile $file, string $directory, string $disk = 'public'): string
     {
         $image = null;
         $extension = strtolower($file->getClientOriginalExtension());
-        $content = $file->get();
 
         try {
             if (in_array($extension, ['jpg', 'jpeg'])) {
@@ -23,8 +22,7 @@ class ImageService
                 imagealphablending($image, true);
                 imagesavealpha($image, true);
             } elseif ($extension === 'webp') {
-                // Already webp, save to private disk.
-                return $file->store($directory, 'local');
+                return $file->store($directory, $disk);
             }
 
             if ($image) {
@@ -35,15 +33,15 @@ class ImageService
                 imagewebp($image, null, 80);
                 $webpContent = ob_get_clean();
                 
-                Storage::disk('local')->put($path, $webpContent);
+                Storage::disk($disk)->put($path, $webpContent);
                 unset($image); // imagedestroy() is deprecated since PHP 8.5; GdImage freed by GC.
                 
                 return $path;
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // Fallback to default storage if conversion fails
         }
 
-        return $file->store($directory, 'local');
+        return $file->store($directory, $disk);
     }
 }

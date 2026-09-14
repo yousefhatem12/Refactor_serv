@@ -57,6 +57,7 @@ class ProjectResource extends Resource
                             ->label('Description (Arabic)')->nullable(),
                         FileUpload::make('image')
                             ->image()
+                            ->disk('public')
                             ->directory('portfolio')
                             ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'portfolio')),
                         TextInput::make('client')
@@ -79,7 +80,7 @@ class ProjectResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\ImageColumn::make('image')->disk('public'),
 
                 Tables\Columns\TextColumn::make('name.en')
                     ->label('Name')

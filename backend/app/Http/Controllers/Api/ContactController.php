@@ -60,7 +60,7 @@ class ContactController extends BaseApiController
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
                 try {
-                    $path = \App\Services\ImageService::convertToWebp($file, 'quotations');
+                    $path = \App\Services\ImageService::convertToWebp($file, 'quotations', 'local');
                 } catch (\Exception $e) {
                     $path = $file->store('quotations', 'local');
                 }

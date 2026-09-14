@@ -108,8 +108,10 @@ class PostResource extends Resource
                         FileUpload::make('image')
                             ->label($isAr ? 'الصورة' : 'Image')
                             ->image()
+                            ->disk('public')
+                            ->visibility('public')
                             ->directory('blog')
-                            ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'blog')),
+                            ->saveUploadedFileUsing(fn ($file) => \App\Services\ImageService::convertToWebp($file, 'blog', 'public')),
                         Select::make('blog_category_id')
                             ->label($isAr ? 'التصنيف' : 'Category')
                             ->options(fn () => \App\Models\BlogCategory::all()->mapWithKeys(fn ($item) => [
@@ -154,7 +156,8 @@ class PostResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('image')
-                    ->label($isAr ? 'الصورة' : 'Image'),
+                    ->label($isAr ? 'الصورة' : 'Image')
+                    ->disk('public'),
                 Tables\Columns\TextColumn::make($isAr ? 'title.ar' : 'title.en')
                     ->label($isAr ? 'العنوان' : 'Title')
                     ->searchable()
