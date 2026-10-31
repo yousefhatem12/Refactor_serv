@@ -1,16 +1,23 @@
 <?php
 
-$allowedOrigins = array_values(array_filter(array_map(
-    'trim',
-    explode(',', env('CORS_ALLOWED_ORIGINS', 'https://serv5.com.eg,https://www.serv5.com.eg'))
-)));
+// 1. Default allowed origins across production and local frontend development
+$defaultOrigins = [
+    'https://serv5.com.eg',
+    'https://www.serv5.com.eg',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://localhost:3001',
+    'http://127.0.0.1:3001',
+];
 
-if ($allowedOrigins === [] || in_array('*', $allowedOrigins, true)) {
-    $allowedOrigins = ['https://serv5.com.eg', 'https://www.serv5.com.eg'];
-    if (in_array(env('APP_ENV', 'production'), ['local', 'testing'], true)) {
-        $allowedOrigins[] = 'http://localhost:3000';
-    }
-}
+// 2. Read additional origins from .env (ignoring wildcard '*' since supports_credentials is true)
+$envOrigins = array_values(array_filter(
+    array_map('trim', explode(',', (string) env('CORS_ALLOWED_ORIGINS', ''))),
+    static fn (string $origin): bool => $origin !== '' && $origin !== '*'
+));
+
+// Merge without duplicates
+$allowedOrigins = array_values(array_unique(array_merge($defaultOrigins, $envOrigins)));
 
 return [
 
@@ -18,28 +25,40 @@ return [
     |--------------------------------------------------------------------------
     | Cross-Origin Resource Sharing (CORS) Configuration
     |--------------------------------------------------------------------------
-    |
-    | Here you may configure your settings for cross-origin resource sharing
-    | or "CORS". This determines what cross-origin operations may execute
-    | in web browsers. You are free to adjust these settings as needed.
-    |
-    | To learn more: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
-    |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'paths' => [
+        'api/*',
+        'sanctum/csrf-cookie',
+        'login',
+        'logout',
+        'register',
+    ],
 
-    'allowed_methods' => ['GET', 'POST', 'OPTIONS'],
+    'allowed_methods' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 
     'allowed_origins' => $allowedOrigins,
 
-    'allowed_origins_patterns' => [],
+    'allowed_origins_patterns' => [
+        '#^https?://(localhost|127\.0\.0\.1)(:\d+)?$#',
+    ],
 
-    'allowed_headers' => ['Accept', 'Authorization', 'Content-Type', 'Origin', 'X-Requested-With'],
+    'allowed_headers' => [
+        'Accept',
+        'Accept-Language',
+        'Authorization',
+        'Content-Type',
+        'Origin',
+        'X-Requested-With',
+        'X-XSRF-TOKEN',
+        'X-Socket-ID',
+    ],
 
-    'exposed_headers' => [],
+    'exposed_headers' => [
+        'Authorization',
+    ],
 
-    'max_age' => 7200,
+    'max_age' => 86400,
 
     'supports_credentials' => true,
 

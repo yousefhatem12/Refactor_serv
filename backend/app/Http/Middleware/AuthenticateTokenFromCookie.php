@@ -39,7 +39,17 @@ class AuthenticateTokenFromCookie
             $allowed[] = rtrim($request->getSchemeAndHttpHost(), '/');
             $allowed[] = rtrim((string) config('app.url'), '/');
 
-            if (! in_array($origin, $allowed, true)) {
+            $matchedOrigin = in_array($origin, $allowed, true);
+            if (! $matchedOrigin) {
+                foreach ((array) config('cors.allowed_origins_patterns', []) as $pattern) {
+                    if (is_string($pattern) && $pattern !== '' && @preg_match($pattern, $origin) === 1) {
+                        $matchedOrigin = true;
+                        break;
+                    }
+                }
+            }
+
+            if (! $matchedOrigin) {
                 return false;
             }
         }

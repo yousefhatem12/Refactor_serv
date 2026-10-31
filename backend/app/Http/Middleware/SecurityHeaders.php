@@ -54,9 +54,18 @@ class SecurityHeaders
             header_remove('Server');
         }
 
-        // Public GET API cache headers
+        // Public GET API cache headers (preserve existing Vary headers such as Origin from HandleCors)
         if ($request->isMethod('GET') && $request->is('api/v1/*') && ! $request->is('api/v1/me')) {
-            $response->headers->set('Vary', 'Accept-Language');
+            $existingVary = $response->headers->get('Vary');
+            $varyHeaders = $existingVary ? array_values(array_filter(array_map('trim', explode(',', $existingVary)))) : [];
+            if (! in_array('Accept-Language', $varyHeaders, true)) {
+                $varyHeaders[] = 'Accept-Language';
+            }
+            if (! in_array('Origin', $varyHeaders, true)) {
+                $varyHeaders[] = 'Origin';
+            }
+            $response->headers->set('Vary', implode(', ', $varyHeaders));
+
             if ($response->getStatusCode() === 200 && ! $response->headers->has('Cache-Control')) {
                 $response->headers->set('Cache-Control', 'public, max-age=60, s-maxage=300');
             }
