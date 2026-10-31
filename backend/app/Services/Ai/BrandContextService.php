@@ -93,13 +93,15 @@ class BrandContextService
         if ($websiteWide) {
             $articles = Post::query()
                 ->where('is_published', true)
-                ->get(['slug', 'title', 'content', 'seo_description'])
+                ->latest('id')
+                ->limit(100)
+                ->get(['slug', 'title', 'seo_title', 'seo_description'])
                 ->map(function (Post $post) use ($languages, $queryTerms): array {
                     $localized = [];
                     foreach ($languages as $language) {
                         $localized[$language] = [
                             'title' => self::localized($post->title, $language, 160),
-                            'summary' => self::localized($post->seo_description ?: $post->content, $language, 420),
+                            'summary' => self::localized($post->seo_description ?: $post->seo_title ?: $post->title, $language, 420),
                         ];
                     }
 
@@ -110,7 +112,7 @@ class BrandContextService
                         'localized' => $localized,
                         '_score' => self::overlap($queryTerms, self::terms(self::flatten([
                             $post->title,
-                            $post->content,
+                            $post->seo_title,
                             $post->seo_description,
                         ]))),
                     ];

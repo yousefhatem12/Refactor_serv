@@ -20,6 +20,11 @@ class ManageFooter extends Page implements HasForms
 {
     use InteractsWithForms;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->hasRole('super_admin') ?? false;
+    }
+
     public static function getNavigationGroup(): ?string { return __('Footer'); }
     protected static ?int $navigationSort = 1;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-bars-3-bottom-right';

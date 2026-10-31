@@ -18,41 +18,80 @@ class CareerController extends BaseApiController
         $lang = $this->getLang();
         $department = $request->query('department');
         $search = $request->query('search');
-        $page = $this->pageNumber($request);
-        $perPage = $this->perPage($request, 9);
+        $page = $this->pageNumber($request, 1);
+        $perPage = $this->perPage($request, 12);
+        $ver = $this->cacheVersion('careers');
 
-        $query = Career::where('is_active', true)->orderBy('id', 'desc');
+        $deptKey = $this->sanitizeSlugParam($department);
+        $searchClean = is_string($search) ? trim(mb_substr($search, 0, 100)) : '';
 
-        if ($department && strtolower($department) !== 'all') {
-            $query->where('department', $department);
-        }
+        $buildResponse = function () use ($department, $searchClean, $page, $perPage, $request, $ver) {
+            $query = Career::where('is_active', true)
+                ->select(['id', 'department', 'title', 'location', 'salary'])
+                ->orderBy('id', 'desc');
 
-        if ($search) {
-            $search = strtolower($search);
-            $query->where(function ($q) use ($search) {
-                $q->where('title->en', 'like', "%{$search}%")
-                  ->orWhere('title->ar', 'like', "%{$search}%")
-                  ->orWhere('description->en', 'like', "%{$search}%")
-                  ->orWhere('description->ar', 'like', "%{$search}%")
-                  ->orWhere('department', 'like', "%{$search}%");
+            if ($department && strtolower((string) $department) !== 'all') {
+                $query->where('department', $department);
+            }
+
+            if ($searchClean !== '') {
+                $escaped = addcslashes(strtolower($searchClean), '%_\\');
+                $query->where(function ($q) use ($escaped) {
+                    $q->where('title->en', 'like', "%{$escaped}%")
+                      ->orWhere('title->ar', 'like', "%{$escaped}%")
+                      ->orWhere('description->en', 'like', "%{$escaped}%")
+                      ->orWhere('description->ar', 'like', "%{$escaped}%")
+                      ->orWhere('department', 'like', "%{$escaped}%");
+                });
+            }
+
+            $uniqueDepts = Cache::remember("careers:v{$ver}:departments", 3600, static function () {
+                return Career::where('is_active', true)->distinct()->pluck('department')->filter()->values()->toArray();
             });
-        }
 
-        $uniqueDepts = Career::where('is_active', true)->distinct()->pluck('department')->filter()->values();
+            $careersPaginated = $query->paginate($perPage, ['*'], 'page', $page);
 
-        if ($page) {
-            $careersPaginated = $query->paginate($perPage);
-            return response()->json([
-                'data' => CareerResource::collection($careersPaginated->items()),
+            return [
+                'data' => CareerResource::collection($careersPaginated->items())->resolve($request),
                 'current_page' => $careersPaginated->currentPage(),
                 'last_page' => $careersPaginated->lastPage(),
+                'total' => $careersPaginated->total(),
                 'has_more' => $careersPaginated->hasMorePages(),
                 'departments' => $uniqueDepts,
-            ]);
+            ];
+        };
+
+        if ($searchClean !== '') {
+            return response()->json($buildResponse());
         }
 
-        $careers = $query->get();
-        return response()->json(CareerResource::collection($careers));
+        $cacheKey = "careers:v{$ver}:{$lang}:dept_{$deptKey}:page_{$page}:per_{$perPage}";
+        $data = Cache::remember($cacheKey, 3600, $buildResponse);
+
+        return response()->json($data);
+    }
+
+    public function show(Request $request, int $id)
+    {
+        $lang = $this->getLang();
+        $ver = $this->cacheVersion('careers');
+        $cacheKey = "careers:v{$ver}:show:{$id}:{$lang}";
+
+        $data = Cache::remember($cacheKey, 3600, function () use ($id, $request) {
+            $career = Career::where('is_active', true)->find($id);
+            if (! $career) {
+                return null;
+            }
+
+            return (new CareerResource($career))->resolve($request);
+        });
+
+        if ($data === null) {
+            Cache::forget($cacheKey);
+            return response()->json(['message' => 'Career not found'], 404);
+        }
+
+        return response()->json(['data' => $data]);
     }
 
     public function apply(StoreCareerApplicationRequest $request)

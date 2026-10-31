@@ -12,6 +12,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $proxies = $_ENV['TRUSTED_PROXIES'] ?? $_SERVER['TRUSTED_PROXIES'] ?? null;
+        if ($proxies) {
+            $middleware->trustProxies(at: $proxies === '*' ? '*' : array_map('trim', explode(',', (string) $proxies)));
+        }
+
         $middleware->alias([
             'token.cookie' => \App\Http\Middleware\AuthenticateTokenFromCookie::class,
             'clear.auth.cookie' => \App\Http\Middleware\ClearAuthCookie::class,

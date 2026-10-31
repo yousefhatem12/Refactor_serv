@@ -19,6 +19,11 @@ class ManageTranslations extends Page implements HasForms
 {
     use InteractsWithForms;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->hasRole('super_admin') ?? false;
+    }
+
     public static function getNavigationGroup(): ?string { return __('System Settings'); }
     protected static ?int $navigationSort = 80;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-language';
@@ -162,16 +167,29 @@ class ManageTranslations extends Page implements HasForms
     {
         try {
             $data = $this->form->getState();
+            $now = now();
+            $rows = [];
 
             foreach ($data as $key => $value) {
-                Setting::updateOrCreate(
-                    ['key' => $key],
-                    [
-                        'value' => json_encode($value),
-                        'type' => 'text',
-                        'value_source' => 'db'
-                    ]
-                );
+                $rows[] = [
+                    'key' => $key,
+                    'value' => json_encode($value),
+                    'type' => 'text',
+                    'value_source' => 'db',
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+            }
+
+            if (! empty($rows)) {
+                Setting::upsert($rows, ['key'], ['value', 'type', 'value_source', 'updated_at']);
+                \Illuminate\Support\Facades\Cache::forget('settings_en');
+                \Illuminate\Support\Facades\Cache::forget('settings_ar');
+                \Illuminate\Support\Facades\Cache::forget('settings_v2_en');
+                \Illuminate\Support\Facades\Cache::forget('settings_v2_ar');
+                \Illuminate\Support\Facades\Cache::forget('footer_data_en');
+                \Illuminate\Support\Facades\Cache::forget('footer_data_ar');
+                \App\Traits\ClearsApiCache::bumpCacheVersion('footer');
             }
 
             Notification::make()

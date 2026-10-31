@@ -75,6 +75,7 @@ Route::prefix('v1')->group(function () {
 
         // Careers (GET)
         Route::get('/careers', [CareerController::class, 'index'])->name('api.careers.index');
+        Route::get('/careers/{id}', [CareerController::class, 'show'])->whereNumber('id')->name('api.careers.show');
 
         // Settings & System Data
         Route::get('/settings', [SettingController::class, 'settings'])->name('api.settings');

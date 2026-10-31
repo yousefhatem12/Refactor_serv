@@ -17,11 +17,16 @@ use Filament\Notifications\Notification;
 use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\Locked;
 
 class LoginWithOtp extends BaseLogin
 {
-    public $isOtpStep = false;
+    #[Locked]
+    public bool $isOtpStep = false;
+
     public $otp = '';
+
+    #[Locked]
     public ?int $userId = null;
 
     public function form(Schema $schema): Schema
@@ -102,7 +107,7 @@ class LoginWithOtp extends BaseLogin
         }
 
         // Generate OTP
-        $otpCode = rand(100000, 999999);
+        $otpCode = random_int(100000, 999999);
         $user->update([
             'otp' => Hash::make($otpCode),
             'otp_expires_at' => now()->addMinutes(10),

@@ -14,10 +14,14 @@ class GeminiProvider implements AiProviderInterface
         int $maxLength,
         string $token
     ): array {
-        $url = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$token}";
+        $encodedModel = rawurlencode($model);
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/{$encodedModel}:generateContent";
 
-        $response = Http::timeout(120)
-            ->retry(3, 2000)
+        $response = Http::withHeaders([
+            'x-goog-api-key' => $token,
+        ])
+            ->timeout(90)
+            ->retry(1, 1500)
             ->post($url, [
                 'contents' => [
                     [
@@ -63,8 +67,9 @@ class GeminiProvider implements AiProviderInterface
 
     public function listModels(string $token): array
     {
-        $response = Http::timeout(15)->get('https://generativelanguage.googleapis.com/v1beta/models', [
-            'key' => $token,
+        $response = Http::withHeaders([
+            'x-goog-api-key' => $token,
+        ])->timeout(15)->get('https://generativelanguage.googleapis.com/v1beta/models', [
             'pageSize' => 200,
         ]);
 

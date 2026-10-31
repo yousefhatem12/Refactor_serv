@@ -6,9 +6,11 @@ use Filament\Auth\Pages\Register as BaseRegister;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Filament\Auth\Events\Registered;
 use Filament\Facades\Filament;
 use Illuminate\Auth\Events\Registered as LaravelRegistered;
@@ -16,12 +18,15 @@ use Illuminate\Validation\ValidationException;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use Filament\Notifications\Notification;
 use Filament\Auth\Http\Responses\Contracts\RegistrationResponse;
+use Livewire\Attributes\Locked;
 
 class RegisterWithOtp extends BaseRegister
 {
-    public $isOtpStep = false;
-    public $otp = '';
-    public $tempData = [];
+    #[Locked]
+    public bool $isOtpStep = false;
+
+    #[Locked]
+    public string $regKey = '';
 
     public function form(Schema $schema): Schema
     {
@@ -81,19 +86,41 @@ class RegisterWithOtp extends BaseRegister
 
         if ($this->isOtpStep) {
             $data = $this->form->getState();
+            $cached = $this->regKey !== '' ? Cache::get($this->regKey) : null;
 
-            if ($data['otp'] != $this->tempData['otp'] || \Carbon\Carbon::parse($this->tempData['otp_expires_at'])->isPast()) {
+            if (! is_array($cached)) {
+                $this->isOtpStep = false;
+                $this->regKey = '';
                 throw ValidationException::withMessages([
                     'data.otp' => 'Invalid or expired OTP code.',
                 ]);
             }
 
+            if (! Hash::check((string) ($data['otp'] ?? ''), (string) ($cached['otp_hash'] ?? ''))) {
+                $cached['attempts'] = ((int) ($cached['attempts'] ?? 0)) + 1;
+
+                if ($cached['attempts'] >= 5) {
+                    Cache::forget($this->regKey);
+                    $this->isOtpStep = false;
+                    $this->regKey = '';
+                } else {
+                    Cache::put($this->regKey, $cached, now()->addMinutes(10));
+                }
+
+                throw ValidationException::withMessages([
+                    'data.otp' => 'Invalid or expired OTP code.',
+                ]);
+            }
+
+            Cache::forget($this->regKey);
+            $this->regKey = '';
+
             // Create User
             $user = User::create([
-                'name' => $this->tempData['name'],
-                'email' => $this->tempData['email'],
-                'phone' => $this->tempData['phone'],
-                'password' => Hash::make($this->tempData['password']),
+                'name' => $cached['name'],
+                'email' => $cached['email'],
+                'phone' => $cached['phone'],
+                'password' => $cached['password_hash'],
                 'otp' => null,
                 'otp_expires_at' => null,
             ]);
@@ -109,9 +136,9 @@ class RegisterWithOtp extends BaseRegister
         }
 
         // Validate first step
-        $this->tempData = $this->form->getState();
+        $formData = $this->form->getState();
 
-        $fullPhone = $this->tempData['country_code'] . ltrim($this->tempData['phone'], '0');
+        $fullPhone = $formData['country_code'] . ltrim($formData['phone'], '0');
 
         if (User::where('phone', $fullPhone)->exists()) {
             throw ValidationException::withMessages([
@@ -119,17 +146,26 @@ class RegisterWithOtp extends BaseRegister
             ]);
         }
 
-        $this->tempData['phone'] = $fullPhone;
+        // Generate cryptographically secure OTP
+        $otpCode = (string) random_int(100000, 999999);
+        $key = 'reg_otp:' . Str::uuid();
 
-        // Generate OTP
-        $otpCode = rand(100000, 999999);
-        $this->tempData['otp'] = (string) $otpCode;
-        $this->tempData['otp_expires_at'] = now()->addMinutes(10);
+        Cache::put($key, [
+            'name' => $formData['name'],
+            'email' => $formData['email'],
+            'phone' => $fullPhone,
+            'password_hash' => Hash::make($formData['password']),
+            'otp_hash' => Hash::make($otpCode),
+            'attempts' => 0,
+        ], now()->addMinutes(10));
+
+        $this->regKey = $key;
+        $this->isOtpStep = true;
+        // Clear sensitive form inputs (password) from Livewire public $data snapshot
+        $this->data = ['otp' => ''];
 
         // Send WhatsApp
-        $this->sendWhatsAppOtp($this->tempData['phone'], $otpCode);
-
-        $this->isOtpStep = true;
+        $this->sendWhatsAppOtp($fullPhone, $otpCode);
 
         Notification::make()
             ->title('OTP Sent')
@@ -152,7 +188,7 @@ class RegisterWithOtp extends BaseRegister
         }
 
         try {
-            $response = Http::post($url, [
+            $response = Http::timeout(10)->post($url, [
                 'token' => $token,
                 'session' => $sender,
                 'sender' => $sender,
@@ -161,10 +197,8 @@ class RegisterWithOtp extends BaseRegister
                 'messageType' => 'text',
             ]);
 
-            Log::info('WhatsApp API Response: ' . $response->status() . ' - ' . $response->body());
-
             if (!$response->successful()) {
-                Log::error('WhatsApp API Error: ' . $response->body());
+                Log::error('WhatsApp API Error: ' . $response->status());
             }
         } catch (\Exception $e) {
             Log::error('WhatsApp API Exception: ' . $e->getMessage());

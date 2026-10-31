@@ -49,9 +49,17 @@ class SecurityHeaders
         $response->headers->remove('X-Powered-By');
         $response->headers->remove('Server');
         
-        if (function_exists('header_remove')) {
+        if (function_exists('header_remove') && ! headers_sent()) {
             header_remove('X-Powered-By');
             header_remove('Server');
+        }
+
+        // Public GET API cache headers
+        if ($request->isMethod('GET') && $request->is('api/v1/*') && ! $request->is('api/v1/me')) {
+            $response->headers->set('Vary', 'Accept-Language');
+            if ($response->getStatusCode() === 200 && ! $response->headers->has('Cache-Control')) {
+                $response->headers->set('Cache-Control', 'public, max-age=60, s-maxage=300');
+            }
         }
         
         return $response;

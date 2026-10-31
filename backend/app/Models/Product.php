@@ -2,12 +2,23 @@
 
 namespace App\Models;
 
+use App\Traits\ClearsApiCache;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, ClearsApiCache;
+
+    protected static function apiCacheScopes(): array
+    {
+        return ['products'];
+    }
+
+    protected static function apiCacheKeys(): array
+    {
+        return ['product_categories_en', 'product_categories_ar'];
+    }
 
     protected $fillable = [
         'slug',

@@ -304,6 +304,25 @@ class GenerateArticleJob implements ShouldQueue
         return [10, 30];
     }
 
+    public function failed(\Throwable $e): void
+    {
+        $item = AiGenerationItem::with('request')->find($this->itemId);
+        if (! $item || $item->status === 'completed') {
+            return;
+        }
+
+        $wasAlreadyFailed = $item->status === 'failed';
+        $item->update([
+            'status' => 'failed',
+            'error_message' => mb_substr($e->getMessage(), 0, 1500),
+        ]);
+
+        if (! $wasAlreadyFailed && $item->request) {
+            $item->request->increment('failed_items');
+            $this->checkRequestCompletion($item->request);
+        }
+    }
+
     private function checkRequestCompletion(AiGenerationRequest $request): void
     {
         $request->refresh();

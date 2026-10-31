@@ -48,7 +48,7 @@ class ProductApiTest extends TestCase
         $response = $this->getJson('/api/v1/products?lang=en');
 
         $response->assertStatus(200);
-        $this->assertEmpty($response->json());
+        $this->assertEmpty($response->json('data'));
     }
 
     #[Test]

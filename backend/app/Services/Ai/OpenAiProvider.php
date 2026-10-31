@@ -17,8 +17,8 @@ class OpenAiProvider implements AiProviderInterface
         $response = Http::withHeaders([
             'Authorization' => "Bearer {$token}",
         ])
-        ->timeout(120)
-        ->retry(3, 2000)
+        ->timeout(90)
+        ->retry(1, 1500)
         ->post('https://api.openai.com/v1/chat/completions', [
             'model' => $model,
             'messages' => [

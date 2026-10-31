@@ -10,7 +10,6 @@ class AiCredential extends Model
 {
     protected $fillable = [
         'provider',
-        'api_token',
         'token_hint',
         'default_model',
         'default_language',

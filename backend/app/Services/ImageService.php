@@ -18,7 +18,6 @@ class ImageService
                 $image = imagecreatefromjpeg($file->getRealPath());
             } elseif ($extension === 'png') {
                 $image = imagecreatefrompng($file->getRealPath());
-                imagepalettetotruecolor($image);
                 imagealphablending($image, true);
                 imagesavealpha($image, true);
             } elseif ($extension === 'webp') {
@@ -26,6 +25,16 @@ class ImageService
             }
 
             if ($image) {
+                imagepalettetotruecolor($image);
+
+                $width = imagesx($image);
+                if ($width > 2560) {
+                    $scaled = imagescale($image, 2560);
+                    if ($scaled !== false) {
+                        $image = $scaled;
+                    }
+                }
+
                 $filename = str()->random(40) . '.webp';
                 $path = $directory . '/' . $filename;
                 

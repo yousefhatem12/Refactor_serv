@@ -53,7 +53,31 @@ class BlogApiTest extends TestCase
         $response = $this->getJson('/api/v1/blog?lang=en');
 
         $response->assertStatus(200);
-        $this->assertEmpty($response->json());
+        $this->assertEmpty($response->json('data'));
+    }
+
+    #[Test]
+    public function it_invalidates_blog_list_cache_when_post_is_updated()
+    {
+        $author = User::factory()->create();
+
+        $post = Post::create([
+            'title' => ['en' => 'Original Title', 'ar' => 'عنوان أصلي'],
+            'content' => ['en' => 'Body', 'ar' => 'محتوى'],
+            'is_published' => true,
+            'author_id' => $author->id,
+            'slug' => 'original-title',
+        ]);
+
+        $this->getJson('/api/v1/blog?lang=en')
+            ->assertOk()
+            ->assertJsonFragment(['title' => 'Original Title']);
+
+        $post->update(['title' => ['en' => 'Updated Title', 'ar' => 'عنوان محدث']]);
+
+        $this->getJson('/api/v1/blog?lang=en')
+            ->assertOk()
+            ->assertJsonFragment(['title' => 'Updated Title']);
     }
 
     #[Test]

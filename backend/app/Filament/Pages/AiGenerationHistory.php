@@ -27,6 +27,11 @@ class AiGenerationHistory extends Page implements HasTable
 {
     use InteractsWithTable;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->hasRole('super_admin') ?? false;
+    }
+
     public static function getNavigationGroup(): ?string 
     { 
         return __('AI Content Tools'); 
@@ -56,7 +61,15 @@ class AiGenerationHistory extends Page implements HasTable
     {
         $isAr = app()->getLocale() === 'ar';
         return $table
-            ->query(AiGenerationRequest::query()->latest())
+            ->query(
+                AiGenerationRequest::query()
+                    ->with(['items.post:id,is_published'])
+                    ->withCount([
+                        'items',
+                        'items as completed_items_count' => fn ($q) => $q->where('status', 'completed'),
+                    ])
+                    ->latest()
+            )
             ->columns([
                 Tables\Columns\TextColumn::make('generation_mode')
                     ->label('Type')

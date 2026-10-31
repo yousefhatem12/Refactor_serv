@@ -41,15 +41,22 @@ class CareerResource extends JsonResource
             }
         }
 
-        return [
+        $isShowRoute = $request->routeIs('*.show');
+
+        $payload = [
             'id' => $this->id,
             'department' => $this->department,
             'title' => $this->title,
             'location' => $this->location,
             'salary' => $this->salary,
-            'description' => $this->description,
-            'responsibilities' => $responsibilities,
-            'requirements' => $requirements,
         ];
+
+        if ($isShowRoute) {
+            $payload['description'] = $this->description;
+            $payload['responsibilities'] = $responsibilities;
+            $payload['requirements'] = $requirements;
+        }
+
+        return $payload;
     }
 }

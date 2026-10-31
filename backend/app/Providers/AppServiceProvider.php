@@ -4,8 +4,12 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use BezhanSalleh\LanguageSwitch\LanguageSwitch;
+use Illuminate\Auth\Events\Failed;
+use Illuminate\Auth\Events\Lockout;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 
 class AppServiceProvider extends ServiceProvider
@@ -57,6 +61,24 @@ class AppServiceProvider extends ServiceProvider
         LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
             $switch
                 ->locales(['ar', 'en']); // Arabic and English
+        });
+
+        Event::listen(Failed::class, function (Failed $event): void {
+            Log::warning('Authentication attempt failed.', [
+                'guard' => $event->guard,
+                'user_id' => $event->user?->getAuthIdentifier(),
+                'email' => is_array($event->credentials) ? ($event->credentials['email'] ?? null) : null,
+                'ip' => request()?->ip(),
+                'user_agent' => request()?->userAgent(),
+            ]);
+        });
+
+        Event::listen(Lockout::class, function (Lockout $event): void {
+            Log::warning('Authentication lockout triggered.', [
+                'email' => $event->request->input('email'),
+                'ip' => $event->request->ip(),
+                'user_agent' => $event->request->userAgent(),
+            ]);
         });
 
         // NOTE: Per-model cache invalidation is handled in each model's booted() method.

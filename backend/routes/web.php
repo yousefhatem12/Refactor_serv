@@ -13,7 +13,7 @@ Route::get('/en', fn () => view('welcome'));
  * URL: GET /admin/quotation-files/{quotation}/{filename}
  * Auth: Uses Filament's own panel auth guard (session-based).
  */
-Route::middleware(['web', 'auth'])->group(function () {
+Route::middleware(['web', 'auth', 'can:view,quotation'])->group(function () {
     Route::get('/admin/quotation-files/{quotation}/{filename}', function (
         \App\Models\Quotation $quotation,
         string $filename

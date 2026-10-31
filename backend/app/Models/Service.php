@@ -2,13 +2,24 @@
 
 namespace App\Models;
 
+use App\Traits\ClearsApiCache;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class Service extends Model
 {
-    use HasFactory;
+    use HasFactory, ClearsApiCache;
+
+    protected static function apiCacheScopes(): array
+    {
+        return ['services', 'nav_links', 'pricing_plans'];
+    }
+
+    protected static function apiCacheKeys(): array
+    {
+        return ['services_v2_en', 'services_v2_ar', 'nav_links_en', 'nav_links_ar'];
+    }
 
     protected $fillable = [
         'name',

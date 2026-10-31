@@ -18,6 +18,11 @@ use App\Filament\Resources\CareerApplications\CareerApplicationResource;
 
 class SitePages extends Page
 {
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->hasRole('super_admin') ?? false;
+    }
+
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-document-duplicate';
     protected static ?int $navigationSort = 20;
     public static function getNavigationLabel(): string { return __('Content'); }

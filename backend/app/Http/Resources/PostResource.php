@@ -30,17 +30,27 @@ class PostResource extends JsonResource
             return (string) ($field[$targetLang] ?? $field['en'] ?? '');
         };
 
-        $translatedContent = $this->content;
-        if (is_string($translatedContent)) {
-            $decoded = json_decode($translatedContent, true);
-            if (is_array($decoded)) {
-                $translatedContent = $decoded;
+        $isDetail = $request->routeIs('*.show') || $request->routeIs('*.getPost');
+
+        $formattedContent = [
+            'content' => '',
+            'table' => null,
+            'list' => [],
+        ];
+
+        if ($isDetail) {
+            $translatedContent = $this->content;
+            if (is_string($translatedContent)) {
+                $decoded = json_decode($translatedContent, true);
+                if (is_array($decoded)) {
+                    $translatedContent = $decoded;
+                }
             }
+            if (is_array($translatedContent) && ($translatedContent['type'] ?? null) !== 'doc') {
+                $translatedContent = $translatedContent[$lang] ?? $translatedContent['en'] ?? '';
+            }
+            $formattedContent = PostContentFormatter::format($translatedContent);
         }
-        if (is_array($translatedContent) && ($translatedContent['type'] ?? null) !== 'doc') {
-            $translatedContent = $translatedContent[$lang] ?? $translatedContent['en'] ?? '';
-        }
-        $formattedContent = PostContentFormatter::format($translatedContent);
 
         $translateCategory = function ($category) use ($lang) {
             if (!$category) return '';

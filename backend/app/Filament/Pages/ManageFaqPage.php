@@ -27,6 +27,11 @@ class ManageFaqPage extends Page implements HasForms, HasTable
     use InteractsWithForms;
     use InteractsWithTable;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->hasRole('super_admin') ?? false;
+    }
+
     protected static bool $shouldRegisterNavigation = false;
     public static function getNavigationGroup(): ?string { return __('Content'); }
     protected static ?int $navigationSort = 5;

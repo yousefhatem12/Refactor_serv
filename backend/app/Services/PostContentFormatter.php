@@ -21,6 +21,7 @@ class PostContentFormatter
     {
         $html = self::toHtml($content);
         $html = self::normalizeHtml($html);
+        $html = self::sanitizeHtml($html);
 
         [$document, $xpath] = self::parseHtml($html);
 
@@ -29,6 +30,46 @@ class PostContentFormatter
             'table' => $document && $xpath ? self::extractTable($xpath) : null,
             'list' => $document && $xpath ? self::extractLists($xpath) : [],
         ];
+    }
+
+    private static function sanitizeHtml(string $html): string
+    {
+        if (trim($html) === '') {
+            return '';
+        }
+
+        // Strip dangerous container tags along with their inner content.
+        $html = preg_replace(
+            '#<(script|style|iframe|object|embed|applet|svg|math|form|input|button|textarea|select|option|link|meta|base)\b[^>]*>.*?</\1>#isu',
+            '',
+            $html
+        ) ?? $html;
+
+        // Strip self-closing or unclosed dangerous tags.
+        $html = preg_replace(
+            '#</?(script|style|iframe|object|embed|applet|svg|math|form|input|button|textarea|select|option|link|meta|base)\b[^>]*>#isu',
+            '',
+            $html
+        ) ?? $html;
+
+        // Strip inline event handlers (onload, onerror, onclick, etc.) and srcdoc attributes.
+        $html = preg_replace('/\s+(?:on[a-z0-9_-]+|srcdoc)\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+)/iu', '', $html) ?? $html;
+
+        // Neutralize dangerous URI schemes in href/src/action/xlink:href attributes.
+        $html = preg_replace(
+            '/\b(href|src|action)\s*=\s*(["\'])\s*(?:javascript|vbscript|data):.*?\2/iu',
+            '$1=$2#$2',
+            $html
+        ) ?? $html;
+
+        // Strip unsafe CSS expressions or url(javascript:...) inside style attributes while keeping safe RichEditor styles like text-align.
+        $html = preg_replace(
+            '/\bstyle\s*=\s*(["\'])[^"\']*?(?:expression\s*\(|javascript\s*:|vbscript\s*:|-moz-binding|behavior\s*:)[^"\']*?\1/iu',
+            '',
+            $html
+        ) ?? $html;
+
+        return $html;
     }
 
     private static function toHtml(mixed $content): string

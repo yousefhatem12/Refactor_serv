@@ -28,21 +28,37 @@ trait ClearsApiCache
         return [];
     }
 
+    protected static function apiCacheScopes(): array
+    {
+        return [];
+    }
+
+    public static function cacheVersion(string $scope): int
+    {
+        return (int) Cache::rememberForever("api_cache_version:{$scope}", static fn () => 1);
+    }
+
+    public static function bumpCacheVersion(string $scope): void
+    {
+        $key = "api_cache_version:{$scope}";
+        $current = (int) Cache::get($key, 1);
+        Cache::forever($key, $current + 1);
+    }
+
     /**
      * Register cache-clearing listeners via the Eloquent event dispatcher.
      * Called automatically by Eloquent's Model::boot() via the bootXxx() convention.
      */
     protected static function bootClearsApiCache(): void
     {
-        // Eloquent fires "eloquent.saved: App\Models\Foo" and
-        // "eloquent.deleted: App\Models\Foo" internally — listening to
-        // those strings is exactly equivalent to Model::saved() / deleted()
-        // but uses only the Event facade which IDEs understand perfectly.
         $model = static::class;
 
         $flush = static function () use ($model): void {
             foreach ($model::apiCacheKeys() as $key) {
                 Cache::forget($key);
+            }
+            foreach ($model::apiCacheScopes() as $scope) {
+                self::bumpCacheVersion($scope);
             }
         };
 
