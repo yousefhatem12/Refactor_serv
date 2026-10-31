@@ -58,6 +58,22 @@ const Footer = () => {
     return map[platform] || map["facebook"];
   };
 
+    const getLocalizedHref = (href) => {
+    const safeHref = safeUrl(href);
+    if (
+      safeHref === "#" ||
+      safeHref.startsWith("http") ||
+      safeHref.startsWith("tel:") ||
+      safeHref.startsWith("mailto:")
+    ) {
+      return safeHref;
+    }
+    const cleanHref = safeHref.startsWith("/") ? safeHref : `/${safeHref}`;
+    const cleanNoLocale = cleanHref.replace(/^\/(ar|en)(\/|$)/, "/");
+    if (cleanNoLocale === "" || cleanNoLocale === "/") return `/${language}`;
+    return `/${language}${cleanNoLocale}`;
+  };
+
   const footerHeading = footerData.texts?.heading || t("haveAGoodWebDesign");
 
   return (
@@ -69,7 +85,10 @@ const Footer = () => {
       {/* Decorative Element */}
       <img
         src="/Element.webp"
-        alt="Element"
+        alt=""
+        aria-hidden="true"
+        width={500}
+        height={500}
         className={`absolute top-0 ${language === "ar" ? "-right-[80px] scale-x-[-1]" : "-left-[80px]"} mix-blend-luminosity opacity-50 w-48 md:w-[500px]  object-contain pointer-events-none z-0 `}
       />
 
@@ -108,7 +127,7 @@ const Footer = () => {
                 if (pathname.includes("/contact-us")) {
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 } else {
-                  router.push("/contact-us");
+                  router.push(`/${language}/contact-us`);
                 }
               }}
               initial={{ opacity: 0, scale: 0.8 }}
@@ -153,14 +172,14 @@ const Footer = () => {
         <div className="relative grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-10 mb-10 pt-6">
           {/* Useful Links */}
           <div>
-            <h4 className="text-xl font-bold mb-5 text-white">
+            <h3 className="text-xl font-bold mb-5 text-white">
               {t("usefulLinks")}
-            </h4>
+            </h3>
             <ul className="space-y-2">
               {footerData.links.usefulLinks.map((link) => (
                 <li key={link.id}>
                   <Link
-                    href={safeUrl(link.url)}
+                    href={getLocalizedHref(link.url)}
                     className="text-gray-400 hover:text-orange-500 transition-colors text-base font-medium"
                   >
                     {link.label}
@@ -172,14 +191,14 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-xl font-bold mb-5 text-white">
+            <h3 className="text-xl font-bold mb-5 text-white">
               {t("quickLinks")}
-            </h4>
+            </h3>
             <ul className="space-y-2">
               {footerData.links.quickLinks.map((link) => (
                 <li key={link.id}>
                   <Link
-                    href={safeUrl(link.url)}
+                    href={getLocalizedHref(link.url)}
                     className="text-gray-400 hover:text-orange-500 transition-colors text-base font-medium"
                   >
                     {link.label}
@@ -191,12 +210,12 @@ const Footer = () => {
 
           {/* Offers */}
           <div>
-            <h4 className="text-xl font-bold mb-5 text-white">{t("offers")}</h4>
+            <h3 className="text-xl font-bold mb-5 text-white">{t("offers")}</h3>
             <ul className="space-y-2">
               {footerData.links.offers.map((link) => (
                 <li key={link.id}>
                   <Link
-                    href={safeUrl(link.url)}
+                    href={getLocalizedHref(link.url)}
                     className="text-gray-400 hover:text-orange-500 transition-colors text-base font-medium"
                   >
                     {link.label}
@@ -208,14 +227,14 @@ const Footer = () => {
 
           {/* Company */}
           <div>
-            <h4 className="text-xl font-bold mb-5 text-white">
+            <h3 className="text-xl font-bold mb-5 text-white">
               {t("company")}
-            </h4>
+            </h3>
             <ul className="space-y-2">
               {footerData.links.company.map((link) => (
                 <li key={link.id}>
                   <Link
-                    href={safeUrl(link.url)}
+                    href={getLocalizedHref(link.url)}
                     className="text-gray-400 hover:text-orange-500 transition-colors text-base font-medium"
                   >
                     {link.label}
@@ -227,9 +246,9 @@ const Footer = () => {
 
           {/* Contact Info */}
           <div>
-            <h4 className="text-xl font-bold mb-5 text-white">
+            <h3 className="text-xl font-bold mb-5 text-white">
               {t("contactInfo")}
-            </h4>
+            </h3>
             <ul className="space-y-2">
               <li className="flex items-start gap-4 group">
                 <div className="text-orange-500 p-2 rounded-lg bg-orange-500/10 group-hover:bg-orange-500 group-hover:text-white transition-all duration-300">
@@ -314,6 +333,7 @@ const Footer = () => {
                     href={safeUrl(social.url)}
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label={social.platform}
                     whileHover={{ y: -4, scale: 1.1 }}
                     className={`${iconData.color} w-7 h-7 rounded-full flex items-center justify-center text-white shadow-[0_4px_10px_rgba(0,0,0,0.3)] transition-all`}
                   >

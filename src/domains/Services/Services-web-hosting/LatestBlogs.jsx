@@ -87,7 +87,7 @@ const LatestBlogs = () => {
               transition={{ delay: index * 0.2, duration: 0.6 }}
               className="group cursor-pointer rounded-3xl overflow-hidden relative shrink-0 snap-center w-[85vw] md:w-auto"
             >
-              <Link href={`/blog/${blog.id}`} prefetch={false} className="block relative h-[450px] w-full">
+              <Link href={`/${language}/blog/${blog.id}`} prefetch={false} className="block relative h-[450px] w-full">
                 {/* Background Image */}
                 <img
                   src={blog.image ? getMediaUrl(blog.image) : siteLogo}

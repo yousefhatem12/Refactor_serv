@@ -72,7 +72,7 @@ export default function ProjectDetails() {
         <h1 className="text-2xl font-bold mb-4">
           {language === "ar" ? "المشروع غير موجود" : "Project not found"}
         </h1>
-        <Link href="/portfolio" prefetch={false} className="text-[#FF8A00] hover:underline">
+        <Link href={`/${language}/portfolio`} prefetch={false} className="text-[#FF8A00] hover:underline">
           {language === "ar" ? "العودة للمعرض" : "Back to Portfolio"}
         </Link>
       </div>
@@ -105,7 +105,7 @@ export default function ProjectDetails() {
         <section className="w-full max-w-7xl mx-auto">
           {/* Back Button */}
           <Link
-            href="/portfolio"
+            href={`/${language}/portfolio`}
             prefetch={false}
             className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-10 transition-colors group"
           >

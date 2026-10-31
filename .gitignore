@@ -48,3 +48,5 @@ next-env.d.ts
 *.zip
 *.rar
 *.tar.gz
+FRONTEND_AUDIT.md
+TOP_ISSUES_DETAILED_GUIDE.md
