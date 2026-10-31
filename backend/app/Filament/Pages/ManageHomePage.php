@@ -12,6 +12,11 @@ use App\Filament\Resources\TeamMembers\TeamMemberResource;
 
 class ManageHomePage extends Page
 {
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->hasRole('super_admin') ?? false;
+    }
+
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-home';
     public static function getNavigationLabel(): string { return __('Home Page'); }
     public static function getNavigationGroup(): ?string { return __('Home Page'); }

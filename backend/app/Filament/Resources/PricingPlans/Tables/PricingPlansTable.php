@@ -14,6 +14,7 @@ class PricingPlansTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn ($query) => $query->with(['service']))
             ->columns([
                 TextColumn::make('service.name')
                     ->label('Service')

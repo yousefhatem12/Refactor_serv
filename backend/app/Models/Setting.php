@@ -9,6 +9,16 @@ class Setting extends Model
     protected $fillable = ['key', 'value', 'type', 'value_source'];
 
     /**
+     * Keys that contain sensitive credentials and must be encrypted at rest.
+     * Public frontend settings remain plaintext to avoid per-row OpenSSL overhead.
+     */
+    protected static array $sensitiveKeys = [
+        'smtp_password',
+        'whatsapp_token',
+        'turnstile_secret_key',
+    ];
+
+    /**
      * Decrypt the value if it is encrypted, otherwise return the raw value.
      */
     public function getValueAttribute(mixed $value)
@@ -17,26 +27,31 @@ class Setting extends Model
             return $value;
         }
 
-        try {
-            return decrypt($value);
-        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
-            // Never expose encrypted database contents to API consumers if the
-            // application key is wrong or the value was written with a retired key.
-            report($e);
+        // Only attempt OpenSSL decryption if the stored string looks like a Laravel payload (eyJpdiI6...)
+        if (is_string($value) && str_starts_with($value, 'eyJpdiI6')) {
+            try {
+                return decrypt($value);
+            } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+                report($e);
 
-            return null;
+                return null;
+            }
         }
+
+        return $value;
     }
 
     /**
-     * Always encrypt the value when setting it.
+     * Encrypt only sensitive keys when setting values.
      */
     public function setValueAttribute(mixed $value)
     {
         if (is_null($value) || $value === '') {
             $this->attributes['value'] = $value;
-        } else {
+        } elseif (in_array($this->attributes['key'] ?? '', self::$sensitiveKeys, true)) {
             $this->attributes['value'] = encrypt($value);
+        } else {
+            $this->attributes['value'] = $value;
         }
     }
 
@@ -49,6 +64,7 @@ class Setting extends Model
             \Illuminate\Support\Facades\Cache::forget('settings_v2_ar');
             \Illuminate\Support\Facades\Cache::forget('footer_data_en');
             \Illuminate\Support\Facades\Cache::forget('footer_data_ar');
+            \App\Traits\ClearsApiCache::bumpCacheVersion('footer');
         };
         static::saved($clear);
         static::deleted($clear);

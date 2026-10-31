@@ -12,20 +12,18 @@ class BaseApiController extends Controller
      * unpaginated collection. Keeping this bounded prevents abusive query
      * strings from creating very large offsets or cache keys.
      */
-    protected function pageNumber(Request $request): ?int
+    protected function pageNumber(Request $request, int $default = 1): int
     {
-        $value = $request->query('page');
+        $value = $request->query('page', $default);
 
         if ($value === null || $value === '' || ! is_numeric($value)) {
-            return null;
+            return $default;
         }
 
-        $page = (int) $value;
-
-        return $page > 0 ? $page : null;
+        return max(1, min((int) $value, 1000));
     }
 
-    protected function perPage(Request $request, int $default = 9, int $max = 50): int
+    protected function perPage(Request $request, int $default = 12, int $max = 50): int
     {
         $value = $request->query('per_page', $default);
 
@@ -34,6 +32,43 @@ class BaseApiController extends Controller
         }
 
         return max(1, min((int) $value, $max));
+    }
+
+    protected function sanitizeSlugParam(mixed $value): string
+    {
+        if (! is_string($value) && ! is_numeric($value)) {
+            return 'all';
+        }
+
+        $clean = strtolower(trim((string) $value));
+        if ($clean === '' || $clean === 'all') {
+            return 'all';
+        }
+
+        return preg_match('/^[a-z0-9_-]{1,64}$/', $clean) ? $clean : 'invalid';
+    }
+
+    protected function sanitizeCountryParam(mixed $value): ?string
+    {
+        if (! is_string($value) || trim($value) === '') {
+            return null;
+        }
+
+        $clean = trim($value);
+        $allowed = ['Egypt', 'Saudi Arabia', 'UAE', 'Kuwait', 'Qatar', 'Bahrain', 'Oman', 'EG', 'SA', 'AE', 'KW', 'QA', 'BH', 'OM'];
+
+        foreach ($allowed as $country) {
+            if (strcasecmp($clean, $country) === 0) {
+                return $country;
+            }
+        }
+
+        return preg_match('/^[a-zA-Z\s]{2,32}$/', $clean) ? $clean : null;
+    }
+
+    protected function cacheVersion(string $scope): int
+    {
+        return \App\Traits\ClearsApiCache::cacheVersion($scope);
     }
 
     protected function limit(mixed $value, int $max = 50): ?int

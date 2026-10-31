@@ -47,7 +47,10 @@ class NavLinkResource extends JsonResource
         // If this is the Services link, inject the dynamic services from the database
         $enName = strtolower($trans($this->label, 'en'));
         if (str_contains($enName, 'service')) {
-            $data['dropdown'] = \App\Models\Service::where('is_active', true)->get()->map(function ($service) use ($trans) {
+            $services = \App\Models\Service::where('is_active', true)
+                ->select(['id', 'name', 'slug'])
+                ->get();
+            $data['dropdown'] = $services->map(function ($service) use ($trans) {
                 return [
                     'name' => $trans($service->name),
                     'href' => '/services/services-' . $service->slug,

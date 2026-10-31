@@ -84,4 +84,13 @@ return [
         'validate_csrf_token' => ValidateCsrfToken::class,
     ],
 
+    'cookie' => [
+        'domain' => env('AUTH_COOKIE_DOMAIN'),
+        'secure' => env('AUTH_COOKIE_SECURE'),
+        'minutes' => (int) env('AUTH_COOKIE_MINUTES', 60 * 24 * 30),
+        'same_site' => env('AUTH_COOKIE_SAME_SITE', 'lax'),
+    ],
+
+    'expose_tokens' => (bool) filter_var(env('AUTH_EXPOSE_TOKENS', false), FILTER_VALIDATE_BOOL),
+
 ];

@@ -32,7 +32,7 @@ class StoreQuotationRequest extends FormRequest
             'reference_sites' => 'nullable|string|max:5000',
             'additional_notes' => 'nullable|string|max:5000',
             'files' => 'nullable|array|max:5',
-            'files.*' => 'file|mimes:jpg,jpeg,png,webp|mimetypes:image/jpeg,image/png,image/webp|max:5120',
+            'files.*' => 'file|mimes:jpg,jpeg,png,webp|mimetypes:image/jpeg,image/png,image/webp|max:5120|dimensions:max_width=4096,max_height=4096',
         ];
     }
 }

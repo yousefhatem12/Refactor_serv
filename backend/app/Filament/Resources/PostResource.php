@@ -154,6 +154,7 @@ class PostResource extends Resource
     {
         $isAr = app()->getLocale() === 'ar';
         return $table
+            ->modifyQueryUsing(fn ($query) => $query->with(['author', 'blogCategory']))
             ->columns([
                 Tables\Columns\ImageColumn::make('image')
                     ->label($isAr ? 'الصورة' : 'Image')

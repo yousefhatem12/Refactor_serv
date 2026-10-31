@@ -28,6 +28,7 @@ class AiPageBuilderTest extends TestCase
         parent::setUp();
         $this->artisan('migrate', ['--path' => 'database/migrations/ai']);
         $this->admin = User::factory()->create();
+        $this->admin->assignRole('super_admin');
     }
 
     #[Test]

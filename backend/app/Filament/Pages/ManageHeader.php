@@ -22,6 +22,11 @@ class ManageHeader extends Page implements HasForms
 {
     use InteractsWithForms;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->hasRole('super_admin') ?? false;
+    }
+
     public static function getNavigationGroup(): ?string
     {
         return __('Header');

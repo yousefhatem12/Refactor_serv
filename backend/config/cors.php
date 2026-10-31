@@ -6,7 +6,10 @@ $allowedOrigins = array_values(array_filter(array_map(
 )));
 
 if ($allowedOrigins === [] || in_array('*', $allowedOrigins, true)) {
-    $allowedOrigins = ['https://serv5.com.eg', 'https://www.serv5.com.eg', 'http://localhost:3000'];
+    $allowedOrigins = ['https://serv5.com.eg', 'https://www.serv5.com.eg'];
+    if (in_array(env('APP_ENV', 'production'), ['local', 'testing'], true)) {
+        $allowedOrigins[] = 'http://localhost:3000';
+    }
 }
 
 return [

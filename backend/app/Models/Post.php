@@ -2,13 +2,24 @@
 
 namespace App\Models;
 
+use App\Traits\ClearsApiCache;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class Post extends Model
 {
-    use HasFactory;
+    use HasFactory, ClearsApiCache;
+
+    protected static function apiCacheScopes(): array
+    {
+        return ['posts'];
+    }
+
+    protected static function apiCacheKeys(): array
+    {
+        return ['trending_posts_en', 'trending_posts_ar'];
+    }
 
     protected $fillable = [
         'title',

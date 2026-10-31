@@ -10,12 +10,12 @@ class ClearAuthCookie
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $domain = env('AUTH_COOKIE_DOMAIN');
+        $domain = config('sanctum.cookie.domain');
         if (!$domain && app()->environment('production')) {
             $domain = '.serv5.com.eg';
         }
 
-        $secureSetting = env('AUTH_COOKIE_SECURE');
+        $secureSetting = config('sanctum.cookie.secure');
         $secure = $secureSetting === null || $secureSetting === ''
             ? app()->environment('production')
             : filter_var($secureSetting, FILTER_VALIDATE_BOOL);
@@ -29,7 +29,7 @@ class ClearAuthCookie
             $secure,
             true,
             false,
-            env('AUTH_COOKIE_SAME_SITE', 'lax')
+            config('sanctum.cookie.same_site', 'lax')
         ));
     }
 }

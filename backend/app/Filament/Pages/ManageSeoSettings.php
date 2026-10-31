@@ -19,6 +19,11 @@ class ManageSeoSettings extends Page implements HasForms
 {
     use InteractsWithForms;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->hasRole('super_admin') ?? false;
+    }
+
     public static function getNavigationGroup(): ?string { return __('System Settings'); }
     protected static ?int $navigationSort = 60;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-magnifying-glass';

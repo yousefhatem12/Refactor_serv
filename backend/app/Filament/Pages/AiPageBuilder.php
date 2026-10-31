@@ -31,6 +31,11 @@ class AiPageBuilder extends Page implements HasForms
 {
     use InteractsWithForms;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->hasRole('super_admin') ?? false;
+    }
+
     protected static ?int $navigationSort = 3;
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-sparkles';
     protected string $view = 'filament.pages.ai-page-builder';

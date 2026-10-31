@@ -36,6 +36,7 @@ class AiWorkflowTest extends TestCase
         $this->artisan('migrate', ['--path' => 'database/migrations/ai']);
 
         $this->admin = User::factory()->create();
+        $this->admin->assignRole('super_admin');
         $this->category = BlogCategory::create([
             'name' => ['en' => 'Business', 'ar' => 'أعمال'],
             'slug' => 'business',

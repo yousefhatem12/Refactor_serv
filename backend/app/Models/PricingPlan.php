@@ -2,10 +2,17 @@
 
 namespace App\Models;
 
+use App\Traits\ClearsApiCache;
 use Illuminate\Database\Eloquent\Model;
 
 class PricingPlan extends Model
 {
+    use ClearsApiCache;
+
+    protected static function apiCacheScopes(): array
+    {
+        return ['pricing_plans'];
+    }
     protected $fillable = [
         'service_id',
         'name',

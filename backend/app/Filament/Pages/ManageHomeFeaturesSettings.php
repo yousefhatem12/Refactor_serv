@@ -19,6 +19,11 @@ class ManageHomeFeaturesSettings extends Page implements HasForms
 {
     use InteractsWithForms;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->hasRole('super_admin') ?? false;
+    }
+
     protected static bool $shouldRegisterNavigation = false;
     public static function getNavigationGroup(): ?string { return __('Home Page'); }
     protected static ?int $navigationSort = 2;

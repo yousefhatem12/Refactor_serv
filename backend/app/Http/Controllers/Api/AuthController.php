@@ -6,18 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
     private function withAuthCookie(\Illuminate\Http\JsonResponse $response, string $token): \Illuminate\Http\JsonResponse
     {
-        $domain = env('AUTH_COOKIE_DOMAIN');
+        $domain = config('sanctum.cookie.domain');
         if (!$domain && app()->environment('production')) {
             $domain = '.serv5.com.eg';
         }
 
-        $secureSetting = env('AUTH_COOKIE_SECURE');
+        $secureSetting = config('sanctum.cookie.secure');
         $secure = $secureSetting === null || $secureSetting === ''
             ? app()->environment('production')
             : filter_var($secureSetting, FILTER_VALIDATE_BOOL);
@@ -25,13 +26,13 @@ class AuthController extends Controller
         return $response->withCookie(cookie(
             'auth_token',
             $token,
-            (int) env('AUTH_COOKIE_MINUTES', 60 * 24 * 30),
+            (int) config('sanctum.cookie.minutes', 60 * 24 * 30),
             '/',
             $domain,
             $secure,
             true,
             false,
-            env('AUTH_COOKIE_SAME_SITE', 'lax')
+            config('sanctum.cookie.same_site', 'lax')
         ));
     }
 
@@ -41,7 +42,7 @@ class AuthController extends Controller
 
         // Keep bearer-token responses opt-in for legacy API clients. The website uses the HttpOnly cookie.
         // In production, token exposure is always disabled regardless of AUTH_EXPOSE_TOKENS.
-        if (! app()->environment('production') && filter_var(env('AUTH_EXPOSE_TOKENS', false), FILTER_VALIDATE_BOOL)) {
+        if (! app()->environment('production') && config('sanctum.expose_tokens', false)) {
             $payload['access_token'] = $token;
             $payload['token_type'] = 'Bearer';
         }
@@ -49,12 +50,21 @@ class AuthController extends Controller
         return $this->withAuthCookie(response()->json($payload), $token);
     }
 
+    private function passwordRule(): Password
+    {
+        $rule = Password::min(8)->mixedCase()->numbers()->symbols();
+
+        return app()->environment('production') ? $rule->uncompromised() : $rule;
+    }
+
     public function register(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => ['required', 'string', 'confirmed', $this->passwordRule()],
+        ], [
+            'email.unique' => 'تعذر إتمام التسجيل بهذه البيانات. يرجى التحقق من البريد الإلكتروني أو تسجيل الدخول.',
         ]);
 
         $user = User::create([
@@ -104,7 +114,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'current_password' => 'required|string',
-            'password'         => 'required|string|min:8|confirmed',
+            'password'         => ['required', 'string', 'confirmed', 'different:current_password', $this->passwordRule()],
         ]);
 
         $user = $request->user();
