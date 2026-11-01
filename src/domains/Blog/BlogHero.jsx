@@ -41,14 +41,14 @@ const BlogHero = ({ data, posts = [] }) => {
   return (
     <section className="w-full max-w-7xl mx-auto px-6 py-16 text-white relative z-10 mt-20">
       <div className="mb-8 overflow-hidden">
-        <motion.h2
+        <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="text-3xl md:text-4xl font-bold mb-2 uppercase tracking-wide"
         >
           {data?.title || t("recentBlogPosts")}
-        </motion.h2>
+        </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -75,6 +75,7 @@ const BlogHero = ({ data, posts = [] }) => {
                   fallback={siteLogo}
                   alt={featuredPost.title}
                   fill
+                  sizes="(max-width: 1024px) 100vw, 60vw"
                   className="transition-transform duration-700 ease-out group-hover:scale-105"
                   priority
                 />
@@ -116,6 +117,7 @@ const BlogHero = ({ data, posts = [] }) => {
                       fallback={siteLogo}
                       alt={post.title}
                       fill
+                      sizes="(max-width: 768px) 33vw, 150px"
                       className="transition-transform duration-700 ease-out group-hover:scale-105"
                     />
                   </div>

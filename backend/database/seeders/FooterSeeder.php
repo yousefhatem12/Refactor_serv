@@ -75,5 +75,20 @@ class FooterSeeder extends Seeder
         
         Setting::updateOrCreate(['key' => 'footer_copyright_en'], ['value' => '© 2024 All Rights Reserved', 'type' => 'text']);
         Setting::updateOrCreate(['key' => 'footer_copyright_ar'], ['value' => '© 2024 جميع الحقوق محفوظة', 'type' => 'text']);
+
+        // 6. Seed Social Links
+        $socials = [
+            ['platform' => 'facebook', 'url' => 'https://facebook.com/serv5'],
+            ['platform' => 'twitter', 'url' => 'https://twitter.com/serv5'],
+            ['platform' => 'instagram', 'url' => 'https://instagram.com/serv5'],
+            ['platform' => 'linkedin', 'url' => 'https://linkedin.com/company/serv5'],
+            ['platform' => 'youtube', 'url' => 'https://youtube.com/@serv5'],
+        ];
+        foreach ($socials as $social) {
+            \App\Models\SocialLink::updateOrCreate(
+                ['platform' => $social['platform']],
+                ['url' => $social['url'], 'is_active' => true]
+            );
+        }
     }
 }

@@ -7,7 +7,7 @@ import {
 } from "../src/lib/custom-head";
 
 describe("custom header code", () => {
-  it("renders verification and analytics tags as direct head children", () => {
+  it("renders verification and analytics tags as direct head children while excluding unsafe scripts", () => {
     const code = `
       <meta name="google-site-verification" content="verification-token">
       <script async src="https://example.com/analytics.js"></script>
@@ -19,23 +19,11 @@ describe("custom header code", () => {
     expect(extractCustomMeta(code)).toEqual({
       "google-site-verification": "verification-token",
     });
-    expect(headElements).toHaveLength(3);
+    expect(headElements).toHaveLength(1);
     expect(headElements[0].type).toBe("meta");
     expect(headElements[0].props).toMatchObject({
       name: "google-site-verification",
       content: "verification-token",
-    });
-    expect(headElements[1].props).toMatchObject({
-      async: true,
-      src: "https://example.com/analytics.js",
-      strategy: "beforeInteractive",
-    });
-    expect(headElements[2].props).toMatchObject({
-      id: "custom-head-5",
-      strategy: "beforeInteractive",
-      dangerouslySetInnerHTML: {
-        __html: "window.analyticsReady = true;",
-      },
     });
   });
 

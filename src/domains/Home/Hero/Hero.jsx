@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import {
   motion,
   AnimatePresence,
@@ -107,14 +108,18 @@ export default function Hero({ isPhaseTwo, data }) {
             style={{ y: planetY, opacity: planetOpacity }}
             className={`absolute top-0 ${isRtl ? "left-0 md:-left-20 lg:-left-32" : "right-0 md:-right-20 lg:-right-32"} z-0 pointer-events-none hidden md:block`}
           >
-            <img
+            <Image
               src={
                 data?.hero_image ||
                 settings?.hero_planet ||
                 "/Hero/orange-planet.webp"
               }
               alt="Orange Planet"
-              className="w-[320px] md:w-[480px] lg:w-[580px] opacity-80"
+              width={580}
+              height={580}
+              priority
+              sizes="(max-width: 768px) 320px, (max-width: 1024px) 480px, 580px"
+              className="w-[320px] md:w-[480px] lg:w-[580px] h-auto opacity-80"
             />
           </motion.div>
         )}
@@ -196,6 +201,7 @@ export default function Hero({ isPhaseTwo, data }) {
                 <div className="flex items-center gap-3.5 group">
                   <button
                     onClick={() => setIsVideoModalOpen(true)}
+                    aria-label={settings?.hero_video_button_text || t("knowMore") || "Watch Video"}
                     className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-full bg-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg active:scale-95 group cursor-pointer border-none"
                   >
                     <svg

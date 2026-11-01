@@ -161,8 +161,9 @@ const ContactForm = () => {
             
             {authMode === "register" && (
               <div className="flex flex-col gap-2">
-                <label className="text-white/80 text-xs font-semibold uppercase tracking-wider">{language === 'ar' ? 'الاسم' : 'Name'}</label>
+                <label htmlFor="auth-name" className="text-white/80 text-xs font-semibold uppercase tracking-wider">{language === 'ar' ? 'الاسم' : 'Name'}</label>
                 <input
+                  id="auth-name"
                   type="text"
                   name="name"
                   value={authData.name}
@@ -175,8 +176,9 @@ const ContactForm = () => {
             )}
 
             <div className="flex flex-col gap-2">
-              <label className="text-white/80 text-xs font-semibold uppercase tracking-wider">{language === 'ar' ? 'البريد الإلكتروني' : 'Email'}</label>
+              <label htmlFor="auth-email" className="text-white/80 text-xs font-semibold uppercase tracking-wider">{language === 'ar' ? 'البريد الإلكتروني' : 'Email'}</label>
               <input
+                id="auth-email"
                 type="email"
                 name="email"
                 value={authData.email}
@@ -188,9 +190,10 @@ const ContactForm = () => {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-white/80 text-xs font-semibold uppercase tracking-wider">{language === 'ar' ? 'كلمة المرور' : 'Password'}</label>
+              <label htmlFor="auth-password" className="text-white/80 text-xs font-semibold uppercase tracking-wider">{language === 'ar' ? 'كلمة المرور' : 'Password'}</label>
               <div className="relative w-full">
                 <input
+                  id="auth-password"
                   type={showPassword ? "text" : "password"}
                   name="password"
                   value={authData.password}
@@ -202,6 +205,7 @@ const ContactForm = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                   className="absolute right-4 rtl:right-auto rtl:left-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors"
                 >
                   {showPassword ? (
@@ -220,9 +224,10 @@ const ContactForm = () => {
 
             {authMode === "register" && (
               <div className="flex flex-col gap-2">
-                <label className="text-white/80 text-xs font-semibold uppercase tracking-wider">{language === 'ar' ? 'تأكيد كلمة المرور' : 'Confirm Password'}</label>
+                <label htmlFor="auth-password-conf" className="text-white/80 text-xs font-semibold uppercase tracking-wider">{language === 'ar' ? 'تأكيد كلمة المرور' : 'Confirm Password'}</label>
                 <div className="relative w-full">
                   <input
+                    id="auth-password-conf"
                     type={showConfirmPassword ? "text" : "password"}
                     name="password_confirmation"
                     value={authData.password_confirmation}
@@ -234,6 +239,7 @@ const ContactForm = () => {
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    aria-label={showConfirmPassword ? "Hide password" : "Show password"}
                     className="absolute right-4 rtl:right-auto rtl:left-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors"
                   >
                     {showConfirmPassword ? (
@@ -314,8 +320,9 @@ const ContactForm = () => {
           {/* Row 1 */}
           <div className="flex flex-col md:flex-row gap-6">
             <div className="w-full md:w-1/2 flex flex-col gap-2">
-              <label className="text-white/80 text-xs font-semibold uppercase tracking-wider">{t("contactFirstName")}</label>
+              <label htmlFor="contact-first-name" className="text-white/80 text-xs font-semibold uppercase tracking-wider">{t("contactFirstName")}</label>
               <input
+                id="contact-first-name"
                 type="text"
                 name="firstName"
                 value={formData.firstName}
@@ -326,8 +333,9 @@ const ContactForm = () => {
               />
             </div>
             <div className="w-full md:w-1/2 flex flex-col gap-2">
-              <label className="text-white/80 text-xs font-semibold uppercase tracking-wider">{t("contactLastName")}</label>
+              <label htmlFor="contact-last-name" className="text-white/80 text-xs font-semibold uppercase tracking-wider">{t("contactLastName")}</label>
               <input
+                id="contact-last-name"
                 type="text"
                 name="lastName"
                 value={formData.lastName}
@@ -341,8 +349,9 @@ const ContactForm = () => {
           {/* Row 2 */}
           <div className="flex flex-col md:flex-row gap-6">
             <div className="w-full md:w-1/2 flex flex-col gap-2">
-              <label className="text-white/80 text-xs font-semibold uppercase tracking-wider">{t("contactEmail")}</label>
+              <label htmlFor="contact-email" className="text-white/80 text-xs font-semibold uppercase tracking-wider">{t("contactEmail")}</label>
               <input
+                id="contact-email"
                 type="email"
                 name="email"
                 value={formData.email}
@@ -353,8 +362,9 @@ const ContactForm = () => {
               />
             </div>
             <div className="w-full md:w-1/2 flex flex-col gap-2">
-              <label className="text-white/80 text-xs font-semibold uppercase tracking-wider">{t("contactPhone")}</label>
+              <label htmlFor="contact-phone" className="text-white/80 text-xs font-semibold uppercase tracking-wider">{t("contactPhone")}</label>
               <input
+                id="contact-phone"
                 type="tel"
                 name="phone"
                 value={formData.phone}
@@ -403,8 +413,9 @@ const ContactForm = () => {
 
           {/* Message */}
           <div className="flex flex-col gap-2">
-            <label className="text-white/80 text-xs font-semibold uppercase tracking-wider">{t("contactMessageLabel")}</label>
+            <label htmlFor="contact-message" className="text-white/80 text-xs font-semibold uppercase tracking-wider">{t("contactMessageLabel")}</label>
             <textarea
+              id="contact-message"
               name="message"
               value={formData.message}
               onChange={handleChange}

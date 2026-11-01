@@ -220,7 +220,10 @@ const Services = () => {
               <motion.img
                 key={index}
                 src="/Services/Outline 6.webp"
-                alt="planet"
+                alt="planet orbit"
+                width={1400}
+                height={1400}
+                loading="lazy"
                 className={`absolute top-[100%] left-1/2 -translate-x-1/2 -translate-y-1/2 h-auto max-w-none ${widthClass}`}
                 style={{
                   opacity: orbitOpacity,
@@ -310,6 +313,9 @@ const Services = () => {
                   <motion.img
                     layoutId={farLeftService.id}
                     src={farLeftService.img}
+                    alt={farLeftService.label || "Service"}
+                    width={120}
+                    height={120}
                     className="w-[65px] sm:w-[85px] md:w-[100px] lg:w-[120px] aspect-square object-contain opacity-60 grayscale-[0.5] group-hover:grayscale-0 transition-all"
                     style={{ filter: "brightness(0.7)" }}
                     animate={{ rotate: -90 }}
@@ -342,6 +348,9 @@ const Services = () => {
                     <motion.img
                       layoutId={leftService.id}
                       src={leftService.img}
+                      alt={leftService.label || "Service"}
+                      width={200}
+                      height={200}
                       className="w-[95px] sm:w-[120px] md:w-[140px] lg:w-[200px] aspect-square object-contain transition-transform duration-500 drop-shadow-[0_0_30px_rgba(255,255,255,0.05)]"
                       style={{ scale: 0.8 }}
                       animate={{ rotate: -45 }}
@@ -392,7 +401,9 @@ const Services = () => {
                 <motion.img
                   layoutId={activeService.id}
                   src={activeService.img}
-                  alt={activeService.label}
+                  alt={activeService.label || "Service"}
+                  width={700}
+                  height={700}
                   className="w-full h-full object-contain opacity-95 drop-shadow-[0_0_50px_rgba(255,255,255,0.15)]"
                   style={{ scale: 1 }}
                   animate={{ rotate: 0 }}
@@ -424,6 +435,9 @@ const Services = () => {
                     <motion.img
                       layoutId={rightService.id}
                       src={rightService.img}
+                      alt={rightService.label || "Service"}
+                      width={200}
+                      height={200}
                       className="w-[95px] sm:w-[120px] md:w-[140px] lg:w-[200px] aspect-square object-contain transition-transform duration-500 drop-shadow-[0_0_30px_rgba(255,255,255,0.05)]"
                       style={{ scale: 0.8 }}
                       animate={{ rotate: 45 }}
@@ -472,6 +486,9 @@ const Services = () => {
                   <motion.img
                     layoutId={farRightService.id}
                     src={farRightService.img}
+                    alt={farRightService.label || "Service"}
+                    width={120}
+                    height={120}
                     className="w-[65px] sm:w-[85px] md:w-[100px] lg:w-[120px] aspect-square object-contain opacity-60 grayscale-[0.5] group-hover:grayscale-0 transition-all"
                     style={{ filter: "brightness(0.7)" }}
                     animate={{ rotate: 90 }}

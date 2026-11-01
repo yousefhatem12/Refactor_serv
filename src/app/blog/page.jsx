@@ -1,67 +1,95 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import BlogHero from "../components/Blog/BlogHero";
-import BlogGrid from "../components/Blog/BlogGrid";
-import Newsletter from "../components/Blog/Newsletter";
-import { fetchAPI } from "@/lib/api";
-import { useLanguage } from "../context/LanguageContext";
-import Loading from "../loading";
+import React from "react";
+import { headers } from "next/headers";
+import { getCachedPage, getCachedBlogPosts, getCachedSettings } from "@/lib/cached-api";
+import { getSeoAlternates } from "@/lib/seo";
+import { getMediaUrl } from "@/lib/api";
+import BlogClient from "./BlogClient";
 
-export default function BlogPage() {
-  const { language } = useLanguage();
-  const [pageData, setPageData] = useState(null);
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [prevLang, setPrevLang] = useState(language);
+export async function generateMetadata() {
+  const headersList = await headers();
+  const lang = headersList.get("x-locale") || "en";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://serv5.com.eg";
 
-  if (language !== prevLang) {
-    setPrevLang(language);
-    setLoading(true);
+  let pageData = null;
+  let settings = null;
+  let alternates = null;
+
+  try {
+    const [pageRes, settingsRes, alts] = await Promise.all([
+      getCachedPage("blog", lang).catch(() => null),
+      getCachedSettings(lang).catch(() => null),
+      getSeoAlternates().catch(() => null),
+    ]);
+    pageData = pageRes?.data || pageRes;
+    settings = settingsRes;
+    alternates = alts;
+  } catch (err) {
+    // API fallback
   }
 
-  useEffect(() => {
-    Promise.all([
-      fetchAPI(`/pages/blog?lang=${language}`).catch((err) => {
-        console.error("Error fetching blog page data:", err);
-        return null;
-      }),
-      fetchAPI(`/blog?lang=${language}&limit=4`).catch((err) => {
-        console.error("Error fetching blog posts:", err);
-        return null;
-      })
-    ])
-      .then(([page, blogPosts]) => {
-        if (page) setPageData(page.data || page);
-        if (blogPosts) setPosts(blogPosts.data || blogPosts);
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, [language]);
+  const title =
+    pageData?.seo?.title ||
+    pageData?.title ||
+    (lang === "ar" ? "المدونة | Serv5" : "Blog | Serv5");
 
-  if (loading || !pageData) {
-    return <Loading />;
+  const description =
+    pageData?.seo?.description ||
+    pageData?.description ||
+    settings?.site_description ||
+    (lang === "ar"
+      ? "مقالات ورؤى تقنية حول تطوير المواقع وتطبيقات الجوال وأحدث استراتيجيات التسويق الرقمي."
+      : "Articles and tech insights on web development, mobile applications, and digital marketing strategies.");
+
+  const ogImage = pageData?.seo?.image
+    ? getMediaUrl(pageData.seo.image)
+    : settings?.social_share_image
+    ? getMediaUrl(settings.social_share_image)
+    : `${siteUrl}/logo.svg`;
+
+  return {
+    title,
+    description,
+    alternates,
+    openGraph: {
+      title,
+      description,
+      url: `${siteUrl}/${lang}/blog`,
+      siteName: "Serv5",
+      type: "website",
+      images: ogImage ? [{ url: ogImage }] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ogImage ? [ogImage] : [],
+    },
+  };
+}
+
+export default async function BlogPage() {
+  const headersList = await headers();
+  const lang = headersList.get("x-locale") || "en";
+
+  let initialPageData = null;
+  let initialPosts = [];
+
+  try {
+    const [pageRes, postsRes] = await Promise.all([
+      getCachedPage("blog", lang).catch(() => null),
+      getCachedBlogPosts(lang, 4).catch(() => null),
+    ]);
+    initialPageData = pageRes?.data || pageRes || null;
+    initialPosts = postsRes?.data || postsRes || [];
+  } catch (error) {
+    console.error("Failed to fetch initial blog data on server:", error);
   }
 
   return (
-    <main className="flex min-h-screen flex-col relative overflow-x-hidden">
-      {/* Background Color Layer */}
-      <div className="fixed inset-0 bg-[#040A37] -z-20 pointer-events-none" />
-
-      {/* Visual background glows */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#FF8A00]/5 rounded-full filter blur-[120px] pointer-events-none z-0" />
-      <div className="absolute top-1/2 right-1/4 w-[600px] h-[600px] bg-blue-500/5 rounded-full filter blur-[150px] pointer-events-none z-0" />
-
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="w-full relative z-10 flex flex-col items-center"
-      >
-        <BlogHero data={pageData} posts={posts} />
-        <BlogGrid posts={posts} />
-        <Newsletter />
-      </motion.div>
-    </main>
+    <BlogClient
+      initialPageData={initialPageData}
+      initialPosts={initialPosts}
+      initialLang={lang}
+    />
   );
 }

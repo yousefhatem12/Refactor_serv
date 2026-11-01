@@ -40,6 +40,19 @@ export async function GET() {
                 },
               },
             });
+            routes.push({
+              url: `${baseUrl}/ar${path}`,
+              lastModified: new Date(),
+              changeFrequency: "monthly",
+              priority: 0.7,
+              alternates: {
+                languages: {
+                  en: `${baseUrl}/en${path}`,
+                  ar: `${baseUrl}/ar${path}`,
+                  "x-default": `${baseUrl}/en${path}`,
+                },
+              },
+            });
           }
         }
       }

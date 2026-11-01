@@ -1,7 +1,64 @@
-"use client";
 import React from "react";
+import { headers } from "next/headers";
+import { getCachedSettings } from "@/lib/cached-api";
+import { getSeoAlternates } from "@/lib/seo";
+import { getMediaUrl } from "@/lib/api";
 import QuotationHero from "../components/Quotation/QuotationHero";
 import QuotationForm from "../components/Quotation/QuotationForm";
+
+export async function generateMetadata() {
+  const headersList = await headers();
+  const lang = headersList.get("x-locale") || "en";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://serv5.com.eg";
+
+  let settings = null;
+  let alternates = null;
+
+  try {
+    const [settingsRes, alts] = await Promise.all([
+      getCachedSettings(lang).catch(() => null),
+      getSeoAlternates().catch(() => null),
+    ]);
+    settings = settingsRes;
+    alternates = alts;
+  } catch (err) {
+    // API fallback
+  }
+
+  const title =
+    lang === "ar"
+      ? "طلب عرض سعر مجاني | Serv5"
+      : "Request a Free Quotation | Serv5";
+
+  const description =
+    lang === "ar"
+      ? "اطلب عرض سعر مخصص لمشروعك البرمجي، موقعك الإلكتروني أو تطبيق الجوال من شركة سيرف فايف."
+      : "Request a detailed quotation tailored for your software project, web application, or mobile app from Serv5.";
+
+  const ogImage = settings?.social_share_image
+    ? getMediaUrl(settings.social_share_image)
+    : `${siteUrl}/logo.svg`;
+
+  return {
+    title,
+    description,
+    alternates,
+    openGraph: {
+      title,
+      description,
+      url: `${siteUrl}/${lang}/request-quote`,
+      siteName: "Serv5",
+      type: "website",
+      images: ogImage ? [{ url: ogImage }] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ogImage ? [ogImage] : [],
+    },
+  };
+}
 
 export default function RequestQuotePage() {
   return (

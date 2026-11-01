@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLanguage } from "@/app/context/LanguageContext";
-import { fetchAPI } from "@/lib/api";
+import { useSettings } from "@/app/context/SettingsContext";
 import PricingModal from "@/app/components/Shared/PricingModal";
 import ContactModal from "@/app/components/Shared/ContactModal";
 import { useRouter, usePathname } from "next/navigation";
@@ -24,15 +24,8 @@ const CTA = () => {
   const localPlanetRef = useRef(null);
   const [isPricingModalOpen, setIsPricingModalOpen] = useState(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-
-  const [settings, setSettings] = useState({});
-  useEffect(() => {
-    fetchAPI("/settings")
-      .then((data) => {
-        if (data) setSettings(data);
-      })
-      .catch(console.error);
-  }, []);
+  const contextSettings = useSettings();
+  const settings = contextSettings || {};
 
   useEffect(() => {
     let ctx;

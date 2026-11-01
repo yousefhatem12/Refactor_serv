@@ -126,6 +126,7 @@ const FAQContent = ({ data }) => {
             </span>
             <input
               type="text"
+              aria-label={language === "ar" ? "ابحث عن الأسئلة الشائعة" : "Search frequently asked questions"}
               placeholder={language === "ar" ? "ابحث عن الأسئلة الشائعة..." : "Search frequently asked questions..."}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -155,6 +156,8 @@ const FAQContent = ({ data }) => {
                   >
                     <button
                       onClick={() => toggleAccordion(item.id)}
+                      aria-expanded={isOpen}
+                      aria-controls={`faq-ans-${item.id}`}
                       className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none cursor-pointer"
                     >
                       <div className="flex items-center gap-6">
@@ -245,10 +248,10 @@ const FAQContent = ({ data }) => {
             transition={{ delay: 0.3 }}
             className="mt-16 flex flex-col sm:flex-row items-center gap-6"
           >
-            <h3 className="text-3xl font-bold text-white">
+            <h2 className="text-3xl font-bold text-white">
               {t("faqStillQuestions")}
-            </h3>
-            <Link href="/contact-us" prefetch={false}>
+            </h2>
+            <Link href={`/${language}/contact-us`} prefetch={false}>
               <button className="px-8 py-3 bg-[#D98B50] hover:bg-[#c47c45] text-white font-semibold rounded-md transition-colors shadow-[0_0_15px_rgba(217,139,80,0.4)] cursor-pointer">
                 {t("getInTouch2")}
               </button>

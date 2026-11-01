@@ -60,6 +60,7 @@ const BlogCard = ({ post, t, language, categoryMap, siteLogo }) => {
             src={imgSrc}
             alt={post.title}
             fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className={`transition-all duration-700 group-hover:scale-105 ${isImageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
               } ${imgSrc === siteLogo ? "object-contain p-4" : "object-cover"}`}
             onLoad={() => setIsImageLoaded(true)}

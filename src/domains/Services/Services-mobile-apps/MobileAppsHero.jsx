@@ -138,6 +138,9 @@ const MobileAppsHero = ({
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
+          tabIndex={0}
+          role="region"
+          aria-label={data?.title || t("mobileAppsHeroTitle") || "Service Description"}
           className="text-gray-300 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed mb-6 md:mb-8 lg:mb-10 max-h-[30vh] overflow-y-auto custom-scrollbar pr-2"
         >
           {data?.subtitle || t("mobileAppsHeroDesc")}
@@ -175,6 +178,8 @@ const MobileAppsHero = ({
           <img
             src={planetImage || "/Services/green.webp"}
             alt="Planet"
+            width={600}
+            height={600}
             className={`w-full h-auto object-contain scale-[1.5] ${isRtl ? "-translate-x-[10%]" : "translate-x-[10%]"}`}
             style={{ filter: `drop-shadow(0 0 35px ${resolvedDotColor}) drop-shadow(0 0 80px ${resolvedDotColor}80)` }}
           />

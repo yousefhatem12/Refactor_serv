@@ -38,6 +38,8 @@ import {
   getCachedHomeData,
   getCachedHeadSettings,
   getCachedSettings,
+  getCachedServicesList,
+  getCachedNavLinks,
 } from "@/lib/cached-api";
 import { renderCustomHeadCode } from "@/lib/custom-head";
 import { sanitizeHtml } from "@/lib/sanitize-html";
@@ -121,8 +123,8 @@ async function ProvidersAndContent({ children }) {
 
   const [settings, servicesRes, navLinksRes] = await Promise.all([
     getCachedSettings(defaultLanguage),
-    fetchAPI(`/services?lang=${defaultLanguage}`).catch(() => null),
-    fetchAPI(`/nav-links?lang=${defaultLanguage}`).catch(() => null),
+    getCachedServicesList(defaultLanguage).catch(() => null),
+    getCachedNavLinks(defaultLanguage).catch(() => null),
   ]);
 
   const initialServices = Array.isArray(servicesRes) ? servicesRes : (servicesRes?.data || []);
@@ -160,7 +162,7 @@ async function ProvidersAndContent({ children }) {
 
   return (
     <NonceProvider nonce={nonce}>
-      <LanguageProvider defaultLanguage={defaultLanguage}>
+      <LanguageProvider defaultLanguage={defaultLanguage} initialSettings={settings || {}}>
         <AuthProvider>
           <SettingsProvider initialSettings={settings || {}} ssrLocale={defaultLanguage}>
             <HomeBackground />
@@ -191,12 +193,17 @@ async function ProvidersAndContent({ children }) {
 }
 
 export default async function RootLayout({ children }) {
-  // IMPORTANT: Do NOT call headers() here in cacheComponents mode.
-  // headers() is a dynamic API that must be inside a Suspense boundary.
-  // The actual locale handling is done in ProvidersAndContent (inside Suspense).
-  //
-  // For lang/dir on <html>: use static defaults + inline script that fires
-  // before React hydrates to set correct values from the URL path.
+  let locale = "en";
+  try {
+    const reqHeaders = await headers();
+    const xLocale = reqHeaders.get("x-locale");
+    if (xLocale === "ar" || xLocale === "en") {
+      locale = xLocale;
+    }
+  } catch {
+    // In static prerender, fallback to default en
+  }
+  const dir = locale === "ar" ? "rtl" : "ltr";
 
   // getCachedHeadSettings uses "use cache" — safe outside Suspense.
   // Custom head code is site-wide, so "en" locale is fine here.
@@ -207,8 +214,8 @@ export default async function RootLayout({ children }) {
 
   return (
     <html
-      lang="en"
-      dir="ltr"
+      lang={locale}
+      dir={dir}
       className={`${montserrat.variable} ${poppins.variable} ${alexandria.variable} ${tsDamasSans.variable} min-h-screen antialiased relative`}
       suppressHydrationWarning
     >
@@ -221,6 +228,8 @@ export default async function RootLayout({ children }) {
           }}
         />
         <link rel="preload" href="/logo.svg" as="image" type="image/svg+xml" fetchPriority="high" />
+        <link rel="preload" href="/Hero/left-starts-Animate.svg" as="image" type="image/svg+xml" fetchPriority="high" />
+        <link rel="preload" href="/Hero/front-stars.svg" as="image" type="image/svg+xml" fetchPriority="high" />
         {customHead}
       </head>
       <body className="min-h-screen flex flex-col relative" suppressHydrationWarning>

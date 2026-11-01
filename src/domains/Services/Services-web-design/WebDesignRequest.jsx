@@ -18,6 +18,9 @@ const WebDesignRequest = () => {
         <img
           src="/services-web-design/b966a362-46ae-4124-9f5d-60ce2a10e6d3.jfif"
           alt="Blue Planet Background"
+          width={1920}
+          height={1080}
+          loading="lazy"
           className="w-full h-full object-cover"
         />
       </div>

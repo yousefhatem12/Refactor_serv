@@ -480,7 +480,7 @@ const QuotationForm = () => {
             />
 
             <div className="col-span-1 md:col-span-2 flex flex-col gap-2">
-              <label className="text-gray-400 text-sm font-medium px-2">
+              <label htmlFor="quote-file-upload" className="text-gray-400 text-sm font-medium px-2 cursor-pointer">
                 {t("quoteUploadFile")}
               </label>
               
@@ -491,7 +491,9 @@ const QuotationForm = () => {
                 className="w-full min-h-[140px] rounded-2xl border-2 border-dashed border-white/10 hover:border-blue-500 bg-white/5 flex flex-col items-center justify-center p-6 text-center cursor-pointer transition-all duration-300 gap-3"
               >
                 <input
+                  id="quote-file-upload"
                   type="file"
+                  aria-label={t("quoteUploadFile") || "Upload File"}
                   ref={fileInputRef}
                   onChange={handleFileChange}
                   multiple
@@ -746,9 +748,10 @@ const InputField = ({
   required,
   isRtl,
 }) => {
+  const inputId = `quote-input-${name}`;
   return (
     <div className="flex flex-col gap-2 w-full text-start">
-      <label className="text-gray-400 text-sm font-medium px-2 flex items-center gap-1 w-full justify-start">
+      <label htmlFor={inputId} className="text-gray-400 text-sm font-medium px-2 flex items-center gap-1 w-full justify-start">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
       <div className="relative flex items-center w-full">
@@ -758,6 +761,7 @@ const InputField = ({
           </div>
         )}
         <input
+          id={inputId}
           type={type}
           name={name}
           value={value}
@@ -856,12 +860,14 @@ const SelectField = ({
 };
 
 const TextareaField = ({ label, name, value, onChange, placeholder }) => {
+  const textareaId = `quote-textarea-${name}`;
   return (
     <div className="flex flex-col gap-2 w-full text-start">
-      <label className="text-gray-400 text-sm font-medium px-2 w-full">
+      <label htmlFor={textareaId} className="text-gray-400 text-sm font-medium px-2 w-full">
         {label}
       </label>
       <textarea
+        id={textareaId}
         name={name}
         value={value}
         onChange={onChange}

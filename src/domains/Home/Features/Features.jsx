@@ -74,89 +74,17 @@ export default function Features() {
   const infinitePartners =
     displayPartners.length > 0 ? [...displayPartners, ...displayPartners, ...displayPartners] : [];
 
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
-
-  const checkScroll = () => {
-    if (partnersRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = partnersRef.current;
-      const maxScroll = scrollWidth - clientWidth;
-      setCanScrollLeft(scrollLeft > 10);
-      setCanScrollRight(scrollLeft < maxScroll - 10);
-    }
-  };
-
-  const scrollSpeedRef = useRef(1);
-  const maxSpeed = 8;
-  const baseSpeed = 1;
-
   const scrollLeft = () => {
-    scrollSpeedRef.current = Math.max(scrollSpeedRef.current - 3.5, -maxSpeed);
+    if (partnersRef.current) {
+      partnersRef.current.scrollBy({ left: -240, behavior: "smooth" });
+    }
   };
 
   const scrollRight = () => {
-    scrollSpeedRef.current = Math.min(scrollSpeedRef.current + 3.5, maxSpeed);
-  };
-
-  useEffect(() => {
-    setTimeout(checkScroll, 300);
-    window.addEventListener("resize", checkScroll);
-    return () => window.removeEventListener("resize", checkScroll);
-  }, [language, settings]);
-
-  const [isHovered, setIsHovered] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeftState, setScrollLeftState] = useState(0);
-
-  // Partners slider auto-scroll
-  useEffect(() => {
-    let intervalId;
-    if (partnersRef.current && !isHovered && displayPartners.length > 0) {
-      const el = partnersRef.current;
-      const N = displayPartners.length;
-
-      const getSetWidth = () => {
-        if (el.children && el.children.length > N) {
-          return el.children[N].offsetLeft - el.children[0].offsetLeft;
-        }
-        return el.scrollWidth / 3;
-      };
-
-      const oneSetWidth = getSetWidth();
-      if (oneSetWidth > 0 && el.scrollLeft === 0) {
-        el.scrollLeft = oneSetWidth;
-      }
-
-      intervalId = setInterval(() => {
-        const el = partnersRef.current;
-        if (!el) return;
-        const { scrollLeft, scrollWidth, clientWidth } = el;
-        const oneSetWidth = getSetWidth();
-        const maxScroll = scrollWidth - clientWidth;
-
-        if (scrollSpeedRef.current > baseSpeed) {
-          scrollSpeedRef.current = Math.max(baseSpeed, scrollSpeedRef.current - 0.15);
-        } else if (scrollSpeedRef.current < baseSpeed) {
-          scrollSpeedRef.current = Math.min(baseSpeed, scrollSpeedRef.current + 0.15);
-        }
-
-        const currentSpeed = Math.round(scrollSpeedRef.current * 10) / 10;
-        let newScroll = scrollLeft + currentSpeed;
-
-        if (currentSpeed > 0 && newScroll >= maxScroll - 5) {
-          newScroll -= oneSetWidth;
-        } else if (currentSpeed < 0 && newScroll <= 5) {
-          newScroll += oneSetWidth;
-        }
-
-        el.scrollLeft = newScroll;
-      }, 30);
+    if (partnersRef.current) {
+      partnersRef.current.scrollBy({ left: 240, behavior: "smooth" });
     }
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-    };
-  }, [isHovered, displayPartners]);
+  };
 
   const [features, setFeatures] = useState([]);
   const fetchedRef = useRef(false);
@@ -263,6 +191,9 @@ export default function Features() {
               <img
                 src={experienceImgSrc}
                 alt="Who We Are"
+                width={400}
+                height={360}
+                loading="lazy"
                 className={`w-full h-auto relative z-10 drop-shadow-[0_0_25px_rgba(217,139,80,0.4)] ${experienceImgSrc === siteLogo ? "object-contain max-h-[170px]" : "object-contain max-h-[190px] mx-auto"}`}
                 onError={() => setFailedExperienceImgSrc(requestedExperienceImgSrc)}
               />
@@ -395,6 +326,9 @@ export default function Features() {
               <img
                 src={experienceImgSrc}
                 alt="Who We Are"
+                width={400}
+                height={360}
+                loading="lazy"
                 className={`w-full h-auto relative z-10 drop-shadow-[0_20px_50px_rgba(217,139,80,0.4)] ${experienceImgSrc === siteLogo ? "object-contain max-h-[290px] p-6 mx-auto" : "object-contain max-h-[360px] mx-auto"}`}
                 onError={() => setFailedExperienceImgSrc(requestedExperienceImgSrc)}
               />
@@ -421,12 +355,8 @@ export default function Features() {
           <div className="flex items-center justify-between gap-4 max-w-6xl mx-auto px-2" dir="ltr">
             <button
               onClick={scrollLeft}
-              disabled={!canScrollLeft}
-              className={`hidden sm:flex w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm items-center justify-center text-gray-400 transition-all duration-300 shrink-0 group ${
-                canScrollLeft
-                  ? "hover:text-white hover:bg-[#D98B50] hover:border-[#D98B50] hover:shadow-[0_0_20px_rgba(217,139,80,0.4)] cursor-pointer"
-                  : "opacity-30 cursor-not-allowed"
-              }`}
+              aria-label="Previous partners"
+              className="hidden sm:flex w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm items-center justify-center text-gray-400 transition-all duration-300 shrink-0 group hover:text-white hover:bg-[#D98B50] hover:border-[#D98B50] hover:shadow-[0_0_20px_rgba(217,139,80,0.4)] cursor-pointer"
             >
               <svg
                 width="20"
@@ -437,48 +367,28 @@ export default function Features() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className={canScrollLeft ? "group-hover:-translate-x-1 transition-transform duration-300" : ""}
+                className="group-hover:-translate-x-1 transition-transform duration-300"
               >
                 <polyline points="15 18 9 12 15 6" />
               </svg>
             </button>
 
-            <div className="flex-1 overflow-hidden">
+            <div className="flex-1 overflow-hidden" ref={partnersRef}>
               <div
-                ref={partnersRef}
-                onScroll={checkScroll}
-                onMouseDown={(e) => {
-                  setIsDragging(true);
-                  setStartX(e.pageX - partnersRef.current.offsetLeft);
-                  setScrollLeftState(partnersRef.current.scrollLeft);
-                }}
-                onMouseLeave={() => {
-                  setIsDragging(false);
-                  setIsHovered(false);
-                }}
-                onMouseUp={() => setIsDragging(false)}
-                onMouseMove={(e) => {
-                  if (!isDragging) return;
-                  e.preventDefault();
-                  const x = e.pageX - partnersRef.current.offsetLeft;
-                  const walk = (x - startX) * 1.5;
-                  partnersRef.current.scrollLeft = scrollLeftState - walk;
-                }}
-                onMouseEnter={() => setIsHovered(true)}
-                className={`flex items-center justify-start gap-8 sm:gap-8 md:gap-12 lg:gap-16 overflow-x-auto scrollbar-hide flex-nowrap select-none ${isDragging ? "cursor-grabbing" : "cursor-grab"}`}
-                style={{ msOverflowStyle: "none", scrollbarWidth: "none" }}
+                className="flex items-center justify-start gap-8 sm:gap-8 md:gap-12 lg:gap-16 w-max animate-marquee select-none"
               >
                 {
                   infinitePartners.map((partner, index) => (
-                    <motion.div
+                    <div
                       key={index}
-                      whileHover={{ scale: 1.1, y: -5 }}
-                      transition={{ type: "spring", stiffness: 300 }}
-                      className="relative group p-2 shrink-0 snap-center"
+                      className="relative group p-2 shrink-0"
                     >
                       <img
                         src={partner}
-                        alt={`Partner ${index + 1}`}
+                        alt={`Partner ${(index % (displayPartners.length || 1)) + 1}`}
+                        width={120}
+                        height={60}
+                        loading="lazy"
                         draggable="false"
                         className="h-14 sm:h-14 md:h-16 lg:h-18 w-auto object-contain opacity-60 group-hover:opacity-100 transition-all duration-300 pointer-events-none"
                         style={
@@ -488,7 +398,7 @@ export default function Features() {
                         }
                       />
                       <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1/3 h-[2px] bg-[#D98B50] opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-[1px]"></div>
-                    </motion.div>
+                    </div>
                   ))
                 }
               </div>
@@ -496,12 +406,8 @@ export default function Features() {
 
             <button
               onClick={scrollRight}
-              disabled={!canScrollRight}
-              className={`hidden sm:flex w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm items-center justify-center text-gray-400 transition-all duration-300 shrink-0 group ${
-                canScrollRight
-                  ? "hover:text-white hover:bg-[#D98B50] hover:border-[#D98B50] hover:shadow-[0_0_20px_rgba(217,139,80,0.4)] cursor-pointer"
-                  : "opacity-30 cursor-not-allowed"
-              }`}
+              aria-label="Next partners"
+              className="hidden sm:flex w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm items-center justify-center text-gray-400 transition-all duration-300 shrink-0 group hover:text-white hover:bg-[#D98B50] hover:border-[#D98B50] hover:shadow-[0_0_20px_rgba(217,139,80,0.4)] cursor-pointer"
             >
               <svg
                 width="20"
@@ -512,7 +418,7 @@ export default function Features() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className={canScrollRight ? "group-hover:translate-x-1 transition-transform duration-300" : ""}
+                className="group-hover:translate-x-1 transition-transform duration-300"
               >
                 <polyline points="9 18 15 12 9 6" />
               </svg>

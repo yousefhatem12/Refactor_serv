@@ -16,6 +16,7 @@ import {
 } from "react-icons/fa";
 import { RiTwitterXFill } from "react-icons/ri";
 import Link from "next/link";
+import Image from "next/image";
 // Inline SVGs are used instead of lucide-react to avoid dependency issues.
 
 // Note: Since lucide-react is not in package.json, I will use inline SVGs
@@ -83,14 +84,18 @@ const Footer = () => {
       <div className="absolute top-0 left-0 w-1/3 h-1/3 bg-orange-500/5 blur-[120px] -z-10 rounded-full"></div>
 
       {/* Decorative Element */}
-      <img
-        src="/Element.webp"
-        alt=""
-        aria-hidden="true"
-        width={500}
-        height={500}
-        className={`absolute top-0 ${language === "ar" ? "-right-[80px] scale-x-[-1]" : "-left-[80px]"} mix-blend-luminosity opacity-50 w-48 md:w-[500px]  object-contain pointer-events-none z-0 `}
-      />
+      <div className={`absolute top-0 ${language === "ar" ? "-right-[80px] scale-x-[-1]" : "-left-[80px]"} mix-blend-luminosity opacity-50 w-48 md:w-[500px] pointer-events-none z-0`}>
+        <Image
+          src="/Element.webp"
+          alt=""
+          aria-hidden="true"
+          width={500}
+          height={296}
+          loading="lazy"
+          sizes="(max-width: 768px) 192px, 500px"
+          className="w-full h-auto object-contain"
+        />
+      </div>
 
       <div className=" mx-auto px-6 lg:px-20 relative z-10">
         {/* Top Section: Heading & Astronaut */}
@@ -325,15 +330,24 @@ const Footer = () => {
               {t("followUs")}
             </span>
             <div className="flex flex-wrap justify-center gap-2">
-              {footerData.socials.map((social) => {
+              {(footerData.socials && footerData.socials.length > 0
+                ? footerData.socials
+                : [
+                    { id: "fb", platform: "facebook", url: "https://facebook.com/serv5" },
+                    { id: "tw", platform: "twitter", url: "https://twitter.com/serv5" },
+                    { id: "in", platform: "instagram", url: "https://instagram.com/serv5" },
+                    { id: "li", platform: "linkedin", url: "https://linkedin.com/company/serv5" },
+                    { id: "yt", platform: "youtube", url: "https://youtube.com/@serv5" },
+                  ]
+              ).map((social) => {
                 const iconData = getSocialIconData(social.platform);
                 return (
                   <motion.a
-                    key={social.id}
+                    key={social.id || social.platform}
                     href={safeUrl(social.url)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={social.platform}
+                    aria-label={`Serv5 ${social.platform || "Social"}`}
                     whileHover={{ y: -4, scale: 1.1 }}
                     className={`${iconData.color} w-7 h-7 rounded-full flex items-center justify-center text-white shadow-[0_4px_10px_rgba(0,0,0,0.3)] transition-all`}
                   >

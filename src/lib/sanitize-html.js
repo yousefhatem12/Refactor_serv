@@ -67,8 +67,13 @@ function escapeAttribute(value) {
 }
 
 function isSafeUrl(value, attribute) {
-  const candidate = String(value || "").trim();
+  let candidate = String(value || "").trim();
   if (!candidate || candidate.startsWith("//")) return null;
+
+  if (attribute === "href") {
+    // Rewrite legacy/broken serv5.eg typo to official domain
+    candidate = candidate.replace(/https?:\/\/serv5\.eg(?!\.com)/gi, "https://serv5.com.eg");
+  }
 
   if (candidate.startsWith("/") || candidate.startsWith("#")) {
     return candidate;
@@ -90,6 +95,8 @@ function getSafeAttributes(node, tagName) {
   const allowed = TAG_ATTRIBUTES[tagName] || new Set();
   const attributes = [];
   let targetBlank = false;
+  let hasAlt = false;
+  let hasLoading = false;
 
   for (const attribute of node.attrs || []) {
     const name = String(attribute.name || "").toLowerCase();
@@ -102,12 +109,19 @@ function getSafeAttributes(node, tagName) {
       if (!value) continue;
     }
 
+    if (name === "alt") hasAlt = true;
+    if (name === "loading") hasLoading = true;
     if (name === "target" && value === "_blank") targetBlank = true;
     attributes.push(` ${name}="${escapeAttribute(value)}"`);
   }
 
   if (tagName === "a" && targetBlank && !attributes.some((attr) => attr.startsWith(" rel="))) {
     attributes.push(' rel="noopener noreferrer"');
+  }
+
+  if (tagName === "img") {
+    if (!hasAlt) attributes.push(' alt=""');
+    if (!hasLoading) attributes.push(' loading="lazy"');
   }
 
   return attributes.join("");
@@ -118,9 +132,12 @@ function serializeNode(node) {
   if (node.nodeName === "#text") return escapeText(node.value || "");
   if (node.nodeName === "#comment") return "";
 
-  const tagName = String(node.tagName || "").toLowerCase();
-  if (!tagName) return (node.childNodes || []).map(serializeNode).join("");
-  if (DROP_CONTENT_TAGS.has(tagName)) return "";
+  const rawTagName = String(node.tagName || "").toLowerCase();
+  if (!rawTagName) return (node.childNodes || []).map(serializeNode).join("");
+  if (DROP_CONTENT_TAGS.has(rawTagName)) return "";
+
+  // Downgrade any <h1> inside article bodies to <h2> to maintain a single H1 per page
+  const tagName = rawTagName === "h1" ? "h2" : rawTagName;
 
   const children = (node.childNodes || []).map(serializeNode).join("");
   if (!ALLOWED_TAGS.has(tagName)) return children;

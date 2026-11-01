@@ -1,4 +1,4 @@
-import { fetchAPI } from "@/lib/api";
+import { getCachedBlogPost } from "@/lib/cached-api";
 import { getSeoAlternates } from "@/lib/seo";
 import { headers, cookies } from "next/headers";
 
@@ -17,7 +17,7 @@ export async function generateMetadata({ params }) {
   let ogImage = "";
 
   try {
-    const post = await fetchAPI(`/blog/${id}?lang=${language}`);
+    const post = await getCachedBlogPost(id, language);
     if (post && post.title) {
       title = post.title;
       // Strip HTML tags and limit length to ~160 chars

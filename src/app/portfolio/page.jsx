@@ -1,49 +1,88 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import PortfolioGallery from "../components/Portfolio/PortfolioGallery";
-import CTA from "../components/Home/CTA/CTA";
-import { fetchAPI } from "@/lib/api";
-import { useLanguage } from "../context/LanguageContext";
-import Loading from "../loading";
-import { notFound } from "next/navigation";
+import React from "react";
+import { headers } from "next/headers";
+import { getCachedPage, getCachedSettings } from "@/lib/cached-api";
+import { getSeoAlternates } from "@/lib/seo";
+import { getMediaUrl } from "@/lib/api";
+import PortfolioClient from "./PortfolioClient";
 
-export default function PortfolioPage() {
-  const { language } = useLanguage();
-  const [pageData, setPageData] = useState(null);
-  const [error, setError] = useState(false);
+export async function generateMetadata() {
+  const headersList = await headers();
+  const lang = headersList.get("x-locale") || "en";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://serv5.com.eg";
 
-  useEffect(() => {
-    fetchAPI(`/pages/portfolio?lang=${language}`)
-      .then((res) => {
-        if (res) {
-          setPageData(res.data || res);
-        } else {
-          setError(true);
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        setError(true);
-      });
-  }, [language]);
+  let pageData = null;
+  let settings = null;
+  let alternates = null;
 
-  if (error) {
-    notFound();
+  try {
+    const [pageRes, settingsRes, alts] = await Promise.all([
+      getCachedPage("portfolio", lang).catch(() => null),
+      getCachedSettings(lang).catch(() => null),
+      getSeoAlternates().catch(() => null),
+    ]);
+    pageData = pageRes?.data || pageRes;
+    settings = settingsRes;
+    alternates = alts;
+  } catch (err) {
+    // API fallback
   }
 
-  if (!pageData) {
-    return <Loading />;
+  const title =
+    pageData?.seo?.title ||
+    pageData?.title ||
+    (lang === "ar" ? "أعمالنا | مشاريع شركة Serv5" : "Portfolio | Serv5 Projects");
+
+  const description =
+    pageData?.seo?.description ||
+    pageData?.description ||
+    settings?.site_description ||
+    (lang === "ar"
+      ? "استعرض أحدث أعمال ومشاريع شركة سيرف فايف في تصميم وتطوير المواقع والتطبيقات والهويات الرقمية."
+      : "Explore our latest projects and case studies in web design, software development, and digital branding.");
+
+  const ogImage = pageData?.seo?.image
+    ? getMediaUrl(pageData.seo.image)
+    : settings?.social_share_image
+    ? getMediaUrl(settings.social_share_image)
+    : `${siteUrl}/logo.svg`;
+
+  return {
+    title,
+    description,
+    alternates,
+    openGraph: {
+      title,
+      description,
+      url: `${siteUrl}/${lang}/portfolio`,
+      siteName: "Serv5",
+      type: "website",
+      images: ogImage ? [{ url: ogImage }] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ogImage ? [ogImage] : [],
+    },
+  };
+}
+
+export default async function PortfolioPage() {
+  const headersList = await headers();
+  const lang = headersList.get("x-locale") || "en";
+
+  let initialPageData = null;
+  try {
+    const res = await getCachedPage("portfolio", lang).catch(() => null);
+    initialPageData = res?.data || res || null;
+  } catch (error) {
+    console.error("Failed to fetch initial portfolio data on server:", error);
   }
 
   return (
-    <main className="flex min-h-screen flex-col relative overflow-x-hidden">
-      {/* Background Color Layer */}
-      <div className="fixed inset-0 bg-[#040A37] -z-20 pointer-events-none" />
-
-      <div className="w-full relative z-10">
-        <PortfolioGallery data={pageData} perPage={9} />
-        <CTA />
-      </div>
-    </main>
+    <PortfolioClient
+      initialPageData={initialPageData}
+      initialLang={lang}
+    />
   );
 }

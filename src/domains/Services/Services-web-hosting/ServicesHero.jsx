@@ -135,6 +135,9 @@ const ServicesHero = ({
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
+          tabIndex={0}
+          role="region"
+          aria-label={title || t("webHostingHeroTitle") || "Service Description"}
           className="text-gray-300 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed mb-6 md:mb-8 lg:mb-10 max-h-[30vh] overflow-y-auto custom-scrollbar pr-2"
         >
           {desc || t("webHostingHeroDesc")}
@@ -147,7 +150,7 @@ const ServicesHero = ({
           className="flex flex-wrap w-full items-center gap-4 md:gap-6 justify-start"
         >
           <button
-            onClick={() => router.push("/contact-us")}
+            onClick={() => router.push(`/${language}/contact-us`)}
             className="px-6 py-2.5 md:px-8 md:py-3 rounded-full bg-white text-[#040A37] font-semibold text-base md:text-lg hover:bg-gray-200 transition-colors border-none cursor-pointer"
           >
             {settings?.hero_cta_text || t("getStarted")}
@@ -180,8 +183,10 @@ const ServicesHero = ({
           className="overflow-visible flex items-center justify-center scale-110"
         >
           <img
-            src={planetImage || "/Services/Purple Planet.webp"}
+            src={planetImage || "/Services/planet4.webp"}
             alt="Planet"
+            width={600}
+            height={600}
             className={`w-full h-auto object-contain scale-[0.95] ${isRtl ? "-translate-x-[5%]" : "translate-x-[5%]"}`}
             style={{ filter: `drop-shadow(0 0 50px ${resolvedDotColor}) drop-shadow(0 0 100px ${resolvedDotColor})` }}
           />

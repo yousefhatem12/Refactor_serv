@@ -1,9 +1,44 @@
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://api.serv5.com.eg/api/v1";
+  process.env.INTERNAL_API_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  "https://api.serv5.com.eg/api/v1";
+
+const LEGACY_IMAGE_MAP = {
+  "/Services/Purple Planet.webp": "/Services/planet4.webp",
+  "/Services/Blue Planet.webp": "/Services/blue.webp",
+  "/Services/new/yellow.webp": "/Services/yellow.webp",
+  "/Services/new/green.webp": "/Services/green.webp",
+  "Services/Purple Planet.webp": "/Services/planet4.webp",
+  "Services/Blue Planet.webp": "/Services/blue.webp",
+  "Services/new/yellow.webp": "/Services/yellow.webp",
+  "Services/new/green.webp": "/Services/green.webp",
+};
 
 export const getMediaUrl = (path) => {
   if (!path) return "";
-  if (path.startsWith("http")) return path;
+  if (path.startsWith("http://") || path.startsWith("https://")) return path;
+
+  if (LEGACY_IMAGE_MAP[path]) {
+    return LEGACY_IMAGE_MAP[path];
+  }
+
+  // Static assets located in the Next.js public/ directory (starts with / and not /storage/)
+  if (path.startsWith("/") && !path.startsWith("/storage/")) {
+    return path;
+  }
+
+  // Mappings from database seed records to public static assets
+  if (path.startsWith("projects/")) {
+    return "/" + path.replace(/^projects\//, "portfolio/");
+  }
+  if (path.startsWith("posts/")) {
+    return "/" + path.replace(/^posts\//, "our-blog/");
+  }
+
+  // Placeholder service heroes from old seeders fallback to empty so defaultHeroImage is used
+  if (path.startsWith("services/heroes/")) {
+    return "";
+  }
 
   const baseUrl = API_BASE_URL.replace(/\/api(\/v\d+)?$/, "");
   const normalizedPath = path
@@ -18,6 +53,43 @@ export const getMediaUrl = (path) => {
 // for personal/private endpoints. Private endpoints must bypass this cache.
 const apiCache = new Map();
 const CACHE_TTL = 300000; // 5 minutes
+
+// Browser request concurrency queue to prevent overwhelming development/production servers
+// and to prioritize visible content requests so they finish significantly faster.
+let activeBrowserRequests = 0;
+const MAX_CONCURRENT_BROWSER_REQUESTS = 3;
+const browserRequestQueue = [];
+
+function processNextInQueue() {
+  if (activeBrowserRequests >= MAX_CONCURRENT_BROWSER_REQUESTS) return;
+  if (browserRequestQueue.length === 0) return;
+
+  const next = browserRequestQueue.shift();
+  activeBrowserRequests++;
+  next.execute().finally(() => {
+    activeBrowserRequests--;
+    processNextInQueue();
+  });
+}
+
+function runWithBrowserQueue(fn, priority = "normal") {
+  if (typeof window === "undefined") {
+    return fn();
+  }
+  return new Promise((resolve, reject) => {
+    const item = {
+      priority,
+      execute: () => fn().then(resolve, reject),
+    };
+    if (priority === "high") {
+      browserRequestQueue.unshift(item);
+    } else {
+      browserRequestQueue.push(item);
+    }
+    processNextInQueue();
+  });
+}
+
 
 /**
  * Helper to determine the language from options, URL, headers, or cookies.
@@ -133,7 +205,14 @@ export const getApiPage = (payload) => {
 export const fetchAPI = async (endpoint, options = {}) => {
   const lang = await getCurrentLang(endpoint, options);
 
-  const url = new URL(`${API_BASE_URL}${endpoint}`);
+  // In browser: ALWAYS use same-origin /api/v1 to eliminate all CORS issues completely
+  const effectiveBaseUrl =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/api/v1`
+      : API_BASE_URL;
+
+  const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+  const url = new URL(`${effectiveBaseUrl}${cleanEndpoint}`);
   url.searchParams.set("lang", lang);
 
   const method = (options.method || "GET").toUpperCase();
@@ -157,9 +236,9 @@ export const fetchAPI = async (endpoint, options = {}) => {
     }
   }
 
-  const fetchPromise = (async () => {
+  const doFetch = async () => {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15-second timeout
+    const timeoutId = setTimeout(() => controller.abort(), 8000); // 8-second timeout
 
     try {
       const isFormData =
@@ -210,7 +289,9 @@ export const fetchAPI = async (endpoint, options = {}) => {
       if (isGet && cacheKey) apiCache.delete(cacheKey); // Don't cache failures
       return null; // Return null so the UI doesn't crash
     }
-  })();
+  };
+
+  const fetchPromise = runWithBrowserQueue(doFetch, options.priority || "normal");
 
   if (canUseBrowserCache && cacheKey) {
     apiCache.set(cacheKey, {

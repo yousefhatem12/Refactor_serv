@@ -35,6 +35,7 @@ const AboutHero = ({ data }) => {
           src={data?.hero_image || "/about-us/hero.webp"}
           alt="Moon Surface Background"
           fill
+          sizes="100vw"
           className="object-cover object-top opacity-80"
           priority
         />
@@ -62,10 +63,10 @@ const AboutHero = ({ data }) => {
                 </div>
               ) : (
                 <div className="w-16 h-16 relative mb-6">
-                  <Image src={`/about-us/logo-${(idx % 3) + 1}.webp`} alt={item.value} fill className="object-contain" />
+                  <Image src={`/about-us/logo-${(idx % 3) + 1}.webp`} alt={item.value} fill sizes="64px" className="object-contain" />
                 </div>
               )}
-              <h3 className="text-xl font-bold text-white mb-3">{item.value}</h3>
+              <h2 className="text-xl font-bold text-white mb-3">{item.value}</h2>
               <p className="text-gray-400 text-sm leading-relaxed">
                 {item.label}
               </p>

@@ -9,11 +9,6 @@ export default function robots() {
         userAgent: "*",
         allow: ["/"],
         disallow: [
-          // Next.js internals
-          "/_next/",
-          "/_next/static/",
-          "/_next/image/",
-
           // API routes (no SEO value)
           "/api/",
 
@@ -66,12 +61,11 @@ export default function robots() {
         disallow: ["/"],
       },
 
-      // ── Googlebot: allow everything (including images) ───────────────────────
+      // ── Googlebot: allow everything (including images & CSS/JS) ──────────────
       {
         userAgent: "Googlebot",
         allow: ["/"],
         disallow: [
-          "/_next/",
           "/api/",
           "/admin/",
           "/dashboard/",
@@ -83,7 +77,6 @@ export default function robots() {
         userAgent: "Bingbot",
         allow: ["/"],
         disallow: [
-          "/_next/",
           "/api/",
           "/admin/",
           "/dashboard/",

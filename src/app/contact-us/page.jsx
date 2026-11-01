@@ -1,55 +1,88 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import ContactInfo from "../components/Contact/ContactInfo";
-import ContactForm from "../components/Contact/ContactForm";
-import ContactMap from "../components/Contact/ContactMap";
-import { fetchAPI } from "@/lib/api";
-import { useLanguage } from "../context/LanguageContext";
-import Loading from "../loading";
-import { notFound } from "next/navigation";
+import React from "react";
+import { headers } from "next/headers";
+import { getCachedPage, getCachedSettings } from "@/lib/cached-api";
+import { getSeoAlternates } from "@/lib/seo";
+import { getMediaUrl } from "@/lib/api";
+import ContactUsClient from "./ContactUsClient";
 
-export default function ContactUsPage() {
-  const { language } = useLanguage();
-  const [pageData, setPageData] = useState(null);
-  const [error, setError] = useState(false);
+export async function generateMetadata() {
+  const headersList = await headers();
+  const lang = headersList.get("x-locale") || "en";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://serv5.com.eg";
 
-  useEffect(() => {
-    fetchAPI(`/pages/contact-us?lang=${language}`)
-      .then((res) => {
-        if (res) {
-          setPageData(res.data || res);
-        } else {
-          setError(true);
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        setError(true);
-      });
-  }, [language]);
+  let pageData = null;
+  let settings = null;
+  let alternates = null;
 
-  if (error) {
-    notFound();
+  try {
+    const [pageRes, settingsRes, alts] = await Promise.all([
+      getCachedPage("contact-us", lang).catch(() => null),
+      getCachedSettings(lang).catch(() => null),
+      getSeoAlternates().catch(() => null),
+    ]);
+    pageData = pageRes?.data || pageRes;
+    settings = settingsRes;
+    alternates = alts;
+  } catch (err) {
+    // API fallback
   }
 
-  if (!pageData) {
-    return <Loading />;
+  const title =
+    pageData?.seo?.title ||
+    pageData?.title ||
+    (lang === "ar" ? "اتصل بنا | Serv5" : "Contact Us | Serv5");
+
+  const description =
+    pageData?.seo?.description ||
+    pageData?.description ||
+    settings?.site_description ||
+    (lang === "ar"
+      ? "تواصل مع فريق سيرف فايف لطلب استشارة أو عرض سعر لمشروعك البرمجي والتسويقي."
+      : "Contact Serv5 team for consultations, quotations, and inquiries about our software and digital marketing services.");
+
+  const ogImage = pageData?.seo?.image
+    ? getMediaUrl(pageData.seo.image)
+    : settings?.social_share_image
+    ? getMediaUrl(settings.social_share_image)
+    : `${siteUrl}/logo.svg`;
+
+  return {
+    title,
+    description,
+    alternates,
+    openGraph: {
+      title,
+      description,
+      url: `${siteUrl}/${lang}/contact-us`,
+      siteName: "Serv5",
+      type: "website",
+      images: ogImage ? [{ url: ogImage }] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ogImage ? [ogImage] : [],
+    },
+  };
+}
+
+export default async function ContactUsPage() {
+  const headersList = await headers();
+  const lang = headersList.get("x-locale") || "en";
+
+  let initialPageData = null;
+  try {
+    const res = await getCachedPage("contact-us", lang).catch(() => null);
+    initialPageData = res?.data || res || null;
+  } catch (error) {
+    console.error("Failed to fetch initial contact data on server:", error);
   }
 
   return (
-    <main className="flex min-h-screen flex-col relative overflow-x-hidden text-white z-10">
-      {/* Visual background glows */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#FF8A00]/5 rounded-full filter blur-[120px] pointer-events-none z-0" />
-      <div className="absolute top-1/2 right-1/4 w-[600px] h-[600px] bg-blue-500/5 rounded-full filter blur-[150px] pointer-events-none z-0" />
-
-      <div className="w-full max-w-7xl mx-auto px-6 relative z-10 pt-32 pb-10">
-        <div className="flex flex-col lg:flex-row items-start justify-between gap-12 lg:gap-8">
-          <ContactInfo data={pageData} />
-          <ContactForm />
-        </div>
-
-        <ContactMap />
-      </div>
-    </main>
+    <ContactUsClient
+      initialPageData={initialPageData}
+      initialLang={lang}
+    />
   );
 }

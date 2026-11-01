@@ -127,6 +127,45 @@ html[dir="rtl"] {
   }
 }
 
+/* GPU-composited Marquee (runs off main thread, zero TBT) */
+@keyframes marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* GPU-composited Floating Stars (replaces Framer Motion JS loops) */
+@keyframes floatStar {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.15;
+  }
+  50% {
+    transform: translate3d(0, -25px, 0);
+    opacity: 0.75;
+  }
+}
+
+.animate-float-star {
+  animation: floatStar var(--star-duration, 6s) ease-in-out infinite;
+  animation-delay: var(--star-delay, 0s);
+  will-change: transform, opacity;
+}
+
 html[dir="rtl"] .article-content,
 html[dir="rtl"] .article-content *,
 html[lang="ar"] .article-content,

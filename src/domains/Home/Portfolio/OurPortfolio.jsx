@@ -160,6 +160,9 @@ const OurPortfolio = ({ activeCategoryId, isFeaturedOnly = false, mobileCategori
                           e.target.classList.add("object-contain", "p-8", "bg-gray-800");
                         }}
                         alt={item.name}
+                        width={600}
+                        height={400}
+                        loading="lazy"
                         className={`w-full h-full transition-transform duration-500 group-hover:scale-105 ${!(item.image) ? "object-contain p-8 bg-gray-800" : "object-cover"}`}
                       />
                       {/* Dark overlay specifically for hover on desktop */}

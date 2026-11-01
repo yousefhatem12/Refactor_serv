@@ -1,16 +1,17 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 
 const LanguageContext = createContext();
 
 import { translations } from "./translations";
 
-export const LanguageProvider = ({ children, defaultLanguage = "en" }) => {
+export const LanguageProvider = ({ children, defaultLanguage = "en", initialSettings = {} }) => {
   const [language, setLanguage] = useState(defaultLanguage); // Initialized from defaultLanguage
-  const [settings, setSettings] = useState({});
+  const [settings, setSettings] = useState(initialSettings);
   const router = useRouter();
+  const initialMountRef = useRef(true);
 
   useEffect(() => {
     // Read from URL path first to keep URL as source of truth
@@ -36,6 +37,13 @@ export const LanguageProvider = ({ children, defaultLanguage = "en" }) => {
   }, [defaultLanguage]);
 
   useEffect(() => {
+    if (initialMountRef.current) {
+      initialMountRef.current = false;
+      if (initialSettings && Object.keys(initialSettings).length > 0 && language === defaultLanguage) {
+        return;
+      }
+    }
+
     let mounted = true;
     const fetchSettings = async () => {
       try {
@@ -55,9 +63,9 @@ export const LanguageProvider = ({ children, defaultLanguage = "en" }) => {
     };
     fetchSettings();
     return () => { mounted = false; };
-  }, [language]);
+  }, [language, defaultLanguage, initialSettings]);
 
-  const toggleLanguage = () => {
+  const toggleLanguage = useCallback(() => {
     const newLang = language === "en" ? "ar" : "en";
     
     // Set cookie for Server Components
@@ -75,9 +83,9 @@ export const LanguageProvider = ({ children, defaultLanguage = "en" }) => {
     }
 
     window.location.href = newPath;
-  };
+  }, [language]);
 
-  const t = (key) => {
+  const t = useCallback((key) => {
     const overrideKey = `trans_${key}`;
     if (settings && settings[overrideKey] !== undefined && settings[overrideKey] !== null && settings[overrideKey] !== "") {
       return settings[overrideKey];
@@ -86,10 +94,15 @@ export const LanguageProvider = ({ children, defaultLanguage = "en" }) => {
       return settings[key];
     }
     return translations[language]?.[key] || key;
-  };
+  }, [settings, language]);
+
+  const contextValue = useMemo(
+    () => ({ language, toggleLanguage, t }),
+    [language, toggleLanguage, t]
+  );
 
   return (
-    <LanguageContext.Provider value={{ language, toggleLanguage, t }}>
+    <LanguageContext.Provider value={contextValue}>
       {children}
     </LanguageContext.Provider>
   );

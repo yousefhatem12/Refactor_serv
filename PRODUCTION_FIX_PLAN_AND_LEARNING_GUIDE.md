@@ -63,20 +63,20 @@ All **13 PDF report issues + 5 extra code-level audit issues** can be completed 
 ### Day 1 (~6.5 Hours): Shared Components, A11y, Technical SEO, Sitemaps & Fast `TTFB`
 *Resolves ~65% of the warnings across all 100 pages on the very first day.*
 
-- [ ] **Hour 1 — Kill All `307` Redirects & `401` Console Errors (`PDF #3`, `PDF #13`):**
+- [x] **Hour 1 — Kill All `307` Redirects & `401` Console Errors (`PDF #3`, `PDF #13`):**
   - Update `src/domains/Shared/Footer/Footer.jsx` with `getLocalizedHref` (Step 1.1).
   - Guard `/api/v1/me` in `src/app/context/AuthContext.jsx` (Step 1.5).
-- [ ] **Hours 2–3.5 — Fix All 100-Page Accessibility (`a11y`) Failures (`PDF #4`, `PDF #5`, `PDF #12`, `Extra E5`):**
+- [x] **Hours 2–3.5 — Fix All 100-Page Accessibility (`a11y`) Failures (`PDF #4`, `PDF #5`, `PDF #12`, `Extra E5`):**
   - Add `aria-label` to social links in `Footer.jsx`, `TeamWork.jsx`, `team-work/page.jsx`, `ContactInfo.jsx`, and `ContactModal.jsx` (Steps 1.1 & 1.2).
   - Add `title` to the Google Maps `<iframe>` in `ContactMap.jsx` (Step 1.2).
   - Fix scrollable hero regions (`tabIndex={0}` or remove `max-h-[30vh] overflow-y-auto`) in the 6 `Services*Hero.jsx` files (Step 1.3).
   - Fix heading hierarchy jumps (`h2` → `h3`) in `Footer.jsx`, `Testimonial.jsx`, `AboutHero.jsx`, `PortfolioGallery.jsx`, `FAQContent.jsx`, and `careers/page.jsx` (Steps 1.1 & 1.8).
   - Add `<label htmlFor>` / `aria-label` to form inputs (`ContactForm.jsx`, `ConsultationForm.jsx`, `QuotationForm.jsx`, `ContactUs.jsx`, `Newsletter.jsx`), add `aria-expanded` to `FAQContent.jsx`, and remove duplicate `id`s in `Navbar.jsx` (Step 1.8).
-- [ ] **Hours 3.5–5 — Fix Root SSR `lang`/`dir`, `robots.txt`, Sitemaps & Blog H1s (`PDF #8`, `PDF #9`, `Extra E1`, `Extra E2`, `Extra E3`):**
+- [x] **Hours 3.5–5 — Fix Root SSR `lang`/`dir`, `robots.txt`, Sitemaps & Blog H1s (`PDF #8`, `PDF #9`, `Extra E1`, `Extra E2`, `Extra E3`):**
   - Read `x-locale` header in `src/app/layout.js` for dynamic `<html lang={locale} dir={dir}>` (Step 1.6).
   - Fix `src/app/robots.js` (allow `/portfolio` and `/_next/`) and restore `/sitemap.xml` with `/ar` and `/en` URLs (Step 1.6).
   - Change `<motion.h2>` to `<motion.h1>` in `BlogHero.jsx` and downgrade rich-text `<h1>` → `<h2>` + fix `serv5.eg` in `src/lib/sanitize-html.js` (Step 1.4 & Step 2.2).
-- [ ] **Hours 5–6.5 — Fix Slow `TTFB` on Blog, Portfolio & Root Layout (`PDF #7`):**
+- [x] **Hours 5–6.5 — Fix Slow `TTFB` on Blog, Portfolio & Root Layout (`PDF #7`):**
   - Add `getCachedPortfolioItem`, `getCachedServicesList`, and `getCachedNavLinks` in `src/lib/cached-api.js` and wire them into `blog/[id]/layout.jsx`, `portfolio/[id]/layout.jsx`, and `src/app/layout.js` (Step 1.7).
 
 ---
@@ -84,7 +84,7 @@ All **13 PDF report issues + 5 extra code-level audit issues** can be completed 
 ### Day 2 (~7.5 Hours): SSR Conversion — Fixing `CLS`, `LCP` & Missing Canonicals on 93 Pages
 *Eliminates the `<Loading />` layout shift (`CLS 0.835` → `< 0.05`), cuts `LCP` (`10.25s` → `< 2.0s`), and restores `<link rel="canonical">` on all 42 missing pages.*
 
-- [ ] **Hour 1 — Stop Homepage Client Double-Fetching (`PDF #6`):**
+- [x] **Hour 1 — Stop Homepage Client Double-Fetching (`PDF #6`):**
   - Update `src/app/(home)/HomePageClient.jsx` to remove `{ ssr: false }` and skip the 9-endpoint `useEffect` refetch on initial mount when `initialData` already matches `language` (Step 2.3).
 - [ ] **Hours 2–7.5 — Convert the 12 Client-Only `page.jsx` Routes to Server Components + `*Client.jsx` (`PDF #1`, `PDF #2`, `PDF #8`):**
   - Apply the Server Component + `generateMetadata` (`getSeoAlternates()`) pattern (Step 2.1) to:

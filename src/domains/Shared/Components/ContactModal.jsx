@@ -73,6 +73,7 @@ const ContactModal = ({ isOpen, onClose, settings }) => {
             {/* Close Button */}
             <button
               onClick={onClose}
+              aria-label="Close modal"
               className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all hover:rotate-90 group border-none cursor-pointer"
             >
               <svg
@@ -180,6 +181,7 @@ const ContactModal = ({ isOpen, onClose, settings }) => {
                           href={safeUrl(social.url)}
                           target="_blank"
                           rel="noopener noreferrer"
+                          aria-label={social.platform}
                           whileHover={{ y: -5, scale: 1.1 }}
                           className={`${iconData.color} w-12 h-12 rounded-full flex items-center justify-center text-white shadow-[0_5px_15px_rgba(0,0,0,0.3)] transition-all`}
                         >

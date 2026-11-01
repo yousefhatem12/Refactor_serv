@@ -1,8 +1,5 @@
 User-Agent: *
 Allow: /
-Disallow: /_next/
-Disallow: /_next/static/
-Disallow: /_next/image/
 Disallow: /api/
 Disallow: /admin/
 Disallow: /dashboard/
@@ -31,17 +28,15 @@ Disallow: /
 
 User-Agent: Googlebot
 Allow: /
-Disallow: /_next/
 Disallow: /api/
 Disallow: /admin/
 Disallow: /dashboard/
 
 User-Agent: Bingbot
 Allow: /
-Disallow: /_next/
 Disallow: /api/
 Disallow: /admin/
 Disallow: /dashboard/
 
-Host: https://serv5.com.eg
-Sitemap: https://serv5.com.eg/sitemap.xml
+Host: http://localhost:3000
+Sitemap: http://localhost:3000/sitemap.xml

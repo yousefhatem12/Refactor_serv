@@ -231,6 +231,7 @@ const ContactUs = () => {
                 <input
                   type="email"
                   name="email"
+                  aria-label={isAr ? "البريد الإلكتروني" : "Email"}
                   value={authData.email}
                   onChange={handleAuthChange}
                   placeholder={isAr ? "البريد الإلكتروني" : "Email"}
@@ -242,6 +243,7 @@ const ContactUs = () => {
                   <input
                     type={showPassword ? "text" : "password"}
                     name="password"
+                    aria-label={isAr ? "كلمة المرور" : "Password"}
                     value={authData.password}
                     onChange={handleAuthChange}
                     placeholder={isAr ? "كلمة المرور" : "Password"}
@@ -251,6 +253,7 @@ const ContactUs = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? (isAr ? "إخفاء كلمة المرور" : "Hide password") : (isAr ? "إظهار كلمة المرور" : "Show password")}
                     className="absolute right-3 rtl:right-auto rtl:left-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors"
                   >
                     {showPassword ? (
@@ -271,6 +274,7 @@ const ContactUs = () => {
                     <input
                       type={showConfirmPassword ? "text" : "password"}
                       name="password_confirmation"
+                      aria-label={isAr ? "تأكيد كلمة المرور" : "Confirm Password"}
                       value={authData.password_confirmation}
                       onChange={handleAuthChange}
                       placeholder={isAr ? "تأكيد كلمة المرور" : "Confirm Password"}
@@ -280,6 +284,7 @@ const ContactUs = () => {
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      aria-label={showConfirmPassword ? (isAr ? "إخفاء كلمة المرور" : "Hide password") : (isAr ? "إظهار كلمة المرور" : "Show password")}
                       className="absolute right-3 rtl:right-auto rtl:left-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors"
                     >
                       {showConfirmPassword ? (
@@ -345,6 +350,7 @@ const ContactUs = () => {
               <input
                 type="text"
                 name="name"
+                aria-label={t("namePlaceholder") || "Full Name"}
                 value={formData.name}
                 onChange={handleChange}
                 placeholder={t("namePlaceholder")}
@@ -354,6 +360,7 @@ const ContactUs = () => {
               <input
                 type="email"
                 name="email"
+                aria-label={t("emailPlaceholder") || "Email"}
                 value={formData.email}
                 onChange={handleChange}
                 placeholder={t("emailPlaceholder")}
@@ -363,6 +370,7 @@ const ContactUs = () => {
               <input
                 type="tel"
                 name="phone"
+                aria-label={t("phonePlaceholder") || "Phone Number"}
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder={t("phonePlaceholder")}
@@ -371,6 +379,7 @@ const ContactUs = () => {
               />
               <select
                 name="type"
+                aria-label={t("contactSubject") || "Inquiry Type"}
                 value={formData.type}
                 onChange={handleChange}
                 className="bg-[#0F172A]/40 border border-white/10 rounded-md p-3 md:p-4 text-white focus:outline-none focus:border-[#FF8A00] transition-colors appearance-none cursor-pointer"
@@ -394,6 +403,7 @@ const ContactUs = () => {
               </select>
               <textarea
                 name="message"
+                aria-label={t("messagePlaceholder") || "Message"}
                 value={formData.message}
                 onChange={handleChange}
                 placeholder={t("messagePlaceholder")}

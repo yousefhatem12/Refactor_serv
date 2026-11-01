@@ -109,6 +109,9 @@ const WebDevHero = ({ data, serviceId = "web-development", gradient, dotColor, p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
+            tabIndex={0}
+            role="region"
+            aria-label={data?.hero_title || data?.title || t("webDevHeroTitle") || "Service Description"}
             className="text-gray-300 text-sm sm:text-base md:text-lg leading-relaxed mb-8 md:mb-10 max-h-[25vh] overflow-y-auto"
           >
             {data?.hero_subtitle || data?.subtitle || data?.desc || data?.description || t("webDevHeroDesc")}
@@ -121,7 +124,7 @@ const WebDevHero = ({ data, serviceId = "web-development", gradient, dotColor, p
             className="flex flex-wrap w-full items-center gap-4 justify-start"
           >
             <button
-              onClick={() => router.push("/contact-us")}
+              onClick={() => router.push(`/${language}/contact-us`)}
               className="px-6 py-2.5 md:px-8 md:py-3 rounded-full bg-white text-[#040A37] font-semibold text-base md:text-lg hover:bg-gray-200 transition-colors border-none cursor-pointer"
             >
               {settings?.hero_cta_text || t("getStarted")}
@@ -157,6 +160,8 @@ const WebDevHero = ({ data, serviceId = "web-development", gradient, dotColor, p
               <img
                 src={planetImage || "/Services/green.webp"}
                 alt="Planet"
+                width={600}
+                height={600}
                 className="w-[100%] h-auto object-contain scale-110"
                 style={{
                   filter: `drop-shadow(0 0 40px ${resolvedDotColor}) drop-shadow(0 0 80px ${resolvedDotColor}aa) drop-shadow(0 0 120px ${resolvedDotColor}55)`,

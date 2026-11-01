@@ -74,6 +74,7 @@ const TextImageSection = ({ data }) => {
                 src={imageUrl}
                 alt={data.title}
                 fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className={imageClass}
               />
             </div>

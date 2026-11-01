@@ -136,6 +136,9 @@ const SocialMediaHero = ({
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
+          tabIndex={0}
+          role="region"
+          aria-label={title || t("socialMediaHeroTitle") || "Service Description"}
           className="text-gray-300 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed mb-6 md:mb-8 lg:mb-10 max-h-[30vh] overflow-y-auto custom-scrollbar pr-2"
         >
           {desc || t("socialMediaHeroDesc")}
@@ -148,7 +151,7 @@ const SocialMediaHero = ({
           className="flex flex-wrap w-full items-center gap-4 md:gap-6 justify-start"
         >
           <button
-            onClick={() => router.push("/contact-us")}
+            onClick={() => router.push(`/${language}/contact-us`)}
             className="px-6 py-2.5 md:px-8 md:py-3 rounded-full bg-white text-[#040A37] font-semibold text-base md:text-lg hover:bg-gray-200 transition-colors border-none cursor-pointer"
           >
             {settings?.hero_cta_text || t("startProject")}
@@ -183,6 +186,8 @@ const SocialMediaHero = ({
             <img
               src={planetImage}
               alt="Planet"
+              width={600}
+              height={600}
               className={`w-full h-auto object-contain scale-110 ${isRtl ? "-translate-x-[10%]" : "translate-x-[10%]"}`}
               style={{ filter: `drop-shadow(0 0 45px ${resolvedDotColor}) drop-shadow(0 0 90px ${resolvedDotColor})` }}
             />

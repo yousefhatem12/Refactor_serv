@@ -21,6 +21,8 @@ const PlanetAstronaut = ({ className = "", progress, ...props }) => {
           <img
             src="/Hero/orange-planet.webp"
             alt="Planet"
+            width={550}
+            height={550}
             className="w-full h-full object-contain drop-shadow-[0_0_80px_rgba(255,138,0,0.4)] animate-[spin_60s_linear_infinite]"
           />
           {/* Subtle Glow */}
@@ -35,7 +37,9 @@ const PlanetAstronaut = ({ className = "", progress, ...props }) => {
           <motion.img
             src="/Hero/astronaut.webp"
             alt="Astronaut"
-            className="w-full h-auto object-contain"
+            width={440}
+            height={440}
+            className="w-full h-full object-contain"
             animate={{
               x: ["-50%", "-52%", "-50%"],
               y: ["-50%", "-55%", "-50%"],

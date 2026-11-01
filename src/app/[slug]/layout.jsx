@@ -1,5 +1,4 @@
-import { fetchAPI } from "@/lib/api";
-import { getCachedSettings } from "@/lib/cached-api";
+import { getCachedSettings, getCachedService, getCachedPage } from "@/lib/cached-api";
 import { getSeoAlternates } from "@/lib/seo";
 import { headers, cookies } from "next/headers";
 
@@ -24,14 +23,14 @@ export async function generateMetadata({ params }) {
   try {
     if (slug.startsWith("services-")) {
       const serviceSlug = slug.replace("services-", "");
-      const data = await fetchAPI(`/services/${serviceSlug}?lang=${language}`);
+      const data = await getCachedService(serviceSlug, language);
       if (data && data.message !== "Service not found") {
         title = data.hero_title || data.title || `${siteTitle} Service`;
         description = data.hero_subtitle || data.description || "";
         ogImage = data.image || data.default_hero_image || "";
       }
     } else {
-      const data = await fetchAPI(`/pages/${slug}?lang=${language}`);
+      const data = await getCachedPage(slug, language);
       if (data && data.message !== "Page not found") {
         title = data.seo?.title || data.title || siteTitle;
         description = data.seo?.description || data.description || "";

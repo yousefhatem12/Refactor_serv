@@ -199,6 +199,7 @@ const ConsultationForm = () => {
           <div className="w-full">
             <textarea
               name="references"
+              aria-label={t("refPlaceholder") || "References"}
               value={formData.references}
               onChange={handleChange}
               placeholder={t("refPlaceholder")}
@@ -406,10 +407,12 @@ const InputField = ({
   placeholder,
   type = "text",
 }) => {
+  const inputId = `consult-${name}`;
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-gray-400 text-sm font-medium px-2">{label}</label>
+      <label htmlFor={inputId} className="text-gray-400 text-sm font-medium px-2">{label}</label>
       <input
+        id={inputId}
         type={type}
         name={name}
         value={value}

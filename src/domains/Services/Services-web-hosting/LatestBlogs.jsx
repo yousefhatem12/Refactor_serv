@@ -97,6 +97,9 @@ const LatestBlogs = () => {
                     e.target.classList.add("object-contain", "p-12", "bg-gray-800");
                   }}
                   alt={blog.title}
+                  width={400}
+                  height={450}
+                  loading="lazy"
                   className={`absolute inset-0 w-full h-full transition-transform duration-700 group-hover:scale-110 ${!blog.image ? "object-contain p-12 bg-gray-800" : "object-cover"}`}
                 />
 

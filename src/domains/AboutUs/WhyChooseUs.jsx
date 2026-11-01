@@ -32,6 +32,7 @@ const WhyChooseUs = ({ data }) => {
           src="/about-us/sectiom-5-bg.webp"
           alt="Why Choose Us Background"
           fill
+          sizes="100vw"
           className="object-cover object-center opacity-80"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A1A] via-transparent to-[#0A0A1A] z-10" />

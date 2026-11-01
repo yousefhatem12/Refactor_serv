@@ -36,4 +36,13 @@ describe("security utilities", () => {
     expect(json).not.toContain("</script>");
     expect(json).toContain("\\u003c/script\\u003e");
   });
+
+  it("downgrades h1 to h2 in article bodies and enforces image accessibility", () => {
+    const result = sanitizeHtml('<h1>Article Subtitle</h1><img src="https://serv5.com.eg/img.webp"><a href="http://serv5.eg/contact">Contact</a>');
+    expect(result).toContain("<h2>Article Subtitle</h2>");
+    expect(result).not.toContain("<h1>");
+    expect(result).toContain('alt=""');
+    expect(result).toContain('loading="lazy"');
+    expect(result).toContain('href="https://serv5.com.eg/contact"');
+  });
 });

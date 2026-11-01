@@ -47,6 +47,7 @@ const Newsletter = () => {
           src="/our-blog/get-our-blog.webp"
           alt="Newsletter Background"
           fill
+          sizes="100vw"
           className="object-cover object-center mix-blend-screen opacity-80 [mask-image:radial-gradient(ellipse,black_20%,transparent_70%)] [-webkit-mask-image:radial-gradient(ellipse,black_20%,transparent_70%)] mix-blend-screen brightness-[130%] contrast-[120%] saturate-[130%]"
           priority
         />
@@ -73,6 +74,7 @@ const Newsletter = () => {
         >
           <input
             type="email"
+            aria-label={t("newsletterPlaceholder") || "Your Email"}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder={t("newsletterPlaceholder") || "Your Email"}

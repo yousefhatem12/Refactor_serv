@@ -19,7 +19,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'Deploy your business applications on our enterprise-grade cloud servers. Experience instant NVMe SSD storage speeds, daily automatic backups, and DDoS protection with an uptime guarantee of 99.99%.',
                         'ar' => 'انشر تطبيقات أعمالك وموقعك على خوادمنا السحابية فائقة السرعة والموثوقية. استمتع بوحدات تخزين NVMe SSD فائقة الأداء، ونقاط استعادة يومية، مع حماية أمنية متكاملة تضمن بقاء موقعك متاحاً طوال الوقت.'
                     ],
-                    'hero_image' => 'services/heroes/hosting-hero.webp',
+                    'hero_image' => null,
                 ]
             ],
             [
@@ -148,7 +148,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'We design beautiful, modern, and high-converting websites that express your brand identity. Tailored user experiences that engage visitors and convert them into loyal clients.',
                         'ar' => 'نصمم مواقع ويب جذابة وعصرية ومخصصة لزيادة المبيعات تعكس تفاصيل هويتك التجارية. نصنع تجربة مستخدم فريدة تأسر الزوار وتحولهم إلى عملاء دائمين.'
                     ],
-                    'hero_image' => 'services/heroes/web-design-hero.webp',
+                    'hero_image' => null,
                 ]
             ],
             [
@@ -274,7 +274,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'Build high-performance, secure, and scalable web applications tailored to your exact business specifications. We turn complex requirements into clean, future-proof code.',
                         'ar' => 'ابنِ تطبيقات ويب متطورة وآمنة وقابلة للتوسع تناسب متطلبات أعمالك بدقة متناهية. نحول المتطلبات المعقدة إلى أكواد برمجية نظيفة وجاهزة للمستقبل.'
                     ],
-                    'hero_image' => 'services/heroes/web-dev-hero.webp',
+                    'hero_image' => null,
                 ]
             ],
             [
@@ -393,7 +393,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'Launch your online retail store with interactive layouts, secure checkout processes, and comprehensive inventory management systems. We build stores that sell.',
                         'ar' => 'أطلق متجرك الإلكتروني بواجهات تفاعلية مذهلة، وعمليات دفع آمنة وسهلة، ونظام متكامل لإدارة المخزون والطلبات. نصنع متاجر تزيد أرباحك.'
                     ],
-                    'hero_image' => 'services/heroes/web-design-hero.webp',
+                    'hero_image' => null,
                 ]
             ],
             [
@@ -512,7 +512,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'Deploy custom iOS and Android mobile applications developed for high scale. Engaging layouts, native fluid animations, and robust database backends.',
                         'ar' => 'أطلق تطبيقك المخصص لهواتف أندرويد وآيفون بأعلى معايير الجودة والأداء الفائق. واجهات تفاعلية جذابة، حركات سلسة، وأنظمة خلفية شديدة الاستقرار.'
                     ],
-                    'hero_image' => 'services/heroes/services-hero.webp',
+                    'hero_image' => null,
                 ]
             ],
             [
@@ -638,7 +638,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'Expand your brand footprint, drive qualified organic traffic, and maximize sales conversions with our data-backed digital marketing strategies.',
                         'ar' => 'وسع نطاق انتشار علامتك التجارية، واجذب ملايين الزوار المهتمين، وضاعف مبيعاتك وأرباحك باستراتيجيات تسويقية رقمية مبنية على الأرقام والتحليل.'
                     ],
-                    'hero_image' => 'services/heroes/social-media-hero.webp',
+                    'hero_image' => null,
                 ]
             ],
             [
@@ -757,7 +757,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'Leave a memorable impression on your customers. We design unique corporate brand identities, logos, marketing materials, and high-impact social media layouts.',
                         'ar' => 'اترك انطباعاً لا ينسى لدى عملائك. نصمم هويات بصرية فريدة للشركات، شعارات مبتكرة، مواد تسويقية مطبوعة ورقيمة، وتنسيقات جذابة لحسابات التواصل الاجتماعي.'
                     ],
-                    'hero_image' => 'services/heroes/services-hero.webp',
+                    'hero_image' => null,
                 ]
             ],
             [
@@ -860,7 +860,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'Protect your infrastructure, websites, and database from security threats, hacks, and malware attacks with our proactive defenses.',
                         'ar' => 'احمِ بنيتك التحتية ومواقعك وقواعد بياناتك من المخاطر الأمنية والاختراقات وهجمات البرمجيات الخبيثة بدفاعاتنا الاستباقية.'
                     ],
-                    'hero_image' => 'services/heroes/hosting-hero.webp',
+                    'hero_image' => null,
                 ]
             ],
             [
@@ -979,7 +979,7 @@ class ServiceSeeder extends Seeder
                         'en' => 'Keep your digital systems running smoothly. We offer server monitoring, bug fixing, updates, and optimization at any hour.',
                         'ar' => 'حافظ على تشغيل أنظمتك الرقمية بسلاسة تامة. نقدم مراقبة الخوادم، إصلاح الأخطاء، التحديثات الدورية، وتحسين الأداء في أي وقت.'
                     ],
-                    'hero_image' => 'services/heroes/hosting-hero.webp',
+                    'hero_image' => null,
                 ]
             ],
             [
@@ -1096,7 +1096,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'Get the most powerful, secure, and fast website hosting with high-performance storage and DDoS shield protection.',
                     'ar' => 'معنا، ستحصل على أقوى استضافة مواقع توفر لك ميزات فائقة الأداء وتساعدك في الحفاظ على أمن موقعك واستقراره.'
                 ],
-                'icon' => '/Services/Purple Planet.webp',
+                'icon' => '/Services/planet4.webp',
                 'template' => 'template-three',
                 'blocks' => $webHostingBlocks,
             ],
@@ -1106,7 +1106,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'Deploy your business websites on fully managed cloud infrastructure with scalable resources and automated backups.',
                     'ar' => 'انشر مواقع أعمالك على بنية تحتية سحابية مخصصة وسريعة تضمن استمرارية التشغيل الكاملة.'
                 ],
-                'icon' => '/Services/Purple Planet.webp',
+                'icon' => '/Services/planet4.webp',
                 'template' => 'template-three',
                 'blocks' => $webHostingBlocks,
             ],
@@ -1116,7 +1116,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'Create stunning, fully responsive, and conversion-optimized web designs that capture your corporate brand identity.',
                     'ar' => 'أنشئ مواقع ويب مذهلة وسريعة الاستجابة وسهلة الاستخدام تأسر جمهورك وتمثل علامتك التجارية بشكل مثالي.'
                 ],
-                'icon' => '/Services/new/yellow.webp',
+                'icon' => '/Services/yellow.webp',
                 'template' => 'template-two',
                 'blocks' => $webDesignBlocks,
             ],
@@ -1126,7 +1126,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'High-fidelity wireframes and interactive user interfaces designed with user convenience and modern aesthetics.',
                     'ar' => 'نصمم واجهات وتجارب مستخدم متكاملة ومدروسة تسهل على الزوار الوصول لأهدافهم وتزيد مبيعاتك.'
                 ],
-                'icon' => '/Services/new/yellow.webp',
+                'icon' => '/Services/yellow.webp',
                 'template' => 'template-two',
                 'blocks' => $webDesignBlocks,
             ],
@@ -1136,7 +1136,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'Complete digital branding solutions including custom logo design, color guidelines, typography, and marketing assets.',
                     'ar' => 'حلول متكاملة لبناء هويتك الرقمية تشمل تصميم الشعارات، الكتيبات الإرشادية للألوان والخطوط.'
                 ],
-                'icon' => '/Services/new/yellow.webp',
+                'icon' => '/Services/yellow.webp',
                 'template' => 'template-two',
                 'blocks' => $webDesignBlocks,
             ],
@@ -1146,7 +1146,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'Custom full-stack web applications coded using React, Next.js, and Laravel, optimized for speed and scaling.',
                     'ar' => 'نطور تطبيقات ومواقع ويب مخصصة قوية وسريعة باستخدام أحدث تقنيات الويب لحلول برمجية متكاملة.'
                 ],
-                'icon' => '/Services/Blue Planet.webp',
+                'icon' => '/Services/blue.webp',
                 'template' => 'template-one',
                 'blocks' => $webDevBlocks,
             ],
@@ -1156,7 +1156,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'Feature-rich online store design with shopping cart, multi-payment options, automated order routing, and inventory sync.',
                     'ar' => 'أطلق متجرك الإلكتروني المجهز لعرض وبيع منتجاتك وقبول المدفوعات والربط مع شركات الشحن المختلفة.'
                 ],
-                'icon' => '/Services/new/yellow.webp',
+                'icon' => '/Services/yellow.webp',
                 'template' => 'template-two',
                 'blocks' => $ecommerceBlocks,
             ],
@@ -1166,7 +1166,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'High-capacity iOS and Android app development using Flutter and React Native, with secure APIs and notifications.',
                     'ar' => 'تطبيقات متميزة وسلسة لأجهزة آيفون وأندرويد بأحدث معايير الأمان والتوافق والربط السحابي.'
                 ],
-                'icon' => '/Services/new/green.webp',
+                'icon' => '/Services/green.webp',
                 'template' => 'template-two',
                 'blocks' => $mobileAppBlocks,
             ],
@@ -1176,7 +1176,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'We code robust native iOS and Android apps, managing the development lifecycle from UI design to app store submission.',
                     'ar' => 'نقوم ببرمجة وتطوير تطبيقات الهواتف الذكية وتجهيزها ورفعها بالكامل على متجري آبل بلاي وجوجل بلاي.'
                 ],
-                'icon' => '/Services/new/green.webp',
+                'icon' => '/Services/green.webp',
                 'template' => 'template-two',
                 'blocks' => $mobileAppBlocks,
             ],
@@ -1186,7 +1186,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'Increase your market reach, attract valuable organic leads, and scale your brand visibility with modern ad strategies.',
                     'ar' => 'وسع نطاق وصول علامتك التجارية، وابنِ الثقة، وحقق المبيعات باستراتيجياتنا التسويقية المتكاملة.'
                 ],
-                'icon' => '/Services/Blue Planet.webp',
+                'icon' => '/Services/blue.webp',
                 'template' => 'template-one',
                 'blocks' => $digitalMarketingBlocks,
             ],
@@ -1196,7 +1196,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'Expert management of social media accounts with regular updates, graphic layouts, content plans, and paid ad funnels.',
                     'ar' => 'إدارة احترافية لحسابات التواصل الاجتماعي تشمل تصميم المنشورات وإعداد خطط المحتوى والحملات الإعلانية.'
                 ],
-                'icon' => '/Services/Blue Planet.webp',
+                'icon' => '/Services/blue.webp',
                 'template' => 'template-one',
                 'blocks' => $digitalMarketingBlocks,
             ],
@@ -1206,7 +1206,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'Strategic affiliate networks and marketing setups to scale customer acquisition channels and generate recurring revenue.',
                     'ar' => 'استراتيجيات وخطط التسويق بالعمولة والشبكات لزيادة قنوات استقطاب العملاء وبناء دخل متكرر.'
                 ],
-                'icon' => '/Services/Blue Planet.webp',
+                'icon' => '/Services/blue.webp',
                 'template' => 'template-one',
                 'blocks' => $digitalMarketingBlocks,
             ],
@@ -1216,7 +1216,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'On-page audits, technical SEO fixes, high-value keyword indexing, and backlink strategies to rank first on search engines.',
                     'ar' => 'تهيئة الموقع الفنية وتوفير الكلمات المفتاحية وبناء الروابط للحصول على ترتيب متقدم في جوجل.'
                 ],
-                'icon' => '/Services/Blue Planet.webp',
+                'icon' => '/Services/blue.webp',
                 'template' => 'template-one',
                 'blocks' => $digitalMarketingBlocks,
             ],
@@ -1226,7 +1226,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'Craft premium logos, commercial packaging, marketing illustrations, and corporate banners that make a lasting impression.',
                     'ar' => 'اجعل أفكارك تنبض بالحياة من خلال حلول التصميم الإبداعي لدينا التي تبرز وتترك انطباعاً دائماً.'
                 ],
-                'icon' => '/Services/new/green.webp',
+                'icon' => '/Services/green.webp',
                 'template' => 'template-two',
                 'blocks' => $creativeDesignBlocks,
             ],
@@ -1236,7 +1236,7 @@ class ServiceSeeder extends Seeder
                     'en' => 'Enterprise-grade system protection, active network firewalls, vulnerability scanning, and secure compliance certifications.',
                     'ar' => 'تأمين كامل للبنية التحتية والمواقع الإلكترونية وقواعد البيانات ضد محاولات الاختراق والهجمات السيبرانية.'
                 ],
-                'icon' => '/Services/Purple Planet.webp',
+                'icon' => '/Services/planet4.webp',
                 'template' => 'template-three',
                 'blocks' => $cyberSecurityBlocks,
             ],
@@ -1246,7 +1246,7 @@ class ServiceSeeder extends Seeder
                     'en' => '24/7 technical monitoring, database optimization, daily health backups, and immediate bug resolution agreements.',
                     'ar' => 'دعم فني وصيانة متواصلة لحل أي مشكلات فنية أو برمجية في الخوادم أو المواقع على مدار الساعة.'
                 ],
-                'icon' => '/Services/Purple Planet.webp',
+                'icon' => '/Services/planet4.webp',
                 'template' => 'template-three',
                 'blocks' => $techSupportBlocks,
             ],

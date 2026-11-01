@@ -19,7 +19,7 @@
 # But exclude the webpack cache — those files exceed GitHub's 100MB limit.
 .next/cache/
 /out/
-.*next/
+.next/
 
 # production
 /build

@@ -97,6 +97,9 @@ const SocialMediaWhyChooseUs = ({ whyTitle, whySubtitle, whyList }) => {
           <img
             src="/Hero/earth.webp"
             alt="Earth"
+            width={600}
+            height={600}
+            loading="lazy"
             className={`w-full max-h-[110vh] object-contain opacity-50 brightness-50 contrast-125 ${
               isRtl
                 ? "-translate-x-[250px] scale-x-[-1.2] scale-y-[1.2]"

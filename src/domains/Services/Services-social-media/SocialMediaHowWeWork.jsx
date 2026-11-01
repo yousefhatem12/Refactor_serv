@@ -108,6 +108,9 @@ const SocialMediaHowWeWork = ({
                   <img
                     src={step.icon}
                     alt={step.title}
+                    width={192}
+                    height={192}
+                    loading="lazy"
                     className="w-full h-full object-contain"
                   />
                 </div>

@@ -68,6 +68,7 @@ const PortfolioCard = ({ item, t, language, siteLogo }) => {
         src={imgSrc}
         alt={item.name}
         fill
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         className={`transition-all duration-700 group-hover:scale-110 ${
           isImageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
         } ${imgSrc === siteLogo ? "object-contain p-4" : "object-cover"}`}
@@ -81,9 +82,9 @@ const PortfolioCard = ({ item, t, language, siteLogo }) => {
         prefetch={false}
         className="absolute inset-0 bg-gradient-to-t from-[#040A37]/90 via-[#040A37]/50 to-transparent opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 lg:p-6 z-10"
       >
-        <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-white mb-1 lg:mb-2 translate-y-0 lg:translate-y-4 lg:group-hover:translate-y-0 transition-transform duration-300">
+        <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-white mb-1 lg:mb-2 translate-y-0 lg:translate-y-4 lg:group-hover:translate-y-0 transition-transform duration-300">
           {item.name}
-        </h3>
+        </h2>
         {item.description && (
           <p className="text-gray-300 text-xs md:text-sm lg:text-base line-clamp-2 mb-3 lg:mb-4 translate-y-0 lg:translate-y-4 lg:group-hover:translate-y-0 transition-transform duration-300 lg:delay-75">
             {item.description}

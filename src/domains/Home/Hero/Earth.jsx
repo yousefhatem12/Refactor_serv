@@ -14,99 +14,107 @@ export default function Earth({ isPhaseTwo }) {
   const isRtl = language === "ar";
 
   useEffect(() => {
-    // Initial setup
-    gsap.set(logoRef.current, { y: -10, scale: 1, opacity: 0.5 });
+    const ctx = gsap.context(() => {
+      // Initial setup
+      gsap.set(logoRef.current, { y: -10, scale: 1, opacity: 0.5 });
 
-    // Continuous Earth Rotation
-    gsap.to(earthRef.current, {
-      rotation: 360,
-      duration: 100,
-      repeat: -1,
-      ease: "none",
-    });
+      // Continuous Earth Rotation
+      gsap.to(earthRef.current, {
+        rotation: 360,
+        duration: 100,
+        repeat: -1,
+        ease: "none",
+      });
 
-    // Continuous Sunlight Movement
-    gsap.to(sunlightRef.current, {
-      x: "-50%",
-      duration: 3,
-      ease: "power2.inOut",
-      repeat: -1,
-      yoyo: true,
-      repeatDelay: 2,
-    });
+      // Continuous Sunlight Movement
+      gsap.to(sunlightRef.current, {
+        x: "-50%",
+        duration: 3,
+        ease: "power2.inOut",
+        repeat: -1,
+        yoyo: true,
+        repeatDelay: 2,
+      });
 
-    // Logo Floating
-    gsap.to(logoRef.current, {
-      y: 10,
-      scale: 1.02,
-      opacity: 1,
-      duration: 2,
-      repeat: -1,
-      yoyo: true,
-      ease: "power1.inOut",
-    });
+      // Logo Floating
+      gsap.to(logoRef.current, {
+        y: 10,
+        scale: 1.02,
+        opacity: 1,
+        duration: 2,
+        repeat: -1,
+        yoyo: true,
+        ease: "power1.inOut",
+      });
 
-    // Astronaut Floating (Inner Image)
-    gsap.to(astronautImgRef.current, {
-      y: -15,
-      rotation: 5,
-      duration: 3,
-      repeat: -1,
-      yoyo: true,
-      ease: "power1.inOut",
-    });
+      // Astronaut Floating (Inner Image)
+      gsap.to(astronautImgRef.current, {
+        y: -15,
+        rotation: 5,
+        duration: 3,
+        repeat: -1,
+        yoyo: true,
+        ease: "power1.inOut",
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
   }, []);
 
   useEffect(() => {
-    const isMobile = window.innerWidth < 768;
+    const ctx = gsap.context(() => {
+      const isMobile = window.innerWidth < 768;
 
-    // Phase Two Animations (Container and Astronaut Entrance)
-    if (isPhaseTwo) {
-      // Main container smooth scale & move
-      gsap.to(containerRef.current, {
-        x: isMobile ? "0%" : isRtl ? "-25%" : "25%",
-        y: isMobile ? "-20%" : "0%",
-        scale: isMobile ? 0.85 : 1.2,
-        duration: 1.5,
-        ease: "power3.inOut",
-      });
+      // Phase Two Animations (Container and Astronaut Entrance)
+      if (isPhaseTwo) {
+        // Main container smooth scale & move
+        gsap.to(containerRef.current, {
+          x: isMobile ? "0%" : isRtl ? "-25%" : "25%",
+          y: isMobile ? "-20%" : "0%",
+          scale: isMobile ? 0.85 : 1.2,
+          duration: 1.5,
+          ease: "power3.inOut",
+        });
 
-      // Astronaut Entrance
-      if (!isMobile) {
-        gsap.fromTo(
-          astronautWrapperRef.current,
-          {
-            x: isRtl ? "-300%" : "300%",
-            y: "50%",
-            opacity: 0,
-            rotation: isRtl ? -45 : 45,
-            scale: 0.5,
-          },
-          {
-            x: isRtl ? "85%" : "-85%",
-            y: "85%",
-            opacity: 1,
-            rotation: isRtl ? 65 : 0,
-            scale: 1.5,
-            duration: 1.5,
-            delay: 0.3,
-            ease: "power3.out",
-          },
-        );
+        // Astronaut Entrance
+        if (!isMobile) {
+          gsap.fromTo(
+            astronautWrapperRef.current,
+            {
+              x: isRtl ? "-300%" : "300%",
+              y: "50%",
+              opacity: 0,
+              rotation: isRtl ? -45 : 45,
+              scale: 0.5,
+            },
+            {
+              x: isRtl ? "85%" : "-85%",
+              y: "85%",
+              opacity: 1,
+              rotation: isRtl ? 65 : 0,
+              scale: 1.5,
+              duration: 1.5,
+              delay: 0.3,
+              ease: "power3.out",
+            },
+          );
+        }
+      } else {
+        // Phase One state
+        gsap.to(containerRef.current, {
+          x: "0%",
+          y: "0%",
+          scale: isMobile ? 0.8 : 0.6,
+          duration: 1.5,
+          ease: "power3.inOut",
+        });
+
+        // Hide Astronaut
+        gsap.set(astronautWrapperRef.current, { opacity: 0 });
       }
-    } else {
-      // Phase One state
-      gsap.to(containerRef.current, {
-        x: "0%",
-        y: "0%",
-        scale: isMobile ? 0.8 : 0.6,
-        duration: 1.5,
-        ease: "power3.inOut",
-      });
+    }, containerRef);
 
-      // Hide Astronaut
-      gsap.set(astronautWrapperRef.current, { opacity: 0 });
-    }
+    return () => ctx.revert();
   }, [isPhaseTwo, isRtl]);
 
   return (
@@ -126,6 +134,8 @@ export default function Earth({ isPhaseTwo }) {
           <img
             src="/Hero/earth.webp"
             alt="Earth"
+            width={800}
+            height={800}
             className="w-full h-full object-contain"
           />
         </div>
@@ -147,6 +157,8 @@ export default function Earth({ isPhaseTwo }) {
             <img
               src="/logo.svg"
               alt="Serv5 Logo"
+              width={300}
+              height={300}
               className="w-full h-full object-contain 
                          mix-blend-luminosity md:mix-blend-normal 
                          drop-shadow-[0_0_40px_rgba(255,255,255,0.8)] md:drop-shadow-[0_0_20px_rgba(255,255,255,0.5)] 
@@ -171,6 +183,8 @@ export default function Earth({ isPhaseTwo }) {
               ref={astronautImgRef}
               src="/Hero/astronaut.webp"
               alt="Astronaut"
+              width={200}
+              height={200}
               className="w-full h-full object-contain"
             />
           </div>

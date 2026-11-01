@@ -291,6 +291,7 @@ const ContactInfo = ({ data }) => {
                 href={safeUrl(social.url)}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={social.platform}
                 className={`${getColor(social.platform)} w-9 h-9 rounded-xl flex items-center justify-center text-white shadow-lg hover:-translate-y-1 hover:scale-105 transition-all duration-300`}
               >
                 {getIcon(social.platform)}

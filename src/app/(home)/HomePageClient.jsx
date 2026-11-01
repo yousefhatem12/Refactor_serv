@@ -24,7 +24,47 @@ import { useLanguage } from "../context/LanguageContext";
 import { fetchAPI } from "@/lib/api";
 import Loading from "../loading";
 
-export default function HomePageClient({ initialHomeData }) {
+function LazySection({ children, minHeight = "600px", rootMargin = "500px" }) {
+  const [shouldRender, setShouldRender] = useState(() => {
+    if (typeof window !== "undefined" && window.location.hash) {
+      return true;
+    }
+    return false;
+  });
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (shouldRender) return;
+    const el = ref.current;
+    if (!el) return;
+
+    if (typeof IntersectionObserver === "undefined") {
+      setShouldRender(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setShouldRender(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [shouldRender, rootMargin]);
+
+  return (
+    <div ref={ref} style={{ minHeight: shouldRender ? undefined : minHeight }}>
+      {shouldRender ? children : null}
+    </div>
+  );
+}
+
+export default function HomePageClient({ initialHomeData, initialLocale = "en" }) {
   const { language } = useLanguage();
   const [pageData, setPageData] = useState(initialHomeData);
   const [isPhaseTwo, setIsPhaseTwo] = useState(true);
@@ -34,16 +74,24 @@ export default function HomePageClient({ initialHomeData }) {
   const [isMobile, setIsMobile] = useState(null);
   const containerRef = useRef(null);
   const isRtl = language === "ar";
+  const initialLangRef = useRef(initialLocale);
+  const isInitialMountRef = useRef(true);
 
   useEffect(() => {
     let isMounted = true;
 
     const loadDataSequentially = async () => {
       try {
-        // Fetch home page structure and products in parallel from the database
+        const isFirstMountWithData = isInitialMountRef.current && initialHomeData && language === initialLangRef.current;
+        isInitialMountRef.current = false;
+
+        // Priority 1: Top section data (Home and Featured Products) executed first
+        // Skip duplicate home API call if initial data was already rendered by SSR
         const [homeData, productsData] = await Promise.all([
-          fetchAPI(`/pages/home?lang=${language}`),
-          fetchAPI(`/products?lang=${language}&category=all&page=1&per_page=3`),
+          isFirstMountWithData
+            ? Promise.resolve(null)
+            : fetchAPI(`/pages/home?lang=${language}`, { priority: "high" }),
+          fetchAPI(`/products?lang=${language}&category=all&page=1&per_page=3`, { priority: "high" }),
         ]);
 
         if (!isMounted) return;
@@ -71,29 +119,8 @@ export default function HomePageClient({ initialHomeData }) {
             }
           }
         }
-
-        // Fetch the remaining endpoints in parallel in background to populate cache
-        const remainingEndpoints = [
-          `/settings?lang=${language}`,
-          `/settings`,
-          `/features`,
-          `/services?lang=${language}`,
-          `/products/categories?lang=${language}`,
-          `/portfolio/categories?lang=${language}`,
-          `/blog?lang=${language}&limit=5`,
-          `/blog/trending?lang=${language}`,
-          `/testimonials?lang=${language}`,
-        ];
-
-        Promise.allSettled(
-          remainingEndpoints.map((endpoint) => fetchAPI(endpoint)),
-        ).then(() => {
-          if (isMounted) {
-            // Preloading completed
-          }
-        });
       } catch (error) {
-        console.error("Error in parallel preloading:", error);
+        console.error("Error in sequential loading:", error);
       }
     };
 
@@ -231,13 +258,13 @@ export default function HomePageClient({ initialHomeData }) {
           {pageData?.sections && <PageSections sections={pageData.sections} />}
 
           <Features />
-          <Services />
-          <OnlineWebsite />
-          <OnlineWebsiteDetails />
-          <OurBlog />
-          <Testimonial />
-          <ContactUs />
-          <CTA />
+          <LazySection minHeight="700px"><Services /></LazySection>
+          <LazySection minHeight="700px"><OnlineWebsite /></LazySection>
+          <LazySection minHeight="500px"><OnlineWebsiteDetails /></LazySection>
+          <LazySection minHeight="600px"><OurBlog /></LazySection>
+          <LazySection minHeight="600px"><Testimonial /></LazySection>
+          <LazySection minHeight="600px"><ContactUs /></LazySection>
+          <LazySection minHeight="800px"><CTA /></LazySection>
 
           <div className="absolute inset-0 pointer-events-none z-40">
             {/* Global Earth */}

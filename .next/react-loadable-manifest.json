@@ -14,72 +14,72 @@
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/Blog/OurBlog": {
     "id": 8164,
     "files": [
-      "static/chunks/8164.c5213bb5b1ca638d.js"
+      "static/chunks/8164.12c199cfccd32f5f.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/CTA/CTA": {
     "id": 6548,
     "files": [
       "static/chunks/3018-c9d6dec3bac3cf96.js",
-      "static/chunks/6548.002ebd00ec2651aa.js"
+      "static/chunks/6548.7a368d3bd80aed31.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/ContactUs/ContactUs": {
     "id": 1672,
     "files": [
-      "static/chunks/1672.5c3e9e75b95899a4.js"
+      "static/chunks/1672.78445a78b412ac4b.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/Features/Features": {
     "id": 3065,
     "files": [
       "static/chunks/8994-b972b82541e48d80.js",
-      "static/chunks/3065.678a28fe79ea44cd.js"
+      "static/chunks/3065.27d339b88db01cc7.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/Hero/Earth": {
     "id": 7995,
     "files": [
-      "static/chunks/7995.d538ced193bd255e.js"
+      "static/chunks/7995.8a77c738a6f7fc63.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/OnlineWebsite/OnlineWebsite": {
     "id": 8690,
     "files": [
       "static/chunks/8500-1881b11f3cfa4a83.js",
-      "static/chunks/8690.e77d41683ec0def6.js"
+      "static/chunks/8690.95ab98db989ec075.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/OnlineWebsite/OnlineWebsiteDetails": {
     "id": 5431,
     "files": [
       "static/chunks/8500-1881b11f3cfa4a83.js",
-      "static/chunks/5431.b650cff04a036fdc.js"
+      "static/chunks/5431.31e63a73aa461875.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/Services/Services": {
     "id": 4818,
     "files": [
       "static/chunks/8500-1881b11f3cfa4a83.js",
-      "static/chunks/4818.3bf415085d6f77c8.js"
+      "static/chunks/4818.61a789137f5097a5.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/Shared/PlanetAstronaut": {
     "id": 653,
     "files": [
-      "static/chunks/653.401e61d54db553c4.js"
+      "static/chunks/653.6d52c036416979e6.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/Testimonial/Testimonial": {
     "id": 3328,
     "files": [
-      "static/chunks/3328.cce45141461cf0fb.js"
+      "static/chunks/3328.96846bdc33bf4fdf.js"
     ]
   },
   "app\\context\\LanguageContext.jsx -> @/lib/api": {
     "id": 8863,
     "files": [
-      "static/chunks/8863.3404b11590cd7a5a.js"
+      "static/chunks/8863.94a890a6bdef2cf2.js"
     ]
   }
 }

@@ -311,6 +311,8 @@ const Navbar = ({ initialServices = [], initialNavLinks = [] }) => {
             <img
               src={settings?.site_logo ? getMediaUrl(settings.site_logo) : "/logo.svg"}
               alt="Serv5 Logo"
+              width={140}
+              height={48}
               className="h-12 md:h-16 w-auto object-contain transition-transform duration-300 hover:scale-105 cursor-pointer"
             />
           </Link>
@@ -583,6 +585,7 @@ const Navbar = ({ initialServices = [], initialNavLinks = [] }) => {
               >
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
+                  aria-label="Close mobile menu"
                   className="text-white hover:text-[#D98B50] transition-colors cursor-pointer border-none bg-transparent"
                 >
                   <svg
@@ -651,7 +654,9 @@ const Navbar = ({ initialServices = [], initialNavLinks = [] }) => {
                           {link.name}
                         </Link>
                         {link.dropdown && (
-                          <button className="text-white/80 hover:text-white transition-colors cursor-pointer bg-transparent border-none p-1">
+                          <button
+                            aria-label={`Toggle ${link.name} dropdown`}
+                            className="text-white/80 hover:text-white transition-colors cursor-pointer bg-transparent border-none p-1">
                             <svg
                               className={`w-6 h-6 transition-transform duration-300 ${openMobileDropdown === link.name ? "rotate-180" : ""}`}
                               fill="none"

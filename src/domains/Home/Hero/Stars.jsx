@@ -10,12 +10,16 @@ export default function Stars() {
         initial={{ opacity: 0.5 }}
         animate={{ opacity: [0.4, 0.7, 0.4] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute inset-0 z-10"
-        style={{
-          backgroundImage: "url('/Hero/front-stars.svg')",
-          backgroundSize: "cover",
-        }}
-      />
+        className="absolute inset-0 z-10 pointer-events-none"
+      >
+        <img
+          src="/Hero/front-stars.svg"
+          alt=""
+          aria-hidden="true"
+          fetchPriority="high"
+          className="w-full h-full object-cover"
+        />
+      </motion.div>
 
       {/* Left Stars Animated Layer */}
       <motion.div
@@ -29,13 +33,16 @@ export default function Stars() {
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="absolute top-0 left-0 w-full h-full z-20"
-        style={{
-          backgroundImage: "url('/Hero/left-starts-Animate.svg')",
-          backgroundSize: "contain",
-          backgroundRepeat: "no-repeat",
-        }}
-      />
+        className="absolute top-0 left-0 w-full h-full z-20 pointer-events-none"
+      >
+        <img
+          src="/Hero/left-starts-Animate.svg"
+          alt=""
+          aria-hidden="true"
+          fetchPriority="high"
+          className="w-full h-full object-contain"
+        />
+      </motion.div>
 
       {/* Dark Gradient Overlay for Depth */}
       <div className="absolute inset-0 bg-gradient-to-b from-blue-950/20 via-transparent to-transparent z-30" />

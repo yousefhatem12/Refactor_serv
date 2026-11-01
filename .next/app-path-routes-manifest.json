@@ -1,6 +1,7 @@
 {
   "/_not-found/page": "/_not-found",
   "/_global-error/page": "/_global-error",
+  "/api/v1/[...path]/route": "/api/v1/[...path]",
   "/blog-sitemap.xml/route": "/blog-sitemap.xml",
   "/favicon.ico/route": "/favicon.ico",
   "/page-sitemap.xml/route": "/page-sitemap.xml",
@@ -15,15 +16,16 @@
   "/careers/page": "/careers",
   "/contact-us/page": "/contact-us",
   "/faq/page": "/faq",
-  "/our-products/[id]/page": "/our-products/[id]",
   "/our-products/page": "/our-products",
   "/portfolio/page": "/portfolio",
   "/project-consultation/page": "/project-consultation",
   "/request-quote/page": "/request-quote",
   "/services/[slug]/page": "/services/[slug]",
+  "/services/page": "/services",
   "/team-work/page": "/team-work",
   "/(home)/page": "/",
   "/[slug]/page": "/[slug]",
   "/blog/[id]/page": "/blog/[id]",
+  "/our-products/[id]/page": "/our-products/[id]",
   "/portfolio/[id]/page": "/portfolio/[id]"
 }

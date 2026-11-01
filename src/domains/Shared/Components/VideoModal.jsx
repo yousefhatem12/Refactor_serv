@@ -36,6 +36,7 @@ const VideoModal = ({ isOpen, onClose, videoUrl }) => {
             {/* Close Button */}
             <button
               onClick={onClose}
+              aria-label="Close video modal"
               className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all hover:rotate-90 group border-none cursor-pointer"
             >
               <svg

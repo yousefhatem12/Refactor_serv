@@ -151,6 +151,7 @@ const GlobalReach = ({ data, minimal = false }) => {
             src="/about-us/Contents.webp"
             alt="Global Reach Map"
             fill
+            sizes="(max-width: 1152px) 100vw, 1152px"
             className="object-contain opacity-80"
           />
 

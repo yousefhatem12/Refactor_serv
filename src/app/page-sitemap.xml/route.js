@@ -23,8 +23,23 @@ export async function GET() {
   const routes = [];
 
   for (const item of staticPaths) {
+    // English version (200 OK)
     routes.push({
       url: `${baseUrl}/en${item.path}`,
+      lastModified: new Date(),
+      changeFrequency: item.changefreq,
+      priority: item.priority,
+      alternates: {
+        languages: {
+          en: `${baseUrl}/en${item.path}`,
+          ar: `${baseUrl}/ar${item.path}`,
+          "x-default": `${baseUrl}/en${item.path}`,
+        },
+      },
+    });
+    // Arabic version (200 OK)
+    routes.push({
+      url: `${baseUrl}/ar${item.path}`,
       lastModified: new Date(),
       changeFrequency: item.changefreq,
       priority: item.priority,

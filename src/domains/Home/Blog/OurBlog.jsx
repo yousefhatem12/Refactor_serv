@@ -5,7 +5,7 @@ import { fetchAPI, getMediaUrl } from "@/lib/api";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
 
-const SafeBlogImage = ({ src, fallback, alt, className }) => {
+const SafeBlogImage = ({ src, fallback, alt, className, width = 600, height = 400 }) => {
   const [imgSrc, setImgSrc] = useState(src || fallback);
   
   useEffect(() => {
@@ -17,7 +17,10 @@ const SafeBlogImage = ({ src, fallback, alt, className }) => {
   return (
     <img
       src={imgSrc}
-      alt={alt}
+      alt={alt || "Blog post image"}
+      width={width}
+      height={height}
+      loading="lazy"
       className={`${className} ${isFallback ? "object-contain p-6 bg-gray-800" : "object-cover"}`}
       onError={() => setImgSrc(fallback)}
     />

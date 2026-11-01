@@ -258,6 +258,9 @@ const Testimonial = () => {
                               <img
                                 src={item.avatar}
                                 alt={item.name}
+                                width={40}
+                                height={40}
+                                loading="lazy"
                                 className="w-full h-full object-cover"
                               />
                             ) : (
@@ -271,9 +274,9 @@ const Testimonial = () => {
                             )}
                           </div>
                           <div>
-                            <h4 className="text-white font-bold text-sm leading-tight">
+                            <h3 className="text-white font-bold text-sm leading-tight">
                               {item.name}
-                            </h4>
+                            </h3>
                             <p className="text-[#FF8A00] text-[10px] font-medium uppercase tracking-wider">
                               {item.role}
                             </p>
@@ -321,6 +324,9 @@ const Testimonial = () => {
                             <img
                               src={item.avatar}
                               alt={item.name}
+                              width={40}
+                              height={40}
+                              loading="lazy"
                               className="w-full h-full object-cover"
                             />
                           ) : (
@@ -334,9 +340,9 @@ const Testimonial = () => {
                           )}
                         </div>
                         <div>
-                          <h4 className="text-white font-bold text-sm leading-tight">
+                          <h3 className="text-white font-bold text-sm leading-tight">
                             {item.name}
-                          </h4>
+                          </h3>
                           <p className="text-[#FF8A00] text-[10px] font-medium uppercase tracking-wider">
                             {item.role}
                           </p>
@@ -393,6 +399,9 @@ const Testimonial = () => {
                                   <img
                                     src={item.avatar}
                                     alt={item.name}
+                                    width={48}
+                                    height={48}
+                                    loading="lazy"
                                     className="w-full h-full object-cover"
                                   />
                                 ) : (
@@ -408,9 +417,9 @@ const Testimonial = () => {
                             </div>
                           </div>
                           <div>
-                            <h4 className="text-white font-bold text-base leading-tight group-hover/card:text-[#FF8A00] transition-colors">
+                            <h3 className="text-white font-bold text-base leading-tight group-hover/card:text-[#FF8A00] transition-colors">
                               {item.name}
-                            </h4>
+                            </h3>
                             <p className="text-gray-400 text-xs font-medium uppercase tracking-wider mt-0.5">
                               {item.role}
                             </p>

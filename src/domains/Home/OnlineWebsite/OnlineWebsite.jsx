@@ -90,6 +90,9 @@ const ProductCard = ({ product, index }) => {
               <img
                 src={product.image || product.logo}
                 alt={product.name || product.title}
+                width={200}
+                height={96}
+                loading="lazy"
                 className="h-full w-auto max-w-[85%] object-contain object-left filter drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]"
               />
             </div>
@@ -201,14 +204,14 @@ const OnlineWebsite = () => {
   // Fetch categories dynamically on mount
   useEffect(() => {
     // Generate stars client-side only to avoid SSR hydration mismatch
-    const generatedStars = Array.from({ length: 40 }).map((_, i) => ({
+    const generatedStars = Array.from({ length: 18 }).map((_, i) => ({
       id: i,
-      width: Math.random() * 3 + 1 + "px",
-      height: Math.random() * 3 + 1 + "px",
-      top: Math.random() * 100 + "%",
-      left: Math.random() * 100 + "%",
-      opacity: Math.random() * 0.5 + 0.1,
-      duration: Math.random() * 5 + 5,
+      width: (Math.random() * 2.5 + 1.5).toFixed(1) + "px",
+      height: (Math.random() * 2.5 + 1.5).toFixed(1) + "px",
+      top: (Math.random() * 95).toFixed(1) + "%",
+      left: (Math.random() * 95).toFixed(1) + "%",
+      duration: (Math.random() * 4 + 4).toFixed(1) + "s",
+      delay: (Math.random() * 3).toFixed(1) + "s",
     }));
 
     Promise.resolve().then(() => {
@@ -324,26 +327,18 @@ const OnlineWebsite = () => {
         <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-blue-900/10 blur-[150px] rounded-full mix-blend-screen" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] bg-[#FF8A00]/10 blur-[150px] rounded-full mix-blend-screen" />
 
-        {/* Floating Stars */}
+        {/* Floating Stars (GPU-accelerated pure CSS) */}
         {stars.map((star) => (
-          <motion.div
+          <div
             key={star.id}
-            className="absolute bg-white rounded-full"
+            className="absolute bg-white rounded-full animate-float-star pointer-events-none"
             style={{
               width: star.width,
               height: star.height,
               top: star.top,
               left: star.left,
-              opacity: star.opacity,
-            }}
-            animate={{
-              y: [0, -30, 0],
-              opacity: [0.1, 0.6, 0.1],
-            }}
-            transition={{
-              duration: star.duration,
-              repeat: Infinity,
-              ease: "easeInOut",
+              "--star-duration": star.duration,
+              "--star-delay": star.delay,
             }}
           />
         ))}

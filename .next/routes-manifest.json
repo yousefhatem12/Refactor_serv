@@ -23,6 +23,14 @@
   },
   "dynamicRoutes": [
     {
+      "page": "/api/v1/[...path]",
+      "regex": "^/api/v1/(.+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPpath": "nxtPpath"
+      },
+      "namedRegex": "^/api/v1/(?<nxtPpath>.+?)(?:/)?$"
+    },
+    {
       "page": "/blog/[id]",
       "regex": "^/blog/([^/]+?)(?:/)?$",
       "routeKeys": {
@@ -177,6 +185,12 @@
       "regex": "^/robots\\.txt(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/robots\\.txt(?:/)?$"
+    },
+    {
+      "page": "/services",
+      "regex": "^/services(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/services(?:/)?$"
     },
     {
       "page": "/services-sitemap.xml",

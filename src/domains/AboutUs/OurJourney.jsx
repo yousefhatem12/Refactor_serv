@@ -211,6 +211,7 @@ const OurJourney = ({ data }) => {
             src="/Hero/orange-planet.webp"
             alt="Decoration"
             fill
+            sizes="(max-width: 1024px) 600px, 800px"
             className="object-contain"
           />
         </div>
@@ -219,6 +220,7 @@ const OurJourney = ({ data }) => {
             src="/about-us/orbit.webp"
             alt="Orbit"
             fill
+            sizes="1500px"
             className="object-contain object-center"
           />
         </div>
@@ -241,6 +243,7 @@ const OurJourney = ({ data }) => {
                   src={item.planet}
                   alt={`Planet ${item.year}`}
                   fill
+                  sizes="(max-width: 768px) 100px, 200px"
                   className="object-contain"
                 />
               </div>
@@ -308,6 +311,7 @@ const OurJourney = ({ data }) => {
                 src={item.planet}
                 alt={`Planet ${item.year}`}
                 fill
+                sizes="48px"
                 className="object-contain"
               />
             </div>

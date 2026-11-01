@@ -31,6 +31,7 @@ describe("sitemap URLs", () => {
       "<loc>https://serv5.com.eg/page-sitemap.xml</loc>",
     );
     expect(pageXml).toContain("<loc>https://serv5.com.eg/en</loc>");
+    expect(pageXml).toContain("<loc>https://serv5.com.eg/ar</loc>");
     expect(`${indexXml}${pageXml}`).not.toContain("localhost");
     expect(indexResponse.headers.get("Cache-Control")).toBe(
       "public, max-age=0, s-maxage=300, must-revalidate",

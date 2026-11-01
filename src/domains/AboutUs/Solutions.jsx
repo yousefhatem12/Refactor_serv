@@ -17,6 +17,7 @@ const Solutions = () => {
               src="/about-us/section-3-image.webp"
               alt="Innovative Solutions"
               fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover [mask-image:radial-gradient(circle,black_0%,transparent_100%)]
     [-webkit-mask-image:radial-gradient(circle,black_0%,transparent_100%)]  mix-blend-screen  brightness-[130%] contrast-[120%] saturate-[130%]"
             />

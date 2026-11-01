@@ -1,4 +1,4 @@
-import { fetchAPI } from "@/lib/api";
+import { getCachedPortfolioItem } from "@/lib/cached-api";
 import { getSeoAlternates } from "@/lib/seo";
 import { headers, cookies } from "next/headers";
 
@@ -17,7 +17,7 @@ export async function generateMetadata({ params }) {
   let ogImage = "";
 
   try {
-    const res = await fetchAPI(`/portfolio/${id}?lang=${language}`);
+    const res = await getCachedPortfolioItem(id, language);
     const project = res.data ? res.data : res;
     if (project && project.name) {
       title = project.name;

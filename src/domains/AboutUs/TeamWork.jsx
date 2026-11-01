@@ -421,6 +421,7 @@ export default function TeamWork({ data }) {
                           href={safeUrl(member.socials.linkedin)}
                           target="_blank"
                           rel="noopener noreferrer"
+                          aria-label={`${member.name} LinkedIn`}
                           className="w-8 h-8 rounded-full bg-black/60 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:bg-blue-600 hover:border-blue-500 transition-all duration-300"
                         >
                           <FaLinkedin className="w-3.5 h-3.5" />
@@ -431,6 +432,7 @@ export default function TeamWork({ data }) {
                         href={safeUrl(member.socials.github)}
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label={`${member.name} GitHub`}
                         className="w-8 h-8 rounded-full bg-black/60 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:bg-neutral-800 hover:border-neutral-700 transition-all duration-300"
                       >
                         <FaGithub className="w-3.5 h-3.5" />
@@ -442,6 +444,7 @@ export default function TeamWork({ data }) {
                         href={safeUrl(member.socials.twitter)}
                           target="_blank"
                           rel="noopener noreferrer"
+                          aria-label={`${member.name} X`}
                           className="w-8 h-8 rounded-full bg-black/60 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:bg-sky-500 hover:border-sky-400 transition-all duration-300"
                         >
                           <FaTwitter className="w-3.5 h-3.5" />

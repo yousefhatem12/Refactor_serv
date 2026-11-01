@@ -48,7 +48,7 @@ async function HomeContent() {
     console.error("Failed to fetch initial home data on server:", error);
   }
 
-  return <HomePageClient initialHomeData={initialHomeData} />;
+  return <HomePageClient initialHomeData={initialHomeData} initialLocale={locale} />;
 }
 
 export default function HomePage() {
