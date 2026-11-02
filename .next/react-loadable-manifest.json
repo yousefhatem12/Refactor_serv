@@ -20,8 +20,7 @@
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/CTA/CTA": {
     "id": 6548,
     "files": [
-      "static/chunks/3018-c9d6dec3bac3cf96.js",
-      "static/chunks/6548.7a368d3bd80aed31.js"
+      "static/chunks/6548.78b17930537d8936.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/ContactUs/ContactUs": {
@@ -40,7 +39,7 @@
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/Hero/Earth": {
     "id": 7995,
     "files": [
-      "static/chunks/7995.8a77c738a6f7fc63.js"
+      "static/chunks/7995.43e7771b7f738195.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/OnlineWebsite/OnlineWebsite": {

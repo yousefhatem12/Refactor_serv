@@ -236,6 +236,7 @@
       "turbopackInferModuleSideEffects": true,
       "turbopackPluginRuntimeStrategy": "childProcesses",
       "optimizePackageImports": [
+        "react-icons",
         "lucide-react",
         "date-fns",
         "lodash-es",

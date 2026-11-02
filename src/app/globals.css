@@ -284,3 +284,57 @@ html[lang="ar"] .article-content strong,
   padding: 0;
   color: #e2e8f0;
 }
+
+/* GPU-Accelerated Keyframes for Continuous Ambient Loops (Zero JS main-thread cost) */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 100s linear infinite;
+}
+
+@keyframes sunlight-sweep {
+  0%, 100% {
+    transform: translateX(0%);
+  }
+  50% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-sunlight {
+  animation: sunlight-sweep 8s ease-in-out infinite;
+}
+
+@keyframes float-gentle {
+  0%, 100% {
+    transform: translateY(-8px) scale(1.01);
+  }
+  50% {
+    transform: translateY(8px) scale(1);
+  }
+}
+
+.animate-float-gentle {
+  animation: float-gentle 4s ease-in-out infinite;
+}
+
+@keyframes float-astronaut {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(4deg);
+  }
+}
+
+.animate-float-astronaut {
+  animation: float-astronaut 3.5s ease-in-out infinite;
+}
+

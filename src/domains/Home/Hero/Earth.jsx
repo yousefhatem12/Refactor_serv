@@ -1,136 +1,36 @@
 "use client";
-import React, { useEffect, useRef } from "react";
-import gsap from "gsap";
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
 
 export default function Earth({ isPhaseTwo }) {
-  const containerRef = useRef(null);
-  const earthRef = useRef(null);
-  const sunlightRef = useRef(null);
-  const logoRef = useRef(null);
-  const astronautWrapperRef = useRef(null);
-  const astronautImgRef = useRef(null);
   const { language } = useLanguage();
   const isRtl = language === "ar";
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Initial setup
-      gsap.set(logoRef.current, { y: -10, scale: 1, opacity: 0.5 });
-
-      // Continuous Earth Rotation
-      gsap.to(earthRef.current, {
-        rotation: 360,
-        duration: 100,
-        repeat: -1,
-        ease: "none",
-      });
-
-      // Continuous Sunlight Movement
-      gsap.to(sunlightRef.current, {
-        x: "-50%",
-        duration: 3,
-        ease: "power2.inOut",
-        repeat: -1,
-        yoyo: true,
-        repeatDelay: 2,
-      });
-
-      // Logo Floating
-      gsap.to(logoRef.current, {
-        y: 10,
-        scale: 1.02,
-        opacity: 1,
-        duration: 2,
-        repeat: -1,
-        yoyo: true,
-        ease: "power1.inOut",
-      });
-
-      // Astronaut Floating (Inner Image)
-      gsap.to(astronautImgRef.current, {
-        y: -15,
-        rotation: 5,
-        duration: 3,
-        repeat: -1,
-        yoyo: true,
-        ease: "power1.inOut",
-      });
-    }, containerRef);
-
-    return () => ctx.revert();
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const isMobile = window.innerWidth < 768;
-
-      // Phase Two Animations (Container and Astronaut Entrance)
-      if (isPhaseTwo) {
-        // Main container smooth scale & move
-        gsap.to(containerRef.current, {
-          x: isMobile ? "0%" : isRtl ? "-25%" : "25%",
-          y: isMobile ? "-20%" : "0%",
-          scale: isMobile ? 0.85 : 1.2,
-          duration: 1.5,
-          ease: "power3.inOut",
-        });
-
-        // Astronaut Entrance
-        if (!isMobile) {
-          gsap.fromTo(
-            astronautWrapperRef.current,
-            {
-              x: isRtl ? "-300%" : "300%",
-              y: "50%",
-              opacity: 0,
-              rotation: isRtl ? -45 : 45,
-              scale: 0.5,
-            },
-            {
-              x: isRtl ? "85%" : "-85%",
-              y: "85%",
-              opacity: 1,
-              rotation: isRtl ? 65 : 0,
-              scale: 1.5,
-              duration: 1.5,
-              delay: 0.3,
-              ease: "power3.out",
-            },
-          );
-        }
-      } else {
-        // Phase One state
-        gsap.to(containerRef.current, {
-          x: "0%",
-          y: "0%",
-          scale: isMobile ? 0.8 : 0.6,
-          duration: 1.5,
-          ease: "power3.inOut",
-        });
-
-        // Hide Astronaut
-        gsap.set(astronautWrapperRef.current, { opacity: 0 });
-      }
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, [isPhaseTwo, isRtl]);
-
   return (
-    <div
-      ref={containerRef}
-      className="relative flex items-center justify-center w-full h-screen  will-change-transform"
+    <motion.div
+      className="relative flex items-center justify-center w-full h-screen will-change-transform"
+      animate={{
+        x: isPhaseTwo ? (isMobile ? "0%" : isRtl ? "-25%" : "25%") : "0%",
+        y: isPhaseTwo ? (isMobile ? "-20%" : "0%") : "0%",
+        scale: isPhaseTwo ? (isMobile ? 0.85 : 1.2) : isMobile ? 0.8 : 0.6,
+      }}
+      transition={{ duration: 1.5, ease: [0.25, 0.1, 0.25, 1.0] }}
     >
       <div className="relative w-[400px] h-[400px] lg:w-[400px] lg:h-[400px]">
         {/* Earth Background Glow */}
         <div className="absolute inset-0 rounded-full bg-blue-500/20 blur-[80px] animate-pulse overflow-hidden will-change-opacity hidden md:block" />
 
-        {/* Earth SVG */}
-        <div
-          ref={earthRef}
-          className="absolute overflow-hidden inset-0 z-10 will-change-transform hidden md:block"
-        >
+        {/* Earth Image - GPU Accelerated Continuous Rotation */}
+        <div className="absolute overflow-hidden inset-0 z-10 will-change-transform hidden md:block animate-spin-slow">
           <img
             src="/Hero/earth.webp"
             alt="Earth"
@@ -140,20 +40,14 @@ export default function Earth({ isPhaseTwo }) {
           />
         </div>
 
-        {/* Sunlight Layer */}
+        {/* Sunlight Layer - GPU Accelerated Continuous Sweep */}
         <div className="absolute inset-[5px] lg:inset-[5px] z-10 rounded-full overflow-hidden pointer-events-none hidden md:block">
-          <div
-            ref={sunlightRef}
-            className="absolute inset-y-0 left-0 w-[200%] bg-[linear-gradient(to_right,rgba(0,0,0,0.8)_0%,rgba(0,0,0,0.8)_50%,transparent_65%)] mix-blend-multiply will-change-transform"
-          />
+          <div className="absolute inset-y-0 left-0 w-[200%] bg-[linear-gradient(to_right,rgba(0,0,0,0.8)_0%,rgba(0,0,0,0.8)_50%,transparent_65%)] mix-blend-multiply will-change-transform animate-sunlight" />
         </div>
 
-        {/* Center Logo Overlay */}
-        <div
-          ref={logoRef}
-          className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
-        >
-          <div className="w-[100%] h-[100%] sm:w-[110%] sm:h-[110%] md:w-[40%] md:h-[40%] relative transition-all duration-700">
+        {/* Center Logo Overlay - GPU Accelerated Ambient Float */}
+        <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+          <div className="w-[100%] h-[100%] sm:w-[110%] sm:h-[110%] md:w-[40%] md:h-[40%] relative transition-all duration-700 animate-float-gentle">
             <img
               src="/logo.svg"
               alt="Serv5 Logo"
@@ -168,9 +62,31 @@ export default function Earth({ isPhaseTwo }) {
         </div>
 
         {/* Astronaut - Phase 2 Entrance */}
-        <div
-          ref={astronautWrapperRef}
-          className={`absolute top-0 ${isRtl ? "left-0" : "right-0"} z-30 w-[100px] h-[100px] md:w-[130px] md:h-[130px] lg:w-[200px] lg:h-[200px] pointer-events-none opacity-0 hidden md:block`}
+        <motion.div
+          className={`absolute top-0 ${isRtl ? "left-0" : "right-0"} z-30 w-[100px] h-[100px] md:w-[130px] md:h-[130px] lg:w-[200px] lg:h-[200px] pointer-events-none hidden md:block`}
+          initial={false}
+          animate={
+            isPhaseTwo && !isMobile
+              ? {
+                  x: isRtl ? "85%" : "-85%",
+                  y: "85%",
+                  opacity: 1,
+                  rotate: isRtl ? 65 : 0,
+                  scale: 1.5,
+                }
+              : {
+                  opacity: 0,
+                  x: isRtl ? "-300%" : "300%",
+                  y: "50%",
+                  scale: 0.5,
+                  rotate: isRtl ? -45 : 45,
+                }
+          }
+          transition={{
+            duration: 1.5,
+            delay: isPhaseTwo ? 0.3 : 0,
+            ease: "easeOut",
+          }}
         >
           <div
             style={{
@@ -180,16 +96,15 @@ export default function Earth({ isPhaseTwo }) {
             }}
           >
             <img
-              ref={astronautImgRef}
               src="/Hero/astronaut.webp"
               alt="Astronaut"
               width={200}
               height={200}
-              className="w-full h-full object-contain"
+              className="w-full h-full object-contain animate-float-astronaut"
             />
           </div>
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }

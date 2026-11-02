@@ -3,6 +3,9 @@ const nextConfig = {
   // Keep all generated metadata in the document <head> for every user agent.
   htmlLimitedBots: /.*/,
   poweredByHeader: false,
+  experimental: {
+    optimizePackageImports: ["react-icons"],
+  },
   images: {
     unoptimized: false,
     remotePatterns: [

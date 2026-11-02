@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import { motion } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { getMediaUrl } from "@/lib/api";
 
@@ -11,8 +10,6 @@ const OurJourney = ({ data }) => {
   const { t, language } = useLanguage();
   const containerRef = useRef(null);
   const timelineRef = useRef(null);
-  const cardsRef = useRef([]);
-  const mobileCardsRef = useRef([]);
 
   // Default hardcoded items
   const defaultItems = [
@@ -24,94 +21,97 @@ const OurJourney = ({ data }) => {
       description: t("journeyDummyText"),
     },
     {
-      year: "2011",
+      year: "2013",
       planet: "planet-2.webp",
       location: t("locationEgypt"),
-      users: "20",
+      users: "15",
       description: t("journeyDummyText"),
     },
     {
-      year: "2013",
+      year: "2016",
       planet: "planet-3.webp",
-      location: t("locationEgyptSaudi"),
-      users: "35",
+      location: t("locationEgypt"),
+      users: "20",
+      partnership: t("serv5Partner"),
       description: t("journeyDummyText"),
     },
     {
-      year: "2015",
+      year: "2019",
       planet: "planet-4.webp",
-      location: t("locationEgyptSaudi"),
-      users: "40",
-      partnership: t("partnershipEtihad") || "Partnership",
+      location: t("locationEgypt"),
+      users: "25",
       description: t("journeyDummyText"),
     },
     {
-      year: "2017",
+      year: "2021",
       planet: "planet-5.webp",
-      location: t("locationEgyptSaudi"),
-      users: "35",
-      partnership: t("partnershipEtihad") || "Partnership",
+      location: t("locationEgypt"),
+      users: "30",
       description: t("journeyDummyText"),
     },
     {
-      year: "2020",
+      year: "2023",
       planet: "planet-6.webp",
-      location: t("locationEgyptSaudi"),
+      location: t("locationEgypt"),
       users: "35",
-      partnership: t("partnershipEtihad") || "Partnership",
       description: t("journeyDummyText"),
     },
     {
-      year: "2024",
+      year: "2026",
       planet: "planet-7.webp",
-      location: t("locationEgyptSaudi"),
-      users: "35",
-      partnership: t("partnershipEtihad") || "Partnership",
+      location: t("locationEgypt"),
+      users: "40",
+      partnership: t("serv5Partner"),
       description: t("journeyDummyText"),
     },
   ];
 
-  const isUsingDefaultData = !(data?.items?.length > 0);
-  const dbItems = isUsingDefaultData ? defaultItems : data.items;
+  const itemsToUse = (data?.items && data.items.length > 0) ? data.items : defaultItems;
 
-  const timelineStyles = [
+  const defaultStyles = [
     {
-      yOffset: "translate-y-[60px] md:translate-y-[100px]",
-      size: "w-[40px] h-[40px] md:w-[70px] md:h-[70px]",
+      yOffset: "translate-y-[280px] lg:translate-y-[280px]",
+      size: "w-[120px] h-[120px] md:w-[150px] md:h-[150px] lg:w-[170px] lg:h-[170px]",
+      mix: false,
     },
     {
-      yOffset: "translate-y-[40px] md:translate-y-[60px]",
-      size: "w-[50px] h-[50px] md:w-[90px] md:h-[90px]",
+      yOffset: "translate-y-[150px] lg:translate-y-[150px]",
+      size: "w-[100px] h-[100px] md:w-[120px] md:h-[120px] lg:w-[140px] lg:h-[140px]",
+      mix: false,
     },
     {
-      yOffset: "translate-y-[20px] md:translate-y-[30px]",
-      size: "w-[60px] h-[60px] md:w-[110px] md:h-[110px]",
-    },
-    {
-      yOffset: "translate-y-0",
-      size: "w-[80px] h-[80px] md:w-[130px] md:h-[130px]",
-    },
-    {
-      yOffset: "-translate-y-[20px] md:-translate-y-[30px]",
-      size: "w-[100px] h-[65px] md:w-[160px] md:h-[110px]",
+      yOffset: "translate-y-[20px] lg:translate-y-[20px]",
+      size: "w-[90px] h-[90px] md:w-[110px] md:h-[110px] lg:w-[130px] lg:h-[130px]",
       mix: true,
     },
     {
-      yOffset: "-translate-y-[40px] md:-translate-y-[60px]",
-      size: "w-[90px] h-[90px] md:w-[140px] md:h-[140px]",
+      yOffset: "-translate-y-[80px] lg:-translate-y-[80px]",
+      size: "w-[80px] h-[80px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[120px]",
+      mix: false,
     },
     {
-      yOffset: "-translate-y-[60px] md:-translate-y-[100px]",
-      size: "w-[110px] h-[110px] md:w-[160px] md:h-[160px]",
+      yOffset: "translate-y-[20px] lg:translate-y-[20px]",
+      size: "w-[90px] h-[90px] md:w-[110px] md:h-[110px] lg:w-[130px] lg:h-[130px]",
+      mix: false,
+    },
+    {
+      yOffset: "translate-y-[150px] lg:translate-y-[150px]",
+      size: "w-[100px] h-[100px] md:w-[120px] md:h-[120px] lg:w-[140px] lg:h-[140px]",
+      mix: false,
+    },
+    {
+      yOffset: "translate-y-[280px] lg:translate-y-[280px]",
+      size: "w-[120px] h-[120px] md:w-[150px] md:h-[150px] lg:w-[170px] lg:h-[170px]",
+      mix: false,
     },
   ];
 
-  const timeline = dbItems.map((item, idx) => {
-    const style = timelineStyles[idx % timelineStyles.length];
-    const isCustomPlanet = item.planet && typeof item.planet === 'string' && (item.planet.startsWith('pages/') || item.planet.startsWith('http'));
+  const timeline = itemsToUse.map((item, idx) => {
+    const isCustomPlanet = item.planet && !item.planet.startsWith("planet");
+    const style = defaultStyles[idx % defaultStyles.length];
 
     return {
-      year: item.year,
+      year: item.year || item.title || `${2009 + idx * 3}`,
       planet: isCustomPlanet ? getMediaUrl(item.planet) : `/about-us/planet${((idx % 7) + 1) === 1 ? '1' : `-${(idx % 7) + 1}`}.webp`,
       yOffset: style.yOffset,
       size: style.size,
@@ -124,68 +124,6 @@ const OurJourney = ({ data }) => {
       },
     };
   });
-
-  useLayoutEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    let mm = gsap.matchMedia();
-
-    mm.add("(min-width: 768px)", () => {
-      // Desktop Animation
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: timelineRef.current,
-          start: "center center",
-          end: "+=1500",
-          pin: true,
-          scrub: 1,
-          invalidateOnRefresh: true,
-        },
-      });
-
-      cardsRef.current.forEach((card, index) => {
-        if (card) {
-          tl.fromTo(
-            card,
-            { opacity: 0, y: 80, scale: 0.8, filter: "blur(15px)" },
-            {
-              opacity: 1,
-              y: 0,
-              scale: 1,
-              filter: "blur(0px)",
-              duration: 1.5,
-              ease: "back.out(1.7)",
-            },
-            index * 0.5,
-          );
-        }
-      });
-    });
-
-    mm.add("(max-width: 767px)", () => {
-      // Mobile Animation
-      mobileCardsRef.current.forEach((card, index) => {
-        if (card) {
-          gsap.fromTo(
-            card,
-            { opacity: 0, x: index % 2 === 0 ? -50 : 50, scale: 0.9 },
-            {
-              opacity: 1,
-              x: 0,
-              scale: 1,
-              duration: 1,
-              scrollTrigger: {
-                trigger: card,
-                start: "top bottom-=100",
-                toggleActions: "play none none reverse",
-              },
-            },
-          );
-        }
-      });
-    });
-
-    return () => mm.revert();
-  }, []);
 
   return (
     <section
@@ -247,10 +185,17 @@ const OurJourney = ({ data }) => {
                   className="object-contain"
                 />
               </div>
-              <div
-                ref={(el) => (cardsRef.current[index] = el)}
+              {/* Framer Motion Revealed Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 30, scale: 0.85 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{
+                  duration: 0.6,
+                  delay: index * 0.12,
+                  ease: "easeOut",
+                }}
                 className="absolute top-[110%] left-1/2 -translate-x-1/2 w-[140px] lg:w-[160px] z-50"
-                style={{ opacity: 0 }}
               >
                 <div
                   dir={language === "ar" ? "rtl" : "ltr"}
@@ -278,7 +223,7 @@ const OurJourney = ({ data }) => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
           ))}
         </div>
@@ -293,10 +238,19 @@ const OurJourney = ({ data }) => {
         <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-[#FF8A00] via-[#FF8A00]/20 to-transparent"></div>
 
         {timeline.map((item, index) => (
-          <div
+          <motion.div
             key={index}
-            ref={(el) => (mobileCardsRef.current[index] = el)}
-            className={`flex flex-col w-full mb-16 relative ${index % 2 === 0 ? "items-end pr-[50%]" : "items-start pl-[50%]"}`}
+            initial={{
+              opacity: 0,
+              x: index % 2 === 0 ? -40 : 40,
+              scale: 0.95,
+            }}
+            whileInView={{ opacity: 1, x: 0, scale: 1 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className={`flex flex-col w-full mb-16 relative ${
+              index % 2 === 0 ? "items-end pr-[50%]" : "items-start pl-[50%]"
+            }`}
           >
             {/* Year Badge on the Line */}
             <div className="absolute left-1/2 -translate-x-1/2 -top-4 z-20 bg-[#FF8A00] text-black text-[10px] font-bold px-3 py-1 rounded-full shadow-[0_0_15px_rgba(255,138,0,0.5)]">
@@ -305,7 +259,9 @@ const OurJourney = ({ data }) => {
 
             {/* Planet Decoration */}
             <div
-              className={`absolute ${index % 2 === 0 ? "right-[55%]" : "left-[55%]"} top-4 w-12 h-12 opacity-80`}
+              className={`absolute ${
+                index % 2 === 0 ? "right-[55%]" : "left-[55%]"
+              } top-4 w-12 h-12 opacity-80`}
             >
               <Image
                 src={item.planet}
@@ -319,7 +275,9 @@ const OurJourney = ({ data }) => {
             {/* Info Card */}
             <div
               dir={language === "ar" ? "rtl" : "ltr"}
-              className={`w-[160px] bg-[#0A0A0C]/80 backdrop-blur-xl border border-white/10 p-4 rounded-2xl shadow-2xl ${index % 2 === 0 ? "mr-4" : "ml-4"}`}
+              className={`w-[160px] bg-[#0A0A0C]/80 backdrop-blur-xl border border-white/10 p-4 rounded-2xl shadow-2xl ${
+                index % 2 === 0 ? "mr-4" : "ml-4"
+              }`}
             >
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2">
@@ -348,7 +306,7 @@ const OurJourney = ({ data }) => {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </section>
