@@ -29,14 +29,21 @@
     Require all denied
 </FilesMatch>
 
-# Security Headers & Hide Server Info
+# Enable HTTP/2 when Apache mod_http2 is available
+<IfModule mod_http2.c>
+    Protocols h2 h2c http/1.1
+</IfModule>
+
+# Security Headers, HTTP/3 Alt-Svc Advertisement & Hide Server Info
+# (uses setifempty so headers already set by Laravel SecurityHeaders middleware are not duplicated)
 <IfModule mod_headers.c>
-    Header set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
-    Header set X-Frame-Options "SAMEORIGIN"
-    Header set X-Content-Type-Options "nosniff"
-    Header set Referrer-Policy "origin-when-cross-origin"
-    Header set Permissions-Policy "camera=(), microphone=(), geolocation=()"
-    Header set X-XSS-Protection "1; mode=block"
+    Header setifempty Alt-Svc "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400, h2=\":443\"; ma=86400"
+    Header setifempty Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+    Header setifempty X-Frame-Options "SAMEORIGIN"
+    Header setifempty X-Content-Type-Options "nosniff"
+    Header setifempty Referrer-Policy "origin-when-cross-origin"
+    Header setifempty Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    Header setifempty X-XSS-Protection "1; mode=block"
 
     # Remove signatures
     Header always unset X-Powered-By

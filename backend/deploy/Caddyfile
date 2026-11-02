@@ -1,0 +1,14 @@
+# Caddyfile — Automatic HTTP/3 (QUIC) + HTTP/2 + TLS 1.3 for Serv5 Backend
+api.serv5.com.eg {
+    root * /var/www/serv5/backend/public
+    encode zstd gzip
+
+    header {
+        Alt-Svc "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400, h2=\":443\"; ma=86400"
+        -Server
+        -X-Powered-By
+    }
+
+    php_fastcgi unix//run/php/php8.4-fpm.sock
+    file_server
+}

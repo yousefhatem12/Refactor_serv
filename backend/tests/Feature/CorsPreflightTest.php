@@ -50,6 +50,9 @@ class CorsPreflightTest extends TestCase
         $vary = (string) $response->headers->get('Vary');
         $this->assertStringContainsString('Origin', $vary);
         $this->assertStringContainsString('Accept-Language', $vary);
+
+        $altSvc = (string) $response->headers->get('Alt-Svc');
+        $this->assertStringContainsString('h3=":443"', $altSvc);
     }
 }
 
