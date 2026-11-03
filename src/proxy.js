@@ -35,7 +35,7 @@ function createContentSecurityPolicy(nonce) {
     "style-src 'self' 'unsafe-inline' https:",
     `img-src 'self' data: blob: ${apiOrigin} https:${localApiOrigins}`,
     "font-src 'self' data: https:",
-    `connect-src 'self' ${apiOrigin} https:${localApiOrigins}`,
+    `connect-src 'self' data: https://challenges.cloudflare.com https://*.challenges.cloudflare.com https://*.cloudflarecaptcha.com ${apiOrigin} https:${localApiOrigins}`,
     frameSrc,
     `media-src 'self' ${apiOrigin} https:${localApiOrigins}`,
     "object-src 'none'",

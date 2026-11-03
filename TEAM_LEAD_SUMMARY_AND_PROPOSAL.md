@@ -158,13 +158,13 @@ Connecting to 'data:,' violates the following Content Security Policy directive:
   1. **The Request Trigger:** Cloudflare Bot Management / Managed Challenge (Turnstile) runs automated browser capability checks on visitors, including testing data-URI connectivity via `fetch('data:,')`. In addition, client-side security software (such as Kaspersky Antivirus shown in `gc.kis.v2.scr.kaspersky-labs.com`) injects scripts into web sessions that test similar connections.
   2. **The Blocker:** The **Content Security Policy (CSP)** header configured on the production host/edge (Cloudflare Transform Rules, Nginx reverse proxy, or edge security middleware) enforces a strict `connect-src` list. While it whitelists Cloudflare and Kaspersky domains, it **omits `data:`**.
 
-### 8.3 Recommended Resolution (DevOps / Infrastructure)
-To permanently clear this warning without modifying any application code, simply add `data:` to the `connect-src` directive in the production edge/web server CSP configuration:
-
+### 8.3 Resolution Applied (Front-End & Infrastructure)
+1. **Front-End Proxy (`src/proxy.js`):** Updated the Next.js Content Security Policy generator to include `data:` and Cloudflare challenge domains in `connect-src`:
 ```diff
-- Content-Security-Policy: ... connect-src 'self' https://gc.kis.v2.scr.kaspersky-labs.com ... https://ca1.cloudflarecaptcha.com;
-+ Content-Security-Policy: ... connect-src 'self' data: https://gc.kis.v2.scr.kaspersky-labs.com ... https://ca1.cloudflarecaptcha.com;
+- connect-src 'self' ${apiOrigin} https:${localApiOrigins}
++ connect-src 'self' data: https://challenges.cloudflare.com https://*.challenges.cloudflare.com https://*.cloudflarecaptcha.com ${apiOrigin} https:${localApiOrigins}
 ```
+2. **Edge / CDN Configuration (If Managed on Cloudflare WAF/Nginx):** Ensure the edge reverse proxy or Cloudflare Transform Rules match this directive by including `data:` in `connect-src`.
 
 * **Impact:** 100% eliminates the console error and ensures Cloudflare bot challenge verification completes with zero false-positive connection blocks.
 

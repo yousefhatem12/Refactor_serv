@@ -239,51 +239,57 @@ const Navbar = ({ initialServices = [], initialNavLinks = [] }) => {
   const dropdownLinks = isUnder1300 ? activeLinks.slice(5) : [];
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+    let ticking = false;
 
-      if (document.body.scrollHeight > window.innerHeight + 100) {
-        const footer = document.querySelector("footer");
-        if (footer) {
-          const rect = footer.getBoundingClientRect();
-          if (rect.top < window.innerHeight - 50) {
-            setIsHidden(true);
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 50);
+
+          if (document.body.scrollHeight > window.innerHeight + 100) {
+            const footer = document.querySelector("footer");
+            if (footer) {
+              const rect = footer.getBoundingClientRect();
+              setIsHidden(rect.top < window.innerHeight - 50);
+            } else {
+              setIsHidden(false);
+            }
           } else {
             setIsHidden(false);
           }
-        }
-      } else {
-        setIsHidden(false);
-      }
 
-      // ScrollSpy Logic
-      let currentHash = "";
-      // Only look for hashes on the current page
-      const pageHashLinks = activeLinks
-        .filter((link) => link.href.startsWith(pathname + "#"))
-        .map((link) => link.href.split("#")[1]);
+          // ScrollSpy Logic
+          let currentHash = "";
+          // Only look for hashes on the current page
+          const pageHashLinks = activeLinks
+            .filter((link) => link.href.startsWith(pathname + "#"))
+            .map((link) => link.href.split("#")[1]);
 
-      for (const sectionId of pageHashLinks) {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          // Adjust threshold: if the section is occupying the middle of the screen
-          if (rect.top <= window.innerHeight / 2 && rect.bottom >= 100) {
-            currentHash = `#${sectionId}`;
-            break; // found the active one
+          for (const sectionId of pageHashLinks) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+              const rect = element.getBoundingClientRect();
+              // Adjust threshold: if the section is occupying the middle of the screen
+              if (rect.top <= window.innerHeight / 2 && rect.bottom >= 100) {
+                currentHash = `#${sectionId}`;
+                break; // found the active one
+              }
+            }
           }
-        }
-      }
 
-      // If user scrolls to the absolute top, clear the hash
-      if (window.scrollY < 100) {
-        currentHash = "";
-      }
+          // If user scrolls to the absolute top, clear the hash
+          if (window.scrollY < 100) {
+            currentHash = "";
+          }
 
-      setActiveHash(currentHash);
+          setActiveHash(currentHash);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     // Initial check
     handleScroll();
 
