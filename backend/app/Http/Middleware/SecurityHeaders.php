@@ -45,6 +45,13 @@ class SecurityHeaders
         $response->headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
         $response->headers->set('X-XSS-Protection', '1; mode=block');
 
+        if (config('http_protocol.alt_svc_enabled', true)) {
+            $altSvc = trim((string) config('http_protocol.alt_svc_header', ''));
+            if ($altSvc !== '' && ! $response->headers->has('Alt-Svc')) {
+                $response->headers->set('Alt-Svc', $altSvc);
+            }
+        }
+
         // Hide signatures
         $response->headers->remove('X-Powered-By');
         $response->headers->remove('Server');

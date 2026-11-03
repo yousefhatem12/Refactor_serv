@@ -20,6 +20,8 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(\Filament\Notifications\Notification::class, \App\Notifications\CustomFilamentNotification::class);
+        $this->app->singleton(\App\Contracts\Api\ApiCacheServiceInterface::class, \App\Services\Api\Support\ApiCacheService::class);
+        $this->app->singleton(\App\Contracts\Notifications\AdminNotificationServiceInterface::class, \App\Services\Notifications\AdminNotificationService::class);
     }
 
     /**
@@ -30,6 +32,9 @@ class AppServiceProvider extends ServiceProvider
         // Keep the AI migrations in the normal migration lifecycle. They live
         // in a subdirectory, so Laravel does not discover them automatically.
         $this->loadMigrationsFrom(database_path('migrations/ai'));
+
+        // Configure outbound HTTP client to negotiate HTTP/3 or HTTP/2 with TCP keep-alive.
+        \App\Services\Http\OutboundHttpClientConfigurator::configure();
 
         RateLimiter::for('auth', function (Request $request) {
             $email = strtolower(trim((string) $request->input('email')));
