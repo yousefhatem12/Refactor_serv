@@ -1,0 +1,370 @@
+"use client";
+import React, { Fragment, useState, useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useLanguage } from "@/app/context/LanguageContext";
+import { useSettings } from "@/app/context/SettingsContext";
+import { fetchAPI } from "@/lib/api";
+import { safeUrl } from "@/lib/safe-url";
+import { motion } from "framer-motion";
+import PlanetAstronaut from "@/app/components/Home/Shared/PlanetAstronaut";
+import {
+  FaFacebook,
+  FaInstagram,
+  FaLinkedin,
+  FaYoutube,
+  FaTiktok,
+} from "react-icons/fa";
+import { RiTwitterXFill } from "react-icons/ri";
+import Link from "next/link";
+import Image from "next/image";
+// Inline SVGs are used instead of lucide-react to avoid dependency issues.
+
+// Note: Since lucide-react is not in package.json, I will use inline SVGs
+// for the icons to match the design perfectly and avoid dependency issues.
+
+const Footer = () => {
+  const { t, language } = useLanguage();
+  const pathname = usePathname();
+  const router = useRouter();
+  const isHomePage = pathname === "/" || pathname === "/ar" || pathname === "/en" || pathname === "/ar/" || pathname === "/en/";
+
+  const contextSettings = useSettings();
+  const settings = contextSettings || {};
+  const [footerData, setFooterData] = useState({
+    texts: {},
+    links: { usefulLinks: [], quickLinks: [], offers: [], company: [] },
+    socials: [],
+  });
+
+  useEffect(() => {
+    fetchAPI(`/footer-data?lang=${language}`)
+      .then((data) => {
+        if (data) setFooterData(data);
+      })
+      .catch(console.error);
+  }, [language]);
+
+  const getSocialIconData = (platform) => {
+    const map = {
+      facebook: { color: "bg-[#1877F2]", svg: <FaFacebook /> },
+      twitter: { color: "bg-[#1DA1F2]", svg: <RiTwitterXFill /> },
+      instagram: {
+        color: "bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600",
+        svg: <FaInstagram />,
+      },
+      linkedin: { color: "bg-[#0077B5]", svg: <FaLinkedin /> },
+      youtube: { color: "bg-[#FF0000]", svg: <FaYoutube /> },
+      tiktok: { color: "bg-black", svg: <FaTiktok /> },
+    };
+    return map[platform] || map["facebook"];
+  };
+
+    const getLocalizedHref = (href) => {
+    const safeHref = safeUrl(href);
+    if (
+      safeHref === "#" ||
+      safeHref.startsWith("http") ||
+      safeHref.startsWith("tel:") ||
+      safeHref.startsWith("mailto:")
+    ) {
+      return safeHref;
+    }
+    const cleanHref = safeHref.startsWith("/") ? safeHref : `/${safeHref}`;
+    const cleanNoLocale = cleanHref.replace(/^\/(ar|en)(\/|$)/, "/");
+    if (cleanNoLocale === "" || cleanNoLocale === "/") return `/${language}`;
+    return `/${language}${cleanNoLocale}`;
+  };
+
+  const footerHeading = footerData.texts?.heading || t("haveAGoodWebDesign");
+
+  return (
+    <footer className="bg-transparent text-white pt-10 pb-6 relative overflow-hidden">
+      {/* Background Glows */}
+      <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-blue-600/10 blur-[150px] -z-10 rounded-full"></div>
+      <div className="absolute top-0 left-0 w-1/3 h-1/3 bg-orange-500/5 blur-[120px] -z-10 rounded-full"></div>
+
+      {/* Decorative Element */}
+      <div className={`absolute top-0 ${language === "ar" ? "-right-[80px] scale-x-[-1]" : "-left-[80px]"} mix-blend-luminosity opacity-50 w-48 md:w-[500px] pointer-events-none z-0`}>
+        <Image
+          src="/Element.webp"
+          alt=""
+          aria-hidden="true"
+          width={500}
+          height={296}
+          loading="lazy"
+          sizes="(max-width: 768px) 192px, 500px"
+          className="w-full h-auto object-contain"
+        />
+      </div>
+
+      <div className=" mx-auto px-6 lg:px-20 relative z-10">
+        {/* Top Section: Heading & Astronaut */}
+        <div className="flex relative flex-col md:flex-row items-center justify-between  relative">
+          <div
+            className={`max-w-2xl text-center ${language === "ar" ? "md:text-right" : "md:text-left"} z-20`}
+          >
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-[1.1] tracking-tight"
+            >
+              <span>
+                {footerHeading.replace(/<br\s*\/?>/gi, "\n").split(/\r?\n/).map((line, index) => (
+                  <Fragment key={`${line}-${index}`}>
+                    {index > 0 && <br className="hidden md:block" />}
+                    {line}
+                  </Fragment>
+                ))}
+              </span>
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="text-gray-400 text-lg md:text-xl mb-6 max-w-xl font-light"
+            >
+              {footerData.texts?.description || t("footerDesc")}
+            </motion.p>
+            <motion.button
+              onClick={() => {
+                if (pathname.includes("/contact-us")) {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                } else {
+                  router.push(`/${language}/contact-us`);
+                }
+              }}
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              whileHover={{
+                scale: 1.05,
+                boxShadow: "0 0 20px rgba(255,255,255,0.2)",
+              }}
+              whileTap={{ scale: 0.95 }}
+              className="px-12 py-4 rounded-full border border-white/30 bg-white/5 backdrop-blur-md text-white font-semibold hover:bg-white hover:text-[#020617] transition-all duration-300 text-lg cursor-pointer"
+            >
+              {footerData.texts?.button_text || t("getStarted")}
+            </motion.button>
+          </div>
+
+          {/* Space reserved for global planet transition */}
+          <div
+            className={`absolute top-[-10%] ${language === "ar" ? "left-[-10%]" : "right-[-10%]"} w-full md:w-1/2 flex justify-center ${language === "ar" ? "md:justify-start pl-10" : "md:justify-end pr-10"} pointer-events-none invisible lg:visible`}
+          >
+            <div
+              className={`w-72 md:w-[500px] lg:w-[600px] aspect-square ${!isHomePage ? "opacity-[0.35]" : ""}`}
+              style={
+                !isHomePage
+                  ? {
+                      filter: "contrast(60%) brightness(60%)",
+                      transform:
+                        language === "ar"
+                          ? "rotate(-10deg) translatey(-6rem) translatex(-12rem) "
+                          : "rotate(10deg) translatey(-6rem) translatex(12rem) ",
+                    }
+                  : {}
+              }
+            >
+              {!isHomePage && <PlanetAstronaut />}
+            </div>
+          </div>
+        </div>
+
+        {/* Middle Section: Links Grid */}
+        <div className="relative grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-10 mb-10 pt-6">
+          {/* Useful Links */}
+          <div>
+            <h3 className="text-xl font-bold mb-5 text-white">
+              {t("usefulLinks")}
+            </h3>
+            <ul className="space-y-2">
+              {footerData.links.usefulLinks.map((link) => (
+                <li key={link.id}>
+                  <Link
+                    href={getLocalizedHref(link.url)}
+                    className="text-gray-400 hover:text-orange-500 transition-colors text-base font-medium"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h3 className="text-xl font-bold mb-5 text-white">
+              {t("quickLinks")}
+            </h3>
+            <ul className="space-y-2">
+              {footerData.links.quickLinks.map((link) => (
+                <li key={link.id}>
+                  <Link
+                    href={getLocalizedHref(link.url)}
+                    className="text-gray-400 hover:text-orange-500 transition-colors text-base font-medium"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Offers */}
+          <div>
+            <h3 className="text-xl font-bold mb-5 text-white">{t("offers")}</h3>
+            <ul className="space-y-2">
+              {footerData.links.offers.map((link) => (
+                <li key={link.id}>
+                  <Link
+                    href={getLocalizedHref(link.url)}
+                    className="text-gray-400 hover:text-orange-500 transition-colors text-base font-medium"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Company */}
+          <div>
+            <h3 className="text-xl font-bold mb-5 text-white">
+              {t("company")}
+            </h3>
+            <ul className="space-y-2">
+              {footerData.links.company.map((link) => (
+                <li key={link.id}>
+                  <Link
+                    href={getLocalizedHref(link.url)}
+                    className="text-gray-400 hover:text-orange-500 transition-colors text-base font-medium"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact Info */}
+          <div>
+            <h3 className="text-xl font-bold mb-5 text-white">
+              {t("contactInfo")}
+            </h3>
+            <ul className="space-y-2">
+              <li className="flex items-start gap-4 group">
+                <div className="text-orange-500 p-2 rounded-lg bg-orange-500/10 group-hover:bg-orange-500 group-hover:text-white transition-all duration-300">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                  </svg>
+                </div>
+                <span className="text-gray-400 text-base font-medium group-hover:text-white transition-colors pt-1">
+                  {settings.site_phone || "00201288853531"}
+                </span>
+              </li>
+              <li className="flex items-start gap-4 group">
+                <div className="text-orange-500 p-2 rounded-lg bg-orange-500/10 group-hover:bg-orange-500 group-hover:text-white transition-all duration-300">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                  </svg>
+                </div>
+                <span className="text-gray-400 text-base font-medium group-hover:text-white transition-colors pt-1 break-all">
+                  {settings.site_email || "sales@serv5.com"}
+                </span>
+              </li>
+              <li className="flex items-start gap-4 group">
+                <div className="text-orange-500 p-2 rounded-lg bg-orange-500/10 group-hover:bg-orange-500 group-hover:text-white transition-all duration-300">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                </div>
+                <span className="text-gray-400 text-base font-medium group-hover:text-white transition-colors pt-1 whitespace-pre-line">
+                  {settings[`site_address_${language}`] ||
+                    settings.site_address ||
+                    t("address")}
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom Section: Socials & Copyright */}
+        <div className="pt-6 border-t-[3px] border-blue-500 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="flex items-center gap-4">
+            <span className="text-gray-300 font-bold text-sm">
+              {t("followUs")}
+            </span>
+            <div className="flex flex-wrap justify-center gap-2">
+              {(footerData.socials && footerData.socials.length > 0
+                ? footerData.socials
+                : [
+                    { id: "fb", platform: "facebook", url: "https://facebook.com/serv5" },
+                    { id: "tw", platform: "twitter", url: "https://twitter.com/serv5" },
+                    { id: "in", platform: "instagram", url: "https://instagram.com/serv5" },
+                    { id: "li", platform: "linkedin", url: "https://linkedin.com/company/serv5" },
+                    { id: "yt", platform: "youtube", url: "https://youtube.com/@serv5" },
+                  ]
+              ).map((social) => {
+                const iconData = getSocialIconData(social.platform);
+                return (
+                  <motion.a
+                    key={social.id || social.platform}
+                    href={safeUrl(social.url)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Serv5 ${social.platform || "Social"}`}
+                    whileHover={{ y: -4, scale: 1.1 }}
+                    className={`${iconData.color} w-7 h-7 rounded-full flex items-center justify-center text-white shadow-[0_4px_10px_rgba(0,0,0,0.3)] transition-all`}
+                  >
+                    {iconData.svg}
+                  </motion.a>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="text-gray-400 text-base font-medium">
+            {footerData.texts?.copyright || t("allRightsReserved")}
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;

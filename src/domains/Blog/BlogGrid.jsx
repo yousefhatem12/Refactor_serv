@@ -1,0 +1,321 @@
+"use client";
+import React, { useState, useEffect, useRef } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
+import { fetchAPI, getApiItems, getApiPage, getMediaUrl } from "@/lib/api";
+import { htmlToText } from "@/lib/sanitize-html";
+import { useLanguage } from "@/app/context/LanguageContext";
+import { useSettings } from "@/app/context/SettingsContext";
+
+// Client-side cache store to make tab/page switching instant
+const blogCache = {};
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.06,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20, scale: 0.96 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      type: "spring",
+      stiffness: 110,
+      damping: 15,
+    }
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.96,
+    transition: { duration: 0.2 }
+  }
+};
+
+const BlogCard = ({ post, t, language, categoryMap, siteLogo }) => {
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const initialImg = post.image ? getMediaUrl(post.image) : siteLogo;
+  const [failedImage, setFailedImage] = useState(null);
+  const imgSrc = failedImage === initialImg ? siteLogo : initialImg;
+
+  return (
+    <motion.div
+      layout
+      variants={itemVariants}
+    >
+      <Link href={`/blog/${post.slug || post.id}`} prefetch={false} className="group cursor-pointer flex flex-col h-full">
+        <div className="relative w-full h-[220px] rounded-lg overflow-hidden mb-4 bg-gray-800/50 border border-white/5 flex items-center justify-center">
+          {!isImageLoaded && (
+            <div className="absolute inset-0 bg-white/5 animate-pulse z-0" />
+          )}
+          <Image
+            src={imgSrc}
+            alt={post.title}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className={`transition-all duration-700 group-hover:scale-105 ${isImageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
+              } ${imgSrc === siteLogo ? "object-contain p-4" : "object-cover"}`}
+            onLoad={() => setIsImageLoaded(true)}
+            onError={() => setFailedImage(initialImg)}
+          />
+        </div>
+        <div className="flex items-center gap-2 mb-2">
+          <div className="text-blue-400 text-xs font-semibold tracking-wider uppercase">
+            {post.published_at}
+          </div>
+          <span className="w-1.5 h-1.5 rounded-full bg-gray-600"></span>
+          <div className="text-orange-400 text-xs font-semibold tracking-wider uppercase">
+            {categoryMap[post.category_raw] || post.category || (language === 'ar' ? 'تكنولوجيا' : 'Technology')}
+          </div>
+        </div>
+        <h3 className="text-lg font-bold mb-3 leading-snug group-hover:text-blue-400 transition-colors uppercase">
+          {post.title}
+        </h3>
+        <div className="text-gray-400 text-sm line-clamp-3">
+          {htmlToText(post.content)}
+        </div>
+      </Link>
+    </motion.div>
+  );
+};
+
+const BlogGrid = () => {
+  const { t, language } = useLanguage();
+  const settings = useSettings();
+  const siteLogo = settings?.site_logo
+    ? getMediaUrl(settings.site_logo)
+    : "/logo.svg";
+
+  const [activeTab, setActiveTab] = useState("ALL");
+  const [categories, setCategories] = useState([]);
+  const [categoryMap, setCategoryMap] = useState({});
+  const [postsList, setPostsList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const sentinelRef = useRef(null);
+
+  useEffect(() => {
+    if (!hasMore || loading) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setCurrentPage((prev) => prev + 1);
+        }
+      },
+      { rootMargin: "200px" }
+    );
+
+    const el = sentinelRef.current;
+    if (el) observer.observe(el);
+
+    return () => {
+      if (el) observer.unobserve(el);
+    };
+  }, [hasMore, loading]);
+
+  // Fetch categories dynamically
+  useEffect(() => {
+    fetchAPI(`/blog/categories?lang=${language}`)
+      .then((data) => {
+        if (data) {
+          const allCat = { id: "ALL", label: language === "ar" ? "الكل" : "All" };
+          setCategories([allCat, ...getApiItems(data)]);
+
+          const map = { ALL: language === "ar" ? "الكل" : "All" };
+          getApiItems(data).forEach((cat) => {
+            map[cat.id] = cat.label;
+          });
+          setCategoryMap(map);
+        }
+      })
+      .catch(console.error);
+  }, [language]);
+
+  // Fetch posts dynamically when activeTab, currentPage, or language changes
+  useEffect(() => {
+    let isMounted = true;
+
+    const categoryQuery = activeTab === "ALL" ? "ALL" : activeTab;
+    const cacheKey = `${language}-${categoryQuery}-${currentPage}`;
+
+    // Read from client-side cache first to avoid framework bootstrap delay
+    if (blogCache[cacheKey]) {
+      const cached = blogCache[cacheKey];
+      Promise.resolve().then(() => {
+        if (!isMounted) return;
+        if (currentPage === 1) {
+          setPostsList(cached.data);
+        } else {
+          setPostsList((prev) => {
+            const newPosts = cached.data.filter((post) => !prev.some((p) => p.id === post.id));
+            return [...prev, ...newPosts];
+          });
+        }
+        setHasMore(cached.hasMore);
+        setLoading(false);
+      });
+      return;
+    }
+
+    Promise.resolve().then(() => {
+      if (isMounted) setLoading(true);
+    });
+
+    fetchAPI(`/blog?lang=${language}&category_raw=${categoryQuery}&page=${currentPage}&per_page=9`)
+      .then((res) => {
+        if (!isMounted) return;
+
+        const page = getApiPage(res);
+        if (res) {
+          // Store in client-side cache
+          blogCache[cacheKey] = {
+            data: page.items,
+            hasMore: page.hasMore,
+          };
+
+          if (currentPage === 1) {
+            setPostsList(page.items);
+          } else {
+            setPostsList((prev) => {
+              const newPosts = page.items.filter((post) => !prev.some((p) => p.id === post.id));
+              return [...prev, ...newPosts];
+            });
+          }
+          setHasMore(page.hasMore);
+        } else if (currentPage === 1) {
+          setPostsList([]);
+          setHasMore(false);
+        }
+      })
+      .catch(console.error)
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [activeTab, currentPage, language]);
+
+  const handleTabChange = (cat) => {
+    setActiveTab(cat);
+    setCurrentPage(1);
+    setPostsList([]); // Clear previous posts immediately to trigger skeleton loader
+  };
+
+  return (
+    <section className="w-full max-w-7xl mx-auto px-6 py-12 text-white relative z-10">
+      <div className="mb-8">
+        <h2 className="text-2xl md:text-3xl font-bold mb-6 uppercase tracking-wide">
+          {t("recentBlogPosts") || (language === 'ar' ? 'أحدث المقالات' : 'Recent Blog Posts')}
+        </h2>
+
+        {/* Tabs */}
+        <div className="flex flex-wrap gap-3 mb-10">
+          {categories.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => handleTabChange(cat.id)}
+              className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 border ${activeTab === cat.id
+                ? "bg-[#FF8A00] border-[#FF8A00] text-white"
+                : "border-blue-500/50 text-gray-300 hover:border-blue-400 hover:text-white"
+                }`}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Grid */}
+      <motion.div
+        layout
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12 min-h-[400px] content-start"
+      >
+        <AnimatePresence mode="popLayout">
+          {postsList.length > 0 ? (
+            <>
+              {postsList.map((post) => (
+                <BlogCard
+                  key={post.id}
+                  post={post}
+                  t={t}
+                  language={language}
+                  categoryMap={categoryMap}
+                  siteLogo={siteLogo}
+                />
+              ))}
+              {loading && [1, 2, 3].map((i) => (
+                <motion.div
+                  layout
+                  variants={itemVariants}
+                  key={`skeleton-more-${i}`}
+                  className="flex flex-col h-full animate-pulse"
+                >
+                  <div className="w-full h-[220px] rounded-lg bg-gray-800/50 mb-4" />
+                  <div className="w-1/3 h-4 bg-gray-800/50 rounded mb-2" />
+                  <div className="w-3/4 h-6 bg-gray-800/50 rounded mb-3" />
+                  <div className="w-full h-4 bg-gray-800/50 rounded mb-1" />
+                  <div className="w-5/6 h-4 bg-gray-800/50 rounded" />
+                </motion.div>
+              ))}
+            </>
+          ) : loading ? (
+            [1, 2, 3, 4, 5, 6].map((i) => (
+              <motion.div
+                variants={itemVariants}
+                key={`skeleton-${i}`}
+                className="flex flex-col h-full animate-pulse"
+              >
+                <div className="w-full h-[220px] rounded-lg bg-gray-800/50 mb-4" />
+                <div className="w-1/3 h-4 bg-gray-800/50 rounded mb-2" />
+                <div className="w-3/4 h-6 bg-gray-800/50 rounded mb-3" />
+                <div className="w-full h-4 bg-gray-800/50 rounded mb-1" />
+                <div className="w-5/6 h-4 bg-gray-800/50 rounded" />
+              </motion.div>
+            ))
+          ) : (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="col-span-full flex flex-col items-center justify-center py-20 text-gray-400"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="mb-4 opacity-50">
+                <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+                <path d="M3 9h18" />
+                <path d="M9 21V9" />
+              </svg>
+              <p className="text-lg font-medium">{t("blogNoPosts") || (language === 'ar' ? 'لا توجد مقالات' : 'No posts found')}</p>
+              <p className="text-sm">{t("blogCheckBack") || (language === 'ar' ? 'الرجاء التحقق لاحقاً' : 'Please check back later')}</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+
+      {/* Infinite Scroll Sentinel */}
+      {hasMore && (
+        <div ref={sentinelRef} className="w-full h-16 flex items-center justify-center mt-8">
+          <span className="w-6 h-6 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></span>
+        </div>
+      )}
+    </section>
+  );
+};
+
+export default BlogGrid;
+

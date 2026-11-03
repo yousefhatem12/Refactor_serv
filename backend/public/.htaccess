@@ -1,0 +1,53 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Handle X-XSRF-Token Header
+    RewriteCond %{HTTP:x-xsrf-token} .
+    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Send Requests To Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# Only Laravel's front controller may execute PHP from the public directory.
+<FilesMatch "^(?!index\.php$).*\.php$">
+    Require all denied
+</FilesMatch>
+
+# Enable HTTP/2 when Apache mod_http2 is available
+<IfModule mod_http2.c>
+    Protocols h2 h2c http/1.1
+</IfModule>
+
+# Security Headers, HTTP/3 Alt-Svc Advertisement & Hide Server Info
+# (uses setifempty so headers already set by Laravel SecurityHeaders middleware are not duplicated)
+<IfModule mod_headers.c>
+    Header setifempty Alt-Svc "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400, h2=\":443\"; ma=86400"
+    Header setifempty Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+    Header setifempty X-Frame-Options "SAMEORIGIN"
+    Header setifempty X-Content-Type-Options "nosniff"
+    Header setifempty Referrer-Policy "origin-when-cross-origin"
+    Header setifempty Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    Header setifempty X-XSS-Protection "1; mode=block"
+
+    # Remove signatures
+    Header always unset X-Powered-By
+    Header always unset Server
+    Header unset X-Powered-By
+    Header unset Server
+</IfModule>

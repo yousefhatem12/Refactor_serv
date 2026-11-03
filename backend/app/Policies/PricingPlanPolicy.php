@@ -1,0 +1,75 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Policies;
+
+use Illuminate\Foundation\Auth\User as AuthUser;
+use App\Models\PricingPlan;
+use Illuminate\Auth\Access\HandlesAuthorization;
+
+class PricingPlanPolicy
+{
+    use HandlesAuthorization;
+    
+    public function viewAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('ViewAny:PricingPlan');
+    }
+
+    public function view(AuthUser $authUser, PricingPlan $pricingPlan): bool
+    {
+        return $authUser->can('View:PricingPlan');
+    }
+
+    public function create(AuthUser $authUser): bool
+    {
+        return $authUser->can('Create:PricingPlan');
+    }
+
+    public function update(AuthUser $authUser, PricingPlan $pricingPlan): bool
+    {
+        return $authUser->can('Update:PricingPlan');
+    }
+
+    public function delete(AuthUser $authUser, PricingPlan $pricingPlan): bool
+    {
+        return $authUser->can('Delete:PricingPlan');
+    }
+
+    public function deleteAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('DeleteAny:PricingPlan');
+    }
+
+    public function restore(AuthUser $authUser, PricingPlan $pricingPlan): bool
+    {
+        return $authUser->can('Restore:PricingPlan');
+    }
+
+    public function forceDelete(AuthUser $authUser, PricingPlan $pricingPlan): bool
+    {
+        return $authUser->can('ForceDelete:PricingPlan');
+    }
+
+    public function forceDeleteAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('ForceDeleteAny:PricingPlan');
+    }
+
+    public function restoreAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('RestoreAny:PricingPlan');
+    }
+
+    public function replicate(AuthUser $authUser, PricingPlan $pricingPlan): bool
+    {
+        return $authUser->can('Replicate:PricingPlan');
+    }
+
+    public function reorder(AuthUser $authUser): bool
+    {
+        return $authUser->can('Reorder:PricingPlan');
+    }
+
+}

@@ -1,0 +1,82 @@
+<?php
+
+namespace App\Models;
+
+use App\Traits\ClearsApiCache;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+
+class Post extends Model
+{
+    use HasFactory, ClearsApiCache;
+
+    protected static function apiCacheScopes(): array
+    {
+        return ['posts'];
+    }
+
+    protected static function apiCacheKeys(): array
+    {
+        return ['trending_posts_en', 'trending_posts_ar'];
+    }
+
+    protected $fillable = [
+        'title',
+        'slug',
+        'content',
+        'image',
+        'category',
+        'blog_category_id',
+        'is_published',
+        'is_trending',
+        'author_id',
+        'seo_title',
+        'seo_description',
+        'ai_generated',
+        'ai_status',
+        'ai_metadata',
+        'image_metadata',
+    ];
+
+    protected $casts = [
+        'is_published' => 'boolean',
+        'is_trending' => 'boolean',
+        'title' => 'json',
+        'content' => 'json',
+        'seo_title' => 'json',
+        'seo_description' => 'json',
+        'ai_generated' => 'boolean',
+        'ai_metadata' => 'json',
+        'image_metadata' => 'json',
+    ];
+
+    public function author(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class, 'author_id');
+    }
+
+    public function blogCategory(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(BlogCategory::class, 'blog_category_id');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($post) {
+            if (empty($post->slug)) {
+                $title = is_array($post->title) ? ($post->title['en'] ?? '') : $post->title;
+                $post->slug = Str::slug($title);
+            }
+        });
+        // Clear known blog API cache keys on any change.
+        // Paginated blog caches (posts_{lang}_cat_...) expire naturally after 1 hour.
+        $clear = static function (): void {
+            \Illuminate\Support\Facades\Cache::forget('trending_posts_en');
+            \Illuminate\Support\Facades\Cache::forget('trending_posts_ar');
+        };
+        static::saved($clear);
+        static::deleted($clear);
+    }
+}
