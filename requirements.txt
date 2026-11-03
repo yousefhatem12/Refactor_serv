@@ -1,0 +1,78 @@
+# =============================================================================
+# Serv5 Full-Stack Requirements Manifest (Frontend + Backend)
+# See REQUIREMENTS.md for full setup instructions and environment variables.
+# =============================================================================
+
+# --- System Runtimes ---
+node>=20.9.0
+npm>=10.0.0
+php>=8.2
+composer>=2.7.0
+mysql>=8.0
+redis>=7.0 # recommended for production cache/queue/session
+
+# --- PHP Extensions (Backend) ---
+ext-bcmath
+ext-ctype
+ext-curl
+ext-dom
+ext-fileinfo
+ext-gd
+ext-intl
+ext-json
+ext-mbstring
+ext-openssl
+ext-pdo_mysql
+ext-pdo_sqlite
+ext-tokenizer
+ext-xml
+ext-zip
+
+# --- Frontend Dependencies (package.json) ---
+next@^16.2.9
+react@19.2.4
+react-dom@19.2.4
+swr@^2.4.1
+framer-motion@^12.38.0
+react-icons@^5.6.0
+parse5@^8.0.1
+tailwindcss@^4
+@tailwindcss/postcss@^4
+postcss@^8.5.15
+
+# --- Frontend Dev Dependencies (package.json) ---
+vitest@^4.1.9
+@vitejs/plugin-react@^6.0.3
+@testing-library/react@^16.3.2
+@testing-library/dom@^10.4.1
+jsdom@^29.1.1
+@playwright/test@^1.62.1
+eslint@^9
+eslint-config-next@16.2.4
+
+# --- Backend Composer Dependencies (backend/composer.json) ---
+laravel/framework:^12.0 (v12.70.2)
+filament/filament:^5.6 (v5.11.0)
+livewire/livewire:^4.4 (v4.4.8)
+bezhansalleh/filament-shield:^4.2
+bezhansalleh/filament-language-switch:^4.3
+spatie/laravel-permission:^6.25
+laravel/sanctum:^4.0
+laravel/tinker:^2.10.1
+
+# --- Backend Composer Dev Dependencies (backend/composer.json) ---
+phpunit/phpunit:^11.5.50
+fakerphp/faker:^1.23
+mockery/mockery:^1.6
+nunomaduro/collision:^8.6
+laravel/pint:^1.24
+laravel/pail:^1.2.2
+laravel/sail:^1.41
+
+# --- Backend NPM Dev Dependencies (backend/package.json) ---
+vite@^7.0.7
+laravel-vite-plugin@^2.0.0
+tailwindcss@^4.0.0
+@tailwindcss/vite@^4.0.0
+axios@^1.11.0
+concurrently@^9.0.1
