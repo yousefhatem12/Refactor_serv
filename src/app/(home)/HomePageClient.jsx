@@ -190,9 +190,9 @@ export default function HomePageClient({ initialHomeData, initialLocale = "en" }
   });
 
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 70,
-    damping: 20,
-    restDelta: 0.001,
+    stiffness: 80,
+    damping: 25,
+    restDelta: 0.005,
   });
 
   // Earth movement: moves from Hero to Features

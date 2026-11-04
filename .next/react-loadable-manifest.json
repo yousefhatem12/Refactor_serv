@@ -27,7 +27,7 @@
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/ContactUs/ContactUs": {
     "id": 1672,
     "files": [
-      "static/chunks/1672.0baea2a84cbc4c6d.js"
+      "static/chunks/1672.95fbb7504bbb77f2.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/Features/Features": {
@@ -79,7 +79,7 @@
   "app\\context\\LanguageContext.jsx -> @/lib/api": {
     "id": 8863,
     "files": [
-      "static/chunks/8863.f244f08d0aaab382.js"
+      "static/chunks/8863.4a73af58bac4c9e1.js"
     ]
   },
   "domains\\Home\\CTA\\CTA.jsx -> @/app/components/Home/Shared/PlanetAstronaut": {

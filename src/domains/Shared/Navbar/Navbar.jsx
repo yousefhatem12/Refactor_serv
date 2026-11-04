@@ -312,16 +312,16 @@ const Navbar = ({ initialServices = [], initialNavLinks = [] }) => {
     >
       <div className="max-w-[1400px] mx-auto px-6 md:px-10 flex items-center justify-between">
         {/* Logo */}
-        <div className="flex-shrink-0">
-          <Link href={getLocalizedHref("/")} prefetch={false}>
+        <div className="flex-shrink-0 w-[64px] h-[64px]">
+          <Link href={getLocalizedHref("/")} prefetch={false} className="block w-[64px] h-[64px]">
             <img
               src={settings?.site_logo ? getMediaUrl(settings.site_logo) : "/logo.svg"}
               alt="Serv5 Logo"
-              width={140}
-              height={48}
+              width={64}
+              height={64}
               fetchPriority="high"
               decoding="async"
-              className="h-12 md:h-16 w-auto object-contain transition-transform duration-300 hover:scale-105 cursor-pointer"
+              className="w-[64px] h-[64px] min-w-[64px] min-h-[64px] max-w-[64px] max-h-[64px] object-contain transition-transform duration-300 hover:scale-105 cursor-pointer"
             />
           </Link>
         </div>

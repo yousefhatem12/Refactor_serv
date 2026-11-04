@@ -1,6 +1,7 @@
 const API_BASE_URL =
   process.env.INTERNAL_API_URL ||
   process.env.NEXT_PUBLIC_API_URL ||
+  process.env.DEFAULT_API_URL ||
   "https://api.serv5.com.eg/api/v1";
 
 const LEGACY_IMAGE_MAP = {
@@ -241,7 +242,9 @@ export const fetchAPI = async (endpoint, options = {}) => {
 
   const doFetch = async () => {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000); // 8-second timeout
+    // Fast 3-second timeout for server-side SSR calls to prevent locking the thread if backend is unreachable
+    const timeoutDuration = options.timeout || (typeof window === "undefined" ? 3000 : 6000);
+    const timeoutId = setTimeout(() => controller.abort(), timeoutDuration);
 
     try {
       const isFormData =
