@@ -1,20 +1,13 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
-import { fetchAPI } from "@/lib/api";
+import { useSettings } from "@/app/context/SettingsContext";
 
 const ContactMap = () => {
   const { t, language } = useLanguage();
-  const [settings, setSettings] = useState({});
-
-  useEffect(() => {
-    fetchAPI(`/settings?lang=${language}`)
-      .then((data) => {
-        if (data) setSettings(data);
-      })
-      .catch(console.error);
-  }, [language]);
+  const contextSettings = useSettings();
+  const settings = contextSettings || {};
 
   const searchQuery = settings.site_address
     ? encodeURIComponent(settings.site_address)

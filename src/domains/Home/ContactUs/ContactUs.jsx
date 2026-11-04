@@ -2,6 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
+import { useSettings } from "@/app/context/SettingsContext";
 
 import { useAuth } from "@/app/context/AuthContext";
 import { fetchAPI } from "@/lib/api";
@@ -37,15 +38,8 @@ const ContactUs = () => {
   const [contactCaptchaToken, setContactCaptchaToken] = React.useState("");
   const [contactCaptchaVersion, setContactCaptchaVersion] = React.useState(0);
 
-  const [settings, setSettings] = React.useState({});
-
-  React.useEffect(() => {
-    fetchAPI("/settings")
-      .then((data) => {
-        if (data) setSettings(data);
-      })
-      .catch(console.error);
-  }, []);
+  const contextSettings = useSettings();
+  const settings = contextSettings || {};
 
   const handleAuthChange = (e) => {
     const { name, value } = e.target;

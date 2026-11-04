@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { fetchAPI, getMediaUrl } from "@/lib/api";
 import { useLanguage } from "@/app/context/LanguageContext";
@@ -129,12 +130,12 @@ const OurBlog = () => {
                     .substring(0, 300)}
                   ...
                 </p>
-                <a
+                <Link
                   href={`/blog/${blogPosts.featured.id}`}
                   className="text-[#ff8a00] text-[0.8rem] font-extrabold underline underline-offset-4 tracking-[0.5px]"
                 >
                   {t("seeMore")}
-                </a>
+                </Link>
               </motion.div>
             )}
             {/* لابلابللب */}
@@ -169,12 +170,12 @@ const OurBlog = () => {
                   <h3 className="font-extrabold leading-[1.3] mb-[15px] text-white transition-colors duration-300 hover:text-[#ff8a00] text-[1.1rem]">
                     {post.title}
                   </h3>
-                  <a
+                  <Link
                     href={`/blog/${post.id}`}
                     className="text-[#ff8a00] text-[0.8rem] font-extrabold underline underline-offset-4 tracking-[0.5px]"
                   >
                     {t("seeMore")}
-                  </a>
+                  </Link>
                 </motion.div>
               ))}
 

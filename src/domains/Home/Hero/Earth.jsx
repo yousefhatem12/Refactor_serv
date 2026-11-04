@@ -36,6 +36,8 @@ export default function Earth({ isPhaseTwo }) {
             alt="Earth"
             width={800}
             height={800}
+            fetchPriority="high"
+            decoding="async"
             className="w-full h-full object-contain"
           />
         </div>
@@ -53,6 +55,8 @@ export default function Earth({ isPhaseTwo }) {
               alt="Serv5 Logo"
               width={300}
               height={300}
+              fetchPriority="high"
+              decoding="async"
               className="w-full h-full object-contain 
                          mix-blend-luminosity md:mix-blend-normal 
                          drop-shadow-[0_0_40px_rgba(255,255,255,0.8)] md:drop-shadow-[0_0_20px_rgba(255,255,255,0.5)] 
@@ -100,6 +104,8 @@ export default function Earth({ isPhaseTwo }) {
               alt="Astronaut"
               width={200}
               height={200}
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-contain animate-float-astronaut"
             />
           </div>

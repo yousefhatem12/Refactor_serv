@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { fetchAPI, getApiPage } from "@/lib/api";
+import { executeWorkerTask } from "@/lib/worker-pool";
 
 const FAQContent = ({ data }) => {
   const [openId, setOpenId] = useState(null);
@@ -74,14 +75,13 @@ const FAQContent = ({ data }) => {
 
       const page = getApiPage(res);
       if (page.items.length > 0 || res) {
-        setFaqs((prev) => {
-          const startIdx = prev.length;
-          const formatted = page.items.map((item, index) => ({
-            ...item,
-            displayId: (startIdx + index + 1).toString().padStart(2, "0"),
-          }));
-          const newFaqs = formatted.filter((item) => !prev.some((p) => p.id === item.id));
-          return [...prev, ...newFaqs];
+        const startIdx = faqs.length;
+        const formatted = page.items.map((item, index) => ({
+          ...item,
+          displayId: (startIdx + index + 1).toString().padStart(2, "0"),
+        }));
+        executeWorkerTask("DEDUPLICATE_ITEMS", { existing: faqs, incoming: formatted }).then((newFaqs) => {
+          setFaqs((prev) => [...prev, ...newFaqs]);
         });
         setHasMore(page.hasMore);
         setCurrentPage(page.currentPage || nextPage);

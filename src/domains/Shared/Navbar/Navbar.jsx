@@ -319,6 +319,8 @@ const Navbar = ({ initialServices = [], initialNavLinks = [] }) => {
               alt="Serv5 Logo"
               width={140}
               height={48}
+              fetchPriority="high"
+              decoding="async"
               className="h-12 md:h-16 w-auto object-contain transition-transform duration-300 hover:scale-105 cursor-pointer"
             />
           </Link>

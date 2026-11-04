@@ -220,6 +220,12 @@ export default async function RootLayout({ children }) {
       suppressHydrationWarning
     >
       <head>
+        {/* Resource Hints: Preconnect to critical API and Font origins */}
+        <link rel="preconnect" href="https://api.serv5.com.eg" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://api.serv5.com.eg" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
         {/* Fix lang/dir immediately from URL before React hydrates (avoids RTL flash) */}
         <script
           suppressHydrationWarning
@@ -227,9 +233,17 @@ export default async function RootLayout({ children }) {
             __html: `(function(){try{var p=location.pathname,ar=p.startsWith('/ar')||p==='/ar';if(ar){var h=document.documentElement;h.setAttribute('lang','ar');h.setAttribute('dir','rtl');}}catch(e){}})();`,
           }}
         />
+
+        {/* Preload Critical Brand Font to prevent layout shift & FOUT */}
+        <link rel="preload" href="/fonts/TsDamasSansFreeBold.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+
+        {/* Preload Largest Contentful Paint (LCP) Candidates & Critical Hero Assets */}
         <link rel="preload" href="/logo.svg" as="image" type="image/svg+xml" fetchPriority="high" />
-        <link rel="preload" href="/Hero/left-starts-Animate.svg" as="image" type="image/svg+xml" fetchPriority="high" />
-        <link rel="preload" href="/Hero/front-stars.svg" as="image" type="image/svg+xml" fetchPriority="high" />
+        <link rel="preload" href="/Hero/bg.webp" as="image" type="image/webp" fetchPriority="high" />
+        <link rel="preload" href="/Hero/earth.webp" as="image" type="image/webp" fetchPriority="high" />
+        <link rel="preload" href="/Hero/orange-planet.webp" as="image" type="image/webp" fetchPriority="high" />
+        <link rel="preload" href="/Hero/left-starts-Animate.svg" as="image" type="image/svg+xml" />
+        <link rel="preload" href="/Hero/front-stars.svg" as="image" type="image/svg+xml" />
         {customHead}
       </head>
       <body className="min-h-screen flex flex-col relative" suppressHydrationWarning>

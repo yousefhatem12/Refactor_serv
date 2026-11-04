@@ -13,19 +13,15 @@ import { RiTwitterXFill } from "react-icons/ri";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { fetchAPI } from "@/lib/api";
 import { safeUrl } from "@/lib/safe-url";
+import { useSettings } from "@/app/context/SettingsContext";
 
 const ContactInfo = ({ data }) => {
   const { t, language } = useLanguage();
-  const [settings, setSettings] = React.useState({});
+  const contextSettings = useSettings();
+  const settings = contextSettings || {};
   const [socials, setSocials] = React.useState([]);
 
   React.useEffect(() => {
-    fetchAPI(`/settings?lang=${language}`)
-      .then((data) => {
-        if (data) setSettings(data);
-      })
-      .catch(console.error);
-
     fetchAPI(`/footer-data?lang=${language}`)
       .then((data) => {
         if (data && data.socials) setSocials(data.socials);

@@ -11,25 +11,28 @@ import Stars from "./Stars";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
 import { fetchAPI } from "@/lib/api";
-import VideoModal from "@/app/components/Shared/VideoModal";
-import PricingModal from "@/app/components/Shared/PricingModal";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 
-// Staggered animation variants
+// Dynamically import modals to reduce initial JavaScript bundle and Total Blocking Time (TBT)
+const VideoModal = dynamic(() => import("@/app/components/Shared/VideoModal"), { ssr: false });
+const PricingModal = dynamic(() => import("@/app/components/Shared/PricingModal"), { ssr: false });
+
+// Immediate render variants for fast Largest Contentful Paint (LCP) & FCP without delay
 const containerVariants = {
-  hidden: { opacity: 0 },
+  hidden: { opacity: 0.9 },
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.4,
+      staggerChildren: 0.05,
+      delayChildren: 0,
     },
   },
 };
 
 const itemVariants = {
-  hidden: { y: 30, opacity: 0 },
-  show: { y: 0, opacity: 1, transition: { duration: 0.8, ease: "easeOut" } },
+  hidden: { y: 10, opacity: 0.9 },
+  show: { y: 0, opacity: 1, transition: { duration: 0.4, ease: "easeOut" } },
 };
 
 export default function Hero({ isPhaseTwo, data }) {
@@ -118,6 +121,7 @@ export default function Hero({ isPhaseTwo, data }) {
               width={580}
               height={580}
               priority
+              fetchPriority="high"
               sizes="(max-width: 768px) 320px, (max-width: 1024px) 480px, 580px"
               className="w-[320px] md:w-[480px] lg:w-[580px] h-auto opacity-80"
             />

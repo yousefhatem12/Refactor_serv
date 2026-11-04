@@ -119,7 +119,7 @@ self.__SERVER_FILES_MANIFEST={
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "C:\\Users\\hp\\Desktop\\serv5-last-last",
+    "outputFileTracingRoot": "C:\\Users\\hp\\Desktop\\Backend Learning\\Refactor_serv",
     "cacheComponents": false,
     "cacheLife": {
       "default": {
@@ -320,11 +320,11 @@ self.__SERVER_FILES_MANIFEST={
     "bundlePagesRouterDependencies": false,
     "configFileName": "next.config.mjs",
     "turbopack": {
-      "root": "C:\\Users\\hp\\Desktop\\serv5-last-last"
+      "root": "C:\\Users\\hp\\Desktop\\Backend Learning\\Refactor_serv"
     },
     "distDirRoot": ".next"
   },
-  "appDir": "C:\\Users\\hp\\Desktop\\serv5-last-last",
+  "appDir": "C:\\Users\\hp\\Desktop\\Backend Learning\\Refactor_serv",
   "relativeAppDir": "",
   "files": [
     ".next\\package.json",

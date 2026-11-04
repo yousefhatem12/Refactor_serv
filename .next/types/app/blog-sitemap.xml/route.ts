@@ -1,4 +1,4 @@
-// File: C:\Users\hp\Desktop\serv5-last-last\src\app\blog-sitemap.xml\route.js
+// File: C:\Users\hp\Desktop\Backend Learning\Refactor_serv\src\app\blog-sitemap.xml\route.js
 import * as entry from '../../../../src/app/blog-sitemap.xml/route.js'
 import type { NextRequest } from 'next/server.js'
 

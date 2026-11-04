@@ -6,7 +6,12 @@ import { useSettings } from "@/app/context/SettingsContext";
 import { fetchAPI } from "@/lib/api";
 import { safeUrl } from "@/lib/safe-url";
 import { motion } from "framer-motion";
-import PlanetAstronaut from "@/app/components/Home/Shared/PlanetAstronaut";
+import dynamic from "next/dynamic";
+
+const PlanetAstronaut = dynamic(
+  () => import("@/app/components/Home/Shared/PlanetAstronaut"),
+  { ssr: false }
+);
 import {
   FaFacebook,
   FaInstagram,

@@ -4,9 +4,11 @@ import { motion } from "framer-motion";
 import { FaPlay } from "react-icons/fa";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
-import VideoModal from "@/app/components/Shared/VideoModal";
-import PricingModal from "@/app/components/Shared/PricingModal";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
+
+const VideoModal = dynamic(() => import("@/app/components/Shared/VideoModal"), { ssr: false });
+const PricingModal = dynamic(() => import("@/app/components/Shared/PricingModal"), { ssr: false });
 
 const getPlanetColors = (planetImg, propGradient, propDotColor) => {
   if (propGradient && propDotColor) {

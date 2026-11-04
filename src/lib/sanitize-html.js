@@ -148,13 +148,35 @@ function serializeNode(node) {
   return `<${tagName}${getSafeAttributes(node, tagName)}>${children}</${tagName}>`;
 }
 
+const sanitizeCache = new Map();
+const htmlToTextCache = new Map();
+const MAX_CACHE_SIZE = 500;
+
+function setBoundedCache(cache, key, value) {
+  if (cache.size >= MAX_CACHE_SIZE) {
+    const firstKey = cache.keys().next().value;
+    cache.delete(firstKey);
+  }
+  cache.set(key, value);
+}
+
 export function sanitizeHtml(value) {
   if (typeof value !== "string" || value.length === 0) return "";
+  
+  // Fast path: If the string has no HTML tag starters, return as is
+  if (!value.includes("<") && !value.includes("&")) return value;
+
+  const cached = sanitizeCache.get(value);
+  if (cached !== undefined) return cached;
 
   try {
-    return (parseFragment(value).childNodes || []).map(serializeNode).join("");
+    const sanitized = (parseFragment(value).childNodes || []).map(serializeNode).join("");
+    setBoundedCache(sanitizeCache, value, sanitized);
+    return sanitized;
   } catch {
-    return escapeText(value);
+    const escaped = escapeText(value);
+    setBoundedCache(sanitizeCache, value, escaped);
+    return escaped;
   }
 }
 
@@ -171,13 +193,23 @@ function collectText(node) {
 export function htmlToText(value) {
   if (typeof value !== "string" || value.length === 0) return "";
 
+  // Fast path: If string is plain text
+  if (!value.includes("<") && !value.includes("&")) return value.trim();
+
+  const cached = htmlToTextCache.get(value);
+  if (cached !== undefined) return cached;
+
   try {
-    return (parseFragment(value).childNodes || [])
+    const text = (parseFragment(value).childNodes || [])
       .map(collectText)
       .join("")
       .replace(/\s+/g, " ")
       .trim();
+    setBoundedCache(htmlToTextCache, value, text);
+    return text;
   } catch {
-    return value.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+    const stripped = value.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+    setBoundedCache(htmlToTextCache, value, stripped);
+    return stripped;
   }
 }

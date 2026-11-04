@@ -338,3 +338,22 @@ html[lang="ar"] .article-content strong,
   animation: float-astronaut 3.5s ease-in-out infinite;
 }
 
+/* Speed Index & Paint Optimization: Skip rendering work for offscreen content */
+.content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 700px;
+}
+
+/* Zero Cumulative Layout Shift (CLS) image protection */
+img, svg, video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Hardware accelerated layer promotions for smooth 60fps scrolling */
+.gpu-layer {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+

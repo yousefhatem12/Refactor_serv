@@ -180,6 +180,8 @@ const MobileAppsHero = ({
             alt="Planet"
             width={600}
             height={600}
+            fetchPriority="high"
+            decoding="async"
             className={`w-full h-auto object-contain scale-[1.5] ${isRtl ? "-translate-x-[10%]" : "translate-x-[10%]"}`}
             style={{ filter: `drop-shadow(0 0 35px ${resolvedDotColor}) drop-shadow(0 0 80px ${resolvedDotColor}80)` }}
           />

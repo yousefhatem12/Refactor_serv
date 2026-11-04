@@ -1,4 +1,4 @@
-// File: C:\Users\hp\Desktop\serv5-last-last\src\app\project-consultation\page.jsx
+// File: C:\Users\hp\Desktop\Backend Learning\Refactor_serv\src\app\project-consultation\page.jsx
 import * as entry from '../../../../src/app/project-consultation/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

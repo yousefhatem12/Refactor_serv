@@ -143,21 +143,24 @@ const getCurrentLang = async (endpoint, options) => {
 const sanitizeEncryptedPayloads = (data) => {
   if (!data) return data;
   if (typeof data === "string") {
-    const trimmed = data.trim();
-    if (trimmed.startsWith("eyJpdiI6") || (trimmed.startsWith('{"iv":') && trimmed.includes('"value":'))) {
-      return "";
-    }
+    // Fast character code checks before string allocation or startsWith
+    if (data.charCodeAt(0) === 101 /* 'e' */ && data.startsWith("eyJpdiI6")) return "";
+    if (data.charCodeAt(0) === 123 /* '{' */ && data.startsWith('{"iv":') && data.includes('"value":')) return "";
     return data;
   }
   if (Array.isArray(data)) {
-    return data.map(sanitizeEncryptedPayloads);
+    for (let i = 0; i < data.length; i++) {
+      data[i] = sanitizeEncryptedPayloads(data[i]);
+    }
+    return data;
   }
   if (typeof data === "object") {
-    const cleaned = {};
-    for (const [key, val] of Object.entries(data)) {
-      cleaned[key] = sanitizeEncryptedPayloads(val);
+    for (const key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+        data[key] = sanitizeEncryptedPayloads(data[key]);
+      }
     }
-    return cleaned;
+    return data;
   }
   return data;
 };

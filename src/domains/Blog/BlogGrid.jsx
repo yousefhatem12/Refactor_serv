@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { fetchAPI, getApiItems, getApiPage, getMediaUrl } from "@/lib/api";
 import { htmlToText } from "@/lib/sanitize-html";
+import { executeWorkerTask } from "@/lib/worker-pool";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
 
@@ -187,9 +188,10 @@ const BlogGrid = () => {
           if (currentPage === 1) {
             setPostsList(page.items);
           } else {
-            setPostsList((prev) => {
-              const newPosts = page.items.filter((post) => !prev.some((p) => p.id === post.id));
-              return [...prev, ...newPosts];
+            executeWorkerTask("DEDUPLICATE_ITEMS", { existing: postsList, incoming: page.items }).then((newPosts) => {
+              if (isMounted) {
+                setPostsList((prev) => [...prev, ...newPosts]);
+              }
             });
           }
           setHasMore(page.hasMore);

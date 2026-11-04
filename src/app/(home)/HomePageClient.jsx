@@ -58,7 +58,11 @@ function LazySection({ children, minHeight = "600px", rootMargin = "500px" }) {
   }, [shouldRender, rootMargin]);
 
   return (
-    <div ref={ref} style={{ minHeight: shouldRender ? undefined : minHeight }}>
+    <div
+      ref={ref}
+      className="content-visibility-auto"
+      style={{ minHeight: shouldRender ? undefined : minHeight }}
+    >
       {shouldRender ? children : null}
     </div>
   );

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { fetchAPI, getApiPage } from "../../lib/api";
+import { executeWorkerTask } from "../../lib/worker-pool";
 import { useLanguage } from "../context/LanguageContext";
 
 export default function OurProductsClient({
@@ -64,9 +65,8 @@ export default function OurProductsClient({
       .then((res) => {
         const page = getApiPage(res);
         if (res) {
-          setProductsList((prev) => {
-            const newProducts = page.items.filter((item) => !prev.some((p) => p.id === item.id));
-            return [...prev, ...newProducts];
+          executeWorkerTask("DEDUPLICATE_ITEMS", { existing: productsList, incoming: page.items }).then((newProducts) => {
+            setProductsList((prev) => [...prev, ...newProducts]);
           });
           setHasMore(page.hasMore);
           setCurrentPage(page.currentPage || nextPage);

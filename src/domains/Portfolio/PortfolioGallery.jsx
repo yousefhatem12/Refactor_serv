@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { fetchAPI, getApiItems, getApiPage, getMediaUrl } from "@/lib/api";
+import { executeWorkerTask } from "@/lib/worker-pool";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
 
@@ -221,11 +222,10 @@ export default function PortfolioGallery({ data, perPage = 9 }) {
           if (currentPage === 1) {
             setPortfolioItems(page.items);
           } else {
-            setPortfolioItems((prev) => {
-              const newItems = page.items.filter(
-                (item) => !prev.some((p) => p.id === item.id),
-              );
-              return [...prev, ...newItems];
+            executeWorkerTask("DEDUPLICATE_ITEMS", { existing: portfolioItems, incoming: page.items }).then((newItems) => {
+              if (isMounted) {
+                setPortfolioItems((prev) => [...prev, ...newItems]);
+              }
             });
           }
           setHasMore(page.hasMore);

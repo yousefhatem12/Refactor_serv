@@ -14,32 +14,33 @@
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/Blog/OurBlog": {
     "id": 8164,
     "files": [
-      "static/chunks/8164.12c199cfccd32f5f.js"
+      "static/chunks/8500-1881b11f3cfa4a83.js",
+      "static/chunks/8164.00376dc084f83390.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/CTA/CTA": {
     "id": 6548,
     "files": [
-      "static/chunks/6548.78b17930537d8936.js"
+      "static/chunks/6548.12eff7d36bb24095.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/ContactUs/ContactUs": {
     "id": 1672,
     "files": [
-      "static/chunks/1672.78445a78b412ac4b.js"
+      "static/chunks/1672.0baea2a84cbc4c6d.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/Features/Features": {
     "id": 3065,
     "files": [
       "static/chunks/8994-b972b82541e48d80.js",
-      "static/chunks/3065.27d339b88db01cc7.js"
+      "static/chunks/3065.5323939178e7cfcf.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/Hero/Earth": {
     "id": 7995,
     "files": [
-      "static/chunks/7995.43e7771b7f738195.js"
+      "static/chunks/7995.03887e478bf9aa46.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/OnlineWebsite/OnlineWebsite": {
@@ -78,7 +79,65 @@
   "app\\context\\LanguageContext.jsx -> @/lib/api": {
     "id": 8863,
     "files": [
-      "static/chunks/8863.94a890a6bdef2cf2.js"
+      "static/chunks/8863.f244f08d0aaab382.js"
+    ]
+  },
+  "domains\\Home\\CTA\\CTA.jsx -> @/app/components/Home/Shared/PlanetAstronaut": {
+    "id": 653,
+    "files": [
+      "static/chunks/653.6d52c036416979e6.js"
+    ]
+  },
+  "domains\\Home\\CTA\\CTA.jsx -> @/app/components/Shared/ContactModal": {
+    "id": 7582,
+    "files": [
+      "static/chunks/8e1d74a4-b1fbea0058e5537a.js",
+      "static/chunks/94730671-58731e77070b6ffd.js",
+      "static/chunks/7267.82334d5ddb41bde8.js"
+    ]
+  },
+  "domains\\Home\\CTA\\CTA.jsx -> @/app/components/Shared/PricingModal": {
+    "id": 8908,
+    "files": [
+      "static/chunks/8908.2901a3148aefa72d.js"
+    ]
+  },
+  "domains\\Home\\Hero\\Hero.jsx -> @/app/components/Shared/PricingModal": {
+    "id": 8908,
+    "files": []
+  },
+  "domains\\Home\\Hero\\Hero.jsx -> @/app/components/Shared/VideoModal": {
+    "id": 2309,
+    "files": []
+  },
+  "domains\\Services\\Services-web-design\\WebDesignHero.jsx -> @/app/components/Shared/PricingModal": {
+    "id": 8908,
+    "files": []
+  },
+  "domains\\Services\\Services-web-design\\WebDesignHero.jsx -> @/app/components/Shared/VideoModal": {
+    "id": 2309,
+    "files": []
+  },
+  "domains\\Services\\Services-web-dev\\WebDevHero.jsx -> @/app/components/Shared/PricingModal": {
+    "id": 8908,
+    "files": []
+  },
+  "domains\\Services\\Services-web-dev\\WebDevHero.jsx -> @/app/components/Shared/VideoModal": {
+    "id": 2309,
+    "files": []
+  },
+  "domains\\Services\\Services-web-hosting\\ServicesHero.jsx -> @/app/components/Shared/PricingModal": {
+    "id": 8908,
+    "files": []
+  },
+  "domains\\Services\\Services-web-hosting\\ServicesHero.jsx -> @/app/components/Shared/VideoModal": {
+    "id": 2309,
+    "files": []
+  },
+  "domains\\Shared\\Footer\\Footer.jsx -> @/app/components/Home/Shared/PlanetAstronaut": {
+    "id": 653,
+    "files": [
+      "static/chunks/3034.0e2d064fa8e02501.js"
     ]
   }
 }

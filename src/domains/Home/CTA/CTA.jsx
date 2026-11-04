@@ -3,10 +3,12 @@ import React, { useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
-import PricingModal from "@/app/components/Shared/PricingModal";
-import ContactModal from "@/app/components/Shared/ContactModal";
+import dynamic from "next/dynamic";
 import { useRouter, usePathname } from "next/navigation";
-import PlanetAstronaut from "@/app/components/Home/Shared/PlanetAstronaut";
+
+const PricingModal = dynamic(() => import("@/app/components/Shared/PricingModal"), { ssr: false });
+const ContactModal = dynamic(() => import("@/app/components/Shared/ContactModal"), { ssr: false });
+const PlanetAstronaut = dynamic(() => import("@/app/components/Home/Shared/PlanetAstronaut"), { ssr: false });
 
 const CTA = () => {
   const router = useRouter();
