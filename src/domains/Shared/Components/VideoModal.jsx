@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { motion, AnimatePresence } from "framer-motion";
 import { getMediaUrl } from "@/lib/api";
 
 const VideoModal = ({ isOpen, onClose, videoUrl }) => {
@@ -10,28 +9,19 @@ const VideoModal = ({ isOpen, onClose, videoUrl }) => {
     setMounted(true);
   }, []);
 
-  if (!mounted) return null;
+  if (!mounted || !isOpen) return null;
 
   return createPortal(
-    <AnimatePresence>
-      {isOpen && (
-        <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4 sm:p-6 md:p-10">
+    <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4 sm:p-6 md:p-10">
           {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+          <div
             onClick={onClose}
-            className="absolute inset-0 bg-black/60 backdrop-blur-md cursor-pointer"
+            className="absolute inset-0 bg-black/60 backdrop-blur-md cursor-pointer animate-fade-in"
           />
 
           {/* Modal Container */}
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.9, opacity: 0, y: 20 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="relative w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(217,139,80,0.3)] border border-white/10 z-10"
+          <div
+            className="relative w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(217,139,80,0.3)] border border-white/10 z-10 animate-fade-up"
           >
             {/* Close Button */}
             <button
@@ -113,10 +103,8 @@ const VideoModal = ({ isOpen, onClose, videoUrl }) => {
                 </div>
               )}
             </div>
-          </motion.div>
-        </div>
-      )}
-    </AnimatePresence>,
+          </div>
+        </div>,
     document.body
   );
 };

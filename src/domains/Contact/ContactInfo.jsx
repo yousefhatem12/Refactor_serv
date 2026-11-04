@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   FaFacebook,
@@ -155,9 +156,11 @@ const ContactInfo = ({ data }) => {
                   >
                     <div className={`w-14 h-10 rounded-xl overflow-hidden border-2 relative flex items-center justify-center bg-white/10 backdrop-blur-sm shadow-xl group-hover:scale-110 transition-all duration-300 ${branch.is_active ? 'border-[#FF8A00] shadow-[0_0_15px_rgba(255,138,0,0.5)]' : 'border-white/10 group-hover:border-white/30'}`}>
                       {isImageFlag(branch) ? (
-                        <img
+                        <Image
                           src={getFlagSrc(branch)}
                           alt={getBranchName(branch)}
+                          width={56}
+                          height={40}
                           className="w-full h-full object-cover"
                         />
                       ) : (

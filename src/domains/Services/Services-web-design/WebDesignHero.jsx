@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { FaPlay } from "react-icons/fa";
 import { useLanguage } from "@/app/context/LanguageContext";
@@ -152,11 +153,13 @@ const WebDesignHero = ({ data, serviceId = "ui-ux-design", gradient, dotColor, p
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
             className="w-full flex items-center justify-center"
           >
-            <img
+            <Image
               src={planetImage || "/Services/yellow.webp"}
               alt="Planet"
               width={600}
               height={600}
+              priority
+              sizes="(max-width: 1024px) 100vw, 600px"
               className="w-[100%] h-auto object-contain scale-110"
               style={{
                 filter: `drop-shadow(0 0 40px ${resolvedDotColor}) drop-shadow(0 0 80px ${resolvedDotColor}aa) drop-shadow(0 0 120px ${resolvedDotColor}55)`,

@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { useParams, useRouter, notFound } from "next/navigation";
 import { fetchAPI } from "../../lib/api";
 import { sanitizeHtml } from "../../lib/sanitize-html";
@@ -415,10 +416,13 @@ export default function DynamicPageClient({
                                 </ul>
                               </div>
                               <div className="w-full lg:w-1/2 relative">
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
+                                <Image
                                   src="/template/Mask group.webp"
                                   alt="Analytics Dashboard"
+                                  width={700}
+                                  height={450}
+                                  loading="lazy"
+                                  sizes="(max-width: 1024px) 100vw, 50vw"
                                   className="w-full h-auto object-contain drop-shadow-2xl"
                                 />
                               </div>
@@ -449,10 +453,13 @@ export default function DynamicPageClient({
                                 </div>
                               </div>
                               <div className="w-full lg:w-1/2 relative">
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
+                                <Image
                                   src="/template/stephen-phillips-hostreviews-co-uk-shr_Xn8S8QU-unsplash 1.webp"
                                   alt="Laptop showing website"
+                                  width={700}
+                                  height={450}
+                                  loading="lazy"
+                                  sizes="(max-width: 1024px) 100vw, 50vw"
                                   className="w-full h-auto object-contain drop-shadow-[0_0_40px_rgba(255,255,255,0.05)]"
                                 />
                               </div>
@@ -531,11 +538,14 @@ export default function DynamicPageClient({
                         {block.data.subtitle?.[language]}
                       </p>
                       {block.data.image && (
-                        <div className="mt-8 rounded-2xl overflow-hidden border border-white/10">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
+                        <div className="mt-8 rounded-2xl overflow-hidden border border-white/10 relative">
+                          <Image
                             src={`${STORAGE_URL}/storage/${block.data.image}`}
                             alt="Hero"
+                            width={1200}
+                            height={600}
+                            loading="lazy"
+                            sizes="(max-width: 1024px) 100vw, 1200px"
                             className="w-full h-auto"
                           />
                         </div>
@@ -653,11 +663,14 @@ export default function DynamicPageClient({
                       </div>
                       <div className="flex-1 w-full">
                         {block.data.image && (
-                          <div className="rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(255,138,0,0.1)] border border-white/10">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
+                          <div className="rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(255,138,0,0.1)] border border-white/10 relative">
+                            <Image
                               src={`${STORAGE_URL}/storage/${block.data.image}`}
                               alt="Split Content"
+                              width={800}
+                              height={500}
+                              loading="lazy"
+                              sizes="(max-width: 1024px) 100vw, 50vw"
                               className="w-full h-auto object-cover"
                             />
                           </div>
@@ -888,10 +901,13 @@ function RenderBlock({
           </div>
           <div className="w-full lg:w-1/2 relative">
             {imageUrl && (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img
+              <Image
                 src={imageUrl}
                 alt={resolveText(data.title) || "Content"}
+                width={700}
+                height={500}
+                loading="lazy"
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="w-full h-auto object-contain drop-shadow-2xl"
               />
             )}

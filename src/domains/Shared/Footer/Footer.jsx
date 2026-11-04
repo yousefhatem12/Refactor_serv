@@ -5,7 +5,6 @@ import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
 import { fetchAPI } from "@/lib/api";
 import { safeUrl } from "@/lib/safe-url";
-import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 
 const PlanetAstronaut = dynamic(
@@ -108,11 +107,8 @@ const Footer = () => {
           <div
             className={`max-w-2xl text-center ${language === "ar" ? "md:text-right" : "md:text-left"} z-20`}
           >
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-[1.1] tracking-tight"
+            <h2
+              className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 leading-[1.1] tracking-tight animate-fade-up"
             >
               <span>
                 {footerHeading.replace(/<br\s*\/?>/gi, "\n").split(/\r?\n/).map((line, index) => (
@@ -122,17 +118,13 @@ const Footer = () => {
                   </Fragment>
                 ))}
               </span>
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
+            </h2>
+            <p
               className="text-gray-400 text-lg md:text-xl mb-6 max-w-xl font-light"
             >
               {footerData.texts?.description || t("footerDesc")}
-            </motion.p>
-            <motion.button
+            </p>
+            <button
               onClick={() => {
                 if (pathname.includes("/contact-us")) {
                   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -140,19 +132,10 @@ const Footer = () => {
                   router.push(`/${language}/contact-us`);
                 }
               }}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              whileHover={{
-                scale: 1.05,
-                boxShadow: "0 0 20px rgba(255,255,255,0.2)",
-              }}
-              whileTap={{ scale: 0.95 }}
-              className="px-12 py-4 rounded-full border border-white/30 bg-white/5 backdrop-blur-md text-white font-semibold hover:bg-white hover:text-[#020617] transition-all duration-300 text-lg cursor-pointer"
+              className="px-12 py-4 rounded-full border border-white/30 bg-white/5 backdrop-blur-md text-white font-semibold hover:bg-white hover:text-[#020617] hover:scale-105 active:scale-95 transition-all duration-300 text-lg cursor-pointer"
             >
               {footerData.texts?.button_text || t("getStarted")}
-            </motion.button>
+            </button>
           </div>
 
           {/* Space reserved for global planet transition */}
@@ -347,17 +330,16 @@ const Footer = () => {
               ).map((social) => {
                 const iconData = getSocialIconData(social.platform);
                 return (
-                  <motion.a
+                  <a
                     key={social.id || social.platform}
                     href={safeUrl(social.url)}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Serv5 ${social.platform || "Social"}`}
-                    whileHover={{ y: -4, scale: 1.1 }}
-                    className={`${iconData.color} w-7 h-7 rounded-full flex items-center justify-center text-white shadow-[0_4px_10px_rgba(0,0,0,0.3)] transition-all`}
+                    className={`${iconData.color} w-7 h-7 rounded-full flex items-center justify-center text-white shadow-[0_4px_10px_rgba(0,0,0,0.3)] transition-all hover:-translate-y-1 hover:scale-110`}
                   >
                     {iconData.svg}
-                  </motion.a>
+                  </a>
                 );
               })}
             </div>

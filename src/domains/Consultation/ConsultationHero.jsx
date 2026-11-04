@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
@@ -54,9 +55,12 @@ const ConsultationHero = () => {
         transition={{ duration: 1, ease: "easeOut" }}
         className="absolute -right-20 top-0 w-64 h-64 pointer-events-none z-10 opacity-30 blur-sm lg:blur-none lg:opacity-50"
       >
-        <img
+        <Image
           src="/Services/blue.webp"
           alt="Decorative Planet"
+          width={256}
+          height={256}
+          loading="lazy"
           className="w-full h-auto object-contain animate-pulse-slow"
         />
       </motion.div>

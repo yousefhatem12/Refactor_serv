@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { motion } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
 
@@ -134,12 +133,8 @@ const ContactUs = () => {
     <section className="py-20 px-4 md:px-8 relative z-10">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
         {/* Left Side: Form & Info */}
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="flex flex-col"
+        <div
+          className="flex flex-col animate-fade-up"
         >
           <div className="flex items-center gap-4 mb-4">
             <h2 className="text-lg md:text-3xl lg:text-4xl font-black text-white leading-tight">
@@ -147,9 +142,8 @@ const ContactUs = () => {
               <span className="text-[#FF8A00]">{t("getInTouch2")}</span>
             </h2>
             {/* Saturn Planet SVG */}
-            <motion.svg
-              animate={{ rotate: [0, 360] }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            <svg
+              className="animate-[spin_20s_linear_infinite]"
               width="40"
               height="40"
               viewBox="0 0 24 24"
@@ -166,7 +160,7 @@ const ContactUs = () => {
                 strokeWidth="1"
                 transform="rotate(-15 12 12)"
               />
-            </motion.svg>
+            </svg>
           </div>
 
           <p className="text-sm md:text-base text-gray-400 mb-8 max-w-lg leading-relaxed">
@@ -500,75 +494,13 @@ const ContactUs = () => {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
-        {/* Right Side: Replaced Map with Contents.webp */}
+        {/* Right Side: Global Reach Interactive Map */}
         <div className="w-full h-full flex items-center justify-center relative min-h-[300px] md:min-h-[450px]">
-          {/* Falling Meteor */}
-          <motion.img
-            src="/CTA/meteor2.webp"
-            alt="Meteor"
-            className="absolute z-30 w-32 md:w-48 pointer-events-none drop-shadow-[0_0_40px_rgba(255,138,0,0.8)]"
-            initial={{
-              opacity: 0,
-              x: isAr ? 1000 : -1000,
-              y: -200,
-              scaleX: isAr ? -0.5 : 0.5,
-              scaleY: 0.5,
-              rotate: isAr ? -15 : 15,
-            }}
-            whileInView={{
-              opacity: [0, 1, 1, 0],
-              x: isAr ? [1000, 500, 0, 0] : [-1000, -500, 0, 0],
-              y: [-200, -100, 0, 0],
-              scaleX: isAr ? [-0.5, -1, -1.5, 0] : [0.5, 1, 1.5, 0],
-              scaleY: [0.5, 1, 1.5, 0],
-            }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{
-              duration: 1.0,
-              times: [0, 0.1, 0.98, 1],
-              ease: "easeIn",
-            }}
-          />
-
-          {/* Explosion */}
-          <motion.img
-            src="/CTA/explosion.webp"
-            alt="Explosion"
-            className="absolute z-40 w-64 md:w-96 pointer-events-none mix-blend-screen"
-            initial={{ opacity: 0, scale: 0.2 }}
-            whileInView={{
-              opacity: [0, 1, 1, 0],
-              scale: [0.2, 1.5, 2, 2.2],
-            }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 1, delay: 0.9, times: [0, 0.2, 0.8, 1] }}
-          />
-
-          {/* Global Reach Interactive Map */}
-          <motion.div
-            className="w-full relative z-20"
-            initial={{
-              opacity: 0,
-              scale: 0.2,
-              filter: "brightness(2) blur(10px)",
-            }}
-            whileInView={{
-              opacity: 1,
-              scale: 1,
-              filter: "brightness(1) blur(0px)",
-            }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{
-              duration: 1.2,
-              delay: 1.4, // Appears as explosion fades
-              type: "spring",
-              stiffness: 80,
-            }}
-          >
+          <div className="w-full relative z-20 animate-fade-in">
             <GlobalReach minimal={true} />
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

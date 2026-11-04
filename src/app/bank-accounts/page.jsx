@@ -1,6 +1,6 @@
 import React from "react";
 import { headers } from "next/headers";
-import { getCachedSettings } from "@/lib/cached-api";
+import { getCachedSettings, getCachedBankAccounts } from "@/lib/cached-api";
 import { getSeoAlternates } from "@/lib/seo";
 import { getMediaUrl } from "@/lib/api";
 import BankAccountsContent from "../components/BankAccounts/BankAccountsContent";
@@ -59,6 +59,17 @@ export async function generateMetadata() {
   };
 }
 
-export default function BankAccountsPage() {
-  return <BankAccountsContent />;
+export default async function BankAccountsPage() {
+  const headersList = await headers();
+  const lang = headersList.get("x-locale") || "en";
+
+  let initialAccounts = null;
+  try {
+    const res = await getCachedBankAccounts(lang, "egypt").catch(() => null);
+    initialAccounts = res?.data || res || null;
+  } catch (error) {
+    console.error("Failed to fetch initial bank accounts on server:", error);
+  }
+
+  return <BankAccountsContent initialData={initialAccounts} initialLang={lang} />;
 }

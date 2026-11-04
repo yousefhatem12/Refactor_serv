@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { fetchAPI } from "@/lib/api";
 import { safeUrl } from "@/lib/safe-url";
@@ -47,28 +46,19 @@ const ContactModal = ({ isOpen, onClose, settings }) => {
     }
   }, [isOpen]);
 
-  if (!mounted) return null;
+  if (!mounted || !isOpen) return null;
 
   return createPortal(
-    <AnimatePresence>
-      {isOpen && (
-        <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4 sm:p-6 md:p-10">
+    <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4 sm:p-6 md:p-10">
           {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+          <div
             onClick={onClose}
-            className="absolute inset-0 bg-black/60 backdrop-blur-md cursor-pointer"
+            className="absolute inset-0 bg-black/60 backdrop-blur-md cursor-pointer animate-fade-in"
           />
 
           {/* Modal Container */}
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.9, opacity: 0, y: 20 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="relative w-full max-w-2xl bg-[#0a0a0a] rounded-2xl shadow-[0_0_50px_rgba(217,139,80,0.2)] border border-white/10 z-10"
+          <div
+            className="relative w-full max-w-2xl bg-[#0a0a0a] rounded-2xl shadow-[0_0_50px_rgba(217,139,80,0.2)] border border-white/10 z-10 animate-fade-up"
           >
             {/* Close Button */}
             <button
@@ -176,27 +166,24 @@ const ContactModal = ({ isOpen, onClose, settings }) => {
                     {socials.map((social) => {
                       const iconData = getSocialIconData(social.platform);
                       return (
-                        <motion.a
+                        <a
                           key={social.id}
                           href={safeUrl(social.url)}
                           target="_blank"
                           rel="noopener noreferrer"
                           aria-label={social.platform}
-                          whileHover={{ y: -5, scale: 1.1 }}
-                          className={`${iconData.color} w-12 h-12 rounded-full flex items-center justify-center text-white shadow-[0_5px_15px_rgba(0,0,0,0.3)] transition-all`}
+                          className={`${iconData.color} w-12 h-12 rounded-full flex items-center justify-center text-white shadow-[0_5px_15px_rgba(0,0,0,0.3)] transition-all hover:-translate-y-1 hover:scale-110`}
                         >
                           {iconData.svg}
-                        </motion.a>
+                        </a>
                       );
                     })}
                   </div>
                 </div>
               )}
             </div>
-          </motion.div>
-        </div>
-      )}
-    </AnimatePresence>,
+          </div>
+        </div>,
     document.body
   );
 };

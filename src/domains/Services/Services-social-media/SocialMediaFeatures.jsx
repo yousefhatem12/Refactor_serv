@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
 
@@ -66,7 +67,7 @@ const SocialMediaFeatures = () => {
               className="bg-[#03071E]/60 backdrop-blur-md rounded-2xl p-8 border border-white/5 hover:border-white/10 transition-colors flex flex-col items-center text-center group"
             >
               <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center bg-white/5 mb-6 group-hover:bg-[#D98B50]/10 group-hover:border-[#D98B50]/50 transition-all duration-300">
-                <img
+                <Image
                   src={feature.icon}
                   alt={feature.title}
                   width={32}

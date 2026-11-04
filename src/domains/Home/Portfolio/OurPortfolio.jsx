@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import Image from "next/image";
 import { fetchAPI, getApiPage, getMediaUrl } from "@/lib/api";
 import { safeUrl } from "@/lib/safe-url";
 import { useLanguage } from "@/app/context/LanguageContext";
@@ -90,11 +90,8 @@ const OurPortfolio = ({ activeCategoryId, isFeaturedOnly = false, mobileCategori
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 md:px-8 py-12 overflow-x-hidden">
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="text-center mb-16"
+      <div
+        className="text-center mb-16 animate-fade-down"
       >
         <h2 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-black inline-block relative pb-4">
           <span className="text-[#FF8A00]">{t("our")}</span>{" "}
@@ -103,7 +100,7 @@ const OurPortfolio = ({ activeCategoryId, isFeaturedOnly = false, mobileCategori
             className={`absolute bottom-0 ${isRtl ? "right-0" : "left-0"} w-[40%] h-1.5 bg-[#FF8A00] rounded-full shadow-[0_0_10px_#FF8A00]`}
           ></div>
         </h2>
-      </motion.div>
+      </div>
       {mobileCategories}
       <div className="flex-1 h-auto lg:h-[700px] overflow-y-visible lg:overflow-y-auto overflow-x-hidden custom-scrollbar">
         <div className="flex flex-col gap-6 md:gap-10 lg:gap-20">
@@ -137,22 +134,14 @@ const OurPortfolio = ({ activeCategoryId, isFeaturedOnly = false, mobileCategori
               const isReversed = index % 2 !== 0;
 
               return (
-                <motion.div
+                <div
                   key={item.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{
-                    duration: 0.6,
-                    ease: "easeOut",
-                    delay: index * 0.15,
-                  }}
-                  className={`relative flex flex-col ${isReversed ? "lg:flex-row-reverse" : "lg:flex-row"} items-stretch gap-0 lg:gap-8 group rounded-2xl lg:rounded-none border border-white/10 lg:border-none overflow-hidden lg:overflow-visible min-h-[250px] sm:min-h-[300px] md:min-h-[350px] lg:min-h-[380px]`}
+                  className={`relative flex flex-col ${isReversed ? "lg:flex-row-reverse" : "lg:flex-row"} items-stretch gap-0 lg:gap-8 group rounded-2xl lg:rounded-none border border-white/10 lg:border-none overflow-hidden lg:overflow-visible min-h-[250px] sm:min-h-[300px] md:min-h-[350px] lg:min-h-[380px] animate-fade-up`}
                 >
                   {/* Image Side */}
                   <div className="w-full lg:w-1/2 flex absolute inset-0 lg:relative lg:inset-auto lg:h-[400px] z-0">
                     <div className="relative w-full h-full group overflow-hidden lg:rounded-xl lg:bg-white/5 lg:border lg:border-white/10 lg:shadow-2xl">
-                      <img
+                      <Image
                         src={item.image ? getMediaUrl(item.image) : siteLogo}
                         onError={(e) => {
                           e.target.src = siteLogo;
@@ -163,6 +152,7 @@ const OurPortfolio = ({ activeCategoryId, isFeaturedOnly = false, mobileCategori
                         width={600}
                         height={400}
                         loading="lazy"
+                        sizes="(max-width: 1024px) 100vw, 50vw"
                         className={`w-full h-full transition-transform duration-500 group-hover:scale-105 ${!(item.image) ? "object-contain p-8 bg-gray-800" : "object-cover"}`}
                       />
                       {/* Dark overlay specifically for hover on desktop */}
@@ -224,7 +214,7 @@ const OurPortfolio = ({ activeCategoryId, isFeaturedOnly = false, mobileCategori
                       </a>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               );
             })
           ) : (

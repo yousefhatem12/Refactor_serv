@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { FaPlay } from "react-icons/fa";
 import { useLanguage } from "@/app/context/LanguageContext";
@@ -184,11 +185,13 @@ const ServicesHero = ({
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           className="overflow-visible flex items-center justify-center scale-110"
         >
-          <img
+          <Image
             src={planetImage || "/Services/planet4.webp"}
             alt="Planet"
             width={600}
             height={600}
+            priority
+            sizes="(max-width: 1024px) 100vw, 600px"
             className={`w-full h-auto object-contain scale-[0.95] ${isRtl ? "-translate-x-[5%]" : "translate-x-[5%]"}`}
             style={{ filter: `drop-shadow(0 0 50px ${resolvedDotColor}) drop-shadow(0 0 100px ${resolvedDotColor})` }}
           />

@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import Image from "next/image";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
 import { fetchAPI, getMediaUrl } from "@/lib/api";
@@ -148,66 +148,47 @@ export default function Features() {
       <div className="w-full max-w-7xl mx-auto px-6 relative z-20 flex-1 flex flex-col justify-center">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center w-full">
           {/* Left Side: Content */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            viewport={{ once: true, margin: "-100px" }}
-            className="flex flex-col relative z-10"
+          <div
+            className="flex flex-col relative z-10 animate-fade-up"
           >
             {/* 15Y Image for Mobile (Hidden on Desktop) */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="lg:hidden w-full max-w-[200px] sm:max-w-[250px] mx-auto mb-10 relative"
+            <div
+              className="lg:hidden w-full max-w-[200px] sm:max-w-[250px] mx-auto mb-10 relative animate-fade-in"
             >
               <div className="absolute inset-0 bg-[#D98B50] blur-[50px] opacity-20 rounded-full animate-pulse"></div>
 
               {/* Golden Stars for Royalty Effect */}
-              <motion.div
-                animate={{ rotate: 360, scale: [1, 1.2, 1] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                className="absolute -left-4 top-4 z-20 drop-shadow-[0_0_10px_rgba(217,139,80,0.8)]"
+              <div
+                className="absolute -left-4 top-4 z-20 drop-shadow-[0_0_10px_rgba(217,139,80,0.8)] animate-[spin_4s_linear_infinite]"
               >
                 <Star className="w-6 h-6" />
-              </motion.div>
-              <motion.div
-                animate={{ rotate: -360, scale: [1, 1.3, 1] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-                className="absolute -right-2 top-1/2 z-20 drop-shadow-[0_0_10px_rgba(217,139,80,0.8)]"
+              </div>
+              <div
+                className="absolute -right-2 top-1/2 z-20 drop-shadow-[0_0_10px_rgba(217,139,80,0.8)] animate-[spin_5s_linear_infinite_reverse]"
               >
                 <Star className="w-8 h-8" />
-              </motion.div>
-              <motion.div
-                animate={{ rotate: 360, scale: [1, 1.1, 1] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                className="absolute left-2 bottom-4 z-20 drop-shadow-[0_0_8px_rgba(243,168,113,0.8)]"
+              </div>
+              <div
+                className="absolute left-2 bottom-4 z-20 drop-shadow-[0_0_8px_rgba(243,168,113,0.8)] animate-[spin_3s_linear_infinite]"
               >
                 <Star className="w-4 h-4" />
-              </motion.div>
+              </div>
 
-              <img
+              <Image
                 src={experienceImgSrc}
                 alt="Who We Are"
                 width={400}
                 height={360}
                 loading="lazy"
+                sizes="(max-width: 768px) 100vw, 400px"
                 className={`w-full h-auto relative z-10 drop-shadow-[0_0_25px_rgba(217,139,80,0.4)] ${experienceImgSrc === siteLogo ? "object-contain max-h-[170px]" : "object-contain max-h-[190px] mx-auto"}`}
                 onError={() => setFailedExperienceImgSrc(requestedExperienceImgSrc)}
               />
-            </motion.div>
+            </div>
 
             {/* Subtitle */}
             <div className="flex  items-center gap-3 mb-4 md:mb-6">
-              <motion.span
-                initial={{ width: 0 }}
-                whileInView={{ width: "40px" }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-                viewport={{ once: true }}
-                className="h-[2px] bg-[#D98B50]"
-              ></motion.span>
+              <span className="h-[2px] w-[40px] bg-[#D98B50]"></span>
               <span className="text-[#D98B50] font-bold tracking-[0.2em] uppercase text-xs md:text-sm lg:text-3xl">
                 {settings.features_subtitle || t("whoWeAre")}
               </span>
@@ -241,11 +222,7 @@ export default function Features() {
             {/* Features Grid/Flex */}
             <div className="grid grid-cols-2 sm:grid-cols-2   gap-3 md:gap-4">
               {displayFeatures.map((featureText, index) => (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
+                <div
                   key={index}
                   className="flex items-center gap-3 px-2 md:px-4 py-2.5 md:px-5 md:py-3 rounded-xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-[#D98B50]/50 hover:bg-white/10 transition-all duration-300 group shadow-lg"
                 >
@@ -267,82 +244,59 @@ export default function Features() {
                   <span className="text-gray-300 font-medium text-xs md:text-base group-hover:text-white transition-colors">
                     {featureText}
                   </span>
-                </motion.div>
+                </div>
               ))}
             </div>
-          </motion.div>
+          </div>
 
           {/* Right Side: 15Y Image (Desktop Only) */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            viewport={{ once: true, margin: "-100px" }}
-            className="hidden lg:flex justify-center lg:justify-end relative"
+          <div
+            className="hidden lg:flex justify-center lg:justify-end relative animate-fade-in"
           >
-            <motion.div
-              animate={{
-                y: [-15, 15, -15],
-              }}
-              transition={{
-                duration: 6,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className="relative w-full max-w-[400px] xl:max-w-[500px]"
+            <div
+              className="relative w-full max-w-[400px] xl:max-w-[500px] animate-astronaut-float-subtle"
             >
               {/* <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-[#D98B50] blur-[80px] opacity-30 rounded-full animate-pulse"></div> */}
 
               {/* Golden Stars for Royalty Effect */}
-              <motion.div
-                animate={{ rotate: 360, scale: [1, 1.2, 1] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                className="absolute -left-10 top-10 z-20 drop-shadow-[0_0_15px_rgba(217,139,80,0.8)]"
+              <div
+                className="absolute -left-10 top-10 z-20 drop-shadow-[0_0_15px_rgba(217,139,80,0.8)] animate-[spin_4s_linear_infinite]"
               >
                 <Star className="w-10 h-10" />
-              </motion.div>
-              <motion.div
-                animate={{ rotate: -360, scale: [1, 1.3, 1] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-                className="absolute -right-6 top-1/3 z-20 drop-shadow-[0_0_15px_rgba(217,139,80,0.8)]"
+              </div>
+              <div
+                className="absolute -right-6 top-1/3 z-20 drop-shadow-[0_0_15px_rgba(217,139,80,0.8)] animate-[spin_5s_linear_infinite_reverse]"
               >
                 <Star className="w-12 h-12" />
-              </motion.div>
-              <motion.div
-                animate={{ rotate: 360, scale: [1, 1.1, 1] }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: "linear" }}
-                className="absolute left-10 bottom-10 z-20 drop-shadow-[0_0_10px_rgba(243,168,113,0.8)]"
+              </div>
+              <div
+                className="absolute left-10 bottom-10 z-20 drop-shadow-[0_0_10px_rgba(243,168,113,0.8)] animate-[spin_3.5s_linear_infinite]"
               >
                 <Star className="w-6 h-6" />
-              </motion.div>
-              <motion.div
-                animate={{ rotate: -360, scale: [1, 1.2, 1] }}
-                transition={{ duration: 4.5, repeat: Infinity, ease: "linear" }}
-                className="absolute right-10 bottom-4 z-20 drop-shadow-[0_0_10px_rgba(217,139,80,0.8)]"
+              </div>
+              <div
+                className="absolute right-10 bottom-4 z-20 drop-shadow-[0_0_10px_rgba(217,139,80,0.8)] animate-[spin_4.5s_linear_infinite_reverse]"
               >
                 <Star className="w-8 h-8" />
-              </motion.div>
+              </div>
 
-              <img
+              <Image
                 src={experienceImgSrc}
                 alt="Who We Are"
                 width={400}
                 height={360}
                 loading="lazy"
+                sizes="(max-width: 1024px) 100vw, 400px"
                 className={`w-full h-auto relative z-10 drop-shadow-[0_20px_50px_rgba(217,139,80,0.4)] ${experienceImgSrc === siteLogo ? "object-contain max-h-[290px] p-6 mx-auto" : "object-contain max-h-[360px] mx-auto"}`}
                 onError={() => setFailedExperienceImgSrc(requestedExperienceImgSrc)}
               />
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </div>
 
         {/* Partners Section */}
         {displayPartners && displayPartners.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            viewport={{ once: true }}
+          <div
             className="w-full mt-20 mb-10 lg:mt-32 pt-8 md:pt-12 border-t border-white/5 relative"
           >
           {/* Creative Top Border Glow */}
@@ -383,7 +337,7 @@ export default function Features() {
                       key={index}
                       className="relative group p-2 shrink-0"
                     >
-                      <img
+                      <Image
                         src={partner}
                         alt={`Partner ${(index % (displayPartners.length || 1)) + 1}`}
                         width={120}
@@ -424,7 +378,7 @@ export default function Features() {
               </svg>
             </button>
           </div>
-          </motion.div>
+          </div>
         )}
       </div>
       <style

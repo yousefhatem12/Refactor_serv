@@ -15,65 +15,66 @@
     "id": 8164,
     "files": [
       "static/chunks/8500-1881b11f3cfa4a83.js",
-      "static/chunks/8164.00376dc084f83390.js"
+      "static/chunks/8164.6ad9474ee63ddeaf.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/CTA/CTA": {
     "id": 6548,
     "files": [
-      "static/chunks/6548.12eff7d36bb24095.js"
+      "static/chunks/6548.f94dfb198c003053.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/ContactUs/ContactUs": {
     "id": 1672,
     "files": [
-      "static/chunks/1672.95fbb7504bbb77f2.js"
+      "static/chunks/1672.55628ee9d1400fa2.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/Features/Features": {
     "id": 3065,
     "files": [
       "static/chunks/8994-b972b82541e48d80.js",
-      "static/chunks/3065.5323939178e7cfcf.js"
+      "static/chunks/3065.29234f264efe1b21.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/Hero/Earth": {
     "id": 7995,
     "files": [
-      "static/chunks/7995.03887e478bf9aa46.js"
+      "static/chunks/7995.8b68b39bb0bf547c.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/OnlineWebsite/OnlineWebsite": {
     "id": 8690,
     "files": [
       "static/chunks/8500-1881b11f3cfa4a83.js",
-      "static/chunks/8690.95ab98db989ec075.js"
+      "static/chunks/8690.0b0db8219a94d0da.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/OnlineWebsite/OnlineWebsiteDetails": {
     "id": 5431,
     "files": [
       "static/chunks/8500-1881b11f3cfa4a83.js",
-      "static/chunks/5431.31e63a73aa461875.js"
+      "static/chunks/5431.b077f854fb783b2c.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/Services/Services": {
     "id": 4818,
     "files": [
       "static/chunks/8500-1881b11f3cfa4a83.js",
-      "static/chunks/4818.61a789137f5097a5.js"
+      "static/chunks/5557-8244090c55516994.js",
+      "static/chunks/4818.4d9be6088be34f75.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/Shared/PlanetAstronaut": {
     "id": 653,
     "files": [
-      "static/chunks/653.6d52c036416979e6.js"
+      "static/chunks/653.7eac17ce35420788.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/Testimonial/Testimonial": {
     "id": 3328,
     "files": [
-      "static/chunks/3328.96846bdc33bf4fdf.js"
+      "static/chunks/3328.86bf33f2e95ad1b9.js"
     ]
   },
   "app\\context\\LanguageContext.jsx -> @/lib/api": {
@@ -85,7 +86,7 @@
   "domains\\Home\\CTA\\CTA.jsx -> @/app/components/Home/Shared/PlanetAstronaut": {
     "id": 653,
     "files": [
-      "static/chunks/653.6d52c036416979e6.js"
+      "static/chunks/653.7eac17ce35420788.js"
     ]
   },
   "domains\\Home\\CTA\\CTA.jsx -> @/app/components/Shared/ContactModal": {
@@ -93,13 +94,13 @@
     "files": [
       "static/chunks/8e1d74a4-b1fbea0058e5537a.js",
       "static/chunks/94730671-58731e77070b6ffd.js",
-      "static/chunks/7267.82334d5ddb41bde8.js"
+      "static/chunks/7267.53df599f45535bfa.js"
     ]
   },
   "domains\\Home\\CTA\\CTA.jsx -> @/app/components/Shared/PricingModal": {
     "id": 8908,
     "files": [
-      "static/chunks/8908.2901a3148aefa72d.js"
+      "static/chunks/8908.ac6011a25f431a7b.js"
     ]
   },
   "domains\\Home\\Hero\\Hero.jsx -> @/app/components/Shared/PricingModal": {
@@ -137,7 +138,7 @@
   "domains\\Shared\\Footer\\Footer.jsx -> @/app/components/Home/Shared/PlanetAstronaut": {
     "id": 653,
     "files": [
-      "static/chunks/3034.0e2d064fa8e02501.js"
+      "static/chunks/653.7eac17ce35420788.js"
     ]
   }
 }

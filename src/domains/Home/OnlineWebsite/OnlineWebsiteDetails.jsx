@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import Image from "next/image";
 import OurPortfolio from "../Portfolio/OurPortfolio";
 import { fetchAPI } from "@/lib/api";
 import { useLanguage } from "@/app/context/LanguageContext";
@@ -44,25 +44,26 @@ const OnlineWebsiteDetails = () => {
         {/* Mobile Categories Menu removed from here, passed as prop */}
         {/* Left/Right Planet Section */}
         <div className="relative hidden lg:flex w-[45%] h-screen items-center z-10">
-          <motion.div
-            initial={{
-              x: isRtl ? 40 : -40,
-              opacity: 0,
-            }}
-            whileInView={{ x: 0, opacity: 1 }}
-            viewport={{ once: true, amount: 0.05 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            className={`absolute w-[100vh] h-[100vh] ${isRtl ? "right-[-45.5vh] left-auto" : "left-[-45.5vh] right-auto"} top-1/2 -translate-y-1/2 z-10 flex items-center justify-center`}
+          <div
+            className={`absolute w-[100vh] h-[100vh] ${isRtl ? "right-[-45.5vh] left-auto" : "left-[-45.5vh] right-auto"} top-1/2 -translate-y-1/2 z-10 flex items-center justify-center animate-fade-in`}
           >
-            <img
+            <Image
               src="/aside/MArs 2.webp"
               alt="Planet Mars"
+              width={800}
+              height={800}
+              loading="lazy"
+              sizes="(max-width: 1024px) 100vw, 800px"
               className={`w-full h-full object-contain drop-shadow-[0_0_80px_rgba(255,138,0,0.3)] ${isRtl ? "scale-x-[-1]" : ""}`}
             />
             {/* The white arc */}
-            <img
+            <Image
               src="/aside/circle.webp"
               alt="Arc"
+              width={800}
+              height={800}
+              loading="lazy"
+              sizes="(max-width: 1024px) 100vw, 800px"
               className={`absolute top-[5%] ${isRtl ? "right-[8.3vh] left-auto" : "left-[8.3vh] right-auto"} w-[95%] h-[100%] object-contain opacity-40 -z-10 pointer-events-none`}
               style={{
                 transform: `scaleY(0.9) ${isRtl ? "scaleX(-1)" : "scaleX(1)"}`,
@@ -95,17 +96,13 @@ const OnlineWebsiteDetails = () => {
                 const isActive = activeCategoryId === cat.id;
 
                 return (
-                  <motion.div
+                  <div
                     key={cat.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.1 }}
-                    className="absolute pointer-events-auto cursor-pointer"
+                    className="absolute pointer-events-auto cursor-pointer animate-fade-in"
                     style={{
                       left: `calc(50% + ${targetX}vh)`,
                       top: `calc(50% + ${targetY}vh)`,
-                      x: "-50%",
-                      y: "-50%",
+                      transform: "translate(-50%, -50%)",
                     }}
                     onClick={() => setActiveCategoryId(cat.id)}
                   >
@@ -122,19 +119,16 @@ const OnlineWebsiteDetails = () => {
                     >
                       <div>{cat.name}</div>
                       {isActive && (
-                        <motion.div
-                          className="absolute -bottom-1.5 left-0 w-full h-[2px] bg-[#ffb800] shadow-[0_0_10px_#ffb800] rounded-full"
-                          initial={{ scaleX: 0, x: -40, originX: 0 }}
-                          animate={{ scaleX: 1, x: 0 }}
-                          transition={{ type: "spring", stiffness: 350, damping: 22 }}
+                        <div
+                          className="absolute -bottom-1.5 left-0 w-full h-[2px] bg-[#ffb800] shadow-[0_0_10px_#ffb800] rounded-full animate-fade-in"
                         />
                       )}
                     </span>
-                  </motion.div>
+                  </div>
                 );
               })}
             </div>
-          </motion.div>
+          </div>
         </div>
         {/* Right Content Area */}
         <div className="w-full lg:w-[55%] relative z-20">

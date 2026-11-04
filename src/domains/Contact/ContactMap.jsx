@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
@@ -30,12 +31,13 @@ const ContactMap = () => {
               : "-translate-x-10 lg:-translate-x-20"
           }`}
         >
-          <img
+          <Image
             src="/contact-us/Element.webp"
             alt="Decorative Background Map Element"
             width={711}
             height={421}
             loading="lazy"
+            sizes="(max-width: 1024px) 100vw, 33vw"
             className={`w-full h-auto object-cover mix-blend-luminosity ${
               language === "ar" ? "scale-x-[-1]" : ""
             }`}

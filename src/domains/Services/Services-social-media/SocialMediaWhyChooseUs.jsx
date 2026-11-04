@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   FiFileText,
@@ -94,12 +95,13 @@ const SocialMediaWhyChooseUs = ({ whyTitle, whySubtitle, whyList }) => {
           transition={{ duration: 1 }}
           className={`absolute ${isRtl ? "left-0" : "right-0"} top-1/2 -translate-y-1/2 w-[40%] max-w-[600px] pointer-events-none hidden lg:block z-10`}
         >
-          <img
+          <Image
             src="/Hero/earth.webp"
             alt="Earth"
             width={600}
             height={600}
             loading="lazy"
+            sizes="(max-width: 1024px) 100vw, 600px"
             className={`w-full max-h-[110vh] object-contain opacity-50 brightness-50 contrast-125 ${
               isRtl
                 ? "-translate-x-[250px] scale-x-[-1.2] scale-y-[1.2]"

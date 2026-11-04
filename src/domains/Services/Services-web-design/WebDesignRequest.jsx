@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
 
@@ -15,13 +16,13 @@ const WebDesignRequest = () => {
           WebkitMaskImage: "linear-gradient(to bottom, transparent 5%, black 90%, transparent)"
         }}
       >
-        <img
+        <Image
           src="/services-web-design/b966a362-46ae-4124-9f5d-60ce2a10e6d3.jfif"
           alt="Blue Planet Background"
-          width={1920}
-          height={1080}
+          fill
+          sizes="100vw"
           loading="lazy"
-          className="w-full h-full object-cover"
+          className="object-cover"
         />
       </div>
 

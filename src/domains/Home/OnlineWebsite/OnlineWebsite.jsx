@@ -1,13 +1,7 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import {
-  motion,
-  AnimatePresence,
-  useMotionValue,
-  useSpring,
-  useTransform,
-} from "framer-motion";
+import Image from "next/image";
 import { fetchAPI, getApiItems, getApiPage } from "@/lib/api";
 import { useLanguage } from "@/app/context/LanguageContext";
 
@@ -26,52 +20,13 @@ const gradients = [
 // --- 3D Card Component ---
 const ProductCard = ({ product, index }) => {
   const { t, language } = useLanguage();
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  const mouseXSpring = useSpring(x, { stiffness: 300, damping: 30 });
-  const mouseYSpring = useSpring(y, { stiffness: 300, damping: 30 });
-
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["15deg", "-15deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-15deg", "15deg"]);
-
-  const handleMouseMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-    x.set(xPct);
-    y.set(yPct);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
-
   const cardGradient = product.gradient || gradients[index % gradients.length];
 
   return (
-    <motion.div
-      layout
-      initial={{ opacity: 0.4, scale: 0.8 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ amount: 0.6, margin: "0px" }}
-      exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.2 } }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-      className="shrink-0 snap-center w-[75vw] sm:w-[250px] md:w-[280px] perspective-[1000px] py-10"
+    <div
+      className="shrink-0 snap-center w-[75vw] sm:w-[250px] md:w-[280px] perspective-[1000px] py-10 transition-all duration-300 hover:-translate-y-2"
     >
-      <motion.div
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        style={{
-          rotateX,
-          rotateY,
-          transformStyle: "preserve-3d",
-        }}
+      <div
         className={`relative w-full h-[280px] sm:h-[350px] md:h-[400px] lg:h-[420px] rounded-3xl bg-gradient-to-br ${cardGradient} p-[1px] group cursor-pointer`}
       >
         {/* Glow border on hover */}
@@ -85,14 +40,15 @@ const ProductCard = ({ product, index }) => {
             <div className="absolute bottom-10 right-10 w-24 h-24 bg-orange-500/20 rounded-full blur-[30px] animate-pulse delay-150" />
           </div>
 
-          <div style={{ transform: "translateZ(50px)" }}>
-            <div className="h-16 sm:h-20 md:h-24 mb-4 lg:mb-6 flex items-center justify-center">
-              <img
+          <div>
+            <div className="h-16 sm:h-20 md:h-24 mb-4 lg:mb-6 flex items-center justify-center relative">
+              <Image
                 src={product.image || product.logo}
                 alt={product.name || product.title}
                 width={200}
                 height={96}
                 loading="lazy"
+                sizes="(max-width: 768px) 100vw, 200px"
                 className="h-full w-auto max-w-[85%] object-contain object-left filter drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]"
               />
             </div>
@@ -105,7 +61,7 @@ const ProductCard = ({ product, index }) => {
             </p>
           </div>
 
-          <div style={{ transform: "translateZ(40px)" }} className="mt-auto">
+          <div className="mt-auto">
             {product.tags && product.tags.length > 0 && (
               <div className="flex flex-wrap h-[26px] md:h-[30px] overflow-hidden gap-1.5 mb-4 md:mb-5">
                 {product.tags.map((tag) => (
@@ -125,7 +81,7 @@ const ProductCard = ({ product, index }) => {
                 href={`/our-products/${product.id}`}
                 className="block rounded-xl"
               >
-                <motion.button className="w-full py-2.5 md:py-3 bg-gradient-to-r from-[#FF8A00] to-[#D98B50] text-white font-bold text-[10px] sm:text-xs md:text-sm tracking-widest uppercase flex items-center justify-center gap-2 rounded-xl transition-all duration-300 hover:brightness-110 hover:scale-[1.02] shadow-[0_0_20px_rgba(255,138,0,0.3)]">
+                <button className="w-full py-2.5 md:py-3 bg-gradient-to-r from-[#FF8A00] to-[#D98B50] text-white font-bold text-[10px] sm:text-xs md:text-sm tracking-widest uppercase flex items-center justify-center gap-2 rounded-xl transition-all duration-300 hover:brightness-110 hover:scale-[1.02] shadow-[0_0_20px_rgba(255,138,0,0.3)] cursor-pointer">
                   {t("viewProject")}
                   <svg
                     className={`w-3.5 h-3.5 md:w-4 md:h-4 transform transition-transform duration-300 ${language === "ar" ? "rotate-180" : ""
@@ -141,13 +97,13 @@ const ProductCard = ({ product, index }) => {
                       d="M14 5l7 7m0 0l-7 7m7-7H3"
                     />
                   </svg>
-                </motion.button>
+                </button>
               </Link>
             </div>
           </div>
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 };
 
@@ -346,12 +302,8 @@ const OnlineWebsite = () => {
 
       {/* Left Content: Title & Tabs */}
       <div className="w-full lg:w-[35%] z-20 flex flex-col pt-10 lg:pt-0 shrink-0">
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="mb-12"
+        <div
+          className="mb-12 animate-fade-up"
         >
           <h2 className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-black mb-4 leading-[1.1] tracking-tight flex gap-2">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">
@@ -364,17 +316,13 @@ const OnlineWebsite = () => {
           <p className="text-gray-400 text-base sm:text-lg md:text-xl font-medium max-w-md">
             {t("ourProductsDesc")}
           </p>
-        </motion.div>
+        </div>
 
         {/* Categories / Tabs */}
         <div className="flex flex-wrap justify-center sm:grid sm:grid-cols-3 lg:flex lg:flex-col gap-2 sm:gap-3 lg:gap-1.5 w-full px-2 lg:px-0">
-          {categories.map((cat, index) => (
-            <motion.button
+          {categories.map((cat) => (
+            <button
               key={cat.id}
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05, duration: 0.4 }}
-              viewport={{ once: true }}
               onClick={() => handleTabChange(cat.id)}
               className={`relative px-3 py-2 sm:px-4 sm:py-3 lg:px-3 lg:py-2.5 text-center lg:text-left whitespace-nowrap rounded-xl lg:rounded-2xl transition-all duration-300 flex items-center justify-center lg:justify-start group overflow-hidden z-10 ${activeTab === cat.id
                 ? "text-white font-bold bg-transparent lg:bg-white/10 border border-transparent lg:border-white/20 shadow-none lg:shadow-[0_0_30px_rgba(255,255,255,0.05)] lg:backdrop-blur-md"
@@ -384,18 +332,15 @@ const OnlineWebsite = () => {
               {activeTab === cat.id && (
                 <>
                   {/* Desktop active vertical indicator (with RTL support) */}
-                  <motion.div
-                    layoutId="activeTabIndicatorVertical"
+                  <div
                     className={`absolute top-0 bottom-0 w-1.5 bg-gradient-to-b from-[#FF8A00] to-[#D98B50] shadow-[0_0_15px_#FF8A00] hidden lg:block ${language === "ar"
                       ? "right-0 rounded-r-2xl"
                       : "left-0 rounded-l-2xl"
                       }`}
                   />
                   {/* Mobile active background slider */}
-                  <motion.div
-                    layoutId="activeTabBackgroundMobile"
+                  <div
                     className="absolute inset-0 bg-gradient-to-r from-[#FF8A00] to-[#D98B50] rounded-xl -z-10 lg:hidden shadow-[0_0_20px_rgba(255,138,0,0.3)]"
-                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
                   />
                 </>
               )}
@@ -405,7 +350,7 @@ const OnlineWebsite = () => {
 
               {/* Hover highlight */}
               <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/5 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out pointer-events-none" />
-            </motion.button>
+            </button>
           ))}
         </div>
       </div>
@@ -481,8 +426,7 @@ const OnlineWebsite = () => {
             {/* Empty spacer for horizontal scroll start padding */}
             <div className="w-8 lg:w-16 shrink-0" />
 
-            <AnimatePresence mode="popLayout">
-              {isLoading ? (
+            {isLoading ? (
                 // Initial page loading skeletons (3 cards)
                 [1, 2, 3].map((i) => (
                   <div
@@ -515,12 +459,8 @@ const OnlineWebsite = () => {
 
                   {/* Gorgeous glowing "Load More" Card */}
                   {hasMore && !isLoadingMore && (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.8 }}
-                      transition={{ duration: 0.4 }}
-                      className="shrink-0 snap-center w-[250px] md:w-[280px] perspective-[1000px] py-10"
+                    <div
+                      className="shrink-0 snap-center w-[250px] md:w-[280px] perspective-[1000px] py-10 animate-fade-in"
                     >
                       <div
                         onClick={() => setCurrentPage((prev) => prev + 1)}
@@ -553,7 +493,7 @@ const OnlineWebsite = () => {
                           </p>
                         </div>
                       </div>
-                    </motion.div>
+                    </div>
                   )}
                 </>
               ) : (
@@ -578,7 +518,6 @@ const OnlineWebsite = () => {
                   </p>
                 </div>
               )}
-            </AnimatePresence>
 
             {/* Empty spacer for horizontal scroll end padding */}
             <div className="w-8 lg:w-16 shrink-0" />

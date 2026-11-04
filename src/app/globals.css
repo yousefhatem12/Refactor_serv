@@ -357,3 +357,87 @@ img, svg, video {
   perspective: 1000px;
 }
 
+/* Native GPU Entrance Animations (Replaces heavy Framer Motion scroll loops) */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: opacity, transform;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out forwards;
+  will-change: opacity;
+}
+
+/* Zero-JS Smooth Accordion Expansion (Animates auto-height on compositor thread) */
+.accordion-grid {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.accordion-grid.open {
+  grid-template-rows: 1fr;
+}
+
+.accordion-grid-inner {
+  overflow: hidden;
+}
+
+/* GPU-accelerated background stars */
+@keyframes stars-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes stars-drift {
+  0%, 100% { transform: translate3d(0, 0, 0); opacity: 0.6; }
+  50% { transform: translate3d(15px, -10px, 0); opacity: 1; }
+}
+
+.animate-stars-pulse {
+  animation: stars-pulse 5s ease-in-out infinite;
+  will-change: opacity;
+}
+
+.animate-stars-drift {
+  animation: stars-drift 8s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes astronaut-float-subtle {
+  0%, 100% {
+    transform: translate3d(-50%, -50%, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(-52%, -55%, 0) rotate(5deg);
+  }
+}
+
+.animate-astronaut-float-subtle {
+  animation: astronaut-float-subtle 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+
+
+

@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
 
@@ -105,7 +106,7 @@ const SocialMediaHowWeWork = ({
                 className={`w-full md:w-1/2 flex ${step.align === "left" ? "justify-end" : "justify-start"} z-10 relative`}
               >
                 <div className="w-48 h-48 md:w-48 md:h-48 relative">
-                  <img
+                  <Image
                     src={step.icon}
                     alt={step.title}
                     width={192}

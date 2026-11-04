@@ -1,14 +1,11 @@
 "use client";
 import React from "react";
-import { motion, useTransform, useMotionValue } from "framer-motion";
+import Image from "next/image";
 import { useLanguage } from "@/app/context/LanguageContext";
 
-const PlanetAstronaut = ({ className = "", progress, ...props }) => {
+const PlanetAstronaut = ({ className = "", ...props }) => {
   const { language } = useLanguage();
   const isRtl = language === "ar";
-
-  const fallbackProgress = useMotionValue(0);
-  const p = progress || fallbackProgress;
 
   return (
     <div
@@ -16,13 +13,15 @@ const PlanetAstronaut = ({ className = "", progress, ...props }) => {
       {...props}
     >
       {/* The Planet & Astronaut Wrapper */}
-      <motion.div className="relative w-full aspect-square flex items-center justify-center">
+      <div className="relative w-full aspect-square flex items-center justify-center">
         <div className="relative w-full aspect-square">
-          <img
+          <Image
             src="/Hero/orange-planet.webp"
             alt="Planet"
             width={550}
             height={550}
+            priority
+            sizes="(max-width: 768px) 100vw, 550px"
             className="w-full h-full object-contain drop-shadow-[0_0_80px_rgba(255,138,0,0.4)] animate-[spin_60s_linear_infinite]"
           />
           {/* Subtle Glow */}
@@ -34,25 +33,19 @@ const PlanetAstronaut = ({ className = "", progress, ...props }) => {
           className="absolute top-1/2 left-0 w-[80%] h-auto z-10"
           style={{ transform: isRtl ? "scaleX(-1)" : "none" }}
         >
-          <motion.img
-            src="/Hero/astronaut.webp"
-            alt="Astronaut"
-            width={440}
-            height={440}
-            className="w-full h-full object-contain"
-            animate={{
-              x: ["-50%", "-52%", "-50%"],
-              y: ["-50%", "-55%", "-50%"],
-              rotate: [0, 5, 0],
-            }}
-            transition={{
-              duration: 6,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
+          <div className="w-full h-full animate-astronaut-float-subtle">
+            <Image
+              src="/Hero/astronaut.webp"
+              alt="Astronaut"
+              width={440}
+              height={440}
+              loading="lazy"
+              sizes="(max-width: 768px) 80vw, 440px"
+              className="w-full h-full object-contain"
+            />
+          </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };

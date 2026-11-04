@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import Hero from "../components/Home/Hero/Hero";
 import PageSections from "../components/Shared/PageSections";
 import dynamic from "next/dynamic";
@@ -77,6 +76,8 @@ export default function HomePageClient({ initialHomeData, initialLocale = "en" }
   // A null check in JSX renders the same on server and client until useEffect fires.
   const [isMobile, setIsMobile] = useState(null);
   const containerRef = useRef(null);
+  const earthRef = useRef(null);
+  const planetRef = useRef(null);
   const isRtl = language === "ar";
   const initialLangRef = useRef(initialLocale);
   const isInitialMountRef = useRef(true);
@@ -184,71 +185,103 @@ export default function HomePageClient({ initialHomeData, initialLocale = "en" }
     }
   }, [pageData]);
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
+  useEffect(() => {
+    let ticking = false;
 
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 80,
-    damping: 25,
-    restDelta: 0.005,
-  });
+    const lerp = (start, end, t) => start + (end - start) * t;
+    const mapRange = (val, inMin, inMax, outMin, outMax) => {
+      if (val <= inMin) return outMin;
+      if (val >= inMax) return outMax;
+      return outMin + ((val - inMin) / (inMax - inMin)) * (outMax - outMin);
+    };
 
-  // Earth movement: moves from Hero to Features
-  const earthY = useTransform(
-    smoothProgress,
-    [0, 0.2],
-    isMobile ? ["0%", "25%"] : ["0%", "60%"],
-  );
-  const earthScale = useTransform(
-    smoothProgress,
-    [0, 0.2],
-    isMobile ? [0.6, 0.4] : [1, 0.8],
-  );
-  const earthOpacity = useTransform(
-    smoothProgress,
-    [0, 0.1, 0.6, 0.7],
-    [1, 1, 1, 0],
-  );
-  const earthX = useTransform(
-    smoothProgress,
-    [0, 0.2],
-    isMobile ? ["0%", "0%"] : isRtl ? ["0%", "5%"] : ["0%", "-5%"],
-  );
+    const updateScrollAnimations = () => {
+      const container = containerRef.current;
+      if (!container) return;
 
-  // PlanetAstronaut movement: CTA to Footer
-  const planetOpacity = useTransform(
-    smoothProgress,
-    [0.88, 0.92, 1],
-    [0, 0.8, 0.35],
-  );
-  const planetX = useTransform(
-    smoothProgress,
-    [0.88, 0.95, 1],
-    isRtl ? ["25%", "-45%", "-45%"] : ["-25%", "45%", "45%"],
-  );
-  const planetY = useTransform(
-    smoothProgress,
-    [0.88, 0.95, 1],
-    ["0%", "0%", "0%"],
-  );
-  const planetScale = useTransform(
-    smoothProgress,
-    [0.88, 0.92, 0.96, 1],
-    [0.7, 1.2, 1.1, 1],
-  );
-  const planetRotate = useTransform(smoothProgress, [0.88, 1], [0, 10]);
-  const planetZIndex = useTransform(
-    smoothProgress,
-    [0.88, 0.92, 1],
-    [-1, 0, 0],
-  );
-  const planetFilter = useTransform(
-    smoothProgress,
-    [0.88, 1],
-    ["contrast(100%) brightness(100%)", "contrast(60%) brightness(60%)"],
-  );
+      const rect = container.getBoundingClientRect();
+      const scrollHeight = container.scrollHeight - window.innerHeight;
+      const progress = scrollHeight > 0 ? Math.min(Math.max(-rect.top / scrollHeight, 0), 1) : 0;
+      const isMob = window.innerWidth < 768;
+
+      // 1. Earth movement (Hero to Features: progress 0 -> 0.7)
+      if (earthRef.current) {
+        if (progress < 0.75) {
+          const pEarth = Math.min(progress / 0.2, 1);
+          const yPct = isMob ? lerp(0, 25, pEarth) : lerp(0, 60, pEarth);
+          const scale = isMob ? lerp(0.6, 0.4, pEarth) : lerp(1, 0.8, pEarth);
+          const xPct = isMob ? 0 : (isRtl ? lerp(0, 5, pEarth) : lerp(0, -5, pEarth));
+
+          let opacity = 1;
+          if (progress > 0.6) {
+            opacity = mapRange(progress, 0.6, 0.7, 1, 0);
+          }
+
+          earthRef.current.style.transform = `translate3d(${xPct}%, ${yPct}%, 0) scale(${scale})`;
+          earthRef.current.style.opacity = `${opacity}`;
+          earthRef.current.style.display = opacity <= 0 ? "none" : "";
+        } else {
+          earthRef.current.style.display = "none";
+        }
+      }
+
+      // 2. Planet Astronaut movement (Near CTA / Footer: progress 0.88 -> 1.0)
+      if (planetRef.current) {
+        if (progress >= 0.85) {
+          let opacity = 0;
+          if (progress <= 0.92) {
+            opacity = mapRange(progress, 0.88, 0.92, 0, 0.8);
+          } else {
+            opacity = mapRange(progress, 0.92, 1.0, 0.8, 0.35);
+          }
+
+          const pX = mapRange(progress, 0.88, 0.95, 0, 1);
+          const startX = isRtl ? 25 : -25;
+          const endX = isRtl ? -45 : 45;
+          const xPct = lerp(startX, endX, pX);
+
+          let scale = 0.7;
+          if (progress < 0.92) {
+            scale = mapRange(progress, 0.88, 0.92, 0.7, 1.2);
+          } else if (progress < 0.96) {
+            scale = mapRange(progress, 0.92, 0.96, 1.2, 1.1);
+          } else {
+            scale = mapRange(progress, 0.96, 1.0, 1.1, 1.0);
+          }
+
+          const rotate = mapRange(progress, 0.88, 1.0, 0, 10);
+          const zIndex = progress >= 0.92 ? 0 : -1;
+          const contrast = mapRange(progress, 0.88, 1.0, 100, 60);
+
+          planetRef.current.style.display = opacity <= 0 ? "none" : "flex";
+          planetRef.current.style.opacity = `${opacity}`;
+          planetRef.current.style.transform = `translate3d(${xPct}%, 0, 0) scale(${scale}) rotate(${rotate}deg)`;
+          planetRef.current.style.zIndex = `${zIndex}`;
+          planetRef.current.style.filter = `contrast(${contrast}%) brightness(${contrast}%)`;
+        } else {
+          planetRef.current.style.display = "none";
+        }
+      }
+
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(updateScrollAnimations);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    updateScrollAnimations();
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [isRtl]);
 
   return (
     <main
@@ -272,36 +305,24 @@ export default function HomePageClient({ initialHomeData, initialLocale = "en" }
 
           <div className="absolute inset-0 pointer-events-none z-40">
             {/* Global Earth */}
-            <motion.div
-              style={{
-                scale: earthScale,
-                opacity: earthOpacity,
-                x: earthX,
-                y: earthY,
-              }}
-              className="sticky top-0 flex items-center justify-center h-screen"
+            <div
+              ref={earthRef}
+              className="sticky top-0 flex items-center justify-center h-screen will-change-transform"
             >
               <Earth isPhaseTwo={isPhaseTwo} />
-            </motion.div>
+            </div>
           </div>
 
           {/* Global PlanetAstronaut */}
-          <motion.div
-            style={{
-              scale: planetScale,
-              opacity: planetOpacity,
-              x: planetX,
-              y: planetY,
-              rotate: planetRotate,
-              zIndex: planetZIndex,
-              filter: planetFilter,
-            }}
-            className="fixed inset-0 pointer-events-none hidden lg:flex items-center justify-center h-screen"
+          <div
+            ref={planetRef}
+            className="fixed inset-0 pointer-events-none hidden lg:flex items-center justify-center h-screen will-change-transform"
+            style={{ opacity: 0, display: "none" }}
           >
             <div className="w-[300px] md:w-[450px] lg:w-[550px] aspect-square">
-              <PlanetAstronaut progress={smoothProgress} />
+              <PlanetAstronaut />
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </main>

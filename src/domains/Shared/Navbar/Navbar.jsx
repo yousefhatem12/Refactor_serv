@@ -1,11 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
-import { fetchAPI, getMediaUrl } from "@/lib/api";
+import { getMediaUrl } from "@/lib/api";
 import { safeUrl } from "@/lib/safe-url";
 
 const getDropdownGridClass = (dropdown) => {
@@ -314,13 +314,12 @@ const Navbar = ({ initialServices = [], initialNavLinks = [] }) => {
         {/* Logo */}
         <div className="flex-shrink-0 w-[64px] h-[64px]">
           <Link href={getLocalizedHref("/")} prefetch={false} className="block w-[64px] h-[64px]">
-            <img
+            <Image
               src={settings?.site_logo ? getMediaUrl(settings.site_logo) : "/logo.svg"}
               alt="Serv5 Logo"
               width={64}
               height={64}
-              fetchPriority="high"
-              decoding="async"
+              priority
               className="w-[64px] h-[64px] min-w-[64px] min-h-[64px] max-w-[64px] max-h-[64px] object-contain transition-transform duration-300 hover:scale-105 cursor-pointer"
             />
           </Link>
@@ -568,26 +567,18 @@ const Navbar = ({ initialServices = [], initialNavLinks = [] }) => {
       </div>
 
       {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[1001] lg:hidden"
-            />
+      {isMobileMenuOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[1001] lg:hidden animate-fade-in"
+          />
 
-            {/* Menu Panel */}
-            <motion.div
-              initial={{ x: isRtl ? "-100%" : "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: isRtl ? "-100%" : "100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className={`fixed top-0 ${isRtl ? "left-0 border-r" : "right-0 border-l"} w-[300px] h-screen bg-[#05050f] border-white/10 z-[1002] p-8 shadow-2xl flex flex-col lg:hidden overflow-y-auto`}
-            >
+          {/* Menu Panel */}
+          <div
+            className={`fixed top-0 ${isRtl ? "left-0 border-r" : "right-0 border-l"} w-[300px] h-screen bg-[#05050f] border-white/10 z-[1002] p-8 shadow-2xl flex flex-col lg:hidden overflow-y-auto animate-fade-in`}
+          >
               <div
                 className={`flex ${isRtl ? "justify-start" : "justify-end"} mb-10`}
               >
@@ -684,13 +675,10 @@ const Navbar = ({ initialServices = [], initialNavLinks = [] }) => {
 
                       {/* Mobile Dropdown */}
                       {link.dropdown && (
-                        <AnimatePresence>
+                        <>
                           {openMobileDropdown === link.name && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: "auto", opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              className={`flex flex-col gap-4 ${isRtl ? "pr-4 border-r-2 mr-2" : "pl-4 border-l-2 ml-2"} overflow-hidden border-white/10`}
+                            <div
+                              className={`flex flex-col gap-4 ${isRtl ? "pr-4 border-r-2 mr-2" : "pl-4 border-l-2 ml-2"} overflow-hidden border-white/10 animate-fade-in`}
                             >
                               {link.dropdown.map((subLink) => (
                                 <Link
@@ -707,19 +695,18 @@ const Navbar = ({ initialServices = [], initialNavLinks = [] }) => {
                                   {subLink.name}
                                 </Link>
                               ))}
-                            </motion.div>
+                            </div>
                           )}
-                        </AnimatePresence>
+                        </>
                       )}
                     </div>
                   );
                 })}
               </div>
-            </motion.div>
+            </div>
           </>
         )}
-      </AnimatePresence>
-    </nav>
+      </nav>
   );
 };
 

@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { motion, AnimatePresence } from "framer-motion";
 import { fetchAPI } from "@/lib/api";
 import { safeUrl } from "@/lib/safe-url";
 import { useLanguage } from "@/app/context/LanguageContext";
@@ -64,28 +63,19 @@ const PricingModal = ({ isOpen, onClose, serviceId = null }) => {
     });
   }, []);
 
-  if (!mounted) return null;
+  if (!mounted || !isOpen) return null;
 
   return createPortal(
-    <AnimatePresence>
-      {isOpen && (
-        <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4 sm:p-6 md:p-10">
+    <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4 sm:p-6 md:p-10">
           {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+          <div
             onClick={onClose}
-            className="absolute inset-0 bg-black/60 backdrop-blur-md cursor-pointer"
+            className="absolute inset-0 bg-black/60 backdrop-blur-md cursor-pointer animate-fade-in"
           />
 
           {/* Modal Container */}
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.9, opacity: 0, y: 20 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto bg-[#0a0a0a] rounded-2xl shadow-[0_0_50px_rgba(217,139,80,0.2)] border border-white/10 z-10 custom-scrollbar"
+          <div
+            className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto bg-[#0a0a0a] rounded-2xl shadow-[0_0_50px_rgba(217,139,80,0.2)] border border-white/10 z-10 custom-scrollbar animate-fade-up"
           >
             {/* Close Button */}
             <button
@@ -155,10 +145,7 @@ const PricingModal = ({ isOpen, onClose, serviceId = null }) => {
                   <div className="loader"></div>
                 </div>
               ) : (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                >
+                <div className="animate-fade-up">
 
                   {plans.length === 0 ? (
                     <div className="text-center text-white/50 py-20 text-lg">
@@ -166,12 +153,9 @@ const PricingModal = ({ isOpen, onClose, serviceId = null }) => {
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
-                      {plans.map((plan, idx) => (
-                        <motion.div
+                      {plans.map((plan) => (
+                        <div
                           key={plan.id}
-                          initial={{ opacity: 0, y: 30 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: idx * 0.1 }}
                           className={`relative flex flex-col p-8 rounded-3xl backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 h-full ${
                             plan.is_popular
                               ? "bg-gradient-to-b from-[#D98B50]/20 to-black border-2 border-[#D98B50] shadow-[0_0_30px_rgba(217,139,80,0.3)] transform lg:scale-105 z-10"
@@ -224,17 +208,15 @@ const PricingModal = ({ isOpen, onClose, serviceId = null }) => {
                           >
                             {plan.button_text || (isRtl ? "اشترك الآن" : "Subscribe Now")}
                           </a>
-                        </motion.div>
+                        </div>
                       ))}
                     </div>
                   )}
-                </motion.div>
+                </div>
               )}
             </div>
-          </motion.div>
-        </div>
-      )}
-    </AnimatePresence>,
+          </div>
+        </div>,
     document.body
   );
 };

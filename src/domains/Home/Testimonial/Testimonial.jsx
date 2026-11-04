@@ -1,7 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { fetchAPI } from "@/lib/api";
 
@@ -104,11 +103,8 @@ const Testimonial = () => {
     <section className="py-20 px-4 md:px-8 relative overflow-hidden">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
+        <div
+          className="text-center mb-16 animate-fade-up"
         >
           <h2 className="text-3xl md:text-4xl font-black text-[#FF8A00] mb-4">
             {t("testimonial")}
@@ -127,7 +123,7 @@ const Testimonial = () => {
               ))}
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Carousel Container */}
         <div className="relative group w-full flex items-center">
@@ -214,13 +210,9 @@ const Testimonial = () => {
               {/* Spacer */}
               <div className="w-4 lg:w-8 shrink-0" />
 
-              {displayTestimonials.map((item, index) => (
-                <motion.div
+              {displayTestimonials.map((item) => (
+                <div
                   key={item.id}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="shrink-0 snap-center w-[85vw] sm:w-[320px] lg:w-[360px] h-auto flex flex-col"
                 >
                   {item.videoUrl ? (
@@ -255,7 +247,7 @@ const Testimonial = () => {
                           <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20 overflow-hidden shrink-0">
                             {item.avatar &&
                             item.avatar !== "/user-placeholder.webp" ? (
-                              <img
+                              <Image
                                 src={item.avatar}
                                 alt={item.name}
                                 width={40}
@@ -321,7 +313,7 @@ const Testimonial = () => {
                         <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20 overflow-hidden shrink-0">
                           {item.avatar &&
                           item.avatar !== "/user-placeholder.webp" ? (
-                            <img
+                            <Image
                               src={item.avatar}
                               alt={item.name}
                               width={40}
@@ -396,7 +388,7 @@ const Testimonial = () => {
                               <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center overflow-hidden">
                                 {item.avatar &&
                                 item.avatar !== "/user-placeholder.webp" ? (
-                                  <img
+                                  <Image
                                     src={item.avatar}
                                     alt={item.name}
                                     width={48}
@@ -428,7 +420,7 @@ const Testimonial = () => {
                       </div>
                     </div>
                   )}
-                </motion.div>
+                </div>
               ))}
 
               {/* Spacer */}
@@ -450,78 +442,69 @@ const Testimonial = () => {
       />
 
       {/* Media Modal Popup */}
-      <AnimatePresence>
-        {activeMedia && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
-            onClick={() => setActiveMedia(null)}
+      {activeMedia && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in"
+          onClick={() => setActiveMedia(null)}
+        >
+          <div
+            className="relative w-full max-w-4xl bg-[#0F172A] rounded-2xl border border-white/10 shadow-2xl p-4 md:p-6 overflow-hidden animate-fade-up"
+            onClick={(e) => e.stopPropagation()}
           >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              transition={{ type: "spring", bounce: 0.3 }}
-              className="relative w-full max-w-4xl bg-[#0F172A] rounded-2xl border border-white/10 shadow-2xl p-4 md:p-6 overflow-hidden"
-              onClick={(e) => e.stopPropagation()}
+            {/* Close Button */}
+            <button
+              onClick={() => setActiveMedia(null)}
+              className="absolute top-4 right-4 z-10 p-2 bg-black/50 hover:bg-red-500 text-white rounded-full transition-colors backdrop-blur-md"
             >
-              {/* Close Button */}
-              <button
-                onClick={() => setActiveMedia(null)}
-                className="absolute top-4 right-4 z-10 p-2 bg-black/50 hover:bg-red-500 text-white rounded-full transition-colors backdrop-blur-md"
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
 
-              {activeMedia.type === "video" ? (
-                <div className="aspect-video w-full rounded-xl overflow-hidden bg-black mt-10 md:mt-0">
-                  <video
-                    className="w-full h-full object-cover"
-                    controls
-                    autoPlay
-                    src={activeMedia.url}
-                  />
+            {activeMedia.type === "video" ? (
+              <div className="aspect-video w-full rounded-xl overflow-hidden bg-black mt-10 md:mt-0">
+                <video
+                  className="w-full h-full object-cover"
+                  controls
+                  autoPlay
+                  src={activeMedia.url}
+                />
+              </div>
+            ) : (
+              <div className="p-8 py-16 flex flex-col items-center justify-center bg-white/5 rounded-xl border border-white/5 mt-10 md:mt-0">
+                <div className="w-20 h-20 bg-[#FF8A00]/20 rounded-full flex items-center justify-center mb-8 animate-pulse">
+                  <svg
+                    className="w-10 h-10 text-[#FF8A00]"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
+                  </svg>
                 </div>
-              ) : (
-                <div className="p-8 py-16 flex flex-col items-center justify-center bg-white/5 rounded-xl border border-white/5 mt-10 md:mt-0">
-                  <div className="w-20 h-20 bg-[#FF8A00]/20 rounded-full flex items-center justify-center mb-8 animate-pulse">
-                    <svg
-                      className="w-10 h-10 text-[#FF8A00]"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-white text-xl font-bold mb-6">
-                    {t("voiceTestimonial")}
-                  </h3>
-                  <audio
-                    className="w-full max-w-md outline-none custom-audio-player"
-                    controls
-                    autoPlay
-                    src={activeMedia.url}
-                  />
-                </div>
-              )}
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                <h3 className="text-white text-xl font-bold mb-6">
+                  {t("voiceTestimonial")}
+                </h3>
+                <audio
+                  className="w-full max-w-md outline-none custom-audio-player"
+                  controls
+                  autoPlay
+                  src={activeMedia.url}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </section>
   );
 };

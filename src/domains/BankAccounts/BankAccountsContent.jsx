@@ -1,5 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
@@ -12,7 +13,7 @@ import {
   FaPhoneAlt
 } from "react-icons/fa";
 
-const BankAccountsContent = () => {
+const BankAccountsContent = ({ initialData, initialLang = "en" }) => {
   const { t, language } = useLanguage();
   const settings = useSettings();
   const siteLogo = settings?.site_logo
@@ -20,11 +21,14 @@ const BankAccountsContent = () => {
     : "/logo.svg";
   const [activeTab, setActiveTab] = useState("egypt"); // "egypt" or "ksa"
   const [copiedId, setCopiedId] = useState(null);
-  const [methods, setMethods] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [hasMore, setHasMore] = useState(false);
-  const [loading, setLoading] = useState(true);
+
+  const initialPage = initialData ? getApiPage(initialData) : { items: [], hasMore: false, currentPage: 1 };
+  const [methods, setMethods] = useState(initialPage.items);
+  const [currentPage, setCurrentPage] = useState(initialPage.currentPage || 1);
+  const [hasMore, setHasMore] = useState(initialPage.hasMore || false);
+  const [loading, setLoading] = useState(!initialData);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const isInitialMountRef = useRef(true);
 
   const [prevTab, setPrevTab] = useState(activeTab);
   const [prevLang, setPrevLang] = useState(language);
@@ -37,6 +41,14 @@ const BankAccountsContent = () => {
   }
 
   useEffect(() => {
+    if (isInitialMountRef.current) {
+      isInitialMountRef.current = false;
+      if (initialData && activeTab === "egypt" && language === initialLang) {
+        return;
+      }
+    }
+
+    setLoading(true);
     fetchAPI(`/bank-accounts?lang=${language}&country=${activeTab}&page=1&per_page=6`)
       .then((res) => {
         const page = getApiPage(res);
@@ -212,11 +224,12 @@ const BankAccountsContent = () => {
                       </div>
 
                       {/* Left (end in RTL): Bank Logo - bigger */}
-                      <div className="shrink-0 w-20 h-20 rounded-xl bg-white flex items-center justify-center shadow-md shadow-black/20 p-2">
-                        <img
+                      <div className="shrink-0 w-20 h-20 rounded-xl bg-white flex items-center justify-center shadow-md shadow-black/20 p-2 relative">
+                        <Image
                           src={method.image ? getMediaUrl(method.image) : siteLogo}
-                          onError={(e) => { e.target.src = siteLogo; }}
                           alt={nameText}
+                          width={64}
+                          height={64}
                           className="max-w-full max-h-full object-contain"
                         />
                       </div>

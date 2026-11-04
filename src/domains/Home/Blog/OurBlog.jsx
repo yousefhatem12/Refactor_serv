@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import Image from "next/image";
 import { fetchAPI, getMediaUrl } from "@/lib/api";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
@@ -16,12 +16,13 @@ const SafeBlogImage = ({ src, fallback, alt, className, width = 600, height = 40
   const isFallback = imgSrc === fallback;
 
   return (
-    <img
+    <Image
       src={imgSrc}
       alt={alt || "Blog post image"}
       width={width}
       height={height}
       loading="lazy"
+      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
       className={`${className} ${isFallback ? "object-contain p-6 bg-gray-800" : "object-cover"}`}
       onError={() => setImgSrc(fallback)}
     />
@@ -76,18 +77,11 @@ const OurBlog = () => {
   return (
     <section className="py-10 md:py-20 bg-transparent text-white relative z-0">
       <div className="max-w-[1400px] mx-auto px-5">
-        <motion.div
-
-          className="text-center mb-[60px]"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
+        <div className="text-center mb-[60px] animate-fade-up">
           <h2 className="text-[1.8rem] md:text-[2.2rem] lg:text-[2.8rem] font-black text-white relative inline-block after:content-[''] after:absolute after:-bottom-2.5 after:left-0 after:w-[40%] after:h-[6px] after:bg-[#ff8a00] after:rounded-[10px] after:shadow-[0_0_15px_rgba(255,138,0,0.5)]">
             <span className="text-[#ff8a00]">{settings?.trans_home_blog_first || t("our")}</span> {settings?.trans_home_blog_second || t("blog")}
           </h2>
-        </motion.div>
+        </div>
 
         <div className="relative">
           <div className={`grid gap-[40px] items-start ${
@@ -97,12 +91,8 @@ const OurBlog = () => {
           }`}>
             {/* Featured Post */}
             {blogPosts.featured && (
-              <motion.div
-                className="flex flex-col"
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
+              <div
+                className="flex flex-col animate-fade-in"
               >
                 <div className="relative rounded-xl  overflow-hidden mb-5 bg-white/5 group aspect-[16/10] flex items-center justify-center">
                   <SafeBlogImage
@@ -136,7 +126,7 @@ const OurBlog = () => {
                 >
                   {t("seeMore")}
                 </Link>
-              </motion.div>
+              </div>
             )}
             {/* لابلابللب */}
             {/* Grid Posts Area */}
@@ -144,13 +134,9 @@ const OurBlog = () => {
               className={`grid grid-cols-1 md:grid-cols-2 gap-[30px] relative ${!showAllPosts ? "max-md:max-h-[300px] max-md:overflow-hidden max-md:rounded-b-[25px]" : ""}`}
             >
               {blogPosts.gridPosts.map((post, index) => (
-                <motion.div
+                <div
                   key={post.id}
                   className={`flex flex-col ${!showAllPosts && index > 0 ? "max-md:hidden" : ""}`}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
                   <div className="relative rounded-xl overflow-hidden mb-5 bg-white/5 group aspect-[16/11] flex items-center justify-center">
                     <SafeBlogImage
@@ -176,7 +162,7 @@ const OurBlog = () => {
                   >
                     {t("seeMore")}
                   </Link>
-                </motion.div>
+                </div>
               ))}
 
               {!showAllPosts && (
@@ -193,12 +179,8 @@ const OurBlog = () => {
 
             {/* Trending Sidebar */}
             {trendingItems.length > 0 && (
-              <motion.aside
+              <aside
                 className={`border border-white/10 p-[30px] rounded h-full flex flex-col lg:col-span-2 xl:col-span-1 ${!showAllPosts ? "max-md:hidden" : ""}`}
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
               >
                 <div className="flex justify-between items-center mb-[30px] pb-[15px] border-b border-white/10">
                   <h3 className="text-[1.5rem] font-bold">{t("trending")}</h3>
@@ -275,7 +257,7 @@ const OurBlog = () => {
                     &rarr;
                   </span>
                 </a>
-              </motion.aside>
+              </aside>
             )}
           </div>
         </div>

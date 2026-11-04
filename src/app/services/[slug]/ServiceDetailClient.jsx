@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import { useParams, useRouter, notFound } from "next/navigation";
 import { fetchAPI, getMediaUrl } from "@/lib/api";
 import { safeJsonForScript } from "@/lib/safe-json";
@@ -375,9 +376,13 @@ function RenderBlock({ block, heroStyle, defaultHeroImage, serviceId, planetImag
           </div>
           <div className="w-full lg:w-1/2 relative">
             {imageUrl && (
-              <img
+              <Image
                 src={imageUrl}
                 alt={resolveText(data.title) || "Content"}
+                width={700}
+                height={500}
+                loading="lazy"
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="w-full h-auto object-contain drop-shadow-2xl"
               />
             )}

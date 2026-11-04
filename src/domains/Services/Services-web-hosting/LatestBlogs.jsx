@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
 import { fetchAPI, getMediaUrl } from "@/lib/api";
@@ -89,7 +90,7 @@ const LatestBlogs = () => {
             >
               <Link href={`/${language}/blog/${blog.id}`} prefetch={false} className="block relative h-[450px] w-full">
                 {/* Background Image */}
-                <img
+                <Image
                   src={blog.image ? getMediaUrl(blog.image) : siteLogo}
                   onError={(e) => {
                     e.target.src = siteLogo;
@@ -100,6 +101,7 @@ const LatestBlogs = () => {
                   width={400}
                   height={450}
                   loading="lazy"
+                  sizes="(max-width: 768px) 85vw, 400px"
                   className={`absolute inset-0 w-full h-full transition-transform duration-700 group-hover:scale-110 ${!blog.image ? "object-contain p-12 bg-gray-800" : "object-cover"}`}
                 />
 

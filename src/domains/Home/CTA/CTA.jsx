@@ -1,6 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import React, { useRef, useState, useEffect } from "react";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { useSettings } from "@/app/context/SettingsContext";
 import dynamic from "next/dynamic";
@@ -21,6 +20,10 @@ const CTA = () => {
     pathname === "/en/";
 
   const containerRef = useRef(null);
+  const slide1Ref = useRef(null);
+  const slide2Ref = useRef(null);
+  const localPlanetRef = useRef(null);
+
   const { t, language } = useLanguage();
   const isRtl = language === "ar";
   const [isPricingModalOpen, setIsPricingModalOpen] = useState(false);
@@ -28,44 +31,80 @@ const CTA = () => {
   const contextSettings = useSettings();
   const settings = contextSettings || {};
 
-  // Hardware-accelerated scroll scrubbing via Framer Motion
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
+  useEffect(() => {
+    let ticking = false;
 
-  // Slide 1 scroll transformations (fade out and slide away)
-  const slide1Opacity = useTransform(scrollYProgress, [0, 0.35], [1, 0]);
-  const text1X = useTransform(
-    scrollYProgress,
-    [0, 0.45],
-    [0, isRtl ? 400 : -400]
-  );
-  const slide1PointerEvents = useTransform(scrollYProgress, (v) =>
-    v > 0.35 ? "none" : "auto"
-  );
+    const mapRange = (val, inMin, inMax, outMin, outMax) => {
+      if (val <= inMin) return outMin;
+      if (val >= inMax) return outMax;
+      return outMin + ((val - inMin) / (inMax - inMin)) * (outMax - outMin);
+    };
 
-  // Slide 2 scroll transformations (fade in, scale up, slide into place)
-  const slide2Opacity = useTransform(scrollYProgress, [0.35, 0.65], [0, 1]);
-  const slide2Scale = useTransform(scrollYProgress, [0.35, 0.65], [0.92, 1]);
-  const slide2Y = useTransform(scrollYProgress, [0.35, 0.65], [40, 0]);
-  const slide2PointerEvents = useTransform(scrollYProgress, (v) =>
-    v < 0.35 ? "none" : "auto"
-  );
+    const updateCTA = () => {
+      const container = containerRef.current;
+      if (!container) return;
 
-  // Non-home local planet scroll transformations
-  const planetX = useTransform(
-    scrollYProgress,
-    [0.2, 0.75],
-    [isRtl ? "25%" : "-25%", isRtl ? "-45%" : "45%"]
-  );
-  const planetScale = useTransform(scrollYProgress, [0.2, 0.75], [0.8, 1]);
-  const planetRotate = useTransform(scrollYProgress, [0.2, 0.75], [0, 10]);
-  const planetOpacity = useTransform(
-    scrollYProgress,
-    [0.2, 0.4, 0.8, 1],
-    [0.8, 1, 0.8, 0.35]
-  );
+      const rect = container.getBoundingClientRect();
+      const totalDist = container.offsetHeight - window.innerHeight;
+      const progress = totalDist > 0 ? Math.min(Math.max(-rect.top / totalDist, 0), 1) : 0;
+
+      // Slide 1
+      if (slide1Ref.current) {
+        const s1Opacity = mapRange(progress, 0, 0.35, 1, 0);
+        const s1X = mapRange(progress, 0, 0.45, 0, isRtl ? 400 : -400);
+        slide1Ref.current.style.opacity = `${s1Opacity}`;
+        slide1Ref.current.style.transform = `translate3d(${s1X}px, 0, 0)`;
+        slide1Ref.current.style.pointerEvents = progress > 0.35 ? "none" : "auto";
+        slide1Ref.current.style.display = s1Opacity <= 0 ? "none" : "flex";
+      }
+
+      // Slide 2
+      if (slide2Ref.current) {
+        const s2Opacity = mapRange(progress, 0.35, 0.65, 0, 1);
+        const s2Scale = mapRange(progress, 0.35, 0.65, 0.92, 1);
+        const s2Y = mapRange(progress, 0.35, 0.65, 40, 0);
+        slide2Ref.current.style.opacity = `${s2Opacity}`;
+        slide2Ref.current.style.transform = `translate3d(0, ${s2Y}px, 0) scale(${s2Scale})`;
+        slide2Ref.current.style.pointerEvents = progress < 0.35 ? "none" : "auto";
+        slide2Ref.current.style.display = s2Opacity <= 0 ? "none" : "flex";
+      }
+
+      // Non-home local planet
+      if (localPlanetRef.current) {
+        const pX = isRtl ? mapRange(progress, 0.2, 0.75, 25, -45) : mapRange(progress, 0.2, 0.75, -25, 45);
+        const pScale = mapRange(progress, 0.2, 0.75, 0.8, 1);
+        const pRotate = mapRange(progress, 0.2, 0.75, 0, 10);
+        let pOpacity = 0;
+        if (progress <= 0.4) {
+          pOpacity = mapRange(progress, 0.2, 0.4, 0.8, 1);
+        } else if (progress <= 0.8) {
+          pOpacity = 1;
+        } else {
+          pOpacity = mapRange(progress, 0.8, 1.0, 0.8, 0.35);
+        }
+        localPlanetRef.current.style.opacity = `${pOpacity}`;
+        localPlanetRef.current.style.transform = `translate3d(${pX}%, 0, 0) scale(${pScale}) rotate(${pRotate}deg)`;
+      }
+
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(updateCTA);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    updateCTA();
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [isRtl]);
 
   return (
     <section
@@ -78,13 +117,9 @@ const CTA = () => {
         <div className="absolute bottom-1/4 left-0 w-[500px] h-[500px] bg-orange-600/5 blur-[150px] rounded-full -z-10 hidden md:block"></div>
 
         {/* Slide 1: Ready For Liftoff (Desktop Only) */}
-        <motion.div
-          style={{
-            opacity: slide1Opacity,
-            x: text1X,
-            pointerEvents: slide1PointerEvents,
-          }}
-          className="hidden md:flex relative md:absolute md:inset-0 flex-col md:flex-row items-center justify-center gap-8 md:gap-16 px-4"
+        <div
+          ref={slide1Ref}
+          className="hidden md:flex relative md:absolute md:inset-0 flex-col md:flex-row items-center justify-center gap-8 md:gap-16 px-4 will-change-transform"
         >
           {/* Planet Side (Placeholder for layout) */}
           <div className="relative w-[280px] md:w-[450px] lg:w-[550px] aspect-square hidden md:flex items-center justify-center">
@@ -113,17 +148,13 @@ const CTA = () => {
               </p>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Slide 2: Unlock Innovation (Desktop Only) */}
-        <motion.div
-          style={{
-            opacity: slide2Opacity,
-            scale: slide2Scale,
-            y: slide2Y,
-            pointerEvents: slide2PointerEvents,
-          }}
-          className="hidden md:flex relative md:absolute z-20 md:inset-0 flex-col lg:flex-row items-center justify-center gap-0 px-6 md:px-16 lg:px-24"
+        <div
+          ref={slide2Ref}
+          className="hidden md:flex relative md:absolute z-20 md:inset-0 flex-col lg:flex-row items-center justify-center gap-0 px-6 md:px-16 lg:px-24 will-change-transform"
+          style={{ opacity: 0, display: "none" }}
         >
           {/* Left Side: Content */}
           <div
@@ -163,7 +194,7 @@ const CTA = () => {
               <div className="absolute inset-0 bg-orange-500/10 blur-[120px] rounded-full -z-10"></div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Mobile CTA Layout (Visible only on < 768px) */}
         <div className="md:hidden w-full px-4 sm:px-6 relative z-20 mt-4">
@@ -201,19 +232,15 @@ const CTA = () => {
         </div>
 
         {!isHomePage && (
-          <motion.div
-            style={{
-              x: planetX,
-              scale: planetScale,
-              rotate: planetRotate,
-              opacity: planetOpacity,
-            }}
-            className="absolute inset-0 pointer-events-none hidden lg:flex items-center justify-center h-screen z-10"
+          <div
+            ref={localPlanetRef}
+            className="absolute inset-0 pointer-events-none hidden lg:flex items-center justify-center h-screen z-10 will-change-transform"
+            style={{ opacity: 0 }}
           >
             <div className="w-[300px] md:w-[450px] lg:w-[550px] aspect-square">
               <PlanetAstronaut />
             </div>
-          </motion.div>
+          </div>
         )}
 
         <PricingModal

@@ -4,7 +4,6 @@ import {
   motion,
   useScroll,
   useTransform,
-  AnimatePresence,
 } from "framer-motion";
 import Link from "next/link";
 import { fetchAPI } from "@/lib/api";
@@ -249,43 +248,37 @@ const Services = () => {
             </div>
 
             {/* Active Service Content */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeService.id}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.4 }}
-                className="flex flex-col items-center gap-4"
+            <div
+              key={activeService.id}
+              className="flex flex-col items-center gap-4 animate-fade-in"
+            >
+              {/* Service Name - colored by planet */}
+              <h3
+                className="text-xl sm:text-2xl md:text-3xl font-semibold"
+                style={{
+                  background: (activeService?.gradient || getPlanetColor(activeService?.dotColor))?.replace(/\b\d+deg|to right|to left\b/g, 'to bottom'),
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  filter: `brightness(1.2) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 10px ${getPlanetColor(activeService?.dotColor)}66)`,
+                }}
               >
-                {/* Service Name - colored by planet */}
-                <h3
-                  className="text-xl sm:text-2xl md:text-3xl font-semibold"
-                  style={{
-                    background: (activeService?.gradient || getPlanetColor(activeService?.dotColor))?.replace(/\b\d+deg|to right|to left\b/g, 'to bottom'),
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    filter: `brightness(1.2) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 10px ${getPlanetColor(activeService?.dotColor)}66)`,
-                  }}
-                >
-                  {activeService.title}
-                </h3>
+                {activeService.title}
+              </h3>
 
-                {/* Description */}
-                <p className="text-white/60 text-xs sm:text-sm max-w-sm mx-auto leading-relaxed text-center">
-                  {activeService.description}
-                </p>
+              {/* Description */}
+              <p className="text-white/60 text-xs sm:text-sm max-w-sm mx-auto leading-relaxed text-center">
+                {activeService.description}
+              </p>
 
-                {/* Know More Link */}
-                <Link
-                  href={getServiceHref(activeService)}
-                  prefetch={false}
-                  className="text-white/70 border-b border-white/30 pb-0.5 hover:text-white hover:border-white transition-colors text-xs tracking-[0.15em] font-medium pointer-events-auto uppercase"
-                >
-                  {t("knowMore")}
-                </Link>
-              </motion.div>
-            </AnimatePresence>
+              {/* Know More Link */}
+              <Link
+                href={getServiceHref(activeService)}
+                prefetch={false}
+                className="text-white/70 border-b border-white/30 pb-0.5 hover:text-white hover:border-white transition-colors text-xs tracking-[0.15em] font-medium pointer-events-auto uppercase"
+              >
+                {t("knowMore")}
+              </Link>
+            </div>
           </motion.div>
 
 

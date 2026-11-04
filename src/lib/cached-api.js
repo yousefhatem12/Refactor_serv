@@ -102,5 +102,13 @@ export const getCachedTeamList = unstable_cache(
   { revalidate: REVALIDATE }
 );
 
+export const getCachedBankAccounts = unstable_cache(
+  async (locale = "en", country = "egypt") =>
+    fetchAPI(`/bank-accounts?lang=${locale}&country=${country}&page=1&per_page=6`, { skipHeaders: true }),
+  ["bank-accounts-list"],
+  { revalidate: REVALIDATE }
+);
+
+
 
 

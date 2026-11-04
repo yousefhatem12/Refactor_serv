@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { FaPlay } from "react-icons/fa";
 import { useLanguage } from "@/app/context/LanguageContext";
@@ -183,11 +184,13 @@ const SocialMediaHero = ({
             animate={{ y: [0, -20, 0] }}
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           >
-            <img
+            <Image
               src={planetImage}
               alt="Planet"
               width={600}
               height={600}
+              priority
+              sizes="(max-width: 1024px) 100vw, 600px"
               className={`w-full h-auto object-contain scale-110 ${isRtl ? "-translate-x-[10%]" : "translate-x-[10%]"}`}
               style={{ filter: `drop-shadow(0 0 45px ${resolvedDotColor}) drop-shadow(0 0 90px ${resolvedDotColor})` }}
             />
