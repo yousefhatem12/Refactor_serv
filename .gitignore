@@ -51,3 +51,4 @@ next-env.d.ts
 FRONTEND_AUDIT.md
 TOP_ISSUES_DETAILED_GUIDE.md
 BACKEND_CORS_FIX_GUIDE.md
+.github/workflows/

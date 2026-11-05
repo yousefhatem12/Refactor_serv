@@ -37,10 +37,11 @@ class PortfolioController extends BaseApiController
 
     public function show(Request $request, string|int $idOrSlug): JsonResponse
     {
+        $decodedSlug = is_string($idOrSlug) ? rawurldecode($idOrSlug) : $idOrSlug;
         $data = $this->portfolioService->findProject(
             request: $request,
-            idOrSlug: $idOrSlug,
-            slugKey: $this->sanitizeSlugParam($idOrSlug),
+            idOrSlug: $decodedSlug,
+            slugKey: $this->sanitizeSlugParam($decodedSlug),
             lang: $this->getLang(),
         );
 

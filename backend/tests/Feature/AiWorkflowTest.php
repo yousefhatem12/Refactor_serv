@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Crypt;
 use Livewire\Livewire;
+use PHPUnit\Framework\Attributes\Test;
 
 class AiWorkflowTest extends TestCase
 {
@@ -43,7 +44,7 @@ class AiWorkflowTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function provider_manager_resolves_gemini_openai_deepseek_correctly()
     {
         $this->assertInstanceOf(\App\Services\Ai\GeminiProvider::class, AiProviderManager::getProvider('gemini'));
@@ -51,7 +52,7 @@ class AiWorkflowTest extends TestCase
         $this->assertInstanceOf(\App\Services\Ai\DeepSeekProvider::class, AiProviderManager::getProvider('deepseek'));
     }
 
-    /** @test */
+    #[Test]
     public function provider_test_connection_returns_success_correctly()
     {
         Http::fake([
@@ -66,7 +67,7 @@ class AiWorkflowTest extends TestCase
         $this->assertTrue($openai->testConnection('fake-openai-key'));
     }
 
-    /** @test */
+    #[Test]
     public function provider_test_connection_returns_failure_correctly()
     {
         Http::fake([
@@ -81,7 +82,7 @@ class AiWorkflowTest extends TestCase
         $this->assertFalse($openai->testConnection('bad-openai-key'));
     }
 
-    /** @test */
+    #[Test]
     public function article_content_service_validates_arabic_seo_correctly()
     {
         // Valid article structure for AR language mode
@@ -124,7 +125,7 @@ class AiWorkflowTest extends TestCase
         $this->assertTrue(count($reportWarning['warnings']) > 0);
     }
 
-    /** @test */
+    #[Test]
     public function generate_article_job_executes_successfully_and_saves_unpublished_draft()
     {
         // Setup credential
@@ -225,7 +226,7 @@ class AiWorkflowTest extends TestCase
         $this->assertNull($post->content['en']);
     }
 
-    /** @test */
+    #[Test]
     public function generate_article_job_fails_gracefully_on_api_errors_and_allows_retry()
     {
         // Setup credential
@@ -280,7 +281,7 @@ class AiWorkflowTest extends TestCase
         $this->assertEquals(0, $request->failed_items);
     }
 
-    /** @test */
+    #[Test]
     public function filament_ui_dashboard_presets_and_default_properties()
     {
         $this->actingAs($this->admin);
@@ -294,7 +295,7 @@ class AiWorkflowTest extends TestCase
             ->assertSet('data.auto_publish', false);
     }
 
-    /** @test */
+    #[Test]
     public function internal_backlink_enforcement_is_idempotent(): void
     {
         foreach (range(1, 4) as $index) {
@@ -326,7 +327,7 @@ class AiWorkflowTest extends TestCase
         $this->assertContains('https://serv5.com.eg/ar/', array_column($second['internal_link_suggestions'], 'url'));
     }
 
-    /** @test */
+    #[Test]
     public function topic_cluster_planner_creates_a_pillar_and_the_exact_supporting_articles(): void
     {
         Queue::fake();
@@ -375,7 +376,7 @@ class AiWorkflowTest extends TestCase
         Queue::assertPushed(GenerateArticleJob::class, 4);
     }
 
-    /** @test */
+    #[Test]
     public function dashboard_counts_the_pillar_plus_requested_supporting_articles(): void
     {
         Queue::fake();
@@ -410,7 +411,7 @@ class AiWorkflowTest extends TestCase
         Queue::assertPushed(PlanTopicClusterJob::class, 1);
     }
 
-    /** @test */
+    #[Test]
     public function filament_ui_credentials_form_reactiveness()
     {
         $this->actingAs($this->admin);

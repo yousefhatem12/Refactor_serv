@@ -40,12 +40,13 @@ class BaseApiController extends Controller
             return 'all';
         }
 
-        $clean = strtolower(trim((string) $value));
+        $decoded = rawurldecode((string) $value);
+        $clean = mb_strtolower(trim($decoded), 'UTF-8');
         if ($clean === '' || $clean === 'all') {
             return 'all';
         }
 
-        return preg_match('/^[a-z0-9_-]{1,64}$/', $clean) ? $clean : 'invalid';
+        return preg_match('/^[\p{L}\p{N}_-]{1,191}$/u', $clean) ? $clean : 'invalid';
     }
 
     protected function sanitizeCountryParam(mixed $value): ?string

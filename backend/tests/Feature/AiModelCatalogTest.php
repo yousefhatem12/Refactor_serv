@@ -7,6 +7,7 @@ use App\Services\Ai\ModelCatalog;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class AiModelCatalogTest extends TestCase
@@ -19,7 +20,7 @@ class AiModelCatalogTest extends TestCase
         Cache::flush();
     }
 
-    /** @test */
+    #[Test]
     public function deepseek_lists_models_from_the_api()
     {
         Http::fake([
@@ -36,7 +37,7 @@ class AiModelCatalogTest extends TestCase
         $this->assertSame(['deepseek-v4-flash', 'deepseek-v4-pro'], array_keys($models));
     }
 
-    /** @test */
+    #[Test]
     public function openai_filters_out_non_chat_models()
     {
         Http::fake([
@@ -60,7 +61,7 @@ class AiModelCatalogTest extends TestCase
         $this->assertArrayNotHasKey('gpt-4o-realtime-preview', $models);
     }
 
-    /** @test */
+    #[Test]
     public function gemini_keeps_only_generate_content_models()
     {
         Http::fake([
@@ -85,7 +86,7 @@ class AiModelCatalogTest extends TestCase
         $this->assertSame(['gemini-2.0-flash' => 'Gemini 2.0 Flash'], $models);
     }
 
-    /** @test */
+    #[Test]
     public function catalog_caches_live_results_and_reports_the_source()
     {
         Http::fake([
@@ -100,7 +101,7 @@ class AiModelCatalogTest extends TestCase
         Http::assertSentCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function catalog_falls_back_to_config_when_the_provider_rejects_the_key()
     {
         Http::fake([
@@ -114,7 +115,7 @@ class AiModelCatalogTest extends TestCase
         $this->assertStringContainsString('401', $result['error']);
     }
 
-    /** @test */
+    #[Test]
     public function catalog_uses_fallback_without_calling_the_api_when_no_token_is_set()
     {
         Http::fake();

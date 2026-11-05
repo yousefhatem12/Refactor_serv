@@ -12,6 +12,7 @@ use App\Services\Ai\GeneratedPostService;
 use App\Services\Ai\GenerationRequestNormalizer;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Crypt;
+use PHPUnit\Framework\Attributes\Test;
 
 class AiFeatureRegressionTest extends TestCase
 {
@@ -35,7 +36,7 @@ class AiFeatureRegressionTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function existing_published_posts_still_appear_in_api()
     {
         $post = Post::create([
@@ -53,7 +54,7 @@ class AiFeatureRegressionTest extends TestCase
                  ->assertJsonFragment(['slug' => 'legacy-published']);
     }
 
-    /** @test */
+    #[Test]
     public function existing_unpublished_posts_remain_hidden()
     {
         $post = Post::create([
@@ -71,7 +72,7 @@ class AiFeatureRegressionTest extends TestCase
                  ->assertJsonMissing(['slug' => 'legacy-unpublished']);
     }
 
-    /** @test */
+    #[Test]
     public function existing_blog_detail_response_does_not_expose_ai_fields()
     {
         $post = Post::create([
@@ -97,7 +98,7 @@ class AiFeatureRegressionTest extends TestCase
                  ->assertJsonMissingPath('data.image_metadata');
     }
 
-    /** @test */
+    #[Test]
     public function manual_post_creation_still_works()
     {
         $post = Post::create([
@@ -113,7 +114,7 @@ class AiFeatureRegressionTest extends TestCase
         $this->assertFalse((bool) $post->ai_generated);
     }
 
-    /** @test */
+    #[Test]
     public function manual_post_publish_false_to_true_still_works()
     {
         $post = Post::create([
@@ -130,7 +131,7 @@ class AiFeatureRegressionTest extends TestCase
         $this->assertTrue((bool) $post->fresh()->is_published);
     }
 
-    /** @test */
+    #[Test]
     public function manual_post_unpublish_true_to_false_still_works()
     {
         $post = Post::create([
@@ -147,7 +148,7 @@ class AiFeatureRegressionTest extends TestCase
         $this->assertFalse((bool) $post->fresh()->is_published);
     }
 
-    /** @test */
+    #[Test]
     public function publication_changes_do_not_modify_ai_metadata()
     {
         $post = Post::create([
@@ -169,7 +170,7 @@ class AiFeatureRegressionTest extends TestCase
         $this->assertEquals(['score' => 95], $post->ai_metadata);
     }
 
-    /** @test */
+    #[Test]
     public function generated_post_service_overrides_incoming_is_published_true()
     {
         $post = GeneratedPostService::createDraft([
@@ -185,7 +186,7 @@ class AiFeatureRegressionTest extends TestCase
         $this->assertEquals('pending_review', $post->ai_status);
     }
 
-    /** @test */
+    #[Test]
     public function generated_posts_have_ai_generated_true_and_pending_review_status()
     {
         $post = GeneratedPostService::createDraft([
@@ -199,7 +200,7 @@ class AiFeatureRegressionTest extends TestCase
         $this->assertEquals('pending_review', $post->ai_status);
     }
 
-    /** @test */
+    #[Test]
     public function auto_publish_respects_the_request_setting_and_waits_for_cluster_finalization()
     {
         $request = AiGenerationRequest::create([
@@ -257,7 +258,7 @@ class AiFeatureRegressionTest extends TestCase
         $this->assertSame('pending_review', $disabledPost->fresh()->ai_status);
     }
 
-    /** @test */
+    #[Test]
     public function generated_post_service_suffixes_a_duplicate_ai_slug()
     {
         Post::create([
@@ -280,7 +281,7 @@ class AiFeatureRegressionTest extends TestCase
         $this->assertSame('importance-of-seo-for-ecommerce-stores-2', $post->slug);
     }
 
-    /** @test */
+    #[Test]
     public function ai_credential_api_token_is_encrypted_in_the_database()
     {
         $credential = new AiCredential();
@@ -298,7 +299,7 @@ class AiFeatureRegressionTest extends TestCase
         $this->assertEquals('2345', $rawRow->token_hint); // Last 4 chars
     }
 
-    /** @test */
+    #[Test]
     public function api_token_is_absent_from_model_arrays_and_json()
     {
         $credential = new AiCredential();
@@ -314,7 +315,7 @@ class AiFeatureRegressionTest extends TestCase
         $this->assertStringNotContainsString('api_token', $json);
     }
 
-    /** @test */
+    #[Test]
     public function request_normalization_produces_same_hash_for_equivalent_keyword_input()
     {
         $payload1 = [
@@ -356,7 +357,7 @@ class AiFeatureRegressionTest extends TestCase
         $this->assertEquals($hash1, $hash2);
     }
 
-    /** @test */
+    #[Test]
     public function request_normalization_produces_different_hash_when_meaningful_settings_change()
     {
         $payload1 = [

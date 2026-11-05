@@ -39,7 +39,7 @@
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/Hero/Earth": {
     "id": 7995,
     "files": [
-      "static/chunks/7995.43e7771b7f738195.js"
+      "static/chunks/7995.54335b3ac74d2c0c.js"
     ]
   },
   "app\\(home)\\HomePageClient.jsx -> ../components/Home/OnlineWebsite/OnlineWebsite": {
@@ -78,7 +78,7 @@
   "app\\context\\LanguageContext.jsx -> @/lib/api": {
     "id": 8863,
     "files": [
-      "static/chunks/8863.94a890a6bdef2cf2.js"
+      "static/chunks/8863.fc58fd1a74132013.js"
     ]
   }
 }
