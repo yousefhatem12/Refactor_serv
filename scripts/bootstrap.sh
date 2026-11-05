@@ -1,29 +1,42 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# Serv5 Bootstrap Script - Optimized for Virtual Servers (VPS / Cloud VMs)
-# Next.js 16 (Port 80) + Laravel 12 / Filament (Port 8000) + MySQL + Redis
+# Serv5 Bootstrap Script - Optimized for Fedora / RHEL & Debian / Ubuntu VMs
+# Stack: Next.js 16 (Port 80) + Laravel 12 / Filament (Port 8000) + MariaDB/MySQL + Redis
 # ==============================================================================
 
 set -euo pipefail
 
 # ------------------------------------------------------------------------------
-# 1. Configuration (Edit if needed, or leave defaults for auto-detection)
+# 1. Path Auto-Detection & Configuration
 # ------------------------------------------------------------------------------
 APP_NAME="serv5"
-APP_DIR="/var/www/${APP_NAME}"
 GIT_REPO_URL="https://github.com/yousefhatem12/Refactor_serv.git"
 GIT_BRANCH="main"
 
-# Auto-detect Server IP (works locally or on public VPS)
+# Auto-detect if executed from within cloned repository
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_CANDIDATE="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+if [ -f "${REPO_CANDIDATE}/package.json" ] && [ -f "${REPO_CANDIDATE}/backend/artisan" ]; then
+    APP_DIR="${REPO_CANDIDATE}"
+else
+    APP_DIR="/var/www/${APP_NAME}"
+fi
+
+# Detect actual non-root invoking user (for home directory permissions)
+RUNNING_USER="${SUDO_USER:-$(id -un)}"
+USER_HOME=$(eval echo "~${RUNNING_USER}")
+
+# Auto-detect Server IP (works on local network or public VPS)
 SERVER_IP=$(curl -s -m 3 ifconfig.me 2>/dev/null || hostname -I | awk '{print $1}')
+[ -z "$SERVER_IP" ] && SERVER_IP="127.0.0.1"
 
 # Ports
 FRONTEND_PORT="80"
 BACKEND_PORT="8000"
 
 # Runtimes
-NODE_VERSION="22"       # Node.js 22 LTS
-PHP_VERSION="8.3"        # PHP 8.3
+NODE_VERSION="22"
 
 # Database & Admin credentials
 DB_NAME="serv5"
@@ -45,21 +58,43 @@ log_warn()    { echo -e "${C_YELLOW}[WARN]${C_RESET} $*"; }
 log_error()   { echo -e "${C_RED}[ERROR]${C_RESET} $*"; }
 
 if [[ $EUID -ne 0 ]]; then
-   log_error "This script must run with root privileges (sudo -i)."
+   log_error "This script must be run with root privileges (sudo ./bootstrap.sh)."
    exit 1
 fi
 
-export DEBIAN_FRONTEND=noninteractive
+log_info "Target Application Directory: ${APP_DIR}"
+log_info "Detected Server IP: ${SERVER_IP}"
 
 # ------------------------------------------------------------------------------
-# 2. Virtual Server Swap Allocation (CRITICAL for Next.js builds on low-RAM VMs)
+# 2. OS & Package Manager Detection
+# ------------------------------------------------------------------------------
+if command -v dnf >/dev/null 2>&1; then
+    PKG_MGR="dnf"
+    WEB_USER="nginx"
+    WEB_GROUP="nginx"
+    PHP_FPM_SOCK="/run/php-fpm/www.sock"
+    NGINX_CONF_DIR="/etc/nginx/conf.d"
+elif command -v apt-get >/dev/null 2>&1; then
+    PKG_MGR="apt"
+    WEB_USER="www-data"
+    WEB_GROUP="www-data"
+    PHP_FPM_SOCK="/run/php/php8.3-fpm.sock"
+    NGINX_CONF_DIR="/etc/nginx/sites-available"
+else
+    log_error "Unsupported package manager. Requires dnf (Fedora/RHEL) or apt (Ubuntu/Debian)."
+    exit 1
+fi
+log_info "Detected Package Manager: ${PKG_MGR} (Web User: ${WEB_USER})"
+
+# ------------------------------------------------------------------------------
+# 3. Virtual Server Swap Allocation (CRITICAL for Next.js builds on low-RAM VMs)
 # ------------------------------------------------------------------------------
 log_info "Checking virtual server memory and swap..."
 TOTAL_RAM_MB=$(free -m | awk '/^Mem:/{print $2}')
 SWAP_EXISTS=$(free -m | awk '/^Swap:/{print $2}')
 
 if [ "$SWAP_EXISTS" -lt 1024 ]; then
-    log_warn "Virtual server has low swap. Creating 2GB swapfile to prevent build OOM crashes..."
+    log_warn "Virtual server has low swap. Creating 2GB swapfile..."
     fallocate -l 2G /swapfile || dd if=/dev/zero of=/swapfile bs=1M count=2048
     chmod 600 /swapfile
     mkswap /swapfile
@@ -68,98 +103,105 @@ if [ "$SWAP_EXISTS" -lt 1024 ]; then
         echo '/swapfile none swap sw 0 0' >> /etc/fstab
     fi
     sysctl vm.swappiness=10
-    echo 'vm.swappiness=10' >> /etc/sysctl.d/99-vps-swap.conf
-    log_success "2GB Swap active."
+    echo 'vm.swappiness=10' > /etc/sysctl.d/99-vps-swap.conf
+    log_success "2GB Swap activated."
 else
-    log_info "Sufficient swap already configured."
+    log_info "Sufficient swap already configured (${SWAP_EXISTS}MB)."
 fi
 
 # ------------------------------------------------------------------------------
-# 3. Base Packages
+# 4. Install Base Packages, Node.js, PHP, Nginx, MariaDB & Redis
 # ------------------------------------------------------------------------------
-log_info "Updating package lists..."
-apt update && apt upgrade -y
-apt install -y curl wget git unzip zip software-properties-common ufw build-essential
+log_info "Installing packages using ${PKG_MGR}..."
+
+if [ "$PKG_MGR" = "dnf" ]; then
+    # Fedora / RHEL
+    dnf install -y curl wget git unzip zip tar ca-certificates policycoreutils-python-utils \
+        nginx redis mariadb-server mariadb gcc-c++ make
+
+    # Node.js 22 LTS via NodeSource RPM or native
+    if ! command -v node >/dev/null 2>&1 || [[ $(node -v | cut -d'.' -f1 | tr -d 'v') -lt 20 ]]; then
+        log_info "Setting up Node.js 22.x..."
+        curl -fsSL https://rpm.nodesource.com/setup_${NODE_VERSION}.x | bash -
+        dnf install -y nodejs
+    fi
+
+    # PHP and extensions (Fedora has PHP 8.3/8.4 in native repos)
+    log_info "Installing PHP and extensions..."
+    dnf install -y php-cli php-fpm php-mysqlnd php-mbstring php-xml php-curl php-zip \
+        php-gd php-intl php-bcmath php-sqlite3 php-pecl-redis5 php-opcache php-json composer || \
+    dnf install -y php php-fpm php-mysqlnd php-mbstring php-xml php-curl php-zip \
+        php-gd php-intl php-bcmath php-sqlite3 php-opcache composer
+
+    # Configure PHP-FPM to listen on socket with proper permissions
+    sed -i "s|^user = .*|user = ${WEB_USER}|" /etc/php-fpm.d/www.conf
+    sed -i "s|^group = .*|group = ${WEB_GROUP}|" /etc/php-fpm.d/www.conf
+    sed -i "s|^listen = .*|listen = /run/php-fpm/www.sock|" /etc/php-fpm.d/www.conf
+    sed -i "s|^;listen.owner = .*|listen.owner = ${WEB_USER}|" /etc/php-fpm.d/www.conf
+    sed -i "s|^;listen.group = .*|listen.group = ${WEB_GROUP}|" /etc/php-fpm.d/www.conf
+    sed -i "s|^;listen.mode = .*|listen.mode = 0660|" /etc/php-fpm.d/www.conf
+    sed -i 's/memory_limit = .*/memory_limit = 256M/' /etc/php.ini
+    sed -i 's/upload_max_filesize = .*/upload_max_filesize = 32M/' /etc/php.ini
+    sed -i 's/post_max_size = .*/post_max_size = 32M/' /etc/php.ini
+
+    DB_SERVICE="mariadb"
+    PHP_SERVICE="php-fpm"
+else
+    # Debian / Ubuntu
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get update && apt-get upgrade -y
+    apt-get install -y curl wget git unzip zip software-properties-common build-essential ca-certificates
+
+    mkdir -p /etc/apt/keyrings
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg --yes
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_VERSION}.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+    add-apt-repository -y ppa:ondrej/php
+    apt-get update
+    apt-get install -y nodejs nginx redis-server mysql-server \
+        php8.3-fpm php8.3-cli php8.3-mysql php8.3-mbstring php8.3-xml php8.3-curl php8.3-zip \
+        php8.3-gd php8.3-intl php8.3-bcmath php8.3-sqlite3 php8.3-redis php8.3-opcache
+
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+    DB_SERVICE="mysql"
+    PHP_SERVICE="php8.3-fpm"
+    PHP_FPM_SOCK="/run/php/php8.3-fpm.sock"
+fi
+
+log_success "Node: $(node -v) | NPM: $(npm -v) | PHP: $(php -v | head -n1)"
 
 # ------------------------------------------------------------------------------
-# 4. Node.js 22 LTS
+# 5. Services Startup & Database Initialization
 # ------------------------------------------------------------------------------
-log_info "Installing Node.js ${NODE_VERSION}.x..."
-mkdir -p /etc/apt/keyrings
-curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg --yes
-echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_VERSION}.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
-apt update && apt install -y nodejs
-log_success "Node: $(node -v) | NPM: $(npm -v)"
+log_info "Starting database and Redis services..."
+systemctl enable --now redis
+systemctl enable --now "${DB_SERVICE}"
+systemctl enable --now "${PHP_SERVICE}"
 
-# ------------------------------------------------------------------------------
-# 5. PHP ${PHP_VERSION} & Required Extensions
-# ------------------------------------------------------------------------------
-log_info "Installing PHP ${PHP_VERSION} & extensions..."
-add-apt-repository -y ppa:ondrej/php
-apt update
-apt install -y \
-    php${PHP_VERSION}-fpm \
-    php${PHP_VERSION}-cli \
-    php${PHP_VERSION}-mysql \
-    php${PHP_VERSION}-mbstring \
-    php${PHP_VERSION}-xml \
-    php${PHP_VERSION}-curl \
-    php${PHP_VERSION}-zip \
-    php${PHP_VERSION}-gd \
-    php${PHP_VERSION}-intl \
-    php${PHP_VERSION}-bcmath \
-    php${PHP_VERSION}-sqlite3 \
-    php${PHP_VERSION}-redis \
-    php${PHP_VERSION}-opcache
-
-# Adjust memory limits for virtual server
-sed -i 's/memory_limit = .*/memory_limit = 256M/' /etc/php/${PHP_VERSION}/fpm/php.ini
-sed -i 's/upload_max_filesize = .*/upload_max_filesize = 32M/' /etc/php/${PHP_VERSION}/fpm/php.ini
-sed -i 's/post_max_size = .*/post_max_size = 32M/' /etc/php/${PHP_VERSION}/fpm/php.ini
-systemctl restart php${PHP_VERSION}-fpm
-
-# Install Composer
-log_info "Installing Composer..."
-curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-# ------------------------------------------------------------------------------
-# 6. MySQL & Redis (Optimized for VPS)
-# ------------------------------------------------------------------------------
-log_info "Installing MySQL and Redis..."
-apt install -y mysql-server redis-server
-
-# Tune MySQL InnoDB buffer pool for virtual server
-cat <<EOF > /etc/mysql/mysql.conf.d/vps-tuning.cnf
-[mysqld]
-innodb_buffer_pool_size = 128M
-max_connections = 60
-EOF
-
-systemctl restart mysql
-systemctl enable --now redis-server mysql
-
-# Provision DB
-log_info "Provisioning MySQL database..."
+log_info "Configuring database: ${DB_NAME}..."
 mysql -e "CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 mysql -e "CREATE USER IF NOT EXISTS '${DB_USER}'@'127.0.0.1' IDENTIFIED BY '${DB_PASSWORD}';"
 mysql -e "GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO '${DB_USER}'@'127.0.0.1';"
 mysql -e "FLUSH PRIVILEGES;"
 
 # ------------------------------------------------------------------------------
-# 7. Pull Code
+# 6. Repository Setup
 # ------------------------------------------------------------------------------
-log_info "Setting up code at ${APP_DIR}..."
-if [ -d "${APP_DIR}/.git" ]; then
-    cd "${APP_DIR}" && git pull origin "${GIT_BRANCH}"
-else
+if [ ! -d "${APP_DIR}/.git" ]; then
+    log_info "Cloning repository into ${APP_DIR}..."
     mkdir -p "${APP_DIR}"
     git clone -b "${GIT_BRANCH}" "${GIT_REPO_URL}" "${APP_DIR}"
 fi
 
+# Ensure home directory traversal if located inside /home/*
+if [[ "${APP_DIR}" == /home/* ]]; then
+    chmod 755 "${USER_HOME}" || true
+fi
+
 # ------------------------------------------------------------------------------
-# 8. Setup Backend (Laravel)
+# 7. Configure Backend (Laravel 12 + Filament 5)
 # ------------------------------------------------------------------------------
-log_info "Configuring Laravel Backend..."
+log_info "Setting up Laravel Backend in ${APP_DIR}/backend..."
 cd "${APP_DIR}/backend"
 
 if [ ! -f .env ]; then
@@ -199,13 +241,14 @@ php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
-chown -R www-data:www-data storage bootstrap/cache
-chmod -R 775 storage bootstrap/cache
+# Set permissions for both owner and web server
+chown -R "${RUNNING_USER}:${WEB_GROUP}" "${APP_DIR}/backend/storage" "${APP_DIR}/backend/bootstrap/cache"
+chmod -R 775 "${APP_DIR}/backend/storage" "${APP_DIR}/backend/bootstrap/cache"
 
 # ------------------------------------------------------------------------------
-# 9. Setup Frontend (Next.js)
+# 8. Configure Frontend (Next.js 16)
 # ------------------------------------------------------------------------------
-log_info "Configuring Next.js Frontend..."
+log_info "Setting up Next.js Frontend in ${APP_DIR}..."
 cd "${APP_DIR}"
 
 cat <<EOF > .env.production
@@ -217,17 +260,36 @@ EOF
 
 npm install
 
-# Cap node memory during webpack build on virtual server to prevent memory spike
+# Cap memory limit during webpack build to prevent VM crashes
 NODE_OPTIONS="--max-old-space-size=1536" npm run build
 
-chown -R www-data:www-data "${APP_DIR}"
+chown -R "${RUNNING_USER}:${WEB_GROUP}" "${APP_DIR}"
 
 # ------------------------------------------------------------------------------
-# 10. Systemd Services
+# 9. SELinux Configuration (Essential on Fedora / RHEL)
 # ------------------------------------------------------------------------------
-log_info "Setting up systemd services..."
+if command -v getenforce >/dev/null 2>&1; then
+    SE_STATUS=$(getenforce)
+    log_info "Configuring SELinux policy (Status: ${SE_STATUS})..."
+    if [ "$SE_STATUS" != "Disabled" ]; then
+        setsebool -P httpd_can_network_connect 1 || true
+        setsebool -P httpd_can_network_connect_db 1 || true
+        setsebool -P httpd_unified 1 || true
+        setsebool -P httpd_read_user_content 1 || true
+        chcon -R -t httpd_sys_rw_content_t "${APP_DIR}/backend/storage" "${APP_DIR}/backend/bootstrap/cache" 2>/dev/null || true
+    fi
+fi
 
-# Next.js Frontend Service
+# ------------------------------------------------------------------------------
+# 10. Native Systemd Services (Next.js & Queue Worker & Cron)
+# ------------------------------------------------------------------------------
+log_info "Installing systemd services..."
+
+NODE_BIN=$(command -v node)
+NPM_BIN=$(command -v npm)
+PHP_BIN=$(command -v php)
+
+# Next.js Service
 cat <<EOF > /etc/systemd/system/${APP_NAME}-frontend.service
 [Unit]
 Description=Serv5 Next.js Service
@@ -235,12 +297,12 @@ After=network.target
 
 [Service]
 Type=simple
-User=www-data
-Group=www-data
+User=${RUNNING_USER}
+Group=${WEB_GROUP}
 WorkingDirectory=${APP_DIR}
 Environment=NODE_ENV=production
 Environment=PORT=3000
-ExecStart=/usr/bin/npm run start
+ExecStart=${NPM_BIN} run start
 Restart=always
 RestartSec=5
 
@@ -248,18 +310,18 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 
-# Queue Worker Service
+# Laravel Queue Worker Service
 cat <<EOF > /etc/systemd/system/${APP_NAME}-worker.service
 [Unit]
-Description=Serv5 Queue Worker
-After=network.target mysql.service redis-server.service
+Description=Serv5 Laravel Queue Worker
+After=network.target ${DB_SERVICE}.service redis.service
 
 [Service]
 Type=simple
-User=www-data
-Group=www-data
+User=${RUNNING_USER}
+Group=${WEB_GROUP}
 WorkingDirectory=${APP_DIR}/backend
-ExecStart=/usr/bin/php ${APP_DIR}/backend/artisan queue:work redis --sleep=3 --tries=3 --timeout=300
+ExecStart=${PHP_BIN} ${APP_DIR}/backend/artisan queue:work redis --sleep=3 --tries=3 --timeout=300
 Restart=always
 RestartSec=5
 
@@ -267,23 +329,25 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 
-# Scheduler Cron
+# Laravel Scheduler Cron
 cat <<EOF > /etc/cron.d/${APP_NAME}-scheduler
-* * * * * www-data /usr/bin/php ${APP_DIR}/backend/artisan schedule:run >> /dev/null 2>&1
+* * * * * ${RUNNING_USER} ${PHP_BIN} ${APP_DIR}/backend/artisan schedule:run >> /dev/null 2>&1
 EOF
 chmod 0644 /etc/cron.d/${APP_NAME}-scheduler
 
 systemctl daemon-reload
 systemctl enable --now ${APP_NAME}-frontend.service
 systemctl enable --now ${APP_NAME}-worker.service
+systemctl restart "${PHP_SERVICE}"
 
 # ------------------------------------------------------------------------------
-# 11. Nginx Reverse Proxy (Frontend :80 / Backend :8000)
+# 11. Configure Nginx (Reverse Proxy & FastCGI)
 # ------------------------------------------------------------------------------
 log_info "Configuring Nginx..."
-apt install -y nginx
 
-cat <<EOF > /etc/nginx/sites-available/${APP_NAME}.conf
+mkdir -p "${NGINX_CONF_DIR}"
+
+cat <<EOF > "${NGINX_CONF_DIR}/${APP_NAME}.conf"
 # Frontend (Next.js on Port 80)
 server {
     listen 80 default_server;
@@ -324,7 +388,7 @@ server {
     location = /robots.txt  { access_log off; log_not_found off; }
 
     location ~ \.php$ {
-        fastcgi_pass unix:/run/php/php${PHP_VERSION}-fpm.sock;
+        fastcgi_pass unix:${PHP_FPM_SOCK};
         fastcgi_param SCRIPT_FILENAME \$realpath_root\$fastcgi_script_name;
         include fastcgi_params;
         fastcgi_hide_header X-Powered-By;
@@ -336,15 +400,24 @@ server {
 }
 EOF
 
-ln -sf /etc/nginx/sites-available/${APP_NAME}.conf /etc/nginx/sites-enabled/
-rm -f /etc/nginx/sites-enabled/default
-nginx -t && systemctl reload nginx
+if [ "$PKG_MGR" = "apt" ]; then
+    ln -sf /etc/nginx/sites-available/${APP_NAME}.conf /etc/nginx/sites-enabled/
+    rm -f /etc/nginx/sites-enabled/default
+fi
+
+nginx -t && systemctl enable --now nginx && systemctl reload nginx
 
 # ------------------------------------------------------------------------------
-# 12. Firewall
+# 12. Firewall Configuration (firewalld on Fedora / ufw on Ubuntu)
 # ------------------------------------------------------------------------------
-if command -v ufw >/dev/null 2>&1; then
-    log_info "Opening ports in firewall..."
+if command -v firewall-cmd >/dev/null 2>&1 && systemctl is-active --quiet firewalld; then
+    log_info "Opening ports in firewalld..."
+    firewall-cmd --permanent --add-service=ssh || true
+    firewall-cmd --permanent --add-port=80/tcp || true
+    firewall-cmd --permanent --add-port=8000/tcp || true
+    firewall-cmd --reload || true
+elif command -v ufw >/dev/null 2>&1; then
+    log_info "Opening ports in ufw..."
     ufw allow 22/tcp || true
     ufw allow 80/tcp || true
     ufw allow 8000/tcp || true
@@ -355,7 +428,7 @@ fi
 # 13. Summary
 # ------------------------------------------------------------------------------
 log_success "=========================================================="
-log_success " Virtual Server Bootstrap Finished!                      "
+log_success " Serv5 Virtual Server Bootstrap Complete!                "
 log_success "=========================================================="
 echo -e "Frontend:           http://${SERVER_IP}"
 echo -e "Backend / Admin:    http://${SERVER_IP}:${BACKEND_PORT}/admin"
@@ -366,6 +439,7 @@ echo -e "Database Password:  ${DB_PASSWORD}"
 echo -e "Admin Email:        ${ADMIN_EMAIL}"
 echo -e "Admin Password:     ${ADMIN_PASSWORD}"
 echo -e ""
-echo -e "Check processes:"
+echo -e "Check service statuses:"
 echo -e "  systemctl status ${APP_NAME}-frontend"
 echo -e "  systemctl status ${APP_NAME}-worker"
+echo -e "  systemctl status ${PHP_SERVICE}"
