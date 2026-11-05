@@ -41,6 +41,14 @@ NODE_VERSION="22"
 # Database & Admin credentials
 DB_NAME="serv5"
 DB_USER="serv5_user"
+
+# Reuse existing DB password from backend/.env if it already exists
+if [ -f "${APP_DIR}/backend/.env" ]; then
+    EXISTING_DB_PASS=$(grep -E '^DB_PASSWORD=' "${APP_DIR}/backend/.env" | head -n1 | cut -d'=' -f2- | tr -d '"' | tr -d "'" || true)
+    if [ -n "${EXISTING_DB_PASS}" ]; then
+        DB_PASSWORD="${EXISTING_DB_PASS}"
+    fi
+fi
 DB_PASSWORD="${DB_PASSWORD:-$(openssl rand -hex 12)}"
 ADMIN_EMAIL="admin@${SERVER_IP}.local"
 ADMIN_PASSWORD="${ADMIN_PASSWORD:-$(openssl rand -base64 12)}"
@@ -180,8 +188,16 @@ systemctl enable --now "${PHP_SERVICE}"
 
 log_info "Configuring database: ${DB_NAME}..."
 mysql -e "CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+
+# Ensure user exists, password is synchronized, and permissions are granted for BOTH localhost and 127.0.0.1
+mysql -e "CREATE USER IF NOT EXISTS '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';"
+mysql -e "ALTER USER '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';"
+mysql -e "GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO '${DB_USER}'@'localhost';"
+
 mysql -e "CREATE USER IF NOT EXISTS '${DB_USER}'@'127.0.0.1' IDENTIFIED BY '${DB_PASSWORD}';"
+mysql -e "ALTER USER '${DB_USER}'@'127.0.0.1' IDENTIFIED BY '${DB_PASSWORD}';"
 mysql -e "GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO '${DB_USER}'@'127.0.0.1';"
+
 mysql -e "FLUSH PRIVILEGES;"
 
 # ------------------------------------------------------------------------------
