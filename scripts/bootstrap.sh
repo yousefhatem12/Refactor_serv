@@ -205,7 +205,49 @@ log_info "Setting up Laravel Backend in ${APP_DIR}/backend..."
 cd "${APP_DIR}/backend"
 
 if [ ! -f .env ]; then
-    cp .env.example .env
+    if [ -f .env.example ]; then
+        cp .env.example .env
+    else
+        log_info "Creating backend/.env from built-in template..."
+        cat <<EOF > .env
+APP_NAME=Serv5
+APP_ENV=production
+APP_KEY=
+APP_DEBUG=false
+APP_URL=http://${SERVER_IP}:${BACKEND_PORT}
+
+LOG_CHANNEL=stack
+LOG_LEVEL=debug
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=${DB_NAME}
+DB_USERNAME=${DB_USER}
+DB_PASSWORD="${DB_PASSWORD}"
+
+BROADCAST_CONNECTION=log
+CACHE_STORE=redis
+FILESYSTEM_DISK=local
+QUEUE_CONNECTION=redis
+SESSION_DRIVER=redis
+
+REDIS_CLIENT=phpredis
+REDIS_HOST=127.0.0.1
+REDIS_PORT=6379
+
+CORS_ALLOWED_ORIGINS="http://${SERVER_IP},http://${SERVER_IP}:${FRONTEND_PORT},http://${SERVER_IP}:${BACKEND_PORT},http://localhost:3000,http://127.0.0.1:3000"
+TRUSTED_PROXIES="*"
+
+HTTP_ALT_SVC_ENABLED=true
+HTTP_OUTBOUND_VERSION=http3
+HTTP_TCP_KEEPALIVE=true
+
+AI_CONTENT_ENABLED=true
+ADMIN_EMAIL=${ADMIN_EMAIL}
+ADMIN_PASSWORD="${ADMIN_PASSWORD}"
+EOF
+    fi
 fi
 
 sed -i "s|^APP_ENV=.*|APP_ENV=production|" .env
