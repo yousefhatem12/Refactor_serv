@@ -1,0 +1,50 @@
+[
+    {
+        "name": {
+            "en": "Ahmed Noman",
+            "ar": "أحمد نعمان"
+        },
+        "role": {
+            "en": "CEO & Founder",
+            "ar": "المدير التنفيذي والمؤسس (CEO)"
+        },
+        "bio": {
+            "en": "Chief Executive Officer at Serv5 Web Services & Digital Marketing.",
+            "ar": "الرئيس التنفيذي لشركة سيرف فايف لتصميم وبرمجة المواقع وخدمات التسويق الإلكتروني."
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2022\/05\/DSC_0576-scaled.jpg",
+        "dept": "management"
+    },
+    {
+        "name": {
+            "en": "Faisal Fahd",
+            "ar": "فيصل فهد"
+        },
+        "role": {
+            "en": "Branch Manager",
+            "ar": "مدير الفرع"
+        },
+        "bio": {
+            "en": "Branch Manager overseeing regional operations and client success at Serv5.",
+            "ar": "مدير الفرع المسؤول عن إدارة العمليات الإقليمية ونجاح العملاء في سيرف فايف."
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2019\/05\/IMG_20190523_134721_196.jpg",
+        "dept": "management"
+    },
+    {
+        "name": {
+            "en": "Kholoud Elngar",
+            "ar": "خلود النجار"
+        },
+        "role": {
+            "en": "Marketing Specialist",
+            "ar": "أخصائية التسويق الإلكتروني"
+        },
+        "bio": {
+            "en": "Digital Marketing & Social Media Specialist at Serv5.",
+            "ar": "متخصصة التسويق الإلكتروني وإدارة الحملات الإعلانية في سيرف فايف."
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2019\/05\/5bb90c1e-98e5-4134-9d12-3556e93cc719.jpg",
+        "dept": "marketing"
+    }
+]

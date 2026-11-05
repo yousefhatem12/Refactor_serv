@@ -1,0 +1,282 @@
+[
+    {
+        "name": {
+            "ar": "الاهلي المصري",
+            "en": "Al Ahly of Egypt"
+        },
+        "owner": {
+            "ar": "سيرف فايف لخدمات الويب",
+            "en": "Serv5 Web Services"
+        },
+        "account": {
+            "ar": "تواصل مع الادارة",
+            "en": "contact the administration"
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2018\/06\/ahli.png",
+        "type": "bank",
+        "country": "egypt",
+        "brand_color": "from-[#1b5e20] to-[#2e7d32]",
+        "shadow": "rgba(255,138,0,0.12)",
+        "sort_order": 1
+    },
+    {
+        "name": {
+            "ar": "بنك مصر",
+            "en": "Egypt Bank"
+        },
+        "owner": {
+            "ar": "سيرف فايف لخدمات الويب",
+            "en": "Serv5 Web Services"
+        },
+        "account": {
+            "ar": "تواصل مع الادارة",
+            "en": "contact the administration"
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/zHutq.a190d0223b-img.jpg",
+        "type": "bank",
+        "country": "egypt",
+        "brand_color": "from-[#880e4f] to-[#ad1457]",
+        "shadow": "rgba(255,138,0,0.12)",
+        "sort_order": 2
+    },
+    {
+        "name": {
+            "ar": "كريدي اجريكول",
+            "en": "Credit Agricole"
+        },
+        "owner": {
+            "ar": "سيرف فايف لخدمات الويب",
+            "en": "Serv5 Web Services"
+        },
+        "account": {
+            "ar": "تواصل مع الادارة",
+            "en": "contact the administration"
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/M1yjV.1394723890.jpg",
+        "type": "bank",
+        "country": "egypt",
+        "brand_color": "from-[#004d40] to-[#00695c]",
+        "shadow": "rgba(255,138,0,0.12)",
+        "sort_order": 3
+    },
+    {
+        "name": {
+            "ar": "المصرف المتحد",
+            "en": "United Bank"
+        },
+        "owner": {
+            "ar": "سيرف فايف لخدمات الويب",
+            "en": "Serv5 Web Services"
+        },
+        "account": {
+            "ar": "تواصل مع الادارة",
+            "en": "contact the administration"
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2019\/01\/419.jpg",
+        "type": "bank",
+        "country": "egypt",
+        "brand_color": "from-[#e65100] to-[#ef6c00]",
+        "shadow": "rgba(255,138,0,0.12)",
+        "sort_order": 4
+    },
+    {
+        "name": {
+            "ar": "البريد المصري",
+            "en": "Egyptian post"
+        },
+        "owner": {
+            "ar": "سيرف فايف لخدمات الويب",
+            "en": "Serv5 Web Services"
+        },
+        "account": {
+            "ar": "تواصل مع الادارة",
+            "en": "contact the administration"
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2019\/01\/lbryd_lmsry.jpg.crop_display.jpg",
+        "type": "bank",
+        "country": "egypt",
+        "brand_color": "from-[#0d47a1] to-[#1565c0]",
+        "shadow": "rgba(255,138,0,0.12)",
+        "sort_order": 5
+    },
+    {
+        "name": {
+            "ar": "اورنج كاش",
+            "en": "Orange Cash"
+        },
+        "owner": {
+            "ar": "يمكن التحويل علي اتصالات كاش لجميع عملائها",
+            "en": "Transfer can be made on Orange cash for all its customers"
+        },
+        "account": {
+            "ar": "تواصل مع الاداره في حاله طلب تحويل",
+            "en": "Contact the administration in case of a transfer request"
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2019\/01\/unnamed.png",
+        "type": "wallet",
+        "country": "egypt",
+        "brand_color": "from-[#ff6f00] to-[#ff8f00]",
+        "shadow": "rgba(255,138,0,0.12)",
+        "sort_order": 6
+    },
+    {
+        "name": {
+            "ar": "اتصالات كاش",
+            "en": "Etisalat Cash"
+        },
+        "owner": {
+            "ar": "يمكن التحويل علي اتصالات كاش لجميع عملائها",
+            "en": "Transfer can be made on Etisalat cash for all its customers"
+        },
+        "account": {
+            "ar": "تواصل مع الاداره في حاله طلب تحويل",
+            "en": "Contact the administration in case of a transfer request"
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2019\/01\/2018-08-06-unnamed.jpg",
+        "type": "wallet",
+        "country": "egypt",
+        "brand_color": "from-[#1b5e20] to-[#43a047]",
+        "shadow": "rgba(255,138,0,0.12)",
+        "sort_order": 7
+    },
+    {
+        "name": {
+            "ar": "فودافون كاش",
+            "en": "Vodafone Cash"
+        },
+        "owner": {
+            "ar": "يمكن التحويل علي فودافون كاش لجميع عملائها",
+            "en": "Transfer can be made on Vodafone cash for all its customers"
+        },
+        "account": {
+            "ar": "تواصل مع الاداره في حاله طلب تحويل",
+            "en": "Contact the administration in case of a transfer request"
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2019\/01\/vodafone-cash.png",
+        "type": "wallet",
+        "country": "egypt",
+        "brand_color": "from-[#b71c1c] to-[#d32f2f]",
+        "shadow": "rgba(255,138,0,0.12)",
+        "sort_order": 8
+    },
+    {
+        "name": {
+            "ar": "بنك الراجحي",
+            "en": "Al Rajhi Bank"
+        },
+        "owner": {
+            "ar": "اسماعيل احمد محمد",
+            "en": "Ismail Ahmad Muhammad"
+        },
+        "account": {
+            "ar": "تواصل مع الادارة",
+            "en": "Contact the administration"
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2018\/06\/bank-logo.png",
+        "type": "bank",
+        "country": "ksa",
+        "brand_color": "from-[#004d40] to-[#00695c]",
+        "shadow": "rgba(255,138,0,0.12)",
+        "sort_order": 9
+    },
+    {
+        "name": {
+            "ar": "بنك الاهلي",
+            "en": "Al-ahly Bank"
+        },
+        "owner": {
+            "ar": "اسماعيل احمد محمد",
+            "en": "Ismail Ahmad Muhammad"
+        },
+        "account": {
+            "ar": "تواصل مع الادارة",
+            "en": "Contact the administration"
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/download.jpeg",
+        "type": "bank",
+        "country": "ksa",
+        "brand_color": "from-[#e65100] to-[#ef6c00]",
+        "shadow": "rgba(255,138,0,0.12)",
+        "sort_order": 10
+    },
+    {
+        "name": {
+            "ar": "بنك البلاد",
+            "en": "the National Bank"
+        },
+        "owner": {
+            "ar": "اسماعيل احمد محمد",
+            "en": "Ismail Ahmad Muhammad"
+        },
+        "account": {
+            "ar": "تواصل مع الادارة",
+            "en": "Contact the administration"
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/DHYuN.albilad_bank.jpg",
+        "type": "bank",
+        "country": "ksa",
+        "brand_color": "from-[#0d47a1] to-[#1565c0]",
+        "shadow": "rgba(255,138,0,0.12)",
+        "sort_order": 11
+    },
+    {
+        "name": {
+            "ar": "المصرف المتحد تحويل دولي",
+            "en": "The United Bank is an international transfer"
+        },
+        "owner": {
+            "ar": "سيرف فايف لخدمات التسويق الالكتروني",
+            "en": "Serv5 for e-marketing services"
+        },
+        "account": {
+            "ar": "تواصل مع الادارة",
+            "en": "Contact the administration"
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2019\/01\/419.jpg",
+        "type": "bank",
+        "country": "ksa",
+        "brand_color": "from-[#ff6f00] to-[#ff8f00]",
+        "shadow": "rgba(255,138,0,0.12)",
+        "sort_order": 12
+    },
+    {
+        "name": {
+            "ar": "ويسترن يونيون",
+            "en": "Western Union"
+        },
+        "owner": {
+            "ar": "سيرف فايف لخدمات التسويق الالكتروني",
+            "en": "Serv5 for e-marketing services"
+        },
+        "account": {
+            "ar": "تواصل مع الادارة",
+            "en": "Contact the administration"
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2019\/01\/western-union-390x220.jpg",
+        "type": "transfer",
+        "country": "ksa",
+        "brand_color": "from-[#1b5e20] to-[#43a047]",
+        "shadow": "rgba(255,138,0,0.12)",
+        "sort_order": 13
+    },
+    {
+        "name": {
+            "ar": "موني جرام",
+            "en": "MoneyGram"
+        },
+        "owner": {
+            "ar": "سيرف فايف لخدمات التسويق الالكتروني",
+            "en": "Serv5 for e-marketing services"
+        },
+        "account": {
+            "ar": "تواصل مع الادارة",
+            "en": "Contact the administration"
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2019\/01\/137.jpg",
+        "type": "transfer",
+        "country": "ksa",
+        "brand_color": "from-[#b71c1c] to-[#d32f2f]",
+        "shadow": "rgba(255,138,0,0.12)",
+        "sort_order": 14
+    }
+]

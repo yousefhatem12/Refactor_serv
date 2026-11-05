@@ -2,10 +2,17 @@
 
 namespace App\Models;
 
+use App\Traits\ClearsApiCache;
 use Illuminate\Database\Eloquent\Model;
 
 class Testimonial extends Model
 {
+    use ClearsApiCache;
+
+    protected static function apiCacheScopes(): array
+    {
+        return ['testimonials'];
+    }
     protected $fillable = ['client_name', 'position', 'review', 'image', 'is_active', 'rating', 'video_url', 'audio_url'];
 
     protected $casts = [

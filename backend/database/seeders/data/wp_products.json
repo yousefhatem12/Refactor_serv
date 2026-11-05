@@ -1,0 +1,882 @@
+[
+    {
+        "slug": "classifieds-website-script",
+        "name": {
+            "ar": "موقع اعلانات مبوبة",
+            "en": "Classifieds Website Script"
+        },
+        "category": {
+            "ar": "مواقع إعلانات مبوبة",
+            "en": "Classifieds & Marketplaces"
+        },
+        "title": {
+            "ar": "موقع اعلانات مبوبة من شركة سيرف فايف",
+            "en": "Classified Ads Website Script from Serv5 by Serv5"
+        },
+        "description": {
+            "ar": "موقع اعلانات مبوبة من شركة سيرف فايف\nموقع اعلانات مبوبة ,هي الوسيله الافضل لبيع المنتجات المستعمله و الجديده ,و عرض وطلب المنتجات بكل سهولة ,\nو هي الوسيله الاكثر انتشارا بين الوسائل الاخرى حيث تعد هي وسيلة الاتصال بين كل من البائع و المشتري حيث\nتمكن كل من البائع بعرض منتجاته على موقع اعلانات مبوبة باى طريقه وعرض جميع مواصفاتها سواء كانت مستعمله,\nاو جديده ,كما تمكن المشترى ايضاَ من عرض رغبته في الحصول على منتج محدد حال لم يجده في الاسواق العاديه,\nاو في مواقع التسوق المختلفة , تمتع بكل ما هو جديد من شركة سيرف فايف لخدمات الويب و تطبيقات الجوال والتسويق\nالإلكترونى والدعايا والإعلان .\nمميزات موقع اعلانات مبوبة\nيتميز الموقع بانه يكون بشكل مجاني ايضاً توجد بعض المزايا التى توفرها بعض المواقع و هي الاعلانات المدفوعه ,\nو هي تمكن البائع من الوصول الى شريحه اوسع واكبر على تلك المواقع عبر تميز الاعلان ,و موقع اعلانات مبوبة\nيعطى مساحه اكبر للظهور على الموقع ,و تكون تلك الخدمه بمقابل مالى ولكن ليس بالضخم ومن هذه المواقع\nهو الاسكريبت الخاص بشركة سيرف فايف .\nاسكربت خاص بموقع اعلانات مبوبة سيرف فايف serv5\nاسكربت موقع اعلانات مبوبة من شركة سيرف فايف مشابه لاسكربت حراج واولكس هو اسكريبت لعمل اعلانات\nسواء مجانية او مدفوعة ,و متابعه الاعلانات كما ان موقع اعلانات مبوبة يتميز عن المواقع الاخرى بميزة مهمة ,\nوهى امكانيه العمل به ,والحصول على فائدة مالية من خلاله عن طريق نشر الروابط على موقعك ,و منها يمكن\nالحصول على الفائده المالية وهناك ميزه اخرى هى لوحة التحكم الخاصة بك كزائر يمنك منها اضافة الاعلانات ,\nومتابعتها ,ومتابعة زياراتك اتصل الآن للحصول على الاسكربت الخاص بموقع اعلانات مبوبة جودة فى\nالتصميم و برمجة و حماية قوية وسرعة 100% تمتع بكل ما هوه جديد من شركة سيرف فايف لخدمات الويب \nوتطبيقات الجوال و التسويق الإلكترونى والدعايا و الإعلان و موقع اعلانات مبوبة .\n\nتواصل معنا على الرقم الموحد 00201288863631\n ",
+            "en": "A complete classified ads website script from Serv5—the best platform for buying and selling new and used products easily, connecting sellers and buyers directly with advanced control panels."
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/screencapture-sa7sa7-2018-07-15-14_40_49.png",
+        "demo_link": "http:\/\/sa7sa7.com\/",
+        "order_link": "\/request-quote",
+        "features": {
+            "ar": [
+                {
+                    "title": "خوادم تعمل بنسبة تصل إلى 99‪.99%‬",
+                    "desc": "سرعة تصل الى 100% وتوافق مع محركات البحث"
+                },
+                {
+                    "title": "سهولة التحكم والعرض",
+                    "desc": "سهولة لوحة التحكم بلنسبة للبائع العميل ولوحة خاصة لمعرفه نشاطاتك"
+                },
+                {
+                    "title": "سهولة الشراء والبيع",
+                    "desc": "سهولة تصفح الموقع ومعلومات كاملة وكافة التفاصيل عن المنتج المراد شراؤه"
+                },
+                {
+                    "title": "متوافق مع جميع الشاشات",
+                    "desc": "يمكن عرضه باحجام مختلفه تتناسب مع جميع شاشات اللاب توب والموبايل والتابلت"
+                }
+            ],
+            "en": [
+                {
+                    "title": "99.99% Uptime Servers",
+                    "desc": "Up to 100% speed optimization and full search engine (SEO) compatibility."
+                },
+                {
+                    "title": "Easy Control & Display",
+                    "desc": "Intuitive control panel for both sellers and buyers with dedicated activity tracking."
+                },
+                {
+                    "title": "Seamless Buying & Selling",
+                    "desc": "Smooth browsing experience with comprehensive product details and direct communication."
+                },
+                {
+                    "title": "Fully Responsive Design",
+                    "desc": "Adapts seamlessly across all desktop, laptop, tablet, and smartphone screens."
+                }
+            ]
+        },
+        "tech_specs": [
+            "PHP",
+            "Laravel",
+            "MySQL",
+            "Bootstrap",
+            "REST API",
+            "SEO Ready"
+        ],
+        "why_choose_us": {
+            "ar": "موقع اعلانات مبوبة , هي الوسيله الافضل لبيع المنتجات المستعمله و الجديده ,و عرض وطلب المنتجات بكل سهولة ,و هي الوسيله الاكثر انتشارا بين الوسائل الاخرى .",
+            "en": "A complete, production-ready software solution engineered by Serv5 with 24\/7 technical support and full customization."
+        },
+        "samples": [
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/screencapture-sa7sa7-2018-07-15-14_40_49.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/screencapture-sa7sa7-2018-07-15-17_01_41.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/screencapture-sa7sa7-2018-07-15-17_02_24.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/screencapture-sa7sa7-2018-07-17-10_59_41.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/screencapture-sa7sa7-2018-07-17-10_59_59.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/screencapture-sa7sa7-2018-07-17-11_00_23.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/screencapture-sa7sa7-2018-07-17-11_01_17.png"
+        ],
+        "is_active": true
+    },
+    {
+        "slug": "watch-and-earn-script",
+        "name": {
+            "ar": "اسكربت شاهد و اربح للربح من الانترنت",
+            "en": "Watch & Earn Script"
+        },
+        "category": {
+            "ar": "منصات الربح والفيديو",
+            "en": "Video & Monetization Platforms"
+        },
+        "title": {
+            "ar": "اسكربت شاهد و اربح للربح من الانترنت من شركة سيرف فايف",
+            "en": "Watch & Earn Online Monetization Script by Serv5"
+        },
+        "description": {
+            "ar": "اسكربت شاهد و اربح للربح من الانترنت :\nاسكربت شاهد و اربح من شركة سيرف فايف\nيمكنك من خلال اسكربت شاهد و اربح ذياده ارباحك من خلال مشاهدة الزوار فيديوهات قناتك ولكن بطريقه جديده تضمن اليك ربح اعلى.\nنظام النقاط التى يفوز بها العضو لمشاهده و رفع و تسجيل الدخول لموقعك اللتى يمكن ان يصرفها بعد ذلك كنقود بعده طرق للصرف\nسهله  و هذا يضمن للموقع الكثير من الزوار.\nربط الموقع بقناتك على الانترنت لزياده عدد المشاهدين على القناه و على الموقع ويمكنك اضافة الاعلانات على الموقع بكل سهوله,\nو التحكم فى اماكن ظهورها بالموقع لزياده الربح من الاعلانات على الفيديو و الموقع مثل GoogleAds وغيرها.\nوهذا شرح للأسكربت ولوحه التحكم:\nالحساب الشخصي للمستخدم:\nاسكربت شاهد و اربح من شركة سيرف فايف\n\nلوحة بسيطة تعرض معلومات العضو الشخصية مع امكانية عرض جميع تفاعلات العضو على الموقع مثل : المتابعين,عدد الفيديوهات\nالتى شاركها العضو , اجمالى المشاهدات , و عدد النقاط التى ربحها العضو ,وكل ما يخص العضو .\nالمحفظه:\nتمكن العضو من معرفة عدد النقاط و كم تساويها من النقود و صرف النقاط عند وصولها للحد المسموح الذى تحدده الاداره كما\nتوجد طرق عديده للصرف .\nاضافة سهلة للفيديوهات:\nاسكربت شاهد و اربح من شركة سيرف فايف\nمن خلال خطوات بسيطة يمكن للعضو اضافة الفيديو من نموذج سهل الإستخدام فقط رابط الفيديو و القسم المراد النشر به,\nو سوف يكون الفيديو متاح على الموقع عندما توافق عليه الاداره.\n \n--[ لوحة الإدارة ]--\nتحتوي لوحة التحكم على مجموعة من الإعدادات المختلفة، تمكنك من التحكم في الموقع من محتوى وعضويات\nبشكل تفصيلي وسهل الإستخدام.\nالأعضاء:\nاسكربت شاهد و اربح من شركة سيرف فايف\nستتمكن من التحكم في العضويات الحالية بالموقع [تنشيط، ايقاف]  مع امكانية تعديل البيانات او حذف العضوية\nبشكل كامل و جميع بيانات الاعضاء .\n\nالإدارة:\nنظام خاص يسمح لك بإضافة عضويات إدارية لإدارة الموقع والتحكم به.\nالفيديوهات:\nاسكربت شاهد و اربح من شركة سيرف فايف\nتمكنك الإعدادات من التحكم في الفيديوهات المنشورة بالموقع، من حيث التفعيل والإيقاف او تعديل البيانات الخاصه بالفيديو .\nتمكنك بيانات الفيديو من التحكم في الفيديوهات المنشورة بالموقع، من حيث التفعيل والإيقاف او تعديل البيانات الخاصه بالفيديو\nالاعلانات:\nيمكنك اضافة الاعلانات لموقعك بكل سهوله والتحكم فى اماكن ظهورها فى الصفحات ومن يطهر له الاعلانات .\nالإعدادات:\nاسكربت شاهد و اربح من شركة سيرف فايف\nمجموعة مختلفة من الإعدادات المناسبة لمعلومات الموقع العامة،\nصفحات خاصة بشروط الخصوصية، وشروط الإستخدام بدعم اللغتين.\nصفحة خاصة بالتحكم في روابط الشبكات الإجتماعية الخاصة بالموقع.\nصفحه خاصه للتحكم باعدادات النقاط و اسعارها و الحد الادنى لصرف النقاط .\nشعار الموقع، اسم الموقع، البريد الإلكتروني الرسمي، معلومات\nالميتا تاج والكلمات الدلالية، الخاصه بمحركات البحث.\nالأقسام:\nيمكنك اداره اقسام الموقع يسهوله تامه من اضافه و تعديل و حذف الاقسام .\nالبريد الوارد:\nاسكربت شاهد و اربح من شركة سيرف فايف\nلاداره البريد الالكترونى الرسمى المربوط بالاسكربت .\nطلبات الدفع:\nلأداره طلبات الدفع للزوار و الاعضاء لتفاعلهم على الموقع ويتم الدفع بطرق عديديه مثل PayPal , BitCoin , تحويل رصيد , تعاملات بنكيه .",
+            "en": "Maximize your channel and platform revenue with the Watch & Earn script from Serv5. Includes a smart points and rewards system where visitors earn points by watching videos and redeem them for prizes."
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/ieRd5vg.png",
+        "demo_link": "https:\/\/tube4ads.com\/",
+        "order_link": "\/request-quote",
+        "features": {
+            "ar": [
+                {
+                    "title": "التصميم حسب الطلب",
+                    "desc": "يمكننا تغير التصميم على حسب متطلباتك بتكلفه : 1500 ريال"
+                },
+                {
+                    "title": "تطبيق اندرويد",
+                    "desc": "يمكننا عمل تطبيق للاندرويد بتكلفه : 2000 ريال"
+                },
+                {
+                    "title": "تطبيق ايفون",
+                    "desc": "وتطبيق للايفون بتكلفه : 2500 ريال"
+                }
+            ],
+            "en": [
+                {
+                    "title": "Custom Design Options",
+                    "desc": "Tailor the visual design and branding to match your exact requirements."
+                },
+                {
+                    "title": "Android Mobile App",
+                    "desc": "Dedicated Android application support for watching and earning on the go."
+                },
+                {
+                    "title": "iOS iPhone App",
+                    "desc": "Full iOS application support for iPhone and iPad users."
+                }
+            ]
+        },
+        "tech_specs": [
+            "PHP",
+            "Laravel",
+            "MySQL",
+            "YouTube API",
+            "Android",
+            "iOS"
+        ],
+        "why_choose_us": {
+            "ar": "اسكربت شاهد و اربح , يمكنك من خلال اسكربت شاهد و اربح ذياده ارباحك من خلال مشاهدة الزوار فيديوهات قناتك بطريقه جديده تضمن اليك ربح اعلى من شركة سيرف فايف .",
+            "en": "A complete, production-ready software solution engineered by Serv5 with 24\/7 technical support and full customization."
+        },
+        "samples": [
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/FEWtI1y.jpg",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/HQseZMT.jpg",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/HYC3kyp.jpg",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/iEiZQzo.jpg",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/ieRd5vg.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/IHrZ2Yj.jpg",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/p8S4jLB.jpg",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/RVMkYLt.jpg"
+        ],
+        "is_active": true
+    },
+    {
+        "slug": "mobile-apps-market",
+        "name": {
+            "ar": "سوق تطبيقات الجوال",
+            "en": "Mobile App Store Market"
+        },
+        "category": {
+            "ar": "متاجر التطبيقات الرقمية",
+            "en": "App Marketplaces"
+        },
+        "title": {
+            "ar": "سوق تطبيقات الجوال من شركة سيرف فايف",
+            "en": "Mobile Applications Marketplace Script by Serv5"
+        },
+        "description": {
+            "ar": "سوق تطبيقات الجوال :\nسوق تطبيقات الجوال ,يمكنك الآن الحصول على متجر إلكتروني للتطبيقات، يسمح للزوار الإشتراك واضافة تطبيقاتهم الخاصه لأجهزة Andoid و iOS وبيعها من خلال الموقع او تقديمها بشكل مجاني .\nخدمة احترافية ذات مستوى مع نظام آلي للدفع الإلكتروني من باي بال [يمكن اضافة بوابات دفع اخرى] وخصم عمولة الموقع بشكل آلي .\nبساطة في العرض وسرعة في الأداء، وسهولة في التحكم في كامل اعدادات الموقع .\nالإعدادات:\nاهم مزايا خدمة سوق تطبيقات الجوال من شركة سيرف فايف\n\nشعار الموقع، اسم الموقع، البريد الإلكتروني الرسمي، معلومات الميتا تاج والكلمات الدلالية، الخاصه بمحركات البحث.\nصفحة خاصة للتحكم بمحتوى الصفحات الرئيسية، كوصف خدمة iOS او خدمة Android أو صفحة الدفع بواسطة PayPal.\nيتميز سوق تطبيقات الجوال من شركة سيرف فايف بمجموعة مختلفة من الإعدادات المناسبة لمعلومات الموقع العامة.\nيتميز سوق تطبيقات الجوال من شركة سيرف فايف بصفحات خاصة بشروط الخصوصية، وشروط الإستخدام بدعم اللغتين.\nيتميز سوق تطبيقات الجوال من شركة سيرف فايف بصفحة خاصة بمعلومات إستقبال الأموال الخاصه بـ باي بال، ونسبة الموقع.\nيتميز سوق تطبيقات الجوال من شركة سيرف فايف بصفحة خاصة بالتحكم في روابط الشبكات الإجتماعية الخاصة بالموقع.\n\nاضافة سهلة للتطبيقات:\nمن خلال خطوات بسيطة يمكن للعضو اضافة تطبيقة الخاص من نموذج سهل الإستخدام.\nيقوم العضو بإضافة كافة بيانات التطبيق من صور وسعر ووصف وبعض المعلومات الفنية كنوع الإصدار المناسب واصدار نسخة التطبيق نفسها.\nعرض بسيط للتطبيق:\nيتم عرض التطبيق في المتجر ببساطة وشكل مميز، مع عرض تقييمات المستخدمين.\nالتطبيقات الأعلى تقييماً:\nسوق تطبيقات الجوال من شركة سيرف فايف\nيتم عرض التطبيقات الأعلى تقييما في الموقع في صفحة عرض التطبيق بشكل رائع.\n--[ لوحة الإدارة ]--\nتحتوي لوحة التحكم على مجموعة من الإعدادات المختلفة، تمكنك من التحكم في الموقع من محتوى وعضويات بشكل تفصيلي وسهل الإستخدام.\nالأعضاء:\nسوق تطبيقات الجوال من شركة سيرف فايف\nستتمكن من التحكم في العضويات الحالية بالموقع [تنشيط، ايقاف] والتأكد من حالة العضويات [هل تم تفعيلها من خلال البريد الإلكتروني ام لا] مع امكانية تعديل البيانات او حذف العضوية بشكل كامل.\nالإدارة:\nنظام خاص يسمح لك بإضافة عضويات إدارية لإدارة الموقع والتحكم به.\nالتطبيقات:\nسوق تطبيقات الجوال من شركة سيرف فايف\nتمكنك الإعدادات من التحكم في التطبيقات المنشورة بالموقع، من حيث التفعيل والإيقاف أو تعديل البيانات الخاصه بالتطبيق، كما نوفر صفحة خاصه لأنظمة التشغيل Android و iOS ,كما يوجد صفحة خاصه لعرض التطبيقات التي تنظر النشر لمراجعتها دفعة واحده بدون البحث في معلومات التطبيقات الكاملة.\nالتصنيفات:\nيمكنك اضافة تصنيفات مختلفة باللغتين العربية والإنجليزية، مع انظمة التشغيل الخاصه Android او iOS، كما ستتمكن من اضافة تصنيفات فرعية منها.\nاعدادات السلايدر:\nسوق تطبيقات الجوال من شركة سيرف فايف\nإمكانية اضافة المحتوى الذي ترغب به للسلايدر الرئيسي للموقع بدعم اللغتين، امكانية وصف عنوان للسلايد، ووصف نصي مع صورة للتطبيق وروابط التحميل .\nالبريد الوارد:\nصفحة مميزة لعرض كافة الرسائل الوارده للموقع من خلال نموذج اتصل بنا، حيث يقوم بعرض قائمة الرسائل وبيانات المرسل كاملة، مع امكانية الحذف لكل رسالة .",
+            "en": "Launch your own online application store allowing developers and visitors to register, upload their Android and iOS apps, and offer them for sale or free download with user ratings and categories."
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/Yo6N26k.jpg",
+        "demo_link": "https:\/\/serv5.com\/portfolio\/",
+        "order_link": "\/request-quote",
+        "features": {
+            "ar": [
+                {
+                    "title": "تغيير التصميم بسهولة",
+                    "desc": "يمكننا تغير التصميم على حسب متطلباتك بتكلفه : 1700 ريال"
+                },
+                {
+                    "title": "تطبيق الاندرويد",
+                    "desc": "يمكننا عمل تطبيق للاندرويد بتكلفه : 2000 ريال"
+                },
+                {
+                    "title": "تطبيق الايفون",
+                    "desc": "وتطبيق للايفون بتكلفه : 2500 ريال"
+                },
+                {
+                    "title": "اضافة سهلة للتطبيقات",
+                    "desc": "من خلال خطوات بسيطة يمكن للعضو اضافة تطبيقة الخاص من نموذج سهل الإستخدام.\nيقوم العضو بإضافة كافة بيانات التطبيق من صور وسعر ووصف وبعض المعلومات الفنية كنوع الإصدار المناسب واصدار نسخة التطبيق نفسها."
+                },
+                {
+                    "title": "عرض بسيط للتطبيق",
+                    "desc": "يتم عرض التطبيق في المتجر ببساطة وشكل مميز، مع عرض تقييمات المستخدمين."
+                },
+                {
+                    "title": "التصنيفات",
+                    "desc": "يمكنك اضافة تصنيفات مختلفة باللغتين العربية والإنجليزية، مع انظمة التشغيل الخاصه Android او iOS، كما ستتمكن من اضافة تصنيفات فرعية منها."
+                }
+            ],
+            "en": [
+                {
+                    "title": "Easy App Submission",
+                    "desc": "Simple step-by-step form for members to upload app icons, screenshots, and download links."
+                },
+                {
+                    "title": "Clean Storefront Display",
+                    "desc": "Showcase applications with user reviews, ratings, and download counters."
+                },
+                {
+                    "title": "Bilingual Categories",
+                    "desc": "Manage unlimited categories in Arabic and English for both Android and iOS platforms."
+                },
+                {
+                    "title": "Responsive & Customizable",
+                    "desc": "Easily customize the theme and expand with native Android and iOS apps."
+                }
+            ]
+        },
+        "tech_specs": [
+            "PHP",
+            "Laravel",
+            "MySQL",
+            "Android",
+            "iOS",
+            "Responsive UI"
+        ],
+        "why_choose_us": {
+            "ar": "سوق تطبيقات الجوال , يمكنك الآن الحصول على متجر إلكتروني للتطبيقات، يسمح للزوار الإشتراك واضافة تطبيقاتهم الخاصه لأجهزة Andoid و iOS وبيعها من خلال الموقع .",
+            "en": "A complete, production-ready software solution engineered by Serv5 with 24\/7 technical support and full customization."
+        },
+        "samples": [
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/cDtQEQG.jpg",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/CQsVSIN.jpg",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/dhZAyqI.jpg",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/gzpC0Wc.jpg",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/IHrZ2Yj-1.jpg",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/o0laXFd.jpg",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/O3gIDSb.jpg",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/p8S4jLB-1.jpg"
+        ],
+        "is_active": true
+    },
+    {
+        "slug": "hosting-companies-script",
+        "name": {
+            "ar": "اسكربت شركات الاستضافة",
+            "en": "Hosting companies script"
+        },
+        "category": {
+            "ar": "إدارة شركات الاستضافة",
+            "en": "Web Hosting Management"
+        },
+        "title": {
+            "ar": "اسكربت شركات الاستضافة من شركة سيرف فايف",
+            "en": "Hosting companies script by Serv5"
+        },
+        "description": {
+            "ar": "اسكربت إداره شركات الاستضافة من سيرف فايف\nاسكربت شركات الاستضافة ,نقدم لكم اليوم قالب مميز لشركات الاستضافه والتصميم ويصلح لجميع خدمات الويب \nالمميزات العامة للسكربت:\nاسكربت شركات الاستضافة\n\nالدعم الفني المتواصل للسكربت علي مدار الساعه من شركة سيرف فايف\nيتمبز اسكربت شركات الاستضافة بالسهولة والسرعة فى الآداء والتعامل .\nيتميز اسكربت شركات الاستضافة بالصداقة مع جميع محركات البحث .\nمن خلال اسكربت شركات الاستضافة يمكنك التحكم بشكل الموقع .\nيتمبز اسكربت شركات الاستضافة بالتطوير الدائم والتحديثات .\nيتواجد بالاسكربت لوحة تحكم خاصة لكل من (العميل - الموظف - المدير) .\nالسكربت شامل لكافة المجالات وليس مقتصر علي مجال واحد فقط .\nحيث يمكن مدير الشركة استخدامه اذا كانت شركته متخصصة بأى مجال .\n\nالفواتير والحسابات:\n\nتنبيه عند وجود أى فاتورة جديدة بالبريد الالكتروني وايضا SMS\nامكانيه التحكم بالفواتير من حيث التعديل والحذف والاضافة و غيرها .\nمن الممكن القيام بمنح موظف خاصية مشاهده خصائص الحسابات .\nامكانيه حجز الطلب من خلال العميل واضافة فاتورة له بصورة اتوماتكيه .\nتمع نظام الفواتير بامكانيه اضافة خصم او اضافة تكلفة ضريبة أو تكلفة اعداد\nاسكربت شركات الاستضافة يتوفر به نظام سهل وبسيط للبحث عن الفواتير\nاسكربت شركات الاستضافة يتوفر به قائمة خاصة للفواتير بانتظار الدفع .\nمن الممكن تصدير الفواتير بصيغ مختلفة مع تحديد اجمالي مبلغ الملف .\nامكانية تصدير حسابات الشركة من بداية تاريخ الي نهاية تاريخ لمعرفة الأرباح .\nاسكربت شركات الاستضافة يتوفر بها إمكانية تصدير فواتير عميل معين .\nانشاء فواتير تلقائيا بمجرد انتهاء الخدمه او قرب انتهاء الخدمه علي حسب ميعاد يتم تحديده من قبل مدير الموقع\n\nالدعم الفني وخدمه العملاء:\nاسكربت شركات الاستضافة من شركة سيرف فايف\n\nالتحكم باضافة عدد لانهائي من اقسام الدعم الفني وامكانيه تعديلهم .\nامكانية ترتيب عرض اقسام الدعم الفني علي حسب رغبتك  التى تريدها .\nامكانيه تخصيص اقسام معينه للموظفين حيث انه اذا كان موظف تصميم علي سبيل المثال فيمكنك منعه من مشاهده تفاصيل الاركان الاخري .\nنظام خاص للردود السريعه حيث يمكن الموظف من ادراج رد من قائمة ردود بصورة سريعه دون الحاجة لكتابته مره اخري مع نظام لإمكانية تحكم المدير بها .\nاسكربت شركات الاستضافة يمكنك من اخفاء أى قسم عن الزوار .\nبمكنك أن تقوم بغلق أى قسم عن اضافة تذاكر مع وضع رسالة للاغلاق .\nتنبيه للموظفين والعميل بوجود تذاكر جديده او ردود جديده .\n\nنظام الاخبار\nاسكربت شركات الاستضافة من شركة سيرف فايف\n\nنظام خاص لاضافة اخبار من قبل مدير الموقع .\nامكانيه التحكم بالأخبار كحذف وتعديل .\nعرض جديد الاخبار بواجهه الموقع .\nنظام ارشيف الأخبار لتصفية الاخبار القديمه .\n\nآراء العملاء:\n\nمنطقة خاصة بآراء العملاء مع امكانيه الغاء هذه الخاصية .\nامكانية منع الزوار من اضافة آراءهم واقتصار ذلك علي العملاء فقط .\nيمكنك أن تقوم بمنع العملاء من اضافة آراء جديدة .\nامكانية مراقبة الآراء وعدم الموافقة عليها الا بعد موافقة الادارة .\nعرض تفاصيل العميل للادارة عند اضافة أى رأي .\n\nمعرض التصاميم :\nاسكربت شركات الاستضافة من شركة سيرف فايف\n\nمعرض خاص لعرض تصاميم الشركة مع امكانية الغاء هذه الخاصية\nامكانية اضافة تصاميم مجانية وتحميلها من قبل الزوار\nامكانية منع الزوار من مشاهده المعرض\nامكانية اغلاق المعرض مع وضع رسالة للاغلاق\nتفاصيل شاملة لكل تصميم تشمل اسم الموقع وسنه التصميم ونوع التصميم\n\nالحسابات البنكية :\nيتميز اسكربت شركات الاستضافة بإمكانية اضافة عدد لانهائي من الحسابات البنكية مع وضع تفاصيل خاصة لكل حساب\nامكانية التعديل علي تفاصيل الحساب من قبل الادارة .\n المنتجات والخدمات:\nمواصفات خاصة ومناسبة لكل خدمه بمعني يختلف مواصفات خدمه الاستضافة عن التصميم ,\nعن غيرها من الخدمات فتسهل علي العميل مشاهده تفاصيل الخدمه الخاصة به دون أى تعب .\nدعم كامل وشامل لمعظم خدمات الشركات بصورة اساسية وليس الاستضافة فقط .\nالتحكم السهل والسريع بخدمات الموقع من اضافة وتعديل وحذف و غيرها .\nتنبيه عند انتهاء الخدمه برسائل بالبريد الالكتروني وايضا .\nنظام سهل للبحث عن الخدمات بالنسبة للموظفينSMS",
+            "en": "Script hosting companies management from Serv5\nScript hosting companies, today we offer you a distinct template for hosting and design companies, suitable for all web services \nGeneral features of the script:\nScript hosting companies\n\nContinuous technical support for the script around the clock from the Serv5 company\nThe script of hosting companies is characterized by ease and speed in performance and handling.\nHosting companies' script is characterized by friendship with all search engines.\nThrough the hosting companies' script, you can control the appearance of the site.\nHosting companies' script is constantly developing and updating.\nThere is a special control panel in the script for each of (client - employee - manager).\nThe script is comprehensive for all fields and is not limited to one domain only.\nWhere the company manager can use it if his company specializes in any field.\n\nInvoices and Accounts:\n\nAlert when there is any new invoice by e-mail and SMS\nThe ability to control invoices in terms of modification, deletion, addition, and others.\nIt is possible to grant an employee the ability to see the characteristics of the accounts.\nThe possibility of reserving the request through the customer and adding an invoice to him automatically.\nThe billing system has the ability to add a discount or add a tax cost or preparation cost\nHosting companies' scripts have an easy and simple system to search for invoices\nThe hosting companies script has a special list of bills awaiting payment.\nIt is possible to export the invoices in different formats with specifying the total amount of the file.\nThe possibility of exporting the company’s accounts from the beginning to the end date to find out the profits.\nScript of hosting companies is available with the ability to export invoices for a specific customer.\nAutomatically create invoices as soon as the service ends or near the end of the service, according to a date to be determined by the site manager\n\nTechnical support and customer service:\nScript hosting companies from Serv5\n\nControl by adding an infinite number of technical support departments and the ability to modify them.\nThe possibility of arranging the display of technical support departments according to your desire.\nThe possibility of allocating specific sections for employees so that if he is a design employee, for example, you can prevent him from seeing the details of other staff.\nA special system for quick responses, which enables the employee to quickly insert a response from a list of responses without the need to write it again with a system for the manager's ability to control it.\nScript hosting companies enables you to hide any section from visitors.\nYou can close any section by adding tickets with a message to close.\nAlert the employees and the customer about the presence of new tickets or new responses.\n\nNews system\nScript hosting companies from Serv5\n\nA special system for adding news by the site manager.\nThe ability to control news as deletion and modification.\nDisplay new news on the front of the site.\nNews archive system to filter old news.\n\nCustomer Reviews:\n\nA special area for customer reviews with the possibility to cancel this feature.\nThe possibility of preventing visitors from adding their opinions and limiting it to customers only.\nYou can block customers from adding new reviews.\nThe ability to monitor opinions and not approve them except after approval of the administration.\nShow customer details for management when adding any opinion.\n\nDesign Gallery:\nScript hosting companies from Serv5\n\nA special exhibition to display the company's designs with the possibility of canceling this feature\nThe possibility of adding free designs and downloading them by visitors\nThe possibility of preventing visitors from viewing the exhibition\nThe possibility of closing the exhibition with a message to close\nComprehensive details of each design, including the site name, year of design, and type of design\n\nBank accounts:\nHosting companies' script is characterized by the ability to add an infinite number of bank accounts, with special details for each account, the \npossibility of modification to the account details by the administration.\n Products and services:\nSpecial and appropriate specifications for each service in a sense that the specifications of the hosting service differ from the design , \nfrom other services, making it easier for the customer to see the details of his service without any fatigue. \nFull and comprehensive support for most companies' services, mainly not just hosting. \nEasy and fast control of the website services from adding, modifying, deleting and others. \nNotice when the service ends with e-mails as well. \nEasy system to search for services for SMS employees"
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/6.png",
+        "demo_link": "https:\/\/serv5.com\/portfolio\/",
+        "order_link": "\/request-quote",
+        "features": {
+            "ar": [
+                {
+                    "title": "امكانيه التحكم بشكل الموقع بسهولة تامة",
+                    "desc": "امكانيه التحكم بشكل الموقع بسهولة تامة"
+                },
+                {
+                    "title": "السهولة والسرعة في التعامل والآداء",
+                    "desc": "السهولة والسرعة في التعامل والآداء"
+                },
+                {
+                    "title": "الدعم الفني المتواصل للسكربت علي مدار الساعه",
+                    "desc": "الدعم الفني المتواصل للسكربت علي مدار الساعه"
+                },
+                {
+                    "title": "السكربت شامل لكافة المجالات وليس مقتصر علي مجال واحد فقط حيث يمكن مدير الشركة استخدامه اذا كانت شركته متخصصة بمجال التصميم او البرمجة أو غيرها علي سبيل المثال",
+                    "desc": "السكربت شامل لكافة المجالات وليس مقتصر علي مجال واحد فقط حيث يمكن مدير الشركة استخدامه اذا كانت شركته متخصصة بمجال التصميم او البرمجة أو غيرها علي سبيل المثال"
+                },
+                {
+                    "title": "صداقة السكربت لمحركات البحث",
+                    "desc": "صداقة السكربت لمحركات البحث"
+                },
+                {
+                    "title": "لوحة تحكم خاصة لكل من (العميل - الموظف - المدير)",
+                    "desc": "لوحة تحكم خاصة لكل من (العميل - الموظف - المدير)"
+                }
+            ],
+            "en": [
+                {
+                    "title": "Easy to control",
+                    "desc": "The ability to control the shape of the site quite easily"
+                },
+                {
+                    "title": "Ease and speed",
+                    "desc": "Ease and speed in handling and performance"
+                },
+                {
+                    "title": "support",
+                    "desc": "Continuous technical support for the script around the clock"
+                },
+                {
+                    "title": "Multipurpose",
+                    "desc": "The script is comprehensive for all areas and is not limited to one area only, as the company’s manager can use it if his company is specialized in the field of design, programming,etc."
+                },
+                {
+                    "title": "SEO Friendly",
+                    "desc": "Script is fully friendly for search engines"
+                },
+                {
+                    "title": "control panels",
+                    "desc": "A special control panel for (customer - employee - manager)"
+                }
+            ]
+        },
+        "tech_specs": [
+            "PHP",
+            "Laravel",
+            "MySQL",
+            "cPanel\/WHM API",
+            "Billing System",
+            "Ticket Desk"
+        ],
+        "why_choose_us": {
+            "ar": "اسكربت شركات الاستضافة , نقدم لكم اليوم قالب مميز لشركات الاستضافه والتصميم ويصلح لجميع خدمات الويب من شركة سيرف فايف لخدمات الويب و التسويق الإلكترونى .",
+            "en": "Hosting companies script, we offer you today a distinctive template for hosting and design companies that is suitable for all web services from Serv5 for web services and e-marketing."
+        },
+        "samples": [
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/10.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/01.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/1.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/02.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/03.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/3-1.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/3.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/04.png"
+        ],
+        "is_active": true
+    },
+    {
+        "slug": "whatsapp-script",
+        "name": {
+            "ar": "اسكربت الواتساب",
+            "en": "Whatsapp script"
+        },
+        "category": {
+            "ar": "أنظمة التسويق والواتساب",
+            "en": "Marketing & WhatsApp Systems"
+        },
+        "title": {
+            "ar": "اسكربت الواتساب من شركة سيرف فايف",
+            "en": "Whatsapp script by Serv5"
+        },
+        "description": {
+            "ar": "لماذا مؤسسة خدماتك serv5.com ..!؟\nاسكربت الواتساب\n\nعزيزي العميل نقدم خدمتنا لك باحتراف و هذا السبب الذى يرشحنا دائما كاختيار أول لتقديم خدمات متميزة ومتطورة بالإضافة إلى ابتكار أفكار جديدة .\nهدفنا الرئيسي هو تقديم مستوى آخر من جودة الخدمة و التي لم يقدمها أحد آخر على الإطلاق ونثابر دائما في الحفاظ علي هذه الصدارة .\nتطوير مستويات الخدمة في كافة المجالات و إدخال خدمات جديدة و مثال\nعلى ذلك اسكربت الواتساب المطروح من مؤسسة خدماتك serv5.com .\nعلى امتداد هذه السنوات قمنا بتحسين المستوى للأفضل بما يناسب المستخدم العربي و مقاييس الويب العربية ،ونحن نتطلع إلى أن نكون الأفضل .\nثقة عملائنا والاعتقاد بأن أهم شيء في الحياة المهنية والعمل هو رعاية العملاء ، وهدفنا الرئيسي هو أن تقدم لهم كل الوسائل الأكثر سهولة والأكثر تميز فى مجالها و أيضا الأكثر ربحا بالنسبة لإستضافة مواقع الإنترنت .\nبعد سنوات من التعاون مع مجموعه كبيرة من المواقع وتقديم خدمات الإنترنت وصلنا إلى أن نكون واحدة من أفضل الشركات المطورة لخدمات الإنترنت و استضافة المواقع وتطبيقات الجوال في الشرق الأوسط .\nانشأ مقر لها في مصر لجعل التعامل أسهل بكثير ويمكن الاعتماد عليه .\nتوفير وسائل كثيرة للدفع التي تشمل أي مكان في الشرق الأوسط .\nتقديم دعم حقيقي في أي وقت و بالطريقة التي تشعر العميل بالراحة .\nلدينا تاريخ طويل في توفير خدمة العملاء الشخصية لعملاء الاستضافة .\n\nاسكربت الواتساب المطور من مؤسسة خدماتك serv5.com .!؟\n\nاسكربت الواتساب نظام متكامل سهل الإستخدام يمكنك من ارسال كميات غير محدودة\nلـ تطبيق الواتس أب بعدد غير محدود وبمميزات إحترافية تطابق المعايير القياسية\nكما يوفر لك اسكربت الوتساب نظام كامل لادارة المشتركين وتوزيع النقاط ومتابعة نتائج الإرسالات و نظام تحليل شامل .\nويسعدنا فريق عمل مؤسسة خدماتك serv5.com لـ نعرض عليكم أجدد مشاريع المؤسسة بتقديم برمجة موقع الواتس اب لـ إرسال الرسائل الجماعية\n\nمميزات لوحة تحكم العضو فى اسكربت الوتساب :\n\nخاصية حاله الارسال فى اسكربت الواتساب ومنها يتم متابعه عملية الارسال\nبرسم بيانى ونسبة كام فى المية متبقى حتى يتم الانتهاء من عملية الارسال .\nنظام تقارير الارسال فيتم صدور تقرير بعد الارسال لمعرفه الارقام التى تم الوصول اليها والارقام التى لم تصل اليها .\nيتميز اسكربت الواتساب بنظام الفلترة و هذا النظام مهم فى لوحة التجكم\nبحيث لو قمنا بإرسلنا 50 رساله ل 10 مجموعات نستطيع فلترة كل مجموعه .\nيتمبز اسكربت الواتساب أيضا بنظام الرسائل الجماعية لكى تتمكن من\nإرسائل الرسائل الجماعيه سواء كانت صوت او صورة او فديو او صوت أو غيرها .\nنظام الرسائل الفردية لارسائل رسائل نصية او صور او صوت او فديو فردى\nيحتوى اسكربت الواتساب على صفحة تعديل البيانات الخاصه بالعضو .\nنظام مشاهدة التذاكر لمعرفه الردود على التذاكر الخاصة بة والمتابعه لها\nنظام كم متبقى من الرصيد الخاص بك وكم مخصوم وكم رساله ارسلتها\nيتميز اسكربت الواتساب بنظام التذاكر الداخلية بين العضو وبين الادارة حتى يكون هناك نظام متابعه من فتح تذكرة للدعم او المبيعات او غير ذلك\nنظام مجموعات الارقام لانشاء مجموعات ارقام كمثال مجموعه العمل بها 5000 رقم مجموعه المنزل بها 1000 رقم بحيث فى عميلة الارسال تكتب الرساله وتختار اسم المجموعه وتقوم بعملية الارسال\nتعديل الباسورد لخاص بالعضو .",
+            "en": "Why your services company serv5.com ..!?\nWhatsApp Script\n\nDear customer, we offer our service to you professionally, and this is the reason that always nominates us as the first choice to provide distinguished and advanced services in addition to creating new ideas.\nOur main goal is to provide another level of service quality that no one else has ever provided, and we always persist in maintaining this fore.\nDeveloping service levels in all fields and introducing new services, an example \nof this is the WhatsApp script offered by your services, serv5.com.\nOver these years we have improved the level for the better to suit the Arab user and Arab web standards, and we look forward to being the best.\nThe confidence of our customers and the belief that the most important thing in professional life and work is customer care, and our main goal is to provide them with all the easiest and most distinctive means in their field and also the most profitable for web hosting .\nAfter years of cooperating with a large group of websites and providing Internet services, we have come to be one of the best developers of Internet services, web hosting and mobile applications in the Middle East.\nEstablished its headquarters in Egypt to make dealing much easier and reliable.\nProviding many means of payment that includes anywhere in the Middle East.\nProvide real support at any time and in the way the customer feels comfortable.\nWe have a long history of providing personalized customer service to our hosting clients.\n\nThe WhatsApp script developed by your services, serv5.com.!?\n\nWhatsApp script is an easy-to-use integrated system that enables you to send unlimited quantities\nFor WhatsApp application with unlimited number and professional features that meet the standard standards\nThe WhatsApp script also provides you with a complete system for managing subscribers, distributing points, tracking the results of transmissions, and a comprehensive analysis system.\nThe serv5.com team of your services is pleased to offer you the latest projects of the organization by providing WhatsApp programming for sending mass messages\n\nFeatures of the member control panel in the WhatsApp script:\n\nThe status of the transmission feature in the WhatsApp script, from which the sending process is followed up with a graph and a percentage of the amount \nremaining until the completion of the sending process.\nThe transmission reports system, and a report is issued after dispatch, in order to know the numbers that have been reached and the numbers that have not been reached.\nWhatsApp script is characterized by a filtering system, and this system is important in the control panel, \nso that if we send 50 messages to 10 groups, we can filter each group.\nThe WhatsApp script also features a group messaging system in order to be able to send group \nmessages, whether it is sound, image, video, voice, or others.\nIndividual messaging system to send individual text messages, pictures, voice or video messages\nThe WhatsApp script contains a page for modifying the member’s data.\nA ticket viewing system to know the responses to your tickets and follow up on them\nSystem of how much balance is left from your account, how much is deducted, and how many messages you sent\nThe WhatsApp script is characterized by the internal ticketing system between the member and the administration so that there is a follow-up system for opening a ticket for support, sales, or otherwise\nNumber groups system to create number groups, for example, the work group has 5000 numbers, the home group has 1000 numbers, so that in the sending client you write the message and choose the group name and the sending process\nChange the password for the member"
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/2386.jpg",
+        "demo_link": "https:\/\/serv5.com\/portfolio\/",
+        "order_link": "\/request-quote",
+        "features": {
+            "ar": [
+                {
+                    "title": "مميزات لوحة تحكم العضو :",
+                    "desc": "حاله الارسال ومنها يتم متابعه عملية الارسال برسم بيانى ونسبة كام فى المية متبقى حتى يتم الانتهاء من عملية الارسال"
+                },
+                {
+                    "title": "مميزات لوحة تحكم الادارة",
+                    "desc": "الاعدادت العامة وبها يمكن تعديل اسم الموقع والكلمات الدليلة ورقم الجوال الخاص بك والاميل الخاص بك"
+                },
+                {
+                    "title": "نظام تعديل مجموعات الاعضاء",
+                    "desc": "نظام تعديل مجموعات الاعضاء"
+                },
+                {
+                    "title": "نظام مشاهدة قائمة التذاكر",
+                    "desc": "نظام مشاهدة قائمة التذاكر"
+                }
+            ],
+            "en": [
+                {
+                    "title": "User Control Panel Features",
+                    "desc": "The status of the transmission, from which the sending process is followed up with a graph and a percentage of the amount in the remaining amount until the completion of the sending process"
+                },
+                {
+                    "title": "Administration Control Panel Features",
+                    "desc": "The general settings, and with it, you can modify the name of the site, the keywords, your mobile number, and your email"
+                },
+                {
+                    "title": "System to amend member groups",
+                    "desc": "System to amend member groups"
+                },
+                {
+                    "title": "View ticket list system",
+                    "desc": "View ticket list system"
+                }
+            ]
+        },
+        "tech_specs": [
+            "PHP",
+            "Node.js",
+            "WhatsApp API",
+            "MySQL",
+            "Analytics",
+            "Bulk Messaging"
+        ],
+        "why_choose_us": {
+            "ar": "اسكربت الواتساب , من شركة سيرف فايف لخدمات الويب و تطبيقات الجوال والتسويق الإلكترونى و الدعايا و الإعلان اطلب الآن نسختك من اسكربت الوتساب .",
+            "en": "The WhatsApp script, from the Serv5 company for web services, mobile applications, e-marketing, advertising and advertising, order your copy of the WhatsApp script now."
+        },
+        "samples": [
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/2386.jpg",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/2387.jpg",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/2388.jpg",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/2389.jpg",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/2390.jpg",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/2391.jpg",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/2392.jpg",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/2394.jpg"
+        ],
+        "is_active": true
+    },
+    {
+        "slug": "hotel-and-flight-reservation-script",
+        "name": {
+            "ar": "اسكريبت حجز الفنادق والطيران",
+            "en": "Hotel and flight reservation script"
+        },
+        "category": {
+            "ar": "حجز الفنادق والطيران والسياحة",
+            "en": "Travel, Hotel & Flight Booking"
+        },
+        "title": {
+            "ar": "اسكريبت حجز الفنادق والطيران من شركة سيرف فايف",
+            "en": "Hotel and flight reservation script by Serv5"
+        },
+        "description": {
+            "ar": "اسكريبت حجز الفنادق والطيران :\nاسكريبت حجز الفنادق والطيران ,تعد مشكلة حجز الفنادق وتذاكر الطيران من أهم المشكلات التي\nتواجه أي شخص يقرر أن يحجز رحلته سواء الفندق او الطيران  عن طريق الإنترنت.\nففكرة حجز غرفة في فندق في دولة أجنبية أمر ليس بالسهل بالاضافة الى ان اختيار الفندق يجب\nان يكون جيد وكذلك شركة الطيران ، فبانتشار مواقع حجز الطيران والفنادق في الآونة الأخيرة، اصبح\nالاختيار صعب ولابد من التاكد من كل شىء قبل البدأ فى الحجز .\nاسكريبت حجز الفنادق وتذاكر الطيران من شركة سيرف فايف فنحن نقدم لك أحدث حلول\nالحجز عبر الإنترنت في السوق العالمى سوف يتمتع مستخدمى الجوال و الأجهزة اللوحية و الكمبيوتر\nالمحمول و سطح المكتب بتجربة مخصصة و مميزة جدا أثناء تصفح بوابة السفر الخاصة بنا ,نحن نفتخر\nبتقديم خدمة السفر مع التكنولوجيا .\nمميزات اسكريبت حجز الفنادق والطيران :\n\nالدعم فريق دعم كامل مميز بخبرته و مخصص لكى يتتبع التواصل و\nمساعدتك بواسطة Skype و Whatsapp و نظام تذاكر مفتوح 24 ساعة .\nمتعدد اللغات من خلال القدرة على إضافة أو تعديل أو تخصيص أي لغة حسب\nمتطلباتك فمتاح لدينا الإصداران RTL و LTR  بالإضافة إلى أنه قابل ببتعديل .\nمتوفر به الحماية الكاملة لخصوصياتك نحن نأخذ الأمن على محمل الجد .\nالإستجابة مع جميع الأجهزة وإعطاء مظهر مميز و جذاب و ثابت .\nالمرونة من خلال تقنيتنا المبسطة نمنحك مستوى تحكم فى بأعلى درجات\nالإستقرار بالإضافة إلى أنه سهل الإستخدام و سريع سهل الفهم و الإدارة .\nالتخصيص حيث يتيح لك محرك قوالب مرن و قوي و العديد من الخيارات\nالمدمجة بالإضافة إلى إمكانية تخصيص النظام بالكامل لاحتياجاتك .\nعرض جميع المعلومات الخاصة بالفندق من حيث عدد النجوم و مالك الفندق .\nعرض اشكال الغرف الفارغة والاضافات بها واوقات التى تكون فارغة بها .\nعرض جميع وسائل الراحة الخاصة بالفندق ساء الداخليه داخل الغرف او الخارجية\nخارج الغرف مثل spa وغيره\nطرق الدفع عن طريق فيزا و ماستر كارد و بيبال و البنوك السعودية و مانى\nجرام و ويستيرن ينيون.\nمفتوح المصدر حيث تم تطويره بإستخدام أحدث التقنيات الموجودة  PHP و\nJS و JQUERY و BOOTSTRAP  و HTML5 و Codeigniter بالإضافة إلى كود\nالتشفير HMVC .\n\nمميزات اسكريبت حجز الفنادق والطيران من حيث تذاكر الطيران :\n\nيعرض لك الشركة الخاصة بالحجز .\nارسال رسالة تأكيد على الحجز .\nعرض مميزات كل شركة والخصومات والكوبونات المتاحة اثناء الحجز .\n\nاسكريبت حجز الفنادق الطيران من افضل الاسكريبتات التى تزودك بجميع المعلومات الخاصة بالفنادق او الطيران حتى تكون على دراية تامة بكل المعلومات ووسائل الراحة ولا يتم خداعك\nفيديو يوضح لوحة التحكم وطريقة التعامل معاها\nserv5",
+            "en": "Hotel and flight reservation script:\nHotel and flight reservation scripts, the problem of hotel reservation and airline tickets is one of the most important problems \nfacing anyone who decides to book his flight, whether hotel or flight, via the Internet.\nThe idea of ​​reserving a hotel room in a foreign country is not easy, in addition to that the choice of the hotel must \nbe good, as well as the airline company, so with the proliferation of airline and hotel reservation sites in recent times, the \nchoice has become difficult and everything must be confirmed before starting the reservation.\nHotel reservation scripts and airline tickets from Serv5 . We provide you with the latest \nonline booking solutions in the global market. Mobile , tablet, \nlaptop and desktop users will enjoy a very special and customized experience while browsing our travel portal , we are proud \nto provide a service Traveling with technology.\nAdvantages of hotel and flight booking script :\n\nThe support is a fully experienced support team dedicated to tracking communication and \nhelping you with Skype, Whatsapp, and a 24-hour ticketing system.\nMultilanguage by being able to add, modify or customize any language according to \nyour requirements, so we have RTL and LTR versions in addition to it is subject to modification.\nProvides full protection for your privacy We take security very seriously.\nResponding with all devices and giving a distinctive, attractive and stable appearance.\nFlexibility Through our simplified technology, we give you a level of control with the highest degree of \nstability, in addition to being easy to use, fast, easy to understand and manage.\nCustomization as it allows you to a flexible and powerful template engine and many \nbuilt-in options in addition to the ability to fully customize the system to your needs.\nDisplay all hotel information in terms of the number of stars and the owner of the hotel.\nDisplay the shapes of empty rooms, the additions in them, and the times in which they are empty.\nShow all the amenities of the hotel, whether internal inside the rooms or external \noutside the rooms, such as spa and others\nPayment methods are via Visa, MasterCard, Paypal, Saudi banks \n, Money Gram and Western Union.\nOpen source as it was developed using the latest technologies in PHP, \nJS, JQUERY, BOOTSTRAP, HTML5, and Codeigniter in addition to the \nHMVC codec.\n\nAdvantages of the hotel and flight reservation script in terms of airline tickets:\n\nShows your company for the reservation.\nSend a confirmation message to your reservation.\nShow each company’s features, discounts and coupons available during booking.\n\nFlight hotel reservation script is one of the best scripts that provide you with all hotel or flight information so that you are fully aware of all the information and amenities and you are not deceived.\nA video explaining the control panel and how to deal with it\nserv5"
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/15.jpg",
+        "demo_link": "https:\/\/tourism.serv5group.com\/",
+        "order_link": "\/request-quote",
+        "features": {
+            "ar": [
+                {
+                    "title": "خوادم تعمل بنسبة تصل إلى 99‪.99%‬",
+                    "desc": "سرعة تصل الى 100% وتوافق مع محركات البحث"
+                },
+                {
+                    "title": "سهولة التحكم والعرض",
+                    "desc": "سهولة لوحة التحكم بلنسبة للبائع العميل ولوحة خاصة لمعرفه نشاطاتك"
+                },
+                {
+                    "title": "سهولة التعامل",
+                    "desc": "عرض جميع المغلومات الخاصة بالفندق من حيث عدد النجوم الموقع ومالك الفندق ."
+                },
+                {
+                    "title": "افضل الاسعار",
+                    "desc": "تقديم افضل الاسعار الخاصة بالفنادق والطيران"
+                },
+                {
+                    "title": "تفاصيل الفنادق والطيران",
+                    "desc": "عرض جميع وسائل الراحة الخاصة بالفندق ساء الداخليه داخل الغرف او الخارجية خارج الغرف"
+                },
+                {
+                    "title": "متوافق مع جميع الشاشات",
+                    "desc": "متوافق مع جميع شاشات العرض والموبايل والتابلت"
+                },
+                {
+                    "title": "توافر الدعم",
+                    "desc": "فريق دعم مميز بخبرته لكى يتتبع التواصل و مساعدتك بواسطة Skype و Whatsapp"
+                },
+                {
+                    "title": "المرونة و السهولة",
+                    "desc": "من خلال تقنيتنا المبسطة نمنحك مستوى تحكم فى بأعلى درجات الإستقرار"
+                },
+                {
+                    "title": "متعدد اللغات",
+                    "desc": "من خلال القدرة على إضافة أو تعديل أو تخصيص أي لغة حسب متطلباتك"
+                },
+                {
+                    "title": "التخصيص",
+                    "desc": "حيث يتيح لك محرك قوالب مرن و قوي و العديد من الخيارات المدمجة"
+                }
+            ],
+            "en": [
+                {
+                    "title": "Servers up to 99.99% working time",
+                    "desc": "Up to 100% speed and search engine compatibility"
+                },
+                {
+                    "title": "Ease of control and display",
+                    "desc": "Ease of the control panel for the customer seller and a special panel to know your activities"
+                },
+                {
+                    "title": "Ease of handling",
+                    "desc": "Display all hotel information in terms of number of stars, location and hotel owner."
+                },
+                {
+                    "title": "best price",
+                    "desc": "Providing the best hotel and aviation prices"
+                },
+                {
+                    "title": "Hotel and flight details",
+                    "desc": "Show all the amenities of the hotel, whether internal inside the rooms or external outside the rooms"
+                },
+                {
+                    "title": "Compatible with all screens",
+                    "desc": "Compatible with all displays, mobiles and tablets"
+                },
+                {
+                    "title": "Support",
+                    "desc": "An experienced support team to track your communication and help you with Skype and Whatsapp"
+                },
+                {
+                    "title": "Flexibility and ease",
+                    "desc": "Through our simplified technology, we give you a level of control with the highest degree of stability"
+                },
+                {
+                    "title": "multilanguage",
+                    "desc": "By being able to add, modify or customize any language as per your requirements"
+                },
+                {
+                    "title": "Customization",
+                    "desc": "It provides you with a flexible and powerful mold engine and many built-in options"
+                }
+            ]
+        },
+        "tech_specs": [
+            "PHP",
+            "Laravel",
+            "MySQL",
+            "Multi-Language",
+            "Payment Gateways",
+            "OTA Engine"
+        ],
+        "why_choose_us": {
+            "ar": "اسكريبت حجز الفنادق والطيران , فنحن نقدم لك أحدث حلول الحجز عبر الإنترنت في السوق العالمى سوف يتمتع مستخدمى الجوال و الأجهزة اللوحية و الكمبيوتر المحمول .",
+            "en": "Hotel and flight reservation scripts, we provide you with the latest online booking solutions in the global market that mobile, tablet and laptop users will enjoy."
+        },
+        "samples": [
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/11.jpg",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/12.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/13.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/14.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/15.jpg",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/16.jpg",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/17.jpg",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/07\/18.jpg"
+        ],
+        "is_active": true
+    },
+    {
+        "slug": "talabi-script-for-food-orders",
+        "name": {
+            "ar": "اسكربت طلبى لطلبات الطعام",
+            "en": "Talabi script for food orders"
+        },
+        "category": {
+            "ar": "الطلب الذاتي وتوصيل المطاعم",
+            "en": "Restaurant & Food Delivery"
+        },
+        "title": {
+            "ar": "اسكربت طلبى لطلبات الطعام من شركة سيرف فايف",
+            "en": "Talabi script for food orders by Serv5"
+        },
+        "description": {
+            "ar": "اسكربت طلبى لطلبات الطعام من\nشركة سيرف فايف الاحترافية :\nاسكربت طلبى لطلبات الطعام هو اسكربت خاص لطلبات الطعام من المطاعم المتاحة به و يتكون\nمن موقع و تطبيق اندرويد و تطبيق ايفون حيث انه يتوفر به :\n1-الصفحة الرئيسية تحتوى فى أعلاها على أيقونات تحميل تطبيقات الاندرويد و الايفون و أرقام التواصل و الايميل الخاص\nبالموقع و تتوفر خانة البحث باختيار المدينة و اختيار نوع المطبخ سواء عربى او هندى او غيره ثم عرض\nالمطاعم المتوفرة .\n2-يقوم العميل باختيار المطعم المرغوب فيه فتظهر له معلومات عن المطعم و قائمة الوجبات و التقييمات و بيانات المطعم .\n3-بيانات المطعم تحتوى على الحد الأدنى للطلب و مواعيد عمل المطعم و الوقت المستغرق فى توصيل الطلب و تكلفة\nالتوصيل و هل يتوفر به خواص استقبال لطلبات لاحقا و كى نت و الدفع عند الاستلام و البطاقات الائتمانية\nو التصنيفات الخاصة بالمطعم سواء عربي او هندى او غيره .\n4-عند القيام باختيار الوجبة المفضلة لديك تظهر لك معلومات الوجبة و يمكنك كتابة اى ملاحظات تريدها فى الوجبة ثم\nإضافة إلى سلة الشراء فيتوفر به دفع مباشر عند الاستلام و دفع اونلاين بالفيزا و دفع من خلال بنوك الدولة .\n5-يجب تحدد العنوان و طريقة الدفع و التمكن من اضافة عنوان جديد برقم المنزل و الشقة والشارع و هكذا و يتيح لك\nاسكربت طلبى لطلبات الطعام اضافة العنوان على الخريطة من خلال الموقع او التطبيقات ثم يتم عمل\nتأكيد للطلب فيوصل الطلب إلى المطعم .\n6-يتوفر فى الصفحة الرئيسية صفحات الشروط  الاحكام الخاصة بالموقع و من نحن و سياسة الخصوصية .\n7-التمكن من إضافة بنرات خاصة للمطاعم المميزة او  الاكثر تقيما فى الصفحة الرئيسية للموقع .\n8-التمكن من مشاهدة جميع الطلبات التى طلبتها من المطعام فى قائمة طلباتى .\n9-صفحة الدعم الفنى التى يتوفر بها شات لايف مع الدعم الفنى لموقع .\n10-صفحة الاتصال بنا التى يتوفر بها فورمة ارسال مباشرة إلى الادارة .\nشرح لوحة تحكم اسكربت طلبى لطلبات الطعام الخاصة بالموقع و التطبيقين\nو تنقسم لوحة التحكم إلى :\nأولا لوحة الادارة  :\n1-إضافة عدد لا نهائى من الدول الجديدة من خلال اضافة اسم الدولة بالعربى و الانجليزى و كود الدولة و اسم العملة و صورة علم الدولة .\n2-إضافة عدد لا نهائى من المحافظات الجديدة من خلال إضافة اسم المحافة بالعربى و الانجليزى و الدولة التى تقع بها المحافظة .\n3-إضافة عدد لا نهائى من تصنيفات المطاعم سواء عربى او هندى او مشويات او أسماك و غيرها و التصنيف باللغتين عربى و انجليزى .\n4-إضافة عدد لا نهائى أيضا من تصنيفات الوجبات و يتم إضافته بالعربى و الانجليزى او عربى فقط .\n5-التمكن من إرسال الإشعارات  لجميع الأشخاص الى بيتوفر عندها التطبيق و التمكن من تحيد دولة معينة و تحديد انظمة\nالتشغيل سواء ايفون او اندرويد التى سوف يصلها الاشعار ثم كتابة التنبيه بالعربى و الانجليزى .\n6-صفحة حسابات الشركات التى تتمكن من خلالها من إضافة حساب جديد لمطعم او لأى شخص فتحدد دولة\nالمطعم و اسمه و اسم المستخدم و كلمة المرور و البريد الإلكترونى و رقم الهاتف و صورة ان وجد .\n7-تعيين مجموعات من المشرفين و تحديد صلاحيات لكل مجموعة مشرفين و البلاد التى يقومون بالإشراف عليها .\n8-تعيين موظفين جدد و إختيار مجموعة المشرفيين التى تيم إضافة الموظف فيها و الايميل الخاص به و العضوية .\n9-صفحة الدعم الفنى التى تتيح لك إضافة سؤال و جواب باللغة العربية و الانجليزية مع تحديد الاقسام .\n10-صفحة الأعضاء التى تتمكن من خلالها من رؤية جميع الأعضاء الموجودين بالموقع و التطبيق .\n11-تتمكن من التطلع على الايميلات التى قامت بالتسجيل فى النشرة البريدية .\n12-تتمكن من التطلع على الرسائل التى وصلت من فورمة التواصل معنا .\n13-إضافة عدد لا نهائى من الصفحات باللغة العربية و الانجليزية .\n14-صفحة المطاعم فى اسكربت طلبى لطلبات الطعام :\n\nتتوفر صفحة المطاعم التى توضح لك جميع المطاعم المتوفرة على الموقع و تتمكن من خلالها من إضافة مطعم جديد من خلال ملأ\nالبيانات من نشاط المطعم سواء نشاط شخصى او نشاط تجارى و اختيار مالك المطعم من خلال الحسابات التى تم انشائها من\nخلال صفحة حسابات الشركات اسم المطعم بالعربى و اسم المطعم بالانجليزى و يتم تحديد تاريخ بداية الإشتراك و نوع\nالاشتراك شهرى او سنوى و تحديد قيمة الاشتراك و تفعيل خدمات الدفع عند الاستلام و كى نت و البطاقات الإئتمانية\nو من الممكن إلغاء تفعيل احد منها ان لم تتوفر و تتمكن من إضافة قائمة الوجبات , و يستطيع المطعم من\nملأ هذه الإعدادت من نفسه .\n15-صفحة المطاعم التى تتمكن من خلالها من معرفة المطاعم التى لم تكمل بيناتها بعد او الفعالة و الغير فعالة و المنتهية الاشتراك .\n16-صفحة طلبات المطاعم التى تتمكن من خلالها من معرفة الطلبات الجديدة للمطاعم و طلبات قيد التوصيل و طلبات لم يتم\nتوصيلها و الطلبات الملغية .\n17-صفحة التقارير المالية للمطاعم التى تتمكن من خلالها من عرض جميع التقارير المالية و القيام بعملية تحويل\nمستحق من مطعم معين .\n18-صفحة الإعلانات الموجودة بالرئيسية التى تتمكن من خلالها من تعديل جميع الاعلانات الموجودة\nبالرئيسية بالحذف و الاضافة .\nثانيا اللوحة الخاصة بالمطعم فى اسكربت طلبى لطلبات الطعام :\n1-يقوم المطعم بتسجيل الدخول إلى اللوحة من خلال الحساب الذى تم إنشائه من لوحة الإدارة و لكن يجب تفعيله من الإدارة لكى\nيتمكن المطعم من استقبال الطلبات الخاصة به و إضافة بيناته و قائمة الطعام الخاصة به و التحكم فى\nكل كبيرة و صغيرة فى بيناته .\n2-صفحة بيانات المطعم التى يتمكن المطعم من خلالها من تحديد نشاطه و معرفة حالته فعالة ام لا و تحديد اسم مالك المطعم\nو الدولة التى بها المطعم و إضافة اسم المطعم باللغة العربية و الانجليزية و إضافة وصف للمطعم باللغة العربية و الانجليزية\nو التحكم فى التصنيفات الخاصة بالمطعم سواء عربى او هندى او غيره و تحديد وقت توصيل الطلب و تكلفة التوصيل\nو الحد الأدنى للطلبات و المحافظة و المدينة و عنوان المطعم و رقم الجوال و رقم الهاتف و صورة اللوجو الخاص\nبالمطعم و صورة المطعم نفسه و التمكن من تحديد المكان على الخريطة .\n3-صفحة حسابى التى يتمكن المطعم من خلالها من تعديل جميع البيانات الخاصة بالحساب و ايميل و كلمة مرور و صور و رقم الهاتف .\n4-صفحة قائمة الوجبات التى تتمكن من خلالها من إضافة وجبات جديدة و تحديد سعرها و وصفها و ما تحتويها و الأطباق الجانبية\nالمتوفرة معها و صور الوجبة و غيرها من التفاصيل التى من الممكن إضافتها .\n5-صفحة الأطباق الجانبية التى تتمكن من خلالها من إضافة عدد لا نهائى من تصنيفات الأطباق الجانبية و إضافة طبق جديد\nو إضافة تصنيف الطبق سواء سلطات او غيره و توضيح اسم الطبق بالعربى و الانجليزى و السعر الخاص به .\n6-صفحة مواعيد عمل المطعم التى يتم من خلالها تحديد المواعيد التى يعمل المطعم خلالها .\n7-صفحة مناطق توصيل الطلبات و تحديد المناطق التى يتمكن المطعم من توصيل الوجبات لها .\n8-تتوفر فى أعلى اللوحة القائمة الخاصة بالطلبات و تحتوى على رقم الطلب و المنطقة .\n9-صفحة طلبات المطاعم فى اسكربت طلبى لطلبات الطعام :\n\nالتى تحتوى على جميع الطلبات الخاصة بالمطعم و منها الطلبات الجديدة و طلبات قيد التوصيل و طلبات تم توصيلها و طلبات تم إلغائها\nو تتمكن من معرفة تفاصيل كل طلب و عنوانه و سعره و جميع البيانات الخاصة بالطلب و تتمكن من تحديد حالة الطلب\nسواء تم تفعيله او فيد التوصيل او تم التوصيل .\n10-صفحة عروض المطعم التى تتمكن من خلالها من إضافة عرض جديد بتفاصيله من اسمه و نوع الوجبة المقدمة\nفى العرض و صور منها و سعره و تاريخ بداية العرض و تاريخ انتهائه و تتمكن من انهاء العرض او ارشفته .\n11- صفحة التقارير المالية للمطعم التى تحتوى على المبلغ المحصل و العمولة و المبلغ المستحق و المبلغ المستلم و المبلغ المتبقى .\nاحصل الآن على الاسكربت الخاص بك من شركة سيرف فايف الاحترافية فى اعمال تصميم مواقع و برمجة مواقع\nو برمجة تطبيقات الجوال و التسوق الالكترونى اعتمد علينا نحن نتطلع إلى\nتطوير أفكارك و تنفيذها .",
+            "en": "My order script for food orders from \nthe professional Serv5 company :\nMy order script for food orders is a special script for food orders from the restaurants available in it and it consists \nof a site and an Android application and an iPhone application as it is available in it:\n1- The home page contains at the top of the icons for downloading Android and iPhone applications, contact numbers and the e-mail of the \nsite, and the search box is available by choosing the city and choosing the type of cuisine, whether Arabic, Indian or other, then displaying the \navailable restaurants.\n2 - The customer chooses the desired restaurant and information about the restaurant, menu of meals, reviews and restaurant information appears.\n3- The restaurant data contains the minimum order, the restaurant’s opening times, the time it takes to deliver the order, the cost of \ndelivery, does it have features for later orders , KNET, payment on receipt, credit cards, \nand ratings for the restaurant, whether Arabic, Indian or other .\n4- When you choose your favorite meal, the meal information appears for you and you can write any notes you want in the meal, then \nadd to the shopping cart, so it has direct payment upon receipt, online payment by visa, and payment through state banks.\n5-must and specify the title of payment and being able to add a new address number home and apartment street and so on and allows you to \nscript my order requests for food Add address on the map through the website or applications then work to \nconfirm the request Viousel application to the restaurant.\n6-The site's terms and conditions pages, who we are and the privacy policy are available on the home page.\n7 - Being able to add special banners for distinctive or most highly rated restaurants on the home page of the site.\n8- Being able to see all the orders that you have ordered from the restaurant in my order list.\n9 - The technical support page on which Chat Live is available with the technical support for the site.\n10 - The contact page, which contains the form for sending directly to the administration.\n\nExplanation of the script control panel for food orders for the site and the two applications, \nand the control panel is divided into:\nFirst, the admin panel:\n1- Adding an endless number of new countries by adding the country’s name in Arabic and English, the country code, the name of the currency, and the image of the state’s flag.\n2- Adding an endless number of new governorates by adding the name of the governorate in Arabic and English, and the country in which the governorate is located.\n3- Adding an endless number of restaurant classifications, whether Arabic, Indian, barbecue, fish, etc., and the classification in both Arabic and English.\n4- Adding an infinite number of meal classifications also, and they are added in Arabic, English or Arabic only.\n5- Being able to send notifications to all people to the application, then the application, and being able to deviate from a specific country, specify the \noperating systems , whether iPhone or Android, that the notification will reach, then write the alert in Arabic and English.\n6- The company accounts page through which you can add a new account for a restaurant or for any person, so the country of the \nrestaurant, its name, user name, password, e-mail, phone number, and a photo, if any, are specified .\n7 - Appointing groups of supervisors and specifying powers for each group of supervisors and the countries they supervise.\n8- Appointing new employees and selecting the supervisors group in which the employee was added, his e-mail, and membership.\n9 - Technical support page, which allows you to add a question and answer in Arabic and English with the sections specified.\n10 - Members page, through which you can see all the members on the site and the application.\n11-You can look at the e-mails that have registered for the newsletter.\n12 - You can look at the messages that have arrived from the form of communication with us.\n13- Adding an endless number of pages in Arabic and English.\n14-Restaurants page in my order script for food orders:\n\nA restaurants page is available that shows you all the restaurants available on the site and through which you can add a new restaurant by filling in the \ndata from the restaurant’s activity, whether a personal activity or a commercial activity, and choosing the owner of the restaurant through the accounts created \nthrough the corporate accounts page. The name of the restaurant in Arabic And the name of the restaurant is in English, and the start date of the subscription is determined, the type of \nsubscription is monthly or annual, the value of the subscription is determined, the activation of payment services on receipt, Knet and credit cards, \nand it is possible to deactivate one of them if it is not available and you can add the menu of meals, and A restaurant can \nfill these settings on its own.\n15-Restaurants page, through which you can find out which restaurants have not yet completed their information, or which are active, ineffective, or expired.\n16-Restaurant orders page through which you can know about new restaurant orders, pending orders, orders that have not been \ndelivered, and canceled orders.\n17-Restaurant financial reports page, through which you can view all financial reports and carry out the transfer of \nreceivables from a specific restaurant.\n18-The ads page in the main page, through which you can modify all ads in \nthe main page by deleting and adding.\nSecondly, the plate for the restaurant in the order script for food orders:\n1- The restaurant logs into the board through the account that was created from the administration panel, but it must be activated by the administration in \norder for the restaurant to receive its requests, add its data and its menu, and control \nevery big and small in its data.\n2- The restaurant data page through which the restaurant can determine its activity and know its active status or not, determine the name of the restaurant owner \nand the country in which the restaurant is located, add the name of the restaurant in Arabic and English, add a description of the restaurant in Arabic and English, \nand control the special classifications In the restaurant, whether Arabic, Indian or other, determining the time of delivery of the order, the cost of delivery \n, the minimum order, the province, the city, the address of the restaurant, the mobile number, the phone number, the logo image of the \nrestaurant, the image of the restaurant itself, and being able to locate the place on the map.\n3- My account page, through which the restaurant can modify all account data, email, password, photos, and phone number.\n4- The meal list page through which you can add new meals, determine their price, description, contents, side dishes \navailable with them, meal photos, and other details that can be added.\n5- The side dishes page through which you can add an endless number of side dishes classifications, add a new dish \n, add the dish classification, whether salads or others, and clarify the name of the dish in Arabic and English and its price.\n6- The restaurant's opening times page, through which the dates that the restaurant will operate during are determined.\n7- A page for order delivery areas and specifying the areas to which the restaurant can deliver meals.\n8-The list of requests is available at the top of the panel, and it contains the order number and the region.\n9-Restaurant requests page in the order script for food orders:\n\nContaining all applications for the restaurant , and including new orders and requests in connection and requests have been delivered and requests have been canceled \nand you can find out the details of each application, address, price , and all data on demand and be able to determine the status of the application , \nwhether activated or vid Delivered or delivered.\n10 - The restaurant offers page through which you can add a new offer with its details such as its name, type of meal presented \nin the offer, photos of it, its price, start date and expiration date, and you can end the offer or archive it.\n11- The restaurant's financial reports page, which contains the amount collected, the commission, the amount owed, the amount received, and the remaining amount.\nNow get your script from your Cerf Five company professional in business website design and programming sites\nand programming mobile applications and e - shopping adopted us we look forward to \ndevelop your ideas and implement them."
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2018\/10\/اسطربى-طلبى-لطلبات-الطعام.png",
+        "demo_link": "https:\/\/tlbie.net\/",
+        "order_link": "\/request-quote",
+        "features": {
+            "ar": [
+                {
+                    "title": "لوحة تحكم عربية وإنجليزية متكاملة",
+                    "desc": "إدارة كاملة لكافة أقسام وإعدادات النظام والعملاء بسهولة فائقة."
+                },
+                {
+                    "title": "تصميم متجاوب مع جميع الشاشات",
+                    "desc": "يعمل بكفاءة عالية على الهواتف الذكية والأجهزة اللوحية وأجهزة الكمبيوتر."
+                },
+                {
+                    "title": "سرعة وأمان وحماية فائقة",
+                    "desc": "بنية برمجية مؤمنة بالكامل ومهيأة لمحركات البحث (SEO)."
+                },
+                {
+                    "title": "دعم فني وتطوير مستمر من سيرف فايف",
+                    "desc": "فريق دعم فني متخصص لمتابعة التشغيل وإضافة التعديلات الخاصة بك."
+                }
+            ],
+            "en": [
+                {
+                    "title": "Comprehensive Control Panel",
+                    "desc": "Full administrative dashboard to manage users, settings, and content effortlessly."
+                },
+                {
+                    "title": "100% Responsive Layout",
+                    "desc": "Works seamlessly across smartphones, tablets, laptops, and desktop screens."
+                },
+                {
+                    "title": "High Performance & SEO Ready",
+                    "desc": "Engineered with clean, secure code optimized for fast loading and search engines."
+                },
+                {
+                    "title": "24\/7 Technical Support by Serv5",
+                    "desc": "Dedicated technical support and custom feature development upon request."
+                }
+            ]
+        },
+        "tech_specs": [
+            "PHP",
+            "Laravel",
+            "Flutter",
+            "Android",
+            "iOS",
+            "Multi-Restaurant"
+        ],
+        "why_choose_us": {
+            "ar": "اسكربت طلبى لطلبات الطعام هو اسكربت خاص لطلبات الطعام من المطاعم المتاحة فى البلد او المنطقة التى يحددها العميل و يبحث عن المطاعم",
+            "en": "My order script for food orders is a special script for food orders from restaurants available in the country or region"
+        },
+        "samples": [
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/10\/اسطربى-طلبى-لطلبات-الطعام.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/10\/اسكربت-طلبى-طلبات-الطاعام.png"
+        ],
+        "is_active": true
+    },
+    {
+        "slug": "my-stadium-script-to-reserve-and-manage-stadiums",
+        "name": {
+            "ar": "اسكربت ملعبى لحجز وادارة الملاعب",
+            "en": "My stadium script to reserve and manage stadiums"
+        },
+        "category": {
+            "ar": "إدارة وحجز الملاعب الرياضية",
+            "en": "Sports & Stadium Booking"
+        },
+        "title": {
+            "ar": "اسكربت ملعبى لحجز وادارة الملاعب من شركة سيرف فايف",
+            "en": "My stadium script to reserve and manage stadiums by Serv5"
+        },
+        "description": {
+            "ar": "اسكربت ملعبى لحجز وادارة الملاعب من\nشركة سيرف فايف الاحترافية :\nاسكربت ملعبى لحجز وادارة الملاعب هو اسكربت خاص لادارة الملاعب  به و يتكون من موقع حيث انه يتوفر به :\n1- الصفحة الرئيسية تحتوى فى أعلاها على شريط اخبارى مميز يمكن التحكم به من لوحة التحكم , و يحتوى الهيدر على عدة\nصفحات و هم صفحة كل الملاعب و صفحة اتصل بنا التى تحتوى على فورمة ارسال للادارة مباشرة و صفحة المدونة لخاصة\nبالموقع و سياسة الخصوصية و صفحة اضف موضوع باسمك و خانة خاصة بالبحث .\n2- يظهر لك فى الموقع سلايد شو مميز لعرض آخر العروض المميزة للملاعب و الملاعب الاكثر تقيما .\n3- يظهر فى الصفحة آخر 4 ملاعب مضافة مؤخرا بمواقعهم على الخريطة و العنوان تفصيلى و سعر الساعة كما انه يظهر لك آخر\nالاخبار الجديدة بالموقع .\n4- يظهر فى الفوتر خريطة توضح جميع الملاعب الموجودة بالموقع على الخريطة و اى ملعب يتم اضافته فى الموقع يتم اضافته\nتلقائيا على الخريطة لتسهل وصول العملاء للملاعب القريبة منهم .\n5- يقوم العميل بتسجيل الدخول او تسجيل اذا كان يمتلك حساب مسبق عن طريق الرابط فى اعلى يسار الصفحة .\n6- عند التسجيل فى الموقع لاول مرة يتم التسجيل اما كصاحب ملعب اى يمكنه اضافة ملعب مع مميزاته وجميع المعلومات\nالخاصة به من مواقيت حجز والاوقات المحجوزه والاوقات التى لم يتم الحجز بها .\n7- التسجيل كمستأجر ويكون وظيفته البحث فى الملاعب وايجاد الملعب المناسب ثم الحجز به واثناء الحجز يظهر له الاوقات\nالفارغه التى يمكنه الحجز فيها ويقوم بوضع بيانات الاتصال ويتم التواصل معه .\n8- بيانات الملعب فى اسكربت ملعبى لحجز وادارة الملاعب :\nتحتوى على عنوان الملعب ومكانه بالتفصيل وبالخريطة و سعر الساعه بالملعب و يظهر تقييم الملعب ويعتمد على تقييم العملاء\nالسابقين وصاحب الملعب ورقم الهاتف الخاص بالملعب وبعض المعلومات اذا كان به دورات العاب او لا المميزات اذا كان مغطى او لا\nالخ ,,,, , و من بيانات الملاعب ايضا يوجد جدول الحجوزات ويحتوى على جميع الحجوزات خلال فتره معينه وباوقاتها المحددة , و عند\nاختيار العميل التاريخ الذى يريد الحجز فيه و الساعة و الضغط على زر حجز الموعد تظهر له فورمة طلب موعد و التى تحتوى على\nملخص بسيط عن الحجز و اختيار اذا كنت عميل جديد ام عميل حالى و خانة خاصة للاسم و رقم الموبيل الخاص بالعميل و الضغط\nعلى زر حجز و يبقى طلب الحجز معلقا لحين موافقط صاحب الملعب عليه او رفضه فاذا تم رفضه يرجع الموعد فارغ كما كان و اذا\nتم الموافقة يتم غلق الموعد .\n9- يتمكن صاحبة الموقع من اضافة المقالات فى المدونة كمل يتمكن الزائر و اصحاب الملاعب ايضا من اضافة مقالات خاصة به ويتم\nمراجعتها من الادارة والموافقه عليها لتظهر فى المدونة الخاصة بالموقع .\n10- نظام التعليقات على الملاعب و المواضيع الموجودة فى الموقع و لاتظهر التعلقات الا بعد موافقة الادارة عليها .\nشرح لوحة اسكربت ملعبى لحجز وادارة الملاعب و تنقسم لوحة التحكم إلى :\nأولا لوحة الادارة  :\n1- لوحة الادمن او الادارة تحتوى على اضافة جميع المقالات الخاصة بالموقع والموافقه على جميع المقالات المضافة من\nقبل صاحب الموقع .\n2- التحكم فى جميع المعلومات الخاصة بالواجهة الرئيسية للموقع والتحكم فى الالوان وكل ما يراه العملاء .\n3- الموافقه على اضافة الملاعب الجديدة كما يمكنه التعديل عليها وازالتها ومعرفة كل التفاصيل الخاصة بكل ملعب .\n4- معرفة كل مواعيد الملاعب والمواعيد المعلقة والمحجوزة وايضا الموافقه على اضافة العملاء كاصحاب موقع .\n5 - لا يمكن التسجيل فى الملعب الا بعد موافقة الادمن على تسجيل العضو اولا ثم بعد ذلك الموافقه على الملعب واعطاءه رقم كودى للجدول الخاص بالملعب .\n6 - تتمكن من التطلع على الايميلات التى قامت بالتسجيل فى النشرة البريدية .\n7 - تتمكن من التطلع على الرسائل التى وصلت من فورمة التواصل معنا .\n8- إضافة عدد لا نهائى من الصفحات باللغة العربية و الانجليزية .\n9- صفحة الأعضاء التى تتمكن من خلالها من رؤية جميع الأعضاء الموجودين بالموقع .\nثانيا لوحة المستأجر  فى اسكربت ملعبى لحجز وادارة الملاعب :\n1- تسجيل الدخول كمستأجر فى هذه الحاله يتم تحويلك على اللوحة الخاصة بك و من خلالها يتم استكمال الحجز الخاص بك حيث\nانك لن تتمكن من الحجز حتى تقوم بالتسجيل فى الموقع ويظهر لك الملعب بالموقع وجميع التفاصيل السابقه الخاصة بالموقع\nوبذلك تكون عضو مشترك بالموقع يمكنك الحجز فى اى ملعب فى الاوقات المتاحة .\nثالثا لوحة صاحب الملعب  :\n1- عند التسجيل كصاحب ملعب يختلف الامر قليلا حيث يتم تحويلك الى لوحه اخرى تختلف عن المستأجر ويكون بها الاتى يمكنك\nاضافة اخبار ومقالات جديدة وتعلق حتى يتم موافقه الادمن او المدير عليها .\n2- تتمكن من اضافة الملعب الخاص بك واضافة جميع التفاصيل السابقة من خلال اللوحة مثل الخريطة والسعر وهكذا .\n3- بعد موافقه الادمن على الملعب يتم ارسال جدول المواعيد الخاص بك ويمكنك التحكم به بعد ذلك عن طريق اللوحه حيث يمكنك\nمعرفه المواعيد والموافقه عليها او لا وبيانات الاتصال الخاصة بالحاجز .\nاحصل الآن على اسكربت ملعبى لحجز وادارة الملاعب بك من شركة سيرف فايف الاحترافية فى اعمال تصميم مواقع\nو برمجة مواقع و برمجة تطبيقات الجوال و التسوق الالكترونى اعتمد علينا نحن نتطلع إلى\nتطوير أفكارك و تنفيذها .",
+            "en": "My stadium script for reserving and managing stadiums from \nthe professional Serv5 company:\nMy stadium script for reserving and managing stadiums is a special script for managing stadiums and it consists of a site where it is available:\n1- The home page contains at the top of a distinguished news tape that can be controlled from the control panel, and the header contains several \npages, and they are the page for all stadiums, the contact us page that contains the form for direct sending to the administration, the blog page for the \nsite, the privacy policy, and a page Add a topic with your name and a search field.\n2- A special Slide Show appears on the site to display the latest special offers for the most evaluated stadiums and stadiums.\n3- The last 4 recently added stadiums appear on the page, with their locations on the map, the address in detail, the hourly rate, and it also shows you the latest \nnew news on the site.\n4- A map appears in the footer that shows all the stadiums on the site on the map, and any stadium that is added to the site is \nautomatically added to the map to facilitate customer access to the stadiums near them.\n5- The customer logs in or registers if he already has an account through the link at the top left of the page.\n6- When registering on the site for the first time, registration is done either as the owner of a stadium, that is, he can add a stadium with its advantages and all its information \nfrom reservation times, reserved times and times that have not been booked.\n7- Registering as a tenant, and his job is to search the stadiums, find the appropriate stadium, then reserve it, and during the reservation he appears to him the \nempty times in which he can book and puts the contact information and is contacted with him.\n8- The stadium data in my stadium script for reserving and managing the stadiums:\nIt contains the stadium's address and location in detail, the map, the hourly rate of the stadium, and the evaluation of the stadium appears and depends on the evaluation of the \nformer customers , the owner of the stadium, the stadium's phone number and some information if it has game tournaments or not the advantages if it is covered or not \netc. ,,,,, and from data The stadiums also has a schedule of reservations and it contains all reservations during a specific period and at their specified times, and when \nthe customer chooses the date he wants to book on and the hour and presses the appointment reservation button, the appointment request form appears for him, which contains a \nsimple summary of the reservation and choosing if you are a customer A new or an existing customer and a special box for the name and the customer’s mobile number, press \nthe reservation button, and the reservation request remains pending until the owner of the stadium approves or rejects it. If it is rejected, the appointment will be returned as empty as it was, and if \napproved, the appointment will be closed.\n9- The owner of the site can add articles on the blog, as well as the visitor and the stadium owners can also add his own articles, which are \nreviewed by the administration and approved to appear in the site’s blog.\n10- Comments system on stadiums and topics on the site, and the comments do not appear until after approval by the administration.\nExplanation of my stadium script for reserving and managing stadiums, and the control panel is divided into:\nFirst, the admin panel:\n1- The admin or admin panel contains the addition of all the articles on the site and approval of all the articles added \nby the site owner.\n2- Control all the information on the main interface of the site and control the colors and everything that customers see.\n3- Approving the addition of new stadiums. He can also amend and remove them and know all the details of each stadium.\n4- Knowing all stadium dates and suspended and reserved dates, as well as agreeing to add clients as site owners.\n5 - It is not possible to register on the playground unless the admin approves the registration of the member first, and then approves the playground and gives him a code number for the schedule for the stadium.\n6 - You can look at the e-mails that have registered for the newsletter.\n7 - You can look at the messages that came from the form of communication with us.\n8- Adding an endless number of pages in Arabic and English.\n9- Members page, through which you can see all the members on the site.\nSecondly, the tenant plate in my stadium script to reserve and manage the stadiums:\n1- Log in as a tenant in this case, you will be transferred to your board and through it your reservation is completed as \nyou will not be able to book until you register on the site and the playground appears on the site and all the previous details of the site and \nthus you are a member of the site. You can book in Any stadium at the available times.\nThird, the stadium owner's plate:\n1- When registering as a stadium owner, the matter differs slightly, as you are transferred to another board that differs from the tenant and has the following in it. You can \nadd new news and articles and comment until the admin or the manager approves them.\n2- You can add your stadium and add all the previous details through the board, such as the map, price, and so on.\n3- After the administrator approves the stadium, your schedule of appointments will be sent, and you can control it after that through the board, where you can \nknow the appointments and agree to them or not, and the contact information of the barrier.\nGet now on a script to book and stadiums management pitches from your Cerf Five company professional in business website design\nand programming sites and programming mobile applications and e - shopping adopted us we look forward to \ndevelop your ideas and implement them."
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2018\/11\/ml3aby.png",
+        "demo_link": "http:\/\/belmagan.com\/special\/ml3b",
+        "order_link": "\/request-quote",
+        "features": {
+            "ar": [
+                {
+                    "title": "لوحة تحكم عربية وإنجليزية متكاملة",
+                    "desc": "إدارة كاملة لكافة أقسام وإعدادات النظام والعملاء بسهولة فائقة."
+                },
+                {
+                    "title": "تصميم متجاوب مع جميع الشاشات",
+                    "desc": "يعمل بكفاءة عالية على الهواتف الذكية والأجهزة اللوحية وأجهزة الكمبيوتر."
+                },
+                {
+                    "title": "سرعة وأمان وحماية فائقة",
+                    "desc": "بنية برمجية مؤمنة بالكامل ومهيأة لمحركات البحث (SEO)."
+                },
+                {
+                    "title": "دعم فني وتطوير مستمر من سيرف فايف",
+                    "desc": "فريق دعم فني متخصص لمتابعة التشغيل وإضافة التعديلات الخاصة بك."
+                }
+            ],
+            "en": [
+                {
+                    "title": "Comprehensive Control Panel",
+                    "desc": "Full administrative dashboard to manage users, settings, and content effortlessly."
+                },
+                {
+                    "title": "100% Responsive Layout",
+                    "desc": "Works seamlessly across smartphones, tablets, laptops, and desktop screens."
+                },
+                {
+                    "title": "High Performance & SEO Ready",
+                    "desc": "Engineered with clean, secure code optimized for fast loading and search engines."
+                },
+                {
+                    "title": "24\/7 Technical Support by Serv5",
+                    "desc": "Dedicated technical support and custom feature development upon request."
+                }
+            ]
+        },
+        "tech_specs": [
+            "PHP",
+            "Laravel",
+            "MySQL",
+            "Booking Calendar",
+            "Responsive Web",
+            "Admin Panel"
+        ],
+        "why_choose_us": {
+            "ar": "اسكربت ملعبى لحجز وادارة الملاعب , اسكربت خاص بحجز الملاعب القريبة منك و اضافة الملعب الخاص بك و صوره و جميع المعلومات عنه و وسائل الاتصال بصاحب الملعب",
+            "en": "Designing an integrated stadium management system from serv5 for web services Request now a sports stadium script"
+        },
+        "samples": [
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/11\/screencapture-belmagan-special-ml3b-2018-11-08-14_17_57.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/11\/screencapture-belmagan-special-ml3b-add-post-2018-11-08-14_20_45.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/11\/screencapture-belmagan-special-ml3b-mla3eb-2018-11-08-14_18_47.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/11\/screencapture-belmagan-special-ml3b-mla3eb-2018-11-08-14_19_05.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2018\/11\/ml3aby.png"
+        ],
+        "is_active": true
+    },
+    {
+        "slug": "networked-marketing-website-script",
+        "name": {
+            "ar": "سكربت تصميم موقع تسويق شبكي",
+            "en": "Networked marketing website script"
+        },
+        "category": {
+            "ar": "منصات التسويق الشبكي والعمولات",
+            "en": "Affiliate & Network Marketing"
+        },
+        "title": {
+            "ar": "سكربت تصميم موقع تسويق شبكي من شركة سيرف فايف",
+            "en": "Networked marketing website script by Serv5"
+        },
+        "description": {
+            "ar": "سكربت تصميم موقع chaker للتسويق الشبكي من شركة سيرف فايف لخدمات الويب و تصميم المواقع Net Work Marketing Web Site\nمميزات تصميم موقع تسويق شبكي من serv5 في المعادلة التسويقية :\n\nالنظام يتكون من موقع تجارة الكترونية بنظام شجري 3 يمين و 3يسار لتحقيق الفئة الربحية الأولى و النظام ثنائي ( Binary ) مع تحقيق التوازن كما هو موضح :\n\nتصميم موقع تسويق شبكي\n\nاول شخص يكون في الشجرة هو صاحب الموقع و  هو ADMIN و بعد عضوين من الإدارة يتم انشائهم تلقائيا مع النظام كبداية للشجرة .\nلدخول أي شخص النظام الشبكي يجب ان يقوم بعملية شراء لا تقل على عن 50 يورو .\nبعد ذلك يدخل النظام الشجري و يستطيع ان يقوم بدعوة الأشخاص للتسجيل تحته من خلال كود الدعوة و سنقوم بشرح ذلك فيما بعد .\nيستطيع أي شخص ان يقوم بالتسجيل بدون كود دعوة حيث يتميز تصميم مواقع التسويق الشبكي بهذه الخاصة و بعد إتمام عملية الشراء يدخل تلقائي في الشجرة في الجانب اليمين او اليسار للشجرة الكبيرة في الجانب الأقل في عدد الأشخاص تلقائيا لتحقيق التوازن .\nتتحقق العمولة عند حدوث توازن 3 اشخاص على يسار الاب للشجرة و 3 اشخاص على اليمين و بذلك تتحقق اول عمولة و شرط تحقق العمولات هو التوازن ( أي نفس العدد من الأشخاص على اليمين هو نفس العدد من الأشخاص على اليسار ليتم تطبيق العمولة ) .\nاول مستوي للعمولة هو 3 يمين و 3 يسار و يحصل الاب على 20 Coins و 5 Points  كما هو موضح في الشكل و كل ثلاثة يمين و ثلاثة يسار بعد ذلك مع شرط التوازن يحصل الاب على 20 Coins + 5 Points كما هو موضح بالشكل و الى ما لا نهاية مع العلم انه في حالة حدوث أي عملية شراء من أي يوزر بعد الدخول في الشجرة لا تؤثر في العمولات للاب .\n\nتصميم موقع تسويق شبكي\n الفرق بين النقاط ( Points ) و ( Coins ) في تصميم موقع التسويق الشبكي :\n\nPoints : يستطيع فقط العميل الشراء بها من على المنصة و لا يستطيع سحيها نقدا .\nCoins : يستطيع العميل سحبها نقدا لكن لا يستطيع الشراء بها من على الموقع .\n\nشرح واجهة موقع تسويق شبكي احترافية\nيتكون الموقع من تصميم متجر الكتروني سهل و بسيط تستطيع الشراء منه بسهولة و عن طريق بوابات الدفع فيزا و ماستر كارد و باي بال ...الخ و أيضا تستطيع الشراء بالنقاط كما وضحنا مسبقا و يتوفر في الموقع المنتجات العادية و الباكيدجات و الباكيدج هي عبارة عن منتجين او اكثر يتم شراؤهم مع بعضهم .\nنبذة عن صفحة المنتج في تصميم موقع تسويق شبكي :-\nتصميم موقع تسويق شبكي ويب\n\nتتميز صفحة المنتج ببساطتها و سهولة طريقة عرضها حيث انها تحتوي على اسم المنتج و  وصف المنتج مع خاصية اختيار المقاس و اللون للمنتج قبل الإضافة للسلة و كل لون للمنتج مربوط بعدة صور خاصة به تظهر عن الضغط عليه .\n بعد ان يختار العميل اللون و الحجم يتمكن من الإضافة في سلة المشتريات و بعد ذلك يكمل بيانات الشحن المطلوبة و يحدد عدد القطع المطلوبة من كل منتج تم اضافته الى الكارت و يري اجاملى التكلفة ثم اكمال باقي إجراءات الدفع عن طريق طرق الدفع المتوفرة عرض المزيد .\n\nتصميم موقع تسويق شبكي\nيتمكن العميل من إضافة المنتج او الباكيدج  إلى المفضلة .\nسيرش للبحث في واجهة الموقع , يتم اختيار نوع البحث منتج او باكيدج ثم الضغط علي علامة بحث.\nتصميم موقع تسويق شبكي واسعارها\nتصميم موقع تسويق شبكي جاهز\nتظهر لك صفحة البحث بهذا  الشكل و تستطيع الفلترة عن طريق التصنيفات للمنتجات و الأعلى سعرا و الأقل سعرا .\nتصميم موقع تسويق شبكي\nتصميم موقع تسويق شبكي ذكي \nيحتوي علي صفحة عن الشركة التي تحتوي علي كل المعلومات التي تخص الشركة .\nتصميم موقع تسويق شبكي كامل\n\nصفحة اتصل بنا التي تحتوي على فورمه ارسال مباشرة على الميل و لوحة التحكم الخاصة بصاحب الموقع .\n\nتصميم موقع تسويق شبكي\n\nتصميم صفحة الميديا التي تحتوي على الصور و الفيديوهات الخاصة بالمنصة .\n\nتصميم مواقع تسويق شبكي\n\nصفحة خاصة لعرض كل المنتجات بتقنية الأجاكس .\n\nشركة تصميم موقع تسويق شبكي حجز\n\nتصميم صفحة سياسة الخصوصية والاستخدام .\n\nتصميم موقع تسويق شبكي\n\nمع إمكانية إضافة عدد لا نهائي من الصفحات .\n\nشرح لوحة العضو في افضل تصميم موقع تسويق شبكي :-\nصفحة معلومات اليوزر و التي تحتوى على كل المعلومات التي تخص اليوزر من اسم و باسورد و باسورد الحماية الخاص بالمحفظة و غيره من المعلومات الشخصية ومعلومات الشحن .\nشركة تصميم موقع تسويق شبكي خارجي\nصفحة الشجرة الخاصة بالعضو التي يستطيع من خلالها متابعة الشجرة الخاصة به و رؤية جميع الأعضاء تحته .\nتصميم موقع تسويق شبكي\nصفحة التسجيل الأسبوعي التي تتمكن من خلالها من رؤية الأشخاص الذين انضموا اليك خلال اخر أسبوع سواء على يمين الشجرة او على شمالها .\nتصميم موقع تسويق شبكي\nصفحة طلبات سحب الرصيد التي تتمكن من خلالها من ارسال طلب للإدارة بسحب الرصيد عندما تصل الى الحد الأدنى للسحب حيث تقوم بكتابة الباسورد الخاص بالمحفظة ثم كتابة اسم البنك الذي يريد العيل التحويل عليه و اسم المستقبل و IBAN و الكمية المراد سحبها , فيصل الطلب للإدارة و من ثم يتم الموافقة و ارسال صورة التحويل .\ndesign a networked marketing websites\nصفحة كود الدعوة التي تتمكن من خلالها من انشاء الأكواد التي تتمكن من دعوة الأشخاص للدخول في الشجر الخاصة بك عن طريق التسجيل و استخدام الكود عند التسجيل و إتمام اول عملية شراء و تلقائيا بعد اول عملية شراء يندرجون تحت الداعي لهم في الشجرة على الجاني اليمين او اليسار على حسب الأقل في عدد الأشخاص .\nشركة تصميم موقع تسويق شبكي\nيتم كتابة الكود هنا عند التسجيل - ويمكنك الاطلاع علي اهم افضل اعمال تصميم مواقع الكترونية من خلال شركة سيرف فايف .\nشركة تصميم موقع تسويق شبكي\nصفحة الطلبات التي تحتوي على الطلبات التي قام اليوزر بها و حالتها .\ndesign a networked marketing website design\nصفحة سياسية طلبات السحب .\nشركة تصميم موقع تسويق شبكي\nشرح لوحة التحكم الخاصة بموقع التسويق الشبكي :-\nتتميز لوحة التحكم بالسهولة في التعامل و تتكون من عدة تابات تسهل عليك الانتقال بينهم و التحكم في كل جزئيات الموقع و هم :\nالتاب الخاص بالتحكم في حسابات السوشيال ميديا المربوطة بالموقع من خلال الايقونات في الفوتر .\nشركة تصميم موقع تسويق شبكي\nالتاب الخاص بالدول للتحكم  في الدول المتاحة عند إتمام عملية الشراء من سلة الشراء و تتمكن من تحديد تسعيرة شحن مختلفة لكل دولة تقوم بإضافتها .\nشركة تصميم موقع تسويق شبكي\ndesign a networked marketing website design\nشركة تصميم موقع تسويق شبكي\nتصميم موقع تسويق شبكي ويب يتيح :-\nإمكانية إضافة مشرفين في اللوحة لمساعدة صاحب الموقع في ادارته و تحديد لكل مشرف الصلاحية الخاصة به  و ذلك عن طريق تابتين  ( صلاحيات المشرفين – المشرفين ) .\nصلاحيات المشرفين و تتمكن من خلال ذلك التاب من إنشاء صلاحية على عدة تابات لإعطائها لمسؤول ليتحكم في هذه التابات المختارة فقط كما هو موضح في الصورة .\nشركة تصميم موقع تسويق شبكي\nبعد كتابة الاسم الخاص بالصلاحية و اختيار التابات التي يتمكن المشرف من التحكم فيها و إضافة الصلاحية تنتقل بعدها الى تاب المشرفين و تقوم بإضافة المشرف و اختيار الصلاحية له كما هو موضح في الصورة .\ndesign a networked marketing website github\nو بعد ذلك يتمكن ذلك المشرف من الدخول على اللوحة بالبيانات الخاصة به و التحكم بالصلاحية المتاحة له .\nشركة تصميم موقع تسويق شبكي\nالتاب الخاص بالأعضاء و الذى يتمكن المشرف من خلال من التحكم في مستخدمي الموقع و إمكانية إضافة مستخدم جديد و التحكم في كل مستخدمي المنصة من حذف من المنصة او التعديل علي بياناتهم الشخصية .\nتاب أقسام المنتجات الذى تتمكن من خلاله من إضافة عدد لا نهائي من الأقسام الرئيسية .\ndesign a networked marketing website key\nتاب أقسام المنتجات الفرعية الذى تتمكن من خلاله من إضافة عدد لا نهائي من الأقسام الفرعية تحت الأقسام الرئيسية .\nشركة تصميم موقع تسويق شبكي\nالتاب الخاص بالمنتجات و إضافة المنتجات .\nشركة تصميم موقع تسويق شبكي\nتصميم موقع تسويق شبكي كامل\nإضافة المنتج :\nشركة تصميم موقع تسويق شبكي\nإضافة صور المنتج الافتراضية التي تظهر عند الدخول عليه لأول مرة .\ndesign a networked marketing website portfolio\nإضافة الصور التي تظهر عند الضغط على اللون .\nشركة تصميم موقع تسويق شبكي\nالتاب الخاص بإضافة الباكيدجات عن طريق كتابة اسم الباكيدج و سعرها و الكود الخاص بها و وصفها و الاختيار من المنتجات المتاحة في الموقع .\nتصميم موقع تسويق شبكي\nالتاب الخاص بالاورادات و الذي يستقبل عليه مدير اللوحة الطليات الخاصة بالعملاء .\nتصميم مواقع التسويق الشبكي\nتصميم موقع تسويق شبكي ناجح \nالأوردرات الجديدة ( New Orders ) هي الاوردرات التي تم طلبها و دفعها من خلال بوابات الدفع الاون لاين المتاحة .\nالأوردرات التي تم تسليمها (Delivered Orders ) هي الاوردرات التي تم طلبها و دفعها من خلال بوابات الدفع الاون لاين المتاحة و تم توصيلها الى صاحبها .\nالاوردرات التى تم الغائها (Cancelled Orders ) هي الاوردرات التي تم طلبها و دفعها من خلال بوابات الدفع الاون لاين المتاحة و تم الغائها من قبل صاحبها .\nالاوردرات التي لم يتم دفعها (Unpaid Orders ) هي الأوردرات التي تم طلبها و لم يتم دفعها عن طريق وسائل الدفع بل عن طريق الدفع عند الاستلام .\nمثال علي صفحة الطلب في لوحة التحكم تصميم موقع تسويق شبكي :\nتصميم موقع تسويق شبكي\nالتاب الخاص بطلبيات السحب للرصيد من العملاء .\ncreative website design company\nالتاب الخاص بالصفحات و الذي تستطيع من خلاله إضافة و تعديل الصفحات الخاصة بالموقع .\nتصميم موقع تسويق شبكي\n الفورم الخاص بإضافة صفحة جديدة .\n\nالتاب الخاص بالنشرة البريدية يحتوي كل الايملات التي تأتي من هذا الحقل الموجود في فوتر الموقع .\n\nالتاب الخاص باتصال بنا و الذي تستطيع من خلاله الاستطلاع على رسائل صفحة تواصل معنا و أيضا تصل هذه الرسالة على الميل المربوط بالموقع .\nموقع تسويق شبكي\nللتواصل معنا يرجى الاتصال على رقم 00201288863631",
+            "en": "Scripts Website Design chaker Marketing website of the company Cerf Fife Web Services and Web Design Net Work Marketing Web Site\nAdvantages of designing a web marketing website from serv5 in the marketing equation:\n\nThe system consists of an e-commerce website with a tree system 3 right and 3 left to achieve the first profit category and the binary system with balance as shown:\n\nDesign a networked marketing website\n\nThe first person in the tree is the owner of the site, which is ADMIN, and after two members of the administration, they are created automatically with the system as the beginning of the tree.\nTo enter the online system, anyone must make a purchase of not less than 50 euros.\nAfter that, it enters the tree system and can invite people to register under it through the invitation code, and we will explain that later.\nAnyone can register without an invitation code as the design of network marketing sites is characterized by this characteristic and after completing the purchase process, it automatically enters the tree on the right or left side of the big tree on the side with the least number of people automatically to achieve balance.\nThe commission is achieved when there is a balance of 3 people to the left of the father of the tree and 3 people on the right, so that the first commission is achieved, and the condition for the commission to be achieved is balance (i.e. the same number of people on the right is the same number of people on the left for the commission to be applied).\nThe first commission level is 3 right and 3 left, and the father gets 20 Coins and 5 Points as shown in the figure and every three right and three left after that with the condition of balance, the father gets 20 Coins + 5 Points as shown in the figure and so on. No end, knowing that in the event of any purchase from any user after entering the tree, it does not affect the commissions for the father.\n\nDesign a networked marketing website\n The difference between the points (Points) and (Coins) in the marketing web site design :\n\nPoints : Only the customer can purchase it from the platform, and he cannot redeem it with cash.\nCoins : The customer can withdraw it in cash, but cannot purchase it online.\n\nExplain a professional network marketing website interface\nThe site consists of an easy and simple electronic store design that you can buy from easily and through the payment gateways Visa, MasterCard, Paypal ... etc. And also you can buy with points as we explained previously, and the regular products, bakages and bakages are available on the site, which are products or More are bought together.\nAbout the product page in designing a networked marketing website : -\n\nDesigning a networked web marketing website\n\nThe product page is characterized by its simplicity and ease of display as it contains the name of the product and the description of the product with the feature of choosing the size and color of the product before adding to the basket and each product color is linked to several pictures of its own that appear when pressing on it.\n After the customer chooses the color and size, he can add to the cart and then complete the required shipping information and specify the number of pieces required from each product that has been added to the card and see the total cost, then complete the rest of the payment procedures through the available payment methods . Show more .\n\nDesign a networked marketing website\nThe customer can add the product or package to the favorites.\nSearch To search on the website interface, choose the search type, product or package, and then click on the search tab.\n\nNetwork marketing website design and prices\nReady web marketing website design\nThe search page appears in this way, and you can filter by categories for the products, the highest and the least expensive.\n\nDesign a networked marketing website\nSmart web marketing website design \nIt contains a page about the company that contains all the information about the company.\n\nDesign a complete web marketing website\n\nThe contact us page that contains the form send directly on the email and the control panel of the site owner.\n\nDesign a networked marketing website\n\nDesigning the media page that contains the photos and videos of the platform.\n\nNetwork Marketing Web Design\n\nA special page to display all products with AJAX technology.\n\nWebsite design company reservation website\n\nPrivacy policy page design and usage.\n\nDesign a networked marketing website\n\nWith the ability to add an infinite number of pages.\n\nExplanation of User Panel in Best Network Marketing Website Design : -\nUser information page, which contains all the information related to the user, such as the name, password, and protection password for the wallet and other personal information and shipping information.\n\nAn external website marketing company\nThe member tree page through which he can follow his tree and see all the members under it.\n\nDesign a networked marketing website\nThe weekly registration page through which you can see the people who joined you during the last week, either on the right or the left of the tree.\n\nDesign a networked marketing website\nBalance withdrawal requests page, through which you can send a request to the administration to withdraw the balance when you reach the minimum withdrawal limit, where you write the password for the wallet and then write the name of the bank that the family wants to transfer to, the name of the recipient, the IBAN and the quantity to be withdrawn, the request is submitted to the administration and from Then the approval is done and the transfer image is sent.\n\ndesign a networked marketing websites\nThe invitation code page through which you can create codes that you can invite people to enter your trees by registering and using the code when registering and completing the first purchase and automatically after the first purchase they fall under the invitation in the tree on the right or left offender According to the least number of people.\n\nWebsite design company\nThe code is written here upon registration - and you can view the most important website design work through Serv5.\n\nWebsite design company\nRequests page that contains the requests made by the user and their status.\n\ndesign a networked marketing website design\nPolicy page withdrawal requests.\n\nWebsite design company\nExplanation of the dashboard of the network marketing website : -\nThe control panel is characterized by ease of dealing and it consists of several tabs that make it easy for you to move between them and control all parts of the site and they are:\nThe tab for controlling the social media accounts that are linked to the site through the icons in the footer.\n\nWebsite design company\nCountry tab to control the available countries upon completing the purchase from the shopping cart, and you can set a different shipping rate for each country you add.\n\nWebsite design company\n\ndesign a networked marketing website design\n\nWebsite design company\nDesigning a networked web marketing website that allows: -\nThe possibility of adding supervisors in the board to help the owner of the site in managing it and assigning each supervisor his own authority through two tabs (the powers of supervisors - supervisors).\nThe powers of the moderators, and through that tab, you can create authority over several tabs to give to an official to control these selected tabs only as shown in the picture.\n\nWebsite design company\nAfter writing the name of the validity and choosing the tabs that the supervisor can control and adding the authority, then you move to the supervisors' repentance and you add the supervisor and choose the authority for him as shown in the picture.\n\ndesign a networked marketing website github\nAfter that, the supervisor can access the board with his data and control the validity available to him.\n\nWebsite design company\nThe members' tab, through which the admin can control the site’s users and the ability to add a new user and control all the platform users from deleting from the platform or modifying their personal data.\nTrack product categories through which you can add an infinite number of major sections.\n\ndesign a networked marketing website key\nFollow the sub-product sections through which you can add an infinite number of sub-sections under the main sections.\n\nWebsite design company\nTab for products and add products.\n\nWebsite design company\nDesign a complete web marketing website\nAdd product:\n\nWebsite design company\nAdd the default product images that appear when entering it for the first time.\n\ndesign a networked marketing website portfolio\nAdd pictures that appear when you click on the color.\n\nWebsite design company\nThe tab for adding bids by writing the name, price, code, description and selection of the products available on the site.\n\nDesign a networked marketing website\nThe import tab, on which the painting manager receives the customers' coatings.\n\nNetwork Marketing Web Design\nDesigning a successful network marketing website \nNew Orders are the orders that were requested and paid through the available online payment gateways.\nDelivered orders are orders that were ordered and paid through the available online payment gateways, and they were delivered to their owner.\nCanceled orders are orders that were requested and paid through the available online payment gateways and were canceled by their owner.\nUnpaid orders are orders that were requested and were not paid by means of payment, but by payment upon receipt.\nAn example of the order page in the control panel, design a network marketing website :\n\nDesign a networked marketing website\nThe tab for requests for withdrawal of the balance from customers.\n\ncreative website design company\nPages tab, through which you can add and modify the pages of the site.\n\nDesign a networked marketing website\n Form for adding a new page.\n\nThe tab for the newsletter contains all the e-mails that come from this field in the website invoice.\n\nThe Contact Us tab, through which you can survey the messages of the Contact Us page, and also receive this message on the mile linked to the site.\n\nA network marketing website\nTo connect with us , please contact the number 00201288863631"
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2021\/04\/التسويق-الشبكي.jpg",
+        "demo_link": "https:\/\/chakernet.com\/",
+        "order_link": "\/request-quote",
+        "features": {
+            "ar": [
+                {
+                    "title": "لوحة تحكم عربية وإنجليزية متكاملة",
+                    "desc": "إدارة كاملة لكافة أقسام وإعدادات النظام والعملاء بسهولة فائقة."
+                },
+                {
+                    "title": "تصميم متجاوب مع جميع الشاشات",
+                    "desc": "يعمل بكفاءة عالية على الهواتف الذكية والأجهزة اللوحية وأجهزة الكمبيوتر."
+                },
+                {
+                    "title": "سرعة وأمان وحماية فائقة",
+                    "desc": "بنية برمجية مؤمنة بالكامل ومهيأة لمحركات البحث (SEO)."
+                },
+                {
+                    "title": "دعم فني وتطوير مستمر من سيرف فايف",
+                    "desc": "فريق دعم فني متخصص لمتابعة التشغيل وإضافة التعديلات الخاصة بك."
+                }
+            ],
+            "en": [
+                {
+                    "title": "Comprehensive Control Panel",
+                    "desc": "Full administrative dashboard to manage users, settings, and content effortlessly."
+                },
+                {
+                    "title": "100% Responsive Layout",
+                    "desc": "Works seamlessly across smartphones, tablets, laptops, and desktop screens."
+                },
+                {
+                    "title": "High Performance & SEO Ready",
+                    "desc": "Engineered with clean, secure code optimized for fast loading and search engines."
+                },
+                {
+                    "title": "24\/7 Technical Support by Serv5",
+                    "desc": "Dedicated technical support and custom feature development upon request."
+                }
+            ]
+        },
+        "tech_specs": [
+            "PHP",
+            "Laravel",
+            "MySQL",
+            "Tree Matrix Engine",
+            "E-Wallet",
+            "Multi-Currency"
+        ],
+        "why_choose_us": {
+            "ar": "سكربت تصميم موقع تسويق شبكي من شركة سيرف فايف لخدمات",
+            "en": "A complete, production-ready software solution engineered by Serv5 with 24\/7 technical support and full customization."
+        },
+        "samples": [
+            "https:\/\/serv5.com\/wp-content\/uploads\/2021\/04\/17.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2021\/04\/التاب-الخاص.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2021\/04\/13.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2021\/04\/16.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2021\/04\/15.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2021\/04\/صور-المنتج.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2021\/04\/اضافه-منتج.png",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2021\/04\/14.png"
+        ],
+        "is_active": true
+    },
+    {
+        "slug": "electronic-lawyer-system",
+        "name": {
+            "ar": "تصميم نظام محامي الكتروني",
+            "en": "Electronic Lawyer Management System"
+        },
+        "category": {
+            "ar": "إدارة مكاتب المحاماة والاستشارات",
+            "en": "Legal & Law Firm ERP"
+        },
+        "title": {
+            "ar": "تصميم نظام محامي الكتروني من شركة سيرف فايف",
+            "en": "Electronic Lawyer & Law Firm Management System by Serv5"
+        },
+        "description": {
+            "ar": "تقدم شركة سيرف فايف نظام محامي الكتروني كواحد من أقوى منتجاتها البرمجية المصممة خصيصا لتلبية احتياجات مكاتب المحاماة بمختلف أحجامها، يتميز النظام بالمرونة والكفاءة العالية في تنظيم وإدارة كل ما يتعلق بالقضايا، الموكلين، الجلسات، والإجراءات القانونية، من خلال واجهة سهلة الاستخدام وتصميم احترافي.\n\nتصميم نظام محامي الكتروني\nلماذا تصميم نظام محامي الكتروني ؟\nلأننا في سيرف فايف نفهم التحديات اليومية التي تواجه مكاتب المحاماة، قمنا بتطوير نظام المحامي ليكون الأداة المتكاملة التي تساعد المحامي على التركيز في عمله القانوني، دون الانشغال بالتفاصيل الإدارية والفنية.\nمميزات نظام المحامي – من تنفيذ شركة سيرف فايف\nتفخر شركة سيرف فايف بتقديم نظام \"المحامي\" الإلكتروني، أحد أبرز الأنظمة القانونية المتكاملة التي تم تطويرها خصيصا لتلبية احتياجات مكاتب المحاماة بطريقة احترافية وعملية.\nقمنا في سيرف فايف بتنفيذ نظام يتميز بـ:\n1-إدارة ذكية للقضاياإمكانية إضافة ومتابعة القضايا بالتفاصيل الكاملة وربطها بالموكلين والخصوم والجلسات والمستندات.\n2-تنظيم شامل للجلساتجدولة تلقائية، تنبيهات قبل كل جلسة، وتسجيل مخرجات الجلسات لحظة بلحظة.\n3-قاعدة بيانات قوية للموكلينملفات شاملة للموكلين يمكن ربطها بعدد غير محدود من القضايا.\n4-إدارة مالية متقدمةتسجيل الإيرادات والمصروفات المرتبطة بكل قضية مع تقارير مالية دقيقة.\n5-نظام مستخدمين بصلاحيات مرنةلكل فرد في المكتب صلاحياته المخصصة سواء كان محاميًا أو سكرتيرًا أو مديرًا.\n6-تصميم احترافي وسهل الاستخدامواجهة مستخدم متجاوبة وسريعة على جميع الأجهزة.\n7-نظام أرشفة إلكترونيةسهولة حفظ واسترجاع المستندات القانونية بدقة عالية.\n8-تنبيهات ذكيةتذكير تلقائي بالجداول والمواعيد والتجديدات المهمة.\n9-تقارير لحظية وإحصائياتمتابعة فورية لأداء المكتب الإداري والمالي والقانوني.\n10-دعم فني مستمرفريقنا يوفر لك دعمًا متواصلًا وتحديثات دورية لضمان استقرار النظام.\nلمن هذا النظام؟\nنظام المحامي مناسب لجميع:\n\nمكاتب المحاماة الكبيرة والصغيرة\nالمحامين المستقلين\nالإدارات القانونية في الشركات\nمراكز التحكيم والاستشارات القانونية\n\nتصميم نظام المحامي الالكتروني \nنظام المحامي الالكتروني هو عبارة عن نظام محاماة يهدف إلى إدارة كل ما تحتاجه مكاتب المحاماة من مهام،  وما يرتبط بالمكاتب من موظفين داخل المكتب وموكلين متعاملين معه. يضم النظام خمسة أقسام رئيسية وهي: \n\nقسم موقع نظام المحامي الالكتروني.\nقسم مكتب المحاماة. \nقسم موظفي مكتب المحاماة. \nقسم الموكلين. \nقسم الإدارة العامة للنظام بأكمله.\n\nقسم موقع نظام المحامي الالكتروني \nيمثل هذا القسم الموقع الرسمي لنظام المحامي الالكتروني، حيث يحتوي على الصفحة الرئيسية HomePage والتي يمكن المستخدم الدخول إليها من خلال الرابط الرسمي للنظام. \nنظام محامي الكتروني\n الصفحة الرئيسية للموقع وتضم ما يلي: \n\nقائمة رئيسية تضم روابط اقسام الصفحة الرئيسية بالإضافة إلى رابط لتسجيل الدخول ورابط  لإنشاء حساب جديد. \n سلايدر من نحن يهدف إلى التعريف بنظام المحامي الإلكتروني\n\nتصميم نظام المحامي الالكتروني\n\nالخدمات التي يقدمها النظام. \nقسم اتصل بنا. \n\nاتصل بنا\n\nما الذي يميز نظام المحامي الإلكتروني. \nشهادات التزكية من قبل مكاتب أو موكلين استخدموا النظام. \nفوتر يضم نوافذ التواصل االجتماعي الخاصة بالمحامي الإلكتروني وشعار النظام والقائمة الرئيسية \n\n حساب العميل client\nيتيح نظام lawyer إمكانية تسجيل حساب للعميل، ويشمل حساب العميل على بيانات العميل كما يشمل قضايا العميل.\nحساب الموظف officer\nيتيح نظام lawyer إمكانية تسجيل حساب للموظف، حيث يستطيع موظف المكتب من خلاله، معرفة بياناته الشخصية، كما يمكنه إضافة القضايا والموكلين الى السيستم\nشرح لوحة التحكم الخاصة بsuper admin  \n تتيح لك لوحة التحكم الإطلاع على التالي :\n\nيوجد نظرة عامة عن الموقع إجمالي (عدد المستخدمين الجدد، عدد السكرتير الجديد، عدد الموظفين الجدد، المحامون الجدد، المكاتب الجديدة التي انضمت).\nكما يستعرض التقرير إجمالي المصروفات والإيرادات وناتج صافي الربح لجميع المكاتب، بإمكانك تحديد حسب المدة الزمنية المطلوبة.\nيوجد ملخص بياني لتوضيح إحصائيات نوع المستخدمين.\nيوجد مخطط توضيحي لنشاط المكتب لتوضيح المكاتب النشطة والغير نشطة .\n\n لوحة التحكم المتخصصه\n1- من خلال الضغط علي ايقونة لوحة التحكم المتخصصه  ستظهر امامك تلك الشاشة يمكنك اضافة وتعديل كل مما يلي\nاعدادات الموقع \nيمكنك التعديل على إعدادات الحساب من خلال :\nالضغط على إعدادات الموقع من الصفحة الرئيسية ، ستظهر أمامك الشاشة ستمكنك من التالي : \n\nإضافة لوجو للموقع .\nوضع اسم الموقع واضافة العنوان.\nيمكنك ايضا تعديل وإضافة بيانات مثل الوصف، الكلمات التعريفية و المؤلف.\nأدخل الرمز المفضل واسم السوشيال كل في خانته المخصصة. \nيمكنك إضافة الربط الالكتروني الخاص بمكتبك في خانة الربط الإلكتروني.\nتستطيع تعديل الرسالة الموقع او اضافة رسالة جديد إليه.\n.يمكنك تحديد عدد الاشعارات التي ستتلقاها.\n ايضا يمكنك إضافة رمز التوثيق الخاص بحسابك في خانة رمز التوثيق.\nيمكنك تعديل رمز المعرف من خانة معرف المثيل، ثم اضغط ايقونة حفظ لتأكيد التغيير.\n\n المحامي\nتحتوي لوحة تحكم super admin على ايقونة للمحامي ، وبعد الذهاب الي هذه الايقونة يمكنك:\n\nمعرفة عدد المحامين.\nمعرفة بيانات المحامين كاملة( الاسم - رقم الهاتف - المكتب التابع له) بالإضافة الى العديد من البيانات الاخرى.\nيمكنك إضافة محامي جديد\nيمكنك عرض بيانات المحامي او تعديلها او حذفها.\n\nمدير لمكتب \nتحتوي لوحة تحكم super admin على ايقونة لمدير المكتب ، وبعد الذهاب الي هذه الايقونة يمكنك:\n\nمعرفة بيانات مدراء المكاتب  (الاسم - المكتب التابع له -الايميل) بالإضافة الى العديد من البيانات الاخرى.\nيمكنك إضافة مدير مكتب جديد\nيمكنك عرض بيانات المحامي او تعديلها او حذفها.\n\nمكتب \nتحتوي لوحة تحكم super admin على ايقونة خاصة بالمكتب ، وبعد الذهاب الى هذه الأيقونة يمكنك:\n\nمعرفة بيانات  المكاتب  (اسم - ارقام المكتب -العنوان) بالإضافة إلى العديد من البيانات الاخرى.\nيمكنك إضافة  مكتب جديد\nيمكنك عرض بيانات المكتب او تعديلها او حذفها.\nكما يمكنك تحديد حالة المكاتب التي تريدها أن تظهر لك:\n\nاطلب الآن\nإذا كنت تبحث عن نظام يساعدك في تطوير أداء مكتبك القانوني ويمنحك سيطرة كاملة على سير العمل، فإن نظام المحامي من سيرف فايف هو خيارك المثالي.تواصل معنا الآن للحصول على عرض خاص أو تجربة توضيحية.",
+            "en": "Serv5 offers the Electronic Lawyer System as one of its flagship software products designed specifically for law firms and legal departments of all sizes to manage cases, clients, court sessions, legal consultations, contracts, and billing with complete security and efficiency."
+        },
+        "image": "https:\/\/serv5.com\/wp-content\/uploads\/2025\/04\/نظام-محامي-الكتروني.webp",
+        "demo_link": "https:\/\/lawyer.serv5.com.eg\/ar",
+        "order_link": "\/request-quote",
+        "features": {
+            "ar": [
+                {
+                    "title": "لوحة تحكم عربية وإنجليزية متكاملة",
+                    "desc": "إدارة كاملة لكافة أقسام وإعدادات النظام والعملاء بسهولة فائقة."
+                },
+                {
+                    "title": "تصميم متجاوب مع جميع الشاشات",
+                    "desc": "يعمل بكفاءة عالية على الهواتف الذكية والأجهزة اللوحية وأجهزة الكمبيوتر."
+                },
+                {
+                    "title": "سرعة وأمان وحماية فائقة",
+                    "desc": "بنية برمجية مؤمنة بالكامل ومهيأة لمحركات البحث (SEO)."
+                },
+                {
+                    "title": "دعم فني وتطوير مستمر من سيرف فايف",
+                    "desc": "فريق دعم فني متخصص لمتابعة التشغيل وإضافة التعديلات الخاصة بك."
+                }
+            ],
+            "en": [
+                {
+                    "title": "Case & Court Session Management",
+                    "desc": "Organize case files, court dates, legal documents, and automated session reminders."
+                },
+                {
+                    "title": "Client & Power of Attorney Records",
+                    "desc": "Complete digital archive of client profiles, powers of attorney, and legal contracts."
+                },
+                {
+                    "title": "Financial & Accounting Module",
+                    "desc": "Track legal fees, installments, expenses, and generate detailed financial invoices."
+                },
+                {
+                    "title": "Role-Based Lawyer Permissions",
+                    "desc": "Assign tasks to lawyers and legal assistants with granular access control and reports."
+                }
+            ]
+        },
+        "tech_specs": [
+            "Laravel",
+            "PHP",
+            "MySQL",
+            "REST API",
+            "Cloud Backup",
+            "RBAC Security"
+        ],
+        "why_choose_us": {
+            "ar": "شركة سيرف فايف تقدم تصميم نظام محامي الكتروني كواحد من أقوى منتجاتها البرمجية المصممة خصيصا لتلبية احتياجات مكاتب المحاماة بمختلف أحجامها، يتميز النظام بالمرونة ",
+            "en": "A complete, production-ready software solution engineered by Serv5 with 24\/7 technical support and full customization."
+        },
+        "samples": [
+            "https:\/\/serv5.com\/wp-content\/uploads\/2025\/04\/نظام-محامي-الكتروني.webp",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2025\/04\/تصميم-نظام-المحامي-الالكتروني.webp",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2025\/04\/اتصل-بنا.webp",
+            "https:\/\/serv5.com\/wp-content\/uploads\/2025\/04\/Screenshot-2025-04-07-144905-1.webp"
+        ],
+        "is_active": true
+    }
+]

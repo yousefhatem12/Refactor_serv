@@ -2,13 +2,19 @@
 
 namespace App\Models;
 
+use App\Traits\ClearsApiCache;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class NavLink extends Model
 {
-    use HasFactory;
+    use HasFactory, ClearsApiCache;
+
+    protected static function apiCacheScopes(): array
+    {
+        return ['nav_links'];
+    }
 
     protected $fillable = [
         'label',

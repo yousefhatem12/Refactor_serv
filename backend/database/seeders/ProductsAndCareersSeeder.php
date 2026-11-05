@@ -10,7 +10,23 @@ class ProductsAndCareersSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Seed Products
+        \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
+        Product::truncate();
+        Career::truncate();
+        \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
+
+        // 1. Seed Real Serv5 Products extracted from 00201288863631.WordPress.2026-11-05.xml
+        $wpProductsPath = database_path('seeders/data/wp_products.json');
+        if (file_exists($wpProductsPath)) {
+            $wpProducts = json_decode((string) file_get_contents($wpProductsPath), true);
+            if (is_array($wpProducts)) {
+                foreach ($wpProducts as $wpProd) {
+                    Product::updateOrCreate(['slug' => $wpProd['slug']], $wpProd);
+                }
+            }
+        }
+
+        // 2. Also keep the 6 SaaS Showcase Products so existing links work seamlessly
         $productsData = [
             [
                 'slug' => 'athath',
@@ -216,73 +232,7 @@ class ProductsAndCareersSeeder extends Seeder
             Product::updateOrCreate(['slug' => $data['slug']], $data);
         }
 
-        // Seed 1000 dummy products
-        $categories = [
-            ['en' => 'Furniture Store', 'ar' => 'تجارة إلكترونية للأثاث'],
-            ['en' => 'Medical Clinic', 'ar' => 'إدارة الرعاية الصحية'],
-            ['en' => 'E-Learning', 'ar' => 'المنصات التعليمية وأنظمة التعلم'],
-            ['en' => 'Real Estate', 'ar' => 'منصات التسويق والوساطة العقارية'],
-            ['en' => 'Restaurant & Cafe', 'ar' => 'المنيو الرقمي والطلب الذاتي'],
-            ['en' => 'Fitness & Gym', 'ar' => 'إدارة الصالات والنوادي الرياضية'],
-        ];
-
-        $techSpecsOptions = [
-            ['Next.js', 'React', 'TailwindCSS', 'Node.js', 'MongoDB', 'Framer Motion'],
-            ['React', 'Next.js', 'TailwindCSS', 'Express.js', 'PostgreSQL', 'Node.js'],
-            ['Next.js', 'React', 'Node.js', 'TailwindCSS', 'GraphQL', 'PostgreSQL'],
-            ['React', 'Next.js', 'TailwindCSS', 'Node.js', 'MongoDB', 'Mapbox API'],
-            ['Next.js', 'React', 'TailwindCSS', 'Socket.io', 'Firebase', 'Node.js'],
-        ];
-
-        for ($i = 1; $i <= 1000; $i++) {
-            $cat = $categories[$i % count($categories)];
-            $tech = $techSpecsOptions[$i % count($techSpecsOptions)];
-            $imgNum = ($i % 6) + 1;
-            Product::updateOrCreate(
-                ['slug' => "dummy-product-{$i}"],
-                [
-                    'name' => [
-                        'en' => "Premium Product {$i}",
-                        'ar' => "منتج مميز رقم {$i}"
-                    ],
-                    'category' => $cat,
-                    'title' => [
-                        'en' => "Professional Product Design {$i}",
-                        'ar' => "تصميم منتج احترافي رقم {$i}"
-                    ],
-                    'description' => [
-                        'en' => "This is a detailed description for Premium Product {$i}. It offers state-of-the-art features, elegant design, and seamless performance built on modern tech stack.",
-                        'ar' => "هذا وصف تفصيلي للمنتج المميز رقم {$i}. يوفر ميزات متطورة وتصميماً أنيقاً وأداءً سلساً مبنياً على أحدث التقنيات الحديثة."
-                    ],
-                    'image' => "/portfolio/image-{$imgNum}.webp",
-                    'demo_link' => '#',
-                    'order_link' => '#',
-                    'features' => [
-                        'en' => [
-                            ['title' => "Feature A for {$i}", 'desc' => "Advanced feature description for item {$i}"],
-                            ['title' => "Feature B for {$i}", 'desc' => "Responsive visual capabilities for item {$i}"]
-                        ],
-                        'ar' => [
-                            ['title' => "ميزة أ للمنتج {$i}", 'desc' => "وصف الميزة المتقدمة للمنتج رقم {$i}"],
-                            ['title' => "ميزة ب للمنتج {$i}", 'desc' => "قدرات بصرية متجاوبة للمنتج رقم {$i}"]
-                        ]
-                    ],
-                    'tech_specs' => $tech,
-                    'why_choose_us' => [
-                        'en' => "High scalability, low latency, and modern design templates.",
-                        'ar' => "قابلية عالية للتوسع، سرعة استجابة فائقة، وقوالب تصميم حديثة."
-                    ],
-                    'samples' => [
-                        "/portfolio/image-1.webp",
-                        "/portfolio/image-2.webp",
-                        "/portfolio/image-3.webp",
-                    ],
-                    'is_active' => true
-                ]
-            );
-        }
-
-        // 2. Seed Careers
+        // 3. Seed Real Serv5 Careers extracted from 00201288863631.WordPress.2026-11-05.xml
         $jobsData = [
             [
                 'title' => ['en' => 'Data Analyst', 'ar' => 'محلل بيانات'],
@@ -623,43 +573,79 @@ class ProductsAndCareersSeeder extends Seeder
                         'معرض أعمال متميز يثبت الفهم العميق لأسس التخطيط، والخطوط، والمسافات، والتفاعل التفاعلي الدقيق.'
                     ]
                 ]
+            ],
+            [
+                'title' => ['en' => 'Project Manager', 'ar' => 'مدير مشاريع برمجية'],
+                'department' => 'Development',
+                'location' => ['en' => 'Mansoura, Egypt', 'ar' => 'المنصورة، مصر'],
+                'salary' => ['en' => 'Competitive Salary', 'ar' => 'راتب مجزي ومنافس'],
+                'description' => [
+                    'en' => 'We are looking for a Project Manager to join our team at Serv5 responsible for overseeing software projects from start to finish, managing and motivating software developers and other team members.',
+                    'ar' => 'نبحث عن مدير مشاريع برمجية للانضمام إلى فريقنا في سيرف فايف ليكون مسؤولاً عن الإشراف على المشاريع البرمجية من البداية إلى النهاية، وإدارة وتحفيز مطوري البرمجيات وأعضاء الفريق.'
+                ],
+                'responsibilities' => [
+                    'en' => [
+                        'Discuss potential projects and their parameters with clients, executives, and software developers.',
+                        'Plan out the blueprints for software projects, including defining the scope, allocating resources, and setting deadlines.',
+                        'Lead quality assurance testing to discover errors and optimize usability across web and mobile deliverables.'
+                    ],
+                    'ar' => [
+                        'مناقشة المشاريع المحتملة ومعاييرها الفنية مع العملاء والإدارة ومطوري البرمجيات.',
+                        'وضع المخططات التنفيذية للمشاريع البرمجية، بما في ذلك تحديد النطاق وتخصيص الموارد ومواعيد التسليم.',
+                        'قيادة اختبارات ضمان الجودة لاكتشاف الأخطاء وتحسين سهولة الاستخدام عبر مواقع الويب وتطبيقات الجوال.'
+                    ]
+                ],
+                'requirements' => [
+                    'en' => [
+                        'Proven experience in software project management and Agile/Scrum methodologies.',
+                        'Strong communication, leadership, and client negotiation skills.',
+                        'Solid technical background in web and mobile application lifecycles.'
+                    ],
+                    'ar' => [
+                        'خبرة مثبتة في إدارة المشاريع البرمجية ومنهجيات العمل الرشيقة (Agile / Scrum).',
+                        'مهارات تواصل وقيادة وتفاوض ممتازة مع العملاء وفرق العمل.',
+                        'خلفية تقنية قوية في دورة حياة تطوير مواقع الويب وتطبيقات الهواتف الذكية.'
+                    ]
+                ]
+            ],
+            [
+                'title' => ['en' => 'Sales Manager / Executive', 'ar' => 'مدير ومندوب مبيعات'],
+                'department' => 'Marketing',
+                'location' => ['en' => 'Mansoura, Egypt', 'ar' => 'المنصورة، مصر'],
+                'salary' => ['en' => 'Competitive Salary + Commission', 'ar' => 'راتب مجزي + عمولة مبيعات'],
+                'description' => [
+                    'en' => 'We at Serv5 are looking for a competitive and trustworthy Sales Executive to help us build up our business activities and expand our client base.',
+                    'ar' => 'نبحث في شركة سيرف فايف عن مسؤول ومدير مبيعات طموح وموثوق لمساعدتنا في تنمية أنشطتنا التجارية وتوسيع قاعدة عملائنا في خدمات الويب والتطبيقات والتسويق.'
+                ],
+                'responsibilities' => [
+                    'en' => [
+                        'Conduct market research to determine selling capabilities and assess customer needs.',
+                        'Actively seek out new sales opportunities through networking, social media, and client outreach.',
+                        'Prepare and deliver appropriate presentations on Serv5 services and software products.'
+                    ],
+                    'ar' => [
+                        'إجراء أبحاث السوق لتحديد الفرص البيعية وتقييم احتياجات العملاء.',
+                        'البحث النشط عن فرص مبيعات جديدة من خلال التواصل المباشر والشبكات المهنية والسوشيال ميديا.',
+                        'إعداد وتقديم العروض التقديمية والفنية حول خدمات ومنتجات شركة سيرف فايف.'
+                    ]
+                ],
+                'requirements' => [
+                    'en' => [
+                        'Proven experience as a Sales Executive or relevant role in the software/digital agency sector.',
+                        'Proficiency in English and Arabic with excellent negotiation and presentation skills.',
+                        'Thorough understanding of marketing and negotiating techniques.'
+                    ],
+                    'ar' => [
+                        'خبرة سابقة في مجال مبيعات البرمجيات وتصميم المواقع أو التسويق الإلكتروني.',
+                        'إجادة مهارات التفاوض والعرض والإقناع وبناء علاقات طويلة الأمد مع العملاء.',
+                        'فهم شامل لتقنيات التسويق وإغلاق الصفقات البيعية بنجاح.'
+                    ]
+                ]
             ]
         ];
 
         foreach ($jobsData as $data) {
-            Career::updateOrCreate(['title->en' => $data['title']['en']], $data);
-        }
-
-        // Seed 1000 dummy careers
-        $departmentsList = ['Development', 'Design', 'Marketing', 'HR'];
-        for ($i = 1; $i <= 1000; $i++) {
-            $baseJob = $jobsData[$i % count($jobsData)];
-            $dept = $departmentsList[$i % count($departmentsList)];
-            Career::updateOrCreate(
-                ['title->en' => $baseJob['title']['en'] . " #{$i}"],
-                [
-                    'title' => [
-                        'en' => $baseJob['title']['en'] . " #{$i}",
-                        'ar' => $baseJob['title']['ar'] . " رقم {$i}"
-                    ],
-                    'department' => $dept,
-                    'location' => [
-                        'en' => $baseJob['location']['en'],
-                        'ar' => $baseJob['location']['ar']
-                    ],
-                    'salary' => [
-                        'en' => $baseJob['salary']['en'],
-                        'ar' => $baseJob['salary']['ar']
-                    ],
-                    'description' => [
-                        'en' => $baseJob['description']['en'] . " (Reference #{$i})",
-                        'ar' => $baseJob['description']['ar'] . " (مرجع رقم {$i})"
-                    ],
-                    'responsibilities' => $baseJob['responsibilities'],
-                    'requirements' => $baseJob['requirements'],
-                    'is_active' => true
-                ]
-            );
+            Career::updateOrCreate(['title->en' => $data['title']['en']], array_merge($data, ['is_active' => true]));
         }
     }
 }

@@ -28,8 +28,16 @@ class DatabaseSeeder extends Seeder
                 'password' => bcrypt($adminPassword),
             ]
         );
-
         $user->syncRoles([$role]);
+
+        $serv5Admin = User::updateOrCreate(
+            ['email' => 'admin@serv5.com'],
+            [
+                'name' => 'Serv5 Admin',
+                'password' => bcrypt('admin123456'),
+            ]
+        );
+        $serv5Admin->syncRoles([$role]);
 
         $this->call([
             InitialContentSeeder::class,

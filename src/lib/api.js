@@ -1,7 +1,7 @@
 const API_BASE_URL =
   process.env.INTERNAL_API_URL ||
   process.env.NEXT_PUBLIC_API_URL ||
-  "https://api.serv5.com.eg/api/v1";
+  "http://127.0.0.1:8000/api/v1";
 
 const LEGACY_IMAGE_MAP = {
   "/Services/Purple Planet.webp": "/Services/planet4.webp",
@@ -52,7 +52,7 @@ export const getMediaUrl = (path) => {
 // It is perfectly safe for public data (services, portfolio, etc.), but MUST NOT be used 
 // for personal/private endpoints. Private endpoints must bypass this cache.
 const apiCache = new Map();
-const CACHE_TTL = 300000; // 5 minutes
+const CACHE_TTL = 2000; // 2-second in-flight deduplication window; backend ApiCacheService handles versioned caching
 
 // Browser request concurrency queue to prevent overwhelming development/production servers
 // and to prioritize visible content requests so they finish significantly faster.
@@ -238,7 +238,7 @@ export const fetchAPI = async (endpoint, options = {}) => {
 
   const doFetch = async () => {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000); // 8-second timeout
+    const timeoutId = setTimeout(() => controller.abort(), 20000); // 20-second timeout
 
     try {
       const isFormData =

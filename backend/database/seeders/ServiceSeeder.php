@@ -58,27 +58,34 @@ class ServiceSeeder extends Seeder
             [
                 'type' => 'hosting_offers',
                 'data' => [
-                    'title' => ['en' => 'Choose Your Business Hosting Plan', 'ar' => 'اختر باقة الاستضافة المثالية لأعمالك'],
+                    'title' => ['en' => 'Hosting Offers from Serv5', 'ar' => 'عروض الاستضافة من سيرف فايف'],
                     'items' => [
                         [
-                            'title' => ['en' => 'Starter Cloud', 'ar' => 'الباقة السحابية للمبتدئين'],
+                            'title' => ['en' => 'Silver Serv', 'ar' => 'سيرف الفضى'],
                             'desc' => [
-                                'en' => "Price: 39 SAR\nPeriod: / month\nSubtitle: Ideal for blogs and personal portfolios\n10 GB NVMe Storage\n1 Hosted Website\nFree SSL Certificate\n10 Email Accounts\nFree Domain for 1st Year\nStandard cPanel Control Panel",
-                                'ar' => "Price: 39 ر.س\nPeriod: / شهرياً\nSubtitle: مثالي للمدونات والمواقع التعريفية الناشئة\nمساحة تخزين 10 جيجابايت NVMe\nاستضافة موقع واحد فقط\nشهادة SSL مجانية\n10 حسابات بريد إلكتروني\nدومين مجاني للسنة الأولى\nلوحة تحكم cPanel القياسية"
+                                'en' => "Price: 180 USD\nPeriod: / annually\nSubtitle: Ideal for websites & startups\nDisk Space: 5 GB\nUnlimited Traffic\nUnlimited Databases\nOnly 1 Domain Hosting Allowed\nCpanel Control Panel\nFree Site Transfer\nProtection Throughout Subscription",
+                                'ar' => "Price: 180 دولار\nPeriod: / سنوياً\nSubtitle: مثالي للمواقع التعريفية والشركات الناشئة\nالمساحة : 5 جيجا\nترافيك غير محدود\nقواعد بيانات غير محدودة\nمسموح باستضافة نطاق واحد\nلوحة تحكم سي بنل (cPanel)\nنقل الموقع مجاناً\nحماية طوال فترة الاشتراك"
                             ]
                         ],
                         [
-                            'title' => ['en' => 'Professional Business', 'ar' => 'باقة الشركات الاحترافية'],
+                            'title' => ['en' => 'Golden Serv', 'ar' => 'سيرف ذهبى'],
                             'desc' => [
-                                'en' => "Price: 119 SAR\nPeriod: / month\nSubtitle: Best for growing companies and online stores\n50 GB NVMe Storage\n5 Hosted Websites\nDaily Backups (15 Days History)\nUnlimited Databases & Emails\nFree Domain & Dedicated IP\nLiteSpeed Cache Optimization\nPriority Support",
-                                'ar' => "Price: 119 ر.س\nPeriod: / شهرياً\nSubtitle: الأفضل للشركات المتوسطة والمتاجر الإلكترونية المتنامية\nمساحة تخزين 50 جيجابايت NVMe\nاستضافة حتى 5 مواقع\nنسخ احتياطي يومي (الاحتفاظ بـ 15 يوماً)\nقواعد بيانات وحسابات بريد غير محدودة\nدومين مجاني وعنوان IP مخصص\nتسريع وتخزين LiteSpeed الذكي\nدعم فني ذو أولوية"
+                                'en' => "Price: 270 USD\nPeriod: / annually\nSubtitle: Best for growing companies & stores\nDisk Space: 10 GB\nUnlimited Traffic\nUnlimited Databases\nOnly 1 Domain Hosting Allowed\nCpanel Control Panel\nFree Site Transfer\nProtection Throughout Subscription",
+                                'ar' => "Price: 270 دولار\nPeriod: / سنوياً\nSubtitle: الأفضل للشركات المتوسطة والمتاجر المتنامية\nالمساحة : 10 جيجا\nترافيك غير محدود\nقواعد بيانات غير محدودة\nمسموح باستضافة نطاق واحد\nلوحة تحكم سي بنل (cPanel)\nنقل الموقع مجاناً\nحماية طوال فترة الاشتراك"
                             ]
                         ],
                         [
-                            'title' => ['en' => 'Enterprise Elite', 'ar' => 'باقة النخبة للمؤسسات والشركات الكبرى'],
+                            'title' => ['en' => 'Bronze Serv', 'ar' => 'سيرف برونزى'],
                             'desc' => [
-                                'en' => "Price: 289 SAR\nPeriod: / month\nSubtitle: For high-traffic applications & large portals\nUnlimited NVMe Storage\nUnlimited Websites\nHourly Database Backups\nCustom Server Firewall\nFree Migration Service\nDedicated Manager\nVIP 24/7 Tech Support",
-                                'ar' => "Price: 289 ر.س\nPeriod: / شهرياً\nSubtitle: للتطبيقات والمنصات ذات حركة المرور العالية والضخمة\nمساحة تخزين غير محدودة NVMe\nاستضافة عدد غير محدود من المواقع\nنسخ احتياطي لقواعد البيانات كل ساعة\nجدار حماية مخصص للخادم\nخدمة نقل مجانية بالكامل ومؤمنة\nمدير حساب مخصص لمشروعك\nدعم فني لكبار الشخصيات 24/7"
+                                'en' => "Price: 300 USD\nPeriod: / annually\nSubtitle: High capacity & free domain included\nDisk Space: 20 GB\nUnlimited Traffic\nUnlimited Databases\nFree Domain Included\nCpanel Control Panel\nFree Site Transfer\nProtection Throughout Subscription",
+                                'ar' => "Price: 350 دولار\nPeriod: / سنوياً\nSubtitle: سعة أكبر مع نطاق مجاني للسنة الأولى\nالمساحة : 20 جيجا\nترافيك غير محدود\nقواعد بيانات غير محدودة\nنطاق مجاني\nلوحة تحكم سي بنل (cPanel)\nنقل الموقع مجاناً\nحماية طوال فترة الاشتراك"
+                            ]
+                        ],
+                        [
+                            'title' => ['en' => 'Featured Serv', 'ar' => 'سيرف مميز'],
+                            'desc' => [
+                                'en' => "Price: 500 USD\nPeriod: / annually\nSubtitle: Unlimited enterprise cloud hosting\nUnlimited Disk Space\nUnlimited Traffic\nUnlimited Databases\nFree Domain Included\nCpanel Control Panel\nFree Site Transfer\n24/7 Protection & Support",
+                                'ar' => "Price: 500 دولار\nPeriod: / سنوياً\nSubtitle: باقة النخبة بمساحة وموارد غير محدودة\nالمساحة غير محدودة\nترافيك غير محدود\nقواعد بيانات غير محدودة\nنطاق مجاني\nلوحة تحكم سي بنل (cPanel)\nنقل الموقع مجاناً\nحماية طوال فترة الاشتراك"
                             ]
                         ]
                     ]
@@ -1252,17 +1259,48 @@ class ServiceSeeder extends Seeder
             ],
         ];
 
+        $wpServicesMeta = [];
+        $wpMetaPath = database_path('seeders/data/wp_services_meta.json');
+        if (file_exists($wpMetaPath)) {
+            $loadedMeta = json_decode((string) file_get_contents($wpMetaPath), true);
+            if (is_array($loadedMeta)) {
+                $wpServicesMeta = $loadedMeta;
+            }
+        }
+
         foreach ($mapping as $slug => $data) {
+            $blocks = $data['blocks'];
+            if (isset($wpServicesMeta[$slug])) {
+                $wpMeta = $wpServicesMeta[$slug];
+                foreach ($blocks as &$block) {
+                    if (($block['type'] ?? '') === 'hero') {
+                        $block['data']['title'] = $wpMeta['title'] ?? $block['data']['title'];
+                        $block['data']['subtitle'] = $wpMeta['subtitle'] ?? $block['data']['subtitle'];
+                    } elseif (($block['type'] ?? '') === 'features') {
+                        if (!empty($wpMeta['about_title'])) {
+                            $block['data']['title'] = $wpMeta['about_title'];
+                        }
+                        if (!empty($wpMeta['about_desc'])) {
+                            $block['data']['subtitle'] = $wpMeta['about_desc'];
+                        }
+                        if (!empty($wpMeta['features'])) {
+                            $block['data']['items'] = $wpMeta['features'];
+                        }
+                    }
+                }
+                unset($block);
+            }
+
             $sections = [
                 'template' => $data['template'],
-                'blocks' => $data['blocks']
+                'blocks' => $blocks
             ];
 
             Service::updateOrCreate(
                 ['slug' => $slug],
                 [
                     'name' => $data['name'],
-                    'description' => $data['description'],
+                    'description' => isset($wpServicesMeta[$slug]['subtitle']) ? $wpServicesMeta[$slug]['subtitle'] : $data['description'],
                     'icon' => $data['icon'],
                     'is_active' => true,
                     'sections' => $sections

@@ -448,5 +448,95 @@ export const jobs = [
         "معرض أعمال متميز يثبت الفهم العميق لأسس التخطيط، والخطوط، والمسافات، والتفاعل التفاعلي الدقيق."
       ]
     }
+  },
+  {
+    id: "project-manager",
+    department: "Management",
+    title: {
+      en: "Project Manager",
+      ar: "مدير مشاريع تقنية"
+    },
+    location: {
+      en: "Mansoura, Egypt",
+      ar: "المنصورة، مصر"
+    },
+    status: "available",
+    salary: {
+      en: "Competitive Salary",
+      ar: "راتب مجزي ومنافس"
+    },
+    description: {
+      en: "We are looking for a skilled Project Manager at Serv5 to plan, execute, and finalize software and web development projects according to strict deadlines and within budget.",
+      ar: "نبحث في سيرف فايف عن مدير مشاريع تقنية محترف للتخطيط وتنفيذ وإتمام مشاريع البرمجيات وتطوير المواقع والتطبيقات وفق الجداول الزمنية المحددة وأعلى معايير الجودة."
+    },
+    responsibilities: {
+      en: [
+        "Coordinate internal resources and third parties/clients for the flawless execution of projects.",
+        "Ensure that all software and mobile projects are delivered on-time, within scope and within budget.",
+        "Develop project scopes and objectives, involving all relevant stakeholders and ensuring technical feasibility."
+      ],
+      ar: [
+        "تنسيق فرق العمل الداخلية والتواصل مع العملاء لضمان التنفيذ المتقن للمشاريع.",
+        "ضمان تسليم جميع مشاريع المواقع والتطبيقات في الوقت المحدد وضمن النطاق المتفق عليه.",
+        "تحديد نطاق وأهداف المشاريع ومتابعة الجدوى التقنية وجودة المخرجات."
+      ]
+    },
+    requirements: {
+      en: [
+        "Proven working experience in project management in the information technology and software sector.",
+        "Solid technical background, with understanding or hands-on experience in software development and web technologies.",
+        "Strong working knowledge of Agile/Scrum methodologies and project management tools (Jira, Trello, Asana)."
+      ],
+      ar: [
+        "خبرة عملية مثبتة في إدارة المشاريع في قطاع تكنولوجيا المعلومات والبرمجيات.",
+        "خلفية تقنية قوية وفهم عميق لمراحل تطوير البرمجيات وتطبيقات الويب والجوال.",
+        "إتقان منهجيات Agile/Scrum وأدوات إدارة المشاريع مثل Jira وTrello."
+      ]
+    }
+  },
+  {
+    id: "sales-manager",
+    department: "Sales",
+    title: {
+      en: "Sales Manager",
+      ar: "مدير مبيعات"
+    },
+    location: {
+      en: "Mansoura, Egypt",
+      ar: "المنصورة، مصر"
+    },
+    status: "available",
+    salary: {
+      en: "Competitive Salary + Commission",
+      ar: "راتب مجزي + عمولة"
+    },
+    description: {
+      en: "Serv5 is hiring an experienced Sales Manager to lead our software and digital solutions sales team, expand our client base in Egypt and the Gulf, and achieve revenue targets.",
+      ar: "تعلن سيرف فايف عن حاجتها لمدير مبيعات ذو خبرة لقيادة فريق مبيعات الحلول البرمجية والرقمية وتوسيع قاعدة عملائنا في مصر والخليج وتحقيق مستهدفات النمو."
+    },
+    responsibilities: {
+      en: [
+        "Achieve growth and hit sales targets by successfully managing the sales team.",
+        "Design and implement a strategic business plan that expands company customer base in Egypt, KSA, and the Gulf.",
+        "Build and promote strong, long-lasting customer relationships by partnering with them and understanding their needs."
+      ],
+      ar: [
+        "تحقيق النمو والوصول إلى مستهدفات المبيعات من خلال الإدارة الفعالة لفريق المبيعات.",
+        "تصميم وتنفيذ خطة عمل استراتيجية لتوسيع قاعدة عملاء الشركة في مصر والسعودية والخليج.",
+        "بناء وتعزيز علاقات قوية وطويلة الأمد مع العملاء وفهم متطلباتهم التقنية."
+      ]
+    },
+    requirements: {
+      en: [
+        "Successful previous experience as a sales representative or sales manager in a software house or digital agency.",
+        "Demonstrated ability to communicate, present and influence credibly and effectively at all levels of the organization.",
+        "Strong business sense and industry expertise in web hosting, mobile apps, and digital marketing services."
+      ],
+      ar: [
+        "خبرة سابقة ناجحة كمندوب مبيعات أو مدير مبيعات في شركات البرمجيات أو التسويق الرقمي.",
+        "قدرة عالية على التواصل والعرض والتأثير بفعالية ومصداقية مع العملاء.",
+        "خبرة قوية في مجال خدمات استضافة المواقع، برمجة التطبيقات، والتسويق الإلكتروني."
+      ]
+    }
   }
 ];

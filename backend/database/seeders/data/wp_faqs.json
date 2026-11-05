@@ -1,0 +1,62 @@
+[
+    {
+        "question": {
+            "ar": "ما هي الخدمات التي تقدمها شركة سيرف فايف ؟",
+            "en": "What are the services provided by Serv5?"
+        },
+        "answer": {
+            "ar": "تقدم شركة سيرف فايف جميع خدمات الويب وهي :- تصميم مواقع . برمجة مواقع . الدعم الفني . استضافه المواقع . التسويق الالكتروني . برمجة تطبيقات الجوال . تصميم المتاجر الالكترونية .",
+            "en": "Serv5 provides all web services, namely: - Web design. Web programming. Technical support Hosting websites. Digital Marketing Mobile application programming. Design of electronic stores"
+        }
+    },
+    {
+        "question": {
+            "ar": "ما هي مدة تصميم موقع الكتروني احترافي ؟",
+            "en": "How long is the time to design a professional website?"
+        },
+        "answer": {
+            "ar": "تحرص الشركة علي تقديم خدمة تصميم المواقع الالكترونية خلال اسرع وقت ممكن وباعلي جودة كما تقدم الشركة خدمة توفير محتوي نصي مميز خاص بالعمل ،بالإضافة الي مراعاة  معايير seo .",
+            "en": "The company is keen to provide web design service as quickly as possible and with the highest quality. The company also provides a service to provide distinctive textual content for work, in addition to taking into account SEO standards."
+        }
+    },
+    {
+        "question": {
+            "ar": "هل تقدم الشركة خدمة الدعم الفني ؟",
+            "en": "Does the company provide technical support service?"
+        },
+        "answer": {
+            "ar": "نعم ..... تحرص شركة سيرف فايف لخدمات الويب علي تقديم خدمة الدعم الفني لعملائها الكرام لأنها بمثابة حلقة الوصل بين العميل والشركة كما تمكن هذه الخدمة العملاء من الاستفسار عن الخدمات المختلفة او متابعه طلب او حل أي مشكله يتعرض لها العميل والرد أيضا علي الاستشارات المختلفة .",
+            "en": "Yes ..... Serv5 for web services to provide technical support service to its valued customers because it serves as a link between the customer and the company. This service also enables customers to inquire about different services or Follow up on the request or solve any problem that the customer is exposed to and also respond to various consultations."
+        }
+    },
+    {
+        "question": {
+            "ar": "هل تقدم الشركة خدمة تصميم مواقع متجاوبة مع الجوال ؟",
+            "en": "Does the company offer a responsive web design service?"
+        },
+        "answer": {
+            "ar": "نعم ... تقدم الشركة تصميم مواقع متجاوبة مع جميع الأجهزة اللوحية والهواتف المحمولة لكي يكون الموقع مناسب لجميع العملاء .",
+            "en": "Yes ... the company offers responsive web design with all tablets and mobile phones in order for the site to be suitable for all customers."
+        }
+    },
+    {
+        "question": {
+            "ar": "هل تقدم الشركة خدماتها للعملاء الاجانب ؟",
+            "en": "Does the company provide services to foreign clients?"
+        },
+        "answer": {
+            "ar": "تقدم الشركة جميع خدماتها لجميع العملاء خارج حدود البلاد وداخلها بكفاءة عالية لأنها تمتلك تاريخ كبير في مجال تصميم المواقع وبرمجة المواقع مما اكسبها ثقة العملاء .",
+            "en": "The company provides all its services to all clients outside and within the country borders with high efficiency because it has a great history in the field of web design and website programming, which has earned it the confidence of customers."
+        }
+    },
+    {
+        "question": {
+            "ar": "هل توفر الشركة حماية ضد اختراق المواقع ؟",
+            "en": "Does the company provide protection against hacking websites?"
+        },
+        "answer": {
+            "ar": "بالتأكد لدي الشركة متخصصين في امن المواقع ، كما ان فريق البرمجة الموجود بالشركة مدرب علي اكتشاف الثغرات وحماية البيانات من الاختراق بالإضافة الي حرص الشركة علي تطوير وتحديث السيرفرات .",
+            "en": "The company certainly has specialists in website security, and the company's programming team is trained to discover vulnerabilities and protect data from penetration, in addition to the company's keenness to develop and update servers."
+        }
+    }
+]

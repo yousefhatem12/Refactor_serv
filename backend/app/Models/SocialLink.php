@@ -2,10 +2,17 @@
 
 namespace App\Models;
 
+use App\Traits\ClearsApiCache;
 use Illuminate\Database\Eloquent\Model;
 
 class SocialLink extends Model
 {
+    use ClearsApiCache;
+
+    protected static function apiCacheScopes(): array
+    {
+        return ['footer'];
+    }
     protected $fillable = ['platform', 'url', 'is_active'];
 
     protected static function booted(): void

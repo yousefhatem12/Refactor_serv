@@ -1,0 +1,932 @@
+{
+    "web-hosting": {
+        "title": {
+            "ar": "استضافة مواقع قوية",
+            "en": "Strong web hosting"
+        },
+        "subtitle": {
+            "ar": "تعد الاستضافة عامل مهم جداً في نجاح الموقع واستمراره ؛ لذا عليك ان تفهم نقاط قوة الاستضافة الخاصة بيك من مساحة تخزين ، ترافيك ،  سكربتات مرفقة مع الاستضافة ، لوحة تحكم والأهم هو  الدعم الفني الفوري وهذا بالفعل ما تعمل سيرف فايف على تقديمة اليك بأفضل صورة اضف الى هذا مستوي الأمان العالي للسيرفرات ومزايا أخرى ....",
+            "en": "Because hosting is a very important factor in the success and continuity of the website; You must be aware of the strengths of your hosting in terms of storage space, traffic, scripts attached to the hosting, control panel, and most importantly of all, immediate technical support, all of which is provided by Lake Serv5 in the best way, which is not the level of high security for servers and many other features ...."
+        },
+        "about_title": {
+            "ar": "دعنا نستضيف موقعك بأقوى المميزات",
+            "en": "Cloud Hosting & Dedicated Servers"
+        },
+        "about_desc": {
+            "ar": "استمتع بخدمة استضافة مميزة مع سيرف فايف .",
+            "en": "Enjoy a unique hosting service with Serv5"
+        },
+        "features": [
+            {
+                "title": {
+                    "ar": "خوادم تعمل بنسبة تصل إلى 99‪.99%‬",
+                    "en": "Servers up to 99.99% working time"
+                },
+                "desc": {
+                    "ar": "الخوادم الداعمة لخطط الاستضافة المشتركة تعمل بدون إنقطاع بنسبة تصل الي 99 % ما لم تكن 100 % , يمكنك أيضاً رؤية التقارير و الحالة الخاصة بتواجد الخوادم علي الشبكة من خلال التوصل مع خدمة الدعم الفني للموقع كما نوفر لكم خطط مميزة للغاية",
+                    "en": "The servers that support shared hosting plans work without interruption by up to 99% unless it is 100%. You can also see the reports and the status of the servers ’presence on the network by arriving with the technical support service for the site. We also provide you with very distinctive plans."
+                }
+            },
+            {
+                "title": {
+                    "ar": "كفائة عالية و سرعة اتصال مميزة",
+                    "en": "High efficiency and distinctive connection speed"
+                },
+                "desc": {
+                    "ar": "المركز الرئيسي لجميع العمليات التي تتم بين العميل و بين سيرف فايف ضمان الرد في اقل من 24 ساعة , ضمان الرد علي تذاكر الدعم فني في خلال 15 دقيقة , نظام دفع متكامل , لعرض الفواتير المدفوعة و المستحقة لجميع الخدمات الذي قمت بشرائها",
+                    "en": "The main center for all operations that take place between the customer and between Serv5, guarantee a response in less than 24 hours, a guarantee of response to technical support tickets within 15 minutes, an integrated payment system, to display the bills paid and due for all services that you have purchased"
+                }
+            },
+            {
+                "title": {
+                    "ar": "افضل مراكز البيانات في العالم",
+                    "en": "The best data centers in the world"
+                },
+                "desc": {
+                    "ar": "تمتع بانشاء و العمل على عدد غير محدود من قواعد البيانات كما يمكنك الدمج بين عدة قواعد فى وقت واحد دون الحصول علي الاخطاء ناتجة عن ربط قواعد البيانات حيث لدينا فريق عمل مميز للغاية يعمل علي بكفائة عالية لتفادي جميع الاخطاء المتوقعة",
+                    "en": "Enjoy creating and working on an unlimited number of databases, and you can also combine several databases at one time without getting errors resulting from linking databases as we have a very distinguished team working on high efficiency to avoid all expected errors"
+                }
+            },
+            {
+                "title": {
+                    "ar": "تنبيه عبر رسائل SMS بقرب انتهاء الاشتراك",
+                    "en": "SMS alert that the subscription is about to expire"
+                },
+                "desc": {
+                    "ar": "تقوم شركتنا بارسال رسائل SMS للعملاء المشتركين بخدمات الاستضافة لدى الشركة بميعاد التجديد و قبل نفاذ مهلة التجديد للاستضافة حتى لا تفقد تواجد موقعك الخاص على شبكة الانترنت فلا تقلق من هذا تواصل مع الدعم الفني \nفي اي وقت",
+                    "en": "Our company sends SMS messages to customers subscribed to the company's hosting services at the renewal date and before the renewal deadline for hosting expires, so that you do not lose your website's presence on the Internet, so do not worry about this. Contact technical support\nAt what time"
+                }
+            },
+            {
+                "title": {
+                    "ar": "سيرفرات Cloud Lunix",
+                    "en": "Cloud Linux servers"
+                },
+                "desc": {
+                    "ar": "نقدم جميع خدماتنا على سيرفرات linux cloud لضمان اقصى حماية لك و استمرارية موقعك على شبكة الانترنت حيث نوفر لكم حماية كبيرة للموقع باستخدام تللك السيرفرات كما اننا نعمل علي توفير وسائل جديدة لضمان الامان الكامل لموقعك في اي وقت",
+                    "en": "We provide all our services on the linux cloud servers to ensure the maximum protection for you and the continuity of your website on the Internet, where we provide you with great protection for the site by using these servers, and we are also working to provide new means to ensure the complete safety of your site at any time"
+                }
+            },
+            {
+                "title": {
+                    "ar": "حماية كاملة",
+                    "en": "Complete protection"
+                },
+                "desc": {
+                    "ar": "نقدم خدمات الحماية الخاصة المتكاملة للحفاظ على استقرار موقعك من عمليات الإختراق لذا لا تقلق فنحن نستخدم سيرفرات قوية للغاية تساعدك علي البقاء علي الانترنت دون خوف من اي شئ حيث نستخدم على سيرفرات linux cloud المعروفة",
+                    "en": "We provide integrated special protection services to maintain the stability of your site from hacking operations, so do not worry, we use very powerful servers that help you stay on the Internet without fear of anything as we use the well-known linux cloud servers"
+                }
+            }
+        ]
+    },
+    "web-development": {
+        "title": {
+            "ar": "هل تبحث عن شركة برمجة مواقع ؟",
+            "en": "Programming strong websites without loopholes"
+        },
+        "subtitle": {
+            "ar": "الآن فرصتك في برمجة موقعك الخاص بين يديك؛ بأقل التكاليف يمكنك برمجة موقع أحلامك مع افضل شركة برمجة مواقع، من منا لا يبحث عن التجديد ومواكبة العصر ومن أهم الأمور التي يجب ان تنتبه لها عندا اختيارك شركة برمجة مواقع هي الكفاءة والجودة وان تحصل على برمجة خالية من الأخطاء التي قد تعرقل من أداء موقعك في المستقل وتعرضه للاختراق؛ لذا يعمل فريق العمل الخاص بنا على بناء أكواد آمنه وقابله للتطوير وذلك حفاظً منا على حقوق العميل.",
+            "en": "Website programming is considered one of the very important steps in building the site. The more clean and error-free programming the site is, the more powerful the site increases."
+        },
+        "about_title": {
+            "ar": "ما يميز برمجة المواقع لدينا",
+            "en": "Vulnerability-Free Secure Code"
+        },
+        "about_desc": {
+            "ar": "Fast traslate \n Icon translate \n\n \n Fast traslate \n Icon translate",
+            "en": ""
+        },
+        "features": [
+            {
+                "title": {
+                    "ar": "اكواد مشفرة فانت بامان",
+                    "en": "Encrypted codes, you are safe"
+                },
+                "desc": {
+                    "ar": "تمتع بأقصى درجات الأمان معنا . نستخدم اصعب اساليب التشفير للأكواد . و حتى اذا استطاع احد الوصول الى اكواد البرمجة فلن يستطيع استخراج اى بيانات منها",
+                    "en": "Enjoy the utmost safety with us. We use the most difficult encryption methods for codes. Even if someone can access the programming code, he will not be able to extract any data from it"
+                }
+            },
+            {
+                "title": {
+                    "ar": "دعم فني متكامل",
+                    "en": "Integrated technical support"
+                },
+                "desc": {
+                    "ar": "تتميز شركتنا بخدمات الدعم الفنى التى نقدمها على مدار الساعة , حتى تستمر خدمات العميل فى العمل على اكمل وجه من دون توقف",
+                    "en": "Our company is characterized by the technical support services that we provide around the clock, so that the customer services continue to work to the fullest without stopping"
+                }
+            },
+            {
+                "title": {
+                    "ar": "امكانية التطوير مستقبلا",
+                    "en": "The possibility of development in the future"
+                },
+                "desc": {
+                    "ar": "نقدم لعملائنا خدماتنا فى برمجة الويب بطريقة احترافية و اكواد اصلية نظيفة تتيح للعميل امكانية تطوير موقعة الالكترونى فى اى وقت يريد",
+                    "en": "We provide our customers with our web programming services in a professional way and clean original codes that allow the customer to develop his website at any time he wants"
+                }
+            },
+            {
+                "title": {
+                    "ar": "جودة العمل",
+                    "en": "Workmanship"
+                },
+                "desc": {
+                    "ar": "اخراج العمل مطابق تماما لفكرتك و كما كان في عقلك و تصورك .\nتطبيق المعايير القياسية في برمجة المواقع .",
+                    "en": "The work output is completely identical to your idea and as it was in your mind and perception.\nApplication of standard standards in programming websites."
+                }
+            },
+            {
+                "title": {
+                    "ar": "ضمان الخدمة",
+                    "en": "Service guarantee"
+                },
+                "desc": {
+                    "ar": "نضمن لك ان تستلم العمل الخاص بك و المتفق عليه و انت راضي عنه تماما 100% و لا نقبل باقل من ذلك .",
+                    "en": "We guarantee that you will receive your agreed work and are completely satisfied with it 100%, and we do not accept less than that."
+                }
+            },
+            {
+                "title": {
+                    "ar": "تواصل 24 ساعه",
+                    "en": "Contact 24 hours"
+                },
+                "desc": {
+                    "ar": "فريق عمل سيرف فايف كاملا يكون فى خدمتك , ندعمكم و ندعم طلباتكم على مدار الساعه و نسعد بالتعاون معكم و خدمتكم .",
+                    "en": "A complete Serv5 team is at your service. We support you and support your requests around the clock and are happy to cooperate with you and serve you."
+                }
+            }
+        ]
+    },
+    "web-design": {
+        "title": {
+            "ar": "افضل شركة تصميم مواقع",
+            "en": "Design your site professionally"
+        },
+        "subtitle": {
+            "ar": "افضل شركة تصميم مواقع الكترونية تساعدك على تحقيق ما تسعى اليه في نشاطك التجاري\nفهل تبحث عن شركة تصميم مواقع الكترونية متميزة تتيح لك حلول تصميم متنوعة ذو الوان عصرية وأفكار مبتكرة تجذب الزائرين من مختلف المنصات؟. اذاً انت في الموقع الصحيح كل ما عليك فعله هو التواصل معنا وطلب خدمة تصميم مواقع.",
+            "en": "If your dream is to own a website with a distinctive design that remains your place with Serv5; For Serv5, an integrated team is available that works to provide the best web design service with the latest technology."
+        },
+        "about_title": {
+            "ar": "لماذا يقع الاختيار على سيرف فايف في تصميم مواقع الويب",
+            "en": "Modern & Responsive Web Design"
+        },
+        "about_desc": {
+            "ar": "افضل شركة تصميم مواقع سيرف فايف تمتاز بالجودة العالية والاتقان والتطوير الدائم الذي يتيح للعميل الحصول على موقع ذو لمسة عصرية من حيث توزيع الأقسام او استخدام الألوان؛ وغيرها من المؤثرات التي تجعل الزائر يستمتع بتجربة استخدام الموقع والبحث بداخله.",
+            "en": "The sites of Serv5 clients are always distinguished, because the work team pays great attention to the details of colors and effects ... etc.\nHowever, the team will study well the behavior of the normal user within the site, and on this basis an attractive and distinctive design is made ..."
+        },
+        "features": [
+            {
+                "title": {
+                    "ar": "الوان عصريه",
+                    "en": "Modern colors"
+                },
+                "desc": {
+                    "ar": "يمتاز فريق العمل لدينا بذوقه الرفيع وخبرته الكبيرة التي تؤهله لإعطاء اراء مفيدة تصب في مصلحة العميل مما يترتب عليه الحصول على تصميم موقع مميز متماشي مع متطلبات العصر.",
+                    "en": "We are keen to keep pace with modern trends in design and colors without losing privacy\n  We are distinguished by choosing the appropriate colors in every design"
+                }
+            },
+            {
+                "title": {
+                    "ar": "تصميم مواقع احترافية",
+                    "en": "Professional design"
+                },
+                "desc": {
+                    "ar": "الاحترافية في تصميم المواقع هي عنواننا الابرز من  افضل شركة تصميم مواقع؛ حيث نجتهد ونسعي بشكل دائم على تطوير فريق العمل بما ينعكس على الاداء العام والذي بدورة ينعكس بالإيجاب على مستوى الخدمة المقدمة للعميل .",
+                    "en": "We are distinguished by simple, modern and professional designs with the overlap of different ideas that express you, your identity and the identity of what you declare."
+                }
+            },
+            {
+                "title": {
+                    "ar": "تصميم موقع سريع",
+                    "en": "Fast design"
+                },
+                "desc": {
+                    "ar": "من منا لا يطمح فى الحصول على موقع سريع خالي من الأخطاء البرمجية؛ هذا ما نعمل على تقديمة حيث ان سرعة الموقع تعد من اهم عوامل نجاح الـ seo .",
+                    "en": "The design is faster and stronger in search engines and is compatible with all browsers and this type is considered the most requested by us."
+                }
+            },
+            {
+                "title": {
+                    "ar": "متوافق مع الجوال",
+                    "en": "Compatible with mobile"
+                },
+                "desc": {
+                    "ar": "توافق الموقع مع الجوال يوفر عليك الكثير ويزيد من نسبة حصولك على زائرين محتملين حيث ان الأغلبية العظمي تعمل على استخدام الهواتف في البحث عن المواقع والخدمات المتنوعة وذلك لسهولة حملها واستخداماها في اي مكان .",
+                    "en": "We always strive to make the site compatible with smart devices and all mobile phones and screens for easy navigation"
+                }
+            },
+            {
+                "title": {
+                    "ar": "الربط مع مواقع التواصل الاجتماعي",
+                    "en": "Social media icons"
+                },
+                "desc": {
+                    "ar": "عندا تصميم مواقع الويب لا بد من الوضع فى عين الاعتبار إمكانية ربط مواقع التواصل الاجتماعي بالموقع والتي تعمل على تقوية الموقع وزيادة مستوى الـ social signals بما يفيد الموقع .",
+                    "en": "Put social media icons in the header or bill, and buttons to share topics and posts on Facebook, Twitter, Google Plus"
+                }
+            },
+            {
+                "title": {
+                    "ar": "التحكم باللغة",
+                    "en": "Control in Arabic"
+                },
+                "desc": {
+                    "ar": "عندا تصميم موقع ويب فأننا نحرص على توفير لوحة تحكم متعددة اللغات والتي تكون ذات قيمة وفائدة عالية حيث ترجع بالفائدة على الموقع فعندما تتعدد اللغات تزداد فرصة الحصول على زائرين أكثر.",
+                    "en": "We provide an Arabic control panel for easy management of the site’s pages and adding services with ease with the option of a control panel in English or any other language"
+                }
+            }
+        ]
+    },
+    "creative-design": {
+        "title": {
+            "ar": "هل ترغب في تصميم فيديو موشن؟",
+            "en": "Motion graphic services"
+        },
+        "subtitle": {
+            "ar": "من المتعارف في الوقت الحالي ان الفيديوهات الدعائية تعد من أقوى وأنجح الوسائل التسويقية والتي تعتبر من الأساليب المرئية والمسموعة التي تعمل على ترسيخ العلامة التجارية او الخدمة المعلن عنها بشكل قوي في أذهان الجمهور المستهدف؛ ونحن في سيرف فايف نعمل على تصميم فيديوهات موشن جرافيك بأفكار مبتكرة خارجة عن المألوف تجعل من علامتك التجارية ايقونة في السوق المنافس ينظر لها الجميع بعين الاعجاب والرغبة في الحصول عليها.",
+            "en": "Motion graphic video design is an animated display of graphics in order to clarify the information in the simplest form and to make your business separate from everyone."
+        },
+        "about_title": {
+            "ar": "أحصل على فيديو موشن جرافيك بأقل التكاليف",
+            "en": "What Are You Waiting For?"
+        },
+        "about_desc": {
+            "ar": "دائما انت بحاجة لابهار عملائك بعرض رائع نحن في سيرف فايف نصنع لك محتوى مرئي فريد يزيد ارباحك و يوفر عليك الكثير من مشقة التسويق التقليدي اطلب الان فيديو موشن جرافيك , غير عادى",
+            "en": "دائما انت بحاجة لابهار عملائك بعرض رائع نحن في سيرف فايف نصنع لك محتوى مرئي فريد يزيد ارباحك و يوفر عليك الكثير من مشقة التسويق التقليدي Order Now فيديو موشن جرافيك , غير عادى"
+        },
+        "features": [
+            {
+                "title": {
+                    "ar": "صناعة شخصيات خاصة",
+                    "en": "Special graphics"
+                },
+                "desc": {
+                    "ar": "معنا سوف تحصل على شخصيات تمثل هويتك  الخاصة ومشاهد مرسومة بطريقة مبتكرة تنقل الفيديو الخاص بك الى عالم أخر يشعر فيه العميل بالارتياح والرغبة في التواصل معك.",
+                    "en": "It is done through a complete analysis of the field of work of your organization to create the desired goal, and purposeful animation is made for your services and reflects your identity in a professional way."
+                }
+            },
+            {
+                "title": {
+                    "ar": "محتوى نصي جذاب",
+                    "en": "Script writing"
+                },
+                "desc": {
+                    "ar": "يمتاز فريق المحتوى الخاص بنا بأفكاره الخارجة عن نطاق المألوف والمعتاد لذا في النهاية يحصل العميل على محتوى نصي وأفكار  ابداعيه تجعل من الفيديو عمل فني قيم.",
+                    "en": "Writing a complete video script for your company in a simple and meaningful video based on the best marketing methods at the hands of a specialist"
+                }
+            },
+            {
+                "title": {
+                    "ar": "الاحترافية",
+                    "en": "Professional video"
+                },
+                "desc": {
+                    "ar": "احترافية الأداء عنصر أساسي منذ استقبال العميل مروراً بمراحل العمل المتعددة من جلب أفكار وكتابة محتوى ورسم شخصيات و وصولاً بوضع المؤثرات الصوتية والمرئية وتسليم المشروع العميل مع تقديم كافة وسائل المساعدة للعميل لتسهيل عملية الترويج لخدمته عن طريق الفيديو المصنوع.",
+                    "en": "We offer you the best technologies used in the field of motion graphic video to be very professional that expresses your company, business and services"
+                }
+            },
+            {
+                "title": {
+                    "ar": "التعليق الصوتي",
+                    "en": "voice over"
+                },
+                "desc": {
+                    "ar": "نعمل ايضاً على دعم الفيديو المصمم بتعليق صوتي متميز حيث توفر الشركة معلقين صوتيات متعددين اللهجات واللغات بما يتناسب مع المحتوي المقدم للعميل والفئة التي يستهدفها.",
+                    "en": "High quality voiceover recorded professionally by voice annotation professionals to provide high quality voiceover video of your business"
+                }
+            },
+            {
+                "title": {
+                    "ar": "المرونة الزمنية",
+                    "en": "Choose the period that suits you"
+                },
+                "desc": {
+                    "ar": "نعمل على تقديم فيديوهات موشن وفقاً لرغبة العميل من حيث العنصر الزمني لعرض الفيديو فهناك عملاء يبحثون عن فيديو موشن قصير وهناك من يبحث عن  مدة زمنية متوسطة واخرين يرغبون في مدة طويلة.",
+                    "en": "We offer many options for your motion graphic video in terms of the period you deem appropriate to display your services"
+                }
+            },
+            {
+                "title": {
+                    "ar": "سرعة الاداء",
+                    "en": "Fast delivery"
+                },
+                "desc": {
+                    "ar": "يقوم فريق العمل بالبدء في تصميم الفيديو بشكل منسق ومرتب لتسريع أداء العمل والحصول على الفيديو في اقل وقت وذلك لتسليم الفيديو للعميل بشكل سريع مع مراعات عنصر الجودة وذلك لنيل رضاء العميل.",
+                    "en": "Serv5 is keen to deliver the customer a high-quality motion graphic video within the agreed period and quickly to meet customers' requests"
+                }
+            }
+        ]
+    },
+    "mobile-apps": {
+        "title": {
+            "ar": "احصل على تطبيق جوال مميز",
+            "en": "Mobile application programming"
+        },
+        "subtitle": {
+            "ar": "هل ترغب في الحصول على وسيلة اتصال دائمة بعملائك ؟ اذاً فأنت بحاجة الى تصميم تطبيق جوال؛ حيث ان التطبيق يعد بمثابة حلقة وصل تضمن لك البقاء على عملائك اينما كانوا فهو بمثابة مصادقة لهواتف عملائك ومحاكة دائمة لعروضك المتعلقة بخدماتك ومنتجاتك؛ حيث تجعل العميل على اطلاع مستمر بكافة عروضك وما تقدمة وذلك عن طريق الاشعارات المنبعثة من التطبيق في حالة صدور أي جديد دون الحاجة للبحث او الذهاب لمقر العمل.",
+            "en": "Mobile applications play a very important role in the success of the project, because they allow you as a project owner the opportunity to communicate with your customer on an ongoing basis, so that Serv5 offers you special offers on Android and IOS mobile application programming services .."
+        },
+        "about_title": {
+            "ar": "تصميم تطبيق جوال",
+            "en": "High-Performance Mobile Apps"
+        },
+        "about_desc": {
+            "ar": "فى هذه الأونة يلزمك تطبيق للهواتف الذكية لمشروعك التجاري , و قد يعتقد بعض الناس أنها حكرا للمشروعات الكبري فقط , و هذا ليس صحيحا , بل تعتمد المشروعات المتوسطة و الصغيرة أيضا على تطبيقات الهواتف الذكية لتنمية و تطوير أعمالهم , بل و دعم اسمهم التجاري عند المستهلك و توليد الأرباح",
+            "en": "فى هذه الأونة يلزمك تطبيق للهواتف الذكية لمشروعك التجاري , و قد يعتقد بعض الناس أنها حكرا للمشروعات الكبري فقط , و هذا ليس صحيحا , بل تعتمد المشروعات المتوسطة و الصغيرة أيضا على تطبيقات الهواتف الذكية لتنمية و تطوير أعمالهم , بل و دعم اسمهم التجاري عند المستهلك و توليد الأرباح"
+        },
+        "features": [
+            {
+                "title": {
+                    "ar": "أحدث التقنيات",
+                    "en": "Modern techniques"
+                },
+                "desc": {
+                    "ar": "تعمل شركة سيرف فايف على تطوير اداء العمل بشكل مستمر وذلك للحصول على نتائج برمجية قوية؛ تسرع من اداء العمل وتعطي نتائج ذات كفاءة عالية.",
+                    "en": "The use of the best and latest software technologies in the work of modern applications and the ease of modification and addition to the software"
+                }
+            },
+            {
+                "title": {
+                    "ar": "أسعار تنافسية",
+                    "en": "suitable prices"
+                },
+                "desc": {
+                    "ar": "مع سيرف فايف يمكنك الحصول على أقوى عروض تصميم تطبيقات الجوال؛ عروض خارج الاطار التنافسي لأنها تحقق معادلة الكفاءة والجودة مع السعر المناسب للعميل..",
+                    "en": "The best prices for the work of Android and iPhone applications, and we have a section dedicated to making applications for Islamic, news and corporate websites"
+                }
+            },
+            {
+                "title": {
+                    "ar": "الأمان العالي",
+                    "en": "protection"
+                },
+                "desc": {
+                    "ar": "معنا سوف تحصل على برمجة تطبيق جوال آمنة، خالية من الأخطاء الكبيرة والصغيرة والتي قد تعرض تطبيقك لخطر الاختراق او فقد البيانات..",
+                    "en": "For more than 10 years, we have been striving at Serv5 to implement the utmost safety methods and reach the highest degree of protection for applications"
+                }
+            },
+            {
+                "title": {
+                    "ar": "سرعة الأداء",
+                    "en": "Experience"
+                },
+                "desc": {
+                    "ar": "معنا سوف تحصل على تصميم تطبيق جوال عالي الكفاءة ذو جودة وتصميم مميز وذلك في وقت قياسي دون الحاجة لانتظار الكثير.",
+                    "en": "We strive to be one of the best smart phone application companies in the Arab world. We have excellent experience and solutions to work with all kinds of applications"
+                }
+            },
+            {
+                "title": {
+                    "ar": "مرونة الأستخدام",
+                    "en": "Ease"
+                },
+                "desc": {
+                    "ar": "يتم برمجة تطبيق الجوال ودمج خصائص أكثر مرونة تسهل من عملية استخدامه وتجعل بيئة العمل على التطبيق قريبة لمنظور العميل مما يحقق نتائج منشودة.",
+                    "en": "Providing software features that give the customer convenience, ease of use, and compatibility with all browsers, modern devices, and all smartphones"
+                }
+            },
+            {
+                "title": {
+                    "ar": "التعدد اللغوي",
+                    "en": "Languages"
+                },
+                "desc": {
+                    "ar": "معنا سوف تحصل على تطبيق جوال ذو تعدد لغوى يساعدك على التواصل مع مختلف الفئات وبالتالي سوف تحصد قاعدة جماهرية واسعة تساعدك على نشر علامتك التجارية.",
+                    "en": "Applications can be in one language or multiple languages according to the client's request and what suits his environment in which the application will be created"
+                }
+            }
+        ]
+    },
+    "digital-marketing": {
+        "title": {
+            "ar": "في التسويق كن انت الملك",
+            "en": "Right marketing with Serv5"
+        },
+        "subtitle": {
+            "ar": "عندا دخولك عالم التسويق الالكتروني ان لم تكن الملك فلن تكن شيء؛ وهذا ما يحرص عليه فريق تسويق سيرف فايف حيث يعمل على جعلك عضو مؤثر في السوق، ولا تقتصر مهام الفريق على زيادة نسبة أرباحك وخلق علامة تجارية قوية؛ بل يحرص فريق العمل أيضا على إيجاد حلول تطويرية تواكب توقعات السوق وتجعل من علامتك التجارية مصدر ثقة عملائك وتساعد بشكل كبير على تكوين قاعدة جماهيرية واسعة.",
+            "en": "E-marketing is considered one of the basics for the success of any project during recent years, and this is because it acts as a means of communication between the institution or project and the target group, meaning that you are in order to reach your correct audience and be a large customer base that supports you all the time. Correct marketing is required, and correct marketing takes steps, and we are at Serv5 is our mission We market to you in the manner that delivers you to your customer and your customer to you."
+        },
+        "about_title": {
+            "ar": "مميزات خدمات التسويق الالكتروني من سيرف فايف",
+            "en": "Data-Driven Digital Marketing"
+        },
+        "about_desc": {
+            "ar": "Fast traslate \n Icon translate \n\n \n Fast traslate \n Icon translate \n\n \n Fast traslate \n Icon translate \n\n \nمترجم\ntra·ṣlà·re\n Fast traslate \n Icon translate \n\n \n Fast traslate \n Icon translate",
+            "en": "Targeted advertising campaigns, social media growth, and conversion optimization to maximize your ROI."
+        },
+        "features": [
+            {
+                "title": {
+                    "ar": "دراسة السوق",
+                    "en": "Study the project"
+                },
+                "desc": {
+                    "ar": "يعمل فريق التسويق الخاص بنا على دراسة السوق والمنافسين بشكل مفصل والعمل على ايجاد نقاط القوة والضعف للخصم وتجهيز تحليل رباعي SWOT دقيق يعمل على نقل المشروع الى منطقة آمنة خارج نطاق الفشل.",
+                    "en": "We make a special study for the project by a specialized team and make the necessary marketing plan for what is appropriate with your project or with your product and with the volume of expenses that you spend on it in full and with the size of the success required to be reached."
+                }
+            },
+            {
+                "title": {
+                    "ar": "إيجاد حلول تسويقية مبتكرة",
+                    "en": "Choose the right marketing field"
+                },
+                "desc": {
+                    "ar": "بعد تحليل السو بشكل دقيق والعمل على ايجاد نقاط الضعف للمنافسين يسعى فريق العمل على خلق حلول مبتكره وأفكار خارج الصندوق وذلك لتحقيق أهداف ربحية وتسويقية متنوعة تصب جميعها بالفائدة على أصحاب العمل.",
+                    "en": "We choose the best channel for your project to market your project, if it is a website with its preparation and advertising campaigns for it or through social media pages, and coordination is made with the website design department to choose the appropriate form of the site and prepare it for marketing"
+                }
+            },
+            {
+                "title": {
+                    "ar": "دقة الاستهداف",
+                    "en": "Targeting and competitors"
+                },
+                "desc": {
+                    "ar": "عندا تحليل السوق ييتم تحديد الشرائح التي سوف يكون من المفيد استهدافها والعمل على تحليل سلوكهم الخاص تجاه المنتج او الخدمة التي يتم الترويج لها وذلك لتحديد مدى احتياج الجمهور المستهدف لها ومتى هو الوقت المناسب والسعر المناسب لطرحها في الأسواق.",
+                    "en": "We target the best appropriate keywords for the site that bring back visitors and profits because we follow modern strategies in creating sites, which makes you profit from your site in the best way, and studying and analyzing the strengths and weaknesses of the target market."
+                }
+            },
+            {
+                "title": {
+                    "ar": "زيادة الأرباح",
+                    "en": "Budget and expected results"
+                },
+                "desc": {
+                    "ar": "عندا فتح مشروع ما؛ الهدف الأول هو كيفية التربح من المشروع وكيفية مضاعفة أرباحه وهذا ما يسعى فريق العمل له حيث يعمل بشكل مفصل على تحديد أهم النقاط التطويرية التي بدورها تعمل على زيادة مستوى الأرباح والنمو.",
+                    "en": "Determine the approximate budget for the success of the project during the first months of implementing the marketing campaign and define the expected results."
+                }
+            },
+            {
+                "title": {
+                    "ar": "تطوير المشروع",
+                    "en": "Looking forward to developing in the future"
+                },
+                "desc": {
+                    "ar": "لا تتوقف مهام فريق التسويق الخاص بنا حد تحقيق الأهداف المتفق عليها فقط؛ بل يسعى فريق العمل بشكل دائم على إيجاد نقاط تطويرية بهدف تحقيق التوسع والنمو.",
+                    "en": "Develop a distinct plan to clarify how to develop the project in the future in stages to start with the lowest possible costs."
+                }
+            },
+            {
+                "title": {
+                    "ar": "تقارير عمل",
+                    "en": "Follow up campaign reports"
+                },
+                "desc": {
+                    "ar": "في جميع مراحل العمل نحرص على تقديم كافة التقارير التي توضح سير العمل وتقدمه؛ وذلك لجعل العميل على اتصال دائم واستيعاب لكافة تطورات العمل.",
+                    "en": "Writing the appropriate report according to your available budget, sending reports to follow up the campaigns and reassuring about their success."
+                }
+            }
+        ]
+    },
+    "ecommerce": {
+        "title": {
+            "ar": "اجعل تجارتك أسهل",
+            "en": "Get an online store at the lowest costs"
+        },
+        "subtitle": {
+            "ar": "معنا سوف تضاعف نسبة أرباحك؛ كل ما عليك فعله هو الاتصال بنا وطلب خدمة تصميم متجر الكتروني.. ان فكرة امتلاك متجر الكتروني تعد من الأفكار السديدة التي من خلالها سوف تجني أضعاف الأرباح التى من الممكن الحصول عليها من خلال المتجر التقليدي؛ وذلك لما يتسم به المتجر الالكتروني من مرونة وشمولية الجانب الجغرافي فمن خصائصه التوسع والعرض على قاعدة جماهيرية لا تتقيد بالظروف المكانية او المناخية ولا بالحدود الدولية مما يتيح لك عدد عملاء أكبر وبالتالي تحقيق مبيعات أكبر؛ ومضاعفة الأرباح.",
+            "en": "Now, you can display your products and services 24 hours a day without stopping, and you can also receive thousands of orders and add millions of products through your online store; And we at Serv5, our mission is to develop electronic stores in a way that provides you as a user with many advantages ..."
+        },
+        "about_title": {
+            "ar": "تصميم متجر الكتروني متميز من سيرف فايف",
+            "en": "Launch Your E-Commerce Store"
+        },
+        "about_desc": {
+            "ar": "أحصل على مميزات متعددة في المتجر الخاص بك بأقل التكاليف وبأعلى كفاءة.",
+            "en": "Turnkey online stores with secure payment gateways, inventory management, multi-currency support, and fast checkout."
+        },
+        "features": [
+            {
+                "title": {
+                    "ar": "اللامحدودية",
+                    "en": "Unlimited products"
+                },
+                "desc": {
+                    "ar": "تمتاز متاجرنا الالكترونية بكونها متاجر تتسمع لملاين المنتجات؛ مما يتيح للتاجر عرض منتجات اكثر وبالتالي زيادة فرصة حصوله على عملاء اكثر؛ مما يترتب عليه مضاعفة نسبة الأرباح.",
+                    "en": "You can add an infinite number of products and sections within your online store, with the ability to organize them according to type, price and category, and when you browse you will find great and multiple advantages in it"
+                }
+            },
+            {
+                "title": {
+                    "ar": "تحكم سهل",
+                    "en": "Ease of control"
+                },
+                "desc": {
+                    "ar": "نعمل على توفير لوحة تحكم مميزة وسهلة الاستخدام للمتاجر التى نعمل على تصميمها وذلك حرصاً منا على تسهيل الامر على العملاء بحيث يستطيع ادارة متجرة دون تعقيد.",
+                    "en": "The store has a complete control panel that helps in managing the entire store and controlling it in the way that the customer prefers, and it is also possible to appoint a manager for your store, whether it is an individual store or a commercial company"
+                }
+            },
+            {
+                "title": {
+                    "ar": "أنظمة تقارير متعددة",
+                    "en": "Sales reports"
+                },
+                "desc": {
+                    "ar": "في متاجرنا الخاصة سوف تحصل على ميزة هامة وهي خاصية التقارير والتي عن طريقها سوف تتابع الأداء العام على متجرك الخاص؛ ومتابعة حركة البيع ومخزون المنتجات المتوفر.",
+                    "en": "Providing search engines, managing employees, creating a forum and reports related to determining customer statistics in order for you to see all parts of buying and selling."
+                }
+            },
+            {
+                "title": {
+                    "ar": "تعدد أساليب الدفع",
+                    "en": "Various payment methods"
+                },
+                "desc": {
+                    "ar": "عند تصميم متجر الكتروني لدى سيرف فايف سوف تتمتع بالاشتراك في العديد من بوابات الدفع الآمنة؛ مما يجعل متجرك أكثر مرونه من حيث المعاملات المالية وبالتالي لن يشعر زبائن متجرك بصعوبة التعامل عليه.",
+                    "en": "Facilitate payment methods for the customer The store contains many languages and currencies where languages and currencies can be controlled very easily, so you choose the currency that suits you."
+                }
+            },
+            {
+                "title": {
+                    "ar": "توافر عربة تسوق",
+                    "en": "Shopping cart"
+                },
+                "desc": {
+                    "ar": "لا يوجد متجر الكتروني دون عربة تسوق؛ حيث تعد عربة تسوق المتجر الالكتروني بمثابة عنصر أساسي من عناصر بناء المتجر حيث تتم عملية الشراء من خلالها .",
+                    "en": "The shopping cart is the number one condition for the online store, as electronic stores are like a supermarket, so it is unreasonable to go to the supermarket without a shopping cart"
+                }
+            },
+            {
+                "title": {
+                    "ar": "المتجر متوافق مع الجوال",
+                    "en": "Mobile friendly shopping site"
+                },
+                "desc": {
+                    "ar": "يعد الهاتف من اكثر الطرق انتشاراً في عمليات البحث عن منتج ما؛ لذا من النقاط الهامة التي حرصنا على مراعاتها فى تصميم المتاجر الالكترونية هى التوافق مع الجوالات.",
+                    "en": "According to electronic marketing, 15% of the total e-commerce sales for the year 2013 were through mobile devices, and there are expectations that this percentage will jump to 25% for the year 2018, i.e. an estimated $ 87 billion"
+                }
+            }
+        ]
+    },
+    "social-media": {
+        "title": {
+            "ar": "إدارة شبكات التواصل الاجتماعي",
+            "en": "Social media management"
+        },
+        "subtitle": {
+            "ar": "من الضروري أن تهتم بمراقبة كل ما يحدث على بروفايلات التواصل الاجتماعي الخاصة بك ، لذلك وفرت لك شركة سيرف فايف خدمة إدارة شبكات التواصل الاجتماعي حتى يمكن الترويج بشكل سليم لخدماتك ومنتجاتك ، كما تساعد هذه الخدمة في التقرب من عملائك وكسب ولائهم وبناء علاقة طويلة الأجل معهم وجذب المزيد من العملاء.",
+            "en": "It is imperative that you take care to monitor everything that happens on your social media profiles. Therefore, Serv5 has provided you with a social media network management service so that your services and products can be properly promoted. This service also helps in getting close to your customers, gaining their loyalty, building a long-term relationship with them and attracting them. More clients."
+        },
+        "about_title": {
+            "ar": "إدارة مواقع التواصل الاجتماعي باحترافية مع سيرف فايف",
+            "en": "Full Social Media Management"
+        },
+        "about_desc": {
+            "ar": "إدارة شبكات التواصل الاجتماعي\nمن الضروري أن تهتم بمراقبة كل ما يحدث على بروفايلات التواصل الاجتماعي الخاصة بك ، لذلك وفرت لك شركة سيرف فايف خدمة إدارة شبكات التواصل الاجتماعي حتى يمكن الترويج بشكل سليم لخدماتك ومنتجاتك ، كما تساعد هذه الخدمة في التقرب من عملائك وكسب ولائهم وبناء علاقة طويلة الأجل معهم وجذب المزيد من العملاء.",
+            "en": "Social Media Network Management\nIt is imperative that you be careful to monitor everything that happens on your social media profiles, so Serv5 has provided you with a Social Network Management service so that you can promote effectively Sound for your services and products, and this service also helps in getting close to your customers, earning their loyalty, building a long-term relationship with them, and attracting more customers."
+        },
+        "features": [
+            {
+                "title": {
+                    "ar": "وضع خطة استراتيجية شاملة",
+                    "en": "Create a comprehensive strategic plan"
+                },
+                "desc": {
+                    "ar": "نقوم بعمل خطة استراتيجية شاملة لتحديد الأهداف وتحديد التكاليف والفترة الزمنية لتحقيقها وتحديد العملاء المستهدفين.",
+                    "en": "We create a comprehensive strategic plan to set goals, determine costs, the time period to achieve them, and identify target customers."
+                }
+            },
+            {
+                "title": {
+                    "ar": "تطوير حساباتك على مواقع التواصل الاجتماعي",
+                    "en": "Developing your social media accounts"
+                },
+                "desc": {
+                    "ar": "نقوم أولاً بكاتبة اسم المشروع وتصنيفه وتحديد أهداف الصفحة \/ الحساب والربط بين كافة الحسابات المختلفة وتحديث البيانات أول بأول.",
+                    "en": "We first write the name of the project, classify it, define the goals of the page \/ account, link all the different accounts, and update the data on an up-to-date basis."
+                }
+            },
+            {
+                "title": {
+                    "ar": "حماية حساباتك وتأمينها جيداً",
+                    "en": "Protect and secure your accounts"
+                },
+                "desc": {
+                    "ar": "نقوم بحماية كافة حساباتك وتأمينها لجعلها في مأمن من القرصنة وسرقة الهوية وذلك من خلال عمل بعض الخطوات  التي من خلالها تصبح حساباتك قوية ويصعب السيطرة عليها وسرقتها.",
+                    "en": "We protect and secure all of your accounts to make them safe from piracy and identity theft by taking some steps through which your accounts become strong and difficult to control and steal."
+                }
+            },
+            {
+                "title": {
+                    "ar": "تحليل البيانات",
+                    "en": "data analysis"
+                },
+                "desc": {
+                    "ar": "لأن تحليل البيانات يساهم في تحسين سير العمل فسنقوم بإعداد التقارير لمعرفة مدى نجاح الخطة الموضوعة والقيام بأي تعديلات جديدة.",
+                    "en": "Because analyzing the data contributes to improving the workflow, we will prepare reports to see the success of the established plan and make any new adjustments."
+                }
+            },
+            {
+                "title": {
+                    "ar": "كتابة المحتوى",
+                    "en": "Content writing"
+                },
+                "desc": {
+                    "ar": "نقوم بتسويق ما تقدمه من خلال كتابة محتوى جيد وسهل الوصول إلى الجمهور ، كما سيتم استخدام محتوى يحث الجمهور على التفاعل من أجل التسويق لمشروعك وكسب أكبر عدد ممكن من العملاء.",
+                    "en": "We market what you offer by writing good content that is easy to reach the audience, and content that encourages the audience to interact will be used in order to market your project and gain the largest number of customers possible."
+                }
+            },
+            {
+                "title": {
+                    "ar": "التواصل مع العملاء",
+                    "en": "Communicate with clients"
+                },
+                "desc": {
+                    "ar": "سيتم تخصيص أكثر من فرد من أجل تعزيز التواصل مع عملائك والرد على كافة أسئلتهم مع استغلال خاصية التواصل المباشر مع عملائك لمشاركة أي تفاصيل جديدة تخص مشروعك",
+                    "en": "More than one person will be allocated to enhance communication with your customers and answer all their questions while using the direct communication feature with your customers to share any new details related to your project."
+                }
+            }
+        ]
+    },
+    "seo-optimization": {
+        "title": {
+            "ar": "أرشفة المواقع في جوجل",
+            "en": "Search Engine Optimization SEO"
+        },
+        "subtitle": {
+            "ar": "هل تبحث عن طريقة تستطيع من خلالها أرشفة موقعك في جوجل بكل سهولة ؟ اذاً انت في الموقع المناسب معنا سوف تحصل على أرشفة مواقع قوية؛ حيث نعتمد على استراتيجيات عمل حديثة ومتجدده متوافقة مع تحديثات جوجل والتي تضمن لك الحصول على أماكن في مراتب البحث الاولي.",
+            "en": "We improve your website to top the first search engines in order to get the largest number of visitors to increase the percentage of sales, and we are also working to configure the internal pages of the site on-page, and the external pages of the site in order to comply with the advanced Google updates and this is done by configuring the domain and The hosting is for the site, as you must also take care to write the correct content that matches the standards of Seo."
+        },
+        "about_title": {
+            "ar": "أرشف موقعك في جوجل",
+            "en": "Search Engine Optimization SEO"
+        },
+        "about_desc": {
+            "ar": "من المتعارف عليه ان العميل الذي يأتي عن طريق بحث جوجل فهو عميل مؤكد أي انه  يقوم بطلب الخدمة ومتخذ قرار الشراء بالفعل لذا فان عملية ظهور موقعك في مراتب البحث الأولى لجوجل تعد من العناصر الهامة جداً التي تضمن لك الحصول على عميل مؤكد؛ لذا احرص دائماً على ان يكون هدفك الأول عندا بناء موقع هو الحصول على أرشفة مواقع قوية..",
+            "en": ""
+        },
+        "features": [
+            {
+                "title": {
+                    "ar": "أرشفة المواقع في جوجل",
+                    "en": "Top search engines"
+                },
+                "desc": {
+                    "ar": "من اهدافنا الخاصة في بناء المواقع هي تهيئة الموقع ذاته للأرشفة في جوجل ، وعندا استلام موقع جاهز مطالب تقديمة خدمة أرشفة \n مواقع  له نحرص على بناء خطة أرشفة قوية تعزز من أماكن تواجد الموقع بشكل دائم في مراتب البحث الاولي.",
+                    "en": "We prepare the website internally and externally in order to appear on the first pages of the search engines."
+                }
+            },
+            {
+                "title": {
+                    "ar": "أرشفة المواقع يتيوب",
+                    "en": "Increase the number of website visitors"
+                },
+                "desc": {
+                    "ar": "من المنصات الأكثر استخداماً بشكل يومي هو اليتيوب لذا ان عملية أرشفة اليتيوب تعد من العمليات الهامة جداً والتي تضمن ظهورك  على منافسيك ؛ وهنا نحرص فى سيرف فايف على دعم خطط أرشفة المواقع بـ خطط أرشفة يتيوب أيضا.",
+                    "en": "The appearance of the site on the first pages of search engines leads to an increase in the number of clicks, which leads to an increase in the number of visitors."
+                }
+            },
+            {
+                "title": {
+                    "ar": "كورس ارشفة المواقع",
+                    "en": "High percentage of sales"
+                },
+                "desc": {
+                    "ar": "باعتبار الشركة من الشركات المؤثرة بشكل كبير في تقديم خدمات أرشفة مواقع نحرص أيضا على تقديم الدعم للأفراد الراغبين في دخول مجال أرشفة المواقع وتقديم كورس عملي تدريبي لهم داخل مقر الشركة.",
+                    "en": "SEO works to attract a lot of visitors to your website, which leads to an increase in the company's profits and an increase in the percentage of sales."
+                }
+            },
+            {
+                "title": {
+                    "ar": "التغلب على المنافسين",
+                    "en": "Outperforming competitors"
+                },
+                "desc": {
+                    "ar": "من أهداف أرشفة المواقع في جوجل هو التحديث الدائم والمستمر وتقديم كل ما هو حصري وذلك للتغلب على المنافسين والحفاظ على التقدم المستمر.",
+                    "en": "Within Serv5, the Seo team analyzes competitors and devises appropriate strategies to outperform them."
+                }
+            }
+        ]
+    },
+    "digital-identity": {
+        "title": {
+            "ar": "ادارة الهوية الرقمية",
+            "en": "Digital Identity Management"
+        },
+        "subtitle": {
+            "ar": "لما الامر يتعلق بتعريف الكيان في العالم الالكتروني ووسائل التواصل الاجتماعي الحديثة يبقي لازم تختار صح  لان اول انطباع هو اهم انطباع عشان كدة سيرف فايف بتقدم جميع الخدمات المتعلقة بالهوية الرقمية للأفراد والمؤسسات مهما اختلفت حجمها ودا بشهادة كل عملائها ، معانا هتبقي مطمن سواء كنت صاحب عمل تجاري او شخصية سياسية معروفة او حتي شخصية عادية فقط تواصل معانا",
+            "en": "When it comes to defining the entity in the electronic world and modern social media, it remains necessary to choose the correct one, because the first impression is the most important impression because of this, Serv5 provides all services related to the digital identity of individuals and institutions, regardless of their size, according to the testimony of all their customers, meaning you will remain reassured whether you are a business owner Or a well-known political figure or even an ordinary person who just communicates with us"
+        },
+        "about_title": {
+            "ar": "مميزات الهوية الرقمية من سيرف فايف",
+            "en": "Distinctive Brand Identity"
+        },
+        "about_desc": {
+            "ar": "الهوية الرقمية او الهوية الالكترونية هي عملية ايصال الفرد او الكيان بالمجتمع ممكن تبقي هوية شخصية او هوية اجتماعية ، سيرف فايف بتتميز عن الشركات الأخرى في بناء انطباع اول مميز يزيد من تفاعل الافراد معك و الوصل للفئة المستهدفة وبناء اسم قوي او علامه تجارية بالطرق المختلفة  .\nبتتميز شركتنا في تقديم هوايات الشركات الرقمية البراند Brand والي بتتمثل في اللوجو والي بيمثل الانطباع الأول لعميلك والي من خلاله بقرر التعامل مع المؤسسة او لا ، كما الشركة بتقدم جميع خدمات الدعاية والاعلان الي بتساعد في توثيق الهوية الرقمية .",
+            "en": "Memorable logos, cohesive color palettes, typography, and brand guidelines that set you apart from competitors."
+        },
+        "features": [
+            {
+                "title": {
+                    "ar": "تصميم هوية للشركات",
+                    "en": "Corporate identity design"
+                },
+                "desc": {
+                    "ar": "الهوية الرقمية للشركات هي الصورة الي المتكونة في عقل العميل عشان كدا سيرف فايف بتصنع صورة مميزة لأنشطة الشركات واعمالها بتميزها عن المنافسين .",
+                    "en": "The corporate digital identity is the image formed in the customer’s mind so that Serv5 creates a distinctive image for companies ’activities and business by distinguishing them from competitors."
+                }
+            },
+            {
+                "title": {
+                    "ar": "تصميمات خلفيات لوسائل التواصل الاجتماعي",
+                    "en": "Social media wallpaper designs"
+                },
+                "desc": {
+                    "ar": "الهوية الرقمية مرتبطة بالسوشيال ميديا وعشان كدا سيرف بتقديم تصميمات مميزة لاستخدامها علي جميع وسائل التواصل الاجتماعي .",
+                    "en": "The digital identity is linked to social media, and as such, Surf provides distinctive designs for use on all social media."
+                }
+            },
+            {
+                "title": {
+                    "ar": "تصميم شعار",
+                    "en": "designing a logo"
+                },
+                "desc": {
+                    "ar": "كل فرد او مؤسسة بتحتاج لشعار خاص بيها والأفضل ان الشعار دا يكون منفرد ومميز ودا الي بنحاول نقدمه لعملائنا  .",
+                    "en": "Every individual or institution needs its own logo, and the best is that this logo is unique and distinctive, friendly to what we try to present to our customers."
+                }
+            },
+            {
+                "title": {
+                    "ar": "تصميم بطاقات عمل شخصية",
+                    "en": "Design personalized business cards"
+                },
+                "desc": {
+                    "ar": "يحتاج كل صاحب مؤسسة عمل الي بطاقة تعريفية مميزة وخاصه في تجمعات العمل ( الاجتماعات - المؤتمرات ) دلوقت تقدر  تحصل علي بطاقة عمل شخصية من سيرف فايف",
+                    "en": "Every business owner needs a unique identification card, especially in business gatherings (meetings - conferences). Now you can get a personal business card from Serv5"
+                }
+            },
+            {
+                "title": {
+                    "ar": "تصميم فديوهات تعريفية",
+                    "en": "Designing introductory videos"
+                },
+                "desc": {
+                    "ar": "تصميم فيديوهات من خدمات إدارة الهوية الرقمية المميزة لان المحتوي البصري عامل النجاح الأول في جميع الحملات الاعلانية والدعائية .",
+                    "en": "Designing videos from the distinctive digital identity management services because visual content is the first success factor in all advertising and advertising campaigns."
+                }
+            }
+        ]
+    },
+    "aldaam-alfny": {
+        "title": {
+            "ar": "الدعم الفنى",
+            "en": "Technical support"
+        },
+        "subtitle": {
+            "ar": "إذا كانت تواجهك مشكلة تقنية يمكنك التواصل مع خدمة العملاء لنقدم لك المساعدة والدعم المميز لدينا خبرة 11 عاما فى حل جميع المشاكل التقنية بالإضافة إلى الرد على جميع الإستفسارات و نقدم لك النصائح والملاحظات على تلك المشاكل .",
+            "en": "If you are facing a technical problem, you can contact customer service to provide you with distinguished assistance and support. We have 11 years of experience in solving all technical problems in addition to responding to all inquiries and we offer you advice and notes on those problems."
+        },
+        "about_title": {
+            "ar": "الدعم الفني",
+            "en": "24\/7 Dedicated Technical Support"
+        },
+        "about_desc": {
+            "ar": "",
+            "en": "Continuous website maintenance, speed optimization, regular backups, and proactive security monitoring."
+        },
+        "features": [
+            {
+                "title": {
+                    "ar": "توفير الدعم الكامل",
+                    "en": "Provide full support"
+                },
+                "desc": {
+                    "ar": "لدينا القدرات الفنية والمميزة فى إصلاح جميع التقنيات فى وقت قياسى و الرد السريع على أى إستفسارات .",
+                    "en": "We have the technical and distinctive capabilities in repairing all technologies in a record time and promptly responding to any inquiries."
+                }
+            },
+            {
+                "title": {
+                    "ar": "ضمان الإستقرار لموقعك",
+                    "en": "Ensure stability for your site"
+                },
+                "desc": {
+                    "ar": "نضمن لك الثبات و الإستقرار لموقعك على الإنترنت بوساطة خططنا المصممة خصيصا للدعم الفنى .",
+                    "en": "We guarantee the stability and stability of your website with our specially designed plans for technical support."
+                }
+            },
+            {
+                "title": {
+                    "ar": "تكلفة مميزة",
+                    "en": "Premium cost"
+                },
+                "desc": {
+                    "ar": "نقدم أقوى عروض وباقات الدعم الفنى بأفضل الأسعار بالإضافة إلى إمتلاكنا الخبره التى تمكنا من تطوير جميع خدماتنا من الدعم الفنى .",
+                    "en": "We offer the strongest technical support offers and packages at the best prices, in addition to our having the experience that enables us to develop all our services from technical support."
+                }
+            },
+            {
+                "title": {
+                    "ar": "العمل على مدار الساغة",
+                    "en": "Work around the clock"
+                },
+                "desc": {
+                    "ar": "نقدم لكم خدمة الدعم الفنى طوال اليوم و الرد خلال من 15 إلى 20 دقيقة من خدمة العملاء على جميع استفساراتك .",
+                    "en": "We provide you with technical support service throughout the day and respond within 15 to 20 minutes of customer service to all your inquiries."
+                }
+            },
+            {
+                "title": {
+                    "ar": "تقرير شهرى",
+                    "en": "monthly report"
+                },
+                "desc": {
+                    "ar": "نقدم لك تقرير شهرى مفصل لما تم تنفيذه من خلال خدمة العملاء .",
+                    "en": "We provide you with a detailed monthly report of what has been implemented through customer service."
+                }
+            },
+            {
+                "title": {
+                    "ar": "عقود رسمية",
+                    "en": "Formal contracts"
+                },
+                "desc": {
+                    "ar": "نوفر عقود رسمية وموثقة من الجهات الحكومية لضمان كافة حقوقك الرسمية .",
+                    "en": "We provide official and documented contracts from government agencies to guarantee all your official rights."
+                }
+            }
+        ]
+    },
+    "network-marketing": {
+        "title": {
+            "ar": "موقع تسويق شبكي",
+            "en": "Network marketing Website"
+        },
+        "subtitle": {
+            "ar": "تصميم موقع تسويق شبكي يحتاج الى شركة متميزة في تصميم المواقع ولديها من الخبرة ما يجعلها الخيار الأول ؛ وهذا ما تمتلكه سيرف فايف ؛ حيث تعمل الشركة منذ أعوام في مجال تصميم مواقع التسويق الشبكي ..",
+            "en": "Designing a networked marketing website needs a distinguished company in web design that has experience, which makes it the first choice; This is what Serv5 has. The company has been working for years in the field of designing network marketing websites."
+        },
+        "about_title": {
+            "ar": "مميزات موقع تسويق شبكى من سيرف فايف",
+            "en": "Advantages of a web marketing website from Serv5"
+        },
+        "about_desc": {
+            "ar": "دئماً نبحث عن الجودة وتذليل الصعاب لخدمة العميل لذا أصبحنا من أفضل شركات تصميم مواقع التسويق الشبكي ..",
+            "en": "We always look for quality and overcome difficulties to serve the customer, so we have become one of the best network marketing web design companies .."
+        },
+        "features": [
+            {
+                "title": {
+                    "ar": "أداء قوى",
+                    "en": "Strong performance"
+                },
+                "desc": {
+                    "ar": "وظفنا أفضل التقنيات المختلفة لجميع الامكانيات و أحدثها , حتى يكون موقعك خفيفا سلس , و سهل سريع فى عملية التصفح و ايضا مع بقاؤه قوي البنية الاساسية",
+                    "en": "We employed the best different technologies for all capabilities and the latest, so that your site is light, smooth, easy and fast in the browsing process and also with its strong infrastructure"
+                }
+            },
+            {
+                "title": {
+                    "ar": "توافق مع الجوال",
+                    "en": "Mobile compatibility"
+                },
+                "desc": {
+                    "ar": "نحن نحرص على ان يظل موقعك متمتع بأفضل مظهر على الاطلاق سواء بتواجده على أي جهاز , و ذلك بفضل القوالب المستجيبة و ايضا قوالب الجوالات المحمولة",
+                    "en": "We make sure that your site remains enjoyable and has the best appearance ever, whether it is on any device, thanks to the responsive templates and also the mobile phone templates."
+                }
+            },
+            {
+                "title": {
+                    "ar": "تصاميم مميزة",
+                    "en": "Distinctive designs"
+                },
+                "desc": {
+                    "ar": "لان التصميم هو اكثر مايميز العمل وهو مايتحكم فى سهولة استخدامه , لذلك نهتم بأدق التفاصيل التى تخص الشكل النهائى , ابتكر تصميمك واترك التنفيذ لفريق العمل",
+                    "en": "Because the design is the most characteristic of the work and it controls the ease of its use, so we pay attention to the smallest details of the final shape, create your design and leave the implementation to the work team"
+                }
+            },
+            {
+                "title": {
+                    "ar": "دمج ايقونات السوشال ميديا",
+                    "en": "Integration of social media icons"
+                },
+                "desc": {
+                    "ar": "وضع ايقونات شبكات التواصل الاجتماعى فى اماكن مخصصه لها فى الهيدر او الفوتر و ازرار مشاركة المواضيع و التدوينات على ( الفيس بوك , تويتر , جوجل بلس , و غيرها )",
+                    "en": "Putting social media icons in places designated for them in the header or bill, and buttons for sharing topics and posts on (Facebook, Twitter, Google Plus, and others)"
+                }
+            },
+            {
+                "title": {
+                    "ar": "لوحة تحكم سهلة",
+                    "en": "Easy control panel"
+                },
+                "desc": {
+                    "ar": "نوفر لوحة تحكم عربية لسهولة ادارة جميع صفحات الموقع و ايضا لإضافة الخدمات المخصصة بكل سهولة و يسر مع خيار لوحة تحكم باللغه الانجليزية او اى لغة اخرى",
+                    "en": "We provide an Arabic control panel for easy management of all website pages and also to add custom services easily and conveniently with the option of a control panel in English or any other language"
+                }
+            },
+            {
+                "title": {
+                    "ar": "مستوي حماية قوي",
+                    "en": "Strong protection level"
+                },
+                "desc": {
+                    "ar": "نقدم لكم فى سيرف فايف خدمات الحماية الكاملة و الخاصة المتكاملة , تهدف للحفاظ على استقرار موقع التسويق الشبكى الخاص بك من عمليات الإختراق",
+                    "en": "At Serv5 we offer you complete, private and integrated protection services, aimed at maintaining the stability of your network marketing site from hacking operations"
+                }
+            }
+        ]
+    }
+}

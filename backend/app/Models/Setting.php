@@ -2,11 +2,31 @@
 
 namespace App\Models;
 
+use App\Traits\ClearsApiCache;
 use Illuminate\Database\Eloquent\Model;
 
 class Setting extends Model
 {
+    use ClearsApiCache;
+
     protected $fillable = ['key', 'value', 'type', 'value_source'];
+
+    protected static function apiCacheKeys(): array
+    {
+        return [
+            'settings_en',
+            'settings_ar',
+            'settings_v2_en',
+            'settings_v2_ar',
+            'footer_data_en',
+            'footer_data_ar',
+        ];
+    }
+
+    protected static function apiCacheScopes(): array
+    {
+        return ['footer'];
+    }
 
     /**
      * Keys that contain sensitive credentials and must be encrypted at rest.
@@ -53,20 +73,5 @@ class Setting extends Model
         } else {
             $this->attributes['value'] = $value;
         }
-    }
-
-    protected static function booted()
-    {
-        $clear = function () {
-            \Illuminate\Support\Facades\Cache::forget('settings_en');
-            \Illuminate\Support\Facades\Cache::forget('settings_ar');
-            \Illuminate\Support\Facades\Cache::forget('settings_v2_en');
-            \Illuminate\Support\Facades\Cache::forget('settings_v2_ar');
-            \Illuminate\Support\Facades\Cache::forget('footer_data_en');
-            \Illuminate\Support\Facades\Cache::forget('footer_data_ar');
-            \App\Traits\ClearsApiCache::bumpCacheVersion('footer');
-        };
-        static::saved($clear);
-        static::deleted($clear);
     }
 }

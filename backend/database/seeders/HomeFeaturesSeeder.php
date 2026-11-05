@@ -86,9 +86,21 @@ class HomeFeaturesSeeder extends Seeder
 
         // 3. Database inserts/updates
         Setting::updateOrCreate(
+            ['key' => 'features_subtitle'],
+            [
+                'value' => json_encode(['en' => 'Who We Are', 'ar' => 'من نحن'], JSON_UNESCAPED_UNICODE),
+                'type' => 'text',
+                'value_source' => 'db'
+            ]
+        );
+
+        Setting::updateOrCreate(
             ['key' => 'features_title'],
             [
-                'value' => json_encode(['en' => 'Who We Are', 'ar' => 'من نحن']),
+                'value' => json_encode([
+                    'en' => 'Serv5 For Integrated <span class="text-[#D98B50]">Web & Mobile Solutions</span>',
+                    'ar' => 'سيرف فايف للحلول الرقمية <span class="text-[#D98B50]">وخدمات الويب المتكاملة</span>'
+                ], JSON_UNESCAPED_UNICODE),
                 'type' => 'text',
                 'value_source' => 'db'
             ]
@@ -98,9 +110,9 @@ class HomeFeaturesSeeder extends Seeder
             ['key' => 'features_desc'],
             [
                 'value' => json_encode([
-                    'en' => 'Serv5 provides a range of cutting-edge, customized software solutions for global enterprise clients.',
-                    'ar' => 'توفر Serv5 مجموعة من الحلول البرمجية المتطورة والمخصصة لعملاء المؤسسات العالمية.'
-                ]),
+                    'en' => 'You have reached your right destination, what you are looking for is here. With us you will get website design services, mobile application programming, web hosting, motion graphics, and distinguished digital marketing services through a professional team working around the clock.',
+                    'ar' => 'لقد وصلت لوجهتك الصحيحة، ما تبحث عنه موجود هنا. معنا ستحصل على خدمات تصميم المواقع الإلكترونية، برمجة تطبيقات الجوال (Android & iOS)، استضافة المواقع، تصميم فيديوهات الموشن جرافيك، وخدمات التسويق الإلكتروني والسيو المتكاملة من خلال فريق عمل محترف على مدار الساعة.'
+                ], JSON_UNESCAPED_UNICODE),
                 'type' => 'text',
                 'value_source' => 'db'
             ]

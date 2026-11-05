@@ -6,7 +6,7 @@ const TARGET_API =
   process.env.NEXT_PUBLIC_API_URL ||
   "http://127.0.0.1:8000/api/v1";
 
-const FALLBACK_API = "https://api.serv5.com.eg/api/v1";
+const FALLBACK_API = TARGET_API;
 
 async function handleProxy(request, context) {
   const params = await context.params;
@@ -43,7 +43,7 @@ async function handleProxy(request, context) {
       headers: forwardHeaders,
       body,
       cache: "no-store",
-      signal: AbortSignal.timeout(6000),
+      signal: AbortSignal.timeout(20000),
     });
 
     // If local target returned a server error (5xx) or 404 and fallback is different, try fallback

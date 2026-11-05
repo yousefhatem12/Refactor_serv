@@ -2,10 +2,17 @@
 
 namespace App\Models;
 
+use App\Traits\ClearsApiCache;
 use Illuminate\Database\Eloquent\Model;
 
 class TeamMember extends Model
 {
+    use ClearsApiCache;
+
+    protected static function apiCacheScopes(): array
+    {
+        return ['team'];
+    }
     protected $fillable = ['name', 'role', 'bio', 'image', 'facebook_url', 'linkedin_url', 'is_active'];
 
     protected $casts = [
