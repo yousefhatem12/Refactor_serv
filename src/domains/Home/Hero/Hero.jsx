@@ -57,21 +57,22 @@ export default function Hero({ isPhaseTwo, data }) {
   let title1 = "";
   let title2 = "";
 
-  const pageHeroTitle = isValidText(data?.hero_title) ? data.hero_title : (isValidText(data?.title) ? data.title : "");
-  const pageHeroSub = isValidText(data?.hero_subtitle) ? data.hero_subtitle : (isValidText(data?.subtitle) ? data.subtitle : "");
+  const pageHeroTitle = isValidText(data?.hero_title) ? data.hero_title : "";
+  const pageHeroSub = isValidText(data?.hero_subtitle) ? data.hero_subtitle : "";
 
-  if (pageHeroTitle || pageHeroSub) {
-    title1 = pageHeroTitle;
-    title2 = pageHeroSub;
-  } else if (heroTitle1 || heroTitle2) {
+  if (heroTitle1 || heroTitle2) {
+    // Backend settings hero titles take highest priority (e.g. "Building The Future" / "Of Your Business")
     title1 = heroTitle1;
     title2 = heroTitle2;
+  } else if (pageHeroTitle || pageHeroSub) {
+    title1 = pageHeroTitle;
+    title2 = pageHeroSub;
   } else if (!isLoadingSettings) {
     title1 = t("innovativeSolutions") || "";
     title2 = t("tailoredToYourNeeds") || "";
   }
 
-  const rawSubtitle = data?.content || settings?.hero_desc;
+  const rawSubtitle = settings?.hero_desc || data?.hero_desc || data?.content;
   const subtitle = isValidText(rawSubtitle) ? rawSubtitle : t("heroDesc");
 
   // Phase 1 (Hero) disappearance on scroll
