@@ -48,6 +48,7 @@ next-env.d.ts
 
 # Local backup archives
 *.zip
+/Refactor_serv/
 *.rar
 *.tar.gz
 FRONTEND_AUDIT.md

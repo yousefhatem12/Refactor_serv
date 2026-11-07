@@ -146,6 +146,8 @@ check_url "Frontend Home (/ar)" "https://refactor.serv5.com.eg/ar" "200"
 check_url "Backend Health (/up)" "https://api-refactor.serv5.com.eg/up" "200"
 check_url "Backend Settings (/settings)" "https://api-refactor.serv5.com.eg/api/v1/settings" "200"
 check_url "Backend Services (/services)" "https://api-refactor.serv5.com.eg/api/v1/services" "200"
+check_url "Backend Portfolio (/portfolio)" "https://api-refactor.serv5.com.eg/api/v1/portfolio" "200"
+check_url "Backend Blog (/blog)" "https://api-refactor.serv5.com.eg/api/v1/blog" "200"
 check_url "Backend Pages (/pages/home)" "https://api-refactor.serv5.com.eg/api/v1/pages/home" "200"
 
 # CORS Check
