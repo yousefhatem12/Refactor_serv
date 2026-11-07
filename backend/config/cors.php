@@ -4,6 +4,7 @@
 $defaultOrigins = [
     'https://serv5.com.eg',
     'https://www.serv5.com.eg',
+    'https://refactor.serv5.com.eg',
     'http://localhost:3000',
     'http://127.0.0.1:3000',
     'http://localhost:3001',
@@ -41,6 +42,7 @@ return [
 
     'allowed_origins_patterns' => [
         '#^https?://(localhost|127\.0\.0\.1)(:\d+)?$#',
+        '#^https?://([a-zA-Z0-9-]+\.)?serv5\.com\.eg$#',
     ],
 
     'allowed_headers' => [
