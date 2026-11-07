@@ -1,21 +1,30 @@
-const { createServer } = require("http");
-const { parse } = require("url");
-const next = require("next");
+process.env.NODE_ENV = 'production';
+const { loadEnvConfig } = require('@next/env');
+loadEnvConfig(__dirname);
 
-process.env.NODE_ENV = process.env.NODE_ENV || "production";
-const dev = process.env.NODE_ENV !== "production";
-const app = next({ dev });
+const fs = require('fs');
+const { createServer } = require('http');
+const { parse } = require('url');
+const next = require('next');
+
+const app = next({ dev: false, dir: __dirname });
 const handle = app.getRequestHandler();
 
-// cPanel / Phusion Passenger passes the port in process.env.PORT
 const port = process.env.PORT || 3000;
 
-app.prepare().then(() => {
-  createServer((req, res) => {
-    const parsedUrl = parse(req.url, true);
-    handle(req, res, parsedUrl);
-  }).listen(port, (err) => {
-    if (err) throw err;
-    console.log(`> Ready on port ${port}`);
+app.prepare()
+  .then(() => {
+    createServer((req, res) => {
+      try {
+        fs.appendFileSync(__dirname + '/tmp/access.log', `[${new Date().toISOString()}] ${req.method} ${req.url}\n`);
+      } catch(e) {}
+      const parsedUrl = parse(req.url, true);
+      handle(req, res, parsedUrl);
+    }).listen(port, (err) => {
+      if (err) throw err;
+      console.log(`> Ready on port ${port}`);
+    });
+  })
+  .catch((err) => {
+    console.error('Next.js startup error:', err);
   });
-});
