@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:full": "powershell -ExecutionPolicy Bypass -Command \"if (-not (Get-Process mysqld -ErrorAction SilentlyContinue)) { Start-Process -FilePath 'C:\\xampp\\mysql\\bin\\mysqld.exe' -ArgumentList '--defaults-file=C:\\xampp\\mysql\\bin\\my.ini' -WindowStyle Hidden }; Start-Process -FilePath 'php' -ArgumentList 'artisan serve --host=127.0.0.1 --port=8000' -WorkingDirectory 'backend' -WindowStyle Minimized; next dev\"",
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",

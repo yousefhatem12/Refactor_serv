@@ -15,8 +15,9 @@ deployment:
     - mkdir -p /home2/serv5eg/public_html/serv5-backend2026
     - tar -C backend/ --exclude='./.env' -cf - . | (cd /home2/serv5eg/public_html/serv5-backend2026/ && tar -xf -)
 
-    # 4. Post-Deployment Backend Tasks
+    # 4. Post-Deployment Backend Tasks (Migrate + Seed Full XML Data + Optimize Cache)
     - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan migrate --force
+    - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan db:seed --force
     - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan optimize:clear
     - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan storage:link --force
     - cd /home2/serv5eg/public_html/serv5-backend2026 && php artisan config:cache
