@@ -22,6 +22,14 @@ const nextConfig = {
         hostname: "api.serv5.com.eg",
       },
       {
+        protocol: "https",
+        hostname: "api-refactor.serv5.com.eg",
+      },
+      {
+        protocol: "https",
+        hostname: "refactor.serv5.com.eg",
+      },
+      {
         protocol: "http",
         hostname: "localhost",
         port: "8000",

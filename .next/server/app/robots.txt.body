@@ -38,5 +38,5 @@ Disallow: /api/
 Disallow: /admin/
 Disallow: /dashboard/
 
-Host: https://serv5.com.eg
-Sitemap: https://serv5.com.eg/sitemap.xml
+Host: https://refactor.serv5.com.eg
+Sitemap: https://refactor.serv5.com.eg/sitemap.xml

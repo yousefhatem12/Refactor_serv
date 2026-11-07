@@ -1,4 +1,4 @@
-// File: C:\Users\NV_USER\Desktop\serv5-last-last\src\app\bank-accounts\page.jsx
+// File: /home/omar/Projects/Refactor_serv/src/app/bank-accounts/page.jsx
 import * as entry from '../../../../src/app/bank-accounts/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

@@ -1,1 +1,1 @@
-self.__NEXT_FONT_MANIFEST='{"pages":{},"app":{},"appUsingSizeAdjust":false,"pagesUsingSizeAdjust":false}';
+self.__NEXT_FONT_MANIFEST='{"pages":{},"app":{"/home/omar/Projects/Refactor_serv/src/app/layout":["static/media/eafabf029ad39a43-s.p.woff2","static/media/8888a3826f4a3af4-s.p.woff2","static/media/b957ea75a84b6ea7-s.p.woff2","static/media/21e0bbc36e00b7eb-s.p.woff2","static/media/904be59b21bd51cb-s.p.woff2","static/media/56a56a7c8799f891-s.p.woff2","static/media/afb88378e209fc3f-s.p.woff2"]},"appUsingSizeAdjust":true,"pagesUsingSizeAdjust":false}';

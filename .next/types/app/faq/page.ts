@@ -1,4 +1,4 @@
-// File: C:\Users\NV_USER\Desktop\serv5-last-last\src\app\faq\page.jsx
+// File: /home/omar/Projects/Refactor_serv/src/app/faq/page.jsx
 import * as entry from '../../../../src/app/faq/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

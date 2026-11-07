@@ -18,8 +18,8 @@
 # so cPanel deploys it directly without needing to build on the server.
 # But exclude the webpack cache — those files exceed GitHub's 100MB limit.
 .next/cache/
+.next/dev/
 /out/
-.next/
 
 # production
 /build
@@ -36,6 +36,8 @@ yarn-error.log*
 
 # env files
 .env*
+!.env.production
+!.env.example
 
 # vercel
 .vercel

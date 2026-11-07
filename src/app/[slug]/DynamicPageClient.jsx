@@ -59,8 +59,7 @@ import MobileAppsFeatures from "../components/Services-mobile-apps/MobileAppsFea
 import MobileAppHowWeWork from "../components/Services-web-dev/MobileAppHowWeWork";
 
 const STORAGE_URL =
-  process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") ||
-  "http://127.0.0.1:8000";
+  (process.env.NEXT_PUBLIC_API_URL || "https://api-refactor.serv5.com.eg/api/v1").replace(/\/api(\/v\d+)?$/, "");
 
 export default function DynamicPageClient({
   slug,
